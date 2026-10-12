@@ -3,17 +3,24 @@ import type { Type } from './types';
 /** How a move is "cast": each move is a different kind of Spanish challenge. */
 export type Mode = 'choose' | 'listen' | 'type' | 'speak';
 
-export const MODE_INFO: Record<Mode, { icon: string; es: string; en: string; power: number }> = {
-  choose: { icon: '👆', es: 'Elegir', en: 'Tap the meaning', power: 35 },
-  listen: { icon: '🎧', es: 'Escuchar', en: 'Write what you hear', power: 45 },
-  type: { icon: '⌨️', es: 'Escribir', en: 'Write it in Spanish', power: 55 },
-  speak: { icon: '🎤', es: 'Hablar', en: 'Say it in Spanish', power: 65 },
+/**
+ * Each kind of challenge is a kind of move. Harder challenges hit harder.
+ * learnAt: like in Gold/Silver, a Palabrita starts with two moves and learns the others as it
+ * levels up (a move can override this with its own level).
+ */
+export const MODE_INFO: Record<Mode, { icon: string; es: string; en: string; power: number; learnAt: number }> = {
+  choose: { icon: '👆', es: 'Elegir', en: 'Tap the meaning', power: 35, learnAt: 1 },
+  type: { icon: '⌨️', es: 'Escribir', en: 'Write it in Spanish', power: 55, learnAt: 1 },
+  listen: { icon: '🎧', es: 'Escuchar', en: 'Write what you hear', power: 45, learnAt: 6 },
+  speak: { icon: '🎤', es: 'Hablar', en: 'Say it in Spanish', power: 65, learnAt: 10 },
 };
 
 export interface Move {
   name: string;
   type: Type;
   mode: Mode;
+  /** Level it is learned at (default: MODE_INFO[mode].learnAt). */
+  level?: number;
 }
 
 export interface Species {
@@ -28,20 +35,20 @@ export interface Species {
   dex: { es: string; en: string };
 }
 
-const m = (name: string, type: Type, mode: Mode): Move => ({ name, type, mode });
+const m = (name: string, type: Type, mode: Mode, level?: number): Move => ({ name, type, mode, level });
 
 export const SPECIES: Record<string, Species> = {
-  perrito: {
-    id: 'perrito',
-    name: 'Perrito',
+  salchichita: {
+    id: 'salchichita',
+    name: 'Salchichita',
     types: ['Fuego'],
     theme: 'perro',
     base: { hp: 45, atk: 54, def: 43, spd: 62 },
-    moves: [m('Ladrido', 'Normal', 'choose'), m('Olfato', 'Normal', 'listen'), m('Mordisco', 'Siniestro', 'type'), m('Aullido Ardiente', 'Fuego', 'speak')],
+    moves: [m('Ladrido', 'Normal', 'choose'), m('Olfato', 'Normal', 'listen'), m('Mordisco', 'Siniestro', 'type'), m('Mostaza Ardiente', 'Fuego', 'speak')],
     catchRate: 0.4,
     dex: {
-      es: 'Un cachorro muy juguetón. Su cola es de fuego, pero nunca quema a sus amigos.',
-      en: 'A very playful puppy. Its tail is made of fire, but it never burns its friends.',
+      es: 'Mitad perro salchicha, mitad perro caliente. Siempre huele a pan recién hecho.',
+      en: 'Half dachshund (sausage dog), half hot dog. It always smells of fresh bread.',
     },
   },
   gotita: {
@@ -76,7 +83,7 @@ export const SPECIES: Record<string, Species> = {
     types: ['Normal', 'Volador'],
     theme: 'naturaleza',
     base: { hp: 40, atk: 45, def: 40, spd: 56 },
-    moves: [m('Picotazo', 'Volador', 'choose'), m('Trino', 'Normal', 'listen'), m('Aleteo', 'Volador', 'type'), m('Vendaval', 'Volador', 'speak')],
+    moves: [m('Picotazo', 'Volador', 'choose'), m('Trino', 'Normal', 'listen', 4), m('Aleteo', 'Volador', 'type'), m('Vendaval', 'Volador', 'speak', 7)],
     catchRate: 0.6,
     dex: {
       es: 'Canta todas las mañanas. Sus canciones despiertan al pueblo.',
@@ -89,7 +96,7 @@ export const SPECIES: Record<string, Species> = {
     types: ['Normal'],
     theme: 'numeros',
     base: { hp: 44, atk: 48, def: 40, spd: 66 },
-    moves: [m('Brinco', 'Normal', 'choose'), m('Cuenta Atrás', 'Normal', 'listen'), m('Patada', 'Lucha', 'type'), m('Multiplicar', 'Normal', 'speak')],
+    moves: [m('Brinco', 'Normal', 'choose'), m('Cuenta Atrás', 'Normal', 'listen', 4), m('Patada', 'Lucha', 'type'), m('Multiplicar', 'Normal', 'speak', 7)],
     catchRate: 0.6,
     dex: {
       es: 'Cuenta todo lo que ve. Si pierde la cuenta, empieza otra vez.',
@@ -102,7 +109,7 @@ export const SPECIES: Record<string, Species> = {
     types: ['Bicho', 'Volador'],
     theme: 'colores',
     base: { hp: 42, atk: 44, def: 45, spd: 60 },
-    moves: [m('Polvillo', 'Bicho', 'choose'), m('Arcoíris', 'Normal', 'listen'), m('Aleteo', 'Volador', 'type'), m('Vuelo Colorido', 'Bicho', 'speak')],
+    moves: [m('Polvillo', 'Bicho', 'choose'), m('Arcoíris', 'Normal', 'listen', 5), m('Aleteo', 'Volador', 'type'), m('Vuelo Colorido', 'Bicho', 'speak', 8)],
     catchRate: 0.5,
     dex: {
       es: 'Sus alas cambian de color según su humor.',
@@ -115,7 +122,7 @@ export const SPECIES: Record<string, Species> = {
     types: ['Normal', 'Fantasma'],
     theme: 'casa',
     base: { hp: 60, atk: 52, def: 68, spd: 22 },
-    moves: [m('Cojinazo', 'Normal', 'choose'), m('Crujido', 'Fantasma', 'listen'), m('Resorte', 'Normal', 'type'), m('Siesta Eterna', 'Fantasma', 'speak')],
+    moves: [m('Cojinazo', 'Normal', 'choose'), m('Crujido', 'Fantasma', 'listen', 7), m('Resorte', 'Normal', 'type'), m('Siesta Eterna', 'Fantasma', 'speak', 12)],
     catchRate: 0.35,
     dex: {
       es: 'Parece un sillón normal, pero se mueve de noche. Le encantan los cojines esponjosos.',
@@ -137,4 +144,6 @@ export const SPECIES: Record<string, Species> = {
   },
 };
 
-export const STARTERS = ['perrito', 'gotita', 'aguacatito'];
+export const learnLevel = (m: Move) => m.level ?? MODE_INFO[m.mode].learnAt;
+
+export const STARTERS = ['salchichita', 'gotita', 'aguacatito'];

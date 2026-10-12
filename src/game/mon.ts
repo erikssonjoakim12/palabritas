@@ -1,5 +1,5 @@
 import { G, uid, type Mon } from './state';
-import { SPECIES } from '../data/species';
+import { SPECIES, learnLevel, type Move } from '../data/species';
 import { tierItems } from '../data/content';
 import { isLearned } from './learning';
 
@@ -26,6 +26,16 @@ export function newMon(sp: string, level: number): Mon {
 }
 
 export const monName = (mon: Mon) => SPECIES[mon.sp].name;
+
+/** The moves a Palabrita knows at its level. */
+export function knownMoves(mon: Mon): Move[] {
+  return SPECIES[mon.sp].moves.filter((m) => learnLevel(m) <= mon.level);
+}
+
+/** Moves learned when going from level `from` to `to`. */
+export function newMoves(mon: Mon, from: number, to: number): Move[] {
+  return SPECIES[mon.sp].moves.filter((m) => learnLevel(m) > from && learnLevel(m) <= to);
+}
 
 export function healParty() {
   for (const m of G.save.party) m.hp = stats(m).maxHp;

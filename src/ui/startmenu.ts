@@ -1,27 +1,26 @@
 import { overlay, el, setTextScale } from '../engine/screen';
 import { input } from '../engine/input';
 import { sfx } from '../engine/sfx';
-import { G, saveGame, type Mon } from '../game/state';
-import { monName, checkLevelUps } from '../game/mon';
-import { pickItem, record, totalLearned, themeLearnedCount, isLearned } from '../game/learning';
-import { SPECIES, type Mode } from '../data/species';
-import { THEMES, poolUpTo } from '../data/content';
-import { canListen, speak } from '../lang/speech';
-import { menu, ask } from './menu';
+import { G, saveGame } from '../game/state';
+import { monName } from '../game/mon';
+import { totalLearned, themeLearnedCount, isLearned } from '../game/learning';
+import { SPECIES } from '../data/species';
+import { THEMES } from '../data/content';
+import { speak } from '../lang/speech';
+import { menu } from './menu';
 import { info, say } from './textbox';
-import { challenge } from './challenge';
 import { pickMon, showDetails, listMenu, spriteCanvas } from './party';
 
-const DEX_ORDER = ['perrito', 'gotita', 'aguacatito', 'pajarito', 'palomon', 'conejito', 'mariposita', 'sillon'];
+const DEX_ORDER = ['salchichita', 'gotita', 'aguacatito', 'pajarito', 'palomon', 'conejito', 'mariposita', 'sillon'];
 
 export async function startMenu() {
   sfx('select');
   let sel = 0;
   while (true) {
-    const opts = ['CRIATURAS', 'DICCIONARIO', 'TARJETA', 'GUARDAR', 'AJUSTES', 'SALIR'];
+    const opts = ['PALABRITAS', 'DICCIONARIO', 'TARJETA', 'GUARDAR', 'AJUSTES', 'SALIR'];
     const i = await menu(opts, { cancel: true, pos: { right: 0, top: 0 }, initial: sel, disabled: [!G.save.party.length] });
     sel = Math.max(0, i);
-    if (i === 0) await creaturesMenu();
+    if (i === 0) await PalabritasMenu();
     else if (i === 1) await dictionary();
     else if (i === 2) await trainerCard();
     else if (i === 3) {
@@ -31,56 +30,17 @@ export async function startMenu() {
   }
 }
 
-async function creaturesMenu() {
+async function PalabritasMenu() {
   while (true) {
     const mon = await pickMon('view');
     if (!mon) return;
-    const i = await menu(['ENTRENAR', 'DETALLES', 'PRIMERO', 'SALIR'], { cancel: true, pos: { right: 0, bottom: 0 } });
-    if (i === 0) await train(mon);
-    else if (i === 1) await showDetails(mon);
-    else if (i === 2) {
+    // Palabritas train by fighting; this menu is for looking at their powers and words.
+    const i = await menu(['DETALLES', 'PRIMERO', 'SALIR'], { cancel: true, pos: { right: 0, bottom: 0 } });
+    if (i === 0) await showDetails(mon);
+    else if (i === 1) {
       G.save.party = [mon, ...G.save.party.filter((m) => m !== mon)];
       await info(`${monName(mon)} luchará primero.`, { en: `${monName(mon)} will fight first.` });
     }
-  }
-}
-
-/** Practice a creature's words outside battle: five challenges, mixed modes. */
-export async function train(mon: Mon) {
-  const sp = SPECIES[mon.sp];
-  const box = el('div', 'box fullpanel detail');
-  const big = spriteCanvas(mon.sp, 96);
-  big.className = 'big';
-  const title = el('h3', '', `Entrenando a ${sp.name}`);
-  const sub = el('div', 'row muted', `Tema: ${THEMES[sp.theme].name} · Nv${mon.level}`);
-  box.append(big, title, sub, el('div', 'row muted', 'Training: answer to grow stronger!'));
-  overlay.appendChild(box);
-  const modes: Mode[] = canListen() ? ['choose', 'listen', 'type', 'speak'] : ['choose', 'listen', 'type'];
-  let m = Math.floor(Math.random() * modes.length);
-  const recent: string[] = [];
-  try {
-    do {
-      let right = 0;
-      for (let round = 1; round <= 5; round++) {
-        const item = pickItem(poolUpTo(sp.theme, mon.level), recent);
-        recent.push(item.id);
-        if (recent.length > 3) recent.shift();
-        const mode = modes[m++ % modes.length];
-        const r = await challenge({ item, mode, title: `Entreno ${round}/5` });
-        const res = record(item, r.mode, r.grade, r.helped);
-        if (r.grade !== 'wrong') right++;
-        if (res.learnedNow) await info(`📗 ¡Dominaste «${item.es}»!`, { auto: 1100 });
-        for (const up of checkLevelUps()) {
-          sfx('levelup');
-          await info(`¡${monName(up.mon)} subió al nivel ${up.to}!`);
-          if (up.mon === mon) sub.textContent = `Tema: ${THEMES[sp.theme].name} · Nv${mon.level}`;
-        }
-      }
-      await info(`¡Buen entreno! ${right}/5 correctas.`, { en: `Good training! ${right}/5 correct.` });
-    } while (await ask('¿Otra ronda?', { voice: false, en: 'Another round?' }));
-  } finally {
-    box.remove();
-    saveGame();
   }
 }
 
@@ -165,7 +125,7 @@ async function trainerCard() {
     `Medallas: ${s.medals.length ? s.medals.join(', ') : 'ninguna'}`,
     `Palabras dominadas: ${totalLearned()}`,
     `Respuestas: ${s.answers} (${acc}% bien)`,
-    `Esferas: ${s.esferas}`,
+    `Palabolas: ${s.palabolas}`,
     `Diccionario: ${s.caught.length} atrapados`,
     `Tiempo: ${Math.floor(mins / 60)}h ${mins % 60}m`,
   ];

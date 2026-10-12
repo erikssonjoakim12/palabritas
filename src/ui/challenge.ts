@@ -31,10 +31,9 @@ export interface ChallengeResult {
   answer: string;
 }
 
-const ACCENTS = ['á', 'é', 'í', 'ó', 'ú', 'ñ', 'ü', '¿', '¡'];
-
 function showPanel() {
   pad().hidden = true;
+  document.body.classList.add('challenge-open');
   const p = panel();
   p.hidden = false;
   p.innerHTML = '';
@@ -47,6 +46,7 @@ export function hidePanel() {
   panel().hidden = true;
   panel().innerHTML = '';
   pad().hidden = false;
+  document.body.classList.remove('challenge-open');
 }
 
 function button(text: string, cls = 'btn', onClick?: () => void) {
@@ -69,7 +69,9 @@ function speakButtons(text: string) {
 function textInput(onEnter: () => void) {
   const inp = el('input', 'ch-input');
   inp.type = 'text';
+  // Tells the phone keyboard this is Spanish (Gboard uses it when Spanish is installed).
   inp.lang = 'es';
+  inp.setAttribute('inputmode', 'text');
   inp.autocomplete = 'off';
   inp.setAttribute('autocapitalize', 'off');
   inp.setAttribute('autocorrect', 'off');
@@ -81,21 +83,7 @@ function textInput(onEnter: () => void) {
       onEnter();
     }
   });
-  const accents = el('div', 'accents');
-  for (const a of ACCENTS) {
-    const b = button(a, 'btn');
-    // pointerdown + preventDefault keeps the keyboard open on phones
-    b.addEventListener('pointerdown', (e) => {
-      e.preventDefault();
-      const s = inp.selectionStart ?? inp.value.length;
-      const t = inp.selectionEnd ?? s;
-      inp.value = inp.value.slice(0, s) + a + inp.value.slice(t);
-      inp.setSelectionRange(s + 1, s + 1);
-      inp.focus();
-    });
-    accents.appendChild(b);
-  }
-  return { inp, accents };
+  return { inp };
 }
 
 /** First letter of each word, e.g. "el perro" → "e_ p____". */
@@ -242,10 +230,10 @@ export function challenge(spec: ChallengeSpec): Promise<ChallengeResult> {
         const r = grade(v, false);
         finish(helped && r.grade === 'perfect' ? 'close' : r.grade, v, r);
       };
-      const { inp, accents } = textInput(submit);
+      const { inp } = textInput(submit);
       const row = el('div', 'ch-row');
       row.append(inp, button('OK', 'btn primary', submit));
-      p.append(row, accents);
+      p.append(row);
       actions.appendChild(dontKnow);
       if (allowHelp) actions.appendChild(helpBtn);
       p.appendChild(actions);
@@ -325,11 +313,11 @@ export function promptText(label: string, en: string, placeholder = ''): Promise
       blockGame();
       resolve(v);
     };
-    const { inp, accents } = textInput(submit);
+    const { inp } = textInput(submit);
     inp.placeholder = placeholder;
     const row = el('div', 'ch-row');
     row.append(inp, button('OK', 'btn primary', submit));
-    p.append(row, accents);
+    p.append(row);
     setTimeout(() => inp.focus(), 50);
   });
 }

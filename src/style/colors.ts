@@ -73,10 +73,15 @@ export const CLOTHES: Record<string, string> = {
   gray: '#8c8c8c',
   purple: '#8860c0',
   teal: '#3898a0',
+  white: '#f0f0e8',
 };
 
 export const OBJECT_PALS: Record<string, Pal> = {
-  esfera: ['', '#f0f0e8', '#38a8a0', SPRITE_INK],
+  palabola: ['', '#f0f0e8', '#38a8a0', SPRITE_INK],
   michi: ['', '#f0f0e8', '#e09848', SPRITE_INK],
   armchair: ['', '#f0b0b8', '#d05058', SPRITE_INK],
+  maquina: ['', '#e8e8e0', '#a0a0a8', SPRITE_INK],
 };
+
+/** Palabola colors in the healing machine (normal, flash). */
+export const HEAL_BALL = ['#38a8a0', '#f0f0e8'];

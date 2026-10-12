@@ -35,7 +35,7 @@ export interface SaveData {
   dir: Dir;
   party: Mon[];
   flags: Record<string, boolean>;
-  esferas: number;
+  palabolas: number;
   medals: string[];
   prog: Record<string, ItemProg>;
   seen: string[];
@@ -59,7 +59,7 @@ export function newSave(): SaveData {
     dir: 'down',
     party: [],
     flags: {},
-    esferas: 0,
+    palabolas: 0,
     medals: [],
     prog: {},
     seen: [],
@@ -92,10 +92,30 @@ export function loadGame(): boolean {
     if (!raw) return false;
     const data = JSON.parse(raw) as SaveData;
     G.save = { ...newSave(), ...data, settings: { ...newSave().settings, ...data.settings } };
+    migrate(G.save);
     return true;
   } catch {
     return false;
   }
+}
+
+/** Palabritas that were renamed between versions: old id -> new id. */
+const RENAMED: Record<string, string> = { perrito: 'salchichita' };
+
+/** Bring older saves up to date so they never break after an update. */
+function migrate(s: SaveData) {
+  const fix = (id: string) => RENAMED[id] ?? id;
+  // "Esferas" were renamed to "Palabolas".
+  const old = s as unknown as { esferas?: number };
+  if (old.esferas !== undefined) {
+    s.palabolas = Math.max(s.palabolas, old.esferas);
+    delete old.esferas;
+  }
+  if (s.flags.esferas) s.flags.palabolas = true;
+  delete s.flags.esferas;
+  for (const m of s.party) m.sp = fix(m.sp);
+  s.seen = [...new Set(s.seen.map(fix))];
+  s.caught = [...new Set(s.caught.map(fix))];
 }
 
 export function saveGame(): boolean {

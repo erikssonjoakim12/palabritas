@@ -17,6 +17,8 @@ export interface NpcRT {
   visible: boolean;
   bubble: number;
   turnTimer: number;
+  /** Extra drawing on top of the sprite (e.g. Palabolas glowing in the healing machine). */
+  overlay?: (g: CanvasRenderingContext2D, x: number, y: number) => void;
 }
 
 export interface ScriptCtx {
@@ -34,7 +36,7 @@ export const OPP: Record<Dir, Dir> = { up: 'down', down: 'up', left: 'right', ri
 
 /** Pixels per frame (a tile is 16px). Gen 2 walks at 1; we go a bit faster. Hold B to run. */
 const WALK_SPEED = 1.5;
-const RUN_SPEED = 3;
+const RUN_SPEED = 2.25;
 const MARGIN = 6;
 const T = 16;
 
@@ -422,6 +424,7 @@ export function renderWorld(g: CanvasRenderingContext2D) {
       draw: () => {
         if (n.def.object) g.drawImage(OBJECTS[n.def.object], sx, sy);
         else g.drawImage(framesFor(n.def.look ?? 'man')[n.dir][0], sx, sy - 4);
+        n.overlay?.(g, sx, sy);
         if (n.bubble > 0) drawBubble(g, sx, sy - 4);
       },
     });

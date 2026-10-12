@@ -1,10 +1,10 @@
-import { W, H, overlay, el, gp } from '../engine/screen';
+import { W, H, overlay, el } from '../engine/screen';
 import { setScene, getScene, nextFrame, frames } from '../engine/loop';
 import { sfx } from '../engine/sfx';
 import { CREATURE_ART } from '../art/creatures';
 import { OBJECTS } from '../art/chars';
 import { G, flag, type Mon } from '../game/state';
-import { stats, monName, checkLevelUps, firstAble, markSeen, markCaught, newMon } from '../game/mon';
+import { stats, monName, checkLevelUps, firstAble, markSeen, markCaught, newMon, knownMoves, newMoves } from '../game/mon';
 import { SPECIES, MODE_INFO, type Move, type Mode } from '../data/species';
 import { effectiveness } from '../data/types';
 import { poolUpTo, THEMES, type Item } from '../data/content';
@@ -60,7 +60,7 @@ const battleScene = {
     g.fill();
     drawFighter(g, enemyF, false);
     drawFighter(g, meF, true);
-    if (ball) g.drawImage(OBJECTS.esfera, Math.round(ball.x + ball.shake), Math.round(ball.y));
+    if (ball) g.drawImage(OBJECTS.palabola, Math.round(ball.x + ball.shake), Math.round(ball.y));
   },
 };
 
@@ -122,33 +122,40 @@ interface Hud {
   update(): void;
 }
 
+/**
+ * Gold/Silver battle boxes: name, then ":N7" (N for nivel = level), then a "PS:" bar
+ * (puntos de salud = HP), inside a bracket line. Yours also shows PS numbers and loyalty.
+ */
 function buildHud(getEnemy: () => Mon, getMe: () => Mon): Hud {
   const root = el('div');
   const mk = (cls: string, showNum: boolean) => {
     const box = el('div', `hud ${cls}`);
-    const br = el('div', 'bracket');
     const name = el('div', 'name');
+    const lv = el('div', 'lv');
+    const br = el('div', 'bracket');
+    const row = el('div', 'hprow');
     const bar = el('div', 'hpbar');
     const fill = el('div');
     bar.appendChild(fill);
-    br.append(name, bar);
+    row.append(el('span', 'hplabel', 'PS:'), bar);
+    br.appendChild(row);
     const num = el('div', 'hpnum');
     const loy = el('div', 'loyalty');
     if (showNum) br.append(num, loy);
-    box.appendChild(br);
+    box.append(name, lv, br);
     root.appendChild(box);
-    return { name, bar, fill, num, loy };
+    return { name, lv, bar, fill, num, loy };
   };
   const e = mk('enemy', false);
   const p = mk('player', true);
   overlay.appendChild(root);
   const set = (h: ReturnType<typeof mk>, mon: Mon) => {
     const s = stats(mon);
-    h.name.innerHTML = '';
-    h.name.append(monName(mon), el('span', 'lv', ` Nv${mon.level}`));
+    h.name.textContent = monName(mon);
+    h.lv.textContent = `:N${mon.level}`;
     h.fill.style.width = `${Math.max(0, (100 * mon.hp) / s.maxHp)}%`;
     h.bar.className = `hpbar ${hpClass(mon.hp, s.maxHp)}`;
-    h.num.textContent = `${mon.hp}/${s.maxHp}`;
+    h.num.textContent = `${mon.hp}/ ${s.maxHp}`;
   };
   return {
     root,
@@ -214,13 +221,14 @@ async function runBattle(cfg: Config): Promise<BattleResult> {
   meF.hidden = true;
   ball = null;
   closeText();
+  overlay.querySelectorAll('.banner').forEach((b) => b.remove()); // the place-name banner
   setScene(battleScene);
   let hud: Hud | null = null;
 
   const myName = () => monName(me);
   const enemyLabel = () => (trainer ? `${monName(enemy)} enemigo` : `El ${monName(enemy)} salvaje`);
 
-  /** Record an answer and announce any level-ups (words are experience!). */
+  /** Record an answer (words are experience!). Level-ups wait until the end of the turn. */
   const learn = async (item: Item, r: ChallengeResult) => {
     const res = record(item, r.mode, r.grade, r.helped);
     tally.asked++;
@@ -228,10 +236,27 @@ async function runBattle(cfg: Config): Promise<BattleResult> {
       tally.learned++;
       await info(`📗 ¡Dominaste «${item.es}»!`, { auto: 1100 });
     }
+  };
+
+  /**
+   * Level-ups happen last in a turn, and only when your attack landed and your Palabrita is
+   * still standing. Otherwise they wait for the next attack that lands.
+   */
+  let landed = false;
+  const endTurn = async () => {
+    const ok = landed && me.hp > 0;
+    landed = false;
+    if (!ok) return;
     for (const up of checkLevelUps()) {
       sfx('levelup');
       hud?.update();
       await info(`¡${monName(up.mon)} subió al nivel ${up.to}!`);
+      for (const mv of newMoves(up.mon, up.from, up.to)) {
+        sfx('perfect');
+        await info(`¡${monName(up.mon)} aprendió ${mv.name}! (${MODE_INFO[mv.mode].icon} ${MODE_INFO[mv.mode].es})`, {
+          en: `${monName(up.mon)} learned ${mv.name}! It's a "${MODE_INFO[mv.mode].en}" move.`,
+        });
+      }
     }
   };
 
@@ -244,9 +269,9 @@ async function runBattle(cfg: Config): Promise<BattleResult> {
   };
 
   const chooseMove = async (): Promise<Move | null> => {
-    const moves = SPECIES[me.sp].moves;
-    const detail = el('div', 'box');
-    Object.assign(detail.style, { left: '0', right: '0', top: '0', fontSize: gp(5.5), lineHeight: '1.5' });
+    const moves = knownMoves(me);
+    // Like Gold/Silver's move menu: a box above it shows the selected move's type and power.
+    const detail = el('div', 'box movedetail');
     overlay.appendChild(detail);
     const i = await menu(
       moves.map((m) => `${MODE_INFO[m.mode].icon} ${m.name}`),
@@ -256,8 +281,14 @@ async function runBattle(cfg: Config): Promise<BattleResult> {
         onMove: (k) => {
           const m = moves[k];
           const mi = MODE_INFO[m.mode];
-          detail.textContent = `${mi.es.toUpperCase()} · Poder ${mi.power} · Tipo ${m.type}\n${mi.en}`;
-          detail.style.whiteSpace = 'pre-wrap';
+          const eff = effectiveness(m.type, SPECIES[enemy.sp].types);
+          const vs = eff > 1 ? '¡Muy eficaz!' : eff === 0 ? 'No le afecta' : eff < 1 ? 'Poco eficaz' : '';
+          detail.innerHTML = '';
+          detail.append(
+            el('div', '', `TIPO/${m.type.toUpperCase()}`),
+            el('div', '', `PODER ${mi.power}${vs ? ` · ${vs}` : ''}`),
+            el('div', 'muted', `${mi.icon} ${mi.es}: ${mi.en}`),
+          );
         },
       },
     );
@@ -268,8 +299,8 @@ async function runBattle(cfg: Config): Promise<BattleResult> {
   const chooseAction = async (): Promise<Action> => {
     while (true) {
       closeText();
-      const canBall = !trainer && flag('esferas');
-      const i = await menu(['LUCHAR', 'EQUIPO', 'ESFERA', 'HUIR'], {
+      const canBall = !trainer && flag('palabolas');
+      const i = await menu(['LUCHAR', 'EQUIPO', 'PALABOLA', 'HUIR'], {
         columns: 2,
         title: `¿Qué hará ${myName()}?`,
         pos: { left: 0, right: 0, bottom: 0 },
@@ -287,7 +318,7 @@ async function runBattle(cfg: Config): Promise<BattleResult> {
   };
 
   /** The Spanish part of an attack: obedience check, then the move's challenge. */
-  const prepareAttack = async (move: Move): Promise<{ grade: Grade; mode: Mode } | null> => {
+  const prepareAttack = async (move: Move): Promise<{ grade: Grade; mode: Mode; helped: boolean } | null> => {
     const theme = SPECIES[me.sp].theme;
     const loy = lealtad(me);
     if (loy < OBEY_THRESHOLD && Math.random() < 0.35 + (OBEY_THRESHOLD - loy)) {
@@ -308,20 +339,24 @@ async function runBattle(cfg: Config): Promise<BattleResult> {
     if (recent.length > 3) recent.shift();
     const r = await challenge({ item, mode: move.mode, title: move.name });
     await learn(item, r);
-    return { grade: r.grade, mode: r.mode };
+    return { grade: r.grade, mode: r.mode, helped: r.helped };
   };
 
-  const playerAttack = async (move: Move, prep: { grade: Grade; mode: Mode } | null) => {
+  /**
+   * Damage depends on how you answered: perfect (accents too) on a non-tap move is a
+   * critical hit ×1.5, almost ×0.75, with 💡 help ×0.5, and a wrong answer misses.
+   */
+  const playerAttack = async (move: Move, prep: { grade: Grade; mode: Mode; helped: boolean } | null) => {
     if (!prep) return;
     await info(`¡${myName()} usó ${move.name}!`, { auto: 700 });
     if (prep.grade === 'wrong') {
       sfx('miss');
-      await info('¡Pero falló!', { auto: 900 });
+      await info('¡Pero no acertó!', { auto: 900, en: 'But it missed!' });
       return;
     }
     await lunge(meF!, 1);
-    const crit = prep.grade === 'perfect' && prep.mode !== 'choose';
-    const mult = crit ? 1.5 : prep.grade === 'close' ? 0.75 : 1;
+    const crit = prep.grade === 'perfect' && !prep.helped && prep.mode !== 'choose';
+    const mult = crit ? 1.5 : prep.helped ? 0.5 : prep.grade === 'close' ? 0.75 : 1;
     const { dmg, eff } = calcDamage(me, enemy, move, MODE_INFO[prep.mode].power, mult);
     if (eff === 0) {
       await info(`No afecta a ${monName(enemy)}...`);
@@ -329,24 +364,38 @@ async function runBattle(cfg: Config): Promise<BattleResult> {
     }
     sfx(eff > 1 ? 'super' : eff < 1 ? 'weak' : 'hit');
     enemy.hp = Math.max(0, enemy.hp - dmg);
+    landed = true;
     hud!.update();
     await hitAnim(enemyF!);
     if (crit) await info('¡Golpe crítico!', { auto: 900 });
+    else if (prep.helped) await info('Con ayuda, el golpe es más débil.', { auto: 1100, en: 'With help, the hit is weaker.' });
     await effMessage(eff);
   };
 
+  let defenseExplained = false;
   const enemyAttack = async () => {
-    const moves = SPECIES[enemy.sp].moves;
+    const moves = knownMoves(enemy);
     const move = moves[Math.floor(Math.random() * moves.length)];
     await info(`¡${enemyLabel()} usó ${move.name}!`, { auto: 700 });
-    // Wild creatures hit a bit softer; trainers let you defend with Spanish.
+    // Wild Palabritas hit a bit softer; trainers let you defend with Spanish.
     let mult = trainer ? 1 : 0.7;
     let defended = false;
     if (trainer) {
+      if (!defenseExplained) {
+        defenseExplained = true;
+        await info('¡Defiéndete! Si respondes bien, recibes menos daño.', {
+          en: 'Defend yourself! Answer well and you take less damage.',
+        });
+      }
       const item = pickFromTheme(trainer.topic, trainer.topicTier, recent);
       recent.push(item.id);
       if (recent.length > 3) recent.shift();
-      const r = await challenge({ item, mode: trainer.defenseMode, title: '🛡️ ¡Defiéndete!' });
+      const r = await challenge({
+        item,
+        mode: trainer.defenseMode,
+        title: '🛡️ Defensa',
+        label: trainer.defenseMode === 'choose' ? '¡Defiéndete! ¿Qué significa? · Defend: what does it mean?' : '¡Defiéndete! Escríbelo en español · Defend: write it in Spanish',
+      });
       await learn(item, r);
       if (r.grade !== 'wrong') {
         mult *= r.grade === 'perfect' ? 0.4 : 0.6;
@@ -391,7 +440,7 @@ async function runBattle(cfg: Config): Promise<BattleResult> {
     await sinkAnim(meF!);
     await info(`¡${myName()} se debilitó!`);
     if (!firstAble()) {
-      await info('¡No te quedan criaturas que puedan luchar!');
+      await info('¡No te quedan Palabritas que puedan luchar!');
       return 'lose';
     }
     const next = (await pickMon('forced', me))!;
@@ -399,18 +448,18 @@ async function runBattle(cfg: Config): Promise<BattleResult> {
     return null;
   };
 
-  const throwEsfera = async (): Promise<'caught' | 'failed' | 'cancel'> => {
-    if (G.save.esferas <= 0) {
-      await info('¡No te quedan Esferas!');
+  const throwPalabola = async (): Promise<'caught' | 'failed' | 'cancel'> => {
+    if (G.save.palabolas <= 0) {
+      await info('¡No te quedan Palabolas!');
       return 'cancel';
     }
     if (G.save.party.length >= 6) {
       await info('Tu equipo está lleno (máximo 6).');
       return 'cancel';
     }
-    G.save.esferas--;
+    G.save.palabolas--;
     const sp = SPECIES[enemy.sp];
-    await info(`¡${G.save.name} lanzó una Esfera! (Quedan ${G.save.esferas})`, { auto: 900 });
+    await info(`¡${G.save.name} lanzó una Palabola! (Quedan ${G.save.palabolas})`, { auto: 900 });
     await info(`Para atraparlo, ¡dile algo de su tema: ${THEMES[sp.theme].name}!`, {
       auto: 1400,
       en: `To catch it, say something from its theme: ${THEMES[sp.theme].en}!`,
@@ -495,7 +544,7 @@ async function runBattle(cfg: Config): Promise<BattleResult> {
         return 'run';
       }
       if (action.type === 'ball') {
-        const res = await throwEsfera();
+        const res = await throwPalabola();
         if (res === 'caught') return await finish('caught');
         if (res === 'cancel') continue;
       }
@@ -515,17 +564,28 @@ async function runBattle(cfg: Config): Promise<BattleResult> {
         const enemyBefore = enemy;
         await myAct();
         const r = await afterEnemyHit();
-        if (r) return await finish(r);
-        if (enemy !== enemyBefore) continue; // a fresh enemy doesn't attack on the turn it comes out
+        if (r) {
+          await endTurn();
+          return await finish(r);
+        }
+        if (enemy !== enemyBefore) {
+          await endTurn();
+          continue; // a fresh enemy doesn't attack on the turn it comes out
+        }
       }
       await enemyAttack();
+      if (me.hp <= 0) landed = false; // knocked out before the turn ended: no level-up this time
       const lost = await afterMyHit();
       if (lost) return lost;
       if (myAct && !meFirst) {
         await myAct();
         const r2 = await afterEnemyHit();
-        if (r2) return await finish(r2);
+        if (r2) {
+          await endTurn();
+          return await finish(r2);
+        }
       }
+      await endTurn();
     }
   } finally {
     hud?.root.remove();

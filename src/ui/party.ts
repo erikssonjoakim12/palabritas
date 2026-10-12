@@ -5,7 +5,7 @@ import { CREATURE_ART } from '../art/creatures';
 import { G, type Mon } from '../game/state';
 import { stats, monName } from '../game/mon';
 import { lealtad, levelProgress, isLearned, peekProg, isFading } from '../game/learning';
-import { SPECIES, MODE_INFO } from '../data/species';
+import { SPECIES, MODE_INFO, learnLevel } from '../data/species';
 import { THEMES, poolUpTo } from '../data/content';
 import { TYPE_COLORS } from '../data/types';
 import { speak } from '../lang/speech';
@@ -76,10 +76,10 @@ function partyRow(mon: Mon, active?: Mon) {
   return row;
 }
 
-/** Pick a creature. In 'switch'/'forced' mode only creatures that can fight are valid. */
+/** Pick a Palabrita. In 'switch'/'forced' mode only Palabritas that can fight are valid. */
 export async function pickMon(mode: 'switch' | 'forced' | 'view', active?: Mon): Promise<Mon | null> {
   while (true) {
-    const header = el('div', 'menu-title', mode === 'view' ? 'TUS CRIATURAS' : '¿Quién luchará?');
+    const header = el('div', 'menu-title', mode === 'view' ? 'TUS PALABRITAS' : '¿Quién luchará?');
     const i = await listMenu(G.save.party.map((m) => partyRow(m, active)), { cancel: mode !== 'forced', header });
     if (i < 0) return null;
     const mon = G.save.party[i];
@@ -91,7 +91,7 @@ export async function pickMon(mode: 'switch' | 'forced' | 'view', active?: Mon):
   }
 }
 
-/** Full details for one creature: theme progress, loyalty, words for the next level. */
+/** Full details for one Palabrita: theme progress, loyalty, words for the next level. */
 export function showDetails(mon: Mon): Promise<void> {
   const sp = SPECIES[mon.sp];
   const theme = THEMES[sp.theme];
@@ -127,7 +127,12 @@ export function showDetails(mon: Mon): Promise<void> {
 
   const moves = el('div', 'row');
   moves.appendChild(el('div', 'muted', 'Ataques · Moves'));
-  for (const m of sp.moves) moves.appendChild(el('div', '', `${MODE_INFO[m.mode].icon} ${m.name} (${m.type})`));
+  for (const m of sp.moves) {
+    const lv = learnLevel(m);
+    const known = lv <= mon.level;
+    const line = el('div', known ? '' : 'muted', `${MODE_INFO[m.mode].icon} ${known ? m.name : '???'} · ${m.type} · Poder ${MODE_INFO[m.mode].power}${known ? '' : ` (Nv${lv})`}`);
+    moves.appendChild(line);
+  }
   box.appendChild(moves);
 
   const lp = levelProgress(mon);

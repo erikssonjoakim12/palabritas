@@ -11,6 +11,59 @@ import { runTitle } from './title';
 layout(true);
 window.addEventListener('resize', () => layout());
 window.addEventListener('orientationchange', () => setTimeout(() => layout(true), 200));
+document.addEventListener('fullscreenchange', () => setTimeout(() => layout(true), 150));
+
+// Fullscreen button (hides Chrome's address bar). Not shown where the browser can't do it.
+const fsButton = document.getElementById('fullscreen') as HTMLButtonElement;
+const root = document.documentElement as HTMLElement & { webkitRequestFullscreen?: () => Promise<void> | void };
+const doc = document as Document & { webkitFullscreenElement?: Element; webkitExitFullscreen?: () => void };
+
+function toast(text: string) {
+  const t = document.createElement('div');
+  t.className = 'toast';
+  t.textContent = text;
+  document.body.appendChild(t);
+  setTimeout(() => t.remove(), 3500);
+}
+
+async function toggleFullscreen() {
+  try {
+    if (document.fullscreenElement || doc.webkitFullscreenElement) {
+      if (document.exitFullscreen) await document.exitFullscreen();
+      else doc.webkitExitFullscreen?.();
+      return;
+    }
+    try {
+      await root.requestFullscreen({ navigationUI: 'hide' });
+    } catch {
+      // Some browsers refuse the options or the standard call; try the plain/older ones.
+      if (root.webkitRequestFullscreen) await root.webkitRequestFullscreen();
+      else await root.requestFullscreen();
+    }
+  } catch (err) {
+    toast(`No se pudo poner pantalla completa (${(err as Error).name || 'error'})`);
+  }
+}
+
+if (document.fullscreenEnabled || root.webkitRequestFullscreen) {
+  fsButton.hidden = false;
+  // Browsers only allow fullscreen when a tap *ends* (touchend / click), not when it starts.
+  // Listen to both and act on whichever arrives first.
+  let last = 0;
+  const onTapEnd = async (e: Event) => {
+    e.stopPropagation();
+    if (Date.now() - last < 600) return;
+    last = Date.now();
+    const wasFull = !!(document.fullscreenElement || doc.webkitFullscreenElement);
+    await toggleFullscreen();
+    setTimeout(() => {
+      if (!wasFull && !document.fullscreenElement && !doc.webkitFullscreenElement) toast('Este navegador no permitió la pantalla completa.');
+    }, 500);
+  };
+  fsButton.addEventListener('touchend', onTapEnd);
+  fsButton.addEventListener('click', onTapEnd);
+  fsButton.addEventListener('keydown', (e) => e.key === 'Enter' && toggleFullscreen());
+}
 
 initInput();
 buildObjects();

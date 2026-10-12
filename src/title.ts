@@ -25,7 +25,7 @@ const titleScene = {
     g.fillStyle = '#5aa04a';
     g.fillRect(0, 98, W, 3);
     const bob = (i: number) => Math.round(Math.sin(t / 15 + i * 2) * 2);
-    g.drawImage(CREATURE_ART.perrito.front, 8, 56 + bob(0));
+    g.drawImage(CREATURE_ART.salchichita.front, 8, 56 + bob(0));
     g.drawImage(CREATURE_ART.gotita.front, 56, 50 + bob(1));
     g.drawImage(CREATURE_ART.aguacatito.front, 104, 56 + bob(2));
   },
@@ -56,7 +56,7 @@ function parseName(raw: string): { name: string; full: boolean } {
 export async function runTitle() {
   setScene(titleScene);
   const title = el('div', 'title', 'PALABRITAS');
-  const sub = el('div', 'subtitle', 'Aprende español con criaturas');
+  const sub = el('div', 'subtitle', 'Aprende español con Palabritas');
   const tap = el('div', 'blink-text', 'TOCA PARA EMPEZAR');
   overlay.append(title, sub, tap);
   await waitTap();
@@ -67,10 +67,10 @@ export async function runTitle() {
 
   let start: 'new' | 'continue' = 'new';
   if (hasSave()) {
-    const i = await menu(['CONTINUAR', 'NUEVA PARTIDA'], { pos: { left: 40, right: 40, bottom: 12 } });
+    const i = await menu(['CONTINUAR', 'NUEVA PARTIDA'], { pos: { left: 22, right: 22, bottom: 12 } });
     start = i === 0 ? 'continue' : 'new';
   } else {
-    await menu(['NUEVA PARTIDA'], { pos: { left: 40, right: 40, bottom: 12 } });
+    await menu(['NUEVA PARTIDA'], { pos: { left: 22, right: 22, bottom: 12 } });
   }
   title.remove();
   sub.remove();
@@ -105,7 +105,7 @@ function applySettings() {
 
 async function newGameIntro() {
   await say('¡Hola! Este es el mundo de Palabritas.', { en: 'Hello! This is the world of Palabritas.' });
-  await say('Aquí, las criaturas crecen cuando tú aprendes español.', { en: 'Here, creatures grow when you learn Spanish.' });
+  await say('Aquí, las Palabritas crecen cuando tú aprendes español.', { en: 'Here, Palabritas grow when you learn Spanish.' });
   await say('Primero, ¿cómo te llamas?', { en: 'First of all, what’s your name?' });
   closeText();
   const raw = await promptText('¿Cómo te llamas?', 'Write "Me llamo …" (or just your name)', 'Me llamo…');

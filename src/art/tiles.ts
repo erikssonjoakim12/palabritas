@@ -50,7 +50,7 @@ export const TILES: Record<string, TileDef> = {
   p: solid(),
   h: solid(),
   w: solid(),
-  c: solid({ look: { es: 'CENTRO DE CRIATURAS. ¡Curamos a tus criaturas gratis!', en: 'CREATURE CENTER. We heal your creatures for free!' } }),
+  c: solid({ look: { es: 'PALACENTRO. ¡Curamos a tus Palabritas gratis!', en: 'PALACENTRO. We heal your Palabritas for free!' } }),
   G: solid({ look: { es: 'GIMNASIO. ¡Solo para entrenadores valientes!', en: 'GYM. Only for brave trainers!' } }),
   d: open({ kind: 'door' }),
   _: open(),
@@ -63,6 +63,9 @@ export const TILES: Record<string, TileDef> = {
   P: solid(),
   V: solid({ look: { es: 'En la tele dan una telenovela. «¡Te amo, Fernando!»', en: 'A soap opera is on TV. "I love you, Fernando!"' } }),
   C: solid({ kind: 'counter' }),
+  Q: solid({ look: { es: 'Es una computadora. En la pantalla dice: «¡Bienvenidos al Palacentro!»', en: 'It’s a computer. The screen says: "Welcome to the Palacentro!"' } }),
+  n: solid({ look: { es: 'Un sofá muy cómodo para esperar.', en: 'A very comfy sofa for waiting.' } }),
+  u: solid({ look: { es: 'Un póster: «¡Lávate las manos!»', en: 'A poster: "Wash your hands!"' } }),
   m: open({ kind: 'mat' }),
   R: open(),
   ' ': solid(),
@@ -246,6 +249,12 @@ function render(ch: string, env: TileEnv): Img {
       if (nb(env).e !== 'C') g.forEach((r, y) => y < 14 && (r[15] = '3'));
       return stack(underImage(env, 'floor'), paintArt(ART.counter, g));
     }
+    case 'Q':
+      return stack(underImage(env, 'floor'), paintArt(ART.pc));
+    case 'n':
+      return stack(underImage(env, 'floor'), paintArt(ART.bench));
+    case 'u':
+      return stack(paintArt(ART.innerWall), paintArt(ART.poster));
     case 'm':
       return stack(underImage(env, 'floor'), paintArt(ART.mat));
     case 'R': {

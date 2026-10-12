@@ -10,7 +10,7 @@ There is no XP from battles. A creature's **level is how much of its theme you h
 
 - Every creature has a **battle type** (the 17 types from Gen 2, in Spanish:
   Fuego, Agua, Planta, Volador…) and a **theme** (*tema*), a slice of Spanish:
-  Perrito → talking to and about dogs, Sillón → the home (soft pillows, cleaning stains), and so on.
+  Salchichita (a dachshund in a hot dog bun) → talking to and about dogs, Sillón → the home (soft pillows, cleaning stains), and so on.
 - Each theme is split into **tiers**, one per level. Tier 2 is what a level-2 creature is
   learning, tier 3 for level 3, etc. When every item in the creature's current tier is
   **mastered**, the creature levels up and the next tier unlocks.
@@ -42,6 +42,10 @@ Below 70%, it may ignore your command. You get it back by answering a review
 question correctly ("¡Háblale!"). Battles pick fading and due words first, so playing keeps
 your team obedient.
 
+## Names
+
+The creatures are **Palabritas**, you catch them with **Palabolas**, and you heal them at the **Palacentro**.
+
 ## Battles
 
 - Each creature has 4 moves, and **each move is a kind of challenge**:
@@ -49,11 +53,17 @@ your team obedient.
   - 🎧 **Escuchar**: hear Spanish, type what you heard
   - ⌨️ **Escribir**: see English, type the Spanish
   - 🎤 **Hablar**: see English, say it out loud (strongest). If you can't talk right now, you can switch to typing.
-- Answer quality changes damage: perfect on a hard move = **critical hit**, close = weaker hit, wrong = miss.
+- Answer quality changes damage: perfect (accents too) on a non-tap move = **critical hit ×1.5**, close ×0.75,
+  with 💡 help ×0.5, wrong = miss. Move power: tap 35, listen 45, write 55, speak 65.
+- **Learning moves:** like Gen 2, a Palabrita starts with 2 moves (👆 tap, ⌨️ write). By default it learns 🎧 listen
+  at level 6 and 🎤 speak at level 10, so the player gets used to each mechanic first. Each Palabrita can differ:
+  weaker ones learn all 4 earlier, stronger ones later.
+- **Level-ups happen last in a turn**, and only if your attack landed and your Palabrita is still standing.
+  Training happens only in battles; the START menu is for looking at your Palabritas.
 - Gen 2 type chart, same-type bonus, speed order.
 - **Trainer battles** add *defense*: when the enemy attacks, answer their topic's question to halve the damage.
   The gym leader's topic is a grammar point (Gym 1: present tense).
-- **Catching**: weaken it, throw an *Esfera*, and say or type the "magic word" (an item from its theme).
+- **Catching**: weaken it, throw a *Palabola*, and say or type the "magic word" (an item from its theme).
   A better answer gives a better catch chance.
 
 ## World (iteration 1)
@@ -61,19 +71,22 @@ your team obedient.
 ```
 Ciudad Brisa      Gym 1: Paloma (Volador) · present tense · Medalla Brisa
    │ Ruta 2       tall grass, trainer Mateo (question words)
-Villa Limón       Centro de Criaturas · Doña Lupe's lost-cat quest → unlocks Esferas
+Villa Limón       Palacentro · Doña Lupe's lost-cat quest → unlocks Palabolas
    │ Ruta 1       tall grass, trainer Sofía (greetings)
 Pueblo Amanecer   home (Mamá heals) · Profesora Ceiba's lab (choose your starter)
 ```
 
-**Starters:** Perrito (Fuego · el perro), Gotita (Agua · el tiempo/weather), Aguacatito (Planta · la comida).
+**Starters:** Salchichita (Fuego · el perro), Gotita (Agua · el tiempo/weather), Aguacatito (Planta · la comida).
 **Wild:** Pajarito (Volador · naturaleza), Conejito (Normal · números), Mariposita (Bicho · colores),
 plus Sillón (Normal/Fantasma · la casa) hiding in a house in Villa Limón.
 
 **The Michi quest** (Villa Limón): Doña Lupe's cat is lost. You have to *ask* villagers "¿Has visto a Michi?"
-(typed or spoken), then *listen* to the baker's spoken answer to find where she is. Reward: Esferas, and catching unlocks.
+(typed or spoken), then *listen* to the baker's spoken answer to find where she is. Reward: Palabolas, and catching unlocks.
 
 ## Ideas parked for later
+
+- **Evolution notes:** some Palabritas are very weak before evolving, others progress evenly (like Gen 2).
+  The user loves evolving mid-battle (anime moments): trigger it at the end of a turn, like level-ups.
 
 - **Evolutions tied to grammar milestones.** For example, Gotita → Nubarrón when you master the -ón
   augmentative and weather in the past tense. The new name itself teaches word-building.

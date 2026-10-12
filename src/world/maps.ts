@@ -3,7 +3,7 @@ import { flag } from '../game/state';
 
 /*
  Tile legend (see art/tiles.ts):
-  .  grass         ,  tall grass (wild creatures)   =  path        *  flowers
+  .  grass         ,  tall grass (wild Palabritas)   =  path        *  flowers
   T  tree          Y  lemon tree                    ~  water       f  fence      S  sign
   r b o p  roofs (red, blue, orange = Centro, purple = Gym)
   h  wall          w  window                        d  door
@@ -54,7 +54,10 @@ export interface MapDef {
 }
 
 const HOUSE = ['##L##V##', '________', '_kk_____', '_kk_____', '________', '______B_', '____m___'];
-const CENTRO = ['##########', 'PxxxxxxxxP', 'xxxCCCCxxx', 'xxxxxxxxxx', 'xxxxxxxxxx', 'xkxxxxxxkx', 'xxxxxxxxxx', 'xxxxmxxxxx'];
+// Palacentro: posters (u), nurse behind the counter (C) next to the healing machine,
+// a computer (Q) and waiting sofas (n).
+const CENTRO = ['##u####u##', 'PxxxxxxxxP', 'xxxCCCCxxx', 'xxxxxxxxQx', 'xxxxxxxxxx', 'nxxxxxxxxn', 'nxxxxxxxxn', 'xxxxmxxxxx'];
+const MAQUINA: NpcDef = { id: 'maquina', x: 5, y: 1, object: 'maquina', script: 'maquina' };
 
 export const MAPS: Record<string, MapDef> = {
   amanecer: {
@@ -97,6 +100,7 @@ export const MAPS: Record<string, MapDef> = {
     npcs: [
       { id: 'lucas', x: 11, y: 2, look: 'boy', dir: 'left', script: 'lucas', turns: true },
       { id: 'pescador', x: 16, y: 14, look: 'fisher', dir: 'down', script: 'pescador' },
+      { id: 'sam', x: 7, y: 8, look: 'tourist', dir: 'down', script: 'sam', turns: true, sight: 3 },
     ],
     triggers: [
       { x: 8, y: 1, script: 'needStarter' },
@@ -124,9 +128,9 @@ export const MAPS: Record<string, MapDef> = {
     npcs: [
       { id: 'ceiba', x: 6, y: 2, look: 'prof', dir: 'down', script: 'ceiba' },
       { id: 'ayudante', x: 8, y: 6, look: 'man', dir: 'left', script: 'ayudante', turns: true },
-      { id: 'starter_perrito', x: 2, y: 2, object: 'esfera', script: 'starter_perrito', show: () => !flag('starter') },
-      { id: 'starter_gotita', x: 3, y: 2, object: 'esfera', script: 'starter_gotita', show: () => !flag('starter') },
-      { id: 'starter_aguacatito', x: 4, y: 2, object: 'esfera', script: 'starter_aguacatito', show: () => !flag('starter') },
+      { id: 'starter_salchichita', x: 2, y: 2, object: 'palabola', script: 'starter_salchichita', show: () => !flag('starter') },
+      { id: 'starter_gotita', x: 3, y: 2, object: 'palabola', script: 'starter_gotita', show: () => !flag('starter') },
+      { id: 'starter_aguacatito', x: 4, y: 2, object: 'palabola', script: 'starter_aguacatito', show: () => !flag('starter') },
     ],
   },
 
@@ -237,13 +241,14 @@ export const MAPS: Record<string, MapDef> = {
 
   centro_limon: {
     id: 'centro_limon',
-    name: 'Centro de Criaturas',
+    name: 'Palacentro',
     outdoor: false,
     floor: 'x',
     rows: CENTRO,
     exit: { to: 'limon', x: 18, y: 7 },
     npcs: [
       { id: 'enfermera', x: 4, y: 1, look: 'nurse', dir: 'down', script: 'enfermera' },
+      MAQUINA,
       { id: 'olvidadizo', x: 7, y: 4, look: 'man', dir: 'left', script: 'olvidadizo' },
     ],
   },
@@ -360,12 +365,12 @@ export const MAPS: Record<string, MapDef> = {
 
   centro_brisa: {
     id: 'centro_brisa',
-    name: 'Centro de Criaturas',
+    name: 'Palacentro',
     outdoor: false,
     floor: 'x',
     rows: CENTRO,
     exit: { to: 'brisa', x: 5, y: 13 },
-    npcs: [{ id: 'enfermera', x: 4, y: 1, look: 'nurse', dir: 'down', script: 'enfermera' }],
+    npcs: [{ id: 'enfermera', x: 4, y: 1, look: 'nurse', dir: 'down', script: 'enfermera' }, MAQUINA],
   },
 
   casa_rita: {

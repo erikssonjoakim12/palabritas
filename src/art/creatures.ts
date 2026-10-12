@@ -19,21 +19,42 @@ const DRAW: Record<string, Draw> = {
     p.rect(14, 34, 3, 1, '#f7a0b0').rect(31, 34, 3, 1, '#f7a0b0');
     p.outline('#183060');
   },
-  perrito(p) {
-    const o = '#e88a3a', dk = '#a8521e', cr = '#fbe3b8';
-    p.poly([[34, 32], [45, 16], [41, 27], [47, 24], [40, 38]], '#e83a2a');
-    p.poly([[37, 31], [43, 21], [41, 32]], '#ffd23a');
-    p.ellipse(26, 36, 13, 8, o);
-    p.rect(16, 40, 4, 6, o).rect(31, 40, 4, 6, o);
-    p.rect(16, 44, 4, 2, cr).rect(31, 44, 4, 2, cr);
-    p.ellipse(24, 37, 5, 4, cr);
-    p.ellipse(20, 22, 12, 11, o);
-    p.ellipse(9, 23, 4, 8, dk).ellipse(31, 23, 4, 8, dk);
-    p.ellipse(20, 27, 6, 4, cr);
-    p.ellipse(20, 25, 2, 1.5, K);
-    p.rect(19, 29, 3, 2, '#ff8aa0');
-    p.ellipse(15, 20, 2, 2.5, K).ellipse(25, 20, 2, 2.5, K);
-    p.set(14, 19, W).set(24, 19, W);
+  /** A dachshund (perro salchicha) lying in a hot dog bun, with mustard on its back. */
+  salchichita(p) {
+    const br = '#b0602c', ear = '#783818', snout = '#d08850';
+    const bunLight = '#f4c878', bun = '#e0a050', bunDark = '#b87830', mustard = '#f8d838';
+    // tail with a little flame (it's a Fire type: a *hot* dog)
+    p.poly([[40, 25], [46, 12], [44, 20], [48, 17], [44, 29]], '#e83a2a');
+    p.poly([[42, 25], [45, 16], [44, 26]], '#ffd23a');
+    // four short dachshund legs poking out under the bun (far legs darker), drawn first so
+    // the bun covers their tops
+    for (const [x, c] of [[15, ear], [39, ear], [11, br], [35, br]] as [number, string][]) {
+      p.rect(x, 36, 3, 8, c);
+      p.rect(x - 1, 44, 4, 1, snout);
+    }
+    // back half of the bun, the long sausage-dog body, mustard zigzag
+    p.ellipse(25, 29, 21, 6, bunLight);
+    p.ellipse(27, 26, 16, 5, br);
+    const zig: [number, number][] = [];
+    for (let x = 15, up = false; x <= 39; x += 3, up = !up) zig.push([x, up ? 21 : 23]);
+    for (let i = 1; i < zig.length; i++) {
+      p.line(zig[i - 1][0], zig[i - 1][1], zig[i][0], zig[i][1], mustard);
+      p.line(zig[i - 1][0], zig[i - 1][1] + 1, zig[i][0], zig[i][1] + 1, mustard);
+    }
+    // front half of the bun
+    p.ellipse(25, 34, 22, 7, bun);
+    p.ellipse(25, 38, 20, 3, bunDark);
+    p.ellipse(18, 31, 9, 1.6, bunLight);
+    // little paws over the edge of the bun
+    p.ellipse(17, 28, 2.5, 1.5, br).ellipse(35, 28, 2.5, 1.5, br);
+    // head, floppy ear, long snout
+    p.ellipse(10, 19, 8, 7, br);
+    p.ellipse(14, 22, 3, 6, ear);
+    p.ellipse(4, 22, 4, 3, snout);
+    p.ellipse(1.5, 21, 1.5, 1.2, K);
+    p.ellipse(8, 17, 1.5, 2, K);
+    p.set(7, 16, W);
+    p.rect(5, 25, 2, 2, '#ff8aa0');
     p.outline('#3a1a08');
   },
   aguacatito(p) {

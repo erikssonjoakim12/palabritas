@@ -11,7 +11,7 @@ import { saludos, preguntas, presente } from './trainers';
 /**
  * A theme is a slice of Spanish. Lines look like `"el perro | el can = the dog"`:
  * the first Spanish form is the one we show, the others are also accepted.
- * Tier N is what a level-N creature of that theme is learning.
+ * Tier N is what a level-N Palabrita of that theme is learning.
  */
 export interface ThemeSource {
   id: string;

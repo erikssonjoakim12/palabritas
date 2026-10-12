@@ -8,13 +8,14 @@ import { SPECIES, type Mode } from '../data/species';
 import { THEMES, adHocItem } from '../data/content';
 import { TRAINERS } from '../data/trainers';
 import { say, info } from '../ui/textbox';
-import { ask } from '../ui/menu';
+import { ask, menu } from '../ui/menu';
 import { challenge, chooseText } from '../ui/challenge';
 import { spriteCanvas } from '../ui/party';
 import { startMenu } from '../ui/startmenu';
 import { wildBattle, trainerBattle } from '../battle/battle';
 import { speak, canListen } from '../lang/speech';
-import { SCRIPTS, scriptedStep, warp, currentMap, refreshNpcs, type ScriptCtx } from './world';
+import { SCRIPTS, scriptedStep, warp, currentMap, refreshNpcs, npcById, type ScriptCtx } from './world';
+import { HEAL_BALL } from '../style/colors';
 
 type Line = [es: string, en: string];
 
@@ -31,7 +32,46 @@ async function blackout() {
   healParty();
   const h = G.save.heal;
   await warp(h.map, h.x, h.y, 'down');
-  await info('Tus criaturas se recuperaron.', { en: 'Your creatures recovered.' });
+  await info('Tus Palabritas se recuperaron.', { en: 'Your Palabritas recovered.' });
+}
+
+/**
+ * Gold/Silver's healing: the Palabolas go into the machine one by one, flash, and the
+ * healing jingle plays.
+ */
+async function healingMachine() {
+  const machine = npcById('maquina');
+  if (!machine) return heal();
+  const count = Math.max(1, G.save.party.length);
+  // 6 slots of 4x4 in the machine's tray; each holds a mini Palabola (teal top, white bottom).
+  const slots: [number, number][] = [[2, 3], [6, 3], [10, 3], [2, 7], [6, 7], [10, 7]];
+  const MINI = ['.tt.', 'tttt', 'wwww', '.ww.'];
+  let shown = 0;
+  let flash = false;
+  machine.overlay = (g, x, y) => {
+    for (let i = 0; i < shown; i++) {
+      const [sx, sy] = slots[i];
+      MINI.forEach((row, dy) =>
+        [...row].forEach((ch, dx) => {
+          if (ch === '.') return;
+          g.fillStyle = flash ? '#f8f8b0' : ch === 't' ? HEAL_BALL[0] : HEAL_BALL[1];
+          g.fillRect(x + sx + dx, y + sy + dy, 1, 1);
+        }),
+      );
+    }
+  };
+  for (let i = 0; i < count && i < 6; i++) {
+    shown = i + 1;
+    sfx('blip');
+    await frames(14);
+  }
+  sfx('heal');
+  healParty();
+  for (let k = 0; k < 10; k++) {
+    flash = !flash;
+    await frames(8);
+  }
+  machine.overlay = undefined;
 }
 
 async function heal() {
@@ -104,7 +144,7 @@ const S: Record<string, (c: ScriptCtx) => Promise<void>> = {
   async needStarter() {
     if (flag('starter')) return;
     await lines(
-      ['¡Espera, {name}! Es peligroso ir a la hierba alta sin una criatura.', 'Wait! It’s dangerous to go into the tall grass without a creature.'],
+      ['¡Espera, {name}! Es peligroso ir a la hierba alta sin una Palabrita.', 'Wait! It’s dangerous to go into the tall grass without a Palabrita.'],
       ['La Profesora Ceiba está en su laboratorio. ¡Ve a verla!', 'Professor Ceiba is in her lab. Go and see her!'],
     );
     await scriptedStep('down');
@@ -112,10 +152,66 @@ const S: Record<string, (c: ScriptCtx) => Promise<void>> = {
 
   async lucas() {
     if (!flag('starter')) {
-      await lines(['¡Hola, {name}! Dicen que la Profesora Ceiba tiene criaturas nuevas.', 'Hi! They say Professor Ceiba has some new creatures.']);
+      await lines(['¡Hola, {name}! Dicen que la Profesora Ceiba tiene Palabritas nuevas.', 'Hi! They say Professor Ceiba has some new Palabritas.']);
     } else {
-      await lines(['¡Qué criatura tan bonita! Al norte está la Ruta 1.', 'What a pretty creature! Route 1 is to the north.']);
+      await lines(['¡Qué Palabrita tan bonita! Al norte está la Ruta 1.', 'What a pretty Palabrita! Route 1 is to the north.']);
     }
+  },
+
+  /** Sam explains the game in English, for players who have never played Pokémon. */
+  async sam() {
+    const en = (text: string) => say(text, { voice: false });
+    if (!flag('beat:sam')) {
+      // First meeting: like a trainer, he spots you and comes over to say hi (only once).
+      setFlag('beat:sam');
+      await say('¡Hola! ¡Hola! Me llamo Sam.', { en: 'Hi! Hi! My name is Sam.' });
+      await en("Sorry, I saw you're new here! I just moved here to learn Spanish too.");
+      const want = await ask('Want me to explain how this game works? (In English!)', { voice: false }, ['Yes, please!', 'No, thanks']);
+      if (!want) {
+        await en("OK! If you ever have questions, just come and talk to me. I'm always around here.");
+        return;
+      }
+    } else {
+      await say('¡Hola otra vez!', { en: 'Hi again!' });
+    }
+    const TOPICS: [string, string[]][] = [
+      ['Palabritas', [
+        'Palabritas are creatures that grow stronger when YOU learn Spanish.',
+        'Each one has a theme: dogs, weather, food, numbers... It learns the words of its theme.',
+        'Professor Ceiba, in the lab next door, will give you your first one.',
+      ]],
+      ['Battles', [
+        'Walk into tall grass to meet wild Palabritas. In battle, every attack is a Spanish question.',
+        'Answer well and your attack hits. A perfect answer, accents included, is a critical hit! A wrong answer misses.',
+        'Against trainers you also answer a question when THEY attack. Answer well and you take less damage.',
+      ]],
+      ['Moves', [
+        'There are four kinds of moves: tap the meaning, write it in Spanish, write what you hear, and say it out loud.',
+        'Harder moves hit harder. A Palabrita starts with two kinds and learns the others as it levels up.',
+        'If you need the 💡 help button, your attack only does half damage.',
+      ]],
+      ['Leveling up', [
+        'There is no XP here. Your Palabrita levels up when you master all the words of its current level.',
+        'You can see which words it needs in START, PALABRITAS, DETALLES.',
+        'Mastered words come back for review on later days. If you forget them, your Palabrita stops obeying you!',
+      ]],
+      ['Catching', [
+        'First weaken a wild Palabrita. Then throw a Palabola and say a word from its theme.',
+        'The better your answer, the easier it is to catch. Doña Lupe in Villa Limón makes Palabolas.',
+      ]],
+      ['Controls', [
+        'A talks and confirms, B goes back (hold B to run), START opens the menu.',
+        'Tap the speaker button to hear any Spanish line again, and EN to see the English translation.',
+        'If your Palabritas get hurt, heal them at the Palacentro, or at home with your mom.',
+      ]],
+    ];
+    while (true) {
+      await say('What do you want to know?', { voice: false, noWait: true });
+      const i = await menu([...TOPICS.map((t) => t[0]), 'Bye'], { cancel: true, columns: 2, pos: { left: 0, right: 0, bottom: 48 } });
+      if (i < 0 || i >= TOPICS.length) break;
+      for (const line of TOPICS[i][1]) await en(line);
+    }
+    await say('¡Hasta luego! ¡Buena suerte!', { en: 'See you later! Good luck!' });
   },
 
   async pescador() {
@@ -131,6 +227,7 @@ const S: Record<string, (c: ScriptCtx) => Promise<void>> = {
         ['¡Buenos días, {name}! ¿Dormiste bien?', 'Good morning! Did you sleep well?'],
         ['La Profesora Ceiba te está buscando. Su laboratorio está al lado.', 'Professor Ceiba is looking for you. Her lab is next door.'],
       );
+      await lines(['¡Ah! Sam, el chico de afuera, habla inglés. Te puede explicar cómo funciona todo.', 'Oh! Sam, the boy outside, speaks English. He can explain how everything works.']);
       await info('Consejo: toca 🔊 para oír otra vez y EN para ver la traducción. Pulsa START para el menú.', {
         en: 'Tip: tap 🔊 to hear it again and EN to see the translation. Press START for the menu.',
       });
@@ -139,7 +236,7 @@ const S: Record<string, (c: ScriptCtx) => Promise<void>> = {
     if (await ask('¡Hola, cariño! ¿Quieres descansar un rato?', { en: 'Hi, sweetie! Do you want to rest for a while?' })) {
       await heal();
       G.save.heal = { map: 'casa', x: 2, y: 4 };
-      await lines(['¡Tus criaturas están llenas de energía! ¡Cuídate mucho!', 'Your creatures are full of energy! Take care!']);
+      await lines(['¡Tus Palabritas están llenas de energía! ¡Cuídate mucho!', 'Your Palabritas are full of energy! Take care!']);
     } else {
       await lines(['Bueno. ¡Cuídate mucho!', 'OK. Take good care!']);
     }
@@ -148,24 +245,24 @@ const S: Record<string, (c: ScriptCtx) => Promise<void>> = {
   async ceiba() {
     if (!flag('starter')) {
       if (flag('metCeiba')) {
-        return lines(['¿Ya elegiste? Las Esferas están en la mesa.', 'Have you chosen yet? The Esferas are on the table.']);
+        return lines(['¿Ya elegiste? Las Palabolas están en la mesa.', 'Have you chosen yet? The Palabolas are on the table.']);
       }
       await lines(
         ['¡Hola, {name}! Soy la Profesora Ceiba. ¡Te estaba esperando!', 'Hi! I’m Professor Ceiba. I was waiting for you!'],
-        ['En esta región, las criaturas crecen con las palabras.', 'In this region, creatures grow with words.'],
-        ['Cada criatura tiene un tema. Cuando dominas las palabras de su tema, ¡sube de nivel!', 'Each creature has a theme. When you master its words, it levels up!'],
+        ['En esta región, las Palabritas crecen con las palabras.', 'In this region, Palabritas grow with words.'],
+        ['Cada Palabrita tiene un tema. Cuando dominas las palabras de su tema, ¡sube de nivel!', 'Each Palabrita has a theme. When you master its words, it levels up!'],
         ['En la batalla, cada ataque es un reto: elegir, escuchar, escribir o hablar.', 'In battle, every attack is a challenge: choose, listen, write or speak.'],
         ['¡Hablar es el ataque más fuerte! Y si respondes perfecto, con acentos, es un golpe crítico.', 'Speaking is the strongest attack! And a perfect answer, accents included, is a critical hit.'],
-        ['Pero ojo: si no usas las palabras, tu criatura las olvida... y deja de obedecerte.', 'But careful: if you don’t use the words, your creature forgets them... and stops obeying you.'],
-        ['En la mesa hay tres Esferas. ¡Elige a tu primera criatura!', 'There are three Esferas on the table. Choose your first creature!'],
+        ['Pero ojo: si no usas las palabras, tu Palabrita las olvida... y deja de obedecerte.', 'But careful: if you don’t use the words, your Palabrita forgets them... and stops obeying you.'],
+        ['En la mesa hay tres Palabolas. ¡Elige a tu primera Palabrita!', 'There are three Palabolas on the table. Choose your first Palabrita!'],
       );
       setFlag('metCeiba');
       return;
     }
-    if (!flag('esferas')) {
+    if (!flag('palabolas')) {
       return lines(
-        ['Ve al norte, a Villa Limón. Mi amiga Doña Lupe hace Esferas para atrapar criaturas.', 'Go north to Lemon Village. My friend Doña Lupe makes Esferas for catching creatures.'],
-        ['Y no olvides entrenar: pulsa START y elige CRIATURAS.', 'And don’t forget to train: press START and choose CRIATURAS.'],
+        ['Ve al norte, a Villa Limón. Mi amiga Doña Lupe hace Palabolas para atrapar Palabritas.', 'Go north to Lemon Village. My friend Doña Lupe makes Palabolas for catching Palabritas.'],
+        ['Tus Palabritas se hacen fuertes luchando. En START, elige PALABRITAS para ver sus poderes.', 'Your Palabritas get stronger by battling. In START, choose PALABRITAS to see their powers.'],
       );
     }
     if (!flag('medalBrisa')) {
@@ -176,12 +273,12 @@ const S: Record<string, (c: ScriptCtx) => Promise<void>> = {
 
   async ayudante() {
     await lines(
-      ['Un consejo: cuando escribes, usa los botones de acentos: á, é, ñ...', 'A tip: when you write, use the accent buttons: á, é, ñ...'],
+      ['Un consejo: para escribir acentos, mantén pulsada la letra: e → é, n → ñ.', 'A tip: to type accents, press and hold the letter: e → é, n → ñ.'],
       ['Si no conoces una palabra nueva, toca 💡 Ayuda. Pero solo cuenta como «casi».', 'If you don’t know a new word, tap 💡 Ayuda. But it only counts as "almost".'],
     );
   },
 
-  starter_perrito: (c) => pickStarter('perrito', c),
+  starter_salchichita: (c) => pickStarter('salchichita', c),
   starter_gotita: (c) => pickStarter('gotita', c),
   starter_aguacatito: (c) => pickStarter('aguacatito', c),
 
@@ -285,7 +382,7 @@ const S: Record<string, (c: ScriptCtx) => Promise<void>> = {
     if (!flag('michiQuest')) {
       await lines(
         ['¡Ay, ay, ay! ¡Mi gata Michi se perdió!', 'Oh dear! My cat Michi is lost!'],
-        ['Hoy no puedo hacer Esferas. Estoy muy preocupada.', 'I can’t make Esferas today. I’m very worried.'],
+        ['Hoy no puedo hacer Palabolas. Estoy muy preocupada.', 'I can’t make Palabolas today. I’m very worried.'],
         ['¿Me ayudas a buscarla? Pregúntale a la gente: «¿Has visto a Michi?»', 'Will you help me find her? Ask people: "Have you seen Michi?"'],
         ['Empieza con Carmen. Siempre está en la plaza.', 'Start with Carmen. She’s always in the square.'],
       );
@@ -295,26 +392,26 @@ const S: Record<string, (c: ScriptCtx) => Promise<void>> = {
     if (!flag('michiFound')) {
       return lines(['¿La encontraste? Pregunta: «¿Has visto a Michi?»', 'Did you find her? Ask: "Have you seen Michi?"']);
     }
-    if (!flag('esferas')) {
+    if (!flag('palabolas')) {
       sfx('caught');
       await lines(
         ['¡Michi! ¡Mi gatita linda! ¡Muchísimas gracias, {name}!', 'Michi! My pretty kitty! Thank you so much!'],
-        ['Yo hago Esferas. Toma, te regalo cinco.', 'I make Esferas. Here, I’ll give you five.'],
+        ['Yo hago Palabolas. Toma, te regalo cinco.', 'I make Palabolas. Here, I’ll give you five.'],
       );
-      G.save.esferas += 5;
-      setFlag('esferas');
+      G.save.palabolas += 5;
+      setFlag('palabolas');
       sfx('levelup');
-      await info('¡{name} recibió 5 Esferas!', { en: '{name} received 5 Esferas!' });
+      await info('¡{name} recibió 5 Palabolas!', { en: '{name} received 5 Palabolas!' });
       await lines(
-        ['Para atrapar una criatura salvaje, primero debilítala un poco.', 'To catch a wild creature, first weaken it a bit.'],
-        ['Luego lanza una Esfera y dile algo de su tema en español. ¡Si lo dices bien, es más fácil atraparla!', 'Then throw an Esfera and say something from its theme in Spanish. Say it well and it’s easier to catch!'],
+        ['Para atrapar una Palabrita salvaje, primero debilítala un poco.', 'To catch a wild Palabrita, first weaken it a bit.'],
+        ['Luego lanza una Palabola y dile algo de su tema en español. ¡Si lo dices bien, es más fácil atraparla!', 'Then throw an Palabola and say something from its theme in Spanish. Say it well and it’s easier to catch!'],
         ['Ah, y el Señor Ramos dice que su sillón hace ruidos raros... ¡Qué cosa tan extraña!', 'Oh, and Mr. Ramos says his armchair makes strange noises... How strange!'],
       );
       return;
     }
-    if (G.save.esferas === 0) {
-      G.save.esferas += 5;
-      await lines(['¿Se te acabaron las Esferas? Toma cinco más.', 'Did you run out of Esferas? Here are five more.']);
+    if (G.save.palabolas === 0) {
+      G.save.palabolas += 5;
+      await lines(['¿Se te acabaron las Palabolas? Toma cinco más.', 'Did you run out of Palabolas? Here are five more.']);
       return;
     }
     await lines(['Michi está muy feliz. ¡Gracias otra vez!', 'Michi is very happy. Thanks again!']);
@@ -323,30 +420,34 @@ const S: Record<string, (c: ScriptCtx) => Promise<void>> = {
   async ramos() {
     if (flag('sillonDone')) return lines(['¡Por fin puedo dormir tranquilo! Gracias.', 'At last I can sleep in peace! Thanks.']);
     await lines(['Mi sillón hace ruidos raros por la noche... ¡Creo que está vivo!', 'My armchair makes strange noises at night... I think it’s alive!']);
-    if (flag('esferas')) await lines(['Si es una criatura, ¡atrápala! Yo prefiero una silla normal.', 'If it’s a creature, catch it! I’d rather have a normal chair.']);
+    if (flag('palabolas')) await lines(['Si es una Palabrita, ¡atrápala! Yo prefiero una silla normal.', 'If it’s a Palabrita, catch it! I’d rather have a normal chair.']);
   },
 
   async sillon() {
-    if (!flag('esferas')) {
+    if (!flag('palabolas')) {
       return lines(['Es un sillón muy cómodo... ¿Se movió un poco?', 'It’s a very comfy armchair... Did it just move a little?']);
     }
     sfx('alert');
-    await lines(['¡El sillón se movió! ¡Es una criatura!', 'The armchair moved! It’s a creature!']);
+    await lines(['¡El sillón se movió! ¡Es una Palabrita!', 'The armchair moved! It’s a Palabrita!']);
     const res = await wildBattle('sillon', 5);
     if (res === 'lose') return blackout();
     if (res === 'caught' || res === 'win') setFlag('sillonDone');
   },
 
   async enfermera() {
-    await lines(['¡Hola! Bienvenidos al Centro de Criaturas.', 'Hi! Welcome to the Creature Center.']);
-    if (await ask('¿Quieres que cure a tus criaturas?', { en: 'Would you like me to heal your creatures?' })) {
+    await lines(['¡Hola! Bienvenidos al Palacentro.', 'Hi! Welcome to the Palacentro.']);
+    if (await ask('¿Quieres que cure a tus Palabritas?', { en: 'Would you like me to heal your Palabritas?' })) {
       await lines(['Un momento, por favor...', 'One moment, please...']);
-      await heal();
+      await healingMachine();
       G.save.heal = { map: currentMap().id, x: 4, y: 3 };
-      await lines(['¡Listo! Tus criaturas están sanas. ¡Vuelve pronto!', 'Done! Your creatures are healthy. Come back soon!']);
+      await lines(['¡Listo! Tus Palabritas están sanas. ¡Vuelve pronto!', 'Done! Your Palabritas are healthy. Come back soon!']);
     } else {
       await lines(['¡Vuelve pronto!', 'Come back soon!']);
     }
+  },
+
+  async maquina() {
+    await lines(['Es la máquina que cura a las Palabritas.', 'It’s the machine that heals Palabritas.']);
   },
 
   async olvidadizo() {
@@ -367,8 +468,8 @@ const S: Record<string, (c: ScriptCtx) => Promise<void>> = {
 
   async lola() {
     await lines([
-      '¡Hola! Puedes entrenar a tus criaturas cuando quieras. Pulsa START, elige CRIATURAS y luego ENTRENAR.',
-      'Hi! You can train your creatures whenever you like. Press START, choose CRIATURAS and then ENTRENAR.',
+      '¡Hola! Cuando tu Palabrita sube de nivel, a veces aprende un ataque nuevo. ¡Mira sus poderes en START, PALABRITAS!',
+      'Hi! When your Palabrita levels up, it sometimes learns a new move. See its powers in START, PALABRITAS!',
     ]);
   },
 
@@ -401,7 +502,7 @@ const S: Record<string, (c: ScriptCtx) => Promise<void>> = {
   async guia() {
     await lines(
       ['¡Hola! ¿Vas a retar a Paloma?', 'Hi! Are you going to challenge Paloma?'],
-      ['Paloma usa criaturas de tipo Volador. Los ataques Eléctricos y de Roca son muy eficaces contra ellas.', 'Paloma uses Flying-type creatures. Electric and Rock attacks are super effective against them.'],
+      ['Paloma usa Palabritas de tipo Volador. Los ataques Eléctricos y de Roca son muy eficaces contra ellas.', 'Paloma uses Flying-type Palabritas. Electric and Rock attacks are super effective against them.'],
       ['Cuando te ataque, tendrás que escribir verbos en presente para defenderte.', 'When she attacks, you’ll have to write present-tense verbs to defend yourself.'],
     );
   },
@@ -434,8 +535,8 @@ const S: Record<string, (c: ScriptCtx) => Promise<void>> = {
       ['Sigue entrenando. ¡El cielo es el límite!', 'Keep training. The sky’s the limit!'],
     );
     await info('¡Felicidades! Terminaste la primera parte de Palabritas.', { en: 'Congratulations! You finished the first part of Palabritas.' });
-    await info('Sigue entrenando a tus criaturas y atrapando nuevas. ¡Pronto habrá más aventuras!', {
-      en: 'Keep training your creatures and catching new ones. More adventures are coming soon!',
+    await info('Sigue entrenando a tus Palabritas y atrapando nuevas. ¡Pronto habrá más aventuras!', {
+      en: 'Keep training your Palabritas and catching new ones. More adventures are coming soon!',
     });
   },
 };
@@ -463,8 +564,8 @@ async function pickStarter(sp: string, _c: ScriptCtx) {
   refreshNpcs();
   await lines(
     [`¡${s.name} es perfecto para ti!`, `${s.name} is perfect for you!`],
-    ['Ahora ve al norte, a Villa Limón. Mi amiga Doña Lupe hace Esferas para atrapar criaturas.', 'Now go north to Lemon Village. My friend Doña Lupe makes Esferas for catching creatures.'],
-    ['En la hierba alta hay criaturas salvajes. ¡Usa tus palabras para luchar!', 'Wild creatures live in the tall grass. Use your words to fight!'],
+    ['Ahora ve al norte, a Villa Limón. Mi amiga Doña Lupe hace Palabolas para atrapar Palabritas.', 'Now go north to Lemon Village. My friend Doña Lupe makes Palabolas for catching Palabritas.'],
+    ['En la hierba alta hay Palabritas salvajes. ¡Usa tus palabras para luchar!', 'Wild Palabritas live in the tall grass. Use your words to fight!'],
   );
 }
 
