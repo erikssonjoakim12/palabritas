@@ -1,0 +1,82 @@
+/*
+  EVERY COLOR IN THE GAME WORLD LIVES HERE.
+
+  These are Pokémon Gold/Silver's daytime palettes as they look on a real Game Boy Color
+  screen (softer and less saturated than the raw palette numbers), sampled from screenshots.
+  Change a value here and every tile, sprite and creature that uses it changes with it.
+
+  A "palette" is 4 colors, like on the real hardware:
+    index 0 = lightest, 1 = light, 2 = dark, 3 = outline
+  The pixel art in tiles.ts / people.ts uses the digits 0-3 to pick from its palette.
+*/
+
+export type Pal = [string, string, string, string];
+
+/** Outline color for the world (the GBC "black" is a soft dark grey). */
+export const INK = '#383838';
+
+// ---------- Outdoors (day) ----------
+export const OUTDOOR = {
+  /** Town and path ground: pale, with grey dots. */
+  town: ['#e8f0e0', '#a8b0a0', '#788070', INK] as Pal,
+  /** Grass, trees, tall grass. */
+  grass: ['#b8e080', '#70a038', '#386018', INK] as Pal,
+  water: ['#d8e0f8', '#a0a8f0', '#7078e0', INK] as Pal,
+  flower: ['#b8e080', '#f0a8b8', '#d05058', '#70a038'] as Pal,
+  /** House walls: cream with a brown dotted pattern and brown edges. */
+  wall: ['#e8f0e0', '#b09080', '#b08870', INK] as Pal,
+  sign: ['#e8f0e8', '#b0b0a8', '#787870', INK] as Pal,
+  fence: ['#e8f0e0', '#c09878', '#906848', INK] as Pal,
+};
+
+/** Accent colors used by individual tiles (letters in tiles.ts). */
+export const ACCENT = {
+  windowYellow: '#e8d090',
+  doorFrame: '#e8c070',
+  doorTop: '#d07050',
+  doorBrown: '#a07050',
+  lemon: '#f0e060',
+  centroRed: '#d05058',
+  gymPurple: '#7858b0',
+};
+
+/** Roof colors: [highlight, light, dark, outline]. Each town picks one (see maps.ts). */
+export const ROOFS: Record<string, Pal> = {
+  green: ['#d8f0c8', '#b8d898', '#789858', INK],
+  yellow: ['#f8f0c8', '#e8d888', '#b89848', INK],
+  blue: ['#d8e8f8', '#a8c8f0', '#6888c8', INK],
+  red: ['#f8d8d0', '#e8a8a0', '#c06058', INK],
+  purple: ['#e8d8f8', '#c8a8e8', '#8868b8', INK],
+  brown: ['#f0e0c8', '#c8a080', '#906848', INK],
+};
+
+// ---------- Indoors ----------
+export const INDOOR = {
+  wood: ['#d8c898', '#a89050', '#706030', INK] as Pal,
+  red: ['#f0e8e0', '#f0b0b8', '#d05058', INK] as Pal,
+  gray: ['#f0e8e0', '#c8c8c0', '#909088', INK] as Pal,
+  green: ['#d8c898', '#88b048', '#507028', INK] as Pal,
+  blue: ['#f0e8e0', '#a0a8f0', '#6870d8', INK] as Pal,
+  books: ['#d05058', '#6870d8', '#70a038', INK] as Pal,
+};
+
+// ---------- Overworld people & objects ----------
+// Like on the GBC, sprites have 3 colors plus transparent: skin, one clothing color, ink.
+export const SKIN = '#e8a890';
+export const SPRITE_INK = '#181818';
+export const CLOTHES: Record<string, string> = {
+  red: '#c84048',
+  blue: '#5860c8',
+  green: '#48a040',
+  brown: '#906048',
+  pink: '#d86878',
+  gray: '#8c8c8c',
+  purple: '#8860c0',
+  teal: '#3898a0',
+};
+
+export const OBJECT_PALS: Record<string, Pal> = {
+  esfera: ['', '#f0f0e8', '#38a8a0', SPRITE_INK],
+  michi: ['', '#f0f0e8', '#e09848', SPRITE_INK],
+  armchair: ['', '#f0b0b8', '#d05058', SPRITE_INK],
+};

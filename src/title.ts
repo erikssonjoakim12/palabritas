@@ -1,0 +1,131 @@
+import { W, H, overlay, el, setTextScale } from './engine/screen';
+import { setScene, nextFrame } from './engine/loop';
+import { input } from './engine/input';
+import { sfx, unlockAudio } from './engine/sfx';
+import { CREATURE_ART } from './art/creatures';
+import { G, hasSave, loadGame, newSave, deleteSave, saveGame } from './game/state';
+import { speechSettings, initSpeech } from './lang/speech';
+import { say, closeText } from './ui/textbox';
+import { menu, ask } from './ui/menu';
+import { promptText } from './ui/challenge';
+import { loadMap, worldScene, fadeIn, setFade } from './world/world';
+
+let t = 0;
+const titleScene = {
+  update() {
+    t++;
+  },
+  render(g: CanvasRenderingContext2D) {
+    g.fillStyle = '#5ab0f0';
+    g.fillRect(0, 0, W, H);
+    g.fillStyle = '#88c8f8';
+    g.fillRect(0, 60, W, 30);
+    g.fillStyle = '#7ec860';
+    g.fillRect(0, 98, W, H - 98);
+    g.fillStyle = '#5aa04a';
+    g.fillRect(0, 98, W, 3);
+    const bob = (i: number) => Math.round(Math.sin(t / 15 + i * 2) * 2);
+    g.drawImage(CREATURE_ART.perrito.front, 8, 56 + bob(0));
+    g.drawImage(CREATURE_ART.gotita.front, 56, 50 + bob(1));
+    g.drawImage(CREATURE_ART.aguacatito.front, 104, 56 + bob(2));
+  },
+};
+
+function waitTap(): Promise<void> {
+  return new Promise((resolve) => {
+    const done = () => {
+      pop();
+      document.removeEventListener('pointerdown', done);
+      resolve();
+    };
+    const pop = input.push((b) => {
+      if (b === 'A' || b === 'START') done();
+    });
+    document.addEventListener('pointerdown', done);
+  });
+}
+
+/** Parse "Me llamo Ana" / "Soy Ana" / "Ana" into a name. */
+function parseName(raw: string): { name: string; full: boolean } {
+  const m = raw.trim().match(/^(me llamo|soy|mi nombre es)\s+(.+)$/i);
+  const name = (m ? m[2] : raw).replace(/[.!¡?¿]/g, '').trim().split(/\s+/)[0] ?? 'Tú';
+  const clean = name.slice(0, 10);
+  return { name: clean.charAt(0).toUpperCase() + clean.slice(1), full: !!m };
+}
+
+export async function runTitle() {
+  setScene(titleScene);
+  const title = el('div', 'title', 'PALABRITAS');
+  const sub = el('div', 'subtitle', 'Aprende español con criaturas');
+  const tap = el('div', 'blink-text', 'TOCA PARA EMPEZAR');
+  overlay.append(title, sub, tap);
+  await waitTap();
+  unlockAudio();
+  initSpeech();
+  sfx('select');
+  tap.remove();
+
+  let start: 'new' | 'continue' = 'new';
+  if (hasSave()) {
+    const i = await menu(['CONTINUAR', 'NUEVA PARTIDA'], { pos: { left: 40, right: 40, bottom: 12 } });
+    start = i === 0 ? 'continue' : 'new';
+  } else {
+    await menu(['NUEVA PARTIDA'], { pos: { left: 40, right: 40, bottom: 12 } });
+  }
+  title.remove();
+  sub.remove();
+
+  if (start === 'new' && hasSave()) {
+    const sure = await ask('¿Borrar la partida guardada y empezar de nuevo?', {
+      voice: false,
+      en: 'Delete your saved game and start over?',
+    });
+    closeText();
+    if (!sure) return runTitle();
+  }
+
+  if (start === 'continue' && loadGame()) {
+    applySettings();
+    enterWorld();
+    return;
+  }
+
+  deleteSave();
+  G.save = newSave();
+  applySettings();
+  await newGameIntro();
+  saveGame();
+  enterWorld();
+}
+
+function applySettings() {
+  setTextScale(G.save.settings.textScale);
+  speechSettings.rate = 0.95;
+}
+
+async function newGameIntro() {
+  await say('¡Hola! Este es el mundo de Palabritas.', { en: 'Hello! This is the world of Palabritas.' });
+  await say('Aquí, las criaturas crecen cuando tú aprendes español.', { en: 'Here, creatures grow when you learn Spanish.' });
+  await say('Primero, ¿cómo te llamas?', { en: 'First of all, what’s your name?' });
+  closeText();
+  const raw = await promptText('¿Cómo te llamas?', 'Write "Me llamo …" (or just your name)', 'Me llamo…');
+  const { name, full } = parseName(raw);
+  G.save.name = name || 'Tú';
+  if (full) {
+    sfx('perfect');
+    await say('¡Muy bien! «Me llamo {name}» es perfecto.', { en: '"Me llamo {name}" is perfect.' });
+  } else {
+    await say('¡Hola, {name}! La próxima vez, di: «Me llamo {name}».', { en: 'Next time, say: "Me llamo {name}" (My name is {name}).' });
+  }
+  await say('¡Tu aventura empieza ahora!', { en: 'Your adventure starts now!' });
+  closeText();
+}
+
+async function enterWorld() {
+  const s = G.save;
+  setFade(1);
+  loadMap(s.map, s.x, s.y, s.dir);
+  setScene(worldScene);
+  await nextFrame();
+  await fadeIn(12);
+}

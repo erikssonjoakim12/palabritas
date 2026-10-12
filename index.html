@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+    <meta name="theme-color" content="#2b2350" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <link rel="manifest" href="./manifest.webmanifest" />
+    <link rel="icon" href="./icon-192.png" />
+    <title>Palabritas</title>
+  </head>
+  <body>
+    <div id="app">
+      <div id="screen-wrap">
+        <canvas id="screen" width="160" height="144"></canvas>
+        <div id="overlay"></div>
+      </div>
+      <div id="panel">
+        <div id="pad">
+          <div id="dpad" aria-label="Cruceta">
+            <div class="dpad-h"></div><div class="dpad-v"></div><div class="dpad-c"></div>
+          </div>
+          <div id="mid-buttons">
+            <button class="pill" data-btn="START" tabindex="-1">START</button>
+          </div>
+          <div id="ab">
+            <button class="round b" data-btn="B" tabindex="-1">B</button>
+            <button class="round a" data-btn="A" tabindex="-1">A</button>
+          </div>
+        </div>
+        <div id="challenge" hidden></div>
+      </div>
+    </div>
+    <script type="module" src="./src/main.ts"></script>
+  </body>
+</html>

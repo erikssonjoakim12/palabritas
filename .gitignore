@@ -1,0 +1,6 @@
+node_modules
+dist
+*.log
+
+# Reference screenshots from the original games (not ours to distribute)
+Gameplay screenshot examples/
