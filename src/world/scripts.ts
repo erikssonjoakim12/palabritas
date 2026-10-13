@@ -1,13 +1,14 @@
 import { overlay, el, gp } from '../engine/screen';
 import { sfx } from '../engine/sfx';
 import { frames } from '../engine/loop';
-import { G, flag, setFlag } from '../game/state';
+import { G, flag, setFlag, saveGame } from '../game/state';
 import { newMon, healParty, markCaught } from '../game/mon';
-import { record, pickFromTheme } from '../game/learning';
+import { record, pickFromTheme, isLearned, isUnseen } from '../game/learning';
+import { itemsBetween } from '../game/curriculum';
 import { SPECIES, STARTER_LEVEL, type Mode } from '../data/species';
 import { THEMES, adHocItem } from '../data/content';
 import { TRAINERS } from '../data/trainers';
-import { say, info } from '../ui/textbox';
+import { say, info, closeText } from '../ui/textbox';
 import { ask, menu } from '../ui/menu';
 import { challenge, chooseText } from '../ui/challenge';
 import { spriteCanvas } from '../ui/party';
@@ -169,7 +170,7 @@ const S: Record<string, (c: ScriptCtx) => Promise<void>> = {
       ['Palabritas', [
         'Palabritas are creatures that grow stronger when YOU learn Spanish.',
         'Each one teaches everyday Spanish plus its own theme: dogs, weather, food, numbers... Every level brings new words.',
-        'Professor Ceiba, in the lab next door, will give you your first one.',
+        'Professor Ceiba, in the lab next door, wants to talk to you. She has something important to tell you!',
       ]],
       ['Battles', [
         'Walk into tall grass to meet wild Palabritas. In battle, every attack is a Spanish question.',
@@ -235,6 +236,7 @@ const S: Record<string, (c: ScriptCtx) => Promise<void>> = {
 
   async ceiba() {
     if (!flag('starter')) {
+      if (G.save.starterChoice) return starterTraining(G.save.starterChoice);
       if (flag('metCeiba')) {
         return lines(['¿Ya elegiste? Las Palabolas están en la mesa.', 'Have you chosen yet? The Palabolas are on the table.']);
       }
@@ -245,7 +247,7 @@ const S: Record<string, (c: ScriptCtx) => Promise<void>> = {
         ['En la batalla, cada ataque es un reto: elegir, escuchar, escribir o hablar.', 'In battle, every attack is a challenge: choose, listen, write or speak.'],
         ['¡Hablar es el ataque más fuerte! Y si respondes perfecto, con acentos, es un golpe crítico.', 'Speaking is the strongest attack! And a perfect answer, accents included, is a critical hit.'],
         ['Pero ojo: si no usas las palabras, tu Palabrita las olvida... y deja de obedecerte.', 'But careful: if you don’t use the words, your Palabrita forgets them... and stops obeying you.'],
-        ['En la mesa hay tres Palabolas. ¡Elige a tu primera Palabrita!', 'There are three Palabolas on the table. Choose your first Palabrita!'],
+        ['En la mesa hay tres Palabolas. Elige una... ¡pero primero tendrás que demostrar que eres un buen entrenador!', 'There are three Palabolas on the table. Pick one... but first you’ll have to show me you’re a good trainer!'],
       );
       setFlag('metCeiba');
       return;
@@ -266,6 +268,7 @@ const S: Record<string, (c: ScriptCtx) => Promise<void>> = {
     await lines(
       ['Un consejo: para escribir acentos, mantén pulsada la letra: e → é, n → ñ.', 'A tip: to type accents, press and hold the letter: e → é, n → ñ.'],
       ['Si no conoces una palabra nueva, toca 💡 Ayuda. Pero solo cuenta como «casi».', 'If you don’t know a new word, tap 💡 Ayuda. But it only counts as "almost".'],
+      ['¿La prueba de la profesora? Si te equivocas, no pasa nada: ella repite las palabras.', 'The professor’s test? If you get one wrong, no problem: she repeats the words.'],
     );
   },
 
@@ -557,6 +560,11 @@ async function pickStarter(sp: string) {
   if (!flag('metCeiba')) {
     return lines(['Mejor habla primero con la Profesora Ceiba.', 'Better talk to Professor Ceiba first.']);
   }
+  const chosen = G.save.starterChoice;
+  if (chosen) {
+    if (chosen === sp) return starterTraining(sp);
+    return lines([`Ya elegiste a ${SPECIES[chosen].name}. ¡Habla con la Profesora Ceiba!`, `You already chose ${SPECIES[chosen].name}. Talk to Professor Ceiba!`]);
+  }
   const s = SPECIES[sp];
   const theme = THEMES[s.theme];
   const hide = showCreature(sp);
@@ -568,10 +576,54 @@ async function pickStarter(sp: string) {
   } finally {
     hide();
   }
+  G.save.starterChoice = sp;
+  await starterTraining(sp);
+}
+
+/**
+ * Professor Ceiba's test: before you get your starter, master its first words (levels 2-4).
+ * New words come as "tap the meaning", missed ones come back as "write it". Progress is
+ * saved after every answer, so you can stop and come back to her later.
+ */
+async function starterTraining(sp: string) {
+  const s = SPECIES[sp];
+  const words = itemsBetween(sp, 2, STARTER_LEVEL - 1);
+  const queue = words.filter((i) => !isLearned(i));
+  if (words.every(isUnseen)) {
+    await lines(
+      [`¡${s.name}! Muy buena elección. Pero antes de dártelo, quiero ver si eres un buen entrenador.`, `${s.name}! Great choice. But before I give it to you, I want to see if you’re a good trainer.`],
+      [`Si no sabes sus primeras palabras, ¡no te va a obedecer! Son ${words.length} palabras.`, `If you don’t know its first words, it won’t obey you! There are ${words.length} words.`],
+      ['Las palabras nuevas te las enseño primero. Si te equivocas, no pasa nada: la repetimos después.', 'I’ll show you the new words first. If you get one wrong, no problem: we’ll repeat it later.'],
+    );
+  } else if (queue.length) {
+    await lines([`¿Seguimos con las palabras de ${s.name}?`, `Shall we continue with ${s.name}’s words?`]);
+  }
+  closeText();
+  const hide = showCreature(sp);
+  try {
+    let asked = 0;
+    while (queue.length) {
+      const item = queue.shift()!;
+      const done = words.length - queue.length - 1;
+      const r = await challenge({ item, mode: isUnseen(item) ? 'choose' : 'type', title: `Palabras ${done}/${words.length}` });
+      record(item, r.mode, r.grade, r.helped);
+      saveGame();
+      if (!isLearned(item)) queue.push(item);
+      if (++asked % 6 === 0 && queue.length) {
+        if (!(await ask('¡Vas muy bien! ¿Seguimos?', { en: 'You’re doing great! Shall we continue?' }))) {
+          return lines(['Muy bien. Vuelve a hablar conmigo cuando quieras seguir.', 'All right. Talk to me again whenever you want to continue.']);
+        }
+      }
+    }
+  } finally {
+    hide();
+  }
+  G.save.starterChoice = undefined;
   G.save.party.push(newMon(sp, STARTER_LEVEL));
   markCaught(sp);
   setFlag('starter');
   sfx('caught');
+  await lines([`¡Excelente! Ya sabes las primeras palabras de ${s.name}.`, `Excellent! You know ${s.name}’s first words now.`]);
   await info(`¡{name} recibió a ${s.name}!`, { en: `{name} received ${s.name}!` });
   refreshNpcs();
   await lines(

@@ -46,6 +46,8 @@ export interface SaveData {
   party: Mon[];
   flags: Record<string, boolean>;
   palabolas: number;
+  /** The starter you picked, while Professor Ceiba's training is still going on. */
+  starterChoice?: string;
   medals: string[];
   prog: Record<string, ItemProg>;
   seen: string[];
