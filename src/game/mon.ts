@@ -1,7 +1,6 @@
 import { G, uid, type Mon } from './state';
 import { SPECIES, learnLevel, type Move } from '../data/species';
-import { tierItems } from '../data/content';
-import { isLearned } from './learning';
+import { canLevelUp } from './learning';
 
 export interface Stats {
   maxHp: number;
@@ -20,7 +19,7 @@ export function stats(mon: Mon): Stats {
 }
 
 export function newMon(sp: string, level: number): Mon {
-  const mon: Mon = { uid: uid(), sp, level, hp: 0 };
+  const mon: Mon = { uid: uid(), sp, level, hp: 0, since: Date.now() };
   mon.hp = stats(mon).maxHp;
   return mon;
 }
@@ -60,10 +59,10 @@ export function checkLevelUps(): LevelUp[] {
   for (const mon of G.save.party) {
     const from = mon.level;
     while (mon.level < 100) {
-      const items = tierItems(SPECIES[mon.sp].theme, mon.level);
-      if (!items.length || !items.every(isLearned)) break;
+      if (!canLevelUp(mon)) break;
       const before = stats(mon).maxHp;
       mon.level++;
+      mon.since = Date.now();
       const after = stats(mon).maxHp;
       if (mon.hp > 0) mon.hp = Math.min(after, mon.hp + (after - before));
     }

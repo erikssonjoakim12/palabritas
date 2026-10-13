@@ -5,10 +5,13 @@ export interface Mon {
   sp: string;
   level: number;
   hp: number;
+  /** When it reached its current level (the review before the next level counts from here). */
+  since?: number;
 }
 
 export interface ItemProg {
-  pts: number;
+  /** Old saves only (the points system was replaced by good answers). */
+  pts?: number;
   seen: number;
   right: number;
   wrong: number;
@@ -17,6 +20,12 @@ export interface ItemProg {
   box: number;
   due: number;
   last: number;
+  /** Good answers (without help) toward mastery. */
+  good?: number;
+  /** Days (YYYY-MM-DD) with a good answer: higher levels need two different days. */
+  goodDays?: string[];
+  /** Time of the latest good answer (used for the level-up review). */
+  lastGood?: number;
 }
 
 export interface Settings {

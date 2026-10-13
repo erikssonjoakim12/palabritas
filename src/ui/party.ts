@@ -4,7 +4,7 @@ import { sfx } from '../engine/sfx';
 import { CREATURE_ART } from '../art/creatures';
 import { G, type Mon } from '../game/state';
 import { stats, monName } from '../game/mon';
-import { lealtad, levelProgress, isLearned, peekProg, isFading } from '../game/learning';
+import { lealtad, levelProgress, isLearned, peekProg, isFading, reviewItems, REVIEW_LEVELS } from '../game/learning';
 import { SPECIES, MODE_INFO, learnLevel } from '../data/species';
 import { THEMES, poolUpTo } from '../data/content';
 import { TYPE_COLORS } from '../data/types';
@@ -71,7 +71,7 @@ function partyRow(mon: Mon, active?: Mon) {
   info.appendChild(bar);
   const lp = levelProgress(mon);
   const loy = Math.round(lealtad(mon) * 100);
-  info.appendChild(el('div', 'small', `${lp.maxed ? 'Nivel máx.' : `Sig. nivel ${lp.learned}/${lp.total}`} · ♥${loy}%`));
+  info.appendChild(el('div', 'small', `${lp.maxed ? 'Nivel máx.' : `Sig. nivel ${lp.learned}/${lp.total}${lp.reviewTotal ? ` +repaso ${lp.reviewDone}/${lp.reviewTotal}` : ''}`} · ♥${loy}%`));
   row.appendChild(info);
   return row;
 }
@@ -156,6 +156,14 @@ export function showDetails(mon: Mon): Promise<void> {
     if (isLearned(it)) addWord(it.es, it.en, '✓');
     else if (p?.seen) addWord(it.es, it.en, '…');
     else addWord('???', it.en, '·');
+  }
+  // From level 21: the previous levels must be reviewed before leveling up.
+  if (lp.reviewTotal) {
+    words.appendChild(
+      el('div', 'muted', `Repaso de los niveles ${mon.level - REVIEW_LEVELS}-${mon.level - 1}: ${lp.reviewDone}/${lp.reviewTotal}`),
+    ).style.marginTop = '0.8em';
+    const todo = new Set(reviewItems(mon).todo.map((i) => i.id));
+    for (const it of reviewItems(mon).all) addWord(it.es, it.en, todo.has(it.id) ? '↻' : '✓');
   }
   const learned = poolUpTo(sp.theme, mon.level - 1).filter(isLearned);
   if (learned.length) {

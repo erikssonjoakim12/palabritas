@@ -312,7 +312,7 @@ const S: Record<string, (c: ScriptCtx) => Promise<void>> = {
     trainerFight('sofia', {
       intro: ['¡Hola! ¿Quieres luchar conmigo?', 'Hi! Do you want to battle me?'],
       defeated: ['¡Ay! ¡Qué fuerte eres!', 'Oh! You’re so strong!'],
-      after: ['Cuando ataco, tú respondes con saludos. ¡Practica los saludos!', 'When I attack, you answer with greetings. Practice your greetings!'],
+      after: ['Cuando ataco, tienes que saber las palabras de mi Conejito: ¡los números!', 'When I attack, you need to know my Conejito’s words: numbers!'],
     }),
 
   // ----- Villa Limón -----
@@ -503,7 +503,7 @@ const S: Record<string, (c: ScriptCtx) => Promise<void>> = {
     await lines(
       ['¡Hola! ¿Vas a retar a Paloma?', 'Hi! Are you going to challenge Paloma?'],
       ['Paloma usa Palabritas de tipo Volador. Los ataques Eléctricos y de Roca son muy eficaces contra ellas.', 'Paloma uses Flying-type Palabritas. Electric and Rock attacks are super effective against them.'],
-      ['Cuando te ataque, tendrás que escribir verbos en presente para defenderte.', 'When she attacks, you’ll have to write present-tense verbs to defend yourself.'],
+      ['Cuando te ataque, tendrás que escribir las palabras de sus Palabritas para defenderte. ¡Las del Palomón son difíciles!', 'When she attacks, you’ll have to write her Palabritas’ words to defend yourself. Palomón’s are hard!'],
     );
   },
 
@@ -519,7 +519,7 @@ const S: Record<string, (c: ScriptCtx) => Promise<void>> = {
     await lines(
       ['¡Hola! Soy Paloma, la líder del Gimnasio de Ciudad Brisa.', 'Hi! I’m Paloma, leader of the Breeze City Gym.'],
       ['Aquí hablamos en presente: lo que hacemos ahora y lo que hacemos siempre.', 'Here we speak in the present: what we do now and what we always do.'],
-      ['Cuando te ataque, tendrás que escribir verbos en presente para defenderte.', 'When I attack, you’ll have to write present-tense verbs to defend yourself.'],
+      ['Cuando te ataque, tendrás que escribir las palabras de mis Palabritas para defenderte.', 'When I attack, you’ll have to write my Palabritas’ words to defend yourself.'],
     );
     if (!(await ask('¿Empezamos?', { en: 'Shall we begin?' }))) return lines(['Vuelve cuando quieras.', 'Come back whenever you want.']);
     const res = await trainerBattle(TRAINERS.paloma);

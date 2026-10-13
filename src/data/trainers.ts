@@ -3,30 +3,17 @@ import type { Mode } from './species';
 export interface TrainerDef {
   id: string;
   name: string;
-  /** Theme they quiz you on when they attack (answer well to take less damage). */
-  topic: string;
-  topicTier: number;
+  /**
+   * How you answer when they attack (to take less damage). The questions themselves come
+   * from each opponent Palabrita's theme, at its level.
+   */
   defenseMode: Mode;
   team: [string, number][];
 }
 
 export const TRAINERS: Record<string, TrainerDef> = {
-  sofia: { id: 'sofia', name: 'Niña Sofía', topic: 'saludos', topicTier: 3, defenseMode: 'choose', team: [['conejito', 3]] },
-  mateo: {
-    id: 'mateo',
-    name: 'Joven Mateo',
-    topic: 'preguntas',
-    topicTier: 3,
-    defenseMode: 'choose',
-    team: [['mariposita', 5], ['pajarito', 5]],
-  },
-  ivan: { id: 'ivan', name: 'Aprendiz Iván', topic: 'presente', topicTier: 2, defenseMode: 'choose', team: [['pajarito', 7]] },
-  paloma: {
-    id: 'paloma',
-    name: 'Líder Paloma',
-    topic: 'presente',
-    topicTier: 3,
-    defenseMode: 'type',
-    team: [['pajarito', 8], ['palomon', 10]],
-  },
+  sofia: { id: 'sofia', name: 'Niña Sofía', defenseMode: 'choose', team: [['conejito', 3]] },
+  mateo: { id: 'mateo', name: 'Joven Mateo', defenseMode: 'choose', team: [['mariposita', 5], ['pajarito', 5]] },
+  ivan: { id: 'ivan', name: 'Aprendiz Iván', defenseMode: 'choose', team: [['pajarito', 7]] },
+  paloma: { id: 'paloma', name: 'Líder Paloma', defenseMode: 'type', team: [['pajarito', 8], ['palomon', 10]] },
 };

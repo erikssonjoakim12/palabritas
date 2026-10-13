@@ -19,19 +19,35 @@ There is no XP from battles. A creature's **level is how much of its theme you h
 - Levels 2–12 are deliberately quick (3–4 short items per level) since the player
   already knows some Spanish. Iteration 1 has content up to level 15. Levels go to 100 later.
 
-### Mastery
+### The level curve
 
-Each item (word, phrase or sentence) earns points when answered correctly:
+> **Being redesigned:** see [LEARNING_PLAN.md](LEARNING_PLAN.md) (core + theme tracks, bands, reviews). The section below describes what is implemented today.
 
-| Answer | Choose (tap) | Listen / Type / Speak |
-|---|---|---|
-| Perfect (accents too) | +1 | +2 |
-| Close (missing accent, small typo, missing article) | +0.5 | +1 |
-| Wrong | −1 | −1 |
+Goal: a Palabrita at **level 60 ≈ B1** (you can keep most conversations going on its theme) and
+**level 100 ≈ C1** (basically fluent on it). A team of Palabritas adds up to broad Spanish:
+each theme brings its own vocabulary, while grammar follows the same bands in every theme.
 
-2 points = mastered. Typing a word you already know perfectly masters it on the spot.
-Brand-new words can be revealed with **💡 Ayuda**, but then the answer counts as "close" at best,
-so you'll need to get it right once more later.
+**Items per level = 3 + (level − 1) ÷ 10** (rounded down): 3 for levels 2–10, 4 for 11–20, 5 for 21–30 … 12 for 91–100.
+Each theme's content is ONE ordered list (easiest first) that the game splits into levels by this formula.
+
+| Levels | Content | Items/level | Mastered after | Plus | ≈ Answers/level | ≈ Battles/level | ≈ Time/level |
+|---|---|---|---|---|---|---|---|
+| 2–10 | words, most basic phrases | 3 | 1 good answer | – | 4 | 1 | 2 min |
+| 11–20 | short phrases | 4 | 2 good answers | – | 14 | 3 | 6 min |
+| 21–40 | simple full sentences (present, *ir a*, basic past) | 5–6 | 2 good answers | review previous 5 levels | 42–50 | 9–11 | 20–25 min |
+| 41–60 | longer sentences, mixed past, opinions, mini-dialogues (B1) | 7–8 | 2 good answers on **different days** | review previous 5 levels | ~60 | ~14 | ~30 min, over 2+ days |
+| 61–80 | subjunctive, conditionals, idioms (B2) | 9–10 | 2 answers, different days | review | ~85 | ~19 | ~40 min, 2+ days |
+| 81–100 | nuance, register, long listening/speaking (C1) | 11–12 | 2 answers, different days | review | ~100 | ~22 | ~50 min, 2+ days |
+
+Measured with the real game code up to level 30 (a player answering right ~85% of the time); higher levels are estimates.
+A wild battle has about 4–5 of your answers (~1.5–2 min). Roughly 45–50 hours of play takes one Palabrita
+from 2 to 100 (about 5 months at 20 minutes a day).
+
+- **Good answer** = correct or almost correct (e.g. a missing accent), without the 💡 help button.
+- **Review (level 21+):** before leveling up, every item from the previous 5 levels must be answered well again
+  since the Palabrita reached its current level (level 25 reviews levels 20–24). Battles mix these in automatically.
+  Progress shows in START → PALABRITAS (`Sig. nivel 3/5 +repaso 12/25`) and on the details page.
+- Content exists up to level 30 for now (117 items per theme).
 
 ### Control (lealtad): use it or lose it
 
@@ -61,8 +77,8 @@ The creatures are **Palabritas**, you catch them with **Palabolas**, and you hea
 - **Level-ups happen last in a turn**, and only if your attack landed and your Palabrita is still standing.
   Training happens only in battles; the START menu is for looking at your Palabritas.
 - Gen 2 type chart, same-type bonus, speed order.
-- **Trainer battles** add *defense*: when the enemy attacks, answer their topic's question to halve the damage.
-  The gym leader's topic is a grammar point (Gym 1: present tense).
+- **Trainer battles** add *defense*: when the enemy attacks, you answer a question from the **opponent Palabrita's
+  theme, at its level** (a stronger Palabrita asks harder things). A good answer reduces the damage.
 - **Catching**: weaken it, throw a *Palabola*, and say or type the "magic word" (an item from its theme).
   A better answer gives a better catch chance.
 

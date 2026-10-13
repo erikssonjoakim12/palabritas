@@ -11,13 +11,33 @@ import { saludos, preguntas, presente } from './trainers';
 /**
  * A theme is a slice of Spanish. Lines look like `"el perro | el can = the dog"`:
  * the first Spanish form is the one we show, the others are also accepted.
- * Tier N is what a level-N Palabrita of that theme is learning.
+ *
+ * Palabrita themes use `levels`: ONE list, easiest first. It is split into levels by
+ * itemsPerLevel() (3 per level for 2-10, 4 for 11-20, 5 for 21-30...), so adding content is
+ * just appending lines. Tier N = what a level-N Palabrita is learning.
+ * Small practice topics (Rita's present tense...) can still list `tiers` by hand.
  */
 export interface ThemeSource {
   id: string;
   name: string;
   en: string;
-  tiers: Record<number, string[]>;
+  levels?: string[];
+  tiers?: Record<number, string[]>;
+}
+
+/** How many items a level has: 3 for levels 2-10, 4 for 11-20, 5 for 21-30, ... 12 for 91-100. */
+export const itemsPerLevel = (level: number) => 3 + Math.floor((level - 1) / 10);
+
+/** Split an ordered list into tiers, starting at level 2. */
+function splitIntoLevels(lines: string[]): Record<number, string[]> {
+  const tiers: Record<number, string[]> = {};
+  let i = 0;
+  for (let level = 2; i < lines.length; level++) {
+    const n = itemsPerLevel(level);
+    tiers[level] = lines.slice(i, i + n);
+    i += n;
+  }
+  return tiers;
 }
 
 export interface Item {
@@ -42,7 +62,8 @@ export const ITEMS: Record<string, Item> = {};
 
 function build(src: ThemeSource): Theme {
   const items: Item[] = [];
-  for (const [tierStr, lines] of Object.entries(src.tiers)) {
+  const tiers = src.levels ? splitIntoLevels(src.levels) : (src.tiers ?? {});
+  for (const [tierStr, lines] of Object.entries(tiers)) {
     const tier = Number(tierStr);
     for (const line of lines) {
       const eq = line.lastIndexOf(' = ');

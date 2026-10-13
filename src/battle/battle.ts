@@ -8,7 +8,7 @@ import { stats, monName, checkLevelUps, firstAble, markSeen, markCaught, newMon,
 import { SPECIES, MODE_INFO, type Move, type Mode } from '../data/species';
 import { effectiveness } from '../data/types';
 import { poolUpTo, THEMES, type Item } from '../data/content';
-import { pickItem, pickFromTheme, record, lealtad, fadingItems, OBEY_THRESHOLD } from '../game/learning';
+import { pickItem, pickForMon, pickFromTheme, defenseItem, record, lealtad, fadingItems, OBEY_THRESHOLD } from '../game/learning';
 import { challenge, type ChallengeResult } from '../ui/challenge';
 import { info, closeText } from '../ui/textbox';
 import { menu } from '../ui/menu';
@@ -334,7 +334,7 @@ async function runBattle(cfg: Config): Promise<BattleResult> {
       }
       await info(`¡${myName()} te escuchó!`, { auto: 900 });
     }
-    const item = pickItem(poolUpTo(theme, me.level), recent);
+    const item = pickForMon(me, recent);
     recent.push(item.id);
     if (recent.length > 3) recent.shift();
     const r = await challenge({ item, mode: move.mode, title: move.name });
@@ -383,11 +383,12 @@ async function runBattle(cfg: Config): Promise<BattleResult> {
     if (trainer) {
       if (!defenseExplained) {
         defenseExplained = true;
-        await info('¡Defiéndete! Si respondes bien, recibes menos daño.', {
-          en: 'Defend yourself! Answer well and you take less damage.',
+        await info(`¡Defiéndete! Responde con palabras de ${monName(enemy)}. Si respondes bien, recibes menos daño.`, {
+          en: `Defend yourself! Answer with ${monName(enemy)}'s words. Answer well and you take less damage.`,
         });
       }
-      const item = pickFromTheme(trainer.topic, trainer.topicTier, recent);
+      // Defense questions come from the opponent's theme at its level: stronger = harder.
+      const item = defenseItem(SPECIES[enemy.sp].theme, enemy.level, recent);
       recent.push(item.id);
       if (recent.length > 3) recent.shift();
       const r = await challenge({
