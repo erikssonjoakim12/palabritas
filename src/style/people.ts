@@ -276,6 +276,9 @@ export const LOOKS: Record<string, Look> = {
   sofia: { head: 'long', body: 'dress', color: 'pink' },
   fisher: { head: 'cap', body: 'pants', color: 'brown' },
   tourist: { head: 'cap', body: 'pants', color: 'purple' },
+  hiker: { head: 'short', body: 'pants', color: 'gray' },
+  painter: { head: 'long', body: 'dress', color: 'purple' },
+  andres: { head: 'cap', body: 'pants', color: 'gray' },
 };
 
 // ---------- Objects in the world (same 3-color sprite rules) ----------

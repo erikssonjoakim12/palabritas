@@ -15,7 +15,7 @@ import { startMenu } from '../ui/startmenu';
 import { wildBattle, trainerBattle } from '../battle/battle';
 import { speak, canListen } from '../lang/speech';
 import { SCRIPTS, scriptedStep, warp, currentMap, refreshNpcs, npcById, type ScriptCtx } from './world';
-import { HEAL_BALL } from '../style/colors';
+import { MINI_BALL, BALL_COLORS, drawPattern } from '../art/balls';
 
 type Line = [es: string, en: string];
 
@@ -45,20 +45,11 @@ async function healingMachine() {
   const count = Math.max(1, G.save.party.length);
   // 6 slots of 4x4 in the machine's tray; each holds a mini Palabola (teal top, white bottom).
   const slots: [number, number][] = [[2, 3], [6, 3], [10, 3], [2, 7], [6, 7], [10, 7]];
-  const MINI = ['.tt.', 'tttt', 'wwww', '.ww.'];
+  const FLASH = { t: '#f8f8b0', w: '#f8f8b0' };
   let shown = 0;
   let flash = false;
   machine.overlay = (g, x, y) => {
-    for (let i = 0; i < shown; i++) {
-      const [sx, sy] = slots[i];
-      MINI.forEach((row, dy) =>
-        [...row].forEach((ch, dx) => {
-          if (ch === '.') return;
-          g.fillStyle = flash ? '#f8f8b0' : ch === 't' ? HEAL_BALL[0] : HEAL_BALL[1];
-          g.fillRect(x + sx + dx, y + sy + dy, 1, 1);
-        }),
-      );
-    }
+    for (let i = 0; i < shown; i++) drawPattern(g, MINI_BALL, x + slots[i][0], y + slots[i][1], flash ? FLASH : BALL_COLORS);
   };
   for (let i = 0; i < count && i < 6; i++) {
     shown = i + 1;
@@ -464,6 +455,27 @@ const S: Record<string, (c: ScriptCtx) => Promise<void>> = {
       intro: ['¡Oye! ¿Por qué me miras? ¡Vamos a luchar!', 'Hey! Why are you looking at me? Let’s battle!'],
       defeated: ['¿Qué? ¿Cómo? ¿Por qué perdí?', 'What? How? Why did I lose?'],
       after: ['Las preguntas son importantes: qué, dónde, cuándo, quién, por qué y cómo.', 'Questions matter: what, where, when, who, why and how.'],
+    }),
+
+  tomas: () =>
+    trainerFight('tomas', {
+      intro: ['¡Camino por esta ruta todos los días! ¿Luchamos?', 'I walk this route every day! Shall we battle?'],
+      defeated: ['¡Uf! Necesito descansar.', 'Phew! I need to rest.'],
+      after: ['Si tus Palabritas están cansadas, vuelve al Palacentro de Villa Limón.', 'If your Palabritas are tired, go back to the Lemon Village Palacentro.'],
+    }),
+
+  valeria: () =>
+    trainerFight('valeria', {
+      intro: ['¡Estoy pintando mariposas! ¿De qué color es la tuya?', 'I’m painting butterflies! What color is yours?'],
+      defeated: ['¡Qué lástima! Mi dibujo no está terminado.', 'What a shame! My drawing isn’t finished.'],
+      after: ['Cada Palabrita sabe palabras diferentes. ¡Atrapa muchas y aprende más!', 'Every Palabrita knows different words. Catch many and learn more!'],
+    }),
+
+  andres: () =>
+    trainerFight('andres', {
+      intro: ['¿Vas al gimnasio? ¡Primero tienes que pasar por mí!', 'Going to the gym? First you have to get past me!'],
+      defeated: ['Estás listo para Paloma... creo.', 'You’re ready for Paloma... I think.'],
+      after: ['El Palomón de Paloma es muy fuerte. ¡Entrena bien antes de entrar!', 'Paloma’s Palomón is very strong. Train well before you go in!'],
     }),
 
   async lola() {

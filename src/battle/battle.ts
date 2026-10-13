@@ -3,6 +3,7 @@ import { setScene, getScene, nextFrame, frames } from '../engine/loop';
 import { sfx } from '../engine/sfx';
 import { CREATURE_ART } from '../art/creatures';
 import { OBJECTS } from '../art/chars';
+import { LINEUP_BALL, BALL_COLORS, FAINTED_COLORS, EMPTY_COLORS, drawPattern } from '../art/balls';
 import { G, flag, type Mon } from '../game/state';
 import { stats, monName, checkLevelUps, firstAble, markSeen, markCaught, newMon, knownMoves, newMoves } from '../game/mon';
 import { SPECIES, MODE_INFO, type Move, type Mode } from '../data/species';
@@ -42,6 +43,8 @@ let enemyF: Fighter | null = null;
 let meF: Fighter | null = null;
 let ball: Ball | null = null;
 let flashOn = false;
+/** Gen 2 style row of Palabolas (one per Palabrita) shown when a trainer battle starts. */
+let lineups: { enemy?: Mon[]; me?: Mon[] } = {};
 
 const battleScene = {
   update() {
@@ -61,6 +64,8 @@ const battleScene = {
     drawFighter(g, enemyF, false);
     drawFighter(g, meF, true);
     if (ball) g.drawImage(OBJECTS.palabola, Math.round(ball.x + ball.shake), Math.round(ball.y));
+    if (lineups.enemy) drawLineup(g, lineups.enemy, 8, 14, false);
+    if (lineups.me) drawLineup(g, lineups.me, 96, 80, true);
   },
 };
 
@@ -71,6 +76,17 @@ function drawFighter(g: CanvasRenderingContext2D, f: Fighter | null, back: boole
   const img = back ? art.back : art.front;
   const h = 48 - f.sink;
   g.drawImage(img, 0, 0, 48, h, Math.round(f.x + f.lunge), Math.round(f.y + f.sink), 48, h);
+}
+
+/** 6 slots: a ball per Palabrita (gray when fainted), empty outlines for the rest, on a bracket line. */
+function drawLineup(g: CanvasRenderingContext2D, team: Mon[], x: number, y: number, tickLeft: boolean) {
+  for (let i = 0; i < 6; i++) {
+    const mon = team[i];
+    drawPattern(g, LINEUP_BALL, x + i * 9, y, !mon ? EMPTY_COLORS : mon.hp > 0 ? BALL_COLORS : FAINTED_COLORS);
+  }
+  g.fillStyle = BALL_COLORS.k;
+  g.fillRect(x - 3, y + 10, 6 * 9 + 4, 1);
+  g.fillRect(tickLeft ? x - 3 : x + 6 * 9, y + 4, 1, 6);
 }
 
 const fighter = (mon: Mon, x: number, y: number): Fighter => ({ mon, x, y, blink: 0, sink: 0, hidden: false, lunge: 0 });
@@ -426,9 +442,14 @@ async function runBattle(cfg: Config): Promise<BattleResult> {
       enemy = cfg.team[++enemyIdx];
       markSeen(enemy.sp);
       enemyF = fighter(enemy, -48, ENEMY_POS.y);
+      const enemyHud = hud!.root.querySelector<HTMLElement>('.hud.enemy')!;
+      enemyHud.style.visibility = 'hidden';
+      lineups = { enemy: cfg.team };
       await info(`¡${trainer.name} envía a ${monName(enemy)}!`, { auto: 900 });
+      lineups = {};
       await slideIn(enemyF, ENEMY_POS.x);
       hud!.update();
+      enemyHud.style.visibility = '';
       return null;
     }
     return 'win';
@@ -522,12 +543,16 @@ async function runBattle(cfg: Config): Promise<BattleResult> {
   try {
     await encounterFlash();
     markSeen(enemy.sp);
+    if (trainer) {
+      lineups = { enemy: cfg.team, me: G.save.party };
+      await info(`¡${trainer.name} quiere luchar!`);
+      lineups = {};
+    }
     await slideIn(enemyF, ENEMY_POS.x);
     hud = buildHud(() => enemy, () => me);
     hud.update();
     hud.root.querySelector<HTMLElement>('.hud.player')!.style.visibility = 'hidden';
     if (trainer) {
-      await info(`¡${trainer.name} quiere luchar!`);
       await info(`¡${trainer.name} envía a ${monName(enemy)}!`, { auto: 900 });
     } else {
       await info(`¡Un ${monName(enemy)} salvaje apareció!`);
@@ -592,6 +617,7 @@ async function runBattle(cfg: Config): Promise<BattleResult> {
     closeText();
     enemyF = meF = null;
     ball = null;
+    lineups = {};
     setScene(prevScene);
   }
 

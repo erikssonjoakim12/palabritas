@@ -312,6 +312,9 @@ export const MAPS: Record<string, MapDef> = {
     npcs: [
       { id: 'mateo', x: 12, y: 14, look: 'mateo', dir: 'left', script: 'mateo', sight: 4 },
       { id: 'lola', x: 4, y: 11, look: 'girl', dir: 'right', script: 'lola', turns: true },
+      { id: 'tomas', x: 11, y: 19, look: 'hiker', dir: 'left', script: 'tomas', sight: 3 },
+      { id: 'valeria', x: 7, y: 9, look: 'painter', dir: 'right', script: 'valeria', sight: 3 },
+      { id: 'andres', x: 11, y: 3, look: 'andres', dir: 'left', script: 'andres', sight: 3 },
     ],
     encounters: {
       rate: 0.12,
