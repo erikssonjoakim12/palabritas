@@ -172,6 +172,46 @@ export const HEADS: Record<string, Facing> = {
     ],
   },
   /** Short dark hair. */
+  /** Short men's hair with a mustache (grown men: Señor Ramos, Don Pepe...). */
+  crew: {
+    down: [
+      '................',
+      '................',
+      '.....333333.....',
+      '....33333333....',
+      '...3333333333...',
+      '..331111111133..',
+      '..311131131113..',
+      '..311111111113..',
+      '..331133331133..',
+      '...3311111133...',
+    ],
+    up: [
+      '................',
+      '................',
+      '.....333333.....',
+      '....33333333....',
+      '...3333333333...',
+      '..333333333333..',
+      '..133333333331..',
+      '..333333333333..',
+      '...3333333333...',
+      '....31111113....',
+    ],
+    side: [
+      '................',
+      '................',
+      '.....333333.....',
+      '....33333333....',
+      '...3333333333...',
+      '...31111333333..',
+      '...31311133333..',
+      '...31111113133..',
+      '...333111113....',
+      '....3111113.....',
+    ],
+  },
+  /** Bobbed hair (older women). */
   short: {
     down: [
       '................',
@@ -266,9 +306,9 @@ export const LOOKS: Record<string, Look> = {
   boy: { head: 'cap', body: 'pants', color: 'blue' },
   girl: { head: 'long', body: 'dress', color: 'red' },
   granny: { head: 'short', body: 'dress', color: 'purple' },
-  baker: { head: 'short', body: 'pants', color: 'brown' },
+  baker: { head: 'crew', body: 'pants', color: 'brown' },
   nurse: { head: 'longColor', body: 'dress', color: 'pink' },
-  man: { head: 'short', body: 'pants', color: 'blue' },
+  man: { head: 'crew', body: 'pants', color: 'blue' },
   lady: { head: 'long', body: 'dress', color: 'green' },
   paloma: { head: 'longColor', body: 'pants', color: 'teal' },
   ivan: { head: 'cap', body: 'pants', color: 'teal' },
@@ -276,7 +316,8 @@ export const LOOKS: Record<string, Look> = {
   sofia: { head: 'long', body: 'dress', color: 'pink' },
   fisher: { head: 'cap', body: 'pants', color: 'brown' },
   tourist: { head: 'cap', body: 'pants', color: 'purple' },
-  hiker: { head: 'short', body: 'pants', color: 'gray' },
+  hiker: { head: 'crew', body: 'pants', color: 'gray' },
+  beto: { head: 'crew', body: 'pants', color: 'green' },
   painter: { head: 'long', body: 'dress', color: 'purple' },
   andres: { head: 'cap', body: 'pants', color: 'gray' },
 };

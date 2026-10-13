@@ -6,7 +6,7 @@ import { flag } from '../game/state';
   .  grass         ,  tall grass (wild Palabritas)   =  path        *  flowers
   T  tree          Y  lemon tree                    ~  water       f  fence      S  sign
   r b o p  roofs (red, blue, orange = Centro, purple = Gym)
-  h  wall          w  window                        d  door
+  h  wall          w  window                        d  door        a  bakery sign
   _  wood floor    +  tile floor                    #  inside wall
   k  table         B  bed       L  shelf            P  plant       V  TV
   C  counter (talk across it)   m  exit mat         R  rug
@@ -198,7 +198,7 @@ export const MAPS: Record<string, MapDef> = {
       'TTg****g..........Y..YTT',
       'TT.rrrr.........ooooo.TT',
       'TT.rrrr.........ooooo.TT',
-      'TT.hwwh.........hwcwh.TT',
+      'TT.hawh.........hwcwh.TT',
       'TT.hdwh.........hwdwh.TT',
       'TT....................TT',
       'TTY.........S........YTT',
@@ -222,9 +222,13 @@ export const MAPS: Record<string, MapDef> = {
       { x: 17, y: 13, to: 'casa_ramos', tx: 4, ty: 6 },
     ],
     signs: [{ x: 12, y: 8, es: 'VILLA LIMÓN: El pueblo más fresco de la región.', en: 'LEMON VILLAGE: The freshest town in the region.' }],
+    triggers: [{ x: 11, y: 1, script: 'betoStops' }],
     npcs: [
       { id: 'carmen', x: 13, y: 10, look: 'lady', dir: 'down', script: 'carmen', turns: true },
       { id: 'diego', x: 17, y: 16, look: 'boy', dir: 'left', script: 'diego', turns: true },
+      // Beto blocks the road to Ruta 2 until you have Palabolas, then steps aside.
+      { id: 'beto', x: 10, y: 1, look: 'beto', dir: 'down', script: 'beto', show: () => !flag('palabolas') },
+      { id: 'beto_aside', x: 13, y: 2, look: 'beto', dir: 'down', script: 'beto', turns: true, show: () => flag('palabolas') },
       { id: 'michi', x: 7, y: 2, object: 'michi', script: 'michi', show: () => flag('michiLocated') && !flag('michiFound') },
     ],
   },

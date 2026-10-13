@@ -52,6 +52,7 @@ export const TILES: Record<string, TileDef> = {
   w: solid(),
   c: solid({ look: { es: 'PALACENTRO. ¡Curamos a tus Palabritas gratis!', en: 'PALACENTRO. We heal your Palabritas for free!' } }),
   G: solid({ look: { es: 'GIMNASIO. ¡Solo para entrenadores valientes!', en: 'GYM. Only for brave trainers!' } }),
+  a: solid({ look: { es: 'PANADERÍA DON PEPE. ¡Pan recién hecho todos los días!', en: 'DON PEPE’S BAKERY. Fresh bread every day!' } }),
   d: open({ kind: 'door' }),
   _: open(),
   '+': open(),
@@ -108,7 +109,7 @@ const setCol = (g: Grid, x: number, ch: string) => g.forEach((row) => (row[x] = 
 // ---------- Neighbors ----------
 
 const ROOF_CHARS = 'rbop';
-const WALL_CHARS = 'hwdcG';
+const WALL_CHARS = 'hwdcGa';
 const roofKey = (ch: string) => (ch === 'b' ? 'r' : ch);
 
 function neighbors(env: TileEnv) {
@@ -225,6 +226,8 @@ function render(ch: string, env: TileEnv): Img {
       return stack(wallImage(env), paintArt(ART.centroSignOverlay));
     case 'G':
       return stack(wallImage(env), paintArt(ART.gymSignOverlay));
+    case 'a':
+      return stack(wallImage(env), paintArt(ART.bakerySignOverlay));
     case '_':
       return paintArt(ART.floor);
     case '+':

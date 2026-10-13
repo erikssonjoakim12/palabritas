@@ -254,7 +254,7 @@ const S: Record<string, (c: ScriptCtx) => Promise<void>> = {
     }
     if (!flag('palabolas')) {
       return lines(
-        ['Ve al norte, a Villa Limón. Mi amiga Doña Lupe hace Palabolas para atrapar Palabritas.', 'Go north to Lemon Village. My friend Doña Lupe makes Palabolas for catching Palabritas.'],
+        ['Ve al norte, a Villa Limón, y visita a mi amiga Doña Lupe. ¡Creo que necesita ayuda!', 'Go north to Lemon Village and visit my friend Doña Lupe. I think she needs help!'],
         ['Tus Palabritas se hacen fuertes luchando. En START, elige PALABRITAS para ver sus poderes.', 'Your Palabritas get stronger by battling. In START, choose PALABRITAS to see their powers.'],
       );
     }
@@ -325,6 +325,29 @@ const S: Record<string, (c: ScriptCtx) => Promise<void>> = {
       return lines(['La panadería de Don Pepe está al norte, cerca de las flores.', 'Don Pepe’s bakery is to the north, near the flowers.']);
     }
     await lines(['Los limones de Villa Limón son los mejores del mundo.', 'The lemons of Lemon Village are the best in the world.']);
+  },
+
+  /** Beto blocks the road to Ruta 2 until you have Palabolas. */
+  async beto() {
+    if (flag('palabolas')) {
+      return lines(
+        ['¡Ya tienes Palabolas! Puedes pasar a la Ruta 2.', 'You have Palabolas now! You can go to Route 2.'],
+        ['Si ves mi sombrero allí, ¡avísame!', 'If you see my hat there, let me know!'],
+      );
+    }
+    await lines(
+      ['¡Alto! No puedes ir a la Ruta 2.', 'Stop! You can’t go to Route 2.'],
+      ['Las Palabritas salvajes de allí son muy traviesas. ¡Ayer una me robó el sombrero!', 'The wild Palabritas there are very naughty. Yesterday one stole my hat!'],
+      ['Sin Palabolas no te dejo pasar. Doña Lupe las hace... pero hoy está muy triste.', 'I won’t let you through without Palabolas. Doña Lupe makes them... but she’s very sad today.'],
+    );
+  },
+
+  /** Stepping past Beto on the free side of the road. */
+  async betoStops() {
+    if (flag('palabolas')) return;
+    sfx('alert');
+    await SCRIPTS.beto({});
+    await scriptedStep('down');
   },
 
   async diego() {
@@ -628,7 +651,7 @@ async function starterTraining(sp: string) {
   refreshNpcs();
   await lines(
     [`¡${s.name} es perfecto para ti!`, `${s.name} is perfect for you!`],
-    ['Ahora ve al norte, a Villa Limón. Mi amiga Doña Lupe hace Palabolas para atrapar Palabritas.', 'Now go north to Lemon Village. My friend Doña Lupe makes Palabolas for catching Palabritas.'],
+    ['Ahora ve al norte, a Villa Limón, y visita a mi amiga Doña Lupe. ¡Creo que necesita ayuda!', 'Now go north to Lemon Village and visit my friend Doña Lupe. I think she needs help!'],
     ['En la hierba alta hay Palabritas salvajes. ¡Usa tus palabras para luchar!', 'Wild Palabritas live in the tall grass. Use your words to fight!'],
   );
 }

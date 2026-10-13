@@ -38,6 +38,8 @@ export const ACCENT = {
   lemon: '#f0e060',
   centroRed: '#d05058',
   gymPurple: '#7858b0',
+  breadCrust: '#c07838',
+  breadLight: '#e8b860',
 };
 
 /** Roof colors: [highlight, light, dark, outline]. Each town picks one (see maps.ts). */
