@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Palabritas icons</title>
+    <style>
+      body { font-family: sans-serif; background: #eee; padding: 16px; }
+      #icons { display: flex; flex-wrap: wrap; gap: 24px; align-items: flex-end; }
+      canvas { border-radius: 22%; box-shadow: 0 2px 8px #0004; max-width: 256px; height: auto; }
+    </style>
+  </head>
+  <body>
+    <!-- Dev only (not part of the game build). Open with: npm run icons -->
+    <p>App icons. Download them and replace the files in <code>public/</code>.</p>
+    <div id="icons"></div>
+    <script type="module" src="/src/dev/icons.ts"></script>
+  </body>
+</html>

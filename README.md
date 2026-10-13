@@ -55,3 +55,6 @@ All visual style lives in `src/style/` (modeled on Pokémon Gold/Silver's daytim
 Each town picks its ground and roof color in `maps.ts` (`ground: 'town'`, `roof: 'green'`).
 Walking speed is `WALK_SPEED` in `src/world/world.ts`. UI text-box colors are the CSS
 variables at the top of `src/style.css`.
+
+The app icon is our mascot Aguacatito, drawn from the game's own sprite (`src/dev/icons.ts`).
+After changing the art, run `npm run icons`, download both PNGs and replace the ones in `public/`.

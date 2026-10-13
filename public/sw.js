@@ -1,6 +1,6 @@
 // Offline support. The page itself: network first (so updates show right away), cache when offline.
 // Everything else (file names change with every build): cache first, refreshed in the background.
-const CACHE = 'palabritas-v2';
+const CACHE = 'palabritas-v3';
 
 self.addEventListener('install', (e) => {
   self.skipWaiting();
