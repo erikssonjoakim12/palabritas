@@ -1,4 +1,6 @@
 # Build the game and publish it to GitHub Pages on every push to master.
+# Two jobs, so "Re-run failed jobs" only repeats the deploy (a re-run of a single combined
+# job uploads the site twice, and Pages refuses two copies).
 name: Deploy to GitHub Pages
 
 on:
@@ -16,11 +18,8 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -33,5 +32,13 @@ jobs:
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
       - id: deployment
         uses: actions/deploy-pages@v4
