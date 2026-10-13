@@ -1,4 +1,5 @@
 import type { Dir } from '../engine/input';
+import { ITEMS, itemBySpanish } from '../data/content';
 
 export interface Mon {
   uid: string;
@@ -125,6 +126,13 @@ function migrate(s: SaveData) {
   for (const m of s.party) m.sp = fix(m.sp);
   s.seen = [...new Set(s.seen.map(fix))];
   s.caught = [...new Set(s.caught.map(fix))];
+  // Items that moved (old trainer topics, words now shared with the core list) keep their progress.
+  for (const [id, p] of Object.entries(s.prog)) {
+    if (ITEMS[id]) continue;
+    const to = itemBySpanish(id.slice(id.indexOf(':') + 1))?.id;
+    if (to && (!s.prog[to] || (p.learned && !s.prog[to].learned))) s.prog[to] = p;
+    delete s.prog[id];
+  }
 }
 
 export function saveGame(): boolean {

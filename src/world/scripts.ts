@@ -531,7 +531,7 @@ const S: Record<string, (c: ScriptCtx) => Promise<void>> = {
     sfx('badge');
     await info('¡{name} recibió la Medalla Brisa!', { en: '{name} received the Breeze Medal!' });
     await lines(
-      ['Esta medalla demuestra que dominas el presente.', 'This medal shows you’ve mastered the present tense.'],
+      ['Esta medalla demuestra que entiendes hasta a los Palabritas más fuertes.', 'This medal shows you understand even the strongest Palabritas.'],
       ['Sigue entrenando. ¡El cielo es el límite!', 'Keep training. The sky’s the limit!'],
     );
     await info('¡Felicidades! Terminaste la primera parte de Palabritas.', { en: 'Congratulations! You finished the first part of Palabritas.' });

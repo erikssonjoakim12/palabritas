@@ -4,9 +4,10 @@ import { sfx } from '../engine/sfx';
 import { CREATURE_ART } from '../art/creatures';
 import { G, type Mon } from '../game/state';
 import { stats, monName } from '../game/mon';
-import { lealtad, levelProgress, isLearned, peekProg, isFading, reviewItems, REVIEW_LEVELS } from '../game/learning';
+import { lealtad, levelProgress, isLearned, peekProg, isFading } from '../game/learning';
+import { itemsUpTo } from '../game/curriculum';
 import { SPECIES, MODE_INFO, learnLevel } from '../data/species';
-import { THEMES, poolUpTo } from '../data/content';
+import { THEMES } from '../data/content';
 import { TYPE_COLORS } from '../data/types';
 import { speak } from '../lang/speech';
 
@@ -63,15 +64,15 @@ function partyRow(mon: Mon, active?: Mon) {
   row.appendChild(spriteCanvas(mon.sp));
   const info = el('div', 'grow');
   info.appendChild(el('div', '', `${monName(mon)}${mon === active ? ' ★' : ''}`));
-  info.appendChild(el('div', 'small', `Nv${mon.level}  PS ${mon.hp}/${s.maxHp}`));
+  const loy = Math.round(lealtad(mon) * 100);
+  info.appendChild(el('div', 'small', `Nv${mon.level}  PS ${mon.hp}/${s.maxHp}  ♥${loy}%`));
   const bar = el('div', `hpbar ${hpClass(mon.hp, s.maxHp)}`);
   const fill = el('div');
   fill.style.width = `${(100 * mon.hp) / s.maxHp}%`;
   bar.appendChild(fill);
   info.appendChild(bar);
   const lp = levelProgress(mon);
-  const loy = Math.round(lealtad(mon) * 100);
-  info.appendChild(el('div', 'small', `${lp.maxed ? 'Nivel máx.' : `Sig. nivel ${lp.learned}/${lp.total}${lp.reviewTotal ? ` +repaso ${lp.reviewDone}/${lp.reviewTotal}` : ''}`} · ♥${loy}%`));
+  info.appendChild(el('div', 'small', lp.maxed ? 'Nivel máx.' : `Nuevas ${lp.learned}/${lp.total}${lp.reviewTotal ? ` · Repaso ${lp.reviewDone}/${lp.reviewTotal}` : ''}`));
   row.appendChild(info);
   return row;
 }
@@ -138,7 +139,7 @@ export function showDetails(mon: Mon): Promise<void> {
   const lp = levelProgress(mon);
   const words = el('div', 'words');
   words.appendChild(
-    el('div', 'muted', lp.maxed ? 'Nivel máximo de esta versión.' : `Para el nivel ${mon.level + 1}: ${lp.learned}/${lp.total} dominadas`),
+    el('div', 'muted', lp.maxed ? 'Nivel máximo de esta versión.' : `Para el nivel ${mon.level + 1}: ${lp.learned}/${lp.total} nuevas dominadas`),
   );
   const addWord = (es: string, en: string, mark: string) => {
     const w = el('div', 'word');
@@ -157,15 +158,15 @@ export function showDetails(mon: Mon): Promise<void> {
     else if (p?.seen) addWord(it.es, it.en, '…');
     else addWord('???', it.en, '·');
   }
-  // From level 21: the previous levels must be reviewed before leveling up.
-  if (lp.reviewTotal) {
+  // Half of an earlier level must be reviewed before leveling up.
+  const { review } = lp;
+  if (review.all.length) {
     words.appendChild(
-      el('div', 'muted', `Repaso de los niveles ${mon.level - REVIEW_LEVELS}-${mon.level - 1}: ${lp.reviewDone}/${lp.reviewTotal}`),
+      el('div', 'muted', `Repaso del nivel ${review.level}: ${lp.reviewDone}/${lp.reviewTotal}`),
     ).style.marginTop = '0.8em';
-    const todo = new Set(reviewItems(mon).todo.map((i) => i.id));
-    for (const it of reviewItems(mon).all) addWord(it.es, it.en, todo.has(it.id) ? '↻' : '✓');
+    for (const it of review.all) addWord(it.es, it.en, review.todo.includes(it) ? '↻' : '✓');
   }
-  const learned = poolUpTo(sp.theme, mon.level - 1).filter(isLearned);
+  const learned = itemsUpTo(mon.sp, mon.level - 1).filter(isLearned);
   if (learned.length) {
     words.appendChild(el('div', 'muted', `Ya dominadas (${learned.length}):`)).style.marginTop = '0.8em';
     for (const it of learned) addWord(it.es, it.en, isFading(peekProg(it.id)) ? '⚠' : '✓');

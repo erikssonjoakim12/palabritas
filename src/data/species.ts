@@ -28,6 +28,8 @@ export interface Species {
   name: string;
   types: Type[];
   theme: string;
+  /** Starters teach the core words in order (the most useful first). They are never found in the wild early on. */
+  starter?: boolean;
   base: { hp: number; atk: number; def: number; spd: number };
   moves: [Move, Move, Move, Move];
   /** 0..1, higher is easier to catch. */
@@ -43,6 +45,7 @@ export const SPECIES: Record<string, Species> = {
     name: 'Salchichita',
     types: ['Fuego'],
     theme: 'perro',
+    starter: true,
     base: { hp: 45, atk: 54, def: 43, spd: 62 },
     moves: [m('Ladrido', 'Normal', 'choose'), m('Olfato', 'Normal', 'listen'), m('Mordisco', 'Siniestro', 'type'), m('Mostaza Ardiente', 'Fuego', 'speak')],
     catchRate: 0.4,
@@ -56,6 +59,7 @@ export const SPECIES: Record<string, Species> = {
     name: 'Gotita',
     types: ['Agua'],
     theme: 'tiempo',
+    starter: true,
     base: { hp: 46, atk: 48, def: 62, spd: 45 },
     moves: [m('Salpicón', 'Normal', 'choose'), m('Llovizna', 'Agua', 'listen'), m('Remolino', 'Agua', 'type'), m('Tormenta', 'Eléctrico', 'speak')],
     catchRate: 0.4,
@@ -69,6 +73,7 @@ export const SPECIES: Record<string, Species> = {
     name: 'Aguacatito',
     types: ['Planta'],
     theme: 'comida',
+    starter: true,
     base: { hp: 48, atk: 50, def: 52, spd: 44 },
     moves: [m('Placaje', 'Normal', 'choose'), m('Hoja Afilada', 'Planta', 'listen'), m('Guacamolazo', 'Planta', 'type'), m('Semilla Dura', 'Roca', 'speak')],
     catchRate: 0.4,

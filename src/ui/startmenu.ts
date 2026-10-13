@@ -3,9 +3,10 @@ import { input } from '../engine/input';
 import { sfx } from '../engine/sfx';
 import { G, saveGame } from '../game/state';
 import { monName } from '../game/mon';
-import { totalLearned, themeLearnedCount, isLearned } from '../game/learning';
+import { totalLearned, isLearned } from '../game/learning';
 import { SPECIES } from '../data/species';
 import { THEMES } from '../data/content';
+import { allItems } from '../game/curriculum';
 import { speak } from '../lang/speech';
 import { menu } from './menu';
 import { info, say } from './textbox';
@@ -81,9 +82,10 @@ function dexEntry(id: string): Promise<void> {
   box.append(es, el('div', 'row muted', sp.dex.en));
   speak(sp.dex.es);
   if (G.save.caught.includes(id)) {
-    const learned = theme.items.filter(isLearned);
+    const items = allItems(id);
+    const learned = items.filter(isLearned);
     const words = el('div', 'words');
-    words.appendChild(el('div', 'muted', `Palabras dominadas: ${themeLearnedCount(sp.theme)}/${theme.items.length}`));
+    words.appendChild(el('div', 'muted', `Palabras dominadas: ${learned.length}/${items.length}`));
     for (const it of learned) {
       const w = el('div', 'word');
       const left = el('span', '', it.es);

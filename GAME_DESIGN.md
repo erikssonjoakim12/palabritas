@@ -21,33 +21,22 @@ There is no XP from battles. A creature's **level is how much of its theme you h
 
 ### The level curve
 
-> **Being redesigned:** see [LEARNING_PLAN.md](LEARNING_PLAN.md) (core + theme tracks, bands, reviews). The section below describes what is implemented today.
+Full design and tables: [LEARNING_PLAN.md](LEARNING_PLAN.md). In short:
 
 Goal: a Palabrita at **level 60 ≈ B1** (you can keep most conversations going on its theme) and
-**level 100 ≈ C1** (basically fluent on it). A team of Palabritas adds up to broad Spanish:
-each theme brings its own vocabulary, while grammar follows the same bands in every theme.
+**level 100 ≈ C1** (basically fluent on it). A team of Palabritas adds up to broad Spanish.
 
-**Items per level = 3 + (level − 1) ÷ 10** (rounded down): 3 for levels 2–10, 4 for 11–20, 5 for 21–30 … 12 for 91–100.
-Each theme's content is ONE ordered list (easiest first) that the game splits into levels by this formula.
-
-| Levels | Content | Items/level | Mastered after | Plus | ≈ Answers/level | ≈ Battles/level | ≈ Time/level |
-|---|---|---|---|---|---|---|---|
-| 2–10 | words, most basic phrases | 3 | 1 good answer | – | 4 | 1 | 2 min |
-| 11–20 | short phrases | 4 | 2 good answers | – | 14 | 3 | 6 min |
-| 21–40 | simple full sentences (present, *ir a*, basic past) | 5–6 | 2 good answers | review previous 5 levels | 42–50 | 9–11 | 20–25 min |
-| 41–60 | longer sentences, mixed past, opinions, mini-dialogues (B1) | 7–8 | 2 good answers on **different days** | review previous 5 levels | ~60 | ~14 | ~30 min, over 2+ days |
-| 61–80 | subjunctive, conditionals, idioms (B2) | 9–10 | 2 answers, different days | review | ~85 | ~19 | ~40 min, 2+ days |
-| 81–100 | nuance, register, long listening/speaking (C1) | 11–12 | 2 answers, different days | review | ~100 | ~22 | ~50 min, 2+ days |
-
-Measured with the real game code up to level 30 (a player answering right ~85% of the time); higher levels are estimates.
-A wild battle has about 4–5 of your answers (~1.5–2 min). Roughly 45–50 hours of play takes one Palabrita
-from 2 to 100 (about 5 months at 20 minutes a day).
-
+- Every level teaches **core words** (a shared ~650-word A1 list: starters teach it in order, most useful first; other kinds learn their own sample)
+  plus **theme items** (the Palabrita's own topic): words for levels 2–10, short phrases for 11–20, sentences from 21.
+  The same Spanish in two lists is one shared item: master it once, it counts everywhere.
+- New core words per level = 2 + (level − 2) ÷ 2 (119 by level 20). Theme: 3, 4, then 3 per level.
 - **Good answer** = correct or almost correct (e.g. a missing accent), without the 💡 help button.
-- **Review (level 21+):** before leveling up, every item from the previous 5 levels must be answered well again
-  since the Palabrita reached its current level (level 25 reviews levels 20–24). Battles mix these in automatically.
-  Progress shows in START → PALABRITAS (`Sig. nivel 3/5 +repaso 12/25`) and on the details page.
-- Content exists up to level 30 for now (117 items per theme).
+  Up to level 20 one good answer masters an item; 21–40 needs two; 41+ two on different days.
+- **Rolling review:** before leveling up, half of the items from 5 levels back must be answered well again
+  (level 12 reviews level 7). Battles mix these in automatically.
+  Progress shows in START → PALABRITAS (`Nuevas 3/9 · Repaso 2/4`) and on the details page.
+- Trainer defense questions (gym leaders too) come from the opponent's own kind: the words of the level it mastered to get where it is.
+- Written content: core words to level 20, theme items to level 37.
 
 ### Control (lealtad): use it or lose it
 

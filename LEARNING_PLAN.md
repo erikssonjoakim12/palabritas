@@ -1,82 +1,62 @@
 # Palabritas — learning plan
 
 How a Palabrita's levels map to real Spanish learning, and what material we need to write.
-Status: **agreed plan, not implemented yet.**
+Status: **levels 2-20 implemented** (core list in src/data/content/core.ts, per-kind words in src/game/curriculum.ts).
+Still to write: the A2 core words and core sentences for levels 21+ (until then, levels 21+ only add theme sentences).
 
 ## Two tracks in every level
 
-- **Core Spanish:** the high-frequency words and grammar everyone needs. A1 ≈ the 500 most useful words.
-  - The **first 7 core words are universal** (levels 2–4): *hola, sí, no, yo, tú, gracias, por favor*, the same for
-    every Palabrita.
-  - From level 5, **each kind of Palabrita has its own fixed random sample** from the shared 500-word pool
-    (the same for every Salchichita, different for a Gotita). Samples overlap, as they naturally would.
-  - Starters and the first wild Palabritas get **samples designed to overlap little**; the rest are random.
-  - Mastered core words count for every Palabrita. Raising another of the same kind is fast (same core words);
-    a new kind is a bit faster (some overlap); once you know most of the core, every new catch levels quickly.
-    That makes catching new kinds worth it: they bring new words.
-- **Theme:** each Palabrita's own vocabulary (dogs, food, weather…). Never re-teaches core words.
+- **Core Spanish:** the high-frequency words everyone needs, ~650 A1 words and expressions in one list,
+  most useful first.
+  - The **first 7 core words are universal** (levels 2–4): *hola, sí, no, yo, tú, gracias, por favor*.
+  - **Starters walk the list in order**: all three teach the same ~119 most useful words by level 20,
+    whichever one you pick. Your starter is special; starters can't be found in the wild before Gym 4.
+  - **Other kinds have their own fixed random sample** of each level's slice of the list (the same for every
+    Pajarito, different for a Conejito), so catching new kinds brings new words.
+  - Mastered core words count for every Palabrita.
+- **Theme:** each Palabrita's own vocabulary (dogs, food, weather…).
+- **Shared items:** the same Spanish in two lists (e.g. *el agua* in the core and in two themes) is ONE item.
+  Master it once and it counts everywhere; a kind never gets the same item twice, so that level is just shorter.
+  Nothing is left out of the core because a theme also teaches it.
 
 ## Level table
 
-*A good answer = correct or almost (e.g. a missing accent), without 💡 help. "Answers" counts every question you answer,
-assuming ~85% right; a wild battle ≈ 4–5 of your answers ≈ 2 minutes.*
+*A good answer = correct or almost (e.g. a missing accent), without 💡 help.*
 
-### Levels 2–20, level by level (words, then short phrases)
+- **New core words per level = 2 + (level − 2) ÷ 2, rounded down** (+1 every second level) → 119 by level 20.
+- **New theme items per level:** 3 words (2–10), 4 short phrases (11–20), 3 sentences (21+).
+- **Mastered after:** 1 good answer (levels 2–20), 2 (21–40), 2 on different days (41+).
+- **Rolling review:** to level up, also re-answer **half of the items from 5 levels back** (level 12 reviews
+  half of level 7). Same total amount as checkpoints every 5 levels, but spread evenly, and the 5-level gap
+  is good spacing for memory. On top of that, spaced repetition brings mastered words back (loyalty).
 
-**New core words per level = 2 + (level − 2) ÷ 2, rounded down** (+1 every second level) → **119 by level 20**.
-Every item needs **1 good answer**; the **checkpoint every 5 levels** makes it stick (re-answer half of the
-previous 5 levels before leveling up).
+Measured with the real game code (a starter, ~85% right answers; a wild battle ≈ 4–5 answers):
 
-| Level | New core words | New theme items | New items | Checkpoint review | ≈ Answers | ≈ Battles | Core words so far | Theme items so far |
-|---|---|---|---|---|---|---|---|---|
-| 2 | 2 (universal) | 3 words | 5 | – | 7 | 2 | 2 | 3 |
-| 3 | 2 (universal) | 3 words | 5 | – | 7 | 2 | 4 | 6 |
-| 4 | 3 (universal) | 3 words | 6 | – | 8 | 2 | 7 | 9 |
-| 5 | 3 | 3 words | 6 | **8** (half of levels 2–4) | 18 | 4 | 10 | 12 |
-| 6 | 4 | 3 words | 7 | – | 9 | 2 | 14 | 15 |
-| 7 | 4 | 3 words | 7 | – | 9 | 2 | 18 | 18 |
-| 8 | 5 | 3 words | 8 | – | 10 | 2 | 23 | 21 |
-| 9 | 5 | 3 words | 8 | – | 10 | 2 | 28 | 24 |
-| 10 | 6 | 3 words | 9 | **18** (half of levels 5–9) | 34 | 8 | 34 | 27 |
-| 11 | 6 | 4 short phrases | 10 | – | 13 | 3 | 40 | 31 |
-| 12 | 7 | 4 short phrases | 11 | – | 14 | 3 | 47 | 35 |
-| 13 | 7 | 4 short phrases | 11 | – | 14 | 3 | 54 | 39 |
-| 14 | 8 | 4 short phrases | 12 | – | 16 | 4 | 62 | 43 |
-| 15 | 8 | 4 short phrases | 12 | **27** (half of levels 10–14) | 48 | 11 | 70 | 47 |
-| 16 | 9 | 4 short phrases | 13 | – | 17 | 4 | 79 | 51 |
-| 17 | 9 | 4 short phrases | 13 | – | 17 | 4 | 88 | 55 |
-| 18 | 10 | 4 short phrases | 14 | – | 18 | 4 | 98 | 59 |
-| 19 | 10 | 4 short phrases | 14 | – | 18 | 4 | 108 | 63 |
-| 20 | 11 | 4 short phrases | 15 | **33** (half of levels 15–19) | 60 | 13 | **119** | **67** |
-
-- Levels 2–10: ~112 answers ≈ 25 battles ≈ **under an hour**. Several levels on day one.
-- Levels 11–20: ~235 answers ≈ 52 battles ≈ **1 h 45 min**.
-- At level 20 one Palabrita knows **186 items** (119 core words + 67 theme items).
+| Levels | Answers per level |
+|---|---|
+| 2–6 | 6–8 |
+| 7–11 | 10–13 |
+| 12–16 | 17–20 |
+| 17–20 | 22–26 |
+| 21–30 | 9–20 (only theme sentences until the A2 core is written) |
 
 ### Levels 21–100, per level (sentences)
 
-| Levels | Band | New core | New theme | New items | Mastered after | Review every level | ≈ Answers | ≈ Battles | ≈ Time |
-|---|---|---|---|---|---|---|---|---|---|
-| 21–40 | **Primeras oraciones** (A2): present tense, *ir a*, basic past, pronouns, comparisons | 2 words (A2 pool) + 2 sentences | 3 sentences | 7 | 2 good answers | 18 (half of previous 5 levels) | 40 | 9 | 18 min |
-| 41–60 | **Conversación** (B1): past vs imperfect, perfect, future, connectors, opinions | 3 sentences | 3 sentences / dialogue lines | 6 | 2 answers on **different days** | 15 | 34 | 8 | 2+ days |
-| 61–80 | **Fluidez** (B2): subjunctive, conditionals with *si*, idioms | 3 sentences | 3 dialogues | 6 | 2 answers, different days | 15 | 34 | 8 | 2+ days |
-| 81–100 | **Maestría** (C1): nuance, formal vs slang, regional variety | 3 sentences | 3 longer listening/speaking items | 6 | 2 answers, different days | 15 | 34 | 8 | 2+ days |
+| Levels | Band | New core | New theme | Mastered after |
+|---|---|---|---|---|
+| 21–40 | **Primeras oraciones** (A2): present tense, *ir a*, basic past, pronouns, comparisons | 2 words (A2 pool) + 2 sentences | 3 sentences | 2 good answers |
+| 41–60 | **Conversación** (B1): past vs imperfect, perfect, future, connectors, opinions | 3 sentences | 3 sentences / dialogue lines | 2 answers on **different days** |
+| 61–80 | **Fluidez** (B2): subjunctive, conditionals with *si*, idioms | 3 sentences | 3 dialogues | 2 answers, different days |
+| 81–100 | **Maestría** (C1): nuance, formal vs slang, regional variety | 3 sentences | 3 longer listening/speaking items | 2 answers, different days |
 
-Core sentences are also drawn per kind from shared band pools, so new kinds bring new grammar examples too.
+Core sentences will also be drawn per kind from shared band pools, so new kinds bring new grammar examples too.
 
-### Per Palabrita at level 100
+## Core coverage (by level 20)
 
-159 core words + 220 core sentences + 307 theme items = **686 items**, plus whatever other kinds added.
-About 30 hours of play, and at least 2 months (one level per day at most from level 41).
-
-## Core coverage (A1 pool: 500 words, 119 per Palabrita by level 20)
-
-| Kinds of Palabrita raised to 20 | Core words covered |
+| Raised to level 20 | Core words covered (of ~650) |
 |---|---|
-| 1 | 24% |
-| 4 (early ones designed to overlap little) | **~80%** |
-| 4 (random kinds) | ~65% |
-| 10 (random kinds) | ~93% |
+| A starter | ~120 (the most useful ones) |
+| The 8 current kinds | ~460 |
 
 ## Themes
 
@@ -89,7 +69,7 @@ La ropa, Las compras, Los deportes, La música, La tecnología.
 
 | Phase | Covers | Core | Themes (×7) | Total |
 |---|---|---|---|---|
-| **A (next)** | levels 2–30 | 500 A1 words (7 universal first) + ~200 A2 words + ~60 sentences for 21–30 | 27 words + 40 phrases + 30 sentences = 97 each → 679 (mostly exists already) | **≈ 1,440** |
+| **A (next)** | levels 2–30 | ~650 A1 words (done) + ~200 A2 words + ~60 sentences for 21–30 | 27 words + 40 phrases + 30 sentences = 97 each → 679 (mostly exists already) | **≈ 1,440** |
 | B | levels 31–40 | +~200 A2 words, ~60 sentences | 30 each → 210 | ≈ 470 |
 | C | levels 41–60 | ~180 B1 sentences | 60 each → 420 | ≈ 600 |
 | D | levels 61–100 | ~360 sentences | 120 each → 840 | ≈ 1,200 (candidate for Claude-generated items) |
@@ -99,13 +79,19 @@ Latin American Spanish throughout; worth a native speaker's skim per phase.
 ## Implementation notes (for later)
 
 - Content: a core word pool (ordered easiest/most frequent first), core sentence pools per band, one list per theme.
-- Each kind of Palabrita derives its core sample from its id (stable), drawing easier words for lower levels.
-- Leveling: all new items of the level mastered, plus the checkpoint/review where it applies.
-- Review "half": a stable choice per item and level, so it doesn't change between sessions.
+- Starters walk the core list in order; other kinds derive a stable sample per level from their id.
+- Leveling: all new items of the level mastered, plus the rolling review.
+- Review half: a stable choice per item and level, so it doesn't change between sessions.
 - START → PALABRITAS shows e.g. `Nuevas 5/8 · Repaso 12/20`.
 - Existing players keep everything they've mastered.
 
-## Open questions
+## Decided
 
-1. Should gym leaders test the core track (e.g. Gym 1 = the most common verbs) instead of their Palabritas' themes?
-2. Defense questions: the opponent's theme at its level (current), or a mix with its core words?
+- **Gym leaders** work like any trainer: their Palabritas are stronger, so their words are harder. One battle mechanic.
+- **Attack questions** come from your own Palabrita: its words at its level, the review it needs, older words.
+- **Defense questions** come from the opponent: its exact kind's words (core sample + theme) of the level it
+  mastered to get where it is (a level-7 Pajarito asks Pajarito's level-6 words; level 2 uses level 2).
+  After level 20 that means sentences, so defending against strong Palabritas gets harder naturally.
+- **Core list source:** written for this game, ordered by everyday spoken frequency and covering the CEFR A1 topics,
+  with Latin American forms (celular, carro, computadora...) and alternatives accepted. Words a theme also
+  teaches are shared items, not left out.

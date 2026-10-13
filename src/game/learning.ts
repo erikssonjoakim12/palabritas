@@ -1,7 +1,9 @@
 import { G, type ItemProg, type Mon } from './state';
-import { THEMES, poolUpTo, tierItems, type Item } from '../data/content';
-import { SPECIES, type Mode } from '../data/species';
+import { THEMES, poolUpTo, type Item } from '../data/content';
+import type { Mode } from '../data/species';
 import type { Grade } from '../lang/check';
+import { levelItems, itemsUpTo, maxLevel } from './curriculum';
+import { pickRandom, hash } from './random';
 
 const HOUR = 3_600_000;
 const DAY = 24 * HOUR;
@@ -12,20 +14,21 @@ export const OBEY_THRESHOLD = 0.7;
 
 /*
   HOW LEVELING WORKS
-  - A level-N Palabrita is learning the items of tier N of its theme
-    (3 items per level for 2-10, 4 for 11-20, 5 for 21-30... see itemsPerLevel()).
+  - A level-N Palabrita is learning its new items for level N: core words + theme items
+    (see curriculum.ts).
   - An item is mastered after enough good answers (without the 💡 help button):
-      tiers 2-10: 1 good answer
-      tiers 11-40: 2 good answers
-      tiers 41+: 2 good answers on different days
-  - From level 21, leveling up ALSO needs a review: every item from the previous
-    5 levels must be answered well again since the Palabrita reached its current level.
+      levels 2-20: 1 good answer
+      levels 21-40: 2 good answers
+      levels 41+: 2 good answers on different days
+  - Rolling review: leveling up ALSO needs half of the items from REVIEW_GAP levels back
+    (level 12 reviews level 7) answered well again since the Palabrita reached its current
+    level. Spreading it over every level keeps the workload smooth.
 */
-export const REVIEW_FROM_LEVEL = 21;
-export const REVIEW_LEVELS = 5;
+export const REVIEW_GAP = 5;
+export const REVIEW_SHARE = 0.5;
 
 export function masteryRule(tier: number): { answers: number; days: number } {
-  if (tier <= 10) return { answers: 1, days: 1 };
+  if (tier <= 20) return { answers: 1, days: 1 };
   if (tier <= 40) return { answers: 2, days: 1 };
   return { answers: 2, days: 2 };
 }
@@ -109,8 +112,7 @@ export function record(item: Item, _mode: Mode, grade: Grade, helped = false): R
 
 /** Share of a Palabrita's learned words that are still fresh (0..1). */
 export function lealtad(mon: Mon): number {
-  const theme = SPECIES[mon.sp].theme;
-  const learned = poolUpTo(theme, mon.level).filter(isLearned);
+  const learned = itemsUpTo(mon.sp, mon.level).filter(isLearned);
   if (!learned.length) return 1;
   const now = Date.now();
   const fresh = learned.filter((i) => !isFading(peekProg(i.id), now)).length;
@@ -119,28 +121,44 @@ export function lealtad(mon: Mon): number {
 
 export function fadingItems(mon: Mon): Item[] {
   const now = Date.now();
-  return poolUpTo(SPECIES[mon.sp].theme, mon.level)
+  return itemsUpTo(mon.sp, mon.level)
     .filter((i) => isFading(peekProg(i.id), now))
     .sort((a, b) => prog(a.id).due - prog(b.id).due);
 }
 
-/** Items from the previous levels that must be answered well again before this Palabrita levels up. */
-export function reviewItems(mon: Mon): { all: Item[]; todo: Item[] } {
-  if (mon.level < REVIEW_FROM_LEVEL) return { all: [], todo: [] };
-  const theme = THEMES[SPECIES[mon.sp].theme];
-  const all = theme.items.filter((i) => i.tier >= mon.level - REVIEW_LEVELS && i.tier < mon.level);
+export interface Review {
+  /** The level being reviewed (0 when there is none yet). */
+  level: number;
+  all: Item[];
+  todo: Item[];
+}
+
+/**
+ * The items from REVIEW_GAP levels back that must be answered well again before this
+ * Palabrita levels up. Which half is a stable choice per item and level.
+ */
+export function reviewItems(mon: Mon): Review {
+  const level = mon.level - REVIEW_GAP;
+  if (level < 2) return { level: 0, all: [], todo: [] };
+  const items = levelItems(mon.sp, level);
+  const share = new Set(
+    [...items]
+      .sort((a, b) => hash(`${a.id}@${mon.level}`) - hash(`${b.id}@${mon.level}`))
+      .slice(0, Math.ceil(items.length * REVIEW_SHARE)),
+  );
+  const all = items.filter((i) => share.has(i));
   const since = mon.since ?? 0;
   const todo = all.filter((i) => (peekProg(i.id)?.lastGood ?? 0) < since || (peekProg(i.id)?.lastGood ?? 0) === 0);
-  return { all, todo };
+  return { level, all, todo };
 }
 
-/** Ready to level up: the current level's items are mastered and the review is done. */
+/**
+ * Ready to level up: the current level's items are mastered and the review is done.
+ * (A level can be empty when all its items were learned earlier: then it's a free level.)
+ */
 export function canLevelUp(mon: Mon): boolean {
-  const items = tierItems(SPECIES[mon.sp].theme, mon.level);
-  return items.length > 0 && items.every(isLearned) && reviewItems(mon).todo.length === 0;
+  return mon.level <= maxLevel(mon.sp) && levelItems(mon.sp, mon.level).every(isLearned) && reviewItems(mon).todo.length === 0;
 }
-
-const pickRandom = <T>(arr: T[]): T => arr[Math.floor(Math.random() * arr.length)];
 
 /**
  * Choose what to ask next from a pool:
@@ -172,53 +190,56 @@ export function pickItem(pool: Item[], avoid: string[] = []): Item {
   return pickRandom(recent.length && Math.random() < 0.7 ? recent : items);
 }
 
-/** What a Palabrita asks you in battle: its own words, plus the review it needs to level up. */
+const without = (items: Item[], avoid: string[]) => items.filter((i) => !avoid.includes(i.id));
+
+/** What a Palabrita asks you in battle: its new words, the review it needs, and older words. */
 export function pickForMon(mon: Mon, avoid: string[] = []): Item {
-  const pool = poolUpTo(SPECIES[mon.sp].theme, mon.level);
-  const fading = fadingItems(mon).filter((i) => !avoid.includes(i.id));
+  const fading = without(fadingItems(mon), avoid);
   if (fading.length && Math.random() < 0.6) return fading[0];
-  const current = tierItems(SPECIES[mon.sp].theme, mon.level);
-  const newStuffLeft = current.some((i) => !isLearned(i));
-  const review = reviewItems(mon).todo.filter((i) => !avoid.includes(i.id));
+  const todo = levelItems(mon.sp, mon.level).filter((i) => !isLearned(i));
+  const review = without(reviewItems(mon).todo, avoid);
   // Mix the review in with the new words; once the new words are done, it's all review.
-  if (review.length && (!newStuffLeft || Math.random() < 0.5)) return pickRandom(review);
-  return pickItem(pool, avoid);
+  if (review.length && (!todo.length || Math.random() < 0.5)) return pickRandom(review);
+  if (todo.length && Math.random() < 0.8) return pickItem(todo, avoid);
+  return pickFromKind(mon.sp, mon.level, avoid);
 }
 
-/** Pick a theme item for a quiz up to a level (catching). */
+/** Any of a kind's words up to a level (catching, a disobedient Palabrita). */
+export function pickFromKind(spId: string, level: number, avoid: string[] = []): Item {
+  return pickItem(itemsUpTo(spId, Math.min(Math.max(2, level), maxLevel(spId))), avoid);
+}
+
+/** Pick a theme item for a quiz up to a level (NPC lessons). */
 export function pickFromTheme(themeId: string, maxTier: number, avoid: string[] = []) {
   return pickItem(poolUpTo(themeId, maxTier), avoid);
 }
 
 /**
- * Defense questions in trainer battles come from the OPPONENT's theme at the opponent's
- * level: a stronger Palabrita asks harder things. Words you don't know yet come up more.
+ * Defense questions in trainer battles come from the ATTACKING Palabrita's own words (its core
+ * words and theme): the level it mastered to get where it is (level 2 uses level 2).
+ * A stronger Palabrita asks harder things, gym leaders included. Words you don't know yet come up more.
  */
-export function defenseItem(themeId: string, level: number, avoid: string[] = []): Item {
-  const theme = THEMES[themeId];
-  let window = theme.items.filter((i) => i.tier >= level - 2 && i.tier <= level && !avoid.includes(i.id));
-  if (!window.length) window = poolUpTo(themeId, level);
-  if (!window.length) window = theme.items;
+export function defenseItem(enemy: Mon, avoid: string[] = []): Item {
+  let level = Math.max(2, Math.min(enemy.level - 1, maxLevel(enemy.sp)));
+  while (level > 2 && !levelItems(enemy.sp, level).length) level--;
+  const words = levelItems(enemy.sp, level).length ? levelItems(enemy.sp, level) : itemsUpTo(enemy.sp, enemy.level);
+  const window = without(words, avoid).length ? without(words, avoid) : words;
   const unknown = window.filter((i) => !isLearned(i));
   return pickRandom(unknown.length && Math.random() < 0.7 ? unknown : window);
 }
 
 export function levelProgress(mon: Mon) {
-  const theme = SPECIES[mon.sp].theme;
-  const items = tierItems(theme, mon.level);
+  const items = levelItems(mon.sp, mon.level);
   const review = reviewItems(mon);
   return {
     items,
     learned: items.filter(isLearned).length,
     total: items.length,
+    review,
     reviewDone: review.all.length - review.todo.length,
     reviewTotal: review.all.length,
-    maxed: !items.length,
+    maxed: mon.level > maxLevel(mon.sp),
   };
-}
-
-export function themeLearnedCount(themeId: string) {
-  return THEMES[themeId].items.filter(isLearned).length;
 }
 
 export function totalLearned() {

@@ -7,8 +7,8 @@ import { G, flag, type Mon } from '../game/state';
 import { stats, monName, checkLevelUps, firstAble, markSeen, markCaught, newMon, knownMoves, newMoves } from '../game/mon';
 import { SPECIES, MODE_INFO, type Move, type Mode } from '../data/species';
 import { effectiveness } from '../data/types';
-import { poolUpTo, THEMES, type Item } from '../data/content';
-import { pickItem, pickForMon, pickFromTheme, defenseItem, record, lealtad, fadingItems, OBEY_THRESHOLD } from '../game/learning';
+import { THEMES, type Item } from '../data/content';
+import { pickForMon, pickFromKind, defenseItem, record, lealtad, fadingItems, OBEY_THRESHOLD } from '../game/learning';
 import { challenge, type ChallengeResult } from '../ui/challenge';
 import { info, closeText } from '../ui/textbox';
 import { menu } from '../ui/menu';
@@ -319,12 +319,11 @@ async function runBattle(cfg: Config): Promise<BattleResult> {
 
   /** The Spanish part of an attack: obedience check, then the move's challenge. */
   const prepareAttack = async (move: Move): Promise<{ grade: Grade; mode: Mode; helped: boolean } | null> => {
-    const theme = SPECIES[me.sp].theme;
     const loy = lealtad(me);
     if (loy < OBEY_THRESHOLD && Math.random() < 0.35 + (OBEY_THRESHOLD - loy)) {
       await info(`¡${myName()} no te hace caso!`);
       await info('Está olvidando sus palabras... ¡Háblale!');
-      const item = fadingItems(me)[0] ?? pickItem(poolUpTo(theme, me.level));
+      const item = fadingItems(me)[0] ?? pickFromKind(me.sp, me.level);
       const r = await challenge({ item, mode: 'type', title: '¡Háblale!' });
       await learn(item, r);
       hud?.update();
@@ -387,8 +386,8 @@ async function runBattle(cfg: Config): Promise<BattleResult> {
           en: `Defend yourself! Answer with ${monName(enemy)}'s words. Answer well and you take less damage.`,
         });
       }
-      // Defense questions come from the opponent's theme at its level: stronger = harder.
-      const item = defenseItem(SPECIES[enemy.sp].theme, enemy.level, recent);
+      // Defense questions come from the opponent's own words at its level: stronger = harder.
+      const item = defenseItem(enemy, recent);
       recent.push(item.id);
       if (recent.length > 3) recent.shift();
       const r = await challenge({
@@ -461,11 +460,11 @@ async function runBattle(cfg: Config): Promise<BattleResult> {
     G.save.palabolas--;
     const sp = SPECIES[enemy.sp];
     await info(`¡${G.save.name} lanzó una Palabola! (Quedan ${G.save.palabolas})`, { auto: 900 });
-    await info(`Para atraparlo, ¡dile algo de su tema: ${THEMES[sp.theme].name}!`, {
+    await info(`Para atraparlo, ¡dile una de sus palabras!`, {
       auto: 1400,
-      en: `To catch it, say something from its theme: ${THEMES[sp.theme].en}!`,
+      en: `To catch it, say one of its words!`,
     });
-    const item = pickFromTheme(sp.theme, Math.max(2, enemy.level), recent);
+    const item = pickFromKind(enemy.sp, enemy.level, recent);
     const r = await challenge({ item, mode: canListen() ? 'speak' : 'type', title: '🔮 ¡Atrápalo!' });
     await learn(item, r);
 
