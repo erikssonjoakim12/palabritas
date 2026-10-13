@@ -59,7 +59,7 @@ The creatures are **Palabritas**, you catch them with **Palabolas**, and you hea
   - ⌨️ **Escribir**: see English, type the Spanish
   - 🎤 **Hablar**: see English, say it out loud (strongest). If you can't talk right now, you can switch to typing.
 - Answer quality changes damage: perfect (accents too) on a non-tap move = **critical hit ×1.5**, close ×0.75,
-  with 💡 help ×0.5, wrong = miss. Move power: tap 35, listen 45, write 55, speak 65.
+  with 💡 help ×0.5, wrong = miss. Move power: tap 35, write 45, listen 55, speak 65 (learned in that order).
 - **Learning moves:** like Gen 2, a Palabrita starts with 2 moves (👆 tap, ⌨️ write). By default it learns 🎧 listen
   at level 6 and 🎤 speak at level 10, so the player gets used to each mechanic first. Each Palabrita can differ:
   weaker ones learn all 4 earlier, stronger ones later.

@@ -167,9 +167,11 @@ export function showDetails(mon: Mon): Promise<void> {
   const moves = el('div', 'row');
   moves.appendChild(el('div', 'muted', 'Ataques · Moves'));
   for (const m of sp.moves) {
-    const lv = learnLevel(m);
-    const known = lv <= mon.level;
-    const line = el('div', known ? '' : 'muted', `${MODE_INFO[m.mode].icon} ${known ? m.name : '???'} · ${m.type} · Poder ${MODE_INFO[m.mode].power}${known ? '' : ` (Nv${lv})`}`);
+    const known = learnLevel(m) <= mon.level;
+    // Moves it hasn't learned yet stay a secret, like in Gold/Silver.
+    const line = known
+      ? el('div', '', `${MODE_INFO[m.mode].icon} ${m.name} · ${m.type} · Poder ${MODE_INFO[m.mode].power}`)
+      : el('div', 'muted', '❔ ???');
     moves.appendChild(line);
   }
   box.appendChild(moves);

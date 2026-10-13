@@ -244,7 +244,7 @@ const S: Record<string, (c: ScriptCtx) => Promise<void>> = {
         ['¡Hola, {name}! Soy la Profesora Ceiba. ¡Te estaba esperando!', 'Hi! I’m Professor Ceiba. I was waiting for you!'],
         ['En esta región, las Palabritas crecen con las palabras.', 'In this region, Palabritas grow with words.'],
         ['Cada Palabrita te enseña palabras: las más útiles y las de su tema. Cuando dominas las de su nivel, ¡sube de nivel!', 'Each Palabrita teaches you words: the most useful ones and those of its theme. When you master the ones for its level, it levels up!'],
-        ['En la batalla, cada ataque es un reto: elegir, escuchar, escribir o hablar.', 'In battle, every attack is a challenge: choose, listen, write or speak.'],
+        ['En la batalla, cada ataque es un reto: elegir, escribir, escuchar o hablar.', 'In battle, every attack is a challenge: choose, write, listen or speak.'],
         ['¡Hablar es el ataque más fuerte! Y si respondes perfecto, con acentos, es un golpe crítico.', 'Speaking is the strongest attack! And a perfect answer, accents included, is a critical hit.'],
         ['Pero ojo: si no usas las palabras, tu Palabrita las olvida... y deja de obedecerte.', 'But careful: if you don’t use the words, your Palabrita forgets them... and stops obeying you.'],
         ['En la mesa hay tres Palabolas. Elige una... ¡pero primero tendrás que demostrar que eres un buen entrenador!', 'There are three Palabolas on the table. Pick one... but first you’ll have to show me you’re a good trainer!'],
