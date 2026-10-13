@@ -27,27 +27,13 @@ export function fromRows(rows: string[], pal: Palette, name = '?'): Img {
   return c;
 }
 
-/** Repeat an 8x8 pattern into 16x16. */
-export function tile2x2(rows8: string[]): string[] {
-  const doubled = rows8.map((r) => r + r);
-  return [...doubled, ...doubled];
-}
-
+/** A left-right flipped copy. */
 export function mirror(src: Img): Img {
   const c = makeCanvas(src.width, src.height);
   const g = c.getContext('2d')!;
   g.translate(src.width, 0);
   g.scale(-1, 1);
   g.drawImage(src, 0, 0);
-  return c;
-}
-
-/** Draw `top` over `bottom` into a new image. */
-export function layer(bottom: Img, top: Img): Img {
-  const c = makeCanvas(bottom.width, bottom.height);
-  const g = c.getContext('2d')!;
-  g.drawImage(bottom, 0, 0);
-  g.drawImage(top, 0, 0);
   return c;
 }
 

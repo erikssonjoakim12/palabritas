@@ -28,7 +28,7 @@ export function startLoop() {
     last = now;
     while (acc >= STEP) {
       scene.update();
-      input.endFrame();
+      input.clearPressed();
       acc -= STEP;
     }
     beginFrame();

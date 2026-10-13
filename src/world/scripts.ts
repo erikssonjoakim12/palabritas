@@ -168,7 +168,7 @@ const S: Record<string, (c: ScriptCtx) => Promise<void>> = {
     const TOPICS: [string, string[]][] = [
       ['Palabritas', [
         'Palabritas are creatures that grow stronger when YOU learn Spanish.',
-        'Each one has a theme: dogs, weather, food, numbers... It learns the words of its theme.',
+        'Each one teaches everyday Spanish plus its own theme: dogs, weather, food, numbers... Every level brings new words.',
         'Professor Ceiba, in the lab next door, will give you your first one.',
       ]],
       ['Battles', [
@@ -182,12 +182,12 @@ const S: Record<string, (c: ScriptCtx) => Promise<void>> = {
         'If you need the 💡 help button, your attack only does half damage.',
       ]],
       ['Leveling up', [
-        'There is no XP here. Your Palabrita levels up when you master all the words of its current level.',
+        'There is no XP here. Your Palabrita levels up when you master the new words of its level, plus a quick review of older ones.',
         'You can see which words it needs in START, PALABRITAS, DETALLES.',
         'Mastered words come back for review on later days. If you forget them, your Palabrita stops obeying you!',
       ]],
       ['Catching', [
-        'First weaken a wild Palabrita. Then throw a Palabola and say a word from its theme.',
+        'First weaken a wild Palabrita. Then throw a Palabola and say one of its words.',
         'The better your answer, the easier it is to catch. Doña Lupe in Villa Limón makes Palabolas.',
       ]],
       ['Controls', [
@@ -241,7 +241,7 @@ const S: Record<string, (c: ScriptCtx) => Promise<void>> = {
       await lines(
         ['¡Hola, {name}! Soy la Profesora Ceiba. ¡Te estaba esperando!', 'Hi! I’m Professor Ceiba. I was waiting for you!'],
         ['En esta región, las Palabritas crecen con las palabras.', 'In this region, Palabritas grow with words.'],
-        ['Cada Palabrita tiene un tema. Cuando dominas las palabras de su tema, ¡sube de nivel!', 'Each Palabrita has a theme. When you master its words, it levels up!'],
+        ['Cada Palabrita te enseña palabras: las más útiles y las de su tema. Cuando dominas las de su nivel, ¡sube de nivel!', 'Each Palabrita teaches you words: the most useful ones and those of its theme. When you master the ones for its level, it levels up!'],
         ['En la batalla, cada ataque es un reto: elegir, escuchar, escribir o hablar.', 'In battle, every attack is a challenge: choose, listen, write or speak.'],
         ['¡Hablar es el ataque más fuerte! Y si respondes perfecto, con acentos, es un golpe crítico.', 'Speaking is the strongest attack! And a perfect answer, accents included, is a critical hit.'],
         ['Pero ojo: si no usas las palabras, tu Palabrita las olvida... y deja de obedecerte.', 'But careful: if you don’t use the words, your Palabrita forgets them... and stops obeying you.'],
@@ -269,9 +269,9 @@ const S: Record<string, (c: ScriptCtx) => Promise<void>> = {
     );
   },
 
-  starter_salchichita: (c) => pickStarter('salchichita', c),
-  starter_gotita: (c) => pickStarter('gotita', c),
-  starter_aguacatito: (c) => pickStarter('aguacatito', c),
+  starter_salchichita: () => pickStarter('salchichita'),
+  starter_gotita: () => pickStarter('gotita'),
+  starter_aguacatito: () => pickStarter('aguacatito'),
 
   async ana() {
     if (flag('anaMet')) {
@@ -395,7 +395,7 @@ const S: Record<string, (c: ScriptCtx) => Promise<void>> = {
       await info('¡{name} recibió 5 Palabolas!', { en: '{name} received 5 Palabolas!' });
       await lines(
         ['Para atrapar una Palabrita salvaje, primero debilítala un poco.', 'To catch a wild Palabrita, first weaken it a bit.'],
-        ['Luego lanza una Palabola y dile algo de su tema en español. ¡Si lo dices bien, es más fácil atraparla!', 'Then throw an Palabola and say something from its theme in Spanish. Say it well and it’s easier to catch!'],
+        ['Luego lanza una Palabola y dile una de sus palabras en español. ¡Si lo dices bien, es más fácil atraparla!', 'Then throw a Palabola and say one of its words in Spanish. Say it well and it’s easier to catch!'],
         ['Ah, y el Señor Ramos dice que su sillón hace ruidos raros... ¡Qué cosa tan extraña!', 'Oh, and Mr. Ramos says his armchair makes strange noises... How strange!'],
       );
       return;
@@ -553,7 +553,7 @@ const S: Record<string, (c: ScriptCtx) => Promise<void>> = {
   },
 };
 
-async function pickStarter(sp: string, _c: ScriptCtx) {
+async function pickStarter(sp: string) {
   if (!flag('metCeiba')) {
     return lines(['Mejor habla primero con la Profesora Ceiba.', 'Better talk to Professor Ceiba first.']);
   }

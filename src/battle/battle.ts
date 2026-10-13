@@ -6,7 +6,7 @@ import { OBJECTS } from '../art/chars';
 import { LINEUP_BALL, BALL_COLORS, FAINTED_COLORS, EMPTY_COLORS, drawPattern } from '../art/balls';
 import { G, flag, type Mon } from '../game/state';
 import { stats, monName, checkLevelUps, firstAble, markSeen, markCaught, newMon, knownMoves, newMoves } from '../game/mon';
-import { SPECIES, MODE_INFO, type Move, type Mode } from '../data/species';
+import { SPECIES, MODE_INFO, type Move } from '../data/species';
 import { effectiveness } from '../data/types';
 import { THEMES, type Item } from '../data/content';
 import { pickForMon, pickFromKind, defenseItem, record, lealtad, fadingItems, OBEY_THRESHOLD } from '../game/learning';
@@ -15,7 +15,6 @@ import { info, closeText } from '../ui/textbox';
 import { menu } from '../ui/menu';
 import { pickMon, hpClass } from '../ui/party';
 import { canListen } from '../lang/speech';
-import type { Grade } from '../lang/check';
 import type { TrainerDef } from '../data/trainers';
 
 export type BattleResult = 'win' | 'lose' | 'run' | 'caught';
@@ -136,6 +135,7 @@ async function encounterFlash() {
 interface Hud {
   root: HTMLElement;
   update(): void;
+  show(side: 'enemy' | 'player', visible: boolean): void;
 }
 
 /**
@@ -160,7 +160,7 @@ function buildHud(getEnemy: () => Mon, getMe: () => Mon): Hud {
     if (showNum) br.append(num, loy);
     box.append(name, lv, br);
     root.appendChild(box);
-    return { name, lv, bar, fill, num, loy };
+    return { box, name, lv, bar, fill, num, loy };
   };
   const e = mk('enemy', false);
   const p = mk('player', true);
@@ -182,6 +182,9 @@ function buildHud(getEnemy: () => Mon, getMe: () => Mon): Hud {
       const l = lealtad(me);
       p.loy.textContent = `♥ ${Math.round(l * 100)}%`;
       p.loy.style.color = l < OBEY_THRESHOLD ? 'var(--bad)' : '';
+    },
+    show(side, visible) {
+      (side === 'enemy' ? e : p).box.style.visibility = visible ? '' : 'hidden';
     },
   };
 }
@@ -230,6 +233,12 @@ async function runBattle(cfg: Config): Promise<BattleResult> {
   let enemy = cfg.team[0];
   let me = firstAble()!;
   const recent: string[] = [];
+  /** Avoid asking the same few items again right away. */
+  const remember = (item: Item) => {
+    recent.push(item.id);
+    if (recent.length > 3) recent.shift();
+    return item;
+  };
   const tally = { asked: 0, learned: 0 };
 
   enemyF = fighter(enemy, -48, ENEMY_POS.y);
@@ -333,8 +342,23 @@ async function runBattle(cfg: Config): Promise<BattleResult> {
     }
   };
 
+  /** One hit: the attacker lunges and the target flashes. Returns the effectiveness (0 = no effect). */
+  const strike = async (att: Mon, attF: Fighter, def: Mon, defF: Fighter, dir: number, move: Move, power: number, mult: number) => {
+    await lunge(attF, dir);
+    const { dmg, eff } = calcDamage(att, def, move, power, mult);
+    if (eff === 0) {
+      await info(`No afecta a ${monName(def)}...`);
+      return 0;
+    }
+    sfx(eff > 1 ? 'super' : eff < 1 ? 'weak' : 'hit');
+    def.hp = Math.max(0, def.hp - dmg);
+    hud!.update();
+    await hitAnim(defF);
+    return eff;
+  };
+
   /** The Spanish part of an attack: obedience check, then the move's challenge. */
-  const prepareAttack = async (move: Move): Promise<{ grade: Grade; mode: Mode; helped: boolean } | null> => {
+  const prepareAttack = async (move: Move): Promise<ChallengeResult | null> => {
     const loy = lealtad(me);
     if (loy < OBEY_THRESHOLD && Math.random() < 0.35 + (OBEY_THRESHOLD - loy)) {
       await info(`¡${myName()} no te hace caso!`);
@@ -349,19 +373,17 @@ async function runBattle(cfg: Config): Promise<BattleResult> {
       }
       await info(`¡${myName()} te escuchó!`, { auto: 900 });
     }
-    const item = pickForMon(me, recent);
-    recent.push(item.id);
-    if (recent.length > 3) recent.shift();
+    const item = remember(pickForMon(me, recent));
     const r = await challenge({ item, mode: move.mode, title: move.name });
     await learn(item, r);
-    return { grade: r.grade, mode: r.mode, helped: r.helped };
+    return r;
   };
 
   /**
    * Damage depends on how you answered: perfect (accents too) on a non-tap move is a
    * critical hit ×1.5, almost ×0.75, with 💡 help ×0.5, and a wrong answer misses.
    */
-  const playerAttack = async (move: Move, prep: { grade: Grade; mode: Mode; helped: boolean } | null) => {
+  const playerAttack = async (move: Move, prep: ChallengeResult | null) => {
     if (!prep) return;
     await info(`¡${myName()} usó ${move.name}!`, { auto: 700 });
     if (prep.grade === 'wrong') {
@@ -369,19 +391,11 @@ async function runBattle(cfg: Config): Promise<BattleResult> {
       await info('¡Pero no acertó!', { auto: 900, en: 'But it missed!' });
       return;
     }
-    await lunge(meF!, 1);
     const crit = prep.grade === 'perfect' && !prep.helped && prep.mode !== 'choose';
     const mult = crit ? 1.5 : prep.helped ? 0.5 : prep.grade === 'close' ? 0.75 : 1;
-    const { dmg, eff } = calcDamage(me, enemy, move, MODE_INFO[prep.mode].power, mult);
-    if (eff === 0) {
-      await info(`No afecta a ${monName(enemy)}...`);
-      return;
-    }
-    sfx(eff > 1 ? 'super' : eff < 1 ? 'weak' : 'hit');
-    enemy.hp = Math.max(0, enemy.hp - dmg);
+    const eff = await strike(me, meF!, enemy, enemyF!, 1, move, MODE_INFO[prep.mode].power, mult);
+    if (!eff) return;
     landed = true;
-    hud!.update();
-    await hitAnim(enemyF!);
     if (crit) await info('¡Golpe crítico!', { auto: 900 });
     else if (prep.helped) await info('Con ayuda, el golpe es más débil.', { auto: 1100, en: 'With help, the hit is weaker.' });
     await effMessage(eff);
@@ -403,9 +417,7 @@ async function runBattle(cfg: Config): Promise<BattleResult> {
         });
       }
       // Defense questions come from the opponent's own words at its level: stronger = harder.
-      const item = defenseItem(enemy, recent);
-      recent.push(item.id);
-      if (recent.length > 3) recent.shift();
+      const item = remember(defenseItem(enemy, recent));
       const r = await challenge({
         item,
         mode: trainer.defenseMode,
@@ -418,16 +430,8 @@ async function runBattle(cfg: Config): Promise<BattleResult> {
         defended = true;
       }
     }
-    await lunge(enemyF!, -1);
-    const { dmg, eff } = calcDamage(enemy, me, move, MODE_INFO[move.mode].power, mult);
-    if (eff === 0) {
-      await info(`No afecta a ${myName()}...`);
-      return;
-    }
-    sfx(eff > 1 ? 'super' : eff < 1 ? 'weak' : 'hit');
-    me.hp = Math.max(0, me.hp - dmg);
-    hud!.update();
-    await hitAnim(meF!);
+    const eff = await strike(enemy, enemyF!, me, meF!, -1, move, MODE_INFO[move.mode].power, mult);
+    if (!eff) return;
     if (defended) await info(`¡${myName()} resistió el golpe!`, { auto: 900 });
     await effMessage(eff);
   };
@@ -437,19 +441,18 @@ async function runBattle(cfg: Config): Promise<BattleResult> {
     if (enemy.hp > 0) return null;
     sfx('faint');
     await sinkAnim(enemyF!);
-    await info(trainer ? `¡${monName(enemy)} enemigo se debilitó!` : `¡El ${monName(enemy)} salvaje se debilitó!`);
+    await info(`¡${enemyLabel()} se debilitó!`);
     if (trainer && enemyIdx < cfg.team.length - 1) {
       enemy = cfg.team[++enemyIdx];
       markSeen(enemy.sp);
       enemyF = fighter(enemy, -48, ENEMY_POS.y);
-      const enemyHud = hud!.root.querySelector<HTMLElement>('.hud.enemy')!;
-      enemyHud.style.visibility = 'hidden';
+      hud!.show('enemy', false);
       lineups = { enemy: cfg.team };
       await info(`¡${trainer.name} envía a ${monName(enemy)}!`, { auto: 900 });
       lineups = {};
       await slideIn(enemyF, ENEMY_POS.x);
       hud!.update();
-      enemyHud.style.visibility = '';
+      hud!.show('enemy', true);
       return null;
     }
     return 'win';
@@ -485,7 +488,7 @@ async function runBattle(cfg: Config): Promise<BattleResult> {
       auto: 1400,
       en: `To catch it, say one of its words!`,
     });
-    const item = pickFromKind(enemy.sp, enemy.level, recent);
+    const item = remember(pickFromKind(enemy.sp, enemy.level, recent));
     const r = await challenge({ item, mode: canListen() ? 'speak' : 'type', title: '🔮 ¡Atrápalo!' });
     await learn(item, r);
 
@@ -551,14 +554,14 @@ async function runBattle(cfg: Config): Promise<BattleResult> {
     await slideIn(enemyF, ENEMY_POS.x);
     hud = buildHud(() => enemy, () => me);
     hud.update();
-    hud.root.querySelector<HTMLElement>('.hud.player')!.style.visibility = 'hidden';
+    hud.show('player', false);
     if (trainer) {
       await info(`¡${trainer.name} envía a ${monName(enemy)}!`, { auto: 900 });
     } else {
       await info(`¡Un ${monName(enemy)} salvaje apareció!`);
     }
     await sendOut(me);
-    hud.root.querySelector<HTMLElement>('.hud.player')!.style.visibility = '';
+    hud.show('player', true);
 
     while (true) {
       const action = await chooseAction();

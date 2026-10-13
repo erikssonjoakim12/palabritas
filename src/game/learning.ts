@@ -160,14 +160,20 @@ export function canLevelUp(mon: Mon): boolean {
   return mon.level <= maxLevel(mon.sp) && levelItems(mon.sp, mon.level).every(isLearned) && reviewItems(mon).todo.length === 0;
 }
 
+const without = (items: Item[], avoid: string[]) => items.filter((i) => !avoid.includes(i.id));
+/** Skip the recently asked items, unless that leaves nothing. */
+const preferNot = (items: Item[], avoid: string[]) => {
+  const rest = without(items, avoid);
+  return rest.length ? rest : items;
+};
+
 /**
  * Choose what to ask next from a pool:
  * fading words first, then due reviews, then words being learned, then new words.
  */
 export function pickItem(pool: Item[], avoid: string[] = []): Item {
   const now = Date.now();
-  const usable = pool.filter((i) => !avoid.includes(i.id));
-  const items = usable.length ? usable : pool;
+  const items = preferNot(pool, avoid);
   const fading = items.filter((i) => isFading(peekProg(i.id), now));
   if (fading.length && Math.random() < 0.6) return pickRandom(fading);
   const due = items.filter((i) => isDue(peekProg(i.id), now));
@@ -189,8 +195,6 @@ export function pickItem(pool: Item[], avoid: string[] = []): Item {
   const recent = items.filter((i) => i.tier >= topTier - 2);
   return pickRandom(recent.length && Math.random() < 0.7 ? recent : items);
 }
-
-const without = (items: Item[], avoid: string[]) => items.filter((i) => !avoid.includes(i.id));
 
 /** What a Palabrita asks you in battle: its new words, the review it needs, and older words. */
 export function pickForMon(mon: Mon, avoid: string[] = []): Item {
@@ -222,8 +226,8 @@ export function pickFromTheme(themeId: string, maxTier: number, avoid: string[] 
 export function defenseItem(enemy: Mon, avoid: string[] = []): Item {
   let level = Math.max(2, Math.min(enemy.level - 1, maxLevel(enemy.sp)));
   while (level > 2 && !levelItems(enemy.sp, level).length) level--;
-  const words = levelItems(enemy.sp, level).length ? levelItems(enemy.sp, level) : itemsUpTo(enemy.sp, enemy.level);
-  const window = without(words, avoid).length ? without(words, avoid) : words;
+  const words = levelItems(enemy.sp, level);
+  const window = preferNot(words.length ? words : itemsUpTo(enemy.sp, enemy.level), avoid);
   const unknown = window.filter((i) => !isLearned(i));
   return pickRandom(unknown.length && Math.random() < 0.7 ? unknown : window);
 }

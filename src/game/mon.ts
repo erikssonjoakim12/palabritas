@@ -51,8 +51,8 @@ export interface LevelUp {
 }
 
 /**
- * Words are experience: a creature levels up once every item in its current tier is
- * mastered. Checks the whole party, since creatures share themes.
+ * Words are experience: a Palabrita levels up once its level's new words and review are done
+ * (see learning.ts). Checks the whole party, since Palabritas share words.
  */
 export function checkLevelUps(): LevelUp[] {
   const ups: LevelUp[] = [];

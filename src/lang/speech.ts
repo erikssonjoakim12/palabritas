@@ -4,7 +4,6 @@
 const PREFERRED_LANGS = ['es-MX', 'es-US', 'es-419', 'es-CO', 'es-AR', 'es'];
 
 let voice: SpeechSynthesisVoice | null = null;
-let voicesReady = false;
 
 export const speechSettings = { rate: 0.95, recognitionLang: 'es-MX' };
 
@@ -12,7 +11,6 @@ function pickVoice() {
   if (!('speechSynthesis' in window)) return;
   const voices = speechSynthesis.getVoices();
   if (!voices.length) return;
-  voicesReady = true;
   for (const lang of PREFERRED_LANGS) {
     const exact = voices.filter((v) => v.lang.replace('_', '-').toLowerCase() === lang.toLowerCase());
     const pool = exact.length ? exact : voices.filter((v) => v.lang.toLowerCase().startsWith(lang.toLowerCase()));
@@ -28,10 +26,6 @@ export function initSpeech() {
   if (!('speechSynthesis' in window)) return;
   pickVoice();
   speechSynthesis.addEventListener?.('voiceschanged', pickVoice);
-}
-
-export function hasVoice() {
-  return 'speechSynthesis' in window && (voicesReady ? !!voice : true);
 }
 
 /** Remove things a voice shouldn't read: emoji, quote marks, the "▼" arrow. */

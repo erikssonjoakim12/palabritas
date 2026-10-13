@@ -151,4 +151,3 @@ export const SPECIES: Record<string, Species> = {
 
 export const learnLevel = (m: Move) => m.level ?? MODE_INFO[m.mode].learnAt;
 
-export const STARTERS = ['salchichita', 'gotita', 'aguacatito'];

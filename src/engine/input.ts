@@ -45,10 +45,7 @@ class Input {
     return this.just.has(b);
   }
 
-  endFrame() {
-    this.just.clear();
-  }
-
+  /** Forget presses nobody handled (once per frame, and after scripts). */
   clearPressed() {
     this.just.clear();
   }
@@ -143,16 +140,4 @@ export function initInput() {
   pad.addEventListener('pointerup', end);
   pad.addEventListener('pointercancel', end);
   pad.addEventListener('contextmenu', (e) => e.preventDefault());
-}
-
-/** Resolve with the next press of one of `btns`. */
-export function waitFor(btns: Btn[]): Promise<Btn> {
-  return new Promise((resolve) => {
-    const pop = input.push((b) => {
-      if (btns.includes(b)) {
-        pop();
-        resolve(b);
-      }
-    });
-  });
 }

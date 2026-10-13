@@ -4,7 +4,7 @@ import { sfx } from '../engine/sfx';
 import { CREATURE_ART } from '../art/creatures';
 import { G, type Mon } from '../game/state';
 import { stats, monName } from '../game/mon';
-import { lealtad, levelProgress, isLearned, peekProg, isFading } from '../game/learning';
+import { lealtad, levelProgress, isLearned, peekProg, isFading, OBEY_THRESHOLD } from '../game/learning';
 import { itemsUpTo } from '../game/curriculum';
 import { SPECIES, MODE_INFO, learnLevel } from '../data/species';
 import { THEMES } from '../data/content';
@@ -92,16 +92,54 @@ export async function pickMon(mode: 'switch' | 'forced' | 'view', active?: Mon):
   }
 }
 
-/** Full details for one Palabrita: theme progress, loyalty, words for the next level. */
+// ---------- Detail pages (Palabrita details, dictionary entries) ----------
+
+/** A full-screen page about a kind of Palabrita: its big sprite, then a title. */
+export function detailBox(sp: string, title: string) {
+  const box = el('div', 'box fullpanel detail');
+  const big = spriteCanvas(sp, 96);
+  big.className = 'big';
+  box.append(big, el('h3', '', title));
+  return box;
+}
+
+/** A word and its English. Tap the Spanish to hear it. */
+export function wordRow(es: string, en: string, mark = '') {
+  const w = el('div', 'word');
+  const left = el('span', '', mark ? `${mark} ${es}` : es);
+  left.style.cursor = 'pointer';
+  left.addEventListener('click', (e) => {
+    e.stopPropagation();
+    speak(es);
+  });
+  w.append(left, el('span', 'en', en));
+  return w;
+}
+
+/** Show a detail page until A, B or a tap; up/down scroll it. */
+export function openDetail(box: HTMLElement): Promise<void> {
+  overlay.appendChild(box);
+  return new Promise((resolve) => {
+    const close = () => {
+      pop();
+      box.remove();
+      resolve();
+    };
+    const pop = input.push((b) => {
+      if (b === 'A' || b === 'B') close();
+      if (b === 'down') box.scrollTop += 40;
+      if (b === 'up') box.scrollTop -= 40;
+    });
+    box.addEventListener('click', close);
+  });
+}
+
+/** Full details for one Palabrita: theme, loyalty, moves, words for the next level. */
 export function showDetails(mon: Mon): Promise<void> {
   const sp = SPECIES[mon.sp];
   const theme = THEMES[sp.theme];
   const s = stats(mon);
-  const box = el('div', 'box fullpanel detail');
-  const big = spriteCanvas(mon.sp, 96);
-  big.className = 'big';
-  box.appendChild(big);
-  box.appendChild(el('h3', '', `${sp.name}  Nv${mon.level}`));
+  const box = detailBox(mon.sp, `${sp.name}  Nv${mon.level}`);
   const types = el('div', 'row');
   for (const t of sp.types) {
     const chip = el('span', '', ` ${t} `);
@@ -121,7 +159,7 @@ export function showDetails(mon: Mon): Promise<void> {
   const meter = el('div', 'meter');
   const fill = el('div');
   fill.style.width = `${loy * 100}%`;
-  if (loy < 0.7) fill.style.background = 'var(--bad)';
+  if (loy < OBEY_THRESHOLD) fill.style.background = 'var(--bad)';
   meter.appendChild(fill);
   box.appendChild(meter);
   box.appendChild(el('div', 'row muted', 'Loyalty: keep using its words or it stops obeying.'));
@@ -141,17 +179,7 @@ export function showDetails(mon: Mon): Promise<void> {
   words.appendChild(
     el('div', 'muted', lp.maxed ? 'Nivel máximo de esta versión.' : `Para el nivel ${mon.level + 1}: ${lp.learned}/${lp.total} nuevas dominadas`),
   );
-  const addWord = (es: string, en: string, mark: string) => {
-    const w = el('div', 'word');
-    const left = el('span', '', `${mark} ${es}`);
-    left.style.cursor = 'pointer';
-    left.addEventListener('click', (e) => {
-      e.stopPropagation();
-      speak(es);
-    });
-    w.append(left, el('span', 'en', en));
-    words.appendChild(w);
-  };
+  const addWord = (es: string, en: string, mark: string) => words.appendChild(wordRow(es, en, mark));
   for (const it of lp.items) {
     const p = peekProg(it.id);
     if (isLearned(it)) addWord(it.es, it.en, '✓');
@@ -172,20 +200,6 @@ export function showDetails(mon: Mon): Promise<void> {
     for (const it of learned) addWord(it.es, it.en, isFading(peekProg(it.id)) ? '⚠' : '✓');
   }
   box.appendChild(words);
-  box.appendChild(el('div', 'row muted', `${sp.dex.es}`));
-  overlay.appendChild(box);
-
-  return new Promise((resolve) => {
-    const close = () => {
-      pop();
-      box.remove();
-      resolve();
-    };
-    const pop = input.push((b) => {
-      if (b === 'A' || b === 'B') close();
-      if (b === 'down') box.scrollTop += 40;
-      if (b === 'up') box.scrollTop -= 40;
-    });
-    box.addEventListener('click', close);
-  });
+  box.appendChild(el('div', 'row muted', sp.dex.es));
+  return openDetail(box);
 }

@@ -1,5 +1,4 @@
-import { overlay, el, setTextScale } from '../engine/screen';
-import { input } from '../engine/input';
+import { el, setTextScale } from '../engine/screen';
 import { sfx } from '../engine/sfx';
 import { G, saveGame } from '../game/state';
 import { monName } from '../game/mon';
@@ -10,7 +9,7 @@ import { allItems } from '../game/curriculum';
 import { speak } from '../lang/speech';
 import { menu } from './menu';
 import { info, say } from './textbox';
-import { pickMon, showDetails, listMenu, spriteCanvas } from './party';
+import { pickMon, showDetails, listMenu, spriteCanvas, detailBox, wordRow, openDetail } from './party';
 
 const DEX_ORDER = ['salchichita', 'gotita', 'aguacatito', 'pajarito', 'palomon', 'conejito', 'mariposita', 'sillon'];
 
@@ -72,13 +71,14 @@ async function dictionary() {
 
 function dexEntry(id: string): Promise<void> {
   const sp = SPECIES[id];
-  const theme = THEMES[sp.theme];
-  const box = el('div', 'box fullpanel detail');
-  const big = spriteCanvas(id, 96);
-  big.className = 'big';
-  box.append(big, el('h3', '', sp.name), el('div', 'row', sp.types.join(' / ')), el('div', 'row', `Tema: ${theme.name}`));
+  const box = detailBox(id, sp.name);
+  box.append(el('div', 'row', sp.types.join(' / ')), el('div', 'row', `Tema: ${THEMES[sp.theme].name}`));
   const es = el('div', 'row', sp.dex.es);
   es.style.cursor = 'pointer';
+  es.addEventListener('click', (e) => {
+    e.stopPropagation();
+    speak(sp.dex.es);
+  });
   box.append(es, el('div', 'row muted', sp.dex.en));
   speak(sp.dex.es);
   if (G.save.caught.includes(id)) {
@@ -86,36 +86,10 @@ function dexEntry(id: string): Promise<void> {
     const learned = items.filter(isLearned);
     const words = el('div', 'words');
     words.appendChild(el('div', 'muted', `Palabras dominadas: ${learned.length}/${items.length}`));
-    for (const it of learned) {
-      const w = el('div', 'word');
-      const left = el('span', '', it.es);
-      left.addEventListener('click', (e) => {
-        e.stopPropagation();
-        speak(it.es);
-      });
-      w.append(left, el('span', 'en', it.en));
-      words.appendChild(w);
-    }
+    for (const it of learned) words.appendChild(wordRow(it.es, it.en));
     box.appendChild(words);
   }
-  overlay.appendChild(box);
-  es.addEventListener('click', (e) => {
-    e.stopPropagation();
-    speak(sp.dex.es);
-  });
-  return new Promise((resolve) => {
-    const close = () => {
-      pop();
-      box.remove();
-      resolve();
-    };
-    const pop = input.push((b) => {
-      if (b === 'A' || b === 'B') close();
-      if (b === 'down') box.scrollTop += 40;
-      if (b === 'up') box.scrollTop -= 40;
-    });
-    box.addEventListener('click', close);
-  });
+  return openDetail(box);
 }
 
 async function trainerCard() {

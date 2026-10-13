@@ -42,7 +42,7 @@ function showPanel() {
   return p;
 }
 
-export function hidePanel() {
+function hidePanel() {
   panel().hidden = true;
   panel().innerHTML = '';
   pad().hidden = false;
@@ -83,7 +83,42 @@ function textInput(onEnter: () => void) {
       onEnter();
     }
   });
-  return { inp };
+  return inp;
+}
+
+/** A text field with an OK button. Calls onSubmit with the trimmed text (ignores empty). */
+function inputRow(onSubmit: (value: string) => void) {
+  const submit = () => {
+    const v = inp.value.trim();
+    if (v) onSubmit(v);
+  };
+  const inp = textInput(submit);
+  const row = el('div', 'ch-row');
+  row.append(inp, button('OK', 'btn primary', submit));
+  setTimeout(() => inp.focus(), 50);
+  return { row, inp };
+}
+
+/** A column of answer buttons. */
+function choiceList(options: string[], onPick: (i: number) => void) {
+  const list = el('div', 'choices');
+  list.style.marginTop = '10px';
+  options.forEach((o, i) => list.appendChild(button(o, 'btn', () => onPick(i))));
+  return list;
+}
+
+/** For the small prompts below: open the panel and block game buttons until close(). */
+function openPanel(label: string, big: string) {
+  const blockGame = input.push(() => {});
+  const p = showPanel();
+  const prompt = el('div', 'ch-prompt');
+  prompt.append(el('div', 'label', label), el('div', 'answer-es', big));
+  p.appendChild(prompt);
+  const close = () => {
+    hidePanel();
+    blockGame();
+  };
+  return { p, close };
 }
 
 /** First letter of each word, e.g. "el perro" → "e_ p____". */
@@ -133,16 +168,7 @@ export function challenge(spec: ChallengeSpec): Promise<ChallengeResult> {
         p.appendChild(speakButtons(item.es));
         speak(item.es);
         const opts = [item.en, ...distractors(item)].sort(() => Math.random() - 0.5);
-        const list = el('div', 'choices');
-        list.style.marginTop = '10px';
-        for (const o of opts) {
-          list.appendChild(
-            button(o, 'btn', () => {
-              finish(o === item.en ? 'perfect' : 'wrong', o);
-            }),
-          );
-        }
-        p.appendChild(list);
+        p.appendChild(choiceList(opts, (i) => finish(opts[i] === item.en ? 'perfect' : 'wrong', opts[i])));
         return;
       }
 
@@ -224,20 +250,14 @@ export function challenge(spec: ChallengeSpec): Promise<ChallengeResult> {
       }
 
       // listen / type: text input
-      const submit = () => {
-        const v = inp.value.trim();
-        if (!v) return;
+      const { row } = inputRow((v) => {
         const r = grade(v, false);
         finish(helped && r.grade === 'perfect' ? 'close' : r.grade, v, r);
-      };
-      const { inp } = textInput(submit);
-      const row = el('div', 'ch-row');
-      row.append(inp, button('OK', 'btn primary', submit));
+      });
       p.append(row);
       actions.appendChild(dontKnow);
       if (allowHelp) actions.appendChild(helpBtn);
       p.appendChild(actions);
-      setTimeout(() => inp.focus(), 50);
     };
 
     const showResult = (grade: Grade, answer: string, res?: CheckResult) => {
@@ -301,47 +321,26 @@ export function challenge(spec: ChallengeSpec): Promise<ChallengeResult> {
 /** Free text input (e.g. the player's name). */
 export function promptText(label: string, en: string, placeholder = ''): Promise<string> {
   return new Promise((resolve) => {
-    const blockGame = input.push(() => {});
-    const p = showPanel();
-    const prompt = el('div', 'ch-prompt');
-    prompt.append(el('div', 'label', en), el('div', 'answer-es', label));
-    p.appendChild(prompt);
-    const submit = () => {
-      const v = inp.value.trim();
-      if (!v) return;
-      hidePanel();
-      blockGame();
+    const { p, close } = openPanel(en, label);
+    const { row, inp } = inputRow((v) => {
+      close();
       resolve(v);
-    };
-    const { inp } = textInput(submit);
+    });
     inp.placeholder = placeholder;
-    const row = el('div', 'ch-row');
-    row.append(inp, button('OK', 'btn primary', submit));
     p.append(row);
-    setTimeout(() => inp.focus(), 50);
   });
 }
 
 /** A comprehension question with answers in Spanish (tap one). */
 export function chooseText(label: string, en: string, options: string[], replay?: string): Promise<number> {
   return new Promise((resolve) => {
-    const blockGame = input.push(() => {});
-    const p = showPanel();
-    const prompt = el('div', 'ch-prompt');
-    prompt.append(el('div', 'label', en), el('div', 'answer-es', label));
-    p.appendChild(prompt);
+    const { p, close } = openPanel(en, label);
     if (replay) p.appendChild(speakButtons(replay));
-    const list = el('div', 'choices');
-    list.style.marginTop = '10px';
-    options.forEach((o, i) =>
-      list.appendChild(
-        button(o, 'btn', () => {
-          hidePanel();
-          blockGame();
-          resolve(i);
-        }),
-      ),
+    p.appendChild(
+      choiceList(options, (i) => {
+        close();
+        resolve(i);
+      }),
     );
-    p.appendChild(list);
   });
 }

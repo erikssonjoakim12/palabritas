@@ -4,7 +4,7 @@ import { input } from './engine/input';
 import { sfx, unlockAudio } from './engine/sfx';
 import { CREATURE_ART } from './art/creatures';
 import { G, hasSave, loadGame, newSave, deleteSave, saveGame } from './game/state';
-import { speechSettings, initSpeech } from './lang/speech';
+import { initSpeech } from './lang/speech';
 import { say, closeText } from './ui/textbox';
 import { menu, ask } from './ui/menu';
 import { promptText } from './ui/challenge';
@@ -100,7 +100,6 @@ export async function runTitle() {
 
 function applySettings() {
   setTextScale(G.save.settings.textScale);
-  speechSettings.rate = 0.95;
 }
 
 async function newGameIntro() {

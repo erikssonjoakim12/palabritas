@@ -72,7 +72,10 @@ export const npcById = (id: string) => npcs.find((n) => n.def.id === id);
 
 // ---------- Map loading ----------
 
+const validated = new Set<string>();
 function validate(m: MapDef) {
+  if (validated.has(m.id)) return;
+  validated.add(m.id);
   const w = m.rows[0].length;
   m.rows.forEach((r, i) => {
     if (r.length !== w) throw new Error(`Map ${m.id}: row ${i} is ${r.length} wide, expected ${w}`);
@@ -198,33 +201,28 @@ export function setFade(v: number) {
 }
 
 /** Fade to black, move somewhere, fade back in. */
-export async function warp(to: string, x: number, y: number, dir: Dir, sound = true) {
+async function transition(to: string, x: number, y: number, dir: Dir, fadeFrames: number) {
   G.lock++;
-  if (sound) sfx('door');
-  await fadeOut();
+  await fadeOut(fadeFrames);
   loadMap(to, x, y, dir);
-  await fadeIn();
+  await fadeIn(fadeFrames);
   G.lock--;
   input.clearPressed();
   saveGame();
 }
 
-async function crossConnection(d: Dir, conn: Conn) {
+/** Through a door (or back home after a blackout). */
+export async function warp(to: string, x: number, y: number, dir: Dir, sound = true) {
+  if (sound) sfx('door');
+  await transition(to, x, y, dir, 8);
+}
+
+/** Walk off the edge of an outdoor map into the connected one. */
+function crossConnection(d: Dir, conn: Conn) {
   const target = MAPS[conn.to];
-  const w2 = target.rows[0].length;
-  const h2 = target.rows.length;
-  let nx = player.x;
-  let ny = player.y;
-  if (d === 'up') [nx, ny] = [player.x + conn.offset, h2 - 1];
-  if (d === 'down') [nx, ny] = [player.x + conn.offset, 0];
-  if (d === 'left') [nx, ny] = [w2 - 1, player.y + conn.offset];
-  if (d === 'right') [nx, ny] = [0, player.y + conn.offset];
-  G.lock++;
-  await fadeOut(4);
-  loadMap(conn.to, nx, ny, d);
-  await fadeIn(4);
-  G.lock--;
-  saveGame();
+  const x = d === 'left' ? target.rows[0].length - 1 : d === 'right' ? 0 : player.x + conn.offset;
+  const y = d === 'up' ? target.rows.length - 1 : d === 'down' ? 0 : player.y + conn.offset;
+  return transition(conn.to, x, y, d, 4);
 }
 
 /** Walk the player one tile as part of a script (no encounters/triggers). */
