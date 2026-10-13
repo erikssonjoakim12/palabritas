@@ -149,5 +149,11 @@ export const SPECIES: Record<string, Species> = {
   },
 };
 
+/**
+ * Your starter begins here, a bit stronger than the first wild Palabritas and trainers.
+ * Its words for the levels below still come up in battle, as extra practice.
+ */
+export const STARTER_LEVEL = 5;
+
 export const learnLevel = (m: Move) => m.level ?? MODE_INFO[m.mode].learnAt;
 

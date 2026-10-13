@@ -4,7 +4,7 @@ import { frames } from '../engine/loop';
 import { G, flag, setFlag } from '../game/state';
 import { newMon, healParty, markCaught } from '../game/mon';
 import { record, pickFromTheme } from '../game/learning';
-import { SPECIES, type Mode } from '../data/species';
+import { SPECIES, STARTER_LEVEL, type Mode } from '../data/species';
 import { THEMES, adHocItem } from '../data/content';
 import { TRAINERS } from '../data/trainers';
 import { say, info } from '../ui/textbox';
@@ -568,7 +568,7 @@ async function pickStarter(sp: string) {
   } finally {
     hide();
   }
-  G.save.party.push(newMon(sp, 2));
+  G.save.party.push(newMon(sp, STARTER_LEVEL));
   markCaught(sp);
   setFlag('starter');
   sfx('caught');

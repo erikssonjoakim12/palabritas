@@ -35,8 +35,8 @@ export const DY: Record<Dir, number> = { up: -1, down: 1, left: 0, right: 0 };
 export const OPP: Record<Dir, Dir> = { up: 'down', down: 'up', left: 'right', right: 'left' };
 
 /** Pixels per frame (a tile is 16px). Gen 2 walks at 1; we go a bit faster. Hold B to run. */
-const WALK_SPEED = 1.5;
-const RUN_SPEED = 2.25;
+const WALK_SPEED = 1.2;
+const RUN_SPEED = 1.8;
 const MARGIN = 6;
 const T = 16;
 
