@@ -44,6 +44,8 @@ const T = 16;
 let map: MapDef = MAPS.casa;
 let mapImg: Img = makeCanvas(1, 1);
 let npcs: NpcRT[] = [];
+/** People in the connected towns/routes, drawn at the map's edges (they only move once you get there). */
+let edgeNpcs: NpcRT[] = [];
 let fade = 0;
 let banner: HTMLElement | null = null;
 let grassOverlay: Img | null = null;
@@ -111,15 +113,22 @@ export function loadMap(id: string, x: number, y: number, dir: Dir) {
   map = MAPS[id];
   validate(map);
   mapImg = mapImage(map);
-  npcs = (map.npcs ?? []).map((def) => ({
+  const npc = (def: NpcDef, dx = 0, dy = 0): NpcRT => ({
     def,
-    x: def.x,
-    y: def.y,
+    x: def.x + dx,
+    y: def.y + dy,
     dir: def.dir ?? 'down',
     visible: def.show ? def.show() : true,
     bubble: 0,
     turnTimer: 60 + Math.floor(Math.random() * 200),
-  }));
+  });
+  npcs = (map.npcs ?? []).map((def) => npc(def));
+  const spots = worldLayout();
+  const me = spots[map.id];
+  edgeNpcs = Object.values(map.connections ?? {}).flatMap((conn) => {
+    const p = me && conn && spots[conn.to];
+    return p ? (MAPS[conn.to].npcs ?? []).map((def) => npc(def, p.x - me.x, p.y - me.y)) : [];
+  });
   // Maps change between versions: never leave a loaded save standing inside a wall.
   [x, y] = nearestFree(x, y);
   Object.assign(player, { x, y, dir, moving: false, prog: 0 });
@@ -129,7 +138,7 @@ export function loadMap(id: string, x: number, y: number, dir: Dir) {
 }
 
 export function refreshNpcs() {
-  for (const n of npcs) n.visible = n.def.show ? n.def.show() : true;
+  for (const n of [...npcs, ...edgeNpcs]) n.visible = n.def.show ? n.def.show() : true;
 }
 
 function showBanner(name: string) {
@@ -421,7 +430,7 @@ export function renderWorld(g: CanvasRenderingContext2D) {
   g.drawImage(mapImg, -camX - MARGIN * T, -camY - MARGIN * T);
 
   const sprites: { y: number; draw: () => void }[] = [];
-  for (const n of npcs) {
+  for (const n of [...npcs, ...edgeNpcs]) {
     if (!n.visible) continue;
     const sx = n.x * T - camX;
     const sy = n.y * T - camY;
