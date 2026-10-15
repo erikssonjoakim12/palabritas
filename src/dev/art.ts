@@ -4,7 +4,8 @@ import { buildCreatureArt, CREATURE_ART } from '../art/creatures';
 import { portrait } from '../art/portraits';
 import { personFrames, buildObjects, OBJECTS } from '../art/chars';
 import { renderMap } from '../art/tiles';
-import { MAPS } from '../world/maps';
+import { MAPS, type MapDef } from '../world/maps';
+import { worldLayout } from '../world/layout';
 import { LOOKS } from '../style/people';
 import { PALETTE } from '../style/colors';
 import { SPECIES } from '../data/species';
@@ -80,16 +81,45 @@ for (const [ch, name] of Object.entries(TILE_NAMES)) {
 }
 
 buildObjects();
-const maps = section('Maps', 'Every map as it is in the game, with its people and objects (some only appear at certain points in the story). Layout: world/maps.ts.');
-for (const m of Object.values(MAPS)) {
+/** A map with its people and objects standing where they are in the game. */
+function mapWithPeople(m: MapDef) {
   const img = renderMap(m);
   const g = img.getContext('2d')!;
   for (const n of m.npcs ?? []) {
     if (n.object) g.drawImage(OBJECTS[n.object], n.x * 16, n.y * 16);
     else g.drawImage(personFrames(n.look ?? 'man')[n.dir ?? 'down'][0], n.x * 16, n.y * 16 - 4);
   }
-  card(maps, `${m.name} (${m.id})`, [img], 2);
+  return img;
 }
+
+// The whole outdoor world, stitched from each map's connections (world/layout.ts).
+const world = section('World', 'All towns and routes together, placed by their connections. Each is still its own map: change one and this updates by itself. If paths don\'t line up at an edge, that map\'s connection offset needs adjusting.');
+{
+  const spots = Object.entries(worldLayout());
+  const x0 = Math.min(...spots.map(([, p]) => p.x));
+  const y0 = Math.min(...spots.map(([, p]) => p.y));
+  const x1 = Math.max(...spots.map(([id, p]) => p.x + MAPS[id].rows[0].length));
+  const y1 = Math.max(...spots.map(([id, p]) => p.y + MAPS[id].rows.length));
+  const c = document.createElement('canvas');
+  c.width = (x1 - x0) * 16;
+  c.height = (y1 - y0) * 16;
+  const g = c.getContext('2d')!;
+  g.fillStyle = '#2a3a28';
+  g.fillRect(0, 0, c.width, c.height);
+  g.font = 'bold 14px sans-serif';
+  for (const [id, p] of spots) {
+    const [x, y] = [(p.x - x0) * 16, (p.y - y0) * 16];
+    g.drawImage(mapWithPeople(MAPS[id]), x, y);
+    g.fillStyle = '#000a';
+    g.fillRect(x + 4, y + 4, g.measureText(MAPS[id].name).width + 12, 22);
+    g.fillStyle = '#fff';
+    g.fillText(MAPS[id].name, x + 10, y + 20);
+  }
+  card(world, `${spots.length} outdoor maps`, [c], 1);
+}
+
+const maps = section('Maps', 'Every map on its own, with its people and objects (some only appear at certain points in the story). Layout: world/maps.ts.');
+for (const m of Object.values(MAPS)) card(maps, `${m.name} (${m.id})`, [mapWithPeople(m)], 2);
 
 // ---------- App icons: our mascot, from the game's own sprite ----------
 

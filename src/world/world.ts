@@ -6,6 +6,7 @@ import { TILES, tallGrassImage, renderMap, tileOf } from '../art/tiles';
 import { personFrames, OBJECTS, type Frames } from '../art/chars';
 import { makeCanvas, type Img } from '../art/pixel';
 import { MAPS, type MapDef, type NpcDef, type Conn } from './maps';
+import { worldLayout } from './layout';
 import { G, flag, saveGame } from '../game/state';
 import { closeText, say } from '../ui/textbox';
 
@@ -83,11 +84,33 @@ function validate(m: MapDef) {
   });
 }
 
+const mapImages = new Map<string, Img>();
+/**
+ * A map with MARGIN tiles around it. Like Gold/Silver, the margin shows the connected
+ * neighbors (so towns and routes look like one world); anything else there is trees.
+ */
+function mapImage(m: MapDef): Img {
+  let img = mapImages.get(m.id);
+  if (img) return img;
+  img = renderMap(m, MARGIN);
+  const spots = worldLayout();
+  const me = spots[m.id];
+  if (me) {
+    const g = img.getContext('2d')!;
+    for (const conn of Object.values(m.connections ?? {})) {
+      const p = conn && spots[conn.to];
+      if (p) g.drawImage(renderMap(MAPS[conn.to]), (p.x - me.x + MARGIN) * T, (p.y - me.y + MARGIN) * T);
+    }
+  }
+  mapImages.set(m.id, img);
+  return img;
+}
+
 export function loadMap(id: string, x: number, y: number, dir: Dir) {
   const prevName = map?.name;
   map = MAPS[id];
   validate(map);
-  mapImg = renderMap(map, MARGIN);
+  mapImg = mapImage(map);
   npcs = (map.npcs ?? []).map((def) => ({
     def,
     x: def.x,
@@ -197,11 +220,18 @@ export async function warp(to: string, x: number, y: number, dir: Dir, sound = t
 }
 
 /** Walk off the edge of an outdoor map into the connected one. */
+/**
+ * Walk off the edge of an outdoor map straight into the connected one, without a fade:
+ * the neighbor is already drawn at the edge, so the step just continues on the new map.
+ */
 function crossConnection(d: Dir, conn: Conn) {
   const target = MAPS[conn.to];
   const x = d === 'left' ? target.rows[0].length - 1 : d === 'right' ? 0 : player.x + conn.offset;
   const y = d === 'up' ? target.rows.length - 1 : d === 'down' ? 0 : player.y + conn.offset;
-  return transition(conn.to, x, y, d, 4);
+  if (TILES[tileOf(target, x, y)].solid) return bump();
+  loadMap(conn.to, x, y, d);
+  startMove(player.x, player.y);
+  saveGame();
 }
 
 /** Walk the player one tile as part of a script (no encounters/triggers). */
