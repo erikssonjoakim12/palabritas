@@ -87,3 +87,22 @@ export const OBJECT_PALS: Record<string, Pal> = {
 
 /** Palabola colors in the healing machine (normal, flash). */
 export const HEAL_BALL = ['#38a8a0', '#f0f0e8'];
+
+/**
+ * The master palette for new art (Palabritas, trainers): color families, each dark → light,
+ * so every family has ready-made shading steps. A sprite picks about 8-16 of these.
+ * Shown on the art page; art-src/palette.png and palette.txt are made from it for ChatGPT.
+ */
+export const PALETTE: Record<string, string[]> = {
+  neutral: ['#101410', '#3a3a42', '#6e6e78', '#a8a8b0', '#d8d8dc', '#f8f8f8'],
+  skin: ['#8c4a32', '#c87858', '#e8a890', '#f8d8c0'],
+  brown: ['#4a2a14', '#6c3717', '#945a2c', '#c89058'],
+  red: ['#6a1820', '#a83038', '#d85058', '#f09090'],
+  orange: ['#7a3410', '#c0601c', '#f09030', '#f8c070'],
+  yellow: ['#7a6010', '#c0a020', '#f0d040', '#f8f0a0'],
+  green: ['#1c3a18', '#2f5928', '#518436', '#84b14e', '#d9ec8d'],
+  teal: ['#104848', '#287878', '#38a8a0', '#a0e0d0'],
+  blue: ['#182860', '#2f58b0', '#5aa8f0', '#b8e0f8'],
+  purple: ['#381858', '#6040a0', '#9070d0', '#c8b0f0'],
+  pink: ['#702848', '#b04878', '#e880a8', '#f8c8d8'],
+};
