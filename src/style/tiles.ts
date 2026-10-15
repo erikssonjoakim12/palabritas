@@ -212,6 +212,29 @@ export const ART: Record<string, TileArt> = {
       '................',
     ],
   },
+  /** The shop's sign: a white $ on blue. */
+  martSignOverlay: {
+    pal: OUTDOOR.wall,
+    extra: { b: ACCENT.martBlue, w: '#f8f8f8' },
+    rows: [
+      '................',
+      '................',
+      '..333333333333..',
+      '..3bbbbbbbbbb3..',
+      '..3bbbbwbbbbb3..',
+      '..3bbbwwwwbbb3..',
+      '..3bbwwbbbbbb3..',
+      '..3bbbwwwbbbb3..',
+      '..3bbbbbwwbbb3..',
+      '..3bbwwwwbbbb3..',
+      '..3bbbbwbbbbb3..',
+      '..333333333333..',
+      '................',
+      '................',
+      '................',
+      '................',
+    ],
+  },
   /** A bread sign over the bakery door. */
   bakerySignOverlay: {
     pal: OUTDOOR.wall,

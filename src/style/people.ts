@@ -318,6 +318,7 @@ export const LOOKS: Record<string, Look> = {
   tourist: { head: 'cap', body: 'pants', color: 'purple' },
   hiker: { head: 'crew', body: 'pants', color: 'gray' },
   beto: { head: 'crew', body: 'pants', color: 'green' },
+  cashier: { head: 'long', body: 'dress', color: 'blue' },
   painter: { head: 'long', body: 'dress', color: 'purple' },
   andres: { head: 'cap', body: 'pants', color: 'gray' },
 };

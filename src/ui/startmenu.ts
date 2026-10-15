@@ -10,6 +10,8 @@ import { speak } from '../lang/speech';
 import { menu } from './menu';
 import { info, say } from './textbox';
 import { pickMon, showDetails, listMenu, spriteCanvas, detailBox, wordRow, openDetail } from './party';
+import { openBag } from './bag';
+import { money } from '../game/bag';
 
 const DEX_ORDER = ['salchichita', 'gotita', 'aguacatito', 'pajarito', 'palomon', 'conejito', 'mariposita', 'sillon'];
 
@@ -17,15 +19,16 @@ export async function startMenu() {
   sfx('select');
   let sel = 0;
   while (true) {
-    const opts = ['PALABRITAS', 'DICCIONARIO', 'TARJETA', 'GUARDAR', 'AJUSTES', 'SALIR'];
+    const opts = ['PALABRITAS', 'MOCHILA', 'DICCIONARIO', 'TARJETA', 'GUARDAR', 'AJUSTES', 'SALIR'];
     const i = await menu(opts, { cancel: true, pos: { right: 0, top: 0 }, initial: sel, disabled: [!G.save.party.length] });
     sel = Math.max(0, i);
     if (i === 0) await PalabritasMenu();
-    else if (i === 1) await dictionary();
-    else if (i === 2) await trainerCard();
-    else if (i === 3) {
+    else if (i === 1) await openBag();
+    else if (i === 2) await dictionary();
+    else if (i === 3) await trainerCard();
+    else if (i === 4) {
       await info(saveGame() ? 'Partida guardada.' : 'No se pudo guardar.', { en: 'Game saved.' });
-    } else if (i === 4) await settings();
+    } else if (i === 5) await settings();
     else return;
   }
 }
@@ -101,7 +104,7 @@ async function trainerCard() {
     `Medallas: ${s.medals.length ? s.medals.join(', ') : 'ninguna'}`,
     `Palabras dominadas: ${totalLearned()}`,
     `Respuestas: ${s.answers} (${acc}% bien)`,
-    `Palabolas: ${s.palabolas}`,
+    `Dinero: ${money()}`,
     `Diccionario: ${s.caught.length} atrapados`,
     `Tiempo: ${Math.floor(mins / 60)}h ${mins % 60}m`,
   ];

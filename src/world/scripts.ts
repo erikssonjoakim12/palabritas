@@ -2,6 +2,9 @@ import { overlay, el, gp } from '../engine/screen';
 import { sfx } from '../engine/sfx';
 import { frames } from '../engine/loop';
 import { G, flag, setFlag, saveGame } from '../game/state';
+import { addItem, money } from '../game/bag';
+import { ITEM_DEFS, SHOP, amountOf } from '../data/items';
+import { gradeOrder } from '../lang/order';
 import { newMon, healParty, markCaught } from '../game/mon';
 import { record, pickFromTheme, isLearned, isUnseen } from '../game/learning';
 import { itemsBetween } from '../game/curriculum';
@@ -29,7 +32,11 @@ const talkMode = (): Mode => (canListen() ? 'speak' : 'type');
 // ---------- Shared flows ----------
 
 async function blackout() {
+  // Like Gold/Silver: losing costs half your money.
+  const lost = Math.floor(G.save.money / 2);
+  G.save.money -= lost;
   await info('{name} corre de vuelta a un lugar seguro...', { en: '{name} hurries back to a safe place...' });
+  if (lost) await info(`¡Con las prisas, se te cayeron ${money(lost)}!`, { en: `In the rush, you dropped ${money(lost)}!` });
   healParty();
   const h = G.save.heal;
   await warp(h.map, h.x, h.y, 'down');
@@ -189,6 +196,11 @@ const S: Record<string, (c: ScriptCtx) => Promise<void>> = {
       ['Catching', [
         'First weaken a wild Palabrita. Then throw a Palabola and say one of its words.',
         'The better your answer, the easier it is to catch. Doña Lupe in Villa Limón makes Palabolas.',
+      ]],
+      ['Money & items', [
+        'Beat trainers to win money (pesos). If all your Palabritas faint, you drop half of it!',
+        'Spend it at the shop in Ciudad Brisa on Palabolas and Potions. To buy, you ask the cashier in Spanish.',
+        'Open START, MOCHILA to see your items and use Potions. In battle, MOCHILA is in the menu too.',
       ]],
       ['Controls', [
         'A talks and confirms, B goes back (hold B to run), START opens the menu.',
@@ -414,7 +426,7 @@ const S: Record<string, (c: ScriptCtx) => Promise<void>> = {
         ['¡Michi! ¡Mi gatita linda! ¡Muchísimas gracias, {name}!', 'Michi! My pretty kitty! Thank you so much!'],
         ['Yo hago Palabolas. Toma, te regalo cinco.', 'I make Palabolas. Here, I’ll give you five.'],
       );
-      G.save.palabolas += 5;
+      addItem('palabola', 5);
       setFlag('palabolas');
       sfx('levelup');
       await info('¡{name} recibió 5 Palabolas!', { en: '{name} received 5 Palabolas!' });
@@ -423,11 +435,6 @@ const S: Record<string, (c: ScriptCtx) => Promise<void>> = {
         ['Luego lanza una Palabola y dile una de sus palabras en español. ¡Si lo dices bien, es más fácil atraparla!', 'Then throw a Palabola and say one of its words in Spanish. Say it well and it’s easier to catch!'],
         ['Ah, y el Señor Ramos dice que su sillón hace ruidos raros... ¡Qué cosa tan extraña!', 'Oh, and Mr. Ramos says his armchair makes strange noises... How strange!'],
       );
-      return;
-    }
-    if (G.save.palabolas === 0) {
-      G.save.palabolas += 5;
-      await lines(['¿Se te acabaron las Palabolas? Toma cinco más.', 'Did you run out of Palabolas? Here are five more.']);
       return;
     }
     await lines(['Michi está muy feliz. ¡Gracias otra vez!', 'Michi is very happy. Thanks again!']);
@@ -448,6 +455,47 @@ const S: Record<string, (c: ScriptCtx) => Promise<void>> = {
     const res = await wildBattle('sillon', 5);
     if (res === 'lose') return blackout();
     if (res === 'caught' || res === 'win') setFlag('sillonDone');
+  },
+
+  /** The shop: pick something, then ask for it in Spanish (written or spoken). */
+  async cajera() {
+    await say('¡Bienvenido a la tienda! ¿Qué deseas comprar?', { en: 'Welcome to the shop! What would you like to buy?', noWait: true });
+    while (true) {
+      const i = await menu([...SHOP.map((id) => `${ITEM_DEFS[id].name}  ${money(ITEM_DEFS[id].price)}`), 'Nada'], {
+        cancel: true,
+        title: `Tienes ${money()}`,
+      });
+      if (i < 0 || i >= SHOP.length) break;
+      const id = SHOP[i];
+      const def = ITEM_DEFS[id];
+      const most = Math.min(5, Math.floor(G.save.money / def.price));
+      if (!most) {
+        await lines(['Lo siento, no tienes suficiente dinero.', 'Sorry, you don’t have enough money.']);
+        continue;
+      }
+      const q = await menu(Array.from({ length: most }, (_, k) => `×${k + 1}  ${money(def.price * (k + 1))}`), { cancel: true, title: '¿Cuántas?' });
+      if (q < 0) continue;
+      const n = q + 1;
+      const enOrder = `I’d like ${n} ${n === 1 ? def.enName : def.enPlural}, please`;
+      const r = await challenge({
+        item: adHocItem([`Quiero ${amountOf(id, n)}, por favor`], enOrder),
+        mode: talkMode(),
+        title: '🛒 Tienda',
+        label: `Pídelo en español: «${enOrder}»`,
+        allowHelp: true,
+        validate: (answer) => gradeOrder(answer, id, n),
+      });
+      if (r.grade === 'wrong') {
+        await lines(['¿Perdón? No te entendí bien. ¿Qué deseas?', 'Sorry? I didn’t quite understand. What would you like?']);
+        continue;
+      }
+      G.save.money -= def.price * n;
+      addItem(id, n);
+      sfx('caught');
+      await lines([`¡Aquí tienes: ${amountOf(id, n)}! Son ${money(def.price * n)}.`, `Here you go! That’s ${money(def.price * n)}.`]);
+      await say('¿Algo más?', { en: 'Anything else?', noWait: true });
+    }
+    await lines(['¡Gracias por tu compra! Vuelve pronto.', 'Thanks for shopping! Come back soon.']);
   },
 
   async enfermera() {
@@ -502,6 +550,17 @@ const S: Record<string, (c: ScriptCtx) => Promise<void>> = {
       defeated: ['Estás listo para Paloma... creo.', 'You’re ready for Paloma... I think.'],
       after: ['El Palomón de Paloma es muy fuerte. ¡Entrena bien antes de entrar!', 'Paloma’s Palomón is very strong. Train well before you go in!'],
     }),
+
+  /** A Palabola-shaped item ball halfway through Ruta 2, like Gold/Silver's. */
+  async pocionRuta2() {
+    if (flag('pocionRuta2')) return;
+    setFlag('pocionRuta2');
+    addItem('pocion');
+    sfx('levelup');
+    await info('¡{name} encontró una Poción!', { en: '{name} found a Potion!' });
+    await info('Úsala desde START → MOCHILA, o en batalla.', { en: 'Use it from START → MOCHILA, or in battle.' });
+    refreshNpcs();
+  },
 
   async lola() {
     await lines([

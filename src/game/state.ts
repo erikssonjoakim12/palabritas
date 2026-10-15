@@ -45,7 +45,10 @@ export interface SaveData {
   dir: Dir;
   party: Mon[];
   flags: Record<string, boolean>;
-  palabolas: number;
+  /** Pesos, earned by beating trainers. */
+  money: number;
+  /** Items by id (data/items.ts) → how many. */
+  bag: Record<string, number>;
   /** The starter you picked, while Professor Ceiba's training is still going on. */
   starterChoice?: string;
   medals: string[];
@@ -71,7 +74,8 @@ export function newSave(): SaveData {
     dir: 'down',
     party: [],
     flags: {},
-    palabolas: 0,
+    money: 0,
+    bag: {},
     medals: [],
     prog: {},
     seen: [],
@@ -118,11 +122,14 @@ const RENAMED: Record<string, string> = { perrito: 'salchichita' };
 function migrate(s: SaveData) {
   const fix = (id: string) => RENAMED[id] ?? id;
   // "Esferas" were renamed to "Palabolas".
-  const old = s as unknown as { esferas?: number };
-  if (old.esferas !== undefined) {
-    s.palabolas = Math.max(s.palabolas, old.esferas);
-    delete old.esferas;
-  }
+  // Palabolas (once called esferas) used to be a plain counter; now they're in the bag.
+  const old = s as unknown as { esferas?: number; palabolas?: number };
+  s.bag ??= {};
+  s.money ??= 0;
+  const balls = Math.max(old.palabolas ?? 0, old.esferas ?? 0);
+  if (balls) s.bag.palabola = (s.bag.palabola ?? 0) + balls;
+  delete old.esferas;
+  delete old.palabolas;
   if (s.flags.esferas) s.flags.palabolas = true;
   delete s.flags.esferas;
   for (const m of s.party) m.sp = fix(m.sp);

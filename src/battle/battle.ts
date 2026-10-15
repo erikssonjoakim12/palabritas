@@ -6,7 +6,7 @@ import { OBJECTS } from '../art/chars';
 import { portrait } from '../art/portraits';
 import type { Img } from '../art/pixel';
 import { LINEUP_BALL, BALL_COLORS, FAINTED_COLORS, EMPTY_COLORS, drawPattern } from '../art/balls';
-import { G, flag, type Mon } from '../game/state';
+import { G, type Mon } from '../game/state';
 import { stats, monName, checkLevelUps, firstAble, markSeen, markCaught, newMon, knownMoves, newMoves } from '../game/mon';
 import { SPECIES, MODE_INFO, type Move } from '../data/species';
 import { effectiveness } from '../data/types';
@@ -14,6 +14,9 @@ import { THEMES, type Item } from '../data/content';
 import { pickForMon, pickFromKind, defenseItem, record, lealtad, fadingItems, OBEY_THRESHOLD } from '../game/learning';
 import { challenge, type ChallengeResult } from '../ui/challenge';
 import { info, say, closeText } from '../ui/textbox';
+import { chooseItem, usePotion } from '../ui/bag';
+import { takeItem, itemCount, prizeMoney, money } from '../game/bag';
+import { ITEM_DEFS } from '../data/items';
 import { menu } from '../ui/menu';
 import { pickMon, hpClass } from '../ui/party';
 import { canListen } from '../lang/speech';
@@ -231,7 +234,7 @@ interface Config {
   outro?: [es: string, en: string];
 }
 
-type Action = { type: 'fight'; move: Move } | { type: 'switch'; mon: Mon } | { type: 'ball' } | { type: 'run' };
+type Action = { type: 'fight'; move: Move } | { type: 'switch'; mon: Mon } | { type: 'ball' } | { type: 'item' } | { type: 'run' };
 
 export function wildBattle(sp: string, level: number) {
   return runBattle({ kind: 'wild', team: [newMon(sp, level)] });
@@ -343,12 +346,11 @@ async function runBattle(cfg: Config): Promise<BattleResult> {
   const chooseAction = async (): Promise<Action> => {
     while (true) {
       closeText();
-      const canBall = !trainer && flag('palabolas');
-      const i = await menu(['LUCHAR', 'EQUIPO', 'PALABOLA', 'HUIR'], {
+      const i = await menu(['LUCHAR', 'EQUIPO', 'MOCHILA', 'HUIR'], {
         columns: 2,
         title: `¿Qué hará ${myName()}?`,
         pos: { left: 0, right: 0, bottom: 0 },
-        disabled: [false, G.save.party.length < 2, !canBall, !!trainer],
+        disabled: [false, G.save.party.length < 2, false, !!trainer],
       });
       if (i === 0) {
         const mv = await chooseMove();
@@ -356,7 +358,17 @@ async function runBattle(cfg: Config): Promise<BattleResult> {
       } else if (i === 1) {
         const m = await pickMon('switch', me);
         if (m && m !== me) return { type: 'switch', mon: m };
-      } else if (i === 2) return { type: 'ball' };
+      } else if (i === 2) {
+        // The bag: a Palabola (wild battles only) or a potion. Either one uses up your turn.
+        const id = await chooseItem();
+        if (id === 'palabola') {
+          if (!trainer) return { type: 'ball' };
+          await info('¡No puedes atrapar la Palabrita de otro entrenador!', { en: 'You can’t catch another trainer’s Palabrita!' });
+        } else if (id && ITEM_DEFS[id].heal && (await usePotion(id))) {
+          hud?.update();
+          return { type: 'item' };
+        }
+      }
       else if (i === 3) return { type: 'run' };
     }
   };
@@ -486,17 +498,13 @@ async function runBattle(cfg: Config): Promise<BattleResult> {
   };
 
   const throwPalabola = async (): Promise<'caught' | 'failed' | 'cancel'> => {
-    if (G.save.palabolas <= 0) {
-      await info('¡No te quedan Palabolas!');
-      return 'cancel';
-    }
     if (G.save.party.length >= 6) {
       await info('Tu equipo está lleno (máximo 6).');
       return 'cancel';
     }
-    G.save.palabolas--;
+    if (!takeItem('palabola')) return 'cancel';
     const sp = SPECIES[enemy.sp];
-    await info(`¡${G.save.name} lanzó una Palabola! (Quedan ${G.save.palabolas})`, { auto: 900 });
+    await info(`¡${G.save.name} lanzó una Palabola! (Quedan ${itemCount('palabola')})`, { auto: 900 });
     await info(`Para atraparlo, ¡dile una de sus palabras!`, {
       auto: 1400,
       en: `To catch it, say one of its words!`,
@@ -648,6 +656,10 @@ async function runBattle(cfg: Config): Promise<BattleResult> {
       await slide(enemyF, ENEMY_POS.x);
       await info(`¡Venciste a ${trainer.name}!`);
       if (cfg.outro) await say(cfg.outro[0], { en: cfg.outro[1] });
+      const prize = prizeMoney(cfg.team);
+      G.save.money += prize;
+      sfx('levelup');
+      await info(`¡Ganaste ${money(prize)}!`, { en: `You won ${money(prize)}!` });
     }
     await summary();
     return r;
