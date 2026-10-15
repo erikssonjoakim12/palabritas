@@ -44,45 +44,6 @@ function card(grid: HTMLElement, label: string, images: Img[], scale: number) {
 
 buildCreatureArt();
 
-// ---------- The master palette ----------
-
-const pal = section('Color palette', 'The colors new art may use (style/colors.ts, PALETTE). Each family runs dark to light. A sprite uses about 8-16 of them.');
-const swatches = document.createElement('canvas');
-swatches.id = 'palette';
-const SW = 64;
-const families = Object.entries(PALETTE);
-swatches.width = 110 + SW * Math.max(...families.map(([, c]) => c.length));
-swatches.height = SW * families.length;
-{
-  const g = swatches.getContext('2d')!;
-  g.fillStyle = '#ffffff';
-  g.fillRect(0, 0, swatches.width, swatches.height);
-  g.font = 'bold 16px sans-serif';
-  g.textBaseline = 'middle';
-  families.forEach(([name, colors], row) => {
-    g.fillStyle = '#222';
-    g.fillText(name, 8, row * SW + SW / 2);
-    colors.forEach((c, i) => {
-      g.fillStyle = c;
-      g.fillRect(110 + i * SW, row * SW, SW - 4, SW - 4);
-      g.fillStyle = parseInt(c.slice(1, 3), 16) + parseInt(c.slice(3, 5), 16) + parseInt(c.slice(5, 7), 16) > 380 ? '#000' : '#fff';
-      g.font = '11px monospace';
-      g.fillText(c, 110 + i * SW + 4, row * SW + SW - 14);
-      g.font = 'bold 16px sans-serif';
-    });
-  });
-}
-swatches.style.imageRendering = 'auto';
-const list = Object.assign(document.createElement('pre'), {
-  id: 'palette-text',
-  textContent: families.map(([n, c]) => `${n}: ${c.join(', ')}`).join('\n'),
-});
-const palCard = document.createElement('div');
-palCard.className = 'card';
-palCard.style.textAlign = 'left';
-palCard.append(swatches, list);
-pal.appendChild(palCard);
-
 const mons = section('Palabritas', 'Front (the opponent sees this) and back (yours in battle). Palabritas with hand-made art (style/palabritas.ts) have a real back view; the others use their mirrored front.');
 for (const [id, art] of Object.entries(CREATURE_ART)) card(mons, SPECIES[id]?.name ?? id, [art.front, art.back], 3);
 
@@ -149,3 +110,42 @@ for (const [size, scale] of ICON_SIZES) {
   el.append(c, a);
   icons.appendChild(el);
 }
+
+// ---------- The master palette ----------
+
+const pal = section('Color palette', 'The colors new art may use (style/colors.ts, PALETTE). Each family runs dark to light. A sprite uses about 8-16 of them.');
+const swatches = document.createElement('canvas');
+swatches.id = 'palette';
+const SW = 64;
+const families = Object.entries(PALETTE);
+swatches.width = 110 + SW * Math.max(...families.map(([, c]) => c.length));
+swatches.height = SW * families.length;
+{
+  const g = swatches.getContext('2d')!;
+  g.fillStyle = '#ffffff';
+  g.fillRect(0, 0, swatches.width, swatches.height);
+  g.font = 'bold 16px sans-serif';
+  g.textBaseline = 'middle';
+  families.forEach(([name, colors], row) => {
+    g.fillStyle = '#222';
+    g.fillText(name, 8, row * SW + SW / 2);
+    colors.forEach((c, i) => {
+      g.fillStyle = c;
+      g.fillRect(110 + i * SW, row * SW, SW - 4, SW - 4);
+      g.fillStyle = parseInt(c.slice(1, 3), 16) + parseInt(c.slice(3, 5), 16) + parseInt(c.slice(5, 7), 16) > 380 ? '#000' : '#fff';
+      g.font = '11px monospace';
+      g.fillText(c, 110 + i * SW + 4, row * SW + SW - 14);
+      g.font = 'bold 16px sans-serif';
+    });
+  });
+}
+swatches.style.imageRendering = 'auto';
+const list = Object.assign(document.createElement('pre'), {
+  id: 'palette-text',
+  textContent: families.map(([n, c]) => `${n}: ${c.join(', ')}`).join('\n'),
+});
+const palCard = document.createElement('div');
+palCard.className = 'card';
+palCard.style.textAlign = 'left';
+palCard.append(swatches, list);
+pal.appendChild(palCard);
