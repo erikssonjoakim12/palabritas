@@ -16,8 +16,8 @@ export interface ItemDef {
 }
 
 export const ITEM_DEFS: Record<string, ItemDef> = {
-  palabola: { id: 'palabola', name: 'Palabola', plural: 'Palabolas', feminine: true, price: 80, enName: 'Palabola', enPlural: 'Palabolas', en: 'Palabola (catches wild Palabritas)' },
-  pocion: { id: 'pocion', name: 'Poción', plural: 'Pociones', feminine: true, price: 120, enName: 'Potion', enPlural: 'Potions', en: 'Potion (heals 20 PS)', heal: 20 },
+  palabola: { id: 'palabola', name: 'Palabola', plural: 'Palabolas', feminine: true, price: 60, enName: 'Palabola', enPlural: 'Palabolas', en: 'Palabola (catches wild Palabritas)' },
+  pocion: { id: 'pocion', name: 'Poción', plural: 'Pociones', feminine: true, price: 100, enName: 'Potion', enPlural: 'Potions', en: 'Potion (heals 20 PS)', heal: 20 },
 };
 
 /** What the shop in Ciudad Brisa sells. */
