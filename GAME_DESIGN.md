@@ -75,7 +75,7 @@ The creatures are **Palabritas**, you catch them with **Palabolas**, and you hea
 
 - Beating a trainer pays **the total stats of their Palabritas** in pesos ($): Sofía $42 ... Paloma ~$170.
   Losing (all Palabritas fainted) drops **half your money**, like Gold/Silver. Wild battles pay nothing.
-- The **shop** (the first one is in Ciudad Brisa) sells Palabolas ($20) and Pociones ($30, heal 20 PS). To buy,
+- The **shop** (the first one is in Ciudad Brisa) sells Palabolas ($40) and Pociones ($60, heal 20 PS). To buy,
   you **ask the cashier in Spanish**, typed or spoken: «Quiero dos Palabolas, por favor», «Me da una poción»...
   Any natural phrasing with the right item and amount counts; accents and singular/plural make it perfect.
 - **MOCHILA** (bag): in START to look at items and use Pociones, and in battle (using an item takes your turn;
