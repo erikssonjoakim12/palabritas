@@ -25,6 +25,12 @@ let alpha = 0;
  */
 export const frameAlpha = () => alpha;
 
+/** Run fn when the browser has nothing else to do (soon anyway, at most after 1 s). */
+export function whenIdle(fn: () => void) {
+  if ('requestIdleCallback' in window) requestIdleCallback(() => fn(), { timeout: 1000 });
+  else setTimeout(fn, 50);
+}
+
 /** Fixed 60 updates per second, render every animation frame. */
 export function startLoop() {
   let last = performance.now();

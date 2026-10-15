@@ -1,7 +1,7 @@
-import { W, H, overlay, el, scaleFactor } from '../engine/screen';
+import { W, H, overlay, el, scaleFactor, ctx } from '../engine/screen';
 import { input, type Dir } from '../engine/input';
 import { sfx } from '../engine/sfx';
-import { nextFrame, frames, frameAlpha } from '../engine/loop';
+import { nextFrame, frames, frameAlpha, whenIdle } from '../engine/loop';
 import { TILES, tallGrassImage, tileImage, tileOf } from '../art/tiles';
 import { personFrames, OBJECTS, type Frames } from '../art/chars';
 import type { Img } from '../art/pixel';
@@ -47,8 +47,19 @@ const T = 16;
 
 let map: MapDef = MAPS.casa;
 let npcs: NpcRT[] = [];
+type Neighbor = { m: MapDef; dx: number; dy: number };
 /** Connected towns/routes, offset (in tiles) from the current map, drawn past its edges. */
-let neighbors: { m: MapDef; dx: number; dy: number }[] = [];
+let neighbors: Neighbor[] = [];
+
+/** A map's connected towns/routes, placed around it (world/layout.ts). */
+function neighborsOf(m: MapDef): Neighbor[] {
+  const spots = worldLayout();
+  const me = spots[m.id];
+  return Object.values(m.connections ?? {}).flatMap((conn) => {
+    const p = me && conn && spots[conn.to];
+    return p ? [{ m: MAPS[conn.to], dx: p.x - me.x, dy: p.y - me.y }] : [];
+  });
+}
 /** People in the connected towns/routes, drawn at the map's edges (they only move once you get there). */
 let edgeNpcs: NpcRT[] = [];
 let fade = 0;
@@ -107,15 +118,10 @@ export function loadMap(id: string, x: number, y: number, dir: Dir) {
     turnTimer: 60 + Math.floor(Math.random() * 200),
   });
   npcs = (map.npcs ?? []).map((def) => npc(def));
-  // The connected towns/routes, placed around this map (world/layout.ts).
-  const spots = worldLayout();
-  const me = spots[map.id];
-  neighbors = Object.values(map.connections ?? {}).flatMap((conn) => {
-    const p = me && conn && spots[conn.to];
-    return p ? [{ m: MAPS[conn.to], dx: p.x - me.x, dy: p.y - me.y }] : [];
-  });
+  neighbors = neighborsOf(map);
   edgeNpcs = neighbors.flatMap(({ m, dx, dy }) => (m.npcs ?? []).map((def) => npc(def, dx, dy)));
-  buildGrid();
+  ({ grid, w: gridW } = gridFor(map));
+  whenIdle(prepareNeighbors);
   // Maps change between versions: never leave a loaded save standing inside a wall.
   [x, y] = nearestFree(x, y);
   Object.assign(player, { x, y, dir, moving: false, prog: 0 });
@@ -228,7 +234,7 @@ function crossConnection(d: Dir, conn: Conn) {
   if (TILES[tileOf(target, x, y)].solid) return bump();
   loadMap(conn.to, x, y, d);
   startMove(player.x, player.y);
-  saveGame();
+  whenIdle(saveGame); // not in the middle of the step
 }
 
 /** Walk the player one tile as part of a script (no encounters/triggers). */
@@ -415,19 +421,53 @@ function drawBubble(g: CanvasRenderingContext2D, x: number, y: number) {
  */
 let grid: Img[] = [];
 let gridW = 0;
-function buildGrid() {
-  gridW = map.rows[0].length + GRID * 2;
-  const gridH = map.rows.length + GRID * 2;
-  grid = new Array(gridW * gridH);
-  for (let gy = 0; gy < gridH; gy++) {
-    for (let gx = 0; gx < gridW; gx++) {
+/** Kept per map: just references to tile images (about 10 KB a map). */
+const grids = new Map<string, { grid: Img[]; w: number }>();
+function gridFor(home: MapDef) {
+  let g = grids.get(home.id);
+  if (g) return g;
+  const near = neighborsOf(home);
+  const w = home.rows[0].length + GRID * 2;
+  const h = home.rows.length + GRID * 2;
+  g = { grid: new Array(w * h), w };
+  for (let gy = 0; gy < h; gy++) {
+    for (let gx = 0; gx < w; gx++) {
       const [tx, ty] = [gx - GRID, gy - GRID];
-      const n = inBounds(tx, ty) ? undefined : neighbors.find(({ m, dx, dy }) => inMap(m, tx - dx, ty - dy));
-      const [m, x, y] = n ? [n.m, tx - n.dx, ty - n.dy] : [map, tx, ty];
+      const n = inMap(home, tx, ty) ? undefined : near.find(({ m, dx, dy }) => inMap(m, tx - dx, ty - dy));
+      const [m, x, y] = n ? [n.m, tx - n.dx, ty - n.dy] : [home, tx, ty];
       const env = { rows: m.rows, outdoor: m.outdoor, floor: m.floor, ground: m.ground, roof: m.roof, x, y };
-      grid[gy * gridW + gx] = tileImage(tileOf(m, x, y), env);
+      g.grid[gy * w + gx] = tileImage(tileOf(m, x, y), env);
     }
   }
+  grids.set(home.id, g);
+  return g;
+}
+
+/** Images already sent to the graphics chip (the first draw of an image is the slow one). */
+const warm = new WeakSet<Img>();
+function warmUp(imgs: Img[]) {
+  for (const img of imgs) {
+    if (warm.has(img)) continue;
+    warm.add(img);
+    ctx.drawImage(img, 0, 0, 1, 1); // invisible: the next frame draws over it
+  }
+}
+
+/**
+ * While the phone is idle, get the connected towns/routes completely ready: their tile
+ * layout, any new tile images, their people's sprites, all on the graphics chip. Then
+ * crossing into them costs (almost) nothing, even the first time. One neighbor per idle moment.
+ */
+function prepareNeighbors() {
+  const todo = neighbors.map((n) => n.m).filter((m) => !grids.has(m.id));
+  const m = todo[0];
+  if (!m) return;
+  warmUp(gridFor(m).grid);
+  for (const n of m.npcs ?? []) {
+    if (n.look) warmUp(Object.values(framesFor(n.look)).flat());
+    else if (n.object) warmUp([OBJECTS[n.object]]);
+  }
+  if (todo.length > 1) whenIdle(prepareNeighbors);
 }
 
 /** Like the Game Boy, only the tiles on screen are drawn, every frame. */
