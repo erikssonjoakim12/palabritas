@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Palabritas art</title>
+    <style>
+      body { font-family: system-ui, sans-serif; background: #f4f4ec; color: #222; margin: 0; padding: 16px; }
+      h1 { font-size: 20px; margin: 0 0 4px; }
+      h2 { font-size: 16px; margin: 28px 0 8px; border-bottom: 2px solid #ccc; padding-bottom: 4px; }
+      p { margin: 4px 0; color: #555; font-size: 14px; }
+      .grid { display: flex; flex-wrap: wrap; gap: 14px; }
+      .card { background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 8px; text-align: center; font-size: 12px; }
+      .card canvas { image-rendering: pixelated; display: block; margin: 0 auto 4px; }
+      .row { display: flex; gap: 6px; justify-content: center; align-items: flex-end; }
+      .icons canvas { border-radius: 22%; box-shadow: 0 2px 8px #0004; }
+    </style>
+  </head>
+  <body>
+    <!-- The art review page: npm run art, or art.html next to the published game. -->
+    <h1>Palabritas art</h1>
+    <p>Everything the game draws, generated from the same code the game uses. Edit the art in <code>src/style/</code> and <code>src/art/</code>, then reload.</p>
+    <div id="art"></div>
+    <script type="module" src="/src/dev/art.ts"></script>
+  </body>
+</html>

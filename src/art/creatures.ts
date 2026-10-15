@@ -152,13 +152,37 @@ const DRAW: Record<string, Draw> = {
   },
 };
 
+/**
+ * Back views (your Palabrita in battle), seen from behind and looking up-right at the opponent.
+ * A Palabrita without one uses its mirrored front view for now.
+ */
+const BACK: Record<string, Draw> = {
+  aguacatito(p) {
+    const sk = '#2f6b2a', hi = '#438a3b', bump = '#3d7d35', fl = '#c9e27a', pit = '#8b5a2b';
+    p.ellipse(15, 46, 4, 2, sk).ellipse(31, 46, 4, 2, sk);
+    p.ellipse(8, 30, 3, 2, sk).ellipse(41, 28, 3, 2.5, sk); // the right arm a bit raised
+    // A sliver of the green flesh on the right: it's turned toward the opponent.
+    p.ellipse(27, 19, 8, 9.5, fl).ellipse(27, 31, 13, 14, fl);
+    p.ellipse(22, 18, 9, 10, sk);
+    p.ellipse(22, 31, 14, 15, sk);
+    p.ellipse(17, 24, 4, 8, hi).ellipse(19, 14, 3, 4, hi);
+    for (const [x, y] of [[25, 22], [29, 30], [20, 36], [26, 40], [15, 33], [23, 28], [30, 37], [24, 13]]) p.set(x, y, bump);
+    p.rect(21, 5, 2, 4, pit);
+    p.poly([[23, 7], [30, 2], [33, 5], [25, 8]], '#4aa84a');
+    p.outline('#163314');
+  },
+};
+
 export const CREATURE_ART: Record<string, { front: Img; back: Img }> = {};
 
 export function buildCreatureArt() {
-  for (const [id, draw] of Object.entries(DRAW)) {
+  const draw = (fn: Draw) => {
     const p = new Pix(48, 48);
-    draw(p);
-    const front = p.toCanvas();
-    CREATURE_ART[id] = { front, back: mirror(front) };
+    fn(p);
+    return p.toCanvas();
+  };
+  for (const [id, fn] of Object.entries(DRAW)) {
+    const front = draw(fn);
+    CREATURE_ART[id] = { front, back: BACK[id] ? draw(BACK[id]) : mirror(front) };
   }
 }

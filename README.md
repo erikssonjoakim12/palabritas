@@ -56,5 +56,6 @@ Each town picks its ground and roof color in `maps.ts` (`ground: 'town'`, `roof:
 Walking speed is `WALK_SPEED` in `src/world/world.ts`. UI text-box colors are the CSS
 variables at the top of `src/style.css`.
 
-The app icon is our mascot Aguacatito, drawn from the game's own sprite (`src/dev/icons.ts`).
-After changing the art, run `npm run icons`, download both PNGs and replace the ones in `public/`.
+All the art can be reviewed without playing: `npm run art` opens a page with every Palabrita, battle portrait and overworld sprite (`src/dev/art.ts`). It is also published: https://erikssonjoakim12.github.io/palabritas/art.html
+The app icon is our mascot Aguacatito, drawn from the game's own sprite.
+After changing it, download both PNGs from the art page and replace the ones in `public/`.

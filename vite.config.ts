@@ -24,5 +24,7 @@ function phoneQr(): Plugin {
 // Chrome only allows the microphone on secure pages.
 export default defineConfig(({ mode }) => ({
   base: './',
+  // The game, plus the art review page (art.html) so the art can be checked on any device.
+  build: { rollupOptions: { input: { main: 'index.html', art: 'art.html' } } },
   plugins: mode === 'phone' ? [basicSsl(), phoneQr()] : [],
 }));

@@ -3,6 +3,8 @@ import { setScene, getScene, nextFrame, frames } from '../engine/loop';
 import { sfx } from '../engine/sfx';
 import { CREATURE_ART } from '../art/creatures';
 import { OBJECTS } from '../art/chars';
+import { portrait } from '../art/portraits';
+import type { Img } from '../art/pixel';
 import { LINEUP_BALL, BALL_COLORS, FAINTED_COLORS, EMPTY_COLORS, drawPattern } from '../art/balls';
 import { G, flag, type Mon } from '../game/state';
 import { stats, monName, checkLevelUps, firstAble, markSeen, markCaught, newMon, knownMoves, newMoves } from '../game/mon';
@@ -11,7 +13,7 @@ import { effectiveness } from '../data/types';
 import { THEMES, type Item } from '../data/content';
 import { pickForMon, pickFromKind, defenseItem, record, lealtad, fadingItems, OBEY_THRESHOLD } from '../game/learning';
 import { challenge, type ChallengeResult } from '../ui/challenge';
-import { info, closeText } from '../ui/textbox';
+import { info, say, closeText } from '../ui/textbox';
 import { menu } from '../ui/menu';
 import { pickMon, hpClass } from '../ui/party';
 import { canListen } from '../lang/speech';
@@ -19,8 +21,9 @@ import type { TrainerDef } from '../data/trainers';
 
 export type BattleResult = 'win' | 'lose' | 'run' | 'caught';
 
+/** Anything standing on the battlefield: a Palabrita, a trainer or you. */
 interface Fighter {
-  mon: Mon;
+  img: Img;
   x: number;
   y: number;
   blink: number;
@@ -60,21 +63,19 @@ const battleScene = {
     g.beginPath();
     g.ellipse(32, 92, 24, 5, 0, 0, Math.PI * 2);
     g.fill();
-    drawFighter(g, enemyF, false);
-    drawFighter(g, meF, true);
+    drawFighter(g, enemyF);
+    drawFighter(g, meF);
     if (ball) g.drawImage(OBJECTS.palabola, Math.round(ball.x + ball.shake), Math.round(ball.y));
     if (lineups.enemy) drawLineup(g, lineups.enemy, 8, 14, false);
     if (lineups.me) drawLineup(g, lineups.me, 96, 80, true);
   },
 };
 
-function drawFighter(g: CanvasRenderingContext2D, f: Fighter | null, back: boolean) {
+function drawFighter(g: CanvasRenderingContext2D, f: Fighter | null) {
   if (!f || f.hidden || f.sink >= 48) return;
   if (f.blink > 0 && Math.floor(f.blink / 4) % 2 === 0) return;
-  const art = CREATURE_ART[f.mon.sp];
-  const img = back ? art.back : art.front;
   const h = 48 - f.sink;
-  g.drawImage(img, 0, 0, 48, h, Math.round(f.x + f.lunge), Math.round(f.y + f.sink), 48, h);
+  g.drawImage(f.img, 0, 0, 48, h, Math.round(f.x + f.lunge), Math.round(f.y + f.sink), 48, h);
 }
 
 /** 6 slots: a ball per Palabrita (gray when fainted), empty outlines for the rest, on a bracket line. */
@@ -88,7 +89,10 @@ function drawLineup(g: CanvasRenderingContext2D, team: Mon[], x: number, y: numb
   g.fillRect(tickLeft ? x - 3 : x + 6 * 9, y + 4, 1, 6);
 }
 
-const fighter = (mon: Mon, x: number, y: number): Fighter => ({ mon, x, y, blink: 0, sink: 0, hidden: false, lunge: 0 });
+const fighter = (img: Img, x: number, y: number): Fighter => ({ img, x, y, blink: 0, sink: 0, hidden: false, lunge: 0 });
+/** The opponent's side shows Palabritas from the front, yours from the back. Both start off-screen. */
+const enemyFighter = (mon: Mon) => fighter(CREATURE_ART[mon.sp].front, -48, ENEMY_POS.y);
+const myFighter = (mon: Mon) => fighter(CREATURE_ART[mon.sp].back, W, ME_POS.y);
 
 async function lunge(f: Fighter, dir: number) {
   for (let i = 0; i <= 10; i++) {
@@ -111,7 +115,8 @@ async function sinkAnim(f: Fighter) {
   f.hidden = true;
 }
 
-async function slideIn(f: Fighter, toX: number) {
+/** Slide sideways to x (in from off-screen, or out to it). */
+async function slide(f: Fighter, toX: number) {
   const fromX = f.x;
   f.hidden = false;
   f.sink = 0;
@@ -214,6 +219,8 @@ interface Config {
   kind: 'wild' | 'trainer';
   team: Mon[];
   trainer?: TrainerDef;
+  look?: string;
+  outro?: [es: string, en: string];
 }
 
 type Action = { type: 'fight'; move: Move } | { type: 'switch'; mon: Mon } | { type: 'ball' } | { type: 'run' };
@@ -222,8 +229,12 @@ export function wildBattle(sp: string, level: number) {
   return runBattle({ kind: 'wild', team: [newMon(sp, level)] });
 }
 
-export function trainerBattle(t: TrainerDef) {
-  return runBattle({ kind: 'trainer', team: t.team.map(([sp, l]) => newMon(sp, l)), trainer: t });
+/**
+ * look: how the trainer looks (key in LOOKS), for their portrait.
+ * outro: what they say in battle when you win.
+ */
+export function trainerBattle(t: TrainerDef, opts: { look?: string; outro?: [es: string, en: string] } = {}) {
+  return runBattle({ kind: 'trainer', team: t.team.map(([sp, l]) => newMon(sp, l)), trainer: t, ...opts });
 }
 
 async function runBattle(cfg: Config): Promise<BattleResult> {
@@ -241,9 +252,9 @@ async function runBattle(cfg: Config): Promise<BattleResult> {
   };
   const tally = { asked: 0, learned: 0 };
 
-  enemyF = fighter(enemy, -48, ENEMY_POS.y);
-  meF = fighter(me, W, ME_POS.y);
-  meF.hidden = true;
+  const trainerFighter = () => fighter(portrait(cfg.look ?? 'man'), -48, ENEMY_POS.y);
+  enemyF = trainer ? trainerFighter() : enemyFighter(enemy);
+  meF = fighter(portrait('player', 'back'), W, ME_POS.y);
   ball = null;
   closeText();
   overlay.querySelectorAll('.banner').forEach((b) => b.remove()); // the place-name banner
@@ -287,9 +298,9 @@ async function runBattle(cfg: Config): Promise<BattleResult> {
 
   const sendOut = async (mon: Mon) => {
     me = mon;
-    meF = fighter(mon, W, ME_POS.y);
+    meF = myFighter(mon);
     await info(`¡Adelante, ${monName(mon)}!`, { auto: 700 });
-    await slideIn(meF, ME_POS.x);
+    await slide(meF, ME_POS.x);
     hud?.update();
   };
 
@@ -401,7 +412,6 @@ async function runBattle(cfg: Config): Promise<BattleResult> {
     await effMessage(eff);
   };
 
-  let defenseExplained = false;
   const enemyAttack = async () => {
     const moves = knownMoves(enemy);
     const move = moves[Math.floor(Math.random() * moves.length)];
@@ -410,12 +420,6 @@ async function runBattle(cfg: Config): Promise<BattleResult> {
     let mult = trainer ? 1 : 0.7;
     let defended = false;
     if (trainer) {
-      if (!defenseExplained) {
-        defenseExplained = true;
-        await info(`¡Defiéndete! Responde con palabras de ${monName(enemy)}. Si respondes bien, recibes menos daño.`, {
-          en: `Defend yourself! Answer with ${monName(enemy)}'s words. Answer well and you take less damage.`,
-        });
-      }
       // Defense questions come from the opponent's own words at its level: stronger = harder.
       const item = remember(defenseItem(enemy, recent));
       const r = await challenge({
@@ -443,14 +447,15 @@ async function runBattle(cfg: Config): Promise<BattleResult> {
     await sinkAnim(enemyF!);
     await info(`¡${enemyLabel()} se debilitó!`);
     if (trainer && enemyIdx < cfg.team.length - 1) {
+      await endTurn(); // level up before the next one comes out
       enemy = cfg.team[++enemyIdx];
       markSeen(enemy.sp);
-      enemyF = fighter(enemy, -48, ENEMY_POS.y);
+      enemyF = enemyFighter(enemy);
       hud!.show('enemy', false);
       lineups = { enemy: cfg.team };
       await info(`¡${trainer.name} envía a ${monName(enemy)}!`, { auto: 900 });
       lineups = {};
-      await slideIn(enemyF, ENEMY_POS.x);
+      await slide(enemyF, ENEMY_POS.x);
       hud!.update();
       hud!.show('enemy', true);
       return null;
@@ -546,20 +551,23 @@ async function runBattle(cfg: Config): Promise<BattleResult> {
   try {
     await encounterFlash();
     markSeen(enemy.sp);
+    // Like Gold/Silver: you and the opponent slide in from opposite sides.
+    await Promise.all([slide(enemyF, ENEMY_POS.x), slide(meF, ME_POS.x)]);
     if (trainer) {
       lineups = { enemy: cfg.team, me: G.save.party };
       await info(`¡${trainer.name} quiere luchar!`);
       lineups = {};
-    }
-    await slideIn(enemyF, ENEMY_POS.x);
-    hud = buildHud(() => enemy, () => me);
-    hud.update();
-    hud.show('player', false);
-    if (trainer) {
+      await slide(enemyF, W);
+      enemyF = enemyFighter(enemy);
       await info(`¡${trainer.name} envía a ${monName(enemy)}!`, { auto: 900 });
+      await slide(enemyF, ENEMY_POS.x);
     } else {
       await info(`¡Un ${monName(enemy)} salvaje apareció!`);
     }
+    hud = buildHud(() => enemy, () => me);
+    hud.update();
+    hud.show('player', false);
+    await slide(meF, -48);
     await sendOut(me);
     hud.show('player', true);
 
@@ -625,6 +633,14 @@ async function runBattle(cfg: Config): Promise<BattleResult> {
   }
 
   async function finish(r: BattleResult) {
+    if (r === 'win' && trainer) {
+      // The trainer comes back out to admit defeat.
+      hud?.show('enemy', false);
+      enemyF = trainerFighter();
+      await slide(enemyF, ENEMY_POS.x);
+      await info(`¡Venciste a ${trainer.name}!`);
+      if (cfg.outro) await say(cfg.outro[0], { en: cfg.outro[1] });
+    }
     await summary();
     return r;
   }

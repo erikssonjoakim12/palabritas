@@ -9,7 +9,7 @@
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview --host",
     "typecheck": "tsc --noEmit",
-    "icons": "vite --open /icons.html"
+    "art": "vite --open /art.html"
   },
   "devDependencies": {
     "@vitejs/plugin-basic-ssl": "^2.3.0",

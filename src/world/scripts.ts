@@ -87,10 +87,9 @@ async function trainerFight(id: string, l: TrainerLines) {
       en: 'Against trainers you can defend! Answer well when they attack and you take less damage.',
     });
   }
-  const res = await trainerBattle(TRAINERS[id]);
+  const res = await trainerBattle(TRAINERS[id], { look: npcById(id)?.def.look, outro: l.defeated });
   if (res === 'lose') return blackout();
   setFlag(`beat:${id}`);
-  await lines(l.defeated);
 }
 
 const MICHI_Q = adHocItem(
@@ -553,24 +552,31 @@ const S: Record<string, (c: ScriptCtx) => Promise<void>> = {
     }),
 
   async paloma() {
-    if (flag('medalBrisa')) return lines(['Sigue entrenando. ¡El cielo es el límite!', 'Keep training. The sky’s the limit!']);
+    if (flag('medalBrisa')) return lines(['Todavía no puedo creer que perdí... ¡La próxima vez será diferente!', 'I still can’t believe I lost... Next time will be different!']);
     await lines(
-      ['¡Hola! Soy Paloma, la líder del Gimnasio de Ciudad Brisa.', 'Hi! I’m Paloma, leader of the Breeze City Gym.'],
-      ['Aquí hablamos en presente: lo que hacemos ahora y lo que hacemos siempre.', 'Here we speak in the present: what we do now and what we always do.'],
-      ['Cuando te ataque, tendrás que escribir las palabras de mis Palabritas para defenderte.', 'When I attack, you’ll have to write my Palabritas’ words to defend yourself.'],
+      ['Así que tú eres {name}... Te vi subir por la Ruta 2.', 'So you’re {name}... I saw you coming up Route 2.'],
+      ['Soy Paloma, la reina del cielo de Ciudad Brisa. ¡Nadie ha ganado esta medalla en meses!', 'I’m Paloma, queen of the Breeze City sky. Nobody has won this medal in months!'],
+      ['El viento está de mi lado. ¿De verdad crees que puedes ganarme?', 'The wind is on my side. Do you really think you can beat me?'],
     );
-    if (!(await ask('¿Empezamos?', { en: 'Shall we begin?' }))) return lines(['Vuelve cuando quieras.', 'Come back whenever you want.']);
-    const res = await trainerBattle(TRAINERS.paloma);
+    if (!(await ask('¿Estás listo para volar?', { en: 'Are you ready to fly?' }))) return lines(['Lo sabía. Vuelve cuando tengas valor.', 'I knew it. Come back when you’re brave enough.']);
+    await lines(['¡Entonces que sople el viento!', 'Then let the wind blow!']);
+    const res = await trainerBattle(TRAINERS.paloma, {
+      look: 'paloma',
+      outro: ['No... ¡No puede ser! ¿Mi Palomón... perdió?', 'No... It can’t be! My Palomón... lost?'],
+    });
     if (res === 'lose') return blackout();
     setFlag('beat:paloma');
     setFlag('medalBrisa');
     G.save.medals.push('Brisa');
-    await lines(['¡Increíble! ¡Hablas muy bien español!', 'Incredible! You speak Spanish really well!']);
+    await lines(
+      ['Usaste cada palabra perfectamente. Hasta las mías... ¡Nunca había visto algo así!', 'You used every word perfectly. Even mine... I’ve never seen anything like it!'],
+      ['Está bien. Te la ganaste. Toma, es tuya.', 'All right. You earned it. Here, it’s yours.'],
+    );
     sfx('badge');
     await info('¡{name} recibió la Medalla Brisa!', { en: '{name} received the Breeze Medal!' });
     await lines(
-      ['Esta medalla demuestra que entiendes hasta a los Palabritas más fuertes.', 'This medal shows you understand even the strongest Palabritas.'],
-      ['Sigue entrenando. ¡El cielo es el límite!', 'Keep training. The sky’s the limit!'],
+      ['Con esta medalla, todos sabrán que hablas el idioma del viento.', 'With this medal, everyone will know you speak the language of the wind.'],
+      ['La próxima vez, mi Palomón y yo volaremos más alto. ¡Ya verás!', 'Next time, my Palomón and I will fly higher. You’ll see!'],
     );
     await info('¡Felicidades! Terminaste la primera parte de Palabritas.', { en: 'Congratulations! You finished the first part of Palabritas.' });
     await info('Sigue entrenando a tus Palabritas y atrapando nuevas. ¡Pronto habrá más aventuras!', {
