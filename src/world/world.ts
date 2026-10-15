@@ -1,7 +1,7 @@
-import { W, H, overlay, el } from '../engine/screen';
+import { W, H, overlay, el, scaleFactor } from '../engine/screen';
 import { input, type Dir } from '../engine/input';
 import { sfx } from '../engine/sfx';
-import { nextFrame, frames } from '../engine/loop';
+import { nextFrame, frames, frameAlpha } from '../engine/loop';
 import { TILES, tallGrassImage, tileImage, tileOf } from '../art/tiles';
 import { personFrames, OBJECTS, type Frames } from '../art/chars';
 import type { Img } from '../art/pixel';
@@ -35,9 +35,14 @@ export const DX: Record<Dir, number> = { up: 0, down: 0, left: -1, right: 1 };
 export const DY: Record<Dir, number> = { up: -1, down: 1, left: 0, right: 0 };
 export const OPP: Record<Dir, Dir> = { up: 'down', down: 'up', left: 'right', right: 'left' };
 
-/** Pixels per frame (a tile is 16px). Gen 2 walks at 1; we go a bit faster. Hold B to run. */
-const WALK_SPEED = 1.2;
-const RUN_SPEED = 1.8;
+/**
+ * Frames per step (a tile is 16 px). Whole numbers, so every step takes exactly as long.
+ * Gen 2 walks in 16; we go a bit faster. Hold B to run.
+ */
+const WALK_FRAMES = 13;
+const RUN_FRAMES = 9;
+/** Tiles of surroundings prepared around the map: more than half a screen, so the edges are covered. */
+const GRID = 7;
 const T = 16;
 
 let map: MapDef = MAPS.casa;
@@ -62,6 +67,8 @@ export const player = {
   justMoved: false,
   scripted: false,
   hidden: false,
+  /** Pixels per frame of the current step. */
+  speed: 0,
   frames: null as Frames | null,
 };
 
@@ -108,6 +115,7 @@ export function loadMap(id: string, x: number, y: number, dir: Dir) {
     return p ? [{ m: MAPS[conn.to], dx: p.x - me.x, dy: p.y - me.y }] : [];
   });
   edgeNpcs = neighbors.flatMap(({ m, dx, dy }) => (m.npcs ?? []).map((def) => npc(def, dx, dy)));
+  buildGrid();
   // Maps change between versions: never leave a loaded save standing inside a wall.
   [x, y] = nearestFree(x, y);
   Object.assign(player, { x, y, dir, moving: false, prog: 0 });
@@ -349,8 +357,9 @@ export function updateWorld() {
   if (player.bumpCd > 0) player.bumpCd--;
   updateNpcs();
   if (player.moving) {
-    player.prog += input.isHeld('B') && !player.scripted ? RUN_SPEED : WALK_SPEED;
-    if (player.prog >= T) {
+    player.speed = T / (input.isHeld('B') && !player.scripted ? RUN_FRAMES : WALK_FRAMES);
+    player.prog += player.speed;
+    if (player.prog >= T - 1e-6) {
       player.moving = false;
       player.prog = 0;
       player.justMoved = true;
@@ -400,31 +409,57 @@ function drawBubble(g: CanvasRenderingContext2D, x: number, y: number) {
 }
 
 /**
- * Like the Game Boy, only the tiles on screen are drawn, every frame, from the small cache of
- * tile images (art/tiles.ts): no pictures of whole maps. Past the edges are the connected
- * towns/routes, or trees (nothing indoors) where there's no neighbor.
+ * Which tile image goes where, for the map plus GRID tiles around it (the connected
+ * towns/routes there, or trees; nothing indoors). Prepared once when a map loads, so drawing a
+ * frame is just looking images up: nothing is created per frame.
  */
-function drawTiles(g: CanvasRenderingContext2D, camX: number, camY: number) {
-  for (let ty = Math.floor(camY / T); ty <= Math.floor((camY + H) / T); ty++) {
-    for (let tx = Math.floor(camX / T); tx <= Math.floor((camX + W) / T); tx++) {
+let grid: Img[] = [];
+let gridW = 0;
+function buildGrid() {
+  gridW = map.rows[0].length + GRID * 2;
+  const gridH = map.rows.length + GRID * 2;
+  grid = new Array(gridW * gridH);
+  for (let gy = 0; gy < gridH; gy++) {
+    for (let gx = 0; gx < gridW; gx++) {
+      const [tx, ty] = [gx - GRID, gy - GRID];
       const n = inBounds(tx, ty) ? undefined : neighbors.find(({ m, dx, dy }) => inMap(m, tx - dx, ty - dy));
       const [m, x, y] = n ? [n.m, tx - n.dx, ty - n.dy] : [map, tx, ty];
       const env = { rows: m.rows, outdoor: m.outdoor, floor: m.floor, ground: m.ground, roof: m.roof, x, y };
-      g.drawImage(tileImage(tileOf(m, x, y), env), tx * T - camX, ty * T - camY);
+      grid[gy * gridW + gx] = tileImage(tileOf(m, x, y), env);
     }
   }
 }
 
+/** Like the Game Boy, only the tiles on screen are drawn, every frame. */
+function drawTiles(g: CanvasRenderingContext2D, camX: number, camY: number) {
+  g.fillStyle = '#000';
+  g.fillRect(0, 0, W, H);
+  const gridH = grid.length / gridW;
+  for (let ty = Math.floor(camY / T); ty <= Math.floor((camY + H) / T); ty++) {
+    const gy = ty + GRID;
+    if (gy < 0 || gy >= gridH) continue;
+    for (let tx = Math.floor(camX / T); tx <= Math.floor((camX + W) / T); tx++) {
+      const gx = tx + GRID;
+      if (gx >= 0 && gx < gridW) g.drawImage(grid[gy * gridW + gx], tx * T - camX, ty * T - camY);
+    }
+  }
+}
+
+/** Snap to the screen's real pixels: smooth motion (finer than game pixels) that stays crisp. */
+const snap = (v: number) => Math.round(v * scaleFactor) / scaleFactor;
+
 export function renderWorld(g: CanvasRenderingContext2D) {
-  const off = player.moving ? T - player.prog : 0;
+  // Mid-step, draw the player as far along as time says (smooth on 90/120 Hz screens too).
+  const prog = player.moving ? Math.min(T, player.prog + player.speed * frameAlpha()) : 0;
+  const off = player.moving ? T - prog : 0;
   const px = player.x * T - DX[player.dir] * off;
   const py = player.y * T - DY[player.dir] * off;
-  const camX = Math.round(px - 64);
-  const camY = Math.round(py - 64);
+  const camX = snap(px - 64);
+  const camY = snap(py - 64);
   drawTiles(g, camX, camY);
 
   const sprites: { y: number; draw: () => void }[] = [];
-  for (const n of [...npcs, ...edgeNpcs]) {
+  for (const n of npcs.concat(edgeNpcs)) {
     if (!n.visible) continue;
     const sx = n.x * T - camX;
     const sy = n.y * T - camY;

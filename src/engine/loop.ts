@@ -18,6 +18,13 @@ export async function frames(n: number) {
   for (let i = 0; i < n; i++) await nextFrame();
 }
 
+let alpha = 0;
+/**
+ * How far we are between the last update and the next one (0..1). On 90/120 Hz screens there
+ * are more frames than updates; drawing moving things this much further keeps motion smooth.
+ */
+export const frameAlpha = () => alpha;
+
 /** Fixed 60 updates per second, render every animation frame. */
 export function startLoop() {
   let last = performance.now();
@@ -31,6 +38,7 @@ export function startLoop() {
       input.clearPressed();
       acc -= STEP;
     }
+    alpha = acc / STEP;
     beginFrame();
     scene.render(ctx);
     requestAnimationFrame(tick);
