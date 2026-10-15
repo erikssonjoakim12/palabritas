@@ -25,11 +25,30 @@ let alpha = 0;
  */
 export const frameAlpha = () => alpha;
 
-/** Run fn when the browser has nothing else to do (soon anyway, at most after 1 s). */
-export function whenIdle(fn: () => void) {
-  if ('requestIdleCallback' in window) requestIdleCallback(() => fn(), { timeout: 1000 });
-  else setTimeout(fn, 50);
+/**
+ * Small jobs done in the spare time between frames, a few at a time, so they never make a
+ * frame late (even while walking, every frame has lots of spare time).
+ */
+const jobs: (() => void)[] = [];
+function runJobs(deadline?: IdleDeadline) {
+  do jobs.shift()!();
+  while (jobs.length && deadline && !deadline.didTimeout && deadline.timeRemaining() > 3);
+  if (jobs.length) scheduleJobs();
 }
+function scheduleJobs() {
+  if ('requestIdleCallback' in window) requestIdleCallback(runJobs, { timeout: 500 });
+  else setTimeout(runJobs, 16);
+}
+
+/** Run each job when the browser has spare time, in order. */
+export function whenIdle(...fns: (() => void)[]) {
+  const wasEmpty = !jobs.length;
+  jobs.push(...fns);
+  if (wasEmpty && jobs.length) scheduleJobs();
+}
+
+/** Forget jobs that aren't needed anymore (e.g. preparing areas you walked away from). */
+export const clearIdle = () => (jobs.length = 0);
 
 /** Fixed 60 updates per second, render every animation frame. */
 export function startLoop() {
