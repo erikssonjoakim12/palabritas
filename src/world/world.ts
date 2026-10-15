@@ -2,7 +2,7 @@ import { W, H, overlay, el } from '../engine/screen';
 import { input, type Dir } from '../engine/input';
 import { sfx } from '../engine/sfx';
 import { nextFrame, frames } from '../engine/loop';
-import { TILES, tileImage, tallGrassImage } from '../art/tiles';
+import { TILES, tallGrassImage, renderMap, tileOf } from '../art/tiles';
 import { personFrames, OBJECTS, type Frames } from '../art/chars';
 import { makeCanvas, type Img } from '../art/pixel';
 import { MAPS, type MapDef, type NpcDef, type Conn } from './maps';
@@ -83,29 +83,11 @@ function validate(m: MapDef) {
   });
 }
 
-function drawTile(g: CanvasRenderingContext2D, ch: string, tx: number, ty: number, px: number, py: number) {
-  const env = { rows: map.rows, outdoor: map.outdoor, floor: map.floor, ground: map.ground, roof: map.roof, x: tx, y: ty };
-  g.drawImage(tileImage(ch, env), px, py);
-}
-
-function prerender() {
-  const w = map.rows[0].length;
-  const h = map.rows.length;
-  const c = makeCanvas((w + MARGIN * 2) * T, (h + MARGIN * 2) * T);
-  const g = c.getContext('2d')!;
-  for (let ty = -MARGIN; ty < h + MARGIN; ty++) {
-    for (let tx = -MARGIN; tx < w + MARGIN; tx++) {
-      drawTile(g, tileAt(tx, ty), tx, ty, (tx + MARGIN) * T, (ty + MARGIN) * T);
-    }
-  }
-  mapImg = c;
-}
-
 export function loadMap(id: string, x: number, y: number, dir: Dir) {
   const prevName = map?.name;
   map = MAPS[id];
   validate(map);
-  prerender();
+  mapImg = renderMap(map, MARGIN);
   npcs = (map.npcs ?? []).map((def) => ({
     def,
     x: def.x,
@@ -140,10 +122,7 @@ function showBanner(name: string) {
 
 const inBounds = (x: number, y: number) => x >= 0 && y >= 0 && y < map.rows.length && x < map.rows[0].length;
 
-export function tileAt(x: number, y: number): string {
-  if (inBounds(x, y)) return map.rows[y][x];
-  return map.outdoor ? 'T' : ' ';
-}
+export const tileAt = (x: number, y: number) => tileOf(map, x, y);
 
 function npcAt(x: number, y: number) {
   return npcs.find((n) => n.visible && n.x === x && n.y === y);

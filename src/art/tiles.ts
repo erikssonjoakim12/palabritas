@@ -273,5 +273,36 @@ function render(ch: string, env: TileEnv): Img {
 
 const nb = neighbors;
 
+/** What drawing a whole map needs (a MapDef has all of this). */
+export interface MapLook {
+  rows: string[];
+  outdoor: boolean;
+  floor: string;
+  ground?: 'town' | 'grass';
+  roof?: string;
+}
+
+/** A map's tile at (x, y). Outside the map: trees outdoors, nothing indoors. */
+export function tileOf(m: MapLook, x: number, y: number): string {
+  if (x >= 0 && y >= 0 && y < m.rows.length && x < m.rows[0].length) return m.rows[y][x];
+  return m.outdoor ? 'T' : ' ';
+}
+
+/** The whole map as one image, with `margin` tiles of surroundings (the game and the art page). */
+export function renderMap(m: MapLook, margin = 0): Img {
+  const T = 16;
+  const w = m.rows[0].length;
+  const h = m.rows.length;
+  const c = makeCanvas((w + margin * 2) * T, (h + margin * 2) * T);
+  const g = c.getContext('2d')!;
+  for (let ty = -margin; ty < h + margin; ty++) {
+    for (let tx = -margin; tx < w + margin; tx++) {
+      const env = { rows: m.rows, outdoor: m.outdoor, floor: m.floor, ground: m.ground, roof: m.roof, x: tx, y: ty };
+      g.drawImage(tileImage(tileOf(m, tx, ty), env), (tx + margin) * T, (ty + margin) * T);
+    }
+  }
+  return c;
+}
+
 /** Tall grass drawn over the player's feet. */
 export const tallGrassImage = () => paintArt(ART.tallGrass);

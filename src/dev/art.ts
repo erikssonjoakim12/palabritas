@@ -2,7 +2,9 @@
 // plus the app icons to download. Published next to the game as art.html.
 import { buildCreatureArt, CREATURE_ART } from '../art/creatures';
 import { portrait } from '../art/portraits';
-import { personFrames } from '../art/chars';
+import { personFrames, buildObjects, OBJECTS } from '../art/chars';
+import { renderMap } from '../art/tiles';
+import { MAPS } from '../world/maps';
 import { LOOKS } from '../style/people';
 import { PALETTE } from '../style/colors';
 import { SPECIES } from '../data/species';
@@ -55,6 +57,38 @@ const walk = section('Overworld sprites', 'Down, up, left, right (standing), the
 for (const id of Object.keys(LOOKS)) {
   const f = personFrames(id);
   card(walk, id, [f.down[0], f.up[0], f.left[0], f.right[0], f.down[1], f.left[1]], 4);
+}
+
+// ---------- Map tiles and whole maps ----------
+
+/** What each tile character is (the legend in world/maps.ts). */
+const TILE_NAMES: Record<string, string> = {
+  '.': 'ground', g: 'grass patch', ',': 'tall grass', '=': 'path', '*': 'flowers', T: 'tree', Y: 'lemon tree',
+  '~': 'water', f: 'fence', S: 'sign', r: 'roof (town color)', b: 'roof', o: 'roof (Palacentro)', p: 'roof (gym)',
+  h: 'wall', w: 'window', d: 'door', c: 'Palacentro sign', G: 'gym sign', a: 'bakery sign', _: 'wood floor',
+  '+': 'tile floor', x: 'Palacentro floor', '#': 'inside wall', k: 'table', B: 'bed', L: 'shelf', P: 'plant',
+  V: 'TV', C: 'counter', Q: 'computer', n: 'sofa', u: 'poster', m: 'exit mat', R: 'rug',
+};
+const INDOOR = '_+x#kBLPVCQnumR';
+
+const tiles = section('Map tiles', 'Every tile on its own (16x16). In maps, roofs, walls and tables join up with their neighbors. Art: style/tiles.ts.');
+for (const [ch, name] of Object.entries(TILE_NAMES)) {
+  const indoor = INDOOR.includes(ch);
+  const look = (ground: 'town' | 'grass') => renderMap({ rows: [ch], outdoor: !indoor, floor: indoor ? '_' : '.', ground, roof: 'red' });
+  const images = ch === '.' ? [look('town'), look('grass')] : [look('town')];
+  card(tiles, `'${ch}' ${ch === '.' ? 'ground (town · route)' : name}`, images, 4);
+}
+
+buildObjects();
+const maps = section('Maps', 'Every map as it is in the game, with its people and objects (some only appear at certain points in the story). Layout: world/maps.ts.');
+for (const m of Object.values(MAPS)) {
+  const img = renderMap(m);
+  const g = img.getContext('2d')!;
+  for (const n of m.npcs ?? []) {
+    if (n.object) g.drawImage(OBJECTS[n.object], n.x * 16, n.y * 16);
+    else g.drawImage(personFrames(n.look ?? 'man')[n.dir ?? 'down'][0], n.x * 16, n.y * 16 - 4);
+  }
+  card(maps, `${m.name} (${m.id})`, [img], 2);
 }
 
 // ---------- App icons: our mascot, from the game's own sprite ----------
