@@ -288,19 +288,17 @@ export function tileOf(m: MapLook, x: number, y: number): string {
   return m.outdoor ? 'T' : ' ';
 }
 
-/** The whole map as one image, with `margin` tiles of surroundings (the game and the art page). */
-export function renderMap(m: MapLook, margin = 0): Img {
+/** A whole map as one image (the art page; the game draws only the tiles on screen). */
+export function renderMap(m: MapLook): Img {
   const T = 16;
-  const w = m.rows[0].length;
-  const h = m.rows.length;
-  const c = makeCanvas((w + margin * 2) * T, (h + margin * 2) * T);
+  const c = makeCanvas(m.rows[0].length * T, m.rows.length * T);
   const g = c.getContext('2d')!;
-  for (let ty = -margin; ty < h + margin; ty++) {
-    for (let tx = -margin; tx < w + margin; tx++) {
-      const env = { rows: m.rows, outdoor: m.outdoor, floor: m.floor, ground: m.ground, roof: m.roof, x: tx, y: ty };
-      g.drawImage(tileImage(tileOf(m, tx, ty), env), (tx + margin) * T, (ty + margin) * T);
-    }
-  }
+  m.rows.forEach((row, y) =>
+    [...row].forEach((ch, x) => {
+      const env = { rows: m.rows, outdoor: m.outdoor, floor: m.floor, ground: m.ground, roof: m.roof, x, y };
+      g.drawImage(tileImage(ch, env), x * T, y * T);
+    }),
+  );
   return c;
 }
 

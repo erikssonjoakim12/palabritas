@@ -2,9 +2,9 @@ import { W, H, overlay, el } from '../engine/screen';
 import { input, type Dir } from '../engine/input';
 import { sfx } from '../engine/sfx';
 import { nextFrame, frames } from '../engine/loop';
-import { TILES, tallGrassImage, renderMap, tileOf } from '../art/tiles';
+import { TILES, tallGrassImage, tileImage, tileOf } from '../art/tiles';
 import { personFrames, OBJECTS, type Frames } from '../art/chars';
-import { makeCanvas, type Img } from '../art/pixel';
+import type { Img } from '../art/pixel';
 import { MAPS, type MapDef, type NpcDef, type Conn } from './maps';
 import { worldLayout } from './layout';
 import { G, flag, saveGame } from '../game/state';
@@ -38,12 +38,12 @@ export const OPP: Record<Dir, Dir> = { up: 'down', down: 'up', left: 'right', ri
 /** Pixels per frame (a tile is 16px). Gen 2 walks at 1; we go a bit faster. Hold B to run. */
 const WALK_SPEED = 1.2;
 const RUN_SPEED = 1.8;
-const MARGIN = 6;
 const T = 16;
 
 let map: MapDef = MAPS.casa;
-let mapImg: Img = makeCanvas(1, 1);
 let npcs: NpcRT[] = [];
+/** Connected towns/routes, offset (in tiles) from the current map, drawn past its edges. */
+let neighbors: { m: MapDef; dx: number; dy: number }[] = [];
 /** People in the connected towns/routes, drawn at the map's edges (they only move once you get there). */
 let edgeNpcs: NpcRT[] = [];
 let fade = 0;
@@ -86,33 +86,10 @@ function validate(m: MapDef) {
   });
 }
 
-const mapImages = new Map<string, Img>();
-/**
- * A map with MARGIN tiles around it. Like Gold/Silver, the margin shows the connected
- * neighbors (so towns and routes look like one world); anything else there is trees.
- */
-function mapImage(m: MapDef): Img {
-  let img = mapImages.get(m.id);
-  if (img) return img;
-  img = renderMap(m, MARGIN);
-  const spots = worldLayout();
-  const me = spots[m.id];
-  if (me) {
-    const g = img.getContext('2d')!;
-    for (const conn of Object.values(m.connections ?? {})) {
-      const p = conn && spots[conn.to];
-      if (p) g.drawImage(renderMap(MAPS[conn.to]), (p.x - me.x + MARGIN) * T, (p.y - me.y + MARGIN) * T);
-    }
-  }
-  mapImages.set(m.id, img);
-  return img;
-}
-
 export function loadMap(id: string, x: number, y: number, dir: Dir) {
   const prevName = map?.name;
   map = MAPS[id];
   validate(map);
-  mapImg = mapImage(map);
   const npc = (def: NpcDef, dx = 0, dy = 0): NpcRT => ({
     def,
     x: def.x + dx,
@@ -123,12 +100,14 @@ export function loadMap(id: string, x: number, y: number, dir: Dir) {
     turnTimer: 60 + Math.floor(Math.random() * 200),
   });
   npcs = (map.npcs ?? []).map((def) => npc(def));
+  // The connected towns/routes, placed around this map (world/layout.ts).
   const spots = worldLayout();
   const me = spots[map.id];
-  edgeNpcs = Object.values(map.connections ?? {}).flatMap((conn) => {
+  neighbors = Object.values(map.connections ?? {}).flatMap((conn) => {
     const p = me && conn && spots[conn.to];
-    return p ? (MAPS[conn.to].npcs ?? []).map((def) => npc(def, p.x - me.x, p.y - me.y)) : [];
+    return p ? [{ m: MAPS[conn.to], dx: p.x - me.x, dy: p.y - me.y }] : [];
   });
+  edgeNpcs = neighbors.flatMap(({ m, dx, dy }) => (m.npcs ?? []).map((def) => npc(def, dx, dy)));
   // Maps change between versions: never leave a loaded save standing inside a wall.
   [x, y] = nearestFree(x, y);
   Object.assign(player, { x, y, dir, moving: false, prog: 0 });
@@ -152,7 +131,8 @@ function showBanner(name: string) {
 
 // ---------- Queries ----------
 
-const inBounds = (x: number, y: number) => x >= 0 && y >= 0 && y < map.rows.length && x < map.rows[0].length;
+const inMap = (m: MapDef, x: number, y: number) => x >= 0 && y >= 0 && y < m.rows.length && x < m.rows[0].length;
+const inBounds = (x: number, y: number) => inMap(map, x, y);
 
 export const tileAt = (x: number, y: number) => tileOf(map, x, y);
 
@@ -419,15 +399,29 @@ function drawBubble(g: CanvasRenderingContext2D, x: number, y: number) {
   g.fillRect(x + 7, y - 5, 3, 2);
 }
 
+/**
+ * Like the Game Boy, only the tiles on screen are drawn, every frame, from the small cache of
+ * tile images (art/tiles.ts): no pictures of whole maps. Past the edges are the connected
+ * towns/routes, or trees (nothing indoors) where there's no neighbor.
+ */
+function drawTiles(g: CanvasRenderingContext2D, camX: number, camY: number) {
+  for (let ty = Math.floor(camY / T); ty <= Math.floor((camY + H) / T); ty++) {
+    for (let tx = Math.floor(camX / T); tx <= Math.floor((camX + W) / T); tx++) {
+      const n = inBounds(tx, ty) ? undefined : neighbors.find(({ m, dx, dy }) => inMap(m, tx - dx, ty - dy));
+      const [m, x, y] = n ? [n.m, tx - n.dx, ty - n.dy] : [map, tx, ty];
+      const env = { rows: m.rows, outdoor: m.outdoor, floor: m.floor, ground: m.ground, roof: m.roof, x, y };
+      g.drawImage(tileImage(tileOf(m, x, y), env), tx * T - camX, ty * T - camY);
+    }
+  }
+}
+
 export function renderWorld(g: CanvasRenderingContext2D) {
   const off = player.moving ? T - player.prog : 0;
   const px = player.x * T - DX[player.dir] * off;
   const py = player.y * T - DY[player.dir] * off;
-  const camX = px - 64;
-  const camY = py - 64;
-  g.fillStyle = '#000';
-  g.fillRect(0, 0, W, H);
-  g.drawImage(mapImg, -camX - MARGIN * T, -camY - MARGIN * T);
+  const camX = Math.round(px - 64);
+  const camY = Math.round(py - 64);
+  drawTiles(g, camX, camY);
 
   const sprites: { y: number; draw: () => void }[] = [];
   for (const n of [...npcs, ...edgeNpcs]) {
