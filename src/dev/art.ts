@@ -63,7 +63,7 @@ const BG = '#2b2350'; // same as theme_color in manifest.webmanifest
 /** Icon size → pixel scale of the 48x48 sprite. 512 is also the "maskable" icon, so it keeps a safe margin. */
 const ICON_SIZES: [number, number][] = [
   [192, 3],
-  [512, 7],
+  [512, 6],
 ];
 
 /** The sprite's non-transparent area, so it can be centered. */

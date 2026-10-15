@@ -38,8 +38,13 @@ interface Ball {
   shake: number;
 }
 
-const ENEMY_POS = { x: 104, y: 4 };
-const ME_POS = { x: 8, y: 46 };
+/**
+ * Each side has a 56x56 slot (Gen 2's sprite size); sprites stand on its bottom, centered.
+ * The opponent's slot ends at y=54, just above your health box.
+ */
+const SLOT = 56;
+const ENEMY_POS = { x: 100, y: -2 };
+const ME_POS = { x: 4, y: 38 };
 
 let enemyF: Fighter | null = null;
 let meF: Fighter | null = null;
@@ -58,7 +63,7 @@ const battleScene = {
     if (flashOn) return;
     g.fillStyle = '#d8d8c4';
     g.beginPath();
-    g.ellipse(128, 50, 24, 5, 0, 0, Math.PI * 2);
+    g.ellipse(128, 52, 24, 5, 0, 0, Math.PI * 2);
     g.fill();
     g.beginPath();
     g.ellipse(32, 92, 24, 5, 0, 0, Math.PI * 2);
@@ -72,10 +77,13 @@ const battleScene = {
 };
 
 function drawFighter(g: CanvasRenderingContext2D, f: Fighter | null) {
-  if (!f || f.hidden || f.sink >= 48) return;
+  if (!f || f.hidden || f.sink >= f.img.height) return;
   if (f.blink > 0 && Math.floor(f.blink / 4) % 2 === 0) return;
-  const h = 48 - f.sink;
-  g.drawImage(f.img, 0, 0, 48, h, Math.round(f.x + f.lunge), Math.round(f.y + f.sink), 48, h);
+  const { width: w, height: fullH } = f.img;
+  const h = fullH - f.sink; // fainting: it sinks into the ground
+  const x = f.x + Math.floor((SLOT - w) / 2) + f.lunge;
+  const y = f.y + SLOT - fullH + f.sink;
+  g.drawImage(f.img, 0, 0, w, h, Math.round(x), Math.round(y), w, h);
 }
 
 /** 6 slots: a ball per Palabrita (gray when fainted), empty outlines for the rest, on a bracket line. */
@@ -91,7 +99,7 @@ function drawLineup(g: CanvasRenderingContext2D, team: Mon[], x: number, y: numb
 
 const fighter = (img: Img, x: number, y: number): Fighter => ({ img, x, y, blink: 0, sink: 0, hidden: false, lunge: 0 });
 /** The opponent's side shows Palabritas from the front, yours from the back. Both start off-screen. */
-const enemyFighter = (mon: Mon) => fighter(CREATURE_ART[mon.sp].front, -48, ENEMY_POS.y);
+const enemyFighter = (mon: Mon) => fighter(CREATURE_ART[mon.sp].front, -SLOT, ENEMY_POS.y);
 const myFighter = (mon: Mon) => fighter(CREATURE_ART[mon.sp].back, W, ME_POS.y);
 
 async function lunge(f: Fighter, dir: number) {
@@ -109,7 +117,7 @@ async function hitAnim(f: Fighter) {
 
 async function sinkAnim(f: Fighter) {
   for (let i = 0; i <= 24; i++) {
-    f.sink = i * 2;
+    f.sink = Math.round((f.img.height * i) / 24);
     await nextFrame();
   }
   f.hidden = true;
@@ -252,7 +260,7 @@ async function runBattle(cfg: Config): Promise<BattleResult> {
   };
   const tally = { asked: 0, learned: 0 };
 
-  const trainerFighter = () => fighter(portrait(cfg.look ?? 'man'), -48, ENEMY_POS.y);
+  const trainerFighter = () => fighter(portrait(cfg.look ?? 'man'), -SLOT, ENEMY_POS.y);
   enemyF = trainer ? trainerFighter() : enemyFighter(enemy);
   meF = fighter(portrait('player', 'back'), W, ME_POS.y);
   ball = null;
@@ -567,7 +575,7 @@ async function runBattle(cfg: Config): Promise<BattleResult> {
     hud = buildHud(() => enemy, () => me);
     hud.update();
     hud.show('player', false);
-    await slide(meF, -48);
+    await slide(meF, -SLOT);
     await sendOut(me);
     hud.show('player', true);
 

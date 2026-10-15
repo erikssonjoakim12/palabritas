@@ -25,9 +25,14 @@ const titleScene = {
     g.fillStyle = '#5aa04a';
     g.fillRect(0, 98, W, 3);
     const bob = (i: number) => Math.round(Math.sin(t / 15 + i * 2) * 2);
-    g.drawImage(CREATURE_ART.salchichita.front, 8, 56 + bob(0));
-    g.drawImage(CREATURE_ART.gotita.front, 56, 50 + bob(1));
-    g.drawImage(CREATURE_ART.aguacatito.front, 104, 56 + bob(2));
+    // The three starters, standing on the grass (centered on x, feet at y).
+    const stand = (sp: string, x: number, y: number) => {
+      const img = CREATURE_ART[sp].front;
+      g.drawImage(img, Math.round(x - img.width / 2), y - img.height);
+    };
+    stand('salchichita', 32, 104 + bob(0));
+    stand('gotita', 80, 98 + bob(1));
+    stand('aguacatito', 128, 104 + bob(2));
   },
 };
 

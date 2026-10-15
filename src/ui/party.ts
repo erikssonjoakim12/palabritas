@@ -17,7 +17,10 @@ export function spriteCanvas(sp: string, size = 48) {
   c.height = size;
   const g = c.getContext('2d')!;
   g.imageSmoothingEnabled = false;
-  g.drawImage(CREATURE_ART[sp].front, 0, 0, size, size);
+  // Fit the sprite in the square without stretching it, standing on the bottom.
+  const img = CREATURE_ART[sp].front;
+  const k = size / Math.max(img.width, img.height);
+  g.drawImage(img, Math.round((size - img.width * k) / 2), Math.round(size - img.height * k), img.width * k, img.height * k);
   return c;
 }
 

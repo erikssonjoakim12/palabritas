@@ -1,6 +1,8 @@
-import { Pix, mirror, type Img } from './pixel';
+import { Pix, mirror, fromRows, type Img } from './pixel';
+import { PALABRITA_ART } from '../style/palabritas';
 
-// Creature portraits (48x48), drawn from simple shapes with a hard pixel outline.
+// Palabrita sprites: hand-made pixel art (style/palabritas.ts), or for the ones that don't have
+// it yet, 48x48 drawings from simple shapes with a hard pixel outline (below).
 const K = '#1a1a26';
 const W = '#ffffff';
 
@@ -56,23 +58,6 @@ const DRAW: Record<string, Draw> = {
     p.set(7, 16, W);
     p.rect(5, 25, 2, 2, '#ff8aa0');
     p.outline('#3a1a08');
-  },
-  aguacatito(p) {
-    const sk = '#2f6b2a', fl = '#c9e27a', pit = '#8b5a2b';
-    p.ellipse(17, 46, 4, 2, sk).ellipse(31, 46, 4, 2, sk);
-    p.ellipse(9, 31, 3, 2, sk).ellipse(39, 31, 3, 2, sk);
-    p.ellipse(24, 18, 9, 10, sk);
-    p.ellipse(24, 31, 14, 15, sk);
-    p.ellipse(24, 19, 6, 7, fl);
-    p.ellipse(24, 32, 11, 12, fl);
-    p.ellipse(24, 35, 6, 6, pit);
-    p.ellipse(22, 33, 2, 2, '#b07a45');
-    p.ellipse(20, 24, 1.5, 2, K).ellipse(28, 24, 1.5, 2, K);
-    p.set(20, 23, W).set(28, 23, W);
-    p.set(23, 27, K).set(24, 28, K).set(25, 27, K);
-    p.rect(23, 5, 2, 4, pit);
-    p.poly([[25, 7], [31, 1], [34, 4], [27, 8]], '#4aa84a');
-    p.outline('#163314');
   },
   pajarito(p) {
     const br = '#9a6a42', dk = '#6b4426', or = '#f39a2b';
@@ -152,37 +137,20 @@ const DRAW: Record<string, Draw> = {
   },
 };
 
-/**
- * Back views (your Palabrita in battle), seen from behind and looking up-right at the opponent.
- * A Palabrita without one uses its mirrored front view for now.
- */
-const BACK: Record<string, Draw> = {
-  aguacatito(p) {
-    const sk = '#2f6b2a', hi = '#438a3b', bump = '#3d7d35', fl = '#c9e27a', pit = '#8b5a2b';
-    p.ellipse(15, 46, 4, 2, sk).ellipse(31, 46, 4, 2, sk);
-    p.ellipse(8, 30, 3, 2, sk).ellipse(41, 28, 3, 2.5, sk); // the right arm a bit raised
-    // A sliver of the green flesh on the right: it's turned toward the opponent.
-    p.ellipse(27, 19, 8, 9.5, fl).ellipse(27, 31, 13, 14, fl);
-    p.ellipse(22, 18, 9, 10, sk);
-    p.ellipse(22, 31, 14, 15, sk);
-    p.ellipse(17, 24, 4, 8, hi).ellipse(19, 14, 3, 4, hi);
-    for (const [x, y] of [[25, 22], [29, 30], [20, 36], [26, 40], [15, 33], [23, 28], [30, 37], [24, 13]]) p.set(x, y, bump);
-    p.rect(21, 5, 2, 4, pit);
-    p.poly([[23, 7], [30, 2], [33, 5], [25, 8]], '#4aa84a');
-    p.outline('#163314');
-  },
-};
-
 export const CREATURE_ART: Record<string, { front: Img; back: Img }> = {};
 
+/**
+ * Hand-made pixel art (style/palabritas.ts) when a Palabrita has it; otherwise its shape
+ * drawing, with the mirrored front as the back view.
+ */
 export function buildCreatureArt() {
-  const draw = (fn: Draw) => {
+  for (const [id, fn] of Object.entries(DRAW)) {
     const p = new Pix(48, 48);
     fn(p);
-    return p.toCanvas();
-  };
-  for (const [id, fn] of Object.entries(DRAW)) {
-    const front = draw(fn);
-    CREATURE_ART[id] = { front, back: BACK[id] ? draw(BACK[id]) : mirror(front) };
+    const front = p.toCanvas();
+    CREATURE_ART[id] = { front, back: mirror(front) };
+  }
+  for (const [id, art] of Object.entries(PALABRITA_ART)) {
+    CREATURE_ART[id] = { front: fromRows(art.front, art.pal, `${id} front`), back: fromRows(art.back, art.pal, `${id} back`) };
   }
 }
