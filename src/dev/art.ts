@@ -45,7 +45,7 @@ function card(grid: HTMLElement, label: string, images: Img[], scale: number) {
 buildCreatureArt();
 
 const mons = section('Palabritas', 'Front (the opponent sees this) and back (yours in battle). Palabritas with hand-made art (style/palabritas.ts) have a real back view; the others use their mirrored front.');
-for (const [id, art] of Object.entries(CREATURE_ART)) card(mons, SPECIES[id]?.name ?? id, [art.front, art.back], 3);
+for (const [id, art] of Object.entries(CREATURE_ART)) card(mons, SPECIES[id]?.name ?? `${id[0].toUpperCase()}${id.slice(1)} (art only)`, [art.front, art.back], 3);
 
 const people = section('Battle portraits', 'Shown at the start and end of trainer battles. Built from each person\'s look, like the overworld sprites.');
 card(people, 'You (front · back)', [portrait('player'), portrait('player', 'back')], 3);
@@ -61,11 +61,9 @@ for (const id of Object.keys(LOOKS)) {
 
 const MASCOT = 'aguacatito';
 const BG = '#2b2350'; // same as theme_color in manifest.webmanifest
-/** Icon size → pixel scale of the 48x48 sprite. 512 is also the "maskable" icon, so it keeps a safe margin. */
-const ICON_SIZES: [number, number][] = [
-  [192, 3],
-  [512, 6],
-];
+const ICON_SIZES = [192, 512];
+/** How much of the icon the mascot may fill. 512 is also the "maskable" icon, so it keeps a safe margin. */
+const ICON_FILL = 0.62;
 
 /** The sprite's non-transparent area, so it can be centered. */
 function bounds(img: HTMLCanvasElement) {
@@ -83,9 +81,11 @@ function bounds(img: HTMLCanvasElement) {
   return { x: x0, y: y0, w: x1 - x0 + 1, h: y1 - y0 + 1 };
 }
 
-function makeIcon(size: number, scale: number): HTMLCanvasElement {
+function makeIcon(size: number): HTMLCanvasElement {
   const sprite = CREATURE_ART[MASCOT].front as HTMLCanvasElement;
   const b = bounds(sprite);
+  // The biggest whole-number zoom that fits, so the pixels stay crisp whatever the sprite's size.
+  const scale = Math.max(1, Math.floor((size * ICON_FILL) / Math.max(b.w, b.h)));
   const c = document.createElement('canvas');
   c.width = c.height = size;
   const g = c.getContext('2d')!;
@@ -100,8 +100,8 @@ function makeIcon(size: number, scale: number): HTMLCanvasElement {
 
 const icons = section('App icons', 'Download both and replace the files in public/.');
 icons.classList.add('icons');
-for (const [size, scale] of ICON_SIZES) {
-  const c = makeIcon(size, scale);
+for (const size of ICON_SIZES) {
+  const c = makeIcon(size);
   c.dataset.file = `icon-${size}.png`;
   c.style.width = c.style.height = `${Math.min(size, 192)}px`;
   const a = Object.assign(document.createElement('a'), { href: c.toDataURL('image/png'), download: `icon-${size}.png`, textContent: `Download icon-${size}.png` });
