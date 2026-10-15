@@ -43,7 +43,7 @@ function card(grid: HTMLElement, label: string, images: Img[], scale: number) {
 
 buildCreatureArt();
 
-const mons = section('Palabritas', 'Front (the opponent sees this) and back (yours in battle). Only Aguacatito has a real back view so far; the others use their mirrored front.');
+const mons = section('Palabritas', 'Front (the opponent sees this) and back (yours in battle). Palabritas with hand-made art (style/palabritas.ts) have a real back view; the others use their mirrored front.');
 for (const [id, art] of Object.entries(CREATURE_ART)) card(mons, SPECIES[id]?.name ?? id, [art.front, art.back], 3);
 
 const people = section('Battle portraits', 'Shown at the start and end of trainer battles. Built from each person\'s look, like the overworld sprites.');
