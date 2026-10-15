@@ -1,0 +1,58 @@
+## CREATURE DESCRIPTION
+
+[put your description here]
+
+## TASK
+
+Create an original creature in the authentic pixel-art style of **Pokémon Generation 2 (Gold/Silver/Crystal)**.
+
+Use these sprites as style references:\
+[https://pixelartgrid.com/en/Pokemon/Gen2](https://pixelartgrid.com/en/Pokemon/Gen2)
+
+Create two matching battle sprites:
+
+- **Front:** Three-quarter front view, showing the creature's personality.
+- **Back:** Three-quarter rear view of the exact same creature, with anatomically correct details.
+
+**Consistency is critical:** Both sprites must represent the exact same physical creature viewed from different angles. Keep anatomy, proportions, colors, limb sizes, attachments, and accessories identical. Nothing should appear, disappear, change size, or move between views unless naturally hidden by perspective. Pay special attention to how body parts connect and overlap.
+
+
+
+## ART REQUIREMENTS
+
+- Maximum 56×56 pixels per sprite. Smaller is fine for smaller creatures.
+- True, grid-aligned pixel art with crisp edges, not a pixelated illustration.
+- **Use ONLY colors from the palette below. Pick at most 16, and use the exact same colors in both sprites.**
+- Simple shading, clean outlines, expressive silhouettes.
+- Fully transparent background.
+- No anti-aliasing, gradients, blur, or stray pixels.
+- Prioritize charm and readability over detail.
+
+**## COLOR PALETTE**
+
+**Only these hex colors are allowed (dark → light within each group):**
+
+- **Outline and neutrals: `#101410`, `#3a3a42`, `#a8a8b0`, `#f8f8f8`**
+- **Dog fur (brown): `#4a2a14`, `#6c3717`, `#945a2c`, `#c89058`**
+- **Bun (warm tan): `#c0601c`, `#f09030`, `#f8c070`, `#f8d8c0`**
+- **Ketchup (red): `#a83038`, `#d85058`**
+- **Mustard (yellow): `#c0a020`, `#f0d040`**
+- **Tongue (pink): `#b04878`, `#e880a8`**
+
+**The outline must be `#101410`. Never invent new colors or in-between shades.**
+
+## OUTPUT
+
+Deliver two separate, native-resolution PNG files:
+
+- `creature_front.png`
+- `creature_back.png`
+
+**Before delivering, use Python (Pillow) to make sure the files are exact:**
+
+1. **If the art isn't already 56×56, resize with nearest-neighbor only.**
+2. **Map every pixel to the closest palette color, with no dithering.**
+3. **Make every background pixel fully transparent (alpha 0) and every other pixel fully opaque (alpha 255).**
+4. **Print the list of colors actually used in each file. Every color must be in the palette above.**
+
+Both must be ready for use in a retro Game Boy Color–style RPG.

@@ -27,6 +27,25 @@ export function fromRows(rows: string[], pal: Palette, name = '?'): Img {
   return c;
 }
 
+/** A copy without the fully transparent rows and columns around the drawing. */
+export function trim(src: Img): Img {
+  const { data, width, height } = src.getContext('2d')!.getImageData(0, 0, src.width, src.height);
+  let [x0, y0, x1, y1] = [width, height, -1, -1];
+  for (let y = 0; y < height; y++) {
+    for (let x = 0; x < width; x++) {
+      if (!data[(y * width + x) * 4 + 3]) continue;
+      x0 = Math.min(x0, x);
+      y0 = Math.min(y0, y);
+      x1 = Math.max(x1, x);
+      y1 = Math.max(y1, y);
+    }
+  }
+  if (x1 < 0) return src;
+  const c = makeCanvas(x1 - x0 + 1, y1 - y0 + 1);
+  c.getContext('2d')!.drawImage(src, -x0, -y0);
+  return c;
+}
+
 /** A left-right flipped copy. */
 export function mirror(src: Img): Img {
   const c = makeCanvas(src.width, src.height);

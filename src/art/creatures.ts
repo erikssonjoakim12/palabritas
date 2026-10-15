@@ -1,4 +1,4 @@
-import { Pix, mirror, fromRows, type Img } from './pixel';
+import { Pix, mirror, fromRows, trim, type Img } from './pixel';
 import { PALABRITA_ART } from '../style/palabritas';
 
 // Palabrita sprites: hand-made pixel art (style/palabritas.ts), or for the ones that don't have
@@ -20,44 +20,6 @@ const DRAW: Record<string, Draw> = {
     p.set(23, 35, K).set(24, 36, K).set(25, 35, K);
     p.rect(14, 34, 3, 1, '#f7a0b0').rect(31, 34, 3, 1, '#f7a0b0');
     p.outline('#183060');
-  },
-  /** A dachshund (perro salchicha) lying in a hot dog bun, with mustard on its back. */
-  salchichita(p) {
-    const br = '#b0602c', ear = '#783818', snout = '#d08850';
-    const bunLight = '#f4c878', bun = '#e0a050', bunDark = '#b87830', mustard = '#f8d838';
-    // tail with a little flame (it's a Fire type: a *hot* dog)
-    p.poly([[40, 25], [46, 12], [44, 20], [48, 17], [44, 29]], '#e83a2a');
-    p.poly([[42, 25], [45, 16], [44, 26]], '#ffd23a');
-    // four short dachshund legs poking out under the bun (far legs darker), drawn first so
-    // the bun covers their tops
-    for (const [x, c] of [[15, ear], [39, ear], [11, br], [35, br]] as [number, string][]) {
-      p.rect(x, 36, 3, 8, c);
-      p.rect(x - 1, 44, 4, 1, snout);
-    }
-    // back half of the bun, the long sausage-dog body, mustard zigzag
-    p.ellipse(25, 29, 21, 6, bunLight);
-    p.ellipse(27, 26, 16, 5, br);
-    const zig: [number, number][] = [];
-    for (let x = 15, up = false; x <= 39; x += 3, up = !up) zig.push([x, up ? 21 : 23]);
-    for (let i = 1; i < zig.length; i++) {
-      p.line(zig[i - 1][0], zig[i - 1][1], zig[i][0], zig[i][1], mustard);
-      p.line(zig[i - 1][0], zig[i - 1][1] + 1, zig[i][0], zig[i][1] + 1, mustard);
-    }
-    // front half of the bun
-    p.ellipse(25, 34, 22, 7, bun);
-    p.ellipse(25, 38, 20, 3, bunDark);
-    p.ellipse(18, 31, 9, 1.6, bunLight);
-    // little paws over the edge of the bun
-    p.ellipse(17, 28, 2.5, 1.5, br).ellipse(35, 28, 2.5, 1.5, br);
-    // head, floppy ear, long snout
-    p.ellipse(10, 19, 8, 7, br);
-    p.ellipse(14, 22, 3, 6, ear);
-    p.ellipse(4, 22, 4, 3, snout);
-    p.ellipse(1.5, 21, 1.5, 1.2, K);
-    p.ellipse(8, 17, 1.5, 2, K);
-    p.set(7, 16, W);
-    p.rect(5, 25, 2, 2, '#ff8aa0');
-    p.outline('#3a1a08');
   },
   pajarito(p) {
     const br = '#9a6a42', dk = '#6b4426', or = '#f39a2b';
@@ -119,22 +81,7 @@ const DRAW: Record<string, Draw> = {
     p.line(19, 32, 29, 32, dr);
     p.outline('#3a1210');
   },
-  palomon(p) {
-    const gy = '#a9a9c6', dg = '#7b7b9c';
-    p.poly([[2, 30], [12, 25], [14, 37], [2, 41]], dg);
-    p.ellipse(24, 31, 16, 12, gy);
-    p.ellipse(20, 30, 11, 7, dg);
-    p.line(12, 31, 28, 31, '#5a5a78').line(13, 34, 27, 34, '#5a5a78');
-    p.ellipse(33, 17, 10, 10, gy);
-    p.ellipse(31, 25, 8, 4, '#5ac0a0');
-    p.ellipse(31, 28, 7, 2, '#9a6ad0');
-    p.poly([[42, 15], [47, 17], [42, 20]], '#e0b070');
-    p.ellipse(36, 14, 2, 2, '#e85030');
-    p.set(36, 14, K);
-    p.line(33, 10, 39, 12, K);
-    p.rect(20, 42, 2, 5, '#e86a6a').rect(28, 42, 2, 5, '#e86a6a');
-    p.outline('#2e2e44');
-  },
+
 };
 
 export const CREATURE_ART: Record<string, { front: Img; back: Img }> = {};
@@ -151,6 +98,8 @@ export function buildCreatureArt() {
     CREATURE_ART[id] = { front, back: mirror(front) };
   }
   for (const [id, art] of Object.entries(PALABRITA_ART)) {
-    CREATURE_ART[id] = { front: fromRows(art.front, art.pal, `${id} front`), back: fromRows(art.back, art.pal, `${id} back`) };
+    // Trimmed, so the feet stand on the ground however much empty space the file has.
+    const img = (view: 'front' | 'back') => trim(fromRows(art[view], art.pal, `${id} ${view}`));
+    CREATURE_ART[id] = { front: img('front'), back: img('back') };
   }
 }
