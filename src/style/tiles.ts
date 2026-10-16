@@ -1,4 +1,4 @@
-import { OUTDOOR, INDOOR, ACCENT, type Pal } from './colors';
+import { OUTDOOR, INDOOR, ACCENT, CAVE, type Pal } from './colors';
 
 /*
   TILE ART (16x16 "metatiles", like Gold/Silver's 2x2 blocks of 8x8 tiles).
@@ -47,6 +47,60 @@ const grassRows = [
   '0100010101000101',
   '1010101010101010',
   '0101010101010101',
+];
+
+/** Rock (mountains, cave walls): lumps lit from the top-left. */
+const rockRows = [
+  '2211111111111111',
+  '1100111111111111',
+  '1001111111001111',
+  '1011121110011111',
+  '1111221110111211',
+  '0112211111112210',
+  '1111111111122100',
+  '1121111111111101',
+  '1221100111111111',
+  '2211001111111111',
+  '1111011121110011',
+  '1111111221100111',
+  '0111112211101110',
+  '1111111111111100',
+  '1121111111111201',
+  '1221111111111111',
+];
+
+/**
+ * The cliff face: replaces the bottom 7 rows of a rock tile where the rock ends to the south
+ * (a shadow under the edge, then a wall with cracks).
+ */
+export const CLIFF_FACE = [
+  '2222222222222222',
+  '3333333333333333',
+  '2122221222212222',
+  '2132221322213222',
+  '2122231222312232',
+  '2222221222212222',
+  '3333333333333333',
+];
+
+/** Ground with pebbles (mountain paths, cave floors). */
+const pebbleRows = [
+  '1111111111111111',
+  '1111111121111111',
+  '1110111111111111',
+  '1101211111111111',
+  '1112111111111111',
+  '1111111111101111',
+  '1111112111012111',
+  '1211111111121111',
+  '1111111111111111',
+  '1111111111111121',
+  '1111111111111111',
+  '1111110111111111',
+  '1111101211111111',
+  '1111112111111101',
+  '1111111112111012',
+  '1111111111111121',
 ];
 
 /** Johto pine: jagged tiers, lit from the left; the corners show grass so rows interlock. */
@@ -100,6 +154,57 @@ export const ART: Record<string, TileArt> = {
   water: {
     pal: OUTDOOR.water,
     rows: tile8(['22222222', '20222222', '22222222', '22222122', '22222222', '22222222', '21222222', '22222202']),
+  },
+  /** Mountains: rock you can't cross, with outlines and cliff faces where it ends (art/tiles.ts). */
+  rock: { pal: OUTDOOR.rock, rows: rockRows },
+  dirt: { pal: OUTDOOR.dirt, rows: pebbleRows },
+  /** A cave entrance, drawn over the rock. */
+  caveMouth: {
+    pal: OUTDOOR.rock,
+    extra: { k: CAVE.dark },
+    rows: [
+      '................',
+      '................',
+      '................',
+      '.....333333.....',
+      '...3322222233...',
+      '..322111111223..',
+      '..32kkkkkkkk23..',
+      '.32kkkkkkkkkk23.',
+      '.32kkkkkkkkkk23.',
+      '.3kkkkkkkkkkkk3.',
+      '.3kkkkkkkkkkkk3.',
+      '.3kkkkkkkkkkkk3.',
+      '.3kkkkkkkkkkkk3.',
+      '.3kkkkkkkkkkkk3.',
+      '.3kkkkkkkkkkkk3.',
+      '.3kkkkkkkkkkkk3.',
+    ],
+  },
+  caveWall: { pal: CAVE.wall, rows: rockRows },
+  caveFloor: { pal: CAVE.floor, rows: pebbleRows },
+  /** The way out of a cave: daylight on the floor. */
+  caveExitOverlay: {
+    pal: CAVE.floor,
+    extra: { l: CAVE.daylight },
+    rows: [
+      '................',
+      '................',
+      '................',
+      '................',
+      '................',
+      '................',
+      '.....000000.....',
+      '...000llll000...',
+      '..00llllllll00..',
+      '.0llllllllllll0.',
+      '.0llllllllllll0.',
+      '0llllllllllllll0',
+      '0llllllllllllll0',
+      '0llllllllllllll0',
+      '0llllllllllllll0',
+      '0llllllllllllll0',
+    ],
   },
   flowers: {
     pal: OUTDOOR.flower,

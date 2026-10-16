@@ -1,5 +1,5 @@
 import { makeCanvas, type Img } from './pixel';
-import { ART, type TileArt } from '../style/tiles';
+import { ART, CLIFF_FACE, type TileArt } from '../style/tiles';
 import { ROOFS, type Pal } from '../style/colors';
 import type { Dir } from '../engine/input';
 
@@ -10,6 +10,17 @@ import type { Dir } from '../engine/input';
   - roofs, walls, tables, counters and rugs get outlines where the neighbor differs.
   Gameplay properties (solid, tall grass, doors...) are in TILES below.
 */
+
+/** What drawing a whole map needs (a MapDef has all of this). */
+export interface MapLook {
+  rows: string[];
+  outdoor: boolean;
+  floor: string;
+  ground?: 'town' | 'grass';
+  roof?: string;
+  /** The tile all around the map's edges (default: trees outdoors, nothing indoors). */
+  border?: string;
+}
 
 export type TileKind = 'tallgrass' | 'door' | 'mat' | 'counter' | 'water';
 
@@ -22,13 +33,8 @@ export interface TileDef {
   look?: { es: string; en: string };
 }
 
-/** What a tile needs to know about the map it's in. */
-export interface TileEnv {
-  rows: string[];
-  outdoor: boolean;
-  floor: string;
-  ground?: 'town' | 'grass';
-  roof?: string;
+/** What a tile needs to know about the map it's in, and where it is. */
+export interface TileEnv extends MapLook {
   x: number;
   y: number;
 }
@@ -74,6 +80,12 @@ export const TILES: Record<string, TileDef> = {
   n: solid({ look: { es: 'Un sofá muy cómodo para esperar.', en: 'A very comfy sofa for waiting.' } }),
   u: solid({ look: { es: 'Un póster: «¡Lávate las manos!»', en: 'A poster: "Wash your hands!"' } }),
   m: open({ kind: 'mat' }),
+  '^': solid(),
+  ':': open(),
+  O: open({ kind: 'door' }),
+  '%': solid(),
+  ';': open(),
+  e: open({ kind: 'mat' }),
   R: open(),
   ' ': solid(),
 };
@@ -119,12 +131,7 @@ const WALL_CHARS = 'hwdcGaM';
 const roofKey = (ch: string) => (ch === 'b' ? 'r' : ch);
 
 function neighbors(env: TileEnv) {
-  const at = (dx: number, dy: number) => {
-    const x = env.x + dx;
-    const y = env.y + dy;
-    if (y < 0 || y >= env.rows.length || x < 0 || x >= env.rows[0].length) return env.outdoor ? 'T' : ' ';
-    return env.rows[y][x];
-  };
+  const at = (dx: number, dy: number) => tileOf(env, env.x + dx, env.y + dy);
   return { n: at(0, -1), s: at(0, 1), w: at(-1, 0), e: at(1, 0) };
 }
 
@@ -163,6 +170,21 @@ function wallImage(env: TileEnv): Img {
   if (!isWall(nb.e)) (setCol(g, 15, '3'), setCol(g, 14, '2'), setCol(g, 13, '2'), setCol(g, 12, '0'));
   return paintArt(ART.wall, g);
 }
+
+/** Rock (mountains, cave walls): outlined where it ends, with a cliff face on the south side. */
+function rockImage(art: TileArt, env: TileEnv, rockChars: string): Img {
+  const nb = neighbors(env);
+  const isRock = (c: string) => rockChars.includes(c);
+  const g = grid(art.rows);
+  const top = 16 - CLIFF_FACE.length; // where the cliff face starts
+  if (!isRock(nb.s)) CLIFF_FACE.forEach((r, i) => (g[top + i] = [...r]));
+  if (!isRock(nb.n)) (setRow(g, 0, '3'), setRow(g, 1, '0'));
+  if (!isRock(nb.w)) (setCol(g, 0, '3'), g.forEach((r, y) => y > 0 && y < top && (r[1] = '0')));
+  if (!isRock(nb.e)) (setCol(g, 15, '3'), g.forEach((r, y) => y > 0 && y < top && (r[14] = '2')));
+  return paintArt(art, g);
+}
+const MOUNTAIN_CHARS = '^O';
+const CAVE_WALL_CHARS = '%';
 
 function tableImage(env: TileEnv): Img {
   const nb = neighbors(env);
@@ -215,6 +237,18 @@ function render(ch: string, env: TileEnv): Img {
       return paintArt(ART.ledgeDown);
     case 'Y':
       return paintArt(ART.lemonTree);
+    case '^':
+      return rockImage(ART.rock, env, MOUNTAIN_CHARS);
+    case 'O':
+      return stack(rockImage(ART.rock, env, MOUNTAIN_CHARS), paintArt(ART.caveMouth));
+    case ':':
+      return paintArt(ART.dirt);
+    case '%':
+      return rockImage(ART.caveWall, env, CAVE_WALL_CHARS);
+    case ';':
+      return paintArt(ART.caveFloor);
+    case 'e':
+      return stack(paintArt(ART.caveFloor), paintArt(ART.caveExitOverlay));
     case '~':
       return paintArt(ART.water);
     case 'f':
@@ -285,20 +319,14 @@ function render(ch: string, env: TileEnv): Img {
 
 const nb = neighbors;
 
-/** What drawing a whole map needs (a MapDef has all of this). */
-export interface MapLook {
-  rows: string[];
-  outdoor: boolean;
-  floor: string;
-  ground?: 'town' | 'grass';
-  roof?: string;
-}
-
-/** A map's tile at (x, y). Outside the map: trees outdoors, nothing indoors. */
+/** A map's tile at (x, y). Outside the map: its border (trees outdoors, nothing indoors). */
 export function tileOf(m: MapLook, x: number, y: number): string {
   if (x >= 0 && y >= 0 && y < m.rows.length && x < m.rows[0].length) return m.rows[y][x];
-  return m.outdoor ? 'T' : ' ';
+  return m.border ?? (m.outdoor ? 'T' : ' ');
 }
+
+/** The tile environment for (x, y) on a map. */
+export const envAt = (m: MapLook, x: number, y: number): TileEnv => ({ rows: m.rows, outdoor: m.outdoor, floor: m.floor, ground: m.ground, roof: m.roof, border: m.border, x, y });
 
 /** A whole map as one image (the art page; the game draws only the tiles on screen). */
 export function renderMap(m: MapLook): Img {
@@ -307,8 +335,7 @@ export function renderMap(m: MapLook): Img {
   const g = c.getContext('2d')!;
   m.rows.forEach((row, y) =>
     [...row].forEach((ch, x) => {
-      const env = { rows: m.rows, outdoor: m.outdoor, floor: m.floor, ground: m.ground, roof: m.roof, x, y };
-      g.drawImage(tileImage(ch, env), x * T, y * T);
+      g.drawImage(tileImage(ch, envAt(m, x, y)), x * T, y * T);
     }),
   );
   return c;

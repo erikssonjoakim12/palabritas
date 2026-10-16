@@ -48,20 +48,20 @@ local words (*chunche*, *tuani*, *¡ideay!*, *va pues*). Great B1/B2 content: re
 
 - **Pueblo Amanecer** ✓: water to the south and east (for SURF later), and a **ledge** to the west: you can see a
   route down there but can't climb up to it yet. Later you come back from the other side and jump down.
-- **Ruta 3** (west of Ciudad Brisa): an **officer** blocks it until you have the Breeze Medal ("only tough
+- **Ruta 3** (west of Ciudad Brisa) — map ✓, trainers and Palabritas to come: an **officer** blocks it until you have the Breeze Medal ("only tough
   trainers may pass"). Mountains instead of trees; the path goes left, up, left; tall grass, **ledges**,
   mostly mandatory trainers; new common Palabritas from the dry-forest and farm pools (birds, bugs, small
   mammals: designs to come). A small **Palacentro** at the end, outside the cave.
-- **Ruta 4: the cave**, about as long as Ruta 3. Bats, cave beetles, spiders (designs to come).
+- **Ruta 4: the cave** ("Cueva del Eco") — map ✓, a dead end for now; about as long as Ruta 3. Bats, cave beetles, spiders (designs to come).
 
 New world mechanics this needs:
 
 | Mechanic | What |
 |---|---|
 | Ledges ✓ | One-way tiles: jump down (with a little hop), can't walk up. |
-| Mountain/cliff tiles | Rocky walls and mountain ground for routes outside towns. |
-| Cave tileset | Rock walls, cave floor, entrance; maybe darkness later. |
-| Gate guards | Generalize Beto: "blocks the way until a flag/medal", reusable for every gate. |
+| Mountain/cliff tiles ✓ | Rocky walls and mountain ground for routes outside towns. |
+| Cave tileset ✓ | Rock walls, cave floor, entrance; maybe darkness later. |
+| Gate guards ✓ | Generalize Beto: "blocks the way until a flag/medal", reusable for every gate. |
 | SURF (later) | Ride a Palabrita over water; needs a field-move system (like Gold/Silver's HMs). |
 
 ## 4. Gyms and the level curve
@@ -119,8 +119,8 @@ themes grow from the creatures, as you said.
 
 1. **Quick changes:** 50/50 critical hits, boy/girl choice (with gendered Spanish), male/female voices.
 2. **Evolutions** ✓ for the three starters (system + placeholder art).
-3. **World mechanics:** ledges, mountain/cliff tiles, cave tiles, reusable gate guards.
+3. **World mechanics** ✓: ledges, mountain/cliff tiles, cave tiles, reusable gate guards.
 4. **Pueblo Amanecer** ✓ expansion (water south/east, the west ledge).
-5. **Ruta 3, its Palacentro, and the cave**, with new Palabritas (your designs) and trainers (Nv 10-16).
+5. **Ruta 3, its Palacentro, and the cave** (maps ✓), with new Palabritas (your designs) and trainers (Nv 10-16).
 6. **Content for levels 21-40** (A2 core words and sentences), needed before gym 3.
 7. **Gym 2** and its town, then onward region by region.

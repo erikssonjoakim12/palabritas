@@ -11,7 +11,7 @@ import { itemsBetween } from '../game/curriculum';
 import { SPECIES, STARTER_LEVEL, type Mode } from '../data/species';
 import { THEMES, adHocItem } from '../data/content';
 import { TRAINERS } from '../data/trainers';
-import { say, info, closeText } from '../ui/textbox';
+import { say, info, closeText, setSpeaker } from '../ui/textbox';
 import { ask, menu } from '../ui/menu';
 import { challenge, chooseText } from '../ui/challenge';
 import { spriteCanvas } from '../ui/party';
@@ -19,9 +19,9 @@ import { startMenu } from '../ui/startmenu';
 import { wildBattle, trainerBattle } from '../battle/battle';
 import { speak, canListen } from '../lang/speech';
 import { SCRIPTS, scriptedStep, warp, currentMap, refreshNpcs, npcById, type ScriptCtx } from './world';
+import { gateOf, type Line } from './maps';
 import { MINI_BALL, BALL_COLORS, drawPattern } from '../art/balls';
 
-type Line = [es: string, en: string];
 
 async function lines(...ls: Line[]) {
   for (const [es, en] of ls) await say(es, { en });
@@ -338,27 +338,20 @@ const S: Record<string, (c: ScriptCtx) => Promise<void>> = {
     await lines(['Los limones de Villa Limón son los mejores del mundo.', 'The lemons of Lemon Village are the best in the world.']);
   },
 
-  /** Beto blocks the road to Ruta 2 until you have Palabolas. */
-  async beto() {
-    if (flag('palabolas')) {
-      return lines(
-        ['¡Ya tienes Palabolas! Puedes pasar a la Ruta 2.', 'You have Palabolas now! You can go to Route 2.'],
-        ['Si ves mi sombrero allí, ¡avísame!', 'If you see my hat there, let me know!'],
-      );
-    }
-    await lines(
-      ['¡Alto! No puedes ir a la Ruta 2.', 'Stop! You can’t go to Route 2.'],
-      ['Las Palabritas salvajes de allí son muy traviesas. ¡Ayer una me robó el sombrero!', 'The wild Palabritas there are very naughty. Yesterday one stole my hat!'],
-      ['Sin Palabolas no te dejo pasar. Doña Lupe las hace... pero hoy está muy triste.', 'I won’t let you through without Palabolas. Doña Lupe makes them... but she’s very sad today.'],
-    );
+  /** A gate guard (maps.ts): why the road is closed, or that you may pass now. */
+  async gate(c) {
+    const g = gateOf(currentMap(), c.npc!.def.id)!;
+    await lines(...(g.opens() ? g.open : g.closed));
   },
 
-  /** Stepping past Beto on the free side of the road. */
-  async betoStops() {
-    if (flag('palabolas')) return;
+  /** Stepping onto the road beside a guard: stopped and sent back. */
+  async gateStop() {
+    const g = currentMap().gates?.find((g) => g.road.some(([x, y]) => x === G.save.x && y === G.save.y));
+    if (!g || g.opens()) return;
     sfx('alert');
-    await SCRIPTS.beto({});
-    await scriptedStep('down');
+    setSpeaker(g.look);
+    await lines(...g.closed);
+    await scriptedStep(g.back);
   },
 
   async diego() {

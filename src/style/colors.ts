@@ -27,6 +27,20 @@ export const OUTDOOR = {
   wall: ['#e8f0e0', '#b09080', '#b08870', INK] as Pal,
   sign: ['#e8f0e8', '#b0b0a8', '#787870', INK] as Pal,
   fence: ['#e8f0e0', '#c09878', '#906848', INK] as Pal,
+  /** Mountains and cliffs. */
+  rock: ['#f0e0b8', '#d0b078', '#987040', INK] as Pal,
+  /** Rocky ground in the mountains. */
+  dirt: ['#f8f0d0', '#e8d8a8', '#b8a070', INK] as Pal,
+};
+
+// ---------- Caves ----------
+
+export const CAVE = {
+  wall: ['#c8a880', '#987050', '#604028', INK] as Pal,
+  floor: ['#e8d8b8', '#d0b890', '#988060', INK] as Pal,
+  /** Darkness in the cave mouth, and daylight at the way out. */
+  dark: '#201810',
+  daylight: '#f8f8e8',
 };
 
 /** Accent colors used by individual tiles (letters in tiles.ts). */
@@ -77,6 +91,7 @@ export const CLOTHES: Record<string, string> = {
   purple: '#8860c0',
   teal: '#3898a0',
   white: '#f0f0e8',
+  navy: '#384080',
 };
 
 export const OBJECT_PALS: Record<string, Pal> = {

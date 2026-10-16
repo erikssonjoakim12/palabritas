@@ -10,7 +10,12 @@ import { flag } from '../game/state';
   _  wood floor    +  tile floor                    #  inside wall
   k  table         B  bed       L  shelf            P  plant       V  TV
   C  counter (talk across it)   m  exit mat         R  rug
+  ^  mountain      :  rocky ground                  O  cave entrance
+  %  cave wall     ;  cave floor                    e  cave exit (walk down to leave)
 */
+
+/** A line of dialog: Spanish, and English for the EN button. */
+export type Line = [es: string, en: string];
 
 export interface NpcDef {
   id: string;
@@ -33,10 +38,35 @@ export interface Conn {
   offset: number;
 }
 
+/**
+ * A guard who blocks a road until something is done, then steps aside (Beto, the officer...).
+ * The guard stands on one tile of the road; stepping onto the rest of it gets you stopped too.
+ */
+export interface GateDef {
+  id: string;
+  look: string;
+  /** The road opens once this is true. */
+  opens: () => boolean;
+  /** Where the guard stands, facing the way you come from. */
+  at: [x: number, y: number, dir: Dir];
+  /** Where the guard waits once the road is open. */
+  aside: [x: number, y: number];
+  /** The rest of the road beside the guard. */
+  road: [x: number, y: number][];
+  /** The way you're sent back when stopped. */
+  back: Dir;
+  closed: Line[];
+  open: Line[];
+}
+
 export interface MapDef {
   id: string;
   name: string;
   outdoor: boolean;
+  /** Show the name when you arrive (outdoor maps always do; caves too). */
+  banner?: boolean;
+  /** The tile all around the map's edges (default: trees outdoors, nothing indoors). */
+  border?: string;
   rows: string[];
   floor: string;
   /** Outdoors: pale dotted town ground or green route grass for '.'. */
@@ -50,6 +80,7 @@ export interface MapDef {
   npcs?: NpcDef[];
   signs?: { x: number; y: number; es: string; en: string }[];
   triggers?: { x: number; y: number; script: string }[];
+  gates?: GateDef[];
   encounters?: { rate: number; table: { sp: string; min: number; max: number; w: number }[] };
 }
 
@@ -58,6 +89,16 @@ const HOUSE = ['##L##V##', '________', '_kk_____', '_kk_____', '________', '____
 // a computer (Q) and waiting sofas (n).
 const CENTRO = ['##u####u##', 'PxxxxxxxxP', 'xxxCCCCxxx', 'xxxxxxxxQx', 'xxxxxxxxxx', 'nxxxxxxxxn', 'nxxxxxxxxn', 'xxxxmxxxxx'];
 const MAQUINA: NpcDef = { id: 'maquina', x: 5, y: 1, object: 'maquina', script: 'maquina' };
+/** A Palacentro inside: the nurse, the healing machine, and whoever else is there. */
+const centro = (id: string, exit: MapDef['exit'], more: NpcDef[] = []): MapDef => ({
+  id,
+  name: 'Palacentro',
+  outdoor: false,
+  floor: 'x',
+  rows: CENTRO,
+  exit,
+  npcs: [{ id: 'enfermera', x: 4, y: 1, look: 'nurse', dir: 'down', script: 'enfermera' }, MAQUINA, ...more],
+});
 
 export const MAPS: Record<string, MapDef> = {
   amanecer: {
@@ -232,13 +273,29 @@ export const MAPS: Record<string, MapDef> = {
       { x: 17, y: 13, to: 'casa_ramos', tx: 4, ty: 6 },
     ],
     signs: [{ x: 12, y: 8, es: 'VILLA LIMÓN: El pueblo más fresco de la región.', en: 'LEMON VILLAGE: The freshest town in the region.' }],
-    triggers: [{ x: 11, y: 1, script: 'betoStops' }],
+    gates: [
+      {
+        id: 'beto',
+        look: 'beto',
+        opens: () => flag('palabolas'),
+        at: [10, 1, 'down'],
+        aside: [13, 2],
+        road: [[11, 1]],
+        back: 'down',
+        closed: [
+          ['¡Alto! No puedes ir a la Ruta 2.', 'Stop! You can’t go to Route 2.'],
+          ['Las Palabritas salvajes de allí son muy traviesas. ¡Ayer una me robó el sombrero!', 'The wild Palabritas there are very naughty. Yesterday one stole my hat!'],
+          ['Sin Palabolas no te dejo pasar. Doña Lupe las hace... pero hoy está muy triste.', 'I won’t let you through without Palabolas. Doña Lupe makes them... but she’s very sad today.'],
+        ],
+        open: [
+          ['¡Ya tienes Palabolas! Puedes pasar a la Ruta 2.', 'You have Palabolas now! You can go to Route 2.'],
+          ['Si ves mi sombrero allí, ¡avísame!', 'If you see my hat there, let me know!'],
+        ],
+      },
+    ],
     npcs: [
       { id: 'carmen', x: 13, y: 10, look: 'lady', dir: 'down', script: 'carmen', turns: true },
       { id: 'diego', x: 17, y: 16, look: 'boy', dir: 'left', script: 'diego', turns: true },
-      // Beto blocks the road to Ruta 2 until you have Palabolas, then steps aside.
-      { id: 'beto', x: 10, y: 1, look: 'beto', dir: 'down', script: 'beto', show: () => !flag('palabolas') },
-      { id: 'beto_aside', x: 13, y: 2, look: 'beto', dir: 'down', script: 'beto', turns: true, show: () => flag('palabolas') },
       { id: 'michi', x: 7, y: 2, object: 'michi', script: 'michi', show: () => flag('michiLocated') && !flag('michiFound') },
     ],
   },
@@ -253,19 +310,7 @@ export const MAPS: Record<string, MapDef> = {
     npcs: [{ id: 'pepe', x: 3, y: 1, look: 'baker', dir: 'down', script: 'pepe' }],
   },
 
-  centro_limon: {
-    id: 'centro_limon',
-    name: 'Palacentro',
-    outdoor: false,
-    floor: 'x',
-    rows: CENTRO,
-    exit: { to: 'limon', x: 18, y: 7 },
-    npcs: [
-      { id: 'enfermera', x: 4, y: 1, look: 'nurse', dir: 'down', script: 'enfermera' },
-      MAQUINA,
-      { id: 'olvidadizo', x: 7, y: 4, look: 'man', dir: 'left', script: 'olvidadizo' },
-    ],
-  },
+  centro_limon: centro('centro_limon', { to: 'limon', x: 18, y: 7 }, [{ id: 'olvidadizo', x: 7, y: 4, look: 'man', dir: 'left', script: 'olvidadizo' }]),
 
   casa_lupe: {
     id: 'casa_lupe',
@@ -375,8 +420,8 @@ export const MAPS: Record<string, MapDef> = {
       'TT.rrrr.pppppppp......TT',
       'TT.hwMh.hwwwGwwh......TT',
       'TT.hwdh.hhhhdhhh......TT',
-      'TT...........S........TT',
-      'TT....................TT',
+      '.............S........TT',
+      '......................TT',
       'TT.ooooo........rrrr..TT',
       'TT.ooooo........rrrr..TT',
       'TT.hwcwh........hwwh..TT',
@@ -387,7 +432,27 @@ export const MAPS: Record<string, MapDef> = {
       'TTTTTTTTTT..TTTTTTTTTTTT',
       'TTTTTTTTTT..TTTTTTTTTTTT',
     ],
-    connections: { down: { to: 'ruta2', offset: 0 } },
+    connections: { down: { to: 'ruta2', offset: 0 }, left: { to: 'ruta3', offset: 15 } },
+    gates: [
+      {
+        id: 'oficial',
+        look: 'officer',
+        opens: () => flag('medalBrisa'),
+        at: [1, 7, 'right'],
+        aside: [2, 6],
+        road: [[1, 8]],
+        back: 'right',
+        closed: [
+          ['¡Alto ahí! El camino a la Ruta 3 está cerrado.', 'Stop right there! The road to Route 3 is closed.'],
+          ['Allí hay montañas y una cueva muy oscura. Es peligroso.', 'There are mountains and a very dark cave there. It’s dangerous.'],
+          ['Solo pueden pasar los entrenadores con la medalla del gimnasio.', 'Only trainers with the gym medal may pass.'],
+        ],
+        open: [
+          ['¡Tienes la Medalla Brisa! Puedes pasar.', 'You have the Breeze Medal! You may pass.'],
+          ['Ten cuidado en la cueva. ¡Está muy oscura!', 'Be careful in the cave. It’s very dark!'],
+        ],
+      },
+    ],
     doors: [
       { x: 12, y: 6, to: 'gimnasio', tx: 4, ty: 11 },
       { x: 5, y: 6, to: 'tienda_brisa', tx: 4, ty: 6 },
@@ -411,15 +476,7 @@ export const MAPS: Record<string, MapDef> = {
     npcs: [{ id: 'cajera', x: 0, y: 2, look: 'cashier', dir: 'right', script: 'cajera' }],
   },
 
-  centro_brisa: {
-    id: 'centro_brisa',
-    name: 'Palacentro',
-    outdoor: false,
-    floor: 'x',
-    rows: CENTRO,
-    exit: { to: 'brisa', x: 5, y: 13 },
-    npcs: [{ id: 'enfermera', x: 4, y: 1, look: 'nurse', dir: 'down', script: 'enfermera' }, MAQUINA],
-  },
+  centro_brisa: centro('centro_brisa', { to: 'brisa', x: 5, y: 13 }),
 
   casa_rita: {
     id: 'casa_rita',
@@ -457,4 +514,110 @@ export const MAPS: Record<string, MapDef> = {
       { id: 'guia', x: 7, y: 10, look: 'man', dir: 'left', script: 'guia' },
     ],
   },
+
+  // West of Ciudad Brisa, through the mountains: left, up, then left again to the cave.
+  // Trainers (most of them in the way) and wild Palabritas come later; the narrow pass at
+  // (21-22, 13-14) and the grass by the Palacentro are where trainers will stand.
+  ruta3: {
+    id: 'ruta3',
+    name: 'Ruta 3',
+    outdoor: true,
+    floor: '.',
+    ground: 'grass',
+    border: '^',
+    rows: [
+      '^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^',
+      '^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^',
+      '^^^^O^^^^ooooo^^^^^^^^^^^^^^^^^^^^^^^^^^',
+      '^^::::::Sooooo^^^^^^^^^^^^^^^^^^^^^^^^^^',
+      '^^::::::.hwcwh^^^^^^^^^^^^^^^^^^^^^^^^^^',
+      '^^::::::.hwdwh....^^^^^^^^^^^^^^^^^^^^^^',
+      '^^::::::..................^^^^^^^^^^^^^^',
+      '^^::::::....,,,,,.........^^^^^^^^^^^^^^',
+      '^^::::::T...,,,,,.,,,,....^^^^^^^^^^^^^^',
+      '^^TT::::....,,,,,.,,,,....^^^^^^^^^^^^^^',
+      '^^^^^^^^^^^^^^^^^^,,,,vvvv^^^^^^^^^^^^^^',
+      '^^^^^^^^^^^^^^^^^^,,,,....^^^^^^^^^^^^^^',
+      '^^^^^^^^^^^^^^^^^^........^^^^^^^^^^^^^^',
+      '^^^^^^^^^^^^^^^^^^^^^..^^^^^^^^^^^^^^^^^',
+      '^^^^^^^^^^^^^^^^^^^^^..^^^^^^^^^^^^^^^^^',
+      '^^^^^^^^^^^^^^^^^^........^^^^^^^^^^^^^^',
+      '^^^^^^^^^^^^^^^^^^....,,,,^^^^^^^^^^^^^^',
+      '^^^^^^^^^^^^^^^^^^....,,,,^^^^^^^^^^^^^^',
+      '^^^^^^^^^^^^^^^^^^T...,,,,^^^^^^^^^^^^^^',
+      '^^^^^^^^^^^^^^^^^^.........,,,,,..^^^^^^',
+      '^^^^^^^^^^^^^^^^^^.........,,,,,..^^^^^^',
+      '^^^^^^^^^^^^^^^^^^.........,,,,,..^^^^^^',
+      '^^^^^^^^^^^^^^^^^^vvvv........==========',
+      '^^^^^^^^^^^^^^^^^^............==========',
+      '^^^^^^^^^^^^^^^^^^..,,,,,,,^^^...S^^^^^^',
+      '^^^^^^^^^^^^^^^^^^^^,,,,,,,^^^....^^^^^^',
+      '^^^^^^^^^^^^^^^^^^^^,,,,,,,....TT.^^^^^^',
+      '^^^^^^^^^^^^^^^^^^^^,,,,,,,.......^^^^^^',
+      '^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^',
+      '^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^',
+    ],
+    connections: { right: { to: 'brisa', offset: -15 } },
+    doors: [
+      { x: 4, y: 2, to: 'ruta4', tx: 4, ty: 20 },
+      { x: 11, y: 5, to: 'centro_ruta3', tx: 4, ty: 7 },
+    ],
+    signs: [
+      { x: 33, y: 24, es: 'RUTA 3. Al oeste: la Cueva del Eco.', en: 'ROUTE 3. To the west: Echo Cave.' },
+      { x: 8, y: 3, es: 'CUEVA DEL ECO. ¡Aquí cada palabra se oye dos veces!', en: 'ECHO CAVE. Here every word is heard twice!' },
+    ],
+  },
+
+  centro_ruta3: centro('centro_ruta3', { to: 'ruta3', x: 11, y: 6 }),
+
+  // Ruta 4: the cave, about as long as Ruta 3. A dead end (top right) for now: the way
+  // through to the next town, and the bats, beetles and spiders, come later.
+  ruta4: {
+    id: 'ruta4',
+    name: 'Cueva del Eco',
+    outdoor: false,
+    banner: true,
+    floor: ';',
+    border: '%',
+    rows: [
+      '%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%',
+      '%%%%%%%%%%%%%%%%%%%%%%;;;;;;%%',
+      '%%%%%%%%%%%%%%%%%%%%%%;;;;;;%%',
+      '%%%%;;;;;;;;;;;;%%;;;;;;;;;;%%',
+      '%%%%;;;;;;;;;;;;%%;;;;;%;;;;%%',
+      '%%%%;;;;;;%%;;;;;;;;;;;%;;;;%%',
+      '%%%%;;;;;;%%;;;;;;;;;;;%;;;;%%',
+      '%%%%;;;;;;;;;;;;;;;;;;;%;;;;%%',
+      '%%%%;;;;;%%%%%%%%%%;;;;;;;;;%%',
+      '%%%%;;;;;%%%%%%%%%%;;;;;;;;;%%',
+      '%%%%;;;;;%%%%%%%%%%;;;;;;%%%%%',
+      '%%%%;;;;;%%%%%%%%%%;;%%;;%%%%%',
+      '%%%%;;;;;%%%%%%%%%%;;%%;;%%%%%',
+      '%%%%;;;;;%%;;;;;;;;;;;;;;%%%%%',
+      '%%;;;;;;;;%;;;;;;;;;;;;;;%%%%%',
+      '%%;;;;;;;;%;;;;;;;;;;;;;;%%%%%',
+      '%%;;;;;;;;%;;;;;;;;;;;;;;%%%%%',
+      '%%;;;;;;;;%;;;;;;;;;;;;;;%%%%%',
+      '%%;;;;;;;;%%%%%%%%%%%%%%%%%%%%',
+      '%%;;;;;;;;%%%%%%%%%%%%%%%%%%%%',
+      '%%;;;;;;;;%%%%%%%%%%%%%%%%%%%%',
+      '%%%%e%%%%%%%%%%%%%%%%%%%%%%%%%',
+    ],
+    exit: { to: 'ruta3', x: 4, y: 3 },
+  },
 };
+
+// Each gate's guard (on the road, or aside once it's open) and the tiles where you get stopped.
+for (const m of Object.values(MAPS)) {
+  for (const g of m.gates ?? []) {
+    const [x, y, dir] = g.at;
+    (m.npcs ??= []).push(
+      { id: g.id, x, y, look: g.look, dir, script: 'gate', show: () => !g.opens() },
+      { id: `${g.id}_aside`, x: g.aside[0], y: g.aside[1], look: g.look, dir: 'down', script: 'gate', turns: true, show: g.opens },
+    );
+    (m.triggers ??= []).push(...g.road.map(([x, y]) => ({ x, y, script: 'gateStop' })));
+  }
+}
+
+/** The gate a guard (on the road or aside) belongs to. */
+export const gateOf = (m: MapDef, npcId: string) => m.gates?.find((g) => npcId === g.id || npcId === `${g.id}_aside`);

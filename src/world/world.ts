@@ -2,7 +2,7 @@ import { W, H, overlay, el, scaleFactor, ctx } from '../engine/screen';
 import { input, type Dir } from '../engine/input';
 import { sfx } from '../engine/sfx';
 import { nextFrame, frames, frameAlpha, whenIdle, clearIdle } from '../engine/loop';
-import { TILES, tallGrassImage, tileImage, tileOf } from '../art/tiles';
+import { TILES, tallGrassImage, tileImage, tileOf, envAt } from '../art/tiles';
 import { personFrames, OBJECTS, type Frames } from '../art/chars';
 import type { Img } from '../art/pixel';
 import { MAPS, type MapDef, type NpcDef, type Conn } from './maps';
@@ -133,7 +133,7 @@ export function loadMap(id: string, x: number, y: number, dir: Dir) {
     whenIdle(() => warmUp(Object.values(frames).flat())); // your walking frames, before the first step
   }
   Object.assign(G.save, { map: id, x, y, dir });
-  if (map.outdoor && map.name !== prevName) showBanner(map.name);
+  if ((map.outdoor || map.banner) && map.name !== prevName) showBanner(map.name);
 }
 
 export function refreshNpcs() {
@@ -303,7 +303,6 @@ function tryMove(d: Dir) {
 
 function onStep() {
   const { x, y } = player;
-  Object.assign(G.save, { x, y, dir: player.dir });
   const door = map.doors?.find((d) => d.x === x && d.y === y);
   if (door) {
     warp(door.to, door.tx, door.ty, 'up');
@@ -387,6 +386,9 @@ export function updateWorld() {
       player.moving = false;
       player.prog = 0;
       player.justMoved = true;
+      // Always remember where you are (also after being walked by a script), so a save never
+      // puts you back on a spot a script moved you away from.
+      Object.assign(G.save, { x: player.x, y: player.y, dir: player.dir });
       if (!player.scripted) onStep();
     }
     return;
@@ -460,8 +462,7 @@ function gridOf(home: MapDef): Grid {
     const [tx, ty] = [(i % w) - GRID, Math.floor(i / w) - GRID];
     const n = inMap(home, tx, ty) ? undefined : near.find(({ m, dx, dy }) => inMap(m, tx - dx, ty - dy));
     const [m, x, y] = n ? [n.m, tx - n.dx, ty - n.dy] : [home, tx, ty];
-    const env = { rows: m.rows, outdoor: m.outdoor, floor: m.floor, ground: m.ground, roof: m.roof, x, y };
-    grid[i] = tileImage(tileOf(m, x, y), env);
+    grid[i] = tileImage(tileOf(m, x, y), envAt(m, x, y));
   };
   g = { grid, w, h, done: 0, fill };
   grids.set(home.id, g);

@@ -70,6 +70,7 @@ const TILE_NAMES: Record<string, string> = {
   h: 'wall', w: 'window', d: 'door', c: 'Palacentro sign', G: 'gym sign', a: 'bakery sign', _: 'wood floor',
   '+': 'tile floor', x: 'Palacentro floor', '#': 'inside wall', k: 'table', B: 'bed', L: 'shelf', P: 'plant',
   V: 'TV', C: 'counter', Q: 'computer', n: 'sofa', u: 'poster', m: 'exit mat', R: 'rug',
+  '^': 'mountain', ':': 'rocky ground', O: 'cave entrance', '%': 'cave wall', ';': 'cave floor', e: 'cave exit',
 };
 const INDOOR = '_+x#kBLPVCQnumR';
 
@@ -80,6 +81,13 @@ for (const [ch, name] of Object.entries(TILE_NAMES)) {
   const images = ch === '.' ? [look('town'), look('grass')] : [look('town')];
   card(tiles, `'${ch}' ${ch === '.' ? 'ground (town · route)' : name}`, images, 4);
 }
+// Mountains and caves only show their edges (outlines, cliff faces) next to other tiles.
+const MOUNTAIN_SAMPLE = ['^^^^^^^^', '^^^^O^^^', '^^^.:.^^', '^^..::..', '^,,,....', '^,,,..^^', '........'];
+const CAVE_SAMPLE = ['%%%%%%%%', '%%;;;;%%', '%;;;;;;%', '%;;%%;;%', '%;;;;;;%', '%%%;e%%%'];
+card(tiles, 'mountain · cave (samples)', [
+  renderMap({ rows: MOUNTAIN_SAMPLE, outdoor: true, floor: '.', ground: 'grass', border: '^' }),
+  renderMap({ rows: CAVE_SAMPLE, outdoor: false, floor: ';', border: '%' }),
+], 3);
 
 buildObjects();
 /** A map with its people and objects standing where they are in the game. */
