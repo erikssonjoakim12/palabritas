@@ -1,5 +1,5 @@
 import { makeCanvas, type Img } from './pixel';
-import { ART, CLIFF_FACE, type TileArt } from '../style/tiles';
+import { ART, ROCK_EDGES, type TileArt } from '../style/tiles';
 import { ROOFS, type Pal } from '../style/colors';
 import type { Dir } from '../engine/input';
 
@@ -49,6 +49,8 @@ export const TILES: Record<string, TileDef> = {
   '=': open(),
   '*': open(),
   T: solid(),
+  t: solid(),
+  I: solid(),
   '>': solid({ ledge: 'right' }),
   v: solid({ ledge: 'down' }),
   Y: solid({ look: { es: '¡Un limonero! Huele muy bien.', en: 'A lemon tree! It smells very nice.' } }),
@@ -172,16 +174,24 @@ function wallImage(env: TileEnv): Img {
 }
 
 /** Rock (mountains, cave walls): outlined where it ends, with a cliff face on the south side. */
-function rockImage(art: TileArt, env: TileEnv, rockChars: string): Img {
+function rockImage(art: TileArt, env: TileEnv, rockChars: string, under: Img): Img {
   const nb = neighbors(env);
   const isRock = (c: string) => rockChars.includes(c);
   const g = grid(art.rows);
-  const top = 16 - CLIFF_FACE.length; // where the cliff face starts
-  if (!isRock(nb.s)) CLIFF_FACE.forEach((r, i) => (g[top + i] = [...r]));
-  if (!isRock(nb.n)) (setRow(g, 0, '3'), setRow(g, 1, '0'));
-  if (!isRock(nb.w)) (setCol(g, 0, '3'), g.forEach((r, y) => y > 0 && y < top && (r[1] = '0')));
-  if (!isRock(nb.e)) (setCol(g, 15, '3'), g.forEach((r, y) => y > 0 && y < top && (r[14] = '2')));
-  return paintArt(art, g);
+  /** Put an edge pattern on the rows from y0 and columns from x0 ('-' keeps the rock; it repeats). */
+  const edge = (rows: string[], x0: number, y0: number, w: number, h: number) => {
+    for (let y = 0; y < h; y++)
+      for (let x = 0; x < w; x++) {
+        const c = rows[y % rows.length][x % rows[0].length];
+        if (c !== '-') g[y0 + y][x0 + x] = c;
+      }
+  };
+  const E = ROCK_EDGES;
+  if (!isRock(nb.n)) edge(E.n, 0, 0, 16, E.n.length);
+  if (!isRock(nb.s)) edge(E.s, 0, 16 - E.s.length, 16, E.s.length);
+  if (!isRock(nb.w)) edge(E.w, 0, 0, E.w[0].length, 16);
+  if (!isRock(nb.e)) edge(E.e, 16 - E.e[0].length, 0, E.e[0].length, 16);
+  return stack(under, paintArt(art, g));
 }
 const MOUNTAIN_CHARS = '^O';
 const CAVE_WALL_CHARS = '%';
@@ -206,8 +216,12 @@ function tableImage(env: TileEnv): Img {
 
 const cache = new Map<string, Img>();
 
+/** About one tree in four is a dry one; which ones never changes (it depends on the spot). */
+const isDryTree = (x: number, y: number) => ((Math.imul(x, 73856093) ^ Math.imul(y, 19349663)) >>> 0) % 4 === 1;
+
 /** The image for tile `ch` at (env.x, env.y) on a map. Cached by everything that affects it. */
 export function tileImage(ch: string, env: TileEnv): Img {
+  if (ch === 'T' && isDryTree(env.x, env.y)) ch = 't';
   const nb = neighbors(env);
   const key = [ch, env.ground, env.roof, env.floor, env.outdoor, env.y === 0, nb.n, nb.s, nb.w, nb.e].join('|');
   let img = cache.get(key);
@@ -231,6 +245,10 @@ function render(ch: string, env: TileEnv): Img {
       return paintArt(ART.flowers);
     case 'T':
       return paintArt(ART.tree);
+    case 't':
+      return paintArt(ART.dryTree);
+    case 'I':
+      return paintArt(ART.pine);
     case '>':
       return paintArt(ART.ledgeRight);
     case 'v':
@@ -238,13 +256,13 @@ function render(ch: string, env: TileEnv): Img {
     case 'Y':
       return paintArt(ART.lemonTree);
     case '^':
-      return rockImage(ART.rock, env, MOUNTAIN_CHARS);
+      return rockImage(ART.rock, env, MOUNTAIN_CHARS, underImage(env, 'ground'));
     case 'O':
-      return stack(rockImage(ART.rock, env, MOUNTAIN_CHARS), paintArt(ART.caveMouth));
+      return stack(rockImage(ART.rock, env, MOUNTAIN_CHARS, underImage(env, 'ground')), paintArt(ART.caveMouth));
     case ':':
       return paintArt(ART.dirt);
     case '%':
-      return rockImage(ART.caveWall, env, CAVE_WALL_CHARS);
+      return rockImage(ART.caveWall, env, CAVE_WALL_CHARS, paintArt(ART.caveFloor));
     case ';':
       return paintArt(ART.caveFloor);
     case 'e':

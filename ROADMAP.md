@@ -52,7 +52,11 @@ local words (*chunche*, *tuani*, *¡ideay!*, *va pues*). Great B1/B2 content: re
   trainers may pass"). Mountains instead of trees; the path goes left, up, left; tall grass, **ledges**,
   mostly mandatory trainers; new common Palabritas from the dry-forest and farm pools (birds, bugs, small
   mammals: designs to come). A small **Palacentro** at the end, outside the cave.
-- **Ruta 4: the cave** ("Cueva del Eco") — map ✓, a dead end for now; about as long as Ruta 3. Bats, cave beetles, spiders (designs to come).
+- **Ruta 4: the cave** ("Cueva del Eco") — map ✓; about as long as Ruta 3 (each ~100 steps). Bats, cave beetles, spiders (designs to come).
+- **Ruta 5** — map ✓: a short route out of the cave, west to the next town (gym 2). A road worker
+  blocks the town until it's built.
+- **Dry-forest trees** ✓: every tree so far is the dry tropical forest's (mostly green, some dry ones,
+  mixed by themselves). The old pine is kept for a colder biome later.
 
 New world mechanics this needs:
 

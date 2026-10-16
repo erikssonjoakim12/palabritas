@@ -1,4 +1,4 @@
-import { OUTDOOR, INDOOR, ACCENT, CAVE, type Pal } from './colors';
+import { OUTDOOR, INDOOR, ACCENT, CAVE, TREES, type Pal } from './colors';
 
 /*
   TILE ART (16x16 "metatiles", like Gold/Silver's 2x2 blocks of 8x8 tiles).
@@ -70,18 +70,31 @@ const rockRows = [
 ];
 
 /**
- * The cliff face: replaces the bottom 7 rows of a rock tile where the rock ends to the south
- * (a shadow under the edge, then a wall with cracks).
+ * Where rock ends, it ends in boulders: rounded tops, fronts and sides, a crevice between each
+ * (one boulder per tile). '-' keeps the rock texture, '.' shows the ground.
+ * art/tiles.ts puts these on the sides of a rock tile that have no rock next to them.
  */
-export const CLIFF_FACE = [
-  '2222222222222222',
-  '3333333333333333',
-  '2122221222212222',
-  '2132221322213222',
-  '2122231222312232',
-  '2222221222212222',
-  '3333333333333333',
-];
+export const ROCK_EDGES = {
+  /** Top rows, where the rock ends to the north. */
+  n: ['....33333333....', '..330000011133..', '.30000111111123.', '3001111111111223', '3--------------3'],
+  /** Bottom rows, where it ends to the south: the boulders' round fronts. */
+  s: [
+    '3--------------3',
+    '30------------23',
+    '301----------123',
+    '3001111111111223',
+    '3011111111112223',
+    '3111111111122223',
+    '3211111111222223',
+    '.32222222222223.',
+    '..322222222223..',
+    '...3333333333...',
+  ],
+  /** Left columns (one string per row), where it ends to the west. */
+  w: ['...3', '..30', '.300', '3001', '301-', '301-', '301-', '301-', '301-', '301-', '301-', '311-', '3112', '.312', '..32', '...3'],
+  /** Right columns, where it ends to the east. */
+  e: ['3...', '23..', '223.', '1223', '-123', '-123', '-123', '-123', '-123', '-123', '-123', '-223', '2223', '223.', '23..', '3...'],
+};
 
 /** Ground with pebbles (mountain paths, cave floors). */
 const pebbleRows = [
@@ -103,8 +116,55 @@ const pebbleRows = [
   '1111111111111121',
 ];
 
-/** Johto pine: jagged tiers, lit from the left; the corners show grass so rows interlock. */
-const treeRows = [
+/** Put grass under a drawing: its '.' pixels become the grass pattern. */
+const onGrass = (rows: string[]) => rows.map((r, y) => [...r].map((c, x) => (c === '.' ? grassRows[y][x] : c)).join(''));
+
+/*
+  Trees of the dry tropical forest (like Nicaragua's Pacific side). Letters: a/b/c = leaves
+  (light, mid, shade), k/K = trunk, 3 = outline, 2 = shadow on the grass.
+  Maps mix them by themselves: mostly green trees, some dry ones (art/tiles.ts).
+*/
+/** A green, round-topped tree (like a young guanacaste or a madroño). */
+const greenTreeRows = onGrass([
+  '.....333333.....',
+  '...33aaabbb33...',
+  '..3aaabbbbbbb3..',
+  '.3aaabbbbabbbc3.',
+  '.3abbbbbaabbcc3.',
+  '3abbbabbbbbbbcc3',
+  '3abbaabbbbbcbcc3',
+  '3bbbbbbbcbbbccc3',
+  '3bbbbbbcbbbcccc3',
+  '.3cbbbccbcccc33.',
+  '.3cccccccccccc3.',
+  '..333c3kkK3c333.',
+  '......3kkK3.....',
+  '......3kkK3.....',
+  '.....223kK322...',
+  '......22222.....',
+]);
+/** A dry-season tree: a wide, lumpy crown of yellowed leaves on spreading branches. */
+const dryTreeRows = onGrass([
+  '................',
+  '...333...3333...',
+  '..3aab3.3aabb3..',
+  '.3aabbb3aabbbb3.',
+  '3aabbbbbabbbbcc3',
+  '3abbbcbbbbbcbcc3',
+  '3bbcbbccbbbccc3.',
+  '.3cc3ccc3cccc3..',
+  '..33k33k33K33...',
+  '...3k3.3k3K3....',
+  '....3k3kK3......',
+  '.....3kkK3......',
+  '......3kK3......',
+  '......3kK3......',
+  '.....223kK322...',
+  '......22222.....',
+]);
+
+/** Johto pine: jagged tiers, lit from the left (kept for a colder biome later). */
+const pineRows = [
   '1010101330101010',
   '0101013223010101',
   '1010032222300010',
@@ -145,11 +205,13 @@ export const ART: Record<string, TileArt> = {
     pal: OUTDOOR.grass,
     rows: tile8(['00000000', '02000200', '21202120', '21121120', '02111200', '10222010', '01000100', '00000000']),
   },
-  tree: { pal: OUTDOOR.grass, rows: treeRows },
+  tree: { pal: OUTDOOR.grass, extra: TREES.green, rows: greenTreeRows },
+  dryTree: { pal: OUTDOOR.grass, extra: TREES.dry, rows: dryTreeRows },
+  pine: { pal: OUTDOOR.grass, rows: pineRows },
   lemonTree: {
     pal: OUTDOOR.grass,
-    extra: { y: ACCENT.lemon },
-    rows: accents(treeRows, [[3, 8], [7, 6], [7, 10], [10, 9], [12, 4], [13, 9]], 'y'),
+    extra: { ...TREES.green, y: ACCENT.lemon },
+    rows: accents(greenTreeRows, [[3, 9], [5, 5], [6, 11], [8, 3], [8, 8], [4, 12]], 'y', 'b'),
   },
   water: {
     pal: OUTDOOR.water,

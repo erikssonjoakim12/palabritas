@@ -33,6 +33,13 @@ export const OUTDOOR = {
   dirt: ['#f8f0d0', '#e8d8a8', '#b8a070', INK] as Pal,
 };
 
+/** Tree leaves (a light, b mid, c shade) and trunks (k, K): green and dry-season trees. */
+const TRUNK = { k: '#a07048', K: '#684028' };
+export const TREES = {
+  green: { a: '#a8d868', b: '#68a030', c: '#3a6820', ...TRUNK },
+  dry: { a: '#f0d890', b: '#c8a050', c: '#886828', ...TRUNK },
+};
+
 // ---------- Caves ----------
 
 export const CAVE = {
@@ -92,6 +99,7 @@ export const CLOTHES: Record<string, string> = {
   teal: '#3898a0',
   white: '#f0f0e8',
   navy: '#384080',
+  orange: '#e08038',
 };
 
 export const OBJECT_PALS: Record<string, Pal> = {

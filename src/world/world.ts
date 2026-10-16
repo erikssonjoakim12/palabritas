@@ -305,7 +305,7 @@ function onStep() {
   const { x, y } = player;
   const door = map.doors?.find((d) => d.x === x && d.y === y);
   if (door) {
-    warp(door.to, door.tx, door.ty, 'up');
+    warp(door.to, door.tx, door.ty, door.dir ?? 'up');
     return;
   }
   const trig = map.triggers?.find((t) => t.x === x && t.y === y);
