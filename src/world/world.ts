@@ -314,8 +314,9 @@ function onStep() {
     return;
   }
   if (checkTrainers()) return;
-  if (TILES[tileAt(x, y)].kind === 'tallgrass' && map.encounters && Math.random() < map.encounters.rate) {
-    const table = map.encounters.table;
+  const wildHere = map.encounters && (map.encounters.everywhere || TILES[tileAt(x, y)].kind === 'tallgrass');
+  if (wildHere && Math.random() < map.encounters!.rate) {
+    const table = map.encounters!.table;
     let r = Math.random() * table.reduce((s, e) => s + e.w, 0);
     const e = table.find((t) => (r -= t.w) < 0) ?? table[0];
     const level = e.min + Math.floor(Math.random() * (e.max - e.min + 1));

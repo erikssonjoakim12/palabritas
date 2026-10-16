@@ -49,7 +49,7 @@ function face(p: Pix) {
 }
 
 function hairBack(p: Pix, look: Look, hair: string) {
-  if (look.head === 'long' || look.head === 'longColor') p.ellipse(24, 21, 12.5, 14, hair);
+  if (look.head === 'long' || look.head === 'longColor' || look.head === 'helmetLong') p.ellipse(24, 21, 12.5, 14, hair);
   if (look.head === 'short') p.ellipse(24, 16, 11.5, 11, hair);
 }
 
@@ -79,6 +79,20 @@ function hairFront(p: Pix, look: Look, hair: string, color: string) {
       break;
     case 'short':
       p.ellipse(24, 9, 10, 5.5, hair);
+      break;
+    case 'helmet':
+    case 'helmetLong':
+      if (look.head === 'helmet') p.rect(15, 11, 2, 5, hair).rect(31, 11, 2, 5, hair);
+      else p.rect(14, 11, 3, 13, hair).rect(31, 11, 3, 13, hair);
+      p.ellipse(24, 8, 11.5, 7, color);
+      p.rect(12, 12, 24, 2, shade(color)); // the brim
+      p.rect(21, 3, 6, 5, '#f0f0d0').rect(22, 4, 4, 3, '#f8f8a0'); // the headlamp
+      break;
+    case 'safari':
+      p.rect(15, 11, 2, 5, hair).rect(31, 11, 2, 5, hair);
+      p.ellipse(24, 12, 17, 3, shade(color)); // the wide brim
+      p.ellipse(24, 7, 9, 5.5, color);
+      p.rect(15, 9, 18, 2, shade(color, 0.5)); // the band
       break;
   }
 }

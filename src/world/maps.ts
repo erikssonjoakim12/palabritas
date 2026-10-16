@@ -11,6 +11,7 @@ import { flag } from '../game/state';
   _  wood floor    +  tile floor                    #  inside wall
   k  table         B  bed       L  shelf            P  plant       V  TV
   C  counter (talk across it)   m  exit mat         R  rug
+  J  palm tree (beaches, later)
   ^  mountain      :  rocky ground                  O  cave entrance
   %  cave wall     ;  cave floor                    e  cave exit (walk down to leave)
 */
@@ -83,7 +84,8 @@ export interface MapDef {
   signs?: { x: number; y: number; es: string; en: string }[];
   triggers?: { x: number; y: number; script: string }[];
   gates?: GateDef[];
-  encounters?: { rate: number; table: { sp: string; min: number; max: number; w: number }[] };
+  /** Wild Palabritas in tall grass, or (`everywhere`, caves) on every step. */
+  encounters?: { rate: number; everywhere?: boolean; table: { sp: string; min: number; max: number; w: number }[] };
 }
 
 const HOUSE = ['##L##V##', '________', '_kk_____', '_kk_____', '________', '______B_', '____m___'];
@@ -539,7 +541,7 @@ export const MAPS: Record<string, MapDef> = {
       '^^:::::::.,,,,,...........>.............^^^^^^^^^^^^^^^^^^^^^^^^',
       '^^:::::::.,,,,,^^^........>.......,,,,,,^^^^^^^^^^^^^^^^^^^^^^^^',
       '^^:::::::.,,,,,^^^,,,,,,..>.......,,,,,,^^^^^^^^^^^^^^^^^^^^^^^^',
-      '^^TT......,,,,,^^^,,,,,,..>.vvvv..,,,,,,^^^^^^^^^^^^^^^^^^^^^^^^',
+      '^^TT......,,,,,^^^,,,,,,..>.......,,,,,,^^^^^^^^^^^^^^^^^^^^^^^^',
       '^^TTT..........^^^,,,,,,..>.......,,,,,,^^^^^^^^^^^^^^^^^^^^^^^^',
       '^^^^^^^^^^^^^^^^^^^^^^^^^^^^......,,,,,,^^^^^^^^^^^^^^^^^^^^^^^^',
       '^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^..^^^^^^^^^^^^^^^^^^^^^^^^^^^',
@@ -561,7 +563,7 @@ export const MAPS: Record<string, MapDef> = {
       '^^^^^^^^^^^^^^^^^^^^^^^^^^^^..,,,,,,,,............^^^...^^^^^^^^',
       '^^^^^^^^^^^^^^^^^^^^^^^^^^^^..,,,,,,,,............^^^...^^^^^^^^',
       '^^^^^^^^^^^^^^^^^^^^^^^^^^^^..,,,,,,,,..^^^.......^^^...^^^^^^^^',
-      '^^^^^^^^^^^^^^^^^^^^^^^^^^^^..vvvvvv....^^^.......^^^S..^^^^^^^^',
+      '^^^^^^^^^^^^^^^^^^^^^^^^^^^^............^^^.......^^^S..^^^^^^^^',
       '^^^^^^^^^^^^^^^^^^^^^^^^^^^^............^^^.......^^^.==========',
       '^^^^^^^^^^^^^^^^^^^^^^^^^^^^............^^^.......^^^.==========',
       '^^^^^^^^^^^^^^^^^^^^^^^^^^^^............^^^.,,,,,,^^^,,,^^^^^^^^',
@@ -581,6 +583,24 @@ export const MAPS: Record<string, MapDef> = {
     signs: [
       { x: 53, y: 33, es: 'RUTA 3. Al oeste: la Cueva del Eco.', en: 'ROUTE 3. To the west: Echo Cave.' },
       { x: 8, y: 3, es: 'CUEVA DEL ECO. ¡Aquí cada palabra se oye dos veces!', en: 'ECHO CAVE. Here every word is heard twice!' },
+    ],
+    encounters: {
+      rate: 0.12,
+      table: [
+        { sp: 'hojadillo', min: 10, max: 12, w: 40 },
+        { sp: 'pajarito', min: 10, max: 12, w: 30 },
+        { sp: 'mariposita', min: 10, max: 12, w: 30 },
+      ],
+    },
+    // Trainers look like Ruta 2's. Those in the passes and spurs can't be walked past unseen.
+    npcs: [
+      { id: 'rodrigo', x: 51, y: 37, look: 'hiker', dir: 'down', script: 'rodrigo', sight: 4 },
+      { id: 'isabel', x: 41, y: 28, look: 'painter', dir: 'down', script: 'isabel', sight: 3 },
+      { id: 'pablo', x: 32, y: 22, look: 'mateo', dir: 'right', script: 'pablo', sight: 1 },
+      { id: 'kevin', x: 38, y: 20, look: 'tourist', dir: 'left', script: 'kevin', sight: 3 },
+      { id: 'camila', x: 35, y: 14, look: 'sofia', dir: 'right', script: 'camila', sight: 1 },
+      { id: 'ernesto', x: 21, y: 8, look: 'hiker', dir: 'down', script: 'ernesto', sight: 4 },
+      { id: 'marcos', x: 16, y: 3, look: 'andres', dir: 'down', script: 'marcos', sight: 5 },
     ],
   },
 
@@ -640,6 +660,23 @@ export const MAPS: Record<string, MapDef> = {
     ],
     exit: { to: 'ruta3', x: 4, y: 3 },
     doors: [{ x: 52, y: 0, to: 'ruta5', tx: 22, ty: 3, dir: 'down' }],
+    encounters: {
+      rate: 0.08,
+      everywhere: true,
+      table: [
+        { sp: 'ecolin', min: 12, max: 15, w: 45 },
+        { sp: 'ochopatas', min: 12, max: 15, w: 30 },
+        { sp: 'cuernito', min: 13, max: 15, w: 25 },
+      ],
+    },
+    npcs: [
+      { id: 'raul', x: 4, y: 24, look: 'espeleologo', dir: 'right', script: 'raul', sight: 2 },
+      { id: 'daniela', x: 20, y: 12, look: 'exploradora', dir: 'down', script: 'daniela', sight: 2 },
+      { id: 'federico', x: 38, y: 26, look: 'arqueologo', dir: 'down', script: 'federico', sight: 2 },
+      { id: 'javier', x: 46, y: 12, look: 'espeleologo', dir: 'right', script: 'javier', sight: 2 },
+      // In the side room: optional.
+      { id: 'rocio', x: 21, y: 36, look: 'exploradora', dir: 'left', script: 'rocio', sight: 3 },
+    ],
   },
 
   // Out of the cave, west to the next town (with the second gym). The town isn't built yet,

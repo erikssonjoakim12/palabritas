@@ -51,6 +51,7 @@ export const TILES: Record<string, TileDef> = {
   T: solid(),
   t: solid(),
   I: solid(),
+  J: solid(),
   '>': solid({ ledge: 'right' }),
   v: solid({ ledge: 'down' }),
   Y: solid({ look: { es: '¡Un limonero! Huele muy bien.', en: 'A lemon tree! It smells very nice.' } }),
@@ -249,6 +250,8 @@ function render(ch: string, env: TileEnv): Img {
       return paintArt(ART.dryTree);
     case 'I':
       return paintArt(ART.pine);
+    case 'J':
+      return paintArt(ART.palm);
     case '>':
       return paintArt(ART.ledgeRight);
     case 'v':

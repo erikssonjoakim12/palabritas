@@ -544,6 +544,95 @@ const S: Record<string, (c: ScriptCtx) => Promise<void>> = {
       after: ['El Palomón de Paloma es muy fuerte. ¡Entrena bien antes de entrar!', 'Paloma’s Palomón is very strong. Train well before you go in!'],
     }),
 
+  // ----- Ruta 3 -----
+
+  rodrigo: () =>
+    trainerFight('rodrigo', {
+      intro: ['¡Hola! Subo estas montañas todos los días. ¿Luchamos?', 'Hi! I climb these mountains every day. Shall we battle?'],
+      defeated: ['¡Uf! Tus Palabritas son muy fuertes.', 'Phew! Your Palabritas are very strong.'],
+      after: ['El camino a la cueva es largo. ¡Lleva pociones!', 'The road to the cave is long. Bring potions!'],
+    }),
+
+  isabel: () =>
+    trainerFight('isabel', {
+      intro: ['¡Qué bonitas son las montañas! ¿Quieres luchar?', 'How pretty the mountains are! Do you want to battle?'],
+      defeated: ['¡Ay! Se me cayó el pincel.', 'Oh! I dropped my brush.'],
+      after: ['Pinto las montañas en la mañana, cuando hay sol.', 'I paint the mountains in the morning, when it’s sunny.'],
+    }),
+
+  pablo: () =>
+    trainerFight('pablo', {
+      intro: ['¡Alto! Nadie pasa sin luchar conmigo.', 'Stop! Nobody gets past without battling me.'],
+      defeated: ['Bueno... puedes pasar.', 'Well... you can pass.'],
+      after: ['Hay un Palacentro al lado de la cueva. ¡Qué bueno!', 'There’s a Palacentro next to the cave. How nice!'],
+    }),
+
+  kevin: () =>
+    trainerFight('kevin', {
+      intro: ['Hello! Perdón... ¡Hola! Estoy aprendiendo español. ¿Luchamos?', 'Hello! Sorry... Hi! I’m learning Spanish. Shall we battle?'],
+      defeated: ['¡Hablas muy bien español!', 'You speak Spanish very well!'],
+      after: ['Mi palabra favorita es «mariposa». ¿Y la tuya?', 'My favorite word is "mariposa" (butterfly). And yours?'],
+    }),
+
+  camila: () =>
+    trainerFight('camila', {
+      intro: ['¡Mi mamá dice que soy muy buena entrenadora!', 'My mom says I’m a very good trainer!'],
+      defeated: ['¡No es justo! Se lo voy a decir a mi mamá.', 'That’s not fair! I’m going to tell my mom.'],
+      after: ['¿Viste un Hojadillo? Tiene una flor en la cola.', 'Have you seen a Hojadillo? It has a flower on its tail.'],
+    }),
+
+  ernesto: () =>
+    trainerFight('ernesto', {
+      intro: ['¡Uf, qué calor! ¿Una batalla para olvidar el calor?', 'Phew, it’s hot! A battle to forget the heat?'],
+      defeated: ['Ahora tengo más calor...', 'Now I’m even hotter...'],
+      after: ['En la cueva hace fresco. ¡Pero está muy oscura!', 'It’s cool in the cave. But it’s very dark!'],
+    }),
+
+  marcos: () =>
+    trainerFight('marcos', {
+      intro: ['¿Vas a la Cueva del Eco? ¡Primero, lucha conmigo!', 'Going to Echo Cave? First, battle me!'],
+      defeated: ['¡Qué rápid{o/a} eres!', 'You’re so fast!'],
+      after: ['En la cueva, grita «¡Hola!» y escucha el eco.', 'In the cave, shout "¡Hola!" and listen to the echo.'],
+    }),
+
+
+  // ----- Cueva del Eco -----
+
+  raul: () =>
+    trainerFight('raul', {
+      intro: ['¡Hola! Soy espeleólogo: exploro cuevas. ¿Luchamos?', 'Hi! I’m a caver: I explore caves. Shall we battle?'],
+      defeated: ['¡Se me apagó la lámpara!', 'My lamp went out!'],
+      after: ['Los Ecolines vuelan en la oscuridad. ¡Escuchan muy bien!', 'Ecolines fly in the dark. They hear very well!'],
+    }),
+
+  daniela: () =>
+    trainerFight('daniela', {
+      intro: ['¡Estoy buscando el otro lado de la cueva! ¿Y tú?', 'I’m looking for the other side of the cave! And you?'],
+      defeated: ['¡Ay, me perdí otra vez!', 'Oh, I got lost again!'],
+      after: ['Si sigues el aire fresco, encuentras la salida.', 'If you follow the fresh air, you find the way out.'],
+    }),
+
+  federico: () =>
+    trainerFight('federico', {
+      intro: ['¡Shh! Busco fósiles muy antiguos. Bueno... ¡luchemos!', 'Shh! I’m looking for very old fossils. Well... let’s battle!'],
+      defeated: ['¡Qué batalla! Fue histórica.', 'What a battle! It was historic.'],
+      after: ['Esta cueva tiene miles de años.', 'This cave is thousands of years old.'],
+    }),
+
+  javier: () =>
+    trainerFight('javier', {
+      intro: ['¡Hola, hola, hola! ¿Oyes el eco? ¡Luchemos!', 'Hello, hello, hello! Do you hear the echo? Let’s battle!'],
+      defeated: ['¡Perdí, perdí, perdí!', 'I lost, I lost, I lost!'],
+      after: ['Ya casi llegas a la salida. ¡Ánimo!', 'You’re almost at the way out. Keep going!'],
+    }),
+
+  rocio: () =>
+    trainerFight('rocio', {
+      intro: ['¡Encontraste mi cuarto secreto! ¿Luchamos?', 'You found my secret room! Shall we battle?'],
+      defeated: ['¡Eres más valiente que yo!', 'You’re braver than me!'],
+      after: ['Aquí nadie me molesta. Bueno, solo los Ochopatas.', 'Nobody bothers me here. Well, only the Ochopatas.'],
+    }),
+
   /** A Palabola-shaped item ball halfway through Ruta 2, like Gold/Silver's. */
   async pocionRuta2() {
     if (flag('pocionRuta2')) return;

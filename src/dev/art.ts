@@ -65,7 +65,7 @@ for (const id of Object.keys(LOOKS)) {
 
 /** What each tile character is (the legend in world/maps.ts). */
 const TILE_NAMES: Record<string, string> = {
-  '.': 'ground', g: 'grass patch', ',': 'tall grass', '=': 'path', '*': 'flowers', T: 'tree (green · dry mix)', t: 'dry tree', I: 'pine (later biome)', Y: 'lemon tree',
+  '.': 'ground', g: 'grass patch', ',': 'tall grass', '=': 'path', '*': 'flowers', T: 'tree (green · dry mix)', t: 'dry tree', I: 'pine (later biome)', J: 'palm (beaches, later)', Y: 'lemon tree',
   '~': 'water', f: 'fence', S: 'sign', r: 'roof (town color)', b: 'roof', o: 'roof (Palacentro)', p: 'roof (gym)',
   h: 'wall', w: 'window', d: 'door', c: 'Palacentro sign', G: 'gym sign', a: 'bakery sign', _: 'wood floor',
   '+': 'tile floor', x: 'Palacentro floor', '#': 'inside wall', k: 'table', B: 'bed', L: 'shelf', P: 'plant',

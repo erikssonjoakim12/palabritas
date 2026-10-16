@@ -163,6 +163,26 @@ const dryTreeRows = onGrass([
   '......22222.....',
 ]);
 
+/** A coconut palm (for beaches later): drooping fronds, coconuts (n), a ringed, bent trunk. */
+const palmRows = onGrass([
+  '.....33..33.....',
+  '...33aa33aa33...',
+  '..3aabbaabbbaa3.',
+  '.3ab33bnnb33bc3.',
+  '3ab3.3nnnn3.3bc3',
+  '3b3..33kK33..3c3',
+  '33....3kK3....33',
+  '......3kK3......',
+  '......3KK3......',
+  '.....3kK3.......',
+  '.....3kK3.......',
+  '.....3KK3.......',
+  '......3kK3......',
+  '......3kK3......',
+  '.....223kK322...',
+  '......22222.....',
+]);
+
 /** Johto pine: jagged tiers, lit from the left (kept for a colder biome later). */
 const pineRows = [
   '1010101330101010',
@@ -208,6 +228,7 @@ export const ART: Record<string, TileArt> = {
   tree: { pal: OUTDOOR.grass, extra: TREES.green, rows: greenTreeRows },
   dryTree: { pal: OUTDOOR.grass, extra: TREES.dry, rows: dryTreeRows },
   pine: { pal: OUTDOOR.grass, rows: pineRows },
+  palm: { pal: OUTDOOR.grass, extra: TREES.palm, rows: palmRows },
   lemonTree: {
     pal: OUTDOOR.grass,
     extra: { ...TREES.green, y: ACCENT.lemon },

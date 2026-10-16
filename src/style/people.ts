@@ -171,7 +171,123 @@ export const HEADS: Record<string, Facing> = {
       '....311111333...',
     ],
   },
-  /** Short dark hair. */
+  /** A hard hat with a headlamp (cavers). */
+  helmet: {
+    down: [
+      '.....333333.....',
+      '....32211223....',
+      '...3222112223...',
+      '...3222222223...',
+      '.33333333333333.',
+      '..331111111133..',
+      '.33111311311133.',
+      '.31111311311113.',
+      '..331111111133..',
+      '...3311111133...',
+    ],
+    up: [
+      '.....333333.....',
+      '....32222223....',
+      '...3222222223...',
+      '...3222222223...',
+      '.33333333333333.',
+      '..333333333333..',
+      '.31333333333313.',
+      '.31133333333113.',
+      '..333333333333..',
+      '...3333333333...',
+    ],
+    side: [
+      '.....333333.....',
+      '....31122223....',
+      '...31122222223..',
+      '...3222222223...',
+      '.3333333333333..',
+      '...31111333333..',
+      '...31311333333..',
+      '...31311333333..',
+      '...311111133....',
+      '....31111133....',
+    ],
+  },
+  /** A hard hat with a headlamp over long hair (explorers). */
+  helmetLong: {
+    down: [
+      '.....333333.....',
+      '....32211223....',
+      '...3222112223...',
+      '...3222222223...',
+      '.33333333333333.',
+      '..333111111333..',
+      '..331111111133..',
+      '..311131131113..',
+      '..331131131133..',
+      '...3311111133...',
+    ],
+    up: [
+      '.....333333.....',
+      '....32222223....',
+      '...3222222223...',
+      '...3222222223...',
+      '.33333333333333.',
+      '..333333333333..',
+      '..333333333333..',
+      '..333333333333..',
+      '...3333333333...',
+      '....31111113....',
+    ],
+    side: [
+      '.....333333.....',
+      '....31122223....',
+      '...31122222223..',
+      '...3222222223...',
+      '.3333333333333..',
+      '..311133333333..',
+      '..313111333333..',
+      '..313111333333..',
+      '...31111333333..',
+      '....3111333333..',
+    ],
+  },
+  /** A wide-brimmed explorer’s hat (archaeologists). */
+  safari: {
+    down: [
+      '................',
+      '.....333333.....',
+      '....32222223....',
+      '...3333333333...',
+      '3333333333333333',
+      '..331111111133..',
+      '.33111311311133.',
+      '.31111311311113.',
+      '..331111111133..',
+      '...3311111133...',
+    ],
+    up: [
+      '................',
+      '.....333333.....',
+      '....32222223....',
+      '...3333333333...',
+      '3333333333333333',
+      '..333333333333..',
+      '.31333333333313.',
+      '.31133333333113.',
+      '..333333333333..',
+      '...3333333333...',
+    ],
+    side: [
+      '................',
+      '.....333333.....',
+      '....32222223....',
+      '...3333333333...',
+      '3333333333333333',
+      '...31111333333..',
+      '...31311333333..',
+      '...31311333333..',
+      '...311111133....',
+      '....31111133....',
+    ],
+  },
   /** Short men's hair with a mustache (grown men: Señor Ramos, Don Pepe...). */
   crew: {
     down: [
@@ -298,8 +414,8 @@ export interface Look {
   color: string;
 }
 
-/** Male characters (a cap or the men's haircut) talk with a male voice. */
-export const isMaleLook = (lookId?: string) => !!lookId && ['cap', 'crew'].includes(LOOKS[lookId]?.head);
+/** Male characters (a cap, a hard hat, an explorer's hat or the men's haircut) talk with a male voice. */
+export const isMaleLook = (lookId?: string) => !!lookId && ['cap', 'crew', 'helmet', 'safari'].includes(LOOKS[lookId]?.head);
 
 /** Who looks like what. Change a color or head here to restyle a character. */
 export const LOOKS: Record<string, Look> = {
@@ -327,6 +443,10 @@ export const LOOKS: Record<string, Look> = {
   andres: { head: 'cap', body: 'pants', color: 'gray' },
   officer: { head: 'cap', body: 'pants', color: 'navy' },
   worker: { head: 'cap', body: 'pants', color: 'orange' },
+  // Trainers in the Cueva del Eco.
+  espeleologo: { head: 'helmet', body: 'pants', color: 'orange' },
+  exploradora: { head: 'helmetLong', body: 'pants', color: 'yellow' },
+  arqueologo: { head: 'safari', body: 'pants', color: 'khaki' },
 };
 
 // ---------- Objects in the world (same 3-color sprite rules) ----------

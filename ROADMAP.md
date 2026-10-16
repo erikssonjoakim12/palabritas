@@ -48,15 +48,15 @@ local words (*chunche*, *tuani*, *¡ideay!*, *va pues*). Great B1/B2 content: re
 
 - **Pueblo Amanecer** ✓: water to the south and east (for SURF later), and a **ledge** to the west: you can see a
   route down there but can't climb up to it yet. Later you come back from the other side and jump down.
-- **Ruta 3** (west of Ciudad Brisa) — map ✓, trainers and Palabritas to come: an **officer** blocks it until you have the Breeze Medal ("only tough
+- **Ruta 3** (west of Ciudad Brisa) — map ✓, 7 trainers ✓ (Ruta 2 looks), Hojadillo in the grass ✓, more Palabritas to come: an **officer** blocks it until you have the Breeze Medal ("only tough
   trainers may pass"). Mountains instead of trees; the path goes left, up, left; tall grass, **ledges**,
   mostly mandatory trainers; new common Palabritas from the dry-forest and farm pools (birds, bugs, small
   mammals: designs to come). A small **Palacentro** at the end, outside the cave.
-- **Ruta 4: the cave** ("Cueva del Eco") — map ✓; about as long as Ruta 3 (each ~100 steps). Bats, cave beetles, spiders (designs to come).
+- **Ruta 4: the cave** ("Cueva del Eco") — map ✓, wild Palabritas on every step ✓ (Ecolín, Ochopatas, Cuernito: placeholder art), 5 trainers ✓ (new kinds: Espeleólogo, Exploradora, Arqueólogo; you defend by listening); about as long as Ruta 3 (each ~100 steps). Bats, cave beetles, spiders (designs to come).
 - **Ruta 5** — map ✓: a short route out of the cave, west to the next town (gym 2). A road worker
   blocks the town until it's built.
 - **Dry-forest trees** ✓: every tree so far is the dry tropical forest's (mostly green, some dry ones,
-  mixed by themselves). The old pine is kept for a colder biome later.
+  mixed by themselves). The old pine is kept for a colder biome later, and a palm tree is ready for the beaches.
 
 New world mechanics this needs:
 

@@ -38,6 +38,7 @@ const TRUNK = { k: '#a07048', K: '#684028' };
 export const TREES = {
   green: { a: '#a8d868', b: '#68a030', c: '#3a6820', ...TRUNK },
   dry: { a: '#f0d890', b: '#c8a050', c: '#886828', ...TRUNK },
+  palm: { a: '#b0e070', b: '#58a030', c: '#306818', k: '#d0a868', K: '#987040', n: '#7a5028' },
 };
 
 // ---------- Caves ----------
@@ -100,6 +101,8 @@ export const CLOTHES: Record<string, string> = {
   white: '#f0f0e8',
   navy: '#384080',
   orange: '#e08038',
+  khaki: '#b8a060',
+  yellow: '#e0c040',
 };
 
 export const OBJECT_PALS: Record<string, Pal> = {
