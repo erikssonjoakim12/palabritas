@@ -587,9 +587,9 @@ export const MAPS: Record<string, MapDef> = {
     encounters: {
       rate: 0.12,
       table: [
-        { sp: 'hojadillo', min: 10, max: 12, w: 40 },
-        { sp: 'pajarito', min: 10, max: 12, w: 30 },
-        { sp: 'mariposita', min: 10, max: 12, w: 30 },
+        { sp: 'hojadillo', min: 9, max: 10, w: 40 },
+        { sp: 'pajarito', min: 9, max: 10, w: 30 },
+        { sp: 'mariposita', min: 9, max: 10, w: 30 },
       ],
     },
     // Trainers look like Ruta 2's. Those in the passes and spurs can't be walked past unseen.
@@ -664,9 +664,9 @@ export const MAPS: Record<string, MapDef> = {
       rate: 0.08,
       everywhere: true,
       table: [
-        { sp: 'ecolin', min: 12, max: 15, w: 45 },
-        { sp: 'ochopatas', min: 12, max: 15, w: 30 },
-        { sp: 'cuernito', min: 13, max: 15, w: 25 },
+        { sp: 'ecolin', min: 10, max: 13, w: 45 },
+        { sp: 'ochopatas', min: 10, max: 13, w: 30 },
+        { sp: 'cuernito', min: 11, max: 13, w: 25 },
       ],
     },
     npcs: [
