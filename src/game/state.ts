@@ -45,6 +45,8 @@ export interface SaveData {
   dir: Dir;
   party: Mon[];
   flags: Record<string, boolean>;
+  /** You, as chosen at the start: changes your look and how people talk to you («listo/lista»). */
+  gender: 'boy' | 'girl';
   /** Pesos, earned by beating trainers. */
   money: number;
   /** Items by id (data/items.ts) → how many. */
@@ -64,6 +66,9 @@ export interface SaveData {
 
 const KEY = 'palabritas.save.v1';
 
+/** Your look (key in LOOKS), boy or girl. */
+export const playerLook = () => (G.save.gender === 'girl' ? 'playerGirl' : 'player');
+
 export function newSave(): SaveData {
   return {
     v: 1,
@@ -74,6 +79,7 @@ export function newSave(): SaveData {
     dir: 'down',
     party: [],
     flags: {},
+    gender: 'boy',
     money: 0,
     bag: {},
     medals: [],
@@ -125,6 +131,7 @@ function migrate(s: SaveData) {
   // Palabolas (once called esferas) used to be a plain counter; now they're in the bag.
   const old = s as unknown as { esferas?: number; palabolas?: number };
   s.bag ??= {};
+  s.gender ??= 'boy';
   s.money ??= 0;
   const balls = Math.max(old.palabolas ?? 0, old.esferas ?? 0);
   if (balls) s.bag.palabola = (s.bag.palabola ?? 0) + balls;

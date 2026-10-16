@@ -4,6 +4,12 @@
 const PREFERRED_LANGS = ['es-MX', 'es-US', 'es-419', 'es-CO', 'es-AR', 'es'];
 
 let voice: SpeechSynthesisVoice | null = null;
+/** A male Spanish voice, if the phone has one (many only have a female one). */
+let maleVoice: SpeechSynthesisVoice | null = null;
+/** Without a male voice, male characters get the normal voice a bit lower. */
+const MALE_PITCH = 0.75;
+/** Voice names that are male (Google, Microsoft, Apple and Samsung name their voices like this). */
+const MALE_NAMES = /(^|[^a-zé])(male|hombre|masculin|jorge|diego|pablo|carlos|juan|enrique|miguel|ra[uú]l|[aá]lvaro|jos[eé]|andr[eé]s|gonzalo|lorenzo|alonso|jaime)/i;
 
 export const speechSettings = { rate: 0.95, recognitionLang: 'es-MX' };
 
@@ -16,7 +22,11 @@ function pickVoice() {
     const pool = exact.length ? exact : voices.filter((v) => v.lang.toLowerCase().startsWith(lang.toLowerCase()));
     if (pool.length) {
       // Prefer the higher quality network / Google voices when present.
-      voice = pool.find((v) => /google|natural|online/i.test(v.name)) ?? pool[0];
+      const better = (vs: SpeechSynthesisVoice[]) => vs.find((v) => /google|natural|online/i.test(v.name)) ?? vs[0];
+      const male = pool.filter((v) => MALE_NAMES.test(v.name));
+      const other = pool.filter((v) => !MALE_NAMES.test(v.name));
+      voice = better(other.length ? other : pool);
+      maleVoice = male.length ? better(male) : null;
       return;
     }
   }
@@ -37,17 +47,22 @@ function clean(text: string) {
     .trim();
 }
 
-/** Speak Spanish. Resolves when done (or after a timeout if the browser never reports). */
-export function speak(text: string, slow = false): Promise<void> {
+/**
+ * Speak Spanish, with a male voice for male characters. Resolves when done (or after a
+ * timeout if the browser never reports).
+ */
+export function speak(text: string, slow = false, male = false): Promise<void> {
   if (!('speechSynthesis' in window)) return Promise.resolve();
   const t = clean(text);
   if (!t) return Promise.resolve();
   speechSynthesis.cancel();
   const u = new SpeechSynthesisUtterance(t);
   if (!voice) pickVoice();
-  if (voice) u.voice = voice;
-  u.lang = voice?.lang ?? 'es-MX';
+  const v = male && maleVoice ? maleVoice : voice;
+  if (v) u.voice = v;
+  u.lang = v?.lang ?? 'es-MX';
   u.rate = slow ? 0.6 : speechSettings.rate;
+  if (male && !maleVoice) u.pitch = MALE_PITCH;
   return new Promise((resolve) => {
     const timeout = setTimeout(resolve, 1500 + t.length * 120);
     u.onend = u.onerror = () => {

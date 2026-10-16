@@ -6,7 +6,7 @@ import { OBJECTS } from '../art/chars';
 import { portrait } from '../art/portraits';
 import type { Img } from '../art/pixel';
 import { LINEUP_BALL, BALL_COLORS, FAINTED_COLORS, EMPTY_COLORS, drawPattern } from '../art/balls';
-import { G, type Mon } from '../game/state';
+import { G, playerLook, type Mon } from '../game/state';
 import { stats, monName, checkLevelUps, firstAble, markSeen, markCaught, newMon, knownMoves, newMoves } from '../game/mon';
 import { SPECIES, MODE_INFO, type Move } from '../data/species';
 import { effectiveness } from '../data/types';
@@ -46,6 +46,8 @@ interface Ball {
  * The opponent's slot ends at y=54, just above your health box.
  */
 const SLOT = 56;
+/** How often a perfect answer (on a non-tap move) is a critical hit. */
+const CRIT_CHANCE = 0.5;
 const ENEMY_POS = { x: 100, y: -2 };
 const ME_POS = { x: 4, y: 38 };
 
@@ -265,7 +267,7 @@ async function runBattle(cfg: Config): Promise<BattleResult> {
 
   const trainerFighter = () => fighter(portrait(cfg.look ?? 'man'), -SLOT, ENEMY_POS.y);
   enemyF = trainer ? trainerFighter() : enemyFighter(enemy);
-  meF = fighter(portrait('player', 'back'), W, ME_POS.y);
+  meF = fighter(portrait(playerLook(), 'back'), W, ME_POS.y);
   ball = null;
   closeText();
   overlay.querySelectorAll('.banner').forEach((b) => b.remove()); // the place-name banner
@@ -412,7 +414,7 @@ async function runBattle(cfg: Config): Promise<BattleResult> {
 
   /**
    * Damage depends on how you answered: perfect (accents too) on a non-tap move is a
-   * critical hit ×1.5, almost ×0.75, with 💡 help ×0.5, and a wrong answer misses.
+   * critical hit ×1.5 half the time (otherwise ×1), almost ×0.75, with 💡 help ×0.5, and a wrong answer misses.
    */
   const playerAttack = async (move: Move, prep: ChallengeResult | null) => {
     if (!prep) return;
@@ -422,7 +424,7 @@ async function runBattle(cfg: Config): Promise<BattleResult> {
       await info('¡Pero no acertó!', { auto: 900, en: 'But it missed!' });
       return;
     }
-    const crit = prep.grade === 'perfect' && !prep.helped && prep.mode !== 'choose';
+    const crit = prep.grade === 'perfect' && !prep.helped && prep.mode !== 'choose' && Math.random() < CRIT_CHANCE;
     const mult = crit ? 1.5 : prep.helped ? 0.5 : prep.grade === 'close' ? 0.75 : 1;
     const eff = await strike(me, meF!, enemy, enemyF!, 1, move, MODE_INFO[prep.mode].power, mult);
     if (!eff) return;

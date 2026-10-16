@@ -110,6 +110,8 @@ function applySettings() {
 async function newGameIntro() {
   await say('¡Hola! Este es el mundo de Palabritas.', { en: 'Hello! This is the world of Palabritas.' });
   await say('Aquí, las Palabritas crecen cuando tú aprendes español.', { en: 'Here, Palabritas grow when you learn Spanish.' });
+  await say('¿Eres un chico o una chica?', { en: 'Are you a boy or a girl?', noWait: true });
+  G.save.gender = (await menu(['Chico', 'Chica'], { pos: { right: 0, bottom: 48 } })) === 1 ? 'girl' : 'boy';
   await say('Primero, ¿cómo te llamas?', { en: 'First of all, what’s your name?' });
   closeText();
   const raw = await promptText('¿Cómo te llamas?', 'Write "Me llamo …" (or just your name)', 'Me llamo…');

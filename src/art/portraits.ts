@@ -106,11 +106,18 @@ function back(look: Look): Img {
   p.poly([[3, 47], [7, 34], [15, 28], [35, 28], [41, 34], [45, 47]], color);
   p.poly([[35, 28], [41, 34], [45, 47], [38, 47]], dark);
   p.ellipse(33, 20, 2.5, 5, SKIN); // a bit of cheek: turned to the right
-  p.ellipse(24, 17, 10, 11, HAIR);
-  p.ellipse(34.5, 17, 1.5, 2.5, SKIN); // ear
-  p.ellipse(24, 9, 11.5, 7, color);
-  p.rect(31, 12, 11, 3, dark); // the cap's brim, pointing where you look
-  p.rect(14, 8, 3, 2, dark);
+  if (look.head === 'cap') {
+    p.ellipse(24, 17, 10, 11, HAIR);
+    p.ellipse(34.5, 17, 1.5, 2.5, SKIN); // ear
+    p.ellipse(24, 9, 11.5, 7, color);
+    p.rect(31, 12, 11, 3, dark); // the cap's brim, pointing where you look
+    p.rect(14, 8, 3, 2, dark);
+  } else {
+    // Long hair down over the shoulders, with a band in her color.
+    p.ellipse(23, 20, 12, 15, HAIR);
+    p.ellipse(34.5, 17, 1.5, 2.5, SKIN); // ear
+    p.rect(13, 8, 22, 2, color);
+  }
   p.outline(K);
   return p.toCanvas();
 }

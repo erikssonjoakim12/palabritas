@@ -51,8 +51,9 @@ const mons = section('Palabritas', 'Front (the opponent sees this) and back (you
 for (const [id, art] of Object.entries(CREATURE_ART)) card(mons, SPECIES[id]?.name ?? `${id[0].toUpperCase()}${id.slice(1)} (art only)`, [art.front, art.back], 3);
 
 const people = section('Battle portraits', 'Shown at the start and end of trainer battles. Built from each person\'s look, like the overworld sprites.');
-card(people, 'You (front · back)', [portrait('player'), portrait('player', 'back')], 3);
-for (const id of Object.keys(LOOKS)) if (id !== 'player') card(people, id, [portrait(id)], 3);
+card(people, 'You, boy (front · back)', [portrait('player'), portrait('player', 'back')], 3);
+card(people, 'You, girl (front · back)', [portrait('playerGirl'), portrait('playerGirl', 'back')], 3);
+for (const id of Object.keys(LOOKS)) if (!id.startsWith('player')) card(people, id, [portrait(id)], 3);
 
 const walk = section('Overworld sprites', 'Down, up, left, right (standing), then walking.');
 for (const id of Object.keys(LOOKS)) {

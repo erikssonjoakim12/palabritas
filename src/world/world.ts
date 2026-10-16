@@ -7,8 +7,8 @@ import { personFrames, OBJECTS, type Frames } from '../art/chars';
 import type { Img } from '../art/pixel';
 import { MAPS, type MapDef, type NpcDef, type Conn } from './maps';
 import { worldLayout } from './layout';
-import { G, flag, saveGame } from '../game/state';
-import { closeText, say } from '../ui/textbox';
+import { G, flag, saveGame, playerLook } from '../game/state';
+import { closeText, say, setSpeaker } from '../ui/textbox';
 
 export interface NpcRT {
   def: NpcDef;
@@ -125,9 +125,9 @@ export function loadMap(id: string, x: number, y: number, dir: Dir) {
   // Maps change between versions: never leave a loaded save standing inside a wall.
   [x, y] = nearestFree(x, y);
   Object.assign(player, { x, y, dir, moving: false, prog: 0 });
-  if (!player.frames) {
-    player.frames = framesFor('player');
-    const frames = player.frames;
+  const frames = framesFor(playerLook());
+  if (player.frames !== frames) {
+    player.frames = frames;
     whenIdle(() => warmUp(Object.values(frames).flat())); // your walking frames, before the first step
   }
   Object.assign(G.save, { map: id, x, y, dir });
@@ -178,11 +178,13 @@ function nearestFree(x: number, y: number): [number, number] {
 export async function runScript(fn: ScriptFn | undefined, c: ScriptCtx = {}) {
   if (!fn) return;
   G.lock++;
+  setSpeaker(c.npc?.def.look); // their voice for the dialog
   try {
     await fn(c);
   } catch (err) {
     console.error(err);
   } finally {
+    setSpeaker();
     closeText();
     G.lock--;
     input.clearPressed();

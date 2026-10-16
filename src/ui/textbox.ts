@@ -3,8 +3,12 @@ import { input } from '../engine/input';
 import { speak } from '../lang/speech';
 import { G } from '../game/state';
 import { sfx } from '../engine/sfx';
+import { isMaleLook } from '../style/people';
 
 let box: HTMLDivElement | null = null;
+/** Who is talking (a look id): male characters get a male voice. Set while talking to someone. */
+let speaker: string | undefined;
+export const setSpeaker = (lookId?: string) => (speaker = lookId);
 
 export interface SayOpts {
   /** English translation, shown with the EN button. */
@@ -19,7 +23,12 @@ export interface SayOpts {
   auto?: number;
 }
 
-export const fill = (text: string) => text.replace(/\{name\}/g, G.save.name);
+/**
+ * Fill in the player: {name}, and {o/a}-style endings that agree with you
+ * («¿Estás list{o/a}?» → «listo» or «lista»).
+ */
+export const fill = (text: string) =>
+  text.replace(/\{name\}/g, G.save.name).replace(/\{(\w*)\/(\w*)\}/g, (_, boy, girl) => (G.save.gender === 'girl' ? girl : boy));
 
 function ensureBox() {
   if (!box) {
@@ -51,7 +60,7 @@ export function say(raw: string, opts: SayOpts = {}): Promise<void> {
     const spk = el('button', 'tool', '🔊');
     spk.addEventListener('click', (e) => {
       e.stopPropagation();
-      speak(text, G.save.settings.slowVoice);
+      speak(text, G.save.settings.slowVoice, isMaleLook(speaker));
     });
     tools.appendChild(spk);
   }
@@ -67,7 +76,7 @@ export function say(raw: string, opts: SayOpts = {}): Promise<void> {
   b.append(textEl, enEl, tools, arrow);
   b.style.paddingRight = tools.childElementCount ? '' : `calc(var(--px) * 8)`;
 
-  if (voice && (opts.speakNow || G.save.settings.dialogVoice)) speak(text, G.save.settings.slowVoice);
+  if (voice && (opts.speakNow || G.save.settings.dialogVoice)) speak(text, G.save.settings.slowVoice, isMaleLook(speaker));
 
   return new Promise((resolve) => {
     let shown = 0;

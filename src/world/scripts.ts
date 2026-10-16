@@ -459,7 +459,7 @@ const S: Record<string, (c: ScriptCtx) => Promise<void>> = {
 
   /** The shop: pick something, then ask for it in Spanish (written or spoken). */
   async cajera() {
-    await say('¡Bienvenido a la tienda! ¿Qué deseas comprar?', { en: 'Welcome to the shop! What would you like to buy?', noWait: true });
+    await say('¡Bienvenid{o/a} a la tienda! ¿Qué deseas comprar?', { en: 'Welcome to the shop! What would you like to buy?', noWait: true });
     while (true) {
       const i = await menu([...SHOP.map((id) => `${ITEM_DEFS[id].name}  ${money(ITEM_DEFS[id].price)}`), 'Nada'], {
         cancel: true,
@@ -547,7 +547,7 @@ const S: Record<string, (c: ScriptCtx) => Promise<void>> = {
   andres: () =>
     trainerFight('andres', {
       intro: ['¿Vas al gimnasio? ¡Primero tienes que pasar por mí!', 'Going to the gym? First you have to get past me!'],
-      defeated: ['Estás listo para Paloma... creo.', 'You’re ready for Paloma... I think.'],
+      defeated: ['Estás list{o/a} para Paloma... creo.', 'You’re ready for Paloma... I think.'],
       after: ['El Palomón de Paloma es muy fuerte. ¡Entrena bien antes de entrar!', 'Paloma’s Palomón is very strong. Train well before you go in!'],
     }),
 
@@ -617,7 +617,7 @@ const S: Record<string, (c: ScriptCtx) => Promise<void>> = {
       ['Soy Paloma, la reina del cielo de Ciudad Brisa. ¡Nadie ha ganado esta medalla en meses!', 'I’m Paloma, queen of the Breeze City sky. Nobody has won this medal in months!'],
       ['El viento está de mi lado. ¿De verdad crees que puedes ganarme?', 'The wind is on my side. Do you really think you can beat me?'],
     );
-    if (!(await ask('¿Estás listo para volar?', { en: 'Are you ready to fly?' }))) return lines(['Lo sabía. Vuelve cuando tengas valor.', 'I knew it. Come back when you’re brave enough.']);
+    if (!(await ask('¿Estás list{o/a} para volar?', { en: 'Are you ready to fly?' }))) return lines(['Lo sabía. Vuelve cuando tengas valor.', 'I knew it. Come back when you’re brave enough.']);
     await lines(['¡Entonces que sople el viento!', 'Then let the wind blow!']);
     const res = await trainerBattle(TRAINERS.paloma, {
       look: 'paloma',

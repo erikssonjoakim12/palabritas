@@ -298,9 +298,13 @@ export interface Look {
   color: string;
 }
 
+/** Male characters (a cap or the men's haircut) talk with a male voice. */
+export const isMaleLook = (lookId?: string) => !!lookId && ['cap', 'crew'].includes(LOOKS[lookId]?.head);
+
 /** Who looks like what. Change a color or head here to restyle a character. */
 export const LOOKS: Record<string, Look> = {
   player: { head: 'cap', body: 'pants', color: 'red' },
+  playerGirl: { head: 'long', body: 'pants', color: 'red' },
   mom: { head: 'long', body: 'dress', color: 'pink' },
   prof: { head: 'bun', body: 'coat', color: 'white' },
   boy: { head: 'cap', body: 'pants', color: 'blue' },
