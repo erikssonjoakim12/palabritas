@@ -13,7 +13,7 @@ import { pickMon, showDetails, listMenu, spriteCanvas, detailBox, wordRow, openD
 import { openBag } from './bag';
 import { money } from '../game/bag';
 
-const DEX_ORDER = ['salchichita', 'gotita', 'aguacatito', 'pajarito', 'palomon', 'conejito', 'mariposita', 'sillon'];
+const DEX_ORDER = ['salchichita', 'hamburgueson', 'gotita', 'nubarron', 'aguacatito', 'aguacatono', 'pajarito', 'palomon', 'conejito', 'mariposita', 'sillon'];
 
 export async function startMenu() {
   sfx('select');

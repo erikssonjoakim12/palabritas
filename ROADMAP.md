@@ -11,7 +11,7 @@ Status: **plan** (nothing below is built yet unless marked ✓). Learning detail
 | **Male voices for male characters** ✓ | Each character gets a voice: male or female (from their look). The game picks a male Spanish voice when the phone has one; if not, it lowers the pitch of the voice it has. Phones differ: Android usually has one Google es-MX/es-US voice; some have several. |
 | **Choose boy or girl** ✓ | At the start of a new game. Changes your overworld sprite and battle portraits, and the Spanish people use with you: «¿Estás **listo/lista**?», «Bienvenido/Bienvenida», «¡Qué cansado/cansada!». That also teaches gender agreement. |
 
-## 2. Evolutions (starters first)
+## 2. Evolutions (starters first) ✓
 
 Like Gold/Silver: at a set level, at the end of a turn (mid-battle, the "anime moment"), with the evolution animation.
 The theme and learned words stay; base stats go up; new name and art.
@@ -118,9 +118,9 @@ themes grow from the creatures, as you said.
 ## 6. Suggested order of work
 
 1. **Quick changes:** 50/50 critical hits, boy/girl choice (with gendered Spanish), male/female voices.
-2. **Evolutions** for the three starters (system + placeholder art).
+2. **Evolutions** ✓ for the three starters (system + placeholder art).
 3. **World mechanics:** ledges, mountain/cliff tiles, cave tiles, reusable gate guards.
-4. **Pueblo Amanecer** expansion (water south/east, the west ledge).
+4. **Pueblo Amanecer** ✓ expansion (water south/east, the west ledge).
 5. **Ruta 3, its Palacentro, and the cave**, with new Palabritas (your designs) and trainers (Nv 10-16).
 6. **Content for levels 21-40** (A2 core words and sentences), needed before gym 3.
 7. **Gym 2** and its town, then onward region by region.

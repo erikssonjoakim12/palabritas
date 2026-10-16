@@ -71,6 +71,21 @@ export function checkLevelUps(): LevelUp[] {
   return ups;
 }
 
+/** Party Palabritas that have reached the level to evolve. */
+export const evolutionsDue = () => G.save.party.filter((m) => {
+  const e = SPECIES[m.sp].evolves;
+  return e && m.level >= e.level;
+});
+
+/** Evolve: new species, and the extra PS of the new form (damage taken stays). */
+export function evolve(mon: Mon) {
+  const to = SPECIES[mon.sp].evolves!.to;
+  const before = stats(mon).maxHp;
+  mon.sp = to;
+  if (mon.hp > 0) mon.hp += stats(mon).maxHp - before;
+  markCaught(to);
+}
+
 export function markSeen(sp: string) {
   if (!G.save.seen.includes(sp)) G.save.seen.push(sp);
 }

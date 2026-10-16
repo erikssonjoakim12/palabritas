@@ -7,7 +7,7 @@ import { portrait } from '../art/portraits';
 import type { Img } from '../art/pixel';
 import { LINEUP_BALL, BALL_COLORS, FAINTED_COLORS, EMPTY_COLORS, drawPattern } from '../art/balls';
 import { G, playerLook, type Mon } from '../game/state';
-import { stats, monName, checkLevelUps, firstAble, markSeen, markCaught, newMon, knownMoves, newMoves } from '../game/mon';
+import { stats, monName, checkLevelUps, firstAble, markSeen, markCaught, newMon, knownMoves, newMoves, evolutionsDue, evolve } from '../game/mon';
 import { SPECIES, MODE_INFO, type Move } from '../data/species';
 import { effectiveness } from '../data/types';
 import { THEMES, type Item } from '../data/content';
@@ -307,6 +307,27 @@ async function runBattle(cfg: Config): Promise<BattleResult> {
         });
       }
     }
+    for (const mon of evolutionsDue()) await evolveNow(mon);
+  };
+
+  /** Evolution right in the battle: the sprite flickers between the two forms, then changes. */
+  const evolveNow = async (mon: Mon) => {
+    const from = monName(mon);
+    await info(`¿Qué? ¡${from} está evolucionando!`, { en: `What? ${from} is evolving!` });
+    const to = SPECIES[mon.sp].evolves!.to;
+    if (mon === me && meF) {
+      const [oldImg, newImg] = [CREATURE_ART[mon.sp].back, CREATURE_ART[to].back];
+      for (let i = 0; i < 12; i++) {
+        meF.img = i % 2 ? oldImg : newImg;
+        sfx('blip');
+        await frames(Math.max(4, 14 - i));
+      }
+      meF.img = newImg;
+    }
+    evolve(mon);
+    sfx('caught');
+    hud?.update();
+    await info(`¡Felicidades! ¡${from} evolucionó a ${monName(mon)}!`, { en: `Congratulations! ${from} evolved into ${monName(mon)}!` });
   };
 
   const sendOut = async (mon: Mon) => {

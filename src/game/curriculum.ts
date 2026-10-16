@@ -1,5 +1,5 @@
 import { THEMES, tierItems, coreItemsPerLevel, type Item } from '../data/content';
-import { SPECIES } from '../data/species';
+import { SPECIES, firstForm } from '../data/species';
 import { seededShuffle } from './random';
 
 /*
@@ -20,7 +20,7 @@ function coreFor(spId: string, level: number, pathPos: number): Item[] {
   const n = coreItemsPerLevel(level);
   if (SPECIES[spId].starter) return THEMES.core.items.slice(pathPos, pathPos + n);
   const slice = tierItems('core', level);
-  return slice.length <= n ? slice : seededShuffle(slice, `${spId}:${level}`).slice(0, n);
+  return slice.length <= n ? slice : seededShuffle(slice, `${firstForm(spId)}:${level}`).slice(0, n);
 }
 
 /** Index = level; each entry = the new items of that level. */

@@ -35,6 +35,8 @@ export interface Species {
   /** 0..1, higher is easier to catch. */
   catchRate: number;
   dex: { es: string; en: string };
+  /** Evolves into another species at a level (at the end of a battle turn, like in the anime). */
+  evolves?: { to: string; level: number };
 }
 
 const m = (name: string, type: Type, mode: Mode, level?: number): Move => ({ name, type, mode, level });
@@ -148,6 +150,53 @@ export const SPECIES: Record<string, Species> = {
     },
   },
 };
+
+/**
+ * An evolved form: the same theme, moves and words as the form before it (its learning simply
+ * continues), with a new name, types, art, stats and dex entry.
+ */
+function evolution(from: string, level: number, s: Pick<Species, 'id' | 'name' | 'types' | 'base' | 'dex'>) {
+  const prev = SPECIES[from];
+  prev.evolves = { to: s.id, level };
+  SPECIES[s.id] = { ...s, theme: prev.theme, starter: prev.starter, moves: prev.moves, catchRate: prev.catchRate / 2 };
+}
+
+evolution('salchichita', 16, {
+  id: 'hamburgueson',
+  name: 'Hamburguesón',
+  types: ['Fuego'],
+  base: { hp: 62, atk: 74, def: 60, spd: 78 },
+  dex: {
+    es: 'Creció tanto que ya no cabe en un pan de perro caliente: ahora vive en una hamburguesa.',
+    en: 'It grew so much it no longer fits in a hot dog bun: now it lives in a burger.',
+  },
+});
+evolution('gotita', 16, {
+  id: 'nubarron',
+  name: 'Nubarrón',
+  types: ['Agua'],
+  base: { hp: 66, atk: 64, def: 80, spd: 60 },
+  dex: {
+    es: 'Muchas gotas juntas forman un nubarrón. Cuando se enoja, truena.',
+    en: 'Many drops together make a storm cloud. When it gets angry, it thunders.',
+  },
+});
+evolution('aguacatito', 16, {
+  id: 'aguacatono',
+  name: 'Aguacatoño',
+  types: ['Planta'],
+  base: { hp: 68, atk: 68, def: 72, spd: 56 },
+  dex: {
+    es: 'El hueso de un Aguacatito echó raíces. Algún día será un árbol grande.',
+    en: 'An Aguacatito pit put down roots. One day it will be a big tree.',
+  },
+});
+
+/** The first form of a Palabrita's line (its words are chosen by the first form). */
+export function firstForm(id: string): string {
+  const prev = Object.values(SPECIES).find((s) => s.evolves?.to === id);
+  return prev ? firstForm(prev.id) : id;
+}
 
 /**
  * Your starter begins here, a bit stronger than the first wild Palabritas and trainers.

@@ -65,6 +65,45 @@ const DRAW: Record<string, Draw> = {
     p.set(22, 12, W).set(26, 12, W);
     p.outline('#2a2238');
   },
+  // ----- Placeholders for the starters' evolutions, until the real art arrives -----
+  /** A dachshund in a burger: buns, patty, lettuce and cheese, the dog's head and tail sticking out. */
+  hamburgueson(p) {
+    const bun = '#e8a050', bunDk = '#c07830', dog = '#8a4a20', patty = '#5a2e14';
+    p.ellipse(9, 22, 6, 6, dog).ellipse(6, 27, 3, 4, '#6c3717'); // head and ear
+    p.poly([[40, 26], [46, 16], [44, 28]], dog); // tail
+    p.ellipse(24, 38, 18, 5, bun).ellipse(24, 40, 17, 3, bunDk); // bottom bun
+    p.rect(8, 31, 32, 4, patty);
+    p.poly([[7, 30], [41, 30], [39, 33], [9, 33]], '#58b030'); // lettuce
+    p.rect(9, 29, 30, 2, '#f8c838'); // cheese
+    p.ellipse(24, 23, 17, 9, bun).ellipse(24, 27, 17, 3, bunDk); // top bun
+    for (const [x, y] of [[16, 18], [22, 16], [29, 17], [34, 21], [19, 22], [27, 21]]) p.rect(x, y, 2, 1, '#fff4d0'); // sesame
+    p.rect(14, 41, 3, 5, dog).rect(31, 41, 3, 5, dog); // legs
+    p.set(7, 20, K).set(3, 23, K);
+    p.rect(1, 23, 3, 2, '#e880a8'); // tongue
+    p.outline('#3a1c08');
+  },
+  /** A grumpy storm cloud with raindrops. */
+  nubarron(p) {
+    const lt = '#c8d0e8', dk = '#8890b0', drop = '#5aa8f0';
+    p.ellipse(14, 24, 10, 9, lt).ellipse(28, 18, 13, 12, lt).ellipse(37, 26, 9, 8, lt).ellipse(24, 28, 16, 8, lt);
+    p.ellipse(25, 33, 17, 4, dk);
+    p.ellipse(20, 23, 2, 3, K).ellipse(30, 23, 2, 3, K);
+    p.set(19, 22, W).set(29, 22, W);
+    p.line(17, 19, 22, 21, K).line(33, 19, 28, 21, K); // grumpy brows
+    p.rect(23, 29, 4, 1, K);
+    for (const [x, y] of [[13, 41], [22, 44], [31, 41], [38, 45], [8, 45]]) p.ellipse(x, y, 1.5, 2.5, drop);
+    p.outline('#404868');
+  },
+  /** A young avocado tree: a slim trunk, leaves, and a little avocado with a face. */
+  aguacatono(p) {
+    const leaf = '#4aa84a', leafDk = '#2f6b2a', trunk = '#8b5a2b', fruit = '#2f5928', flesh = '#c9e27a';
+    p.rect(22, 26, 4, 18, trunk).ellipse(24, 45, 8, 2, '#6c3717'); // trunk and roots
+    p.ellipse(15, 15, 9, 6, leafDk).ellipse(33, 14, 9, 6, leafDk).ellipse(24, 9, 8, 7, leaf);
+    p.ellipse(13, 19, 7, 4, leaf).ellipse(35, 18, 7, 4, leaf);
+    p.ellipse(31, 30, 5, 7, fruit).ellipse(31, 31, 3, 5, flesh); // a little avocado
+    p.set(30, 29, K).set(33, 29, K).set(31, 32, K).set(32, 32, K);
+    p.outline('#163314');
+  },
   sillon(p) {
     const rd = '#c8463e', dr = '#8e2a26', cu = '#e86a5a', wd = '#7a4a22';
     p.ellipse(24, 9, 14, 5, rd);
