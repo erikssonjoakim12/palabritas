@@ -571,13 +571,19 @@ export function renderWorld(g: CanvasRenderingContext2D) {
   }
   sprites.sort((a, b) => a.y - b.y).forEach((s) => s.draw());
 
-  // Tall grass covers your feet, like in Gold/Silver, also while walking through it:
-  // the front half of the grass tiles you're on (both while moving) is drawn over you.
+  // Tall grass covers your feet, like in Gold/Silver, also while walking through it: the grass
+  // tiles you're on (both while moving) are drawn over you, but only in a band at your feet,
+  // so the tile you're leaving never covers your head.
   const under = player.moving ? [[player.x, player.y], [player.x - DX[player.dir], player.y - DY[player.dir]]] : [[player.x, player.y]];
+  g.save();
+  g.beginPath();
+  g.rect(64, 64 + 9, T, T - 9);
+  g.clip();
   for (const [tx, ty] of under) {
     if (TILES[tileAt(tx, ty)].kind !== 'tallgrass') continue;
-    g.drawImage((grassOverlay ??= tallGrassImage()), 0, 9, 16, 7, tx * T - camX, ty * T - camY + 9, 16, 7);
+    g.drawImage((grassOverlay ??= tallGrassImage()), tx * T - camX, ty * T - camY);
   }
+  g.restore();
   if (fade > 0) {
     g.fillStyle = `rgba(0,0,0,${fade})`;
     g.fillRect(0, 0, W, H);
