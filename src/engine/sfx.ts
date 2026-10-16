@@ -34,12 +34,13 @@ function seq(notes: [number, number][], step = 0.09, type: OscillatorType = 'squ
 export type Sfx =
   | 'blip' | 'select' | 'bump' | 'door' | 'hit' | 'super' | 'weak' | 'miss'
   | 'faint' | 'levelup' | 'heal' | 'right' | 'perfect' | 'wrong' | 'throw'
-  | 'shake' | 'caught' | 'encounter' | 'badge' | 'alert';
+  | 'shake' | 'caught' | 'encounter' | 'badge' | 'alert' | 'jump';
 
 export function sfx(name: Sfx) {
   if (!ac) return;
   switch (name) {
     case 'blip': return tone(1200, 0, 0.03, 'square', 0.03);
+    case 'jump': return seq([[300, 1], [450, 1], [600, 1], [450, 1]], 0.04, 'square', 0.04);
     case 'select': return seq([[880, 1], [1320, 1]], 0.04, 'square', 0.04);
     case 'bump': return tone(110, 0, 0.08, 'square', 0.05);
     case 'door': return seq([[300, 1], [200, 1], [150, 2]], 0.05, 'triangle', 0.08);

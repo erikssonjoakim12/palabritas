@@ -80,6 +80,8 @@ export const player = {
   hidden: false,
   /** Pixels per frame of the current step. */
   speed: 0,
+  /** Length of the current move in pixels (two tiles when hopping a ledge). */
+  dist: 16,
   frames: null as Frames | null,
 };
 
@@ -257,9 +259,11 @@ export async function scriptedStep(d: Dir) {
 
 // ---------- Movement ----------
 
-function startMove(nx: number, ny: number) {
+/** Start moving to (nx, ny), `dist` pixels away (a normal step is one tile; hopping a ledge is two). */
+function startMove(nx: number, ny: number, dist = T) {
   player.x = nx;
   player.y = ny;
+  player.dist = dist;
   player.moving = true;
   player.prog = 0;
   player.step ^= 1;
@@ -284,6 +288,14 @@ function tryMove(d: Dir) {
     if (conn) crossConnection(d, conn);
     else bump();
     return;
+  }
+  const ledge = TILES[tileAt(nx, ny)].ledge;
+  if (ledge) {
+    // Hop down over it from the high side, landing on the tile beyond; it's a wall otherwise.
+    const [lx, ly] = [nx + DX[d], ny + DY[d]];
+    if (ledge !== d || !walkable(lx, ly)) return bump();
+    sfx('jump');
+    return startMove(lx, ly, 2 * T);
   }
   if (!walkable(nx, ny)) return bump();
   startMove(nx, ny);
@@ -371,7 +383,7 @@ export function updateWorld() {
   if (player.moving) {
     player.speed = T / (input.isHeld('B') && !player.scripted ? RUN_FRAMES : WALK_FRAMES);
     player.prog += player.speed;
-    if (player.prog >= T - 1e-6) {
+    if (player.prog >= player.dist - 1e-6) {
       player.moving = false;
       player.prog = 0;
       player.justMoved = true;
@@ -517,8 +529,10 @@ const snap = (v: number) => Math.round(v * scaleFactor) / scaleFactor;
 
 export function renderWorld(g: CanvasRenderingContext2D) {
   // Mid-step, draw the player as far along as time says (smooth on 90/120 Hz screens too).
-  const prog = player.moving ? Math.min(T, player.prog + player.speed * frameAlpha()) : 0;
-  const off = player.moving ? T - prog : 0;
+  const prog = player.moving ? Math.min(player.dist, player.prog + player.speed * frameAlpha()) : 0;
+  const off = player.moving ? player.dist - prog : 0;
+  /** Hopping a ledge: the player rises and falls, over a shadow. */
+  const hop = player.moving && player.dist > T ? Math.round(Math.sin((Math.PI * prog) / player.dist) * 8) : 0;
   const px = player.x * T - DX[player.dir] * off;
   const py = player.y * T - DY[player.dir] * off;
   const camX = snap(px - 64);
@@ -544,7 +558,16 @@ export function renderWorld(g: CanvasRenderingContext2D) {
   if (!player.hidden && player.frames) {
     const fr = player.frames[player.dir];
     const img = player.moving && player.prog < 8 ? fr[player.step ? 1 : 2] : fr[0];
-    sprites.push({ y: py, draw: () => g.drawImage(img, 64, 60) });
+    sprites.push({
+      y: py,
+      draw: () => {
+        if (hop) {
+          g.fillStyle = 'rgba(0,0,0,0.25)';
+          g.fillRect(67, 74, 10, 2);
+        }
+        g.drawImage(img, 64, 60 - hop);
+      },
+    });
   }
   sprites.sort((a, b) => a.y - b.y).forEach((s) => s.draw());
 

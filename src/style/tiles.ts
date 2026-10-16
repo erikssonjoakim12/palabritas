@@ -77,6 +77,15 @@ export const ART: Record<string, TileArt> = {
     rows: tile8(['00000000', '00100000', '00000010', '00000100', '10000000', '00001000', '00000000', '01000010']),
   },
   grassGround: { pal: OUTDOOR.grass, rows: grassRows },
+  /**
+   * Ledges: grass with a lip you can hop down but not climb (like Gold/Silver).
+   * ledgeRight: the high side is on the left, you hop east. ledgeDown: you hop south.
+   */
+  ledgeRight: { pal: OUTDOOR.grass, rows: grassRows.map((r, y) => r.slice(0, 10) + (y % 4 === 1 ? '00' : '01') + '1232') },
+  ledgeDown: {
+    pal: OUTDOOR.grass,
+    rows: grassRows.map((r, y) => (y === 10 ? '0000000000000000' : y === 11 ? '1101111011011110' : y === 12 ? '2222222222222222' : y === 13 ? '3333333333333333' : r)),
+  },
   /** Tall grass: a "V" tuft every 8 pixels. */
   tallGrass: {
     pal: OUTDOOR.grass,

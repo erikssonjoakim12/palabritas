@@ -46,7 +46,7 @@ local words (*chunche*, *tuani*, *¡ideay!*, *va pues*). Great B1/B2 content: re
 
 ### Map changes, near term
 
-- **Pueblo Amanecer:** water to the south and east (for SURF later), and a **ledge** to the west: you can see a
+- **Pueblo Amanecer** ✓: water to the south and east (for SURF later), and a **ledge** to the west: you can see a
   route down there but can't climb up to it yet. Later you come back from the other side and jump down.
 - **Ruta 3** (west of Ciudad Brisa): an **officer** blocks it until you have the Breeze Medal ("only tough
   trainers may pass"). Mountains instead of trees; the path goes left, up, left; tall grass, **ledges**,
@@ -58,7 +58,7 @@ New world mechanics this needs:
 
 | Mechanic | What |
 |---|---|
-| Ledges | One-way tiles: jump down (with a little hop), can't walk up. |
+| Ledges ✓ | One-way tiles: jump down (with a little hop), can't walk up. |
 | Mountain/cliff tiles | Rocky walls and mountain ground for routes outside towns. |
 | Cave tileset | Rock walls, cave floor, entrance; maybe darkness later. |
 | Gate guards | Generalize Beto: "blocks the way until a flag/medal", reusable for every gate. |

@@ -78,7 +78,7 @@ export function newSave(): SaveData {
     y: 2,
     dir: 'down',
     party: [],
-    flags: {},
+    flags: { amanecerWide: true },
     gender: 'boy',
     money: 0,
     bag: {},
@@ -132,6 +132,11 @@ function migrate(s: SaveData) {
   const old = s as unknown as { esferas?: number; palabolas?: number };
   s.bag ??= {};
   s.gender ??= 'boy';
+  // Pueblo Amanecer grew 6 columns to the west (the plateau): keep you where you were.
+  if (!s.flags.amanecerWide) {
+    if (s.map === 'amanecer') s.x += 6;
+    s.flags.amanecerWide = true;
+  }
   s.money ??= 0;
   const balls = Math.max(old.palabolas ?? 0, old.esferas ?? 0);
   if (balls) s.bag.palabola = (s.bag.palabola ?? 0) + balls;

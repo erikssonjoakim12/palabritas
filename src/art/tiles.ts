@@ -1,6 +1,7 @@
 import { makeCanvas, type Img } from './pixel';
 import { ART, type TileArt } from '../style/tiles';
 import { ROOFS, type Pal } from '../style/colors';
+import type { Dir } from '../engine/input';
 
 /*
   Turns the tile art in style/tiles.ts into images, per map:
@@ -15,6 +16,8 @@ export type TileKind = 'tallgrass' | 'door' | 'mat' | 'counter' | 'water';
 export interface TileDef {
   solid: boolean;
   kind?: TileKind;
+  /** A ledge: you hop over it when walking this way (from the high side); otherwise it's solid. */
+  ledge?: Dir;
   /** Text shown when you press A facing this tile. */
   look?: { es: string; en: string };
 }
@@ -40,6 +43,8 @@ export const TILES: Record<string, TileDef> = {
   '=': open(),
   '*': open(),
   T: solid(),
+  '>': solid({ ledge: 'right' }),
+  v: solid({ ledge: 'down' }),
   Y: solid({ look: { es: '¡Un limonero! Huele muy bien.', en: 'A lemon tree! It smells very nice.' } }),
   '~': solid({ kind: 'water' }),
   f: solid(),
@@ -204,6 +209,10 @@ function render(ch: string, env: TileEnv): Img {
       return paintArt(ART.flowers);
     case 'T':
       return paintArt(ART.tree);
+    case '>':
+      return paintArt(ART.ledgeRight);
+    case 'v':
+      return paintArt(ART.ledgeDown);
     case 'Y':
       return paintArt(ART.lemonTree);
     case '~':
