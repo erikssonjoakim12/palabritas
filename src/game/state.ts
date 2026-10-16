@@ -138,6 +138,9 @@ function migrate(s: SaveData) {
     s.flags.amanecerWide = true;
   }
   s.money ??= 0;
+  // The Ruta 2 potion became a general item ball.
+  if (s.flags.pocionRuta2) Object.assign(s.flags, { 'item:pocion_ruta2': true, itemTip: true });
+  delete s.flags.pocionRuta2;
   const balls = Math.max(old.palabolas ?? 0, old.esferas ?? 0);
   if (balls) s.bag.palabola = (s.bag.palabola ?? 0) + balls;
   delete old.esferas;

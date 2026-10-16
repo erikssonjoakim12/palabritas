@@ -33,6 +33,8 @@ export interface NpcDef {
   sight?: number;
   /** Looks around now and then. */
   turns?: boolean;
+  /** Item balls: what's inside (key in ITEM_DEFS). */
+  item?: string;
 }
 
 export interface Conn {
@@ -92,6 +94,8 @@ const HOUSE = ['##L##V##', '________', '_kk_____', '_kk_____', '________', '____
 // Palacentro: posters (u), nurse behind the counter (C) next to the healing machine,
 // a computer (Q) and waiting sofas (n).
 const CENTRO = ['##u####u##', 'PxxxxxxxxP', 'xxxCCCCxxx', 'xxxxxxxxQx', 'xxxxxxxxxx', 'nxxxxxxxxn', 'nxxxxxxxxn', 'xxxxmxxxxx'];
+/** An item ball on the ground, like Gold/Silver's: picked up once (scripts.ts, itemBall). */
+const itemBall = (id: string, x: number, y: number, item: string): NpcDef => ({ id, x, y, object: 'palabola', item, script: 'itemBall', show: () => !flag(`item:${id}`) });
 const MAQUINA: NpcDef = { id: 'maquina', x: 5, y: 1, object: 'maquina', script: 'maquina' };
 /** A Palacentro inside: the nurse, the healing machine, and whoever else is there. */
 const centro = (id: string, exit: MapDef['exit'], more: NpcDef[] = []): MapDef => ({
@@ -395,7 +399,7 @@ export const MAPS: Record<string, MapDef> = {
       { id: 'lola', x: 4, y: 36, look: 'girl', dir: 'right', script: 'lola', turns: true },
       { id: 'valeria', x: 3, y: 33, look: 'painter', dir: 'right', script: 'valeria', sight: 3 },
       { id: 'mateo', x: 13, y: 25, look: 'mateo', dir: 'left', script: 'mateo', sight: 3 },
-      { id: 'pocion_ruta2', x: 6, y: 22, object: 'palabola', script: 'pocionRuta2', show: () => !flag('pocionRuta2') },
+      itemBall('pocion_ruta2', 6, 22, 'pocion'),
       { id: 'tomas', x: 9, y: 18, look: 'hiker', dir: 'left', script: 'tomas', sight: 3 },
       { id: 'andres', x: 12, y: 2, look: 'andres', dir: 'left', script: 'andres', sight: 3 },
     ],
@@ -587,9 +591,9 @@ export const MAPS: Record<string, MapDef> = {
     encounters: {
       rate: 0.12,
       table: [
-        { sp: 'hojadillo', min: 9, max: 10, w: 40 },
-        { sp: 'pajarito', min: 9, max: 10, w: 30 },
-        { sp: 'mariposita', min: 9, max: 10, w: 30 },
+        { sp: 'hojadillo', min: 7, max: 11, w: 40 },
+        { sp: 'pajarito', min: 7, max: 11, w: 30 },
+        { sp: 'mariposita', min: 7, max: 11, w: 30 },
       ],
     },
     // Trainers look like Ruta 2's. Those in the passes and spurs can't be walked past unseen.
@@ -646,14 +650,14 @@ export const MAPS: Record<string, MapDef> = {
       '%%%%;;;%%%%%%%%%%%%%%%%%;;;;;;;;;;;;;;;;;;;%%;;;;;;%%%%%',
       '%%%%;;;%%%%%%%%%%%%%%%%%;;;;;;;;;;;;;;;;;;;;;;;;;;;%%%%%',
       '%%%%;;;%%%%%%%%%%%%%%%%%;;;;;;;;;;;;;;;;;;;;;;;;;;;%%%%%',
-      '%%%%;;;%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%;;;;;;;;;;;%%%%%',
-      '%%;;;;;;;;;%%%%%%%%%%%%%%%%%%%%%%%%%%%%%;;;;;;;;;;;%%%%%',
-      '%%;;;;;;;;;%%%;;;;;;;;;%%%%%%%%%%%%%%%%%;;;;;;;;;;;%%%%%',
-      '%%;;;;;;;;;%%%;;;;;;;;;%%%%%%%%%%%%%%%%%;;;;;;;;;;;%%%%%',
-      '%%;;;;;;;;;%%%;;;;%%;;;%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%',
-      '%%;;;;;;;;;;;;;;;;%%;;;%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%',
-      '%%;;;;;;;;;;;;;;;;;;;;;%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%',
-      '%%;;;;;;;;;%%%;;;;;;;;;%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%',
+      '%%%%;;;%%%%%%%%%%%%%%%%%%%%%;;%%%%%%%%%%;;;;;;;;;;;%%%%%',
+      '%%;;;;;;;;;%%%%%%%%%%%%%%%%%;;%%%%%%%%%%;;;;;;;;;;;%%%%%',
+      '%%;;;;;;;;;%%%;;;;;;;;;%%%%%;;%%%%%%%%%%;;;;;;;;;;;%%%%%',
+      '%%;;;;;;;;;%%%;;;;;;;;;%%;;;;;;;;;%%%%%%;;;;;;;;;;;%%%%%',
+      '%%;;;;;;;;;%%%;;;;%%;;;%%;;;;;;;;;%%%%%%%%%%%%%%%%%%%%%%',
+      '%%;;;;;;;;;;;;;;;;%%;;;%%;;%;;;;;;%%%%%%%%%%%%%%%%%%%%%%',
+      '%%;;;;;;;;;;;;;;;;;;;;;%%;;%;;;;;;%%%%%%%%%%%%%%%%%%%%%%',
+      '%%;;;;;;;;;%%%;;;;;;;;;%%;;;;;;;;;%%%%%%%%%%%%%%%%%%%%%%',
       '%%;;;;;;;;;%%%;;;;;;;;;%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%',
       '%%;;;;;;;;;%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%',
       '%%%%e%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%',
@@ -664,9 +668,9 @@ export const MAPS: Record<string, MapDef> = {
       rate: 0.08,
       everywhere: true,
       table: [
-        { sp: 'ecolin', min: 10, max: 13, w: 45 },
-        { sp: 'ochopatas', min: 10, max: 13, w: 30 },
-        { sp: 'cuernito', min: 11, max: 13, w: 25 },
+        { sp: 'ecolin', min: 8, max: 13, w: 45 },
+        { sp: 'ochopatas', min: 8, max: 13, w: 30 },
+        { sp: 'cuernito', min: 8, max: 13, w: 25 },
       ],
     },
     npcs: [
@@ -676,6 +680,8 @@ export const MAPS: Record<string, MapDef> = {
       { id: 'javier', x: 46, y: 12, look: 'espeleologo', dir: 'right', script: 'javier', sight: 2 },
       // In the side room: optional.
       { id: 'rocio', x: 21, y: 36, look: 'exploradora', dir: 'left', script: 'rocio', sight: 3 },
+      // Halfway, in a dead-end room south of the big chamber.
+      itemBall('pocion_cueva', 32, 35, 'pocion'),
     ],
   },
 

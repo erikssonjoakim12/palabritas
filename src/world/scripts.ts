@@ -633,14 +633,18 @@ const S: Record<string, (c: ScriptCtx) => Promise<void>> = {
       after: ['Aquí nadie me molesta. Bueno, solo los Ochopatas.', 'Nobody bothers me here. Well, only the Ochopatas.'],
     }),
 
-  /** A Palabola-shaped item ball halfway through Ruta 2, like Gold/Silver's. */
-  async pocionRuta2() {
-    if (flag('pocionRuta2')) return;
-    setFlag('pocionRuta2');
-    addItem('pocion');
+  /** An item ball (maps.ts, itemBall): what's inside goes in your bag, once. */
+  async itemBall(c) {
+    const { id, item } = c.npc!.def;
+    if (!item || flag(`item:${id}`)) return;
+    setFlag(`item:${id}`);
+    addItem(item);
     sfx('levelup');
-    await info('¡{name} encontró una Poción!', { en: '{name} found a Potion!' });
-    await info('Úsala desde START → MOCHILA, o en batalla.', { en: 'Use it from START → MOCHILA, or in battle.' });
+    await info(`¡{name} encontró ${amountOf(item, 1)}!`, { en: `{name} found a ${ITEM_DEFS[item].enName}!` });
+    if (!flag('itemTip')) {
+      setFlag('itemTip');
+      await info('Lo que encuentras está en START → MOCHILA. ¡También puedes usarlo en batalla!', { en: 'What you find is in START → MOCHILA. You can use it in battle too!' });
+    }
     refreshNpcs();
   },
 
