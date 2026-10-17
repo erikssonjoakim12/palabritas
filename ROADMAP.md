@@ -128,3 +128,6 @@ themes grow from the creatures, as you said.
 5. **Ruta 3, its Palacentro, and the cave** (maps ✓), with new Palabritas (your designs) and trainers (Nv 10-16).
 6. **Content for levels 21-40** (A2 core words and sentences), needed before gym 3.
 7. **Gym 2** and its town, then onward region by region.
+
+The detailed plan for gyms 2-4 (places, story, side quests, Palabritas, Spanish, systems, build order):
+[PLAN_GYMS_2-4.md](PLAN_GYMS_2-4.md).
