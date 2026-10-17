@@ -7,7 +7,7 @@ import { portrait } from '../art/portraits';
 import type { Img } from '../art/pixel';
 import { LINEUP_BALL, BALL_COLORS, FAINTED_COLORS, EMPTY_COLORS, drawPattern } from '../art/balls';
 import { G, playerLook, type Mon } from '../game/state';
-import { stats, monName, checkLevelUps, firstAble, markSeen, markCaught, newMon, knownMoves, newMoves, evolutionsDue, evolve } from '../game/mon';
+import { stats, monName, checkLevelUps, firstAble, markSeen, keepMon, newMon, knownMoves, newMoves, evolutionsDue, evolve } from '../game/mon';
 import { SPECIES, MODE_INFO, type Move } from '../data/species';
 import { effectiveness } from '../data/types';
 import { THEMES, type Item } from '../data/content';
@@ -521,10 +521,6 @@ async function runBattle(cfg: Config): Promise<BattleResult> {
   };
 
   const throwPalabola = async (): Promise<'caught' | 'failed' | 'cancel'> => {
-    if (G.save.party.length >= 6) {
-      await info('Tu equipo está lleno (máximo 6).');
-      return 'cancel';
-    }
     if (!takeItem('palabola')) return 'cancel';
     const sp = SPECIES[enemy.sp];
     await info(`¡${G.save.name} lanzó una Palabola! (Quedan ${itemCount('palabola')})`, { auto: 900 });
@@ -565,11 +561,15 @@ async function runBattle(cfg: Config): Promise<BattleResult> {
     if (success) {
       sfx('caught');
       await info(`¡Atrapaste a ${sp.name}!`);
-      markCaught(enemy.sp);
-      G.save.party.push(enemy);
-      await info(`${sp.name} se unió a tu equipo. Aprenderá palabras de: ${THEMES[sp.theme].name}.`, {
-        en: `${sp.name} joined your team. It learns words about: ${THEMES[sp.theme].en}.`,
-      });
+      if (keepMon(enemy) === 'box') {
+        await info(`¡${sp.name} fue enviado a la Caja de Palabritas!`, {
+          en: `Your team is full (6), so ${sp.name} was sent to the storage box. Use a Palacentro computer to get it.`,
+        });
+      } else {
+        await info(`${sp.name} se unió a tu equipo. Aprenderá palabras de: ${THEMES[sp.theme].name}.`, {
+          en: `${sp.name} joined your team. It learns words about: ${THEMES[sp.theme].en}.`,
+        });
+      }
       return 'caught';
     }
     ball = null;

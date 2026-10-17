@@ -44,6 +44,8 @@ export interface SaveData {
   y: number;
   dir: Dir;
   party: Mon[];
+  /** The Caja de Palabritas (storage box, at any Palacentro computer): no limit. */
+  box: Mon[];
   flags: Record<string, boolean>;
   /** You, as chosen at the start: changes your look and how people talk to you («listo/lista»). */
   gender: 'boy' | 'girl';
@@ -78,6 +80,7 @@ export function newSave(): SaveData {
     y: 2,
     dir: 'down',
     party: [],
+    box: [],
     flags: { amanecerWide: true },
     gender: 'boy',
     money: 0,
@@ -131,6 +134,7 @@ function migrate(s: SaveData) {
   // Palabolas (once called esferas) used to be a plain counter; now they're in the bag.
   const old = s as unknown as { esferas?: number; palabolas?: number };
   s.bag ??= {};
+  s.box ??= [];
   s.gender ??= 'boy';
   // Pueblo Amanecer grew 6 columns to the west (the plateau): keep you where you were.
   if (!s.flags.amanecerWide) {
@@ -147,7 +151,7 @@ function migrate(s: SaveData) {
   delete old.palabolas;
   if (s.flags.esferas) s.flags.palabolas = true;
   delete s.flags.esferas;
-  for (const m of s.party) m.sp = fix(m.sp);
+  for (const m of [...s.party, ...s.box]) m.sp = fix(m.sp);
   s.seen = [...new Set(s.seen.map(fix))];
   s.caught = [...new Set(s.caught.map(fix))];
   // Items that moved (old trainer topics, words now shared with the core list) keep their progress.

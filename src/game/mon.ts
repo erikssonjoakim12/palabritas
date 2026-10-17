@@ -36,6 +36,24 @@ export function newMoves(mon: Mon, from: number, to: number): Move[] {
   return SPECIES[mon.sp].moves.filter((m) => learnLevel(m) > from && learnLevel(m) <= to);
 }
 
+/** A team holds 6 Palabritas at most; more go to the storage box. */
+export const PARTY_MAX = 6;
+
+/** Keep a new Palabrita: in the team if there's room, otherwise in the storage box (healed). */
+export function keepMon(mon: Mon): 'party' | 'box' {
+  markCaught(mon.sp);
+  if (G.save.party.length < PARTY_MAX) {
+    G.save.party.push(mon);
+    return 'party';
+  }
+  mon.hp = stats(mon).maxHp;
+  G.save.box.push(mon);
+  return 'box';
+}
+
+/** A gift (or a starter, a fossil...): a new Palabrita, kept like a caught one. */
+export const giveMon = (sp: string, level: number) => keepMon(newMon(sp, level));
+
 export function healParty() {
   for (const m of G.save.party) m.hp = stats(m).maxHp;
 }

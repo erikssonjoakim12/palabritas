@@ -365,8 +365,9 @@ function interact() {
     runScript(() => say(sign.es, { en: sign.en }));
     return;
   }
-  const look = TILES[tileAt(fx, fy)].look;
-  if (look) runScript(() => say(look.es, { en: look.en }));
+  const { look, script } = TILES[tileAt(fx, fy)];
+  if (script) runScript(SCRIPTS[script]);
+  else if (look) runScript(() => say(look.es, { en: look.en }));
 }
 
 /**

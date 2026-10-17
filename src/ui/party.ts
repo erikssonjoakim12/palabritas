@@ -80,6 +80,12 @@ function partyRow(mon: Mon, active?: Mon) {
   return row;
 }
 
+/** Pick one of these Palabritas (the team, the storage box...), or null on B. */
+export async function pickFrom(mons: Mon[], title: string): Promise<Mon | null> {
+  const i = await listMenu(mons.map((m) => partyRow(m)), { header: el('div', 'menu-title', title) });
+  return i < 0 ? null : mons[i];
+}
+
 /** Pick a Palabrita. In 'switch'/'forced' mode only Palabritas that can fight are valid. */
 export async function pickMon(mode: 'switch' | 'forced' | 'view', active?: Mon): Promise<Mon | null> {
   while (true) {

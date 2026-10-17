@@ -5,7 +5,7 @@ import { G, flag, setFlag, saveGame } from '../game/state';
 import { addItem, money } from '../game/bag';
 import { ITEM_DEFS, SHOP, amountOf } from '../data/items';
 import { gradeOrder } from '../lang/order';
-import { newMon, healParty, markCaught } from '../game/mon';
+import { giveMon, healParty, stats, monName, PARTY_MAX } from '../game/mon';
 import { record, pickFromTheme, isLearned, isUnseen } from '../game/learning';
 import { itemsBetween } from '../game/curriculum';
 import { SPECIES, STARTER_LEVEL, type Mode } from '../data/species';
@@ -14,7 +14,7 @@ import { TRAINERS } from '../data/trainers';
 import { say, info, closeText, setSpeaker } from '../ui/textbox';
 import { ask, menu } from '../ui/menu';
 import { challenge, chooseText } from '../ui/challenge';
-import { spriteCanvas } from '../ui/party';
+import { spriteCanvas, pickFrom } from '../ui/party';
 import { startMenu } from '../ui/startmenu';
 import { wildBattle, trainerBattle } from '../battle/battle';
 import { speak, canListen } from '../lang/speech';
@@ -491,6 +491,46 @@ const S: Record<string, (c: ScriptCtx) => Promise<void>> = {
     await lines(['¡Gracias por tu compra! Vuelve pronto.', 'Thanks for shopping! Come back soon.']);
   },
 
+  /** The Palacentro computer: the Caja de Palabritas (storage box). */
+  async computer() {
+    await say('Encendiste la computadora. ¿Qué quieres hacer?', {
+      en: 'You turned on the computer. What do you want to do? DEPOSITAR = leave a Palabrita in the box, RETIRAR = take one out, SALIR = log off.',
+      noWait: true,
+    });
+    while (true) {
+      const i = await menu(['DEPOSITAR', 'RETIRAR', 'SALIR'], { cancel: true, title: 'CAJA DE PALABRITAS' });
+      if (i === 0) {
+        const mon = await pickFrom(G.save.party, '¿Cuál dejas en la caja?');
+        if (!mon) continue;
+        if (mon.hp > 0 && !G.save.party.some((m) => m !== mon && m.hp > 0)) {
+          await lines(['¡No puedes dejar tu equipo vacío!', 'You can’t leave your team empty (keep one that can fight)!']);
+          continue;
+        }
+        G.save.party.splice(G.save.party.indexOf(mon), 1);
+        mon.hp = stats(mon).maxHp;
+        G.save.box.push(mon);
+        sfx('door');
+        await info(`Dejaste a ${monName(mon)} en la caja.`, { en: `You left ${monName(mon)} in the box (it gets healed there).` });
+      } else if (i === 1) {
+        if (!G.save.box.length) {
+          await info('La caja está vacía.', { en: 'The box is empty.' });
+          continue;
+        }
+        if (G.save.party.length >= PARTY_MAX) {
+          await info('Tu equipo está lleno.', { en: `Your team is full (${PARTY_MAX}). Deposit one first.` });
+          continue;
+        }
+        const mon = await pickFrom(G.save.box, '¿Cuál sacas de la caja?');
+        if (!mon) continue;
+        G.save.box.splice(G.save.box.indexOf(mon), 1);
+        G.save.party.push(mon);
+        sfx('select');
+        await info(`¡${monName(mon)} volvió a tu equipo!`, { en: `${monName(mon)} is back on your team!` });
+      } else break;
+    }
+    closeText();
+  },
+
   async enfermera() {
     await lines(['¡Hola! Bienvenidos al Palacentro.', 'Hi! Welcome to the Palacentro.']);
     if (await ask('¿Quieres que cure a tus Palabritas?', { en: 'Would you like me to heal your Palabritas?' })) {
@@ -793,8 +833,7 @@ async function starterTraining(sp: string) {
     hide();
   }
   G.save.starterChoice = undefined;
-  G.save.party.push(newMon(sp, STARTER_LEVEL));
-  markCaught(sp);
+  giveMon(sp, STARTER_LEVEL);
   setFlag('starter');
   sfx('caught');
   await lines([`¡Excelente! Ya sabes las primeras palabras de ${s.name}.`, `Excellent! You know ${s.name}’s first words now.`]);

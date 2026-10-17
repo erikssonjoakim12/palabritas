@@ -46,6 +46,8 @@ export interface TileDef {
   current?: Dir;
   /** Text shown when you press A facing this tile. */
   look?: { es: string; en: string };
+  /** A script run when you press A facing this tile (instead of `look`). */
+  script?: string;
 }
 
 /** What a tile needs to know about the map it's in, and where it is. */
@@ -94,7 +96,7 @@ export const TILES: Record<string, TileDef> = {
   P: solid(),
   V: solid({ look: { es: 'En la tele dan una telenovela. «¡Te amo, Fernando!»', en: 'A soap opera is on TV. "I love you, Fernando!"' } }),
   C: solid({ kind: 'counter' }),
-  Q: solid({ look: { es: 'Es una computadora. En la pantalla dice: «¡Bienvenidos al Palacentro!»', en: 'It’s a computer. The screen says: "Welcome to the Palacentro!"' } }),
+  Q: solid({ script: 'computer', look: { es: 'Es una computadora. En la pantalla dice: «¡Bienvenidos al Palacentro!»', en: 'It’s a computer. The screen says: "Welcome to the Palacentro!"' } }),
   n: solid({ look: { es: 'Un sofá muy cómodo para esperar.', en: 'A very comfy sofa for waiting.' } }),
   u: solid({ look: { es: 'Un póster: «¡Lávate las manos!»', en: 'A poster: "Wash your hands!"' } }),
   m: open({ kind: 'mat' }),
