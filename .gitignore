@@ -4,3 +4,6 @@ dist
 
 # Reference screenshots from the original games (not ours to distribute)
 Gameplay screenshot examples/
+
+# Test screenshots
+tests/out/

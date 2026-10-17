@@ -78,9 +78,28 @@ if (import.meta.env.PROD && 'serviceWorker' in navigator) {
 
 if (import.meta.env.DEV) {
   // Handy for testing from the browser console: __game.G.save, __game.warp('brisa', 11, 15, 'up')...
-  Promise.all([import('./game/state'), import('./world/world'), import('./battle/battle'), import('./game/mon')]).then(
-    ([state, world, battle, mon]) => {
-      (window as any).__game = { ...state, ...world, ...battle, ...mon };
-    },
-  );
+  // The tests use it too: always the game's own modules (a fresh import can be a second copy after hot reloads).
+  Promise.all([
+    import('./game/state'),
+    import('./world/world'),
+    import('./battle/battle'),
+    import('./game/mon'),
+    import('./world/maps'),
+    import('./ui/textbox'),
+    import('./data/species'),
+    import('./data/content'),
+    import('./game/curriculum'),
+    import('./game/learning'),
+    import('./art/tiles'),
+    import('./art/creatures'),
+    import('./style/people'),
+    import('./data/trainers'),
+  ]).then(([state, world, battle, mon, maps, textbox, species, content, curriculum, learning, tiles, creatures, people, trainers]) => {
+    (window as any).__game = {
+      ...state, ...world, ...battle, ...mon, ...maps,
+      fill: textbox.fill, SPECIES: species.SPECIES, TILES: tiles.TILES, CREATURE_ART: creatures.CREATURE_ART, LOOKS: people.LOOKS,
+      OBJECTS_ART: people.OBJECTS_ART, TRAINERS: trainers.TRAINERS,
+      content, curriculum, learning,
+    };
+  });
 }

@@ -9,10 +9,12 @@
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview --host",
     "typecheck": "tsc --noEmit",
-    "art": "vite --open /art.html"
+    "art": "vite --open /art.html",
+    "test": "node tests/run.mjs"
   },
   "devDependencies": {
     "@vitejs/plugin-basic-ssl": "^2.3.0",
+    "puppeteer-core": "^25.13.0",
     "qrcode-terminal": "^0.12.0",
     "typescript": "^7.0.2",
     "vite": "^8.3.4"
