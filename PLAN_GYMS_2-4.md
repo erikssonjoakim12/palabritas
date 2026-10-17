@@ -50,7 +50,7 @@ of the game.
 
 | Region | Gym | Story chapter | Side quests | New themes (one per new family) |
 |---|---|---|---|---|
-| 2 · Dry forest | **Villa Madroño**: Petra, Roca/Tierra, Medalla Barro | The muted town and the clay mine | Beto's hat · the echo room and a fossil · the lost oxen · the national bird | El cuerpo, La cocina, El trabajo, Los animales, La historia, Nicaragua |
+| 2 · Dry forest | **Villa Madroño**: Petra, Roca/Tierra, Medalla Barro | The muted town and the clay mine | Beto's hat · the echo room and a fossil · the lost oxen · the national bird | El cuerpo, La cocina, El trabajo, Los animales, La historia, Latinoamérica |
 | 3 · Pacific coast | **Playa Carey**: Marina, Agua, Medalla Ola | The night of the turtles (*la arribada*) | The seafood restaurant · the fishing rod · the message in a bottle | La playa, Las frutas, El mar, La pesca, El viaje, La familia |
 | 4 · Volcanoes | **Ciudad Chispa**: Don Tizón, Fuego, Medalla Chispa | The stolen fireworks and the volcano | A hammock for Mom · the lost parakeet chick · the haunted house · the Torovenado costumes · the legend of the Carreta Nagua | La fiesta, La conversación, La ciudad, La ropa, La rutina, Las emociones |
 
@@ -220,7 +220,7 @@ are used until your art arrives.
 | **Brasita** (your art) | Fuego | los animales | (third stage later) | the volcano; Don Tizón | (art exists) |
 | **Caparazonte** | Roca/Tierra | la historia | → Gliptodón at 30 | fossil (echo room, then the museum) | a small ancient armadillo with a domed bony shell, cracked like old stone |
 | **Gliptodón** | Roca/Tierra | la historia | | | a giant prehistoric armadillo with a huge dome shell and a spiked tail club |
-| **Guardabarranco** | Normal/Volador | Nicaragua | | the canyon (rare) | Nicaragua's national bird: turquoise brows, green body, rust belly, a long tail with two racket tips |
+| **Guardabarranco** | Normal/Volador | Latinoamérica | | the canyon (rare) | Nicaragua's national bird: turquoise brows, green body, rust belly, a long tail with two racket tips |
 
 ### Region 3 — the coast
 | Palabrita | Types | Theme | Evolution | Where | Look |
@@ -265,7 +265,7 @@ keeps the old word sample, so Mariposita and Sillón that players already have d
 
 | Region | Levels | CEFR | Grammar | Topics (new themes) | Where it shows up |
 |---|---|---|---|---|---|
-| 2 · Dry forest | 12–19 | A1 → A1+ | questions (*qué, dónde, cuánto...*), *gustar/encantar*, *hay*, first *ser/estar* | **El cuerpo**, **La cocina**, **El trabajo**, **Los animales**, **La historia**, **Nicaragua** | Petra's riddles and speech; describing the hat; first directions; listening and speaking in the echo room; reading the child's message |
+| 2 · Dry forest | 12–19 | A1 → A1+ | questions (*qué, dónde, cuánto...*), *gustar/encantar*, *hay*, first *ser/estar* | **El cuerpo**, **La cocina**, **El trabajo**, **Los animales**, **La historia**, **Latinoamérica** | Petra's riddles and speech; describing the hat; first directions; listening and speaking in the echo room; reading the child's message |
 | 3 · Coast | 19–25 | A2 | the present tense in full (*tener, ir, hacer, querer, poder*), ***ir a* + verb**, ordering food, numbers to 100, directions | **La playa**, **Las frutas**, **El mar**, **La pesca**, **El viaje**, **La familia** | Marina's speech; the restaurant; the bottle map; counting turtle eggs; lessons |
 | 4 · Volcanoes | 25–31 | A2 | daily routines and time (*me levanto, ¿a qué hora?*), shopping and prices, **first past tense** (*fui, hice, vi, comí, compré*), sequencing (*primero, luego, después, al final*), clothes | **La fiesta**, **La conversación**, **La ciudad**, **La ropa**, **La rutina**, **Las emociones** | Don Tizón's speech; the torch poem; bargaining at the market; the Torovenado; the legend |
 
@@ -274,7 +274,7 @@ keeps the old word sample, so Mariposita and Sillón that players already have d
 | What | Size | Why |
 |---|---|---|
 | **A2 core, levels 21–35** | ~200 words + ~100 sentences, in the grammar order above | today the core stops at level 20 |
-| **18 new themes**, one per new family | 117 lines each (27 words, 40 phrases, 50 sentences, so they reach level ~37) ≈ 2,100 lines | see §5; existing families keep their themes so saves don't change |
+| **18 new themes**, one per new family | 117 lines each (27 words, 40 phrases, 50 sentences, so they reach level ~37) ≈ 2,100 lines | see §5; existing families keep their themes so saves don't change. **Latinoamérica** (the Guardabarranco) covers every Spanish-speaking country in Central and South America: countries, capitals, nationalities (*colombiano/colombiana*), *«¿De dónde eres?» «Soy de Perú»*, and one or two typical foods and words from each |
 | **7 lesson topics** (grammar, like Rita's present tense) | ~25 each ≈ 175 lines | Preguntas, Gustar, Direcciones, Ir a, En el restaurante, De compras, El pasado |
 | **Dialogue** | ~800 lines | NPCs, ~58 trainers, quests, story |
 
