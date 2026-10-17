@@ -1,8 +1,8 @@
 # Palabritas — plan: gyms 2 to 4 ("part two")
 
 Everything between the Breeze Medal and the fourth medal: places, story, side quests, Palabritas,
-evolutions, Spanish, new systems and the order to build it in. Written so it can be built in one long
-session, phase by phase, with a playable game after every phase.
+evolutions, Spanish, new systems and the order to build it in. Built phase by phase from the detailed specs in
+[plans/](plans/README.md), with a playable game after every phase.
 Big picture: [ROADMAP.md](ROADMAP.md) · learning rules: [LEARNING_PLAN.md](LEARNING_PLAN.md) · animals: [BIOMES.md](BIOMES.md).
 
 **At a glance**
@@ -373,7 +373,10 @@ Don Sigilo. New heads: cowboy hat, bandana and hood. The rest reuse existing hea
 
 ---
 
-## 10. Build order (one long session, in phases)
+## 10. Build order (one phase per session)
+
+**The detailed specs for each phase are in [plans/](plans/README.md)**, with every map drawn and checked, every
+trainer, quest step and line of dialogue, and the Spanish content. Build from those; this section is the summary.
 
 Every phase ends with a playable game, all tests green, the art page checked, the pace measured, and a commit
 and push.
