@@ -13,11 +13,11 @@ Big picture: [ROADMAP.md](ROADMAP.md) · learning rules: [LEARNING_PLAN.md](LEAR
 | New outdoor maps and dungeons | ~15 (6 routes, 3 towns, a mine, a turtle beach, a volcano in 3 parts) |
 | New interiors | ~25 |
 | New Palabritas | 40 (38 with placeholder art; Brasita and Mordisquito already have your art) |
-| New themes | 6 (7 → 13) |
+| New themes | 18 (7 → 25): every new family has its own |
 | Trainers | ~58, including a rival and a villain team |
 | Side quests | 12, plus 3 story chapters |
 | New systems | 13 (storage box, fishing, bus, rematches, lessons, gym puzzles, night scenes...) |
-| New Spanish | ~2,000 lines (A2 core, 6 themes, 9 lesson topics, dialogue) |
+| New Spanish | ~3,400 lines (A2 core, 18 themes, 7 lesson topics, dialogue) |
 | Play time, gym 1 → 4 | ~8–12 hours (3–5 weeks at 20–30 min a day; see §7) |
 
 ---
@@ -48,11 +48,11 @@ of the game.
    Ruta 8  (lagoon, sugarcane)──(Volcán Chocoyo)──[Ciudad Chispa]──Ruta 9──ledge──[Pueblo Amanecer]
 ```
 
-| Region | Gym | Story chapter | Side quests | New themes |
+| Region | Gym | Story chapter | Side quests | New themes (one per new family) |
 |---|---|---|---|---|
-| 2 · Dry forest | **Villa Madroño**: Petra, Roca/Tierra, Medalla Barro | The muted town and the clay mine | Beto's hat · the echo room and a fossil · the lost oxen · the national bird | El cuerpo, El trabajo |
-| 3 · Pacific coast | **Playa Carey**: Marina, Agua, Medalla Ola | The night of the turtles (*la arribada*) | The seafood restaurant · the fishing rod · the message in a bottle | La playa, El viaje, La familia |
-| 4 · Volcanoes | **Ciudad Chispa**: Don Tizón, Fuego, Medalla Chispa | The stolen fireworks and the volcano | A hammock for Mom · the lost parakeet chick · the haunted house · the Torovenado costumes · the legend of the Carreta Nagua | La fiesta |
+| 2 · Dry forest | **Villa Madroño**: Petra, Roca/Tierra, Medalla Barro | The muted town and the clay mine | Beto's hat · the echo room and a fossil · the lost oxen · the national bird | El cuerpo, La cocina, El trabajo, Los animales, La historia, Nicaragua |
+| 3 · Pacific coast | **Playa Carey**: Marina, Agua, Medalla Ola | The night of the turtles (*la arribada*) | The seafood restaurant · the fishing rod · the message in a bottle | La playa, Las frutas, El mar, La pesca, El viaje, La familia |
+| 4 · Volcanoes | **Ciudad Chispa**: Don Tizón, Fuego, Medalla Chispa | The stolen fireworks and the volcano | A hammock for Mom · the lost parakeet chick · the haunted house · the Torovenado costumes · the legend of the Carreta Nagua | La fiesta, La conversación, La ciudad, La ropa, La rutina, Las emociones |
 
 ---
 
@@ -190,7 +190,7 @@ Already built: Ruta 3, Cueva del Eco (Ruta 4), Ruta 5 and the Palacentro by the 
 
 ## 5. Palabritas
 
-Each comes with types, a language theme, stats, 4 moves (one per challenge mode) and a dex entry.
+Each comes with types, a language theme (tied to that family, not its type: every new family gets its own), stats, 4 moves (one per challenge mode) and a dex entry.
 The **Look** column is the one-line art brief to paste into your ChatGPT art prompt; placeholder drawings
 are used until your art arrives.
 
@@ -212,26 +212,26 @@ are used until your art arrives.
 |---|---|---|---|---|---|
 | **Piedrita** | Roca | el cuerpo | → Petroglifón at 18 | the mine | a round gray pebble with a petroglyph face and stick-figure arms carved on it |
 | **Petroglifón** | Roca/Tierra | el cuerpo | | deep in the mine; Petra | a tall standing stone covered in glowing carved spirals and stick figures, with stone arms |
-| **Ollita** | Tierra | comida | → Tinajón at 21 | the mine, around town | a small clay cooking pot with painted patterns, steam puffing from its lid |
-| **Tinajón** | Tierra/Agua | comida | | Ruta 8 (rare) | a big round clay water jar (*tinaja*), water sloshing inside, a cork for a hat |
+| **Ollita** | Tierra | la cocina | → Tinajón at 21 | the mine, around town | a small clay cooking pot with painted patterns, steam puffing from its lid |
+| **Tinajón** | Tierra/Agua | la cocina | | Ruta 8 (rare) | a big round clay water jar (*tinaja*), water sloshing inside, a cork for a hat |
 | **Hormiguita** | Bicho/Planta | el trabajo | → Hormigón at 22 | Rutas 5–6 | a red leafcutter ant carrying a leaf bigger than itself, wearing a tiny hard hat |
 | **Hormigón** | Bicho/Roca | el trabajo | | Ruta 8 | a big ant built from gray concrete blocks (*hormigón* = concrete!), carrying a stone slab |
-| **Garrobito** | Normal | tiempo | → **Brasita** at 24 | Rutas 5–6, sunny rocks | a small spiny-tailed iguana (*garrobo*) sunbathing, orange spines along its back |
-| **Brasita** (your art) | Fuego | tiempo | (third stage later) | the volcano; Don Tizón | (art exists) |
-| **Caparazonte** | Roca/Tierra | naturaleza | → Gliptodón at 30 | fossil (echo room, then the museum) | a small ancient armadillo with a domed bony shell, cracked like old stone |
-| **Gliptodón** | Roca/Tierra | naturaleza | | | a giant prehistoric armadillo with a huge dome shell and a spiked tail club |
-| **Guardabarranco** | Normal/Volador | naturaleza | | the canyon (rare) | Nicaragua's national bird: turquoise brows, green body, rust belly, a long tail with two racket tips |
+| **Garrobito** | Normal | los animales | → **Brasita** at 24 | Rutas 5–6, sunny rocks | a small spiny-tailed iguana (*garrobo*) sunbathing, orange spines along its back |
+| **Brasita** (your art) | Fuego | los animales | (third stage later) | the volcano; Don Tizón | (art exists) |
+| **Caparazonte** | Roca/Tierra | la historia | → Gliptodón at 30 | fossil (echo room, then the museum) | a small ancient armadillo with a domed bony shell, cracked like old stone |
+| **Gliptodón** | Roca/Tierra | la historia | | | a giant prehistoric armadillo with a huge dome shell and a spiked tail club |
+| **Guardabarranco** | Normal/Volador | Nicaragua | | the canyon (rare) | Nicaragua's national bird: turquoise brows, green body, rust belly, a long tail with two racket tips |
 
 ### Region 3 — the coast
 | Palabrita | Types | Theme | Evolution | Where | Look |
 |---|---|---|---|---|---|
 | **Cangrejito** | Agua | la playa | → Cangrejón at 22 | Ruta 7, the turtle beach, fishing | a small red crab with one big claw and eyes on stalks |
 | **Cangrejón** | Agua/Lucha | la playa | | Marina | a huge crab with boxing-glove claws |
-| **Coquito** | Planta | la playa | → Cocotero at 26 | Ruta 7, the turtle beach | a green coconut with a cute face and a little palm-leaf tuft on top |
-| **Cocotero** | Planta/Agua | la playa | | Ruta 8 (rare) | a coconut-palm creature: a coconut head on a curved trunk, swaying frond arms |
-| **Mordisquito** (your art) | Agua | el cuerpo | → Mordiscón at 25 | fishing in the sea | (art exists) |
-| **Mordiscón** | Agua/Siniestro | el cuerpo | | Marina | a big bull shark with a wide grin full of teeth and a scar |
-| **Mojarrita** | Agua | colores | | fishing everywhere | a small round striped fish (*mojarra*) with big surprised eyes |
+| **Coquito** | Planta | las frutas | → Cocotero at 26 | Ruta 7, the turtle beach | a green coconut with a cute face and a little palm-leaf tuft on top |
+| **Cocotero** | Planta/Agua | las frutas | | Ruta 8 (rare) | a coconut-palm creature: a coconut head on a curved trunk, swaying frond arms |
+| **Mordisquito** (your art) | Agua | el mar | → Mordiscón at 25 | fishing in the sea | (art exists) |
+| **Mordiscón** | Agua/Siniestro | el mar | | Marina | a big bull shark with a wide grin full of teeth and a scar |
+| **Mojarrita** | Agua | la pesca | | fishing everywhere | a small round striped fish (*mojarra*) with big surprised eyes |
 | **Pelicanito** | Agua/Volador | el viaje | → Maletícano at 22 | Ruta 7, the pier | a brown pelican chick whose pouch looks like a little backpack |
 | **Maletícano** | Agua/Volador | el viaje | | Marina | a big pelican whose beak pouch is a travel suitcase covered in stickers |
 | **Paslamita** | Agua | la familia | → Paslamona at 28 | gift (*arribada*) | an olive ridley turtle hatchling with big eyes and a heart-shaped shell |
@@ -242,14 +242,14 @@ are used until your art arrives.
 |---|---|---|---|---|---|
 | **Chispita** | Fuego | la fiesta | → Cohetón at 26 | the volcano, Ciudad Chispa | a little firework spark: a star-shaped body with a fuse tail |
 | **Cohetón** | Fuego/Eléctrico | la fiesta | | Don Tizón | a firework rocket with a grinning face, colorful stripes and a sparkling tail |
-| **Chocoyito** | Normal/Volador | naturaleza | → Chocoyote at 25 | the crater rim | a green parakeet (*chocoyo*) with an orange forehead and a chatty open beak |
-| **Chocoyote** | Fuego/Volador | naturaleza | | Don Tizón | a big parakeet with flame-colored wing tips, living in a volcano crater |
-| **Zopilotito** | Volador/Siniestro | el trabajo | → Zopilotón at 28 | Ruta 8, the volcano slopes | a scruffy black vulture chick with a bald gray head, holding a tiny broom |
-| **Zopilotón** | Volador/Siniestro | el trabajo | | evolve it (wild in later regions) | a big black vulture with broad wings and a street-sweeper's cap |
-| **Mascarita** | Fantasma/Normal | la fiesta | → Torovenado at 30 | gift (costume quest) | a colorful floating festival mask with ribbons |
-| **Torovenado** | Fantasma/Lucha | la fiesta | | | a dancing festival costume: bull horns, deer antlers, a mask and ribbons |
-| **Hamaquita** | Normal | casa | | gift (hammock quest) | a striped Nicaraguan hammock that's always asleep, with a little face in the middle |
-| **Lamparita** | Fantasma/Fuego | casa | | the haunted house | an old oil lamp with a ghostly flame face |
+| **Chocoyito** | Normal/Volador | la conversación | → Chocoyote at 25 | the crater rim | a green parakeet (*chocoyo*) with an orange forehead and a chatty open beak |
+| **Chocoyote** | Fuego/Volador | la conversación | | Don Tizón | a big parakeet with flame-colored wing tips, living in a volcano crater |
+| **Zopilotito** | Volador/Siniestro | la ciudad | → Zopilotón at 28 | Ruta 8, the volcano slopes | a scruffy black vulture chick with a bald gray head, holding a tiny broom |
+| **Zopilotón** | Volador/Siniestro | la ciudad | | evolve it (wild in later regions) | a big black vulture with broad wings and a street-sweeper's cap |
+| **Mascarita** | Fantasma/Normal | la ropa | → Torovenado at 30 | gift (costume quest) | a colorful floating festival mask with ribbons |
+| **Torovenado** | Fantasma/Lucha | la ropa | | | a dancing festival costume: bull horns, deer antlers, a mask and ribbons |
+| **Hamaquita** | Normal | la rutina | | gift (hammock quest) | a striped Nicaraguan hammock that's always asleep, with a little face in the middle |
+| **Lamparita** | Fantasma/Fuego | las emociones | | the haunted house | an old oil lamp with a ghostly flame face |
 
 **Art priority** (if you want to make real art in order): gym leaders' aces and gifts first (Petroglifón,
 Mordiscón, Cohetón, Paslamita, Caparazonte, Mascarita), then the commons you'll see most (Garrobito,
@@ -265,17 +265,17 @@ keeps the old word sample, so Mariposita and Sillón that players already have d
 
 | Region | Levels | CEFR | Grammar | Topics (new themes) | Where it shows up |
 |---|---|---|---|---|---|
-| 2 · Dry forest | 12–19 | A1 → A1+ | questions (*qué, dónde, cuánto...*), *gustar/encantar*, *hay*, first *ser/estar* | **El cuerpo**, **El trabajo** | Petra's riddles and speech; describing the hat; first directions; listening and speaking in the echo room; reading the child's message |
-| 3 · Coast | 19–25 | A2 | the present tense in full (*tener, ir, hacer, querer, poder*), ***ir a* + verb**, ordering food, numbers to 100, directions | **La playa**, **El viaje**, **La familia** | Marina's speech; the restaurant; the bottle map; counting turtle eggs; lessons |
-| 4 · Volcanoes | 25–31 | A2 | daily routines and time (*me levanto, ¿a qué hora?*), shopping and prices, **first past tense** (*fui, hice, vi, comí, compré*), sequencing (*primero, luego, después, al final*), clothes | **La fiesta** | Don Tizón's speech; the torch poem; bargaining at the market; the Torovenado; the legend |
+| 2 · Dry forest | 12–19 | A1 → A1+ | questions (*qué, dónde, cuánto...*), *gustar/encantar*, *hay*, first *ser/estar* | **El cuerpo**, **La cocina**, **El trabajo**, **Los animales**, **La historia**, **Nicaragua** | Petra's riddles and speech; describing the hat; first directions; listening and speaking in the echo room; reading the child's message |
+| 3 · Coast | 19–25 | A2 | the present tense in full (*tener, ir, hacer, querer, poder*), ***ir a* + verb**, ordering food, numbers to 100, directions | **La playa**, **Las frutas**, **El mar**, **La pesca**, **El viaje**, **La familia** | Marina's speech; the restaurant; the bottle map; counting turtle eggs; lessons |
+| 4 · Volcanoes | 25–31 | A2 | daily routines and time (*me levanto, ¿a qué hora?*), shopping and prices, **first past tense** (*fui, hice, vi, comí, compré*), sequencing (*primero, luego, después, al final*), clothes | **La fiesta**, **La conversación**, **La ciudad**, **La ropa**, **La rutina**, **Las emociones** | Don Tizón's speech; the torch poem; bargaining at the market; the Torovenado; the legend |
 
 **Content to write** (Latin American Spanish, with a little Nicaraguan flavor in names and places):
 
 | What | Size | Why |
 |---|---|---|
 | **A2 core, levels 21–35** | ~200 words + ~100 sentences, in the grammar order above | today the core stops at level 20 |
-| **6 new themes** | 117 lines each (27 words, 40 phrases, 50 sentences, so they reach level ~37) ≈ 700 lines | El cuerpo, El trabajo, La playa, El viaje, La familia, La fiesta |
-| **9 lesson topics** (like Rita's present tense) | ~25 each ≈ 225 lines | Preguntas, Gustar, Direcciones, Ir a, En el restaurante, De compras, La ropa, La hora y la rutina, El pasado |
+| **18 new themes**, one per new family | 117 lines each (27 words, 40 phrases, 50 sentences, so they reach level ~37) ≈ 2,100 lines | see §5; existing families keep their themes so saves don't change |
+| **7 lesson topics** (grammar, like Rita's present tense) | ~25 each ≈ 175 lines | Preguntas, Gustar, Direcciones, Ir a, En el restaurante, De compras, El pasado |
 | **Dialogue** | ~800 lines | NPCs, ~58 trainers, quests, story |
 
 Quests use real items from the core and themes wherever possible, so every quest answer also counts toward
@@ -373,18 +373,17 @@ and push.
    - Tiles, then Ruta 5's extension and bridge, the canyon, Villa Madroño and its interiors, the mine.
    - Lucas #1 and Equipo Silencio's first chapter.
    - Gym 2 and its 4 side quests.
-   - The region's Palabritas, the El cuerpo and El trabajo themes, the bus (Brisa, Limón, Madroño) and lesson
-     topics.
+   - The region's Palabritas and their 6 themes, the bus (Brisa, Limón, Madroño) and lesson topics.
    - **Playable to the Medalla Barro.**
 3. **Region 3.**
    - Tiles, fishing, Rutas 6–7, Playa Carey, the turtle beach (day and night).
    - Lucas #2, the *arribada*, gym 3 and its quests.
-   - The region's Palabritas and the La playa, El viaje and La familia themes.
+   - The region's Palabritas and their 6 themes.
    - **Playable to the Medalla Ola.**
 4. **Region 4.**
    - Tiles, Ruta 8, the volcano, Ciudad Chispa (plus festival night), Ruta 9 and the jump home.
    - Lucas #3, Don Sigilo, gym 4 and its quests.
-   - The region's Palabritas and the La fiesta theme.
+   - The region's Palabritas and their 6 themes.
    - **Playable to the Medalla Chispa.**
 5. **Polish.** Update ROADMAP and LEARNING_PLAN, sort the Palabrita list by family, and make an art-brief file
    for the placeholders. A full test pass.
@@ -401,7 +400,8 @@ Answer these once; everything else I can decide while building. **My default is 
 defaults" and I'll use them all.
 
 1. **Story:** Equipo Silencio plus rival Lucas? **Yes.**
-2. **Themes:** go from 7 to 13 (El cuerpo, El trabajo, La playa, El viaje, La familia, La fiesta)? **Yes.**
+2. ✓ **Themes — decided:** as many as learning Spanish needs. Themes belong to a family, not a type, so every new
+   family gets its own: 18 new themes (7 → 25).
 3. **Family changes:**
    - Gusanito → Capullito → Mariposita (Rutas 1–2 get Gusanito);
    - Pajarito → Palomón at 14;
@@ -409,7 +409,8 @@ defaults" and I'll use them all.
    - Garrobito before Brasita.
 
    **Yes.**
-4. **Pace:** gym 1 → 4 in about 8–12 hours (3–5 weeks of daily play)? **Yes, tune after playtests.** Or shorter?
+4. ✓ **Pace — decided:** as much play as the level curve needs. It should take time, but never get boring:
+   variety (quests, training spots, rematches, lessons) instead of grinding.
 5. **Art:** placeholders first; you make real art at your own pace from the Look column. **Yes.**
 6. **Names:** towns, leaders, villains and Palabritas above. **Keep them; veto any you dislike.**
 7. **Real dates:** the fossil revives tomorrow; rematches, lessons and the restaurant reset daily. **Yes.**

@@ -60,7 +60,8 @@ Core sentences will also be drawn per kind from shared band pools, so new kinds 
 
 ## Themes
 
-Room for **up to 20 themes** (and 50–100 kinds of Palabrita sharing them). Development sticks to the current **7**:
+As many themes as learning Spanish needs: a theme belongs to a Palabrita family (not its type), and every new
+family gets its own (gyms 2–4 add 18: see [PLAN_GYMS_2-4.md](PLAN_GYMS_2-4.md)). The first **7**:
 El perro, El tiempo, La comida, La naturaleza, Los números, Los colores, La casa.
 Ideas for later: La familia, El cuerpo, Los sentimientos, La ciudad, El viaje, El trabajo, La escuela, La salud,
 La ropa, Las compras, Los deportes, La música, La tecnología.
