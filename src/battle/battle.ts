@@ -14,7 +14,7 @@ import { THEMES, type Item } from '../data/content';
 import { pickForMon, pickFromKind, defenseItem, record, lealtad, fadingItems, OBEY_THRESHOLD } from '../game/learning';
 import { challenge, type ChallengeResult } from '../ui/challenge';
 import { info, say, closeText } from '../ui/textbox';
-import { chooseItem, usePotion } from '../ui/bag';
+import { chooseItem, useOnMon, notNow } from '../ui/bag';
 import { takeItem, itemCount, prizeMoney, money } from '../game/bag';
 import { ITEM_DEFS } from '../data/items';
 import { menu } from '../ui/menu';
@@ -236,7 +236,7 @@ interface Config {
   outro?: [es: string, en: string];
 }
 
-type Action = { type: 'fight'; move: Move } | { type: 'switch'; mon: Mon } | { type: 'ball' } | { type: 'item' } | { type: 'run' };
+type Action = { type: 'fight'; move: Move } | { type: 'switch'; mon: Mon } | { type: 'ball'; id: string } | { type: 'item' } | { type: 'run' };
 
 export function wildBattle(sp: string, level: number) {
   return runBattle({ kind: 'wild', team: [newMon(sp, level)] });
@@ -382,15 +382,19 @@ async function runBattle(cfg: Config): Promise<BattleResult> {
         const m = await pickMon('switch', me);
         if (m && m !== me) return { type: 'switch', mon: m };
       } else if (i === 2) {
-        // The bag: a Palabola (wild battles only) or a potion. Either one uses up your turn.
+        // The bag: a ball (wild battles only), a potion or a Revivir. Each one uses up your turn.
         const id = await chooseItem();
-        if (id === 'palabola') {
-          if (!trainer) return { type: 'ball' };
+        const def = id ? ITEM_DEFS[id] : null;
+        if (!id || !def) continue;
+        if (def.ball) {
+          if (!trainer) return { type: 'ball', id };
           await info('¡No puedes atrapar la Palabrita de otro entrenador!', { en: 'You can’t catch another trainer’s Palabrita!' });
-        } else if (id && ITEM_DEFS[id].heal && (await usePotion(id))) {
-          hud?.update();
-          return { type: 'item' };
-        }
+        } else if (def.heal || def.revive) {
+          if (await useOnMon(id)) {
+            hud?.update();
+            return { type: 'item' };
+          }
+        } else await notNow();
       }
       else if (i === 3) return { type: 'run' };
     }
@@ -520,10 +524,11 @@ async function runBattle(cfg: Config): Promise<BattleResult> {
     return null;
   };
 
-  const throwPalabola = async (): Promise<'caught' | 'failed' | 'cancel'> => {
-    if (!takeItem('palabola')) return 'cancel';
+  const throwBall = async (id: string): Promise<'caught' | 'failed' | 'cancel'> => {
+    if (!takeItem(id)) return 'cancel';
     const sp = SPECIES[enemy.sp];
-    await info(`¡${G.save.name} lanzó una Palabola! (Quedan ${itemCount('palabola')})`, { auto: 900 });
+    const ballDef = ITEM_DEFS[id];
+    await info(`¡${G.save.name} lanzó una ${ballDef.name}! (Quedan ${itemCount(id)})`, { auto: 900 });
     await info(`Para atraparlo, ¡dile una de sus palabras!`, {
       auto: 1400,
       en: `To catch it, say one of its words!`,
@@ -546,7 +551,7 @@ async function runBattle(cfg: Config): Promise<BattleResult> {
     const s = stats(enemy);
     const hpFactor = 1 - (2 / 3) * (enemy.hp / s.maxHp);
     const quality = r.grade === 'perfect' ? 1.8 : r.grade === 'close' ? 1.3 : 0.5;
-    const p = Math.min(0.95, Math.max(0.05, sp.catchRate * hpFactor * quality * 1.4));
+    const p = Math.min(0.95, Math.max(0.05, sp.catchRate * hpFactor * quality * 1.4 * ballDef.ball!));
     const success = Math.random() < p;
     const shakes = success ? 3 : Math.floor(Math.random() * 3);
     for (let k = 0; k < shakes; k++) {
@@ -619,7 +624,7 @@ async function runBattle(cfg: Config): Promise<BattleResult> {
         return 'run';
       }
       if (action.type === 'ball') {
-        const res = await throwPalabola();
+        const res = await throwBall(action.id);
         if (res === 'caught') return await finish('caught');
         if (res === 'cancel') continue;
       }

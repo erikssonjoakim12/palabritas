@@ -21,4 +21,26 @@ await t.press('Enter');
 await t.play({ choose: (opts) => opts.find((o) => o.startsWith('Gotita')) ?? steps.shift() });
 s = await t.save();
 t.check('the potion healed 20 PS', s.party[0].hp === 25 && s.bag.pocion === 0, { hp: s.party[0].hp, bag: s.bag });
+
+// The Superpoción, bought here for the test (Brisa's shop doesn't sell it).
+await t.fromSave({ map: 'tienda_brisa', x: 2, y: 2, dir: 'left', money: 1000, party: [['gotita', 8]], flags: { palabolas: true } });
+await t.game(() => window.__game.SHOPS.tienda_brisa.push('superpocion'));
+const more = ['Superpoción', '×1', 'Nada'];
+await t.press('z');
+await t.play({ choose: () => more.shift(), answers: ['me da una superpocion'] });
+s = await t.save();
+t.check('bought a Superpoción for $250', s.bag.superpocion === 1 && s.money === 750, { bag: s.bag, money: s.money });
+
+await t.fromSave({ map: 'ruta1', x: 3, y: 4, dir: 'right', party: [['gotita', 8, { hp: 0 }], ['conejito', 6]], bag: { revivir: 1 } });
+const revive = ['MOCHILA', 'Revivir', 'B', 'SALIR'];
+await t.press('Enter');
+await t.play({ choose: (opts) => opts.find((o) => o.startsWith('Gotita')) ?? revive.shift() });
+s = await t.save();
+const half = await t.game(() => Math.floor(window.__game.stats(window.__game.G.save.party[0]).maxHp / 2));
+t.check('Revivir brings a fainted one back with half its PS', s.party[0].hp === half && !s.bag.revivir, { hp: s.party[0].hp, half });
+
+await t.game(() => { window.__game.G.save.repel = 3; Math.random = () => 0; }); // every grass step would meet one
+const said = await t.walk('right', 3);
+s = await t.save();
+t.check('no wild Palabritas while the Repelente lasts, then it wears off', s.x === 6 && !s.repel && said.includes('Repelente'), { x: s.x, said });
 await t.end();

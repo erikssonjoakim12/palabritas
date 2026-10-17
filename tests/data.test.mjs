@@ -27,6 +27,22 @@ const report = await t.game(() => {
 });
 for (const [id, problems] of Object.entries(report)) t.check(`Palabrita ${id}`, problems.length === 0, problems.join('; '));
 
+// Every item a shop sells can be ordered: «Quiero una X» and «Quiero dos Xs» (also without accents).
+const orders = await t.game(async () => {
+  const { gradeOrder } = await import('/src/lang/order.ts');
+  const { ITEM_DEFS, SHOPS } = window.__game;
+  const strip = (x) => x.normalize('NFD').replace(/[̀-ͯ]/g, '');
+  return [...new Set(Object.values(SHOPS).flat())].map((id) => {
+    const d = ITEM_DEFS[id];
+    const one = `Quiero ${d.feminine ? 'una' : 'un'} ${d.name}`;
+    const two = `Quiero dos ${d.plural}`;
+    return [id, gradeOrder(one, id, 1), gradeOrder(two, id, 2), gradeOrder(strip(two), id, 2), !!d.key];
+  });
+});
+for (const [id, one, two, plain, key] of orders) {
+  t.check(`shop item ${id} can be ordered`, one === 'perfect' && two === 'perfect' && plain && !key, [one, two, plain]);
+}
+
 const art = await t.page.browser().newPage();
 const artErrors = [];
 art.on('pageerror', (e) => artErrors.push(e.message));

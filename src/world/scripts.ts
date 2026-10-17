@@ -3,7 +3,7 @@ import { sfx } from '../engine/sfx';
 import { frames } from '../engine/loop';
 import { G, flag, setFlag, saveGame } from '../game/state';
 import { addItem, money } from '../game/bag';
-import { ITEM_DEFS, SHOP, amountOf } from '../data/items';
+import { ITEM_DEFS, SHOPS, amountOf } from '../data/items';
 import { gradeOrder } from '../lang/order';
 import { giveMon, healParty, stats, monName, PARTY_MAX } from '../game/mon';
 import { record, pickFromTheme, isLearned, isUnseen } from '../game/learning';
@@ -453,20 +453,21 @@ const S: Record<string, (c: ScriptCtx) => Promise<void>> = {
   /** The shop: pick something, then ask for it in Spanish (written or spoken). */
   async cajera() {
     await say('¡Bienvenid{o/a} a la tienda! ¿Qué deseas comprar?', { en: 'Welcome to the shop! What would you like to buy?', noWait: true });
+    const shop = SHOPS[currentMap().id] ?? SHOPS.tienda_brisa;
     while (true) {
-      const i = await menu([...SHOP.map((id) => `${ITEM_DEFS[id].name}  ${money(ITEM_DEFS[id].price)}`), 'Nada'], {
+      const i = await menu([...shop.map((id) => `${ITEM_DEFS[id].name}  ${money(ITEM_DEFS[id].price)}`), 'Nada'], {
         cancel: true,
         title: `Tienes ${money()}`,
       });
-      if (i < 0 || i >= SHOP.length) break;
-      const id = SHOP[i];
+      if (i < 0 || i >= shop.length) break;
+      const id = shop[i];
       const def = ITEM_DEFS[id];
       const most = Math.min(5, Math.floor(G.save.money / def.price));
       if (!most) {
         await lines(['Lo siento, no tienes suficiente dinero.', 'Sorry, you don’t have enough money.']);
         continue;
       }
-      const q = await menu(Array.from({ length: most }, (_, k) => `×${k + 1}  ${money(def.price * (k + 1))}`), { cancel: true, title: '¿Cuántas?' });
+      const q = await menu(Array.from({ length: most }, (_, k) => `×${k + 1}  ${money(def.price * (k + 1))}`), { cancel: true, title: def.feminine ? '¿Cuántas?' : '¿Cuántos?' });
       if (q < 0) continue;
       const n = q + 1;
       const enOrder = `I’d like ${n} ${n === 1 ? def.enName : def.enPlural}, please`;

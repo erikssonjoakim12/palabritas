@@ -53,6 +53,8 @@ export interface SaveData {
   money: number;
   /** Items by id (data/items.ts) → how many. */
   bag: Record<string, number>;
+  /** Steps left on a Repelente (no wild Palabritas while > 0). */
+  repel?: number;
   /** The starter you picked, while Professor Ceiba's training is still going on. */
   starterChoice?: string;
   medals: string[];

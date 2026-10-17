@@ -94,11 +94,12 @@ if (import.meta.env.DEV) {
     import('./art/creatures'),
     import('./style/people'),
     import('./data/trainers'),
-  ]).then(([state, world, battle, mon, maps, textbox, species, content, curriculum, learning, tiles, creatures, people, trainers]) => {
+    import('./data/items'),
+  ]).then(([state, world, battle, mon, maps, textbox, species, content, curriculum, learning, tiles, creatures, people, trainers, items]) => {
     (window as any).__game = {
       ...state, ...world, ...battle, ...mon, ...maps,
       fill: textbox.fill, SPECIES: species.SPECIES, TILES: tiles.TILES, CREATURE_ART: creatures.CREATURE_ART, LOOKS: people.LOOKS,
-      OBJECTS_ART: people.OBJECTS_ART, TRAINERS: trainers.TRAINERS,
+      OBJECTS_ART: people.OBJECTS_ART, TRAINERS: trainers.TRAINERS, ITEM_DEFS: items.ITEM_DEFS, SHOPS: items.SHOPS,
       content, curriculum, learning,
     };
   });

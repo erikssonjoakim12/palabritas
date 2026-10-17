@@ -318,6 +318,10 @@ function onStep() {
     return;
   }
   if (checkTrainers()) return;
+  if (G.save.repel) {
+    if (!--G.save.repel) runScript(() => say('El Repelente se acabó.', { en: 'The Repel wore off.' }));
+    return;
+  }
   const wildHere = map.encounters && (map.encounters.everywhere || TILES[tileAt(x, y)].kind === 'tallgrass');
   if (wildHere && Math.random() < map.encounters!.rate) {
     const table = map.encounters!.table;
