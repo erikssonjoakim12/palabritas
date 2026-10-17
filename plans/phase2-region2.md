@@ -93,7 +93,7 @@ only once phase 4's loop through Pueblo Amanecer exists. That's expected.
 **Already built** (the fix the user asked for): these rows, the tunnel doors both ways, the sign. Two gates hold
 the unfinished roads closed: `obrero` on the west road and `derrumbe` on the canyon path. **To do in this phase:**
 - remove both gates;
-- add the connections and ;
+- add the connections and `style: { trees: 'pine' }`;
 - add the encounters, the trainers, Gaby and the Lucas trigger below.
 
 You leave the cave walking **up** (its far exit is at the top) and come out of a tunnel at the **bottom** of
