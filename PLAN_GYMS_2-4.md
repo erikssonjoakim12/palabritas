@@ -414,7 +414,7 @@ so the build keeps them easy to change (see the rule below).
 
 1. ✓ **Story:** Equipo Silencio plus rival Lucas? **Yes.**
 2. ✓ **Themes — decided:** as many as learning Spanish needs. Themes belong to a family, not a type, so every new
-   family gets its own: 18 new themes (7 → 25).
+   family gets its own: 21 new themes (7 → 28).
 3. ✓ **Family changes:**
    - Gusanito → Capullito → Mariposita (Rutas 1–2 get Gusanito);
    - Pajarito → Palomón at 14;
