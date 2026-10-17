@@ -264,6 +264,8 @@ export const ART: Record<string, TileArt> = {
       '.3kkkkkkkkkkkk3.',
     ],
   },
+  /** Wooden bridges and piers. Planks run across the way you walk (art/tiles.ts turns them and adds rails). */
+  bridge: { pal: INDOOR.wood, rows: Array(16).fill('1112111211121112') },
   caveWall: { pal: CAVE.wall, rows: rockRows },
   caveFloor: { pal: CAVE.floor, rows: pebbleRows },
   /** The way out of a cave: daylight on the floor. */

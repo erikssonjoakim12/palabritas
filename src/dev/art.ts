@@ -70,7 +70,7 @@ const TILE_NAMES: Record<string, string> = {
   h: 'wall', w: 'window', d: 'door', c: 'Palacentro sign', G: 'gym sign', a: 'bakery sign', _: 'wood floor',
   '+': 'tile floor', x: 'Palacentro floor', '#': 'inside wall', k: 'table', B: 'bed', L: 'shelf', P: 'plant',
   V: 'TV', C: 'counter', Q: 'computer', n: 'sofa', u: 'poster', m: 'exit mat', R: 'rug',
-  '^': 'mountain', ':': 'rocky ground', O: 'cave entrance', '%': 'cave wall', ';': 'cave floor', e: 'cave exit',
+  '^': 'mountain', ':': 'rocky ground', O: 'cave entrance', '%': 'cave wall', ';': 'cave floor', e: 'cave exit', D: 'tunnel (walk south into it)', H: 'bridge / pier',
 };
 const INDOOR = '_+x#kBLPVCQnumR';
 

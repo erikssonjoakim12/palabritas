@@ -30,8 +30,8 @@ marked "in the way" can't be walked past, and seams line up with their neighbors
 
 | What | Notes |
 |---|---|
-| `D` dark passage (phase 1 reserved) | Rock on both sides, with the dark opening of a tunnel going south under the cliff, drawn with `CAVE.dark` fading from the bottom. Walkable; `kind: 'door'`. |
-| `H` wooden bridge | Planks across the water: horizontal boards when there's water above and below, vertical ones when water is left and right. Rope rails on both edges. |
+| `D` dark passage ✓ **already built** (with the Ruta 5 fix) | Rock on both sides, with the dark opening of a tunnel going south under the cliff, drawn with `CAVE.dark` fading from the bottom. Walkable; `kind: 'door'`. |
+| `H` wooden bridge ✓ **already built** | Planks across the water: horizontal boards when there's water above and below, vertical ones when water is left and right. Rope rails on both edges. |
 | `F` fountain | 2×2: stone rim, water inside, a spout. Each quarter picks its corner from its neighbors (like the table). |
 | `U` market stall | A wooden counter under a striped awning, with goods on it: clay pots here. Indoors, the same tile works as pottery shelves. |
 | `K` mine rails | Two rails with wooden sleepers on cave floor. |
@@ -88,7 +88,13 @@ only once phase 4's loop through Pueblo Amanecer exists. That's expected.
 
 ---
 
-## 3. Ruta 5 (replaces the current one)
+## 3. Ruta 5
+
+**Already built** (the fix the user asked for): these rows, the tunnel doors both ways, the sign. Two gates hold
+the unfinished roads closed: `obrero` on the west road and `derrumbe` on the canyon path. **To do in this phase:**
+- remove both gates;
+- add the connections and ;
+- add the encounters, the trainers, Gaby and the Lucas trigger below.
 
 You leave the cave walking **up** (its far exit is at the top) and come out of a tunnel at the **bottom** of
 Ruta 5, still walking up (the user asked for this). The road goes north between pines, past the canyon

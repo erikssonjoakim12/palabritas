@@ -89,6 +89,8 @@ export const TILES: Record<string, TileDef> = {
   '%': solid(),
   ';': open(),
   e: open({ kind: 'mat' }),
+  D: open({ kind: 'door' }),
+  H: open(),
   R: open(),
   ' ': solid(),
 };
@@ -195,6 +197,24 @@ function rockImage(art: TileArt, env: TileEnv, rockChars: string, under: Img): I
   return stack(under, paintArt(art, g));
 }
 const MOUNTAIN_CHARS = '^O';
+
+/** Bridges and piers: planks across the way you walk, with rails where the bridge ends at the sides. */
+function bridgeImage(env: TileEnv): Img {
+  const nb = neighbors(env);
+  const goesOn = (c: string) => c === 'H' || !TILES[c]?.solid;
+  const g = grid(ART.bridge.rows);
+  if (goesOn(nb.w) || goesOn(nb.e)) {
+    // You walk east-west: the planks run north-south, with rails along the top and bottom.
+    if (nb.n !== 'H') (setRow(g, 0, '3'), setRow(g, 1, '0'));
+    if (nb.s !== 'H') (setRow(g, 14, '2'), setRow(g, 15, '3'));
+  } else {
+    // You walk north-south: turn the planks, with rails on the left and right.
+    g.forEach((row, y) => row.fill(y % 4 === 3 ? '2' : '1'));
+    if (nb.w !== 'H') (setCol(g, 0, '3'), setCol(g, 1, '0'));
+    if (nb.e !== 'H') (setCol(g, 14, '2'), setCol(g, 15, '3'));
+  }
+  return paintArt(ART.bridge, g);
+}
 const CAVE_WALL_CHARS = '%';
 
 function tableImage(env: TileEnv): Img {
@@ -270,6 +290,11 @@ function render(ch: string, env: TileEnv): Img {
       return paintArt(ART.caveFloor);
     case 'e':
       return stack(paintArt(ART.caveFloor), paintArt(ART.caveExitOverlay));
+    case 'D':
+      // A dark passage under a cliff (you walk south into it): the cave mouth's dark arch, on the ground.
+      return stack(paintArt(env.outdoor ? ART.dirt : ART.caveFloor), paintArt(ART.caveMouth));
+    case 'H':
+      return bridgeImage(env);
     case '~':
       return paintArt(ART.water);
     case 'f':
