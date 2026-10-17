@@ -34,7 +34,8 @@ rainforest animals live along rivers). Animals, visual hooks and color direction
 | Biome | Where in the game | Colors |
 |---|---|---|
 | Farms, villages, forest edges | Pueblo Amanecer, Villa Limón, Rutas 1-2 (now) | familiar, simple |
-| Hot, dry forest | west of Ciudad Brisa: Ruta 3 onward | tan, ochre, rust-red |
+| Pine highlands (the north) | Ruta 3 to gym 2 (Villa Ocote) | pine green, clay red, misty blue-gray |
+| Hot, dry forest | the trees of Rutas 1-2; Rutas 6 and 8 and around the volcano | tan, ochre, rust-red |
 | Volcanoes and lava | around gym 4 | charcoal, ember orange, sulfur yellow |
 | Tropical beaches and coasts | around gym 3 | (coast colors) |
 | Lakes, rivers, wetlands | the lake archipelago, SURF routes | aqua, turquoise, muddy brown |
@@ -76,7 +77,7 @@ Route trainers sit between the previous leader and the next one.
 | # | City / habitat | Type | Team | Top level | Route trainers before it |
 |---|---|---|---|---|---|
 | 1 ✓ | Ciudad Brisa | Volador (birds) | 2 | 12 | 3-6 |
-| 2 | dry-forest town past the cave | Roca / Tierra | 2-3 | 19 | 10-16 |
+| 2 | Villa Ocote, a pine-highland town past the cave | Roca / Tierra | 2-3 | 19 | 10-16 |
 | 3 | beach town | Agua | 3 | 25 | 16-22 |
 | 4 | volcano town | Fuego | 3 | 31 | 22-28 |
 | 5 | rainforest town | Planta / Veneno | 3-4 | 37 | 28-34 |

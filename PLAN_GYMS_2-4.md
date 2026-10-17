@@ -9,15 +9,15 @@ Big picture: [ROADMAP.md](ROADMAP.md) · learning rules: [LEARNING_PLAN.md](LEAR
 
 | | |
 |---|---|
-| Regions | 3 (dry forest · Pacific coast · volcanoes), each ending in a gym |
+| Regions | 3 (pine highlands · Pacific coast · volcanoes), each ending in a gym |
 | New outdoor maps and dungeons | ~15 (6 routes, 3 towns, a mine, a turtle beach, a volcano in 3 parts) |
 | New interiors | ~25 |
-| New Palabritas | 40 (38 with placeholder art; Brasita and Mordisquito already have your art) |
-| New themes | 18 (7 → 25): every new family has its own |
+| New Palabritas | 46 (44 with placeholder art; Brasita and Mordisquito already have your art) |
+| New themes | 21 (7 → 28): every new family has its own |
 | Trainers | ~58, including a rival and a villain team |
 | Side quests | 12, plus 3 story chapters |
 | New systems | 13 (storage box, fishing, bus, rematches, lessons, gym puzzles, night scenes...) |
-| New Spanish | ~3,400 lines (A2 core, 18 themes, 7 lesson topics, dialogue) |
+| New Spanish | ~3,700 lines (A2 core, 21 themes, 7 lesson topics, dialogue) |
 | Play time, gym 1 → 4 | ~8–12 hours (3–5 weeks at 20–30 min a day; see §7) |
 
 ---
@@ -31,15 +31,15 @@ win it back. Grunts are *Silenciosos/Silenciosas*; the admin is **Callada**; the
 **The rival: Lucas** (your neighbor in Pueblo Amanecer). After you left, Profesora Ceiba gave him the starter
 that's strong against yours. Friendly, a bit of a show-off. He battles you three times.
 
-**The route forms a loop.** From Ciudad Brisa you go west through the mountains, south to the sea, and east
+**The route forms a loop.** From Ciudad Brisa you go west up into the pine highlands, south to the sea, and east
 past the volcano, until you jump down the ledge into Pueblo Amanecer. That's the ledge you saw at the start
 of the game.
 
 ```
                  (Cañón)                          Cueva
-   [Villa Madroño]────Ruta 5────────────────(del Eco)────Ruta 3────[Ciudad Brisa]
+   [Villa Ocote]──────Ruta 5────────────────(del Eco)────Ruta 3────[Ciudad Brisa]
      │   (Mina de Barro, north)                                         │
-   Ruta 6  (dry forest, river, bridge)                                Ruta 2
+   Ruta 6  (pine slopes → dry forest, river)                          Ruta 2
      │                                                                  │
    Ruta 7  (the coast)                                            [Villa Limón]
      │                                                                  │
@@ -50,25 +50,30 @@ of the game.
 
 | Region | Gym | Story chapter | Side quests | New themes (one per new family) |
 |---|---|---|---|---|
-| 2 · Dry forest | **Villa Madroño**: Petra, Roca/Tierra, Medalla Barro | The muted town and the clay mine | Beto's hat · the echo room and a fossil · the lost oxen · the national bird | El cuerpo, La cocina, El trabajo, Los animales, La historia, Latinoamérica |
+| 2 · Pine highlands | **Villa Ocote**: Petra, Roca/Tierra, Medalla Barro | The muted town and the clay mine | Beto's hat · the echo room and a fossil · the lost oxen · the national bird | El cuerpo, La cocina, Los deportes, La música, La salud, La historia, Latinoamérica |
 | 3 · Pacific coast | **Playa Carey**: Marina, Agua, Medalla Ola | The night of the turtles (*la arribada*) | The seafood restaurant · the fishing rod · the message in a bottle | La playa, Las frutas, El mar, La pesca, El viaje, La familia |
-| 4 · Volcanoes | **Ciudad Chispa**: Don Tizón, Fuego, Medalla Chispa | The stolen fireworks and the volcano | A hammock for Mom · the lost parakeet chick · the haunted house · the Torovenado costumes · the legend of the Carreta Nagua | La fiesta, La conversación, La ciudad, La ropa, La rutina, Las emociones |
+| 4 · Volcanoes | **Ciudad Chispa**: Don Tizón, Fuego, Medalla Chispa | The stolen fireworks and the volcano | A hammock for Mom · the lost parakeet chick · the haunted house · the Torovenado costumes · the legend of the Carreta Nagua | La fiesta, La conversación, La ciudad, La ropa, La rutina, Las emociones, Los animales, El trabajo |
 
 ---
 
-## 2. Region 2 — the dry forest: Ciudad Brisa → Villa Madroño (gym 2)
+## 2. Region 2 — the pine highlands: Ciudad Brisa → Villa Ocote (gym 2)
 
-Already built: Ruta 3, Cueva del Eco (Ruta 4), Ruta 5 and the Palacentro by the cave.
+Inspired by Nicaragua's north (Estelí, Madriz): cool mountains, pine forests, deep canyons, pottery and Ice Age
+fossils. It looks nothing like the green lowland farms before gym 1. Here the trees are **pines** (the pine
+tile we kept), with a few green broadleaf trees mixed in.
+Already built: Ruta 3, Cueva del Eco (Ruta 4), Ruta 5 and the Palacentro by the cave. Ruta 3's mountains and
+the cave already fit; Ruta 5 gets pines.
 
 ### Places
 - **Ruta 5**, longer at its west end. The road worker finishes the bridge over a ravine, and the bridge leads to
-  Villa Madroño. Grass with Hormiguita and Garrobito. Lucas waits here (rival battle #1).
-- **Cañón del Guardabarranco** (optional): a narrow canyon off Ruta 5 with rarer Palabritas. This is where the
-  national bird lives.
-- **Villa Madroño** (town, ~30×26). Named after Nicaragua's national tree, which stands huge in the plaza.
-  - Adobe houses with clay-tile roofs and an ox-cart parked in the street.
-  - Petra's pottery workshop, which is the gym.
-  - A museum (fossils, petroglyphs, the Acahualinca footprints as a display), a school and a bus stop.
+  Villa Ocote. Pines, and grass with Ardillita, Colibrí and Espinita. Lucas waits here (rival battle #1).
+- **Cañón del Guardabarranco** (optional): a deep, narrow canyon off Ruta 5, like Somoto's, with a river at the
+  bottom and rarer Palabritas. The guardabarranco (the "ravine guard") lives here.
+- **Villa Ocote** (town, ~30×26). Named after the *ocote*, the resin-rich pine of the north. Cool, misty
+  mornings and tall pines around the plaza.
+  - Adobe and pine-wood houses with clay-tile roofs, and an ox-cart parked in the street.
+  - Petra's pottery workshop (the north is famous for its pottery), which is the gym.
+  - A museum (Ice Age fossils and petroglyphs), a school and a bus stop.
   - Palacentro, shop and a few houses.
   - North exit to the mine. South exit to Ruta 6, guarded until you have the Medalla Barro.
 - **La Mina de Barro** (dungeon, 2 floors). An old clay mine with cave rules (wild Palabritas on every step),
@@ -101,11 +106,11 @@ Already built: Ruta 3, Cueva del Eco (Ruta 4), Ruta 5 and the Palacentro by the 
 
 ---
 
-## 3. Region 3 — the Pacific coast: Villa Madroño → Playa Carey (gym 3)
+## 3. Region 3 — the Pacific coast: Villa Ocote → Playa Carey (gym 3)
 
 ### Places
-- **Ruta 6** (~130 steps). Dry forest with cacti, a dry riverbed, a river with a wooden bridge, and a big
-  yellow-grass meadow (*zacatal*, an optional place to train). Ledges step down toward the sea. About 8 trainers
+- **Ruta 6** (~130 steps). Down from the pine highlands: pine slopes first, then dry forest with cacti, a dry
+  riverbed, a river with a wooden bridge, and a big yellow-grass meadow (*zacatal*, an optional place to train). Ledges step down toward the sea. About 8 trainers
   (cowboys, a birdwatcher, a fisherman at the river).
 - **Ruta 7** (~90 steps). Sand, palms, dunes and tide pools. Lucas waits at the start (rival battle #2).
   About 6 trainers (surfer, swimmer, fisherman). Fishing spots.
@@ -144,8 +149,9 @@ Already built: Ruta 3, Cueva del Eco (Ruta 4), Ruta 5 and the Palacentro by the 
 ## 4. Region 4 — the volcanoes: Playa Carey → Ciudad Chispa (gym 4)
 
 ### Places
-- **Ruta 8** (~120 steps). Inland past a lagoon (water you'll SURF later) and huge **sugarcane fields**, a new
-  kind of tall grass and the best place to train. A farm with cows. About 9 trainers.
+- **Ruta 8** (~120 steps). Inland through hot dry forest (dry trees, cacti), past a lagoon (water you'll SURF
+  later) and huge **sugarcane fields**, a new kind of tall grass and the best place to train. A farm with cows.
+  About 9 trainers.
 - **Volcán Chocoyo** (dungeon in 3 parts), inspired by Masaya, where parakeets really nest inside the active
   crater:
   - Ash slopes with steam vents.
@@ -207,17 +213,19 @@ are used until your art arrives.
 | **Tarantón** (new) | Bicho/Veneno | números | from Ochopatas at 24 | the lava tube | a huge hairy tarantula with striped legs and eight eyes in a row |
 | **Hercúleo** (new) | Bicho/Lucha | colores | from Cuernito at 26 | sugarcane fields (rare) | a Hercules beetle with a long double horn and a rainbow-shiny shell |
 
-### Region 2 — dry forest
+### Region 2 — pine highlands
 | Palabrita | Types | Theme | Evolution | Where | Look |
 |---|---|---|---|---|---|
 | **Piedrita** | Roca | el cuerpo | → Petroglifón at 18 | the mine | a round gray pebble with a petroglyph face and stick-figure arms carved on it |
 | **Petroglifón** | Roca/Tierra | el cuerpo | | deep in the mine; Petra | a tall standing stone covered in glowing carved spirals and stick figures, with stone arms |
 | **Ollita** | Tierra | la cocina | → Tinajón at 21 | the mine, around town | a small clay cooking pot with painted patterns, steam puffing from its lid |
 | **Tinajón** | Tierra/Agua | la cocina | | Ruta 8 (rare) | a big round clay water jar (*tinaja*), water sloshing inside, a cork for a hat |
-| **Hormiguita** | Bicho/Planta | el trabajo | → Hormigón at 22 | Rutas 5–6 | a red leafcutter ant carrying a leaf bigger than itself, wearing a tiny hard hat |
-| **Hormigón** | Bicho/Roca | el trabajo | | Ruta 8 | a big ant built from gray concrete blocks (*hormigón* = concrete!), carrying a stone slab |
-| **Garrobito** | Normal | los animales | → **Brasita** at 24 | Rutas 5–6, sunny rocks | a small spiny-tailed iguana (*garrobo*) sunbathing, orange spines along its back |
-| **Brasita** (your art) | Fuego | los animales | (third stage later) | the volcano; Don Tizón | (art exists) |
+| **Ardillita** | Normal | los deportes | → Ardillón at 20 | Ruta 5, the pine woods | a squirrel with a huge two-tone bushy tail, doing a cartwheel |
+| **Ardillón** | Normal/Lucha | los deportes | | evolve it | a big acrobatic squirrel with a sweatband and a tail like a cheerleader's pom-pom |
+| **Colibrí** | Volador | la música | → Zumbador at 22 | Ruta 5, flowers in the canyon | a tiny hummingbird with a shiny green throat, wings a blur, humming music notes |
+| **Zumbador** | Volador/Eléctrico | la música | | evolve it | a bigger hummingbird with a needle beak and a glowing throat, leaving a trail of music notes |
+| **Espinita** | Normal | la salud | → Puercoespín at 22 | Ruta 5, the canyon | a baby porcupine with soft spines and a curly gripping tail |
+| **Puercoespín** | Normal/Acero | la salud | | deep in the mine (rare) | a round porcupine with a doctor's head mirror, its spines like syringes |
 | **Caparazonte** | Roca/Tierra | la historia | → Gliptodón at 30 | fossil (echo room, then the museum) | a small ancient armadillo with a domed bony shell, cracked like old stone |
 | **Gliptodón** | Roca/Tierra | la historia | | | a giant prehistoric armadillo with a huge dome shell and a spiked tail club |
 | **Guardabarranco** | Normal/Volador | Latinoamérica | | the canyon (rare) | Nicaragua's national bird: turquoise brows, green body, rust belly, a long tail with two racket tips |
@@ -240,6 +248,10 @@ are used until your art arrives.
 ### Region 4 — volcanoes
 | Palabrita | Types | Theme | Evolution | Where | Look |
 |---|---|---|---|---|---|
+| **Hormiguita** | Bicho/Planta | el trabajo | → Hormigón at 22 | Ruta 8, the sugarcane fields | a red leafcutter ant carrying a leaf bigger than itself, wearing a tiny hard hat |
+| **Hormigón** | Bicho/Roca | el trabajo | | Ruta 8 (rare) | a big ant built from gray concrete blocks (*hormigón* = concrete!), carrying a stone slab |
+| **Garrobito** | Normal | los animales | → **Brasita** at 24 | Ruta 8, sunny rocks on the volcano | a small spiny-tailed iguana (*garrobo*) sunbathing, orange spines along its back |
+| **Brasita** (your art) | Fuego | los animales | (third stage later) | the volcano; Don Tizón | (art exists) |
 | **Chispita** | Fuego | la fiesta | → Cohetón at 26 | the volcano, Ciudad Chispa | a little firework spark: a star-shaped body with a fuse tail |
 | **Cohetón** | Fuego/Eléctrico | la fiesta | | Don Tizón | a firework rocket with a grinning face, colorful stripes and a sparkling tail |
 | **Chocoyito** | Normal/Volador | la conversación | → Chocoyote at 25 | the crater rim | a green parakeet (*chocoyo*) with an orange forehead and a chatty open beak |
@@ -252,8 +264,8 @@ are used until your art arrives.
 | **Lamparita** | Fantasma/Fuego | las emociones | | the haunted house | an old oil lamp with a ghostly flame face |
 
 **Art priority** (if you want to make real art in order): gym leaders' aces and gifts first (Petroglifón,
-Mordiscón, Cohetón, Paslamita, Caparazonte, Mascarita), then the commons you'll see most (Garrobito,
-Hormiguita, Cangrejito, Coquito, Chispita, Chocoyito, Gusanito), then the rest.
+Mordiscón, Cohetón, Paslamita, Caparazonte, Mascarita), then the commons you'll see most (Ardillita,
+Colibrí, Cangrejito, Coquito, Chispita, Chocoyito, Gusanito, Garrobito), then the rest.
 
 **Words stay with the family.** Evolutions keep their words. When a new first stage goes in front of an
 existing Palabrita (Gusanito before Mariposita, Cojincito before Sillón, Garrobito before Brasita), the family
@@ -265,16 +277,16 @@ keeps the old word sample, so Mariposita and Sillón that players already have d
 
 | Region | Levels | CEFR | Grammar | Topics (new themes) | Where it shows up |
 |---|---|---|---|---|---|
-| 2 · Dry forest | 12–19 | A1 → A1+ | questions (*qué, dónde, cuánto...*), *gustar/encantar*, *hay*, first *ser/estar* | **El cuerpo**, **La cocina**, **El trabajo**, **Los animales**, **La historia**, **Latinoamérica** | Petra's riddles and speech; describing the hat; first directions; listening and speaking in the echo room; reading the child's message |
+| 2 · Pine highlands | 12–19 | A1 → A1+ | questions (*qué, dónde, cuánto...*), *gustar/encantar*, *hay*, first *ser/estar* | **El cuerpo**, **La cocina**, **Los deportes**, **La música**, **La salud**, **La historia**, **Latinoamérica** | Petra's riddles and speech; describing the hat; first directions; listening and speaking in the echo room; reading the child's message |
 | 3 · Coast | 19–25 | A2 | the present tense in full (*tener, ir, hacer, querer, poder*), ***ir a* + verb**, ordering food, numbers to 100, directions | **La playa**, **Las frutas**, **El mar**, **La pesca**, **El viaje**, **La familia** | Marina's speech; the restaurant; the bottle map; counting turtle eggs; lessons |
-| 4 · Volcanoes | 25–31 | A2 | daily routines and time (*me levanto, ¿a qué hora?*), shopping and prices, **first past tense** (*fui, hice, vi, comí, compré*), sequencing (*primero, luego, después, al final*), clothes | **La fiesta**, **La conversación**, **La ciudad**, **La ropa**, **La rutina**, **Las emociones** | Don Tizón's speech; the torch poem; bargaining at the market; the Torovenado; the legend |
+| 4 · Volcanoes | 25–31 | A2 | daily routines and time (*me levanto, ¿a qué hora?*), shopping and prices, **first past tense** (*fui, hice, vi, comí, compré*), sequencing (*primero, luego, después, al final*), clothes | **La fiesta**, **La conversación**, **La ciudad**, **La ropa**, **La rutina**, **Las emociones**, **Los animales**, **El trabajo** | Don Tizón's speech; the torch poem; bargaining at the market; the Torovenado; the legend |
 
 **Content to write** (Latin American Spanish, with a little Nicaraguan flavor in names and places):
 
 | What | Size | Why |
 |---|---|---|
 | **A2 core, levels 21–35** | ~200 words + ~100 sentences, in the grammar order above | today the core stops at level 20 |
-| **18 new themes**, one per new family | 117 lines each (27 words, 40 phrases, 50 sentences, so they reach level ~37) ≈ 2,100 lines | see §5; existing families keep their themes so saves don't change. **Latinoamérica** (the Guardabarranco) covers every Spanish-speaking country in Central and South America: countries, capitals, nationalities (*colombiano/colombiana*), *«¿De dónde eres?» «Soy de Perú»*, and one or two typical foods and words from each |
+| **21 new themes**, one per new family | 117 lines each (27 words, 40 phrases, 50 sentences, so they reach level ~37) ≈ 2,450 lines | see §5; existing families keep their themes so saves don't change. **Latinoamérica** (the Guardabarranco) covers every Spanish-speaking country in Central and South America: countries, capitals, nationalities (*colombiano/colombiana*), *«¿De dónde eres?» «Soy de Perú»*, and one or two typical foods and words from each |
 | **7 lesson topics** (grammar, like Rita's present tense) | ~25 each ≈ 175 lines | Preguntas, Gustar, Direcciones, Ir a, En el restaurante, De compras, El pasado |
 | **Dialogue** | ~800 lines | NPCs, ~58 trainers, quests, story |
 
@@ -321,12 +333,13 @@ Where those answers come from, gyms 2–4:
 | **New items** | Superpoción ($250, heals 50), Superbola ($200, easier catch), Revivir ($600), Repelente ($200, no wild battles for 100 steps; great in caves), and a key-items pocket (fishing rod, fossil, Beto's hat) | the bag and shop already exist |
 | **Gifts and fossils** | One helper gives you a Palabrita (to the box if your team is full). The fossil revives "tomorrow" by the real date. | |
 | **Fishing** | Face water and press A, with each map having its own fishing table | unlocked by the rod (region 3) |
-| **El bus** (fast travel) | Colorful "chicken buses" stop in Amanecer, Limón, Brisa, Madroño, Carey and Chispa. Pay $40 and say where you're going: *«Quiero ir a Playa Carey.»* Only towns you've visited. | unlocked after gym 2; practices *ir a* |
+| **El bus** (fast travel) | Colorful "chicken buses" stop in Amanecer, Limón, Brisa, Ocote, Carey and Chispa. Pay $40 and say where you're going: *«Quiero ir a Playa Carey.»* Only towns you've visited. | unlocked after gym 2; practices *ir a* |
 | **Rematches** | Trainers you've beaten can battle again the next day, their teams keeping pace with yours. Half the money. | daily practice |
 | **Lessons** | The teacher at each school: a private class for one of your Palabritas (its current words and review) for money, or the town's grammar topic | like Profesora Ceiba's training, which you liked |
 | **Riddle doors** (gym 2) | A door that opens after a correct answer | a kind of gate |
 | **Currents** (gym 3) | Tiles that slide you until you stop | |
 | **Torches** (gym 4) | Light them in order; a wrong order resets them | |
+| **Tree style per map** | Pines in the highlands; the green/dry mix in the lowlands, mostly dry around the volcano | a map setting |
 | **Night scenes** | A dark tint with a glow around you, for the *arribada*, the festival night and the haunted house | night maps are their own scenes; no day/night clock |
 | **The muted town** | While the flag is on, everyone on that map just says "…" | |
 | **Cutscene walking** | NPCs walk set paths (the rival arriving, the parade) | reuses the trainer walk |
@@ -343,8 +356,8 @@ in black basalt.
 
 | Region | Tiles |
 |---|---|
-| 2 | clay-tile roofs, adobe walls, the big madroño tree (2×2), ox-cart, plaza fountain, cacti, yellow dry grass (*zacate*), rope bridge, clay mine (rails, supports, the Silenciador), petroglyph stone doors |
-| 3 | sand, shoreline (foam edges), open sea, pier planks, wooden bridge, boats, lighthouse, stilt houses, tide pools, current tiles, pool |
+| 2 | pines (the kept pine tile, plus a cooler grass color), clay-tile roofs, adobe and pine-wood walls, ox-cart, plaza fountain, pottery stalls, canyon walls with a river, rope bridge, clay mine (rails, supports, the Silenciador), petroglyph stone doors, morning mist (optional) |
+| 3 | cacti and yellow dry grass (*zacate*) on Ruta 6, sand, shoreline (foam edges), open sea, pier planks, wooden bridge, boats, lighthouse, stilt houses, tide pools, current tiles, pool |
 | 4 | basalt rock, ash ground, lava, steam vents, crater rim, sugarcane tall grass, cobblestone plaza, colonial church, market stalls with hammocks and masks, haunted house, torches, festival lights, bus stop |
 
 **New trainer looks** (battle portraits come for free): cowboy (*sabanero*), surfer, lifeguard, swimmer,
@@ -370,10 +383,10 @@ and push.
    - the changes to existing families (§5) with placeholder art;
    - the A2 core for levels 21–35.
 2. **Region 2.**
-   - Tiles, then Ruta 5's extension and bridge, the canyon, Villa Madroño and its interiors, the mine.
+   - Tiles, then Ruta 5's extension and bridge, the canyon, Villa Ocote and its interiors, the mine.
    - Lucas #1 and Equipo Silencio's first chapter.
    - Gym 2 and its 4 side quests.
-   - The region's Palabritas and their 6 themes, the bus (Brisa, Limón, Madroño) and lesson topics.
+   - The region's Palabritas and their 7 themes, the bus (Brisa, Limón, Ocote) and lesson topics.
    - **Playable to the Medalla Barro.**
 3. **Region 3.**
    - Tiles, fishing, Rutas 6–7, Playa Carey, the turtle beach (day and night).
@@ -383,7 +396,7 @@ and push.
 4. **Region 4.**
    - Tiles, Ruta 8, the volcano, Ciudad Chispa (plus festival night), Ruta 9 and the jump home.
    - Lucas #3, Don Sigilo, gym 4 and its quests.
-   - The region's Palabritas and their 6 themes.
+   - The region's Palabritas and their 8 themes.
    - **Playable to the Medalla Chispa.**
 5. **Polish.** Update ROADMAP and LEARNING_PLAN, sort the Palabrita list by family, and make an art-brief file
    for the placeholders. A full test pass.

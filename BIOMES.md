@@ -169,3 +169,25 @@ Pacific coast: San Juan del Sur, La Flor, Poneloya · Caribbean coast: Corn Isla
 | 13 | Yellow-bellied sea snake | Serpiente marina amarilla | Black-and-yellow bands, paddle tail |
 | 14 | Fiddler crab | Cangrejo violinista | One enormous claw |
 | 15 | Sea star | Estrella de mar | Five arms, textured body |
+
+## 8. Pine highlands (the north)
+Estelí, Madriz, Nueva Segovia · cool, dry pine forests, deep canyons (Somoto), pottery towns, Ice Age fossils.
+Region 2 of the game (Ruta 3 to gym 2). The misty cloud forest (biome 3) is kept for later.
+
+| # | Animal | Visual hook |
+|---|---|---|
+| 1 | Variegated squirrel | Huge two-tone bushy tail |
+| 2 | Hummingbird | Needle beak, blurred wings, shiny throat |
+| 3 | Prehensile-tailed porcupine | Spines, curled gripping tail |
+| 4 | Turquoise-browed motmot (*guardabarranco*) | Lives in ravines; racket tail |
+| 5 | Salamander | Smooth body, tiny legs, long tail |
+| 6 | Acorn woodpecker | Red cap, clown face |
+| 7 | Gray fox | Pointed ears, bushy tail |
+| 8 | White-tailed deer | Tall ears, white tail |
+| 9 | Pine beetle | Small, dark, armored |
+| 10 | Owl | Round face, big eyes |
+
+Also living things that aren't animals, in the game's style: petroglyph stones, clay pots, fossils.
+
+**Design direction:** pine green, clay red and terracotta, stone gray, cool blue-gray mornings. Rounded,
+earthy shapes; carved and painted patterns.
