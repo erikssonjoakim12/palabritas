@@ -21,6 +21,8 @@ export interface ItemDef {
   ball?: number;
   /** A key item: never sold, never used up; it's only usable where something says so. */
   key?: boolean;
+  /** Using it from the bag closes the menus and runs this script (the fishing rod: 'fish'). */
+  use?: string;
 }
 
 const key = (id: string, name: string, en: string, feminine = false): ItemDef =>
@@ -34,7 +36,7 @@ export const ITEM_DEFS: Record<string, ItemDef> = {
   revivir: { id: 'revivir', name: 'Revivir', plural: 'Revivires', feminine: false, price: 600, enName: 'Revive', enPlural: 'Revives', en: 'Revive (a fainted Palabrita comes back with half its PS)', revive: true },
   repelente: { id: 'repelente', name: 'Repelente', plural: 'Repelentes', feminine: false, price: 200, enName: 'Repel', enPlural: 'Repels', en: 'Repel (no wild Palabritas for 100 steps)', repel: 100 },
   // Key items: found or given, never sold.
-  cana: key('cana', 'Caña de pescar', 'Fishing rod', true),
+  cana: { ...key('cana', 'Caña de pescar', 'Fishing rod', true), use: 'fish' },
   fosil: key('fosil', 'Fósil Caparazón', 'Shell fossil'),
   sombrero: key('sombrero', 'Sombrero de Beto', 'Beto’s hat'),
   hamaca: key('hamaca', 'Hamaca', 'Hammock', true),

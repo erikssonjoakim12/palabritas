@@ -15,7 +15,8 @@ import { money } from '../game/bag';
 
 const DEX_ORDER = ['salchichita', 'hamburgueson', 'gotita', 'nubarron', 'aguacatito', 'aguacatono', 'pajarito', 'palomon', 'conejito', 'mariposita', 'sillon', 'hojadillo', 'ecolin', 'ochopatas', 'cuernito'];
 
-export async function startMenu() {
+/** The START menu. Resolves a script to run after it closes (an item used from the bag), if any. */
+export async function startMenu(): Promise<string | undefined> {
   sfx('select');
   let sel = 0;
   while (true) {
@@ -23,7 +24,10 @@ export async function startMenu() {
     const i = await menu(opts, { cancel: true, pos: { right: 0, top: 0 }, initial: sel, disabled: [!G.save.party.length] });
     sel = Math.max(0, i);
     if (i === 0) await PalabritasMenu();
-    else if (i === 1) await openBag();
+    else if (i === 1) {
+      const script = await openBag();
+      if (script) return script;
+    }
     else if (i === 2) await dictionary();
     else if (i === 3) await trainerCard();
     else if (i === 4) {

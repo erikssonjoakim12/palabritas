@@ -52,12 +52,16 @@ export async function useOnMon(id: string): Promise<boolean> {
 /** "Not now": a key item (or anything) that has no use here. */
 export const notNow = () => info('Ahora no.', { en: 'Not now. (There’s no use for it here.)' });
 
-/** START → MOCHILA: look at your items and use potions, Revivir and Repelente. */
-export async function openBag() {
+/**
+ * START → MOCHILA: look at your items and use potions, Revivir and Repelente. Resolves the script an item
+ * runs once the menus close (the fishing rod), if one was used.
+ */
+export async function openBag(): Promise<string | undefined> {
   while (true) {
     const id = await chooseItem();
     if (!id) return;
     const def = ITEM_DEFS[id];
+    if (def.use) return def.use;
     if (def.heal || def.revive) await useOnMon(id);
     else if (def.repel) {
       takeItem(id);

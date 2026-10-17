@@ -93,8 +93,21 @@ export interface MapDef {
   triggers?: { x: number; y: number; script: string }[];
   gates?: GateDef[];
   /** Wild Palabritas in tall grass, or (`everywhere`, caves) on every step. */
-  encounters?: { rate: number; everywhere?: boolean; table: { sp: string; min: number; max: number; w: number }[] };
+  encounters?: { rate: number; everywhere?: boolean; table: EncounterEntry[] };
+  /** What bites when you fish here (FRESHWATER when left out). */
+  fishing?: { table: EncounterEntry[] };
 }
+
+/** One kind of wild Palabrita in an encounter table: its levels and weight (how common it is). */
+export interface EncounterEntry {
+  sp: string;
+  min: number;
+  max: number;
+  w: number;
+}
+
+/** What bites in lakes and rivers (Mojarrita arrives with the rod, in phase 3). */
+export const FRESHWATER: EncounterEntry[] = [{ sp: 'mojarrita', min: 8, max: 14, w: 100 }];
 
 const HOUSE = ['##L##V##', '________', '_kk_____', '_kk_____', '________', '______B_', '____m___'];
 // Palacentro: posters (u), nurse behind the counter (C) next to the healing machine,

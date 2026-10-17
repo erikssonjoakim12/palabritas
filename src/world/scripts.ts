@@ -2,7 +2,7 @@ import { overlay, el, gp } from '../engine/screen';
 import { sfx } from '../engine/sfx';
 import { frames } from '../engine/loop';
 import { G, flag, setFlag, saveGame } from '../game/state';
-import { addItem, money } from '../game/bag';
+import { addItem, itemCount, money } from '../game/bag';
 import { ITEM_DEFS, SHOPS, amountOf } from '../data/items';
 import { gradeOrder } from '../lang/order';
 import { giveMon, healParty, stats, monName, PARTY_MAX } from '../game/mon';
@@ -18,8 +18,10 @@ import { spriteCanvas, pickFrom } from '../ui/party';
 import { startMenu } from '../ui/startmenu';
 import { wildBattle, trainerBattle } from '../battle/battle';
 import { speak, canListen } from '../lang/speech';
-import { SCRIPTS, scriptedStep, warp, currentMap, refreshNpcs, npcById, type ScriptCtx } from './world';
-import { gateOf, type Line } from './maps';
+import { SCRIPTS, scriptedStep, warp, currentMap, refreshNpcs, npcById, pickEncounter, facingTile, type ScriptCtx } from './world';
+import { gateOf, FRESHWATER, type Line } from './maps';
+import { TILES } from '../art/tiles';
+import { notNow } from '../ui/bag';
 import { MINI_BALL, BALL_COLORS, drawPattern } from '../art/balls';
 
 
@@ -129,7 +131,22 @@ function showCreature(sp: string) {
 // ---------- Scripts ----------
 
 const S: Record<string, (c: ScriptCtx) => Promise<void>> = {
-  startMenu: () => startMenu(),
+  async startMenu(c) {
+    const next = await startMenu();
+    if (next) await SCRIPTS[next](c);
+  },
+
+  /** Fishing with the rod, facing water: sometimes something bites. */
+  async fish() {
+    if (TILES[facingTile()].kind !== 'water') return notNow();
+    await info('{name} tiró la caña...', { en: '{name} cast the fishing rod...', auto: 900 });
+    await info('...', { auto: 1000 + Math.random() * 2000 });
+    if (Math.random() >= 0.75) return info('No pica nada...', { en: 'Nothing’s biting...' });
+    sfx('alert');
+    await info('¡Algo picó!', { en: 'Something bit!', auto: 800 });
+    const { sp, level } = pickEncounter(currentMap().fishing?.table ?? FRESHWATER);
+    if ((await wildBattle(sp, level)) === 'lose') await blackout();
+  },
 
   async __wild(c) {
     const { sp, level } = c.data as { sp: string; level: number };
@@ -222,6 +239,7 @@ const S: Record<string, (c: ScriptCtx) => Promise<void>> = {
     const likes = await ask('¿Te gusta pescar?', { en: 'Do you like fishing?' }, ['Sí, me gusta.', 'No, no me gusta.']);
     if (likes) await lines(['¡A mí también! Me gusta mucho.', 'Me too! I like it a lot.']);
     else await lines(['¿No? ¡Pues a mí me encanta!', 'No? Well, I love it!']);
+    if (itemCount('cana')) await lines(['¡Tienes una caña! Prueba en el lago.', 'You have a fishing rod! Try it in the lake.']);
   },
 
   async mama() {

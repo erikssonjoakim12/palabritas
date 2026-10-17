@@ -5,9 +5,10 @@ import { nextFrame, frames, frameAlpha, whenIdle, clearIdle } from '../engine/lo
 import { TILES, tallGrassImage, tileImage, tileOf, envAt } from '../art/tiles';
 import { personFrames, OBJECTS, type Frames } from '../art/chars';
 import type { Img } from '../art/pixel';
-import { MAPS, type MapDef, type NpcDef, type Conn } from './maps';
+import { MAPS, type MapDef, type NpcDef, type Conn, type EncounterEntry } from './maps';
 import { worldLayout } from './layout';
 import { G, flag, saveGame, playerLook } from '../game/state';
+import { itemCount } from '../game/bag';
 import { closeText, say, setSpeaker } from '../ui/textbox';
 
 export interface NpcRT {
@@ -323,14 +324,18 @@ function onStep() {
     return;
   }
   const wildHere = map.encounters && (map.encounters.everywhere || TILES[tileAt(x, y)].kind === 'tallgrass');
-  if (wildHere && Math.random() < map.encounters!.rate) {
-    const table = map.encounters!.table;
-    let r = Math.random() * table.reduce((s, e) => s + e.w, 0);
-    const e = table.find((t) => (r -= t.w) < 0) ?? table[0];
-    const level = e.min + Math.floor(Math.random() * (e.max - e.min + 1));
-    runScript(SCRIPTS.__wild, { data: { sp: e.sp, level } });
-  }
+  if (wildHere && Math.random() < map.encounters!.rate) runScript(SCRIPTS.__wild, { data: pickEncounter(map.encounters!.table) });
 }
+
+/** A random wild Palabrita from a table (by weight), with its level. */
+export function pickEncounter(table: EncounterEntry[]): { sp: string; level: number } {
+  let r = Math.random() * table.reduce((s, e) => s + e.w, 0);
+  const e = table.find((t) => (r -= t.w) < 0) ?? table[0];
+  return { sp: e.sp, level: e.min + Math.floor(Math.random() * (e.max - e.min + 1)) };
+}
+
+/** The tile you're facing. */
+export const facingTile = () => tileAt(player.x + DX[player.dir], player.y + DY[player.dir]);
 
 function checkTrainers(): boolean {
   for (const n of npcs) {
@@ -369,8 +374,9 @@ function interact() {
     runScript(() => say(sign.es, { en: sign.en }));
     return;
   }
-  const { look, script } = TILES[tileAt(fx, fy)];
-  if (script) runScript(SCRIPTS[script]);
+  const { look, script, kind } = TILES[tileAt(fx, fy)];
+  if (kind === 'water' && itemCount('cana')) runScript(SCRIPTS.fish);
+  else if (script) runScript(SCRIPTS[script]);
   else if (look) runScript(() => say(look.es, { en: look.en }));
 }
 
