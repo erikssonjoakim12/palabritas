@@ -407,15 +407,15 @@ screenshots.
 
 ---
 
-## 11. Decisions for you
+## 11. Decisions (all made on 2026-10-17)
 
-Answer these once; everything else I can decide while building. **My default is in bold**: say "go with the
-defaults" and I'll use them all.
+All eight are decided: two by you (✓) and the rest with my defaults (**Yes**). Any of them may change later,
+so the build keeps them easy to change (see the rule below).
 
-1. **Story:** Equipo Silencio plus rival Lucas? **Yes.**
+1. ✓ **Story:** Equipo Silencio plus rival Lucas? **Yes.**
 2. ✓ **Themes — decided:** as many as learning Spanish needs. Themes belong to a family, not a type, so every new
    family gets its own: 18 new themes (7 → 25).
-3. **Family changes:**
+3. ✓ **Family changes:**
    - Gusanito → Capullito → Mariposita (Rutas 1–2 get Gusanito);
    - Pajarito → Palomón at 14;
    - Cojincito before Sillón;
@@ -424,8 +424,18 @@ defaults" and I'll use them all.
    **Yes.**
 4. ✓ **Pace — decided:** as much play as the level curve needs. It should take time, but never get boring:
    variety (quests, training spots, rematches, lessons) instead of grinding.
-5. **Art:** placeholders first; you make real art at your own pace from the Look column. **Yes.**
-6. **Names:** towns, leaders, villains and Palabritas above. **Keep them; veto any you dislike.**
-7. **Real dates:** the fossil revives tomorrow; rematches, lessons and the restaurant reset daily. **Yes.**
-8. **Spanish check:** I write all ~2,000 lines carefully; a native speaker skims them when convenient.
+5. ✓ **Art:** placeholders first; you make real art at your own pace from the Look column. **Yes.**
+6. ✓ **Names:** towns, leaders, villains and Palabritas above. **Keep them; veto any you dislike.**
+7. ✓ **Real dates:** the fossil revives tomorrow; rematches, lessons and the restaurant reset daily. **Yes.**
+8. ✓ **Spanish check:** I write all ~3,700 lines carefully; a native speaker skims them when convenient.
    **Yes** (nothing waits for it).
+
+**Rule for the build: decisions stay easy to change.**
+- Names (towns, leaders, villains, the rival, Palabritas) live in the data, in one place each, so a rename is a
+  one-line change. Scripts refer to them and never repeat them.
+- The story is made of steps that check flags. Dropping Equipo Silencio or the rival later would mean
+  replacing a few steps, not rewriting regions.
+- Family changes are data: an evolution is one line, and the family's word sample is pinned so it can be
+  reshuffled later without changing anyone's words.
+- Daily resets read the date in one helper, so they can be turned off or changed in one place.
+- Every theme is its own file, so it can be checked or rewritten on its own.
