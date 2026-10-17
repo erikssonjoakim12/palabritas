@@ -217,7 +217,7 @@ are used until your art arrives.
 | Palabrita | Types | Theme | Evolution | Where | Look |
 |---|---|---|---|---|---|
 | **Piedrita** | Roca | el cuerpo | → Petroglifón at 18 | the mine | a round gray pebble with a petroglyph face and stick-figure arms carved on it |
-| **Petroglifón** | Roca/Tierra | el cuerpo | | deep in the mine; Petra | a tall standing stone covered in glowing carved spirals and stick figures, with stone arms |
+| **Petroglifón** | Roca/Tierra | el cuerpo | | Petra; evolve it | a tall standing stone covered in glowing carved spirals and stick figures, with stone arms |
 | **Ollita** | Tierra | la cocina | → Tinajón at 21 | the mine, around town | a small clay cooking pot with painted patterns, steam puffing from its lid |
 | **Tinajón** | Tierra/Agua | la cocina | | Ruta 8 (rare) | a big round clay water jar (*tinaja*), water sloshing inside, a cork for a hat |
 | **Ardillita** | Normal | los deportes | → Ardillón at 20 | Ruta 5, the pine woods | a squirrel with a huge two-tone bushy tail, doing a cartwheel |
@@ -225,7 +225,7 @@ are used until your art arrives.
 | **Colibrí** | Volador | la música | → Zumbador at 22 | Ruta 5, flowers in the canyon | a tiny hummingbird with a shiny green throat, wings a blur, humming music notes |
 | **Zumbador** | Volador/Eléctrico | la música | | evolve it | a bigger hummingbird with a needle beak and a glowing throat, leaving a trail of music notes |
 | **Espinita** | Normal | la salud | → Puercoespín at 22 | Ruta 5, the canyon | a baby porcupine with soft spines and a curly gripping tail |
-| **Puercoespín** | Normal/Acero | la salud | | deep in the mine (rare) | a round porcupine with a doctor's head mirror, its spines like syringes |
+| **Puercoespín** | Normal/Acero | la salud | | evolve it | a round porcupine with a doctor's head mirror, its spines like syringes |
 | **Caparazonte** | Roca/Tierra | la historia | → Gliptodón at 30 | fossil (echo room, then the museum) | a small ancient armadillo with a domed bony shell, cracked like old stone |
 | **Gliptodón** | Roca/Tierra | la historia | | | a giant prehistoric armadillo with a huge dome shell and a spiked tail club |
 | **Guardabarranco** | Normal/Volador | Latinoamérica | | the canyon (rare) | Nicaragua's national bird: turquoise brows, green body, rust belly, a long tail with two racket tips |
