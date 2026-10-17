@@ -1,4 +1,4 @@
-import { G, type ItemProg, type Mon } from './state';
+import { G, today, type ItemProg, type Mon } from './state';
 import { THEMES, poolUpTo, type Item } from '../data/content';
 import type { Mode } from '../data/species';
 import type { Grade } from '../lang/check';
@@ -62,7 +62,6 @@ export function isDue(p: ItemProg | undefined, now = Date.now()) {
   return !!p?.learned && now >= p.due;
 }
 
-const today = () => new Date().toISOString().slice(0, 10);
 
 export interface RecordResult {
   learnedNow: boolean;

@@ -70,7 +70,7 @@ const TILE_NAMES: Record<string, string> = {
   h: 'wall', w: 'window', d: 'door', c: 'Palacentro sign', G: 'gym sign', a: 'bakery sign', _: 'wood floor',
   '+': 'tile floor', x: 'Palacentro floor', '#': 'inside wall', k: 'table', B: 'bed', L: 'shelf', P: 'plant',
   V: 'TV', C: 'counter', Q: 'computer', n: 'sofa', u: 'poster', m: 'exit mat', R: 'rug',
-  '^': 'mountain', ':': 'rocky ground', O: 'cave entrance', '%': 'cave wall', ';': 'cave floor', e: 'cave exit', D: 'tunnel (walk south into it)', H: 'bridge / pier',
+  '^': 'mountain', ':': 'rocky ground', O: 'cave entrance', '%': 'cave wall', ';': 'cave floor', e: 'cave exit', D: 'tunnel (walk south into it)', H: 'bridge / pier', '8': 'current up', '2': 'current down', '4': 'current left', '6': 'current right',
 };
 const INDOOR = '_+x#kBLPVCQnumR';
 
@@ -87,6 +87,19 @@ const CAVE_SAMPLE = ['%%%%%%%%', '%%;;;;%%', '%;;;;;;%', '%;;%%;;%', '%;;;;;;%',
 card(tiles, 'mountain · cave (samples)', [
   renderMap({ rows: MOUNTAIN_SAMPLE, outdoor: true, floor: '.', ground: 'grass', border: '^' }),
   renderMap({ rows: CAVE_SAMPLE, outdoor: false, floor: ';', border: '%' }),
+], 3);
+
+// Map styles: the same tiles in each region's look.
+const TOWN_SAMPLE = ['TTTTTTTT', 'T.rrrr.T', 'T.rrrr.T', 'T.hwwh.T', 'T.hwdh.T', 'T......T', 'TTTTTTTT'];
+card(tiles, 'styles: lowland · pine highlands (adobe, clay roofs) · dry forest', [
+  renderMap({ rows: TOWN_SAMPLE, outdoor: true, floor: '.', ground: 'town', roof: 'red' }),
+  renderMap({ rows: TOWN_SAMPLE, outdoor: true, floor: '.', ground: 'town', roof: 'clay', style: { trees: 'pine', walls: 'adobe' } }),
+  renderMap({ rows: TOWN_SAMPLE, outdoor: true, floor: '.', ground: 'sand', roof: 'blue', style: { trees: 'dry' } }),
+], 3);
+card(tiles, 'styles: basalt mountain · clay cave · basalt cave', [
+  renderMap({ rows: MOUNTAIN_SAMPLE, outdoor: true, floor: '.', ground: 'grass', border: '^', style: { rock: 'basalt' } }),
+  renderMap({ rows: CAVE_SAMPLE, outdoor: false, floor: ';', border: '%', style: { cave: 'clay' } }),
+  renderMap({ rows: CAVE_SAMPLE, outdoor: false, floor: ';', border: '%', style: { cave: 'basalt' } }),
 ], 3);
 
 buildObjects();

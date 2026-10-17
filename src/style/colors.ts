@@ -29,6 +29,12 @@ export const OUTDOOR = {
   fence: ['#e8f0e0', '#c09878', '#906848', INK] as Pal,
   /** Mountains and cliffs. */
   rock: ['#f0e0b8', '#d0b078', '#987040', INK] as Pal,
+  /** Black volcanic rock (style rock: 'basalt'). */
+  basalt: ['#b0a8a8', '#706870', '#403840', INK] as Pal,
+  /** Warm ochre adobe walls (style walls: 'adobe'). */
+  adobe: ['#f0d8b0', '#c89868', '#a06838', INK] as Pal,
+  /** Beach sand (ground: 'sand'). */
+  sand: ['#f8f0d0', '#f0e0b0', '#d8c088', INK] as Pal,
   /** Rocky ground in the mountains. */
   dirt: ['#f8f0d0', '#e8d8a8', '#b8a070', INK] as Pal,
 };
@@ -42,6 +48,12 @@ export const TREES = {
 };
 
 // ---------- Caves ----------
+
+/** Cave looks by map style (style cave: 'clay' | 'basalt'); the default is CAVE's wall and floor. */
+export const CAVE_STYLES: Record<string, { wall: Pal; floor: Pal }> = {
+  clay: { wall: ['#d08860', '#a05838', '#683020', INK], floor: ['#e8c0a0', '#d0a080', '#a07050', INK] },
+  basalt: { wall: ['#888088', '#585058', '#302830', INK], floor: ['#b0a8a0', '#908880', '#605850', INK] },
+};
 
 export const CAVE = {
   wall: ['#c8a880', '#987050', '#604028', INK] as Pal,
@@ -67,6 +79,7 @@ export const ACCENT = {
 
 /** Roof colors: [highlight, light, dark, outline]. Each town picks one (see maps.ts). */
 export const ROOFS: Record<string, Pal> = {
+  clay: ['#f8d8c0', '#e09870', '#b05838', INK],
   green: ['#d8f0c8', '#b8d898', '#789858', INK],
   yellow: ['#f8f0c8', '#e8d888', '#b89848', INK],
   blue: ['#d8e8f8', '#a8c8f0', '#6888c8', INK],

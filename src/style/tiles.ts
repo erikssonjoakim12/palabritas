@@ -211,6 +211,8 @@ export const ART: Record<string, TileArt> = {
     rows: tile8(['00000000', '00100000', '00000010', '00000100', '10000000', '00001000', '00000000', '01000010']),
   },
   grassGround: { pal: OUTDOOR.grass, rows: grassRows },
+  /** Sand: beaches (ground: 'sand'), and the sand tile. */
+  sand: { pal: OUTDOOR.sand, rows: tile8(['00000000', '00010000', '00000001', '01000000', '00000100', '00000000', '10000010', '00001000']) },
   /**
    * Ledges: grass with a lip you can hop down but not climb (like Gold/Silver).
    * ledgeRight: the high side is on the left, you hop east. ledgeDown: you hop south.
@@ -266,6 +268,28 @@ export const ART: Record<string, TileArt> = {
   },
   /** Wooden bridges and piers. Planks run across the way you walk (art/tiles.ts turns them and adds rails). */
   bridge: { pal: INDOOR.wood, rows: Array(16).fill('1112111211121112') },
+  /** A water current (drawn over water, turned for each direction): a white arrow pointing up. */
+  currentArrow: {
+    pal: OUTDOOR.water,
+    rows: [
+      '................',
+      '................',
+      '.......00.......',
+      '......0000......',
+      '.....000000.....',
+      '....00.00.00....',
+      '.......00.......',
+      '.......00.......',
+      '.......00.......',
+      '.......00.......',
+      '......1001......',
+      '.....1.00.1.....',
+      '.......00.......',
+      '................',
+      '................',
+      '................',
+    ],
+  },
   caveWall: { pal: CAVE.wall, rows: rockRows },
   caveFloor: { pal: CAVE.floor, rows: pebbleRows },
   /** The way out of a cave: daylight on the floor. */

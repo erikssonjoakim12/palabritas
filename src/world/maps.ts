@@ -1,5 +1,6 @@
 import type { Dir } from '../engine/input';
 import { flag } from '../game/state';
+import type { MapStyle } from '../art/tiles';
 
 /*
  Tile legend (see art/tiles.ts):
@@ -74,8 +75,12 @@ export interface MapDef {
   border?: string;
   rows: string[];
   floor: string;
-  /** Outdoors: pale dotted town ground or green route grass for '.'. */
-  ground?: 'town' | 'grass';
+  /** Outdoors: pale dotted town ground, green route grass or beach sand for '.'. */
+  ground?: 'town' | 'grass' | 'sand';
+  /** Tree, wall, rock and cave looks (art/tiles.ts MapStyle). */
+  style?: MapStyle;
+  /** Drawn dark, with light around you (night scenes). */
+  night?: boolean;
   /** Roof color for 'r' buildings (key in ROOFS, style/colors.ts). */
   roof?: string;
   connections?: Partial<Record<Dir, Conn>>;

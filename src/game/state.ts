@@ -176,6 +176,17 @@ export function deleteSave() {
   }
 }
 
+/**
+ * Today as YYYY-MM-DD in local time: the one clock for everything daily (mastery days, rematches, lessons,
+ * the fossil...). Tests can set window.__today = '2026-10-18'.
+ */
+export function today(): string {
+  const fake = (globalThis as { __today?: string }).__today;
+  if (fake) return fake;
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+}
+
 export const flag = (name: string) => !!G.save.flags[name];
 export const setFlag = (name: string, v = true) => {
   G.save.flags[name] = v;

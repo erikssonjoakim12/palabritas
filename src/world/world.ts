@@ -18,6 +18,8 @@ export interface NpcRT {
   visible: boolean;
   bubble: number;
   turnTimer: number;
+  /** While walking (cutscenes): pixels still to go to reach (x, y), and the walking frame. */
+  off?: { x: number; y: number; frame: number };
   /** Extra drawing on top of the sprite (e.g. Palabolas glowing in the healing machine). */
   overlay?: (g: CanvasRenderingContext2D, x: number, y: number) => void;
 }
@@ -82,6 +84,8 @@ export const player = {
   speed: 0,
   /** Length of the current move in pixels (two tiles when hopping a ledge). */
   dist: 16,
+  /** Being carried by a water current this way (you keep facing where you were going). */
+  slide: null as Dir | null,
   frames: null as Frames | null,
 };
 
@@ -365,6 +369,37 @@ function interact() {
   if (look) runScript(() => say(look.es, { en: look.en }));
 }
 
+/**
+ * Walk an NPC along a path, one tile per step with the walking animation (for cutscenes). Steps into a
+ * wall, another NPC or the player are skipped (with a warning in dev).
+ */
+export async function walkNpc(id: string, path: Dir[], { speed = 1 } = {}) {
+  const n = npcById(id);
+  if (!n) return console.warn(`walkNpc: no NPC ${id}`);
+  for (const [i, d] of path.entries()) {
+    n.dir = d;
+    const [nx, ny] = [n.x + DX[d], n.y + DY[d]];
+    if (!inBounds(nx, ny) || TILES[tileAt(nx, ny)].solid || npcAt(nx, ny) || (player.x === nx && player.y === ny)) {
+      if (import.meta.env.DEV) console.warn(`walkNpc: ${id} can't step ${d} to ${nx},${ny}`);
+      continue;
+    }
+    [n.x, n.y] = [nx, ny];
+    const steps = Math.round(WALK_FRAMES / speed);
+    for (let f = steps; f > 0; f--) {
+      n.off = { x: -DX[d] * T * (f / steps), y: -DY[d] * T * (f / steps), frame: f > steps / 2 ? 1 + (i % 2) : 0 };
+      await nextFrame();
+    }
+    n.off = undefined;
+  }
+}
+
+/** Put an NPC at (x, y), visible (e.g. the rival arriving from off-screen before walking in). */
+export function placeNpc(id: string, x: number, y: number, dir: Dir) {
+  const n = npcById(id);
+  if (!n) return console.warn(`placeNpc: no NPC ${id}`);
+  Object.assign(n, { x, y, dir, visible: true, off: undefined });
+}
+
 function updateNpcs() {
   for (const n of npcs) {
     if (n.bubble > 0) n.bubble--;
@@ -381,7 +416,7 @@ export function updateWorld() {
   if (player.bumpCd > 0) player.bumpCd--;
   updateNpcs();
   if (player.moving) {
-    player.speed = T / (input.isHeld('B') && !player.scripted ? RUN_FRAMES : WALK_FRAMES);
+    player.speed = T / (input.isHeld('B') && !player.scripted && !player.slide ? RUN_FRAMES : WALK_FRAMES);
     player.prog += player.speed;
     if (player.prog >= player.dist - 1e-6) {
       player.moving = false;
@@ -390,6 +425,14 @@ export function updateWorld() {
       // Always remember where you are (also after being walked by a script), so a save never
       // puts you back on a spot a script moved you away from.
       Object.assign(G.save, { x: player.x, y: player.y, dir: player.dir });
+      // A water current carries you on until you land somewhere (or it would push you into something).
+      const current = TILES[tileAt(player.x, player.y)].current;
+      if (current && walkable(player.x + DX[current], player.y + DY[current])) {
+        player.slide = current;
+        startMove(player.x + DX[current], player.y + DY[current]);
+        return;
+      }
+      player.slide = null;
       if (!player.scripted) onStep();
     }
     return;
@@ -535,8 +578,9 @@ export function renderWorld(g: CanvasRenderingContext2D) {
   const off = player.moving ? player.dist - prog : 0;
   /** Hopping a ledge: the player rises and falls, over a shadow. */
   const hop = player.moving && player.dist > T ? Math.round(Math.sin((Math.PI * prog) / player.dist) * 8) : 0;
-  const px = player.x * T - DX[player.dir] * off;
-  const py = player.y * T - DY[player.dir] * off;
+  const moveDir = player.slide ?? player.dir;
+  const px = player.x * T - DX[moveDir] * off;
+  const py = player.y * T - DY[moveDir] * off;
   const camX = snap(px - 64);
   const camY = snap(py - 64);
   drawTiles(g, camX, camY);
@@ -544,14 +588,14 @@ export function renderWorld(g: CanvasRenderingContext2D) {
   const sprites: { y: number; draw: () => void }[] = [];
   for (const n of npcs.concat(edgeNpcs)) {
     if (!n.visible) continue;
-    const sx = n.x * T - camX;
-    const sy = n.y * T - camY;
+    const sx = n.x * T - camX + (n.off?.x ?? 0);
+    const sy = n.y * T - camY + (n.off?.y ?? 0);
     if (sx < -T || sy < -T || sx > W || sy > H + T) continue;
     sprites.push({
       y: n.y * T,
       draw: () => {
         if (n.def.object) g.drawImage(OBJECTS[n.def.object], sx, sy);
-        else g.drawImage(framesFor(n.def.look ?? 'man')[n.dir][0], sx, sy - 4);
+        else g.drawImage(framesFor(n.def.look ?? 'man')[n.dir][n.off?.frame ?? 0], sx, sy - 4);
         n.overlay?.(g, sx, sy);
         if (n.bubble > 0) drawBubble(g, sx, sy - 4);
       },
@@ -559,7 +603,7 @@ export function renderWorld(g: CanvasRenderingContext2D) {
   }
   if (!player.hidden && player.frames) {
     const fr = player.frames[player.dir];
-    const img = player.moving && player.prog < 8 ? fr[player.step ? 1 : 2] : fr[0];
+    const img = player.moving && !player.slide && player.prog < 8 ? fr[player.step ? 1 : 2] : fr[0];
     sprites.push({
       y: py,
       draw: () => {

@@ -1,6 +1,6 @@
 import { makeCanvas, type Img } from './pixel';
 import { ART, ROCK_EDGES, type TileArt } from '../style/tiles';
-import { ROOFS, type Pal } from '../style/colors';
+import { ROOFS, OUTDOOR, CAVE_STYLES, type Pal } from '../style/colors';
 import type { Dir } from '../engine/input';
 
 /*
@@ -11,13 +11,26 @@ import type { Dir } from '../engine/input';
   Gameplay properties (solid, tall grass, doors...) are in TILES below.
 */
 
+/** How a map's shared tiles look. All optional; the defaults are the original look. */
+export interface MapStyle {
+  /** 'T': green/dry mix (default) | mostly pines | mostly dry trees. */
+  trees?: 'lowland' | 'pine' | 'dry';
+  /** Walls (h, w, d...): cream (default) | warm ochre adobe. */
+  walls?: 'plain' | 'adobe';
+  /** '^' and 'O': tan rock (default) | black volcanic rock. */
+  rock?: 'rock' | 'basalt';
+  /** '%', ';', 'e', 'D' in caves: brown (default) | red clay | black basalt. */
+  cave?: 'cave' | 'clay' | 'basalt';
+}
+
 /** What drawing a whole map needs (a MapDef has all of this). */
 export interface MapLook {
   rows: string[];
   outdoor: boolean;
   floor: string;
-  ground?: 'town' | 'grass';
+  ground?: 'town' | 'grass' | 'sand';
   roof?: string;
+  style?: MapStyle;
   /** The tile all around the map's edges (default: trees outdoors, nothing indoors). */
   border?: string;
 }
@@ -29,6 +42,8 @@ export interface TileDef {
   kind?: TileKind;
   /** A ledge: you hop over it when walking this way (from the high side); otherwise it's solid. */
   ledge?: Dir;
+  /** A water current: it carries you this way until you land on something else. */
+  current?: Dir;
   /** Text shown when you press A facing this tile. */
   look?: { es: string; en: string };
 }
@@ -90,6 +105,11 @@ export const TILES: Record<string, TileDef> = {
   ';': open(),
   e: open({ kind: 'mat' }),
   D: open({ kind: 'door' }),
+  // Water currents, by numpad direction: 8 up, 2 down, 4 left, 6 right.
+  '8': open({ current: 'up' }),
+  '2': open({ current: 'down' }),
+  '4': open({ current: 'left' }),
+  '6': open({ current: 'right' }),
   H: open(),
   R: open(),
   ' ': solid(),
@@ -127,6 +147,11 @@ function stack(...layers: Img[]): Img {
 }
 
 const setRow = (g: Grid, y: number, ch: string) => g[y].fill(ch);
+/** Turn a 16×16 grid clockwise, `times` quarter turns. */
+function turn(g: Grid, times: number): Grid {
+  for (let t = 0; t < times; t++) g = g.map((row, y) => row.map((_, x) => g[15 - x][y]));
+  return g;
+}
 const setCol = (g: Grid, x: number, ch: string) => g.forEach((row) => (row[x] = ch));
 
 // ---------- Neighbors ----------
@@ -141,11 +166,16 @@ function neighbors(env: TileEnv) {
 }
 
 function groundArt(env: TileEnv, ch: '.' | '='): TileArt {
-  const town = env.ground === 'town';
   // Like Johto, paths are the same pale dotted ground as towns.
-  if (ch === '=') return ART.townGround;
-  return town ? ART.townGround : ART.grassGround;
+  if (ch === '=' || env.ground === 'town') return ART.townGround;
+  return env.ground === 'sand' ? ART.sand : ART.grassGround;
 }
+
+/** The same art in another palette (map styles: adobe walls, basalt rock, clay caves). */
+const withPal = (art: TileArt, pal?: Pal): TileArt => (pal ? { ...art, pal } : art);
+const wallArt = (env: TileEnv) => withPal(ART.wall, env.style?.walls === 'adobe' ? OUTDOOR.adobe : undefined);
+const rockArt = (env: TileEnv, art: TileArt = ART.rock) => withPal(art, env.style?.rock === 'basalt' ? OUTDOOR.basalt : undefined);
+const caveArt = (env: TileEnv, part: 'wall' | 'floor', art: TileArt) => withPal(art, CAVE_STYLES[env.style?.cave ?? '']?.[part]);
 
 function underImage(env: TileEnv, under: 'ground' | 'floor' | 'auto'): Img {
   if (under === 'ground') return paintArt(groundArt(env, '.'));
@@ -173,7 +203,7 @@ function wallImage(env: TileEnv): Img {
   if (!isWall(nb.s)) (setRow(g, 12, '0'), setRow(g, 13, '2'), setRow(g, 14, '2'), setRow(g, 15, '3'));
   if (!isWall(nb.w)) (setCol(g, 0, '3'), setCol(g, 1, '2'), setCol(g, 2, '2'), setCol(g, 3, '0'));
   if (!isWall(nb.e)) (setCol(g, 15, '3'), setCol(g, 14, '2'), setCol(g, 13, '2'), setCol(g, 12, '0'));
-  return paintArt(ART.wall, g);
+  return paintArt(wallArt(env), g);
 }
 
 /** Rock (mountains, cave walls): outlined where it ends, with a cliff face on the south side. */
@@ -237,14 +267,24 @@ function tableImage(env: TileEnv): Img {
 
 const cache = new Map<string, Img>();
 
-/** About one tree in four is a dry one; which ones never changes (it depends on the spot). */
-const isDryTree = (x: number, y: number) => ((Math.imul(x, 73856093) ^ Math.imul(y, 19349663)) >>> 0) % 4 === 1;
+/**
+ * Which tree a 'T' is, from the map's tree style: lowland = about 1 in 4 dry, dry = about 3 in 4 dry,
+ * pine = about 3 in 4 pines (the rest green). It depends on the spot, so it never changes.
+ */
+function treeAt(env: TileEnv): string {
+  const odd = ((Math.imul(env.x, 73856093) ^ Math.imul(env.y, 19349663)) >>> 0) % 4 === 1;
+  const trees = env.style?.trees ?? 'lowland';
+  if (trees === 'pine') return odd ? 'T' : 'I';
+  if (trees === 'dry') return odd ? 'T' : 't';
+  return odd ? 't' : 'T';
+}
 
 /** The image for tile `ch` at (env.x, env.y) on a map. Cached by everything that affects it. */
 export function tileImage(ch: string, env: TileEnv): Img {
-  if (ch === 'T' && isDryTree(env.x, env.y)) ch = 't';
+  if (ch === 'T') ch = treeAt(env);
   const nb = neighbors(env);
-  const key = [ch, env.ground, env.roof, env.floor, env.outdoor, env.y === 0, nb.n, nb.s, nb.w, nb.e].join('|');
+  const st = env.style;
+  const key = [ch, env.ground, env.roof, env.floor, env.outdoor, env.y === 0, nb.n, nb.s, nb.w, nb.e, st?.walls, st?.rock, st?.cave].join('|');
   let img = cache.get(key);
   if (!img) {
     img = render(ch, env);
@@ -279,22 +319,27 @@ function render(ch: string, env: TileEnv): Img {
     case 'Y':
       return paintArt(ART.lemonTree);
     case '^':
-      return rockImage(ART.rock, env, MOUNTAIN_CHARS, underImage(env, 'ground'));
+      return rockImage(rockArt(env), env, MOUNTAIN_CHARS, underImage(env, 'ground'));
     case 'O':
-      return stack(rockImage(ART.rock, env, MOUNTAIN_CHARS, underImage(env, 'ground')), paintArt(ART.caveMouth));
+      return stack(rockImage(rockArt(env), env, MOUNTAIN_CHARS, underImage(env, 'ground')), paintArt(rockArt(env, ART.caveMouth)));
     case ':':
       return paintArt(ART.dirt);
     case '%':
-      return rockImage(ART.caveWall, env, CAVE_WALL_CHARS, paintArt(ART.caveFloor));
+      return rockImage(caveArt(env, 'wall', ART.caveWall), env, CAVE_WALL_CHARS, paintArt(caveArt(env, 'floor', ART.caveFloor)));
     case ';':
-      return paintArt(ART.caveFloor);
+      return paintArt(caveArt(env, 'floor', ART.caveFloor));
     case 'e':
-      return stack(paintArt(ART.caveFloor), paintArt(ART.caveExitOverlay));
+      return stack(paintArt(caveArt(env, 'floor', ART.caveFloor)), paintArt(caveArt(env, 'floor', ART.caveExitOverlay)));
     case 'D':
       // A dark passage under a cliff (you walk south into it): the cave mouth's dark arch, on the ground.
-      return stack(paintArt(env.outdoor ? ART.dirt : ART.caveFloor), paintArt(ART.caveMouth));
+      return stack(paintArt(env.outdoor ? ART.dirt : caveArt(env, 'floor', ART.caveFloor)), paintArt(rockArt(env, ART.caveMouth)));
     case 'H':
       return bridgeImage(env);
+    case '8':
+    case '2':
+    case '4':
+    case '6':
+      return stack(paintArt(ART.water), paintArt(ART.currentArrow, turn(grid(ART.currentArrow.rows), { 8: 0, 6: 1, 2: 2, 4: 3 }[ch]!)));
     case '~':
       return paintArt(ART.water);
     case 'f':
@@ -372,7 +417,7 @@ export function tileOf(m: MapLook, x: number, y: number): string {
 }
 
 /** The tile environment for (x, y) on a map. */
-export const envAt = (m: MapLook, x: number, y: number): TileEnv => ({ rows: m.rows, outdoor: m.outdoor, floor: m.floor, ground: m.ground, roof: m.roof, border: m.border, x, y });
+export const envAt = (m: MapLook, x: number, y: number): TileEnv => ({ rows: m.rows, outdoor: m.outdoor, floor: m.floor, ground: m.ground, roof: m.roof, border: m.border, style: m.style, x, y });
 
 /** A whole map as one image (the art page; the game draws only the tiles on screen). */
 export function renderMap(m: MapLook): Img {
