@@ -51,16 +51,23 @@ const T = 16;
 let map: MapDef = MAPS.casa;
 let npcs: NpcRT[] = [];
 type Neighbor = { m: MapDef; dx: number; dy: number };
-/** Connected towns/routes, offset (in tiles) from the current map, drawn past its edges. */
+/** Nearby towns/routes, offset (in tiles) from the current map, drawn past its edges. */
 let neighbors: Neighbor[] = [];
 
-/** A map's connected towns/routes, placed around it (world/layout.ts). */
+/**
+ * The towns/routes around a map in the world (world/layout.ts): every one within GRID tiles of its edges,
+ * connected or not, so the scenery is whole (the mountain beside a route, a corner where three meet).
+ */
 function neighborsOf(m: MapDef): Neighbor[] {
   const spots = worldLayout();
   const me = spots[m.id];
-  return Object.values(m.connections ?? {}).flatMap((conn) => {
-    const p = me && conn && spots[conn.to];
-    return p ? [{ m: MAPS[conn.to], dx: p.x - me.x, dy: p.y - me.y }] : [];
+  if (!me) return [];
+  const [w, h] = [m.rows[0].length, m.rows.length];
+  return Object.entries(spots).flatMap(([id, p]) => {
+    const o = MAPS[id];
+    const [dx, dy] = [p.x - me.x, p.y - me.y];
+    const near = dx < w + GRID && dx + o.rows[0].length > -GRID && dy < h + GRID && dy + o.rows.length > -GRID;
+    return id !== m.id && near ? [{ m: o, dx, dy }] : [];
   });
 }
 /** People in the connected towns/routes, drawn at the map's edges (they only move once you get there). */

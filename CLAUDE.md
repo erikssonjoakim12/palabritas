@@ -67,7 +67,9 @@ Spanish) · [BIOMES.md](BIOMES.md) (animals per region).
 **A map** (in `MAPS`, src/world/maps.ts). Each row is a string of tiles (legend at the top of the file).
 - **Outdoor** maps join seamlessly through `connections: { left: { to, offset } }`. The other map must
   connect back with the opposite direction and `-offset`. Put walkable tiles on both sides of the seam.
-  `border` sets the tile drawn around the map (default: trees).
+  `border` sets the tile drawn around the map (default: trees). The game draws every map within a few tiles
+  of the current one in the world, connected or not. A `scenery: true` connection only places a map in
+  the world (a mountain beside a route), and nobody walks across it.
 - **Interiors** have `outdoor: false`, an exit mat `m` on the bottom row and `exit: { to, x, y }`. Reuse
   `HOUSE`, `CENTRO` and `centro(id, exit, extraNpcs)`.
 - **Doors:** `doors: [{ x, y, to, tx, ty, dir? }]`. You arrive at (tx, ty) facing `dir` (default up).

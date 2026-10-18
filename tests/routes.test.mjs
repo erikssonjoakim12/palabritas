@@ -20,7 +20,7 @@ await go('ruta4', 4, 38, 'down', 1, 'its daylight leads back out to Ruta 3', 'ru
 await go('ruta3', 11, 6, 'up', 1, 'the Palacentro by the cave opens', 'centro_ruta3');
 await go('ruta4', 52, 2, 'up', 1, 'the far end of the cave leads to Ruta 5', 'ruta5');
 const arrived = await t.game(() => [window.__game.G.save.x, window.__game.G.save.y, window.__game.player.dir]);
-t.check('you come out of the tunnel at the bottom, still walking up', arrived.join() === '24,24,up', arrived);
+t.check('you come out of the tunnel high on the mountain, still walking up', arrived.join() === '90,4,up', arrived);
 await t.shot('ruta5');
-await go('ruta5', 24, 24, 'down', 1, 'and the tunnel leads back into the cave', 'ruta4');
+await go('ruta5', 90, 4, 'down', 1, 'and the tunnel leads back into the cave', 'ruta4');
 await t.end();

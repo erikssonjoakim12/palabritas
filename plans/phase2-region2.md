@@ -81,34 +81,41 @@ Also: `isMaleLook` gets `hood` for `silencioso` and `capataz`. Female grunts use
 
 | Map | Size | World top-left | Connections (exact offsets) |
 |---|---|---|---|
-| `ruta5` (replaced) | 32×26 | (-116, -164) | `left: { to: 'ocote', offset: -2 }`, `up: { to: 'canon', offset: -4 }` (it already has `down: { to: 'cerro_eco', offset: -2, scenery: true }`: keep it) |
-| `cerro_eco` ✓ **already built** | 54×47 | (-114, -138) | scenery only: `up` Ruta 5, `right` Ruta 3 |
+| `ruta5` ✓ **built** | 96×29 | (-116, -164) | add `left: { to: 'ocote', offset: -2 }`, `up: { to: 'canon', offset: -4 }`; it already has `down: { to: 'cerro_eco', offset: -2, scenery: true }`: keep it |
+| `cerro_eco` ✓ **built** | 54×44 | (-114, -135) | scenery only: `up` Ruta 5 (offset 2), `right` Ruta 3 (offset 0) |
 | `canon` | 24×30 | (-112, -194) | `down: { to: 'ruta5', offset: 4 }` |
 | `ocote` | 32×28 | (-148, -162) | `right: { to: 'ruta5', offset: 2 }`, `down: { to: 'ruta6', offset: 2 }` (Ruta 6 comes in phase 3; until then the south road ends at the guard) |
 
-The cave (`ruta4`) links Ruta 3 and Ruta 5 by doors. Outside, the Cerro del Eco (the mountain over the cave)
-joins them in the world drawing with **scenery connections** (`scenery: true`: drawn side by side, never walked
-across), so Ruta 5 already sits at its spot above. Phase 3's Ruta 6 (x -150..-115) runs down the Cerro's west
-side: give Ruta 6 trees along that edge.
+The cave (`ruta4`) links Ruta 3 and Ruta 5 by doors. Inside, it climbs **up and to the right** (in at the
+bottom left, out at the top right), so outside, Ruta 5's tunnel is up and to the right of the cave mouth on
+Ruta 3: the tunnel is at world (-26, -159), the mouth at (-56, -133). The mountain between them is Ruta 5's
+south-east rock and Ruta 3's top rock, which meet. The Cerro del Eco is the mountain's west slope, left of Ruta 3
+and under Ruta 5's west part. These maps join through **scenery connections** (`scenery: true`: they place the
+map in the world and are never walked across). The game draws every map within a few tiles of the one you're
+on, connected or not, so the scenery is whole. Ruta 5's ravine river runs down the Cerro into a lake, then
+bends down and to the left and leaves the Cerro's west edge at world y -93..-92: Ruta 6's river (phase 3).
 
 ---
 
 ## 3. Ruta 5
 
-**Already built** (the fix the user asked for): these rows, the tunnel doors both ways, the sign. Two gates hold
-the unfinished roads closed: `obrero` on the west road and `derrumbe` on the canyon path. **To do in this phase:**
+**Already built** (the fixes the user asked for): these rows, the tunnel doors both ways, the sign. Two gates
+hold the unfinished roads closed: `obrero` on the west road and `derrumbe` on the canyon path. **To do in this
+phase:**
 - remove both gates;
 - add the connections and `style: { trees: 'pine' }`;
 - add the encounters, the trainers, Gaby and the Lucas trigger below.
 
-You leave the cave walking **up** (its far exit is at the top) and come out of a tunnel at the **bottom** of
-Ruta 5, still walking up (the user asked for this). The road goes north between pines, past the canyon
-path, then west over the ravine bridge to Villa Ocote.
+You leave the cave walking **up** (its far exit is at the top right) and come out of a tunnel high on the
+mountain, still walking up: up and to the right of where you went in (the user asked for this). A trail runs
+west along the clifftop (rows 3–4), down past a clearing with tall grass (x 46–47), to the road (rows 11–12).
+The road goes west past the canyon path and over the ravine bridge to Villa Ocote. South of the road, a
+meadow with tall grass.
 
 - `name: 'Ruta 5'`, `outdoor: true`, `ground: 'grass'`, `style: { trees: 'pine' }`.
 - **Doors:**
-  - `{ x: 24, y: 25, to: 'ruta4', tx: 52, ty: 1, dir: 'down' }`: the tunnel.
-  - In `ruta4`, the far exit door becomes `{ x: 52, y: 0, to: 'ruta5', tx: 24, ty: 24, dir: 'up' }`.
+  - `{ x: 90, y: 5, to: 'ruta4', tx: 52, ty: 1, dir: 'down' }`: the tunnel.
+  - In `ruta4`, the far exit door is `{ x: 52, y: 0, to: 'ruta5', tx: 90, ty: 4, dir: 'up' }`.
 - **Remove** the road worker's gate: the bridge is finished.
 - **Encounters** (rate 0.12):
 
@@ -124,41 +131,44 @@ path, then west over the ravine bridge to Villa Ocote.
 
   | id | Where | Kind | Notes |
   |---|---|---|---|
-  | `armando` | (22, 18) facing right, sight 3 | Leñador Armando, `lenador` | **in the way** (the corridor north of the tunnel) |
+  | `armando` | (70, 2) facing down, sight 2 | Leñador Armando, `lenador` | **in the way** (the clifftop trail: he sees both rows) |
   | `elena` | (14, 10) facing down, sight 2 | Campista Elena, `campista` | **in the way** (the road west) |
   | `gaby` | (20, 8) facing left | Gaby the birdwatcher, `ornitologa` | quest NPC, §8.4 |
 
-- **Trigger:** `(23..25, 13)` → `lucasRuta5` (rival battle #1, §7), only once.
+- **Trigger:** `(46..47, 10)`, the foot of the trail → `lucasRuta5` (rival battle #1, §7), only once.
 - **Sign** (16, 13): «RUTA 5. Al oeste: Villa Ocote. Al norte: el Cañón del Guardabarranco.» / "ROUTE 5. West:
   Villa Ocote. North: Guardabarranco Canyon."
 
 ```
-      'TTTTTT^~~^TTTTTTTT==TTTTTTTTTTTT',
-      'TTTTTT^~~^TTTTTTTT==TTTTTTTTTTTT',
-      'TTTTTT^~~^TTTTTTTT==T........T.T',
-      'TTTTTT^~~^TTTTTTTT==.,,,,,,,,.TT',
-      'TTTTTT^~~^TTTTTTTT==.,,,,,,,,..T',
-      'TTTTTT^~~^TTTTTTTT==.,,,,,,,,..T',
-      'TTTTTT^~~^TTTTTTTT==.,,,,,,,,..T',
-      'TTTTTT^~~^TTTTTTTT==.,,,,,,,,..T',
-      'TTTTTT^~~^TTTTTTTT==...........T',
-      'T.T...^~~^TTTTTTTT==..T....T...T',
-      'T.....^~~^TTTT.TTT==...........T',
-      '======HHHH======================',
-      '======HHHH==================*===',
-      'T.....^~~^TTTT..S......===,,,,,T',
-      'TT.T..^~~^TTTT,,,,,,,..===,,,,,T',
-      'TTTTTT^~~^TTTT,,,,,,,..===,,,,,T',
-      'TTTTTT^~~^TTTT,,,,,,,..===,,,,,T',
-      'TTTTTT^~~^TTTT,,,,,,TTT===TTTTTT',
-      'TTTTTT^~~^TTTT,,,,,,TT.===TTTTTT',
-      'TTTTTT^~~^TTTT,,,,,,TTT===TTTTTT',
-      'TTTTTT^~~^TTTT......TTT===TTTTTT',
-      'TTTTTT^~~^TTTT......TTT===TTTTTT',
-      'TTTTTT^~~^TTTTTTTTTT^^^:::^^^^^^',
-      'TTTTTT^~~^TTTTTTTTTT^^^:::^^^^^^',
-      'TTTTTT^~~^TTTTTTTTTT^^^:::^^^^^^',
-      'TTTTTT^~~^TTTTTTTTTT^^^^D^^^^^^^',
+      'TTTTTT^~~^TTTTTTTT==TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT',
+      'TTTTTT^~~^TTTTTTTT==TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT',
+      'TTTTTT^~~^TTTTTTTT==T........T.TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT.TTTTTTTTTTTTTTTTTTTTTTTTT',
+      'TTTTTT^~~^TTTTTTTT==.,,,,,,,,.TTTTTTTTTTTTTTTT==============================================TTTT',
+      'TTTTTT^~~^TTTTTTTT==.,,,,,,,,..TTTTTTTTTTTTTTT==============================================TTTT',
+      'TTTTTT^~~^TTTTTTTT==.,,,,,,,,..TTTTTTTTTTTTTTT==.,,,,,,,,,,T^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^D^^^^^',
+      'TTTTTT^~~^TTTTTTTT==.,,,,,,,,..TTTTTTTTTTTTTTT==.,,,,,,,,,,T^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^',
+      'TTTTTT^~~^TTTTTTTT==.,,,,,,,,..TTTTTTTTTTTTTTT==.,,,,,,,,,,T^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^',
+      'TTTTTT^~~^TTTTTTTT==...........TTTTTTTTTTTTTTT==.,,,,,,,,,,T^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^',
+      'T.T...^~~^TTTTTTTT==..T....T...TTTTTTTTTTTTTTT==.,,,,,,,,,,T^^^^^^^^^^^^^^^^^^^^^^^^^^^^T^^^^^^^',
+      'T.....^~~^TTTT.TTT==...........TTTTTTTTTTTTTTT==...........T^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^',
+      '======HHHH======================================^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^',
+      '======HHHH==================*===================^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^',
+      'T.....^~~^TTTT..S.......,,,,,,.TTTTTTTTTTTTTTTTT^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^T^^^^^^^',
+      'TT.T..^~~^TTTT,,,,,,,...,,,,,,.TTTTTTTTTTTTTTTTT^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^T^^^^T^^^^^^^^',
+      'TTTTTT^~~^TTTT,,,,,,,...,,,,,,TTTTTTTTTTTTTTTTTT^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^',
+      'TTTTTT^~~^TTTT,,,,,,,...,,,,,,TTTTTTTTTTTTTTTTTT^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^',
+      'TTTTTT^~~^TTTT,,,,,,TTT.TTTTTTTTTTTTTTTTTTTTTTTT^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^',
+      'TTTTTT^~~^TTTT,,,,,,TTTTTTTTTTTTTTTTTTTTTTTTTTTT^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^',
+      'TTTTTT^~~^TTTT,,,,,,TTTTTTTTTTTTTTTTTTTTTTTTTTTT^^^^^^^^^^^^^^^^T^^^^^^^^^^^^^^^^^^^^T^^^^^^^^^^',
+      'TTTTTT^~~^TTTT......TTTTTTTTTTTTTTTTTTTTTTTTTTTT^^^^^^^^^^^^^^^^^^^^^^^^^^T^^^^^^^^^^^^T^^^^^^^^',
+      'TTTTTT^~~^TTTT......TTTTTTTTTTTTTTTTTTTTTTTTTTTT^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^',
+      'TTTTTT^~~^TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^',
+      'TTTTTT^~~^TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^',
+      'TTTTTT^~~^TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^',
+      'TTTTTT^~~^TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^',
+      'TTTTTT^~~^TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^',
+      'TTTTTT^~~^TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^',
+      'TTTTTT^~~^TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^',
 ```
 
 ---
@@ -737,7 +747,7 @@ turtle night.
 - At level 15 his starter is still its first form (evolution is at 16).
 
 **`lucasRuta5`** (trigger, once, flag `lucas1`):
-1. A `!` over you. Lucas appears at (0, 11) and walks east along the road to (22, 12), next to the corridor.
+1. A `!` over you. Lucas appears at (0, 11) and walks east along the road to (45, 11), next to the trail.
 2. «¡{name}! ¡Por fin te alcancé!» / "{name}! I finally caught up with you!"
 3. «Cuando te fuiste, la Profesora Ceiba me dio un Palabrita a mí también. ¡Mira!» / "When you left,
    Professor Ceiba gave me a Palabrita too. Look!"
