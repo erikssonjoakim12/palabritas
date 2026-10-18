@@ -41,4 +41,31 @@ await freeze();
 await t.walk('up', 1);
 const again = await t.ui();
 t.check("Sam doesn't stop you twice", again.lock === 0 && !again.text, again.text);
+// The clock: outdoors gets darker (and bluer) at night.
+// (the brightness of a screenshot of the page, measured in the page)
+const brightness = async () => {
+  const png = await t.page.screenshot({ encoding: 'base64' });
+  return t.page.evaluate(async (src) => {
+    const img = new Image();
+    img.src = `data:image/png;base64,${src}`;
+    await img.decode();
+    const c = Object.assign(document.createElement('canvas'), { width: img.width, height: img.height });
+    const g = c.getContext('2d');
+    g.drawImage(img, 0, 0);
+    const d = g.getImageData(0, 0, c.width, c.height).data;
+    let v = 0;
+    for (let i = 0; i < d.length; i += 4) v += d[i] + d[i + 1] + d[i + 2];
+    return v;
+  }, png);
+};
+await t.warp('limon', 11, 8, 'down');
+await t.game(() => (window.__hour = 12));
+await sleep(300);
+const noon = await brightness();
+await t.game(() => (window.__hour = 23));
+await sleep(300);
+const night = await brightness();
+t.check('night outdoors is darker than day', night < noon * 0.85, [noon, night]);
+await t.game(() => delete window.__hour);
+
 await t.end();

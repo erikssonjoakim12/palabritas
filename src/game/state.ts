@@ -216,6 +216,16 @@ export function today(): string {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
 }
 
+/**
+ * The time of day outdoors, from the phone's clock: day 6–18, dusk 18–20, night 20–6 (Gold/Silver had night
+ * from 18, but that's when most people play). Tests can set window.__hour = 22.
+ */
+export type DayTime = 'day' | 'dusk' | 'night';
+export function dayTime(): DayTime {
+  const h = (globalThis as { __hour?: number }).__hour ?? new Date().getHours();
+  return h >= 20 || h < 6 ? 'night' : h >= 18 ? 'dusk' : 'day';
+}
+
 export const flag = (name: string) => !!G.save.flags[name];
 export const setFlag = (name: string, v = true) => {
   G.save.flags[name] = v;

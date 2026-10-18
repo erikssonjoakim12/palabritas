@@ -75,6 +75,15 @@ export const CAVE = {
 export const NIGHT = 'rgba(16, 24, 64, 0.62)';
 export const NIGHT_CLEAR = 'rgba(16, 24, 64, 0)';
 
+/**
+ * The clock's time of day outdoors (state.ts dayTime): the world is multiplied by these, like Gold/Silver's
+ * evening and night palettes. Lighter than night scenes, since there's no light around you.
+ */
+export const DAYTIME_TINT = {
+  dusk: '#f8b890',
+  night: '#6878c0',
+};
+
 /** Accent colors used by individual tiles (letters in tiles.ts). */
 export const ACCENT = {
   windowYellow: '#e8d090',

@@ -7,9 +7,9 @@ import { personFrames, OBJECTS, type Frames } from '../art/chars';
 import type { Img } from '../art/pixel';
 import { MAPS, type MapDef, type NpcDef, type Conn, type EncounterEntry } from './maps';
 import { worldLayout } from './layout';
-import { G, flag, saveGame, playerLook } from '../game/state';
+import { G, flag, saveGame, playerLook, dayTime } from '../game/state';
 import { rematchReady } from '../game/rematch';
-import { NIGHT, NIGHT_CLEAR } from '../style/colors';
+import { NIGHT, NIGHT_CLEAR, DAYTIME_TINT } from '../style/colors';
 import { itemCount } from '../game/bag';
 import { closeText, say, setSpeaker } from '../ui/textbox';
 
@@ -513,6 +513,17 @@ function drawNight(g: CanvasRenderingContext2D, cx: number, cy: number) {
   g.fillRect(0, 0, W, H);
 }
 
+/** Dusk and night by the clock, outdoors: the whole view multiplied by the time's color. */
+function drawDayTime(g: CanvasRenderingContext2D) {
+  const t = dayTime();
+  if (t === 'day') return;
+  g.save();
+  g.globalCompositeOperation = 'multiply';
+  g.fillStyle = DAYTIME_TINT[t];
+  g.fillRect(0, 0, W, H);
+  g.restore();
+}
+
 function drawBubble(g: CanvasRenderingContext2D, x: number, y: number) {
   g.fillStyle = '#202028';
   g.fillRect(x + 4, y - 12, 9, 11);
@@ -678,6 +689,7 @@ export function renderWorld(g: CanvasRenderingContext2D) {
   }
   g.restore();
   if (map.night) drawNight(g, 72, 68 - hop);
+  else if (map.outdoor) drawDayTime(g);
   if (fade > 0) {
     g.fillStyle = `rgba(0,0,0,${fade})`;
     g.fillRect(0, 0, W, H);
