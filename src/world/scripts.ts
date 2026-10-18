@@ -685,6 +685,13 @@ const S: Record<string, (c: ScriptCtx) => Promise<void>> = {
       after: ['Ya casi llegas a la salida. ¡Ánimo!', 'You’re almost at the way out. Keep going!'],
     }),
 
+  lucia: () =>
+    trainerFight('lucia', {
+      intro: ['¡Qué vista tan bonita! Estoy pintando la montaña. ¿Luchamos un rato?', 'What a beautiful view! I’m painting the mountain. Shall we battle for a bit?'],
+      defeated: ['¡Ay, se me cayó la pintura!', 'Oh, I dropped my paint!'],
+      after: ['Villa Ocote está al oeste, después del puente. ¡Ya casi llegas!', 'Villa Ocote is to the west, past the bridge. You’re almost there!'],
+    }),
+
   rocio: () =>
     trainerFight('rocio', {
       intro: ['¡Encontraste mi cuarto secreto! ¿Luchamos?', 'You found my secret room! Shall we battle?'],

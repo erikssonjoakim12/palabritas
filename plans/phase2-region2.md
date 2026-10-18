@@ -132,6 +132,7 @@ meadow with tall grass.
   | id | Where | Kind | Notes |
   |---|---|---|---|
   | `armando` | (70, 2) facing down, sight 2 | Leñador Armando, `lenador` | **in the way** (the clifftop trail: he sees both rows) |
+  | `lucia` ✓ **built** | (34, 10) facing down, sight 2 | Pintora Lucía, `painter` | **in the way** (halfway along the road, in a gap in the pines) |
   | `elena` | (14, 10) facing down, sight 2 | Campista Elena, `campista` | **in the way** (the road west) |
   | `gaby` | (20, 8) facing left | Gaby the birdwatcher, `ornitologa` | quest NPC, §8.4 |
 
@@ -150,7 +151,7 @@ meadow with tall grass.
       'TTTTTT^~~^TTTTTTTT==.,,,,,,,,..TTTTTTTTTTTTTTT==.,,,,,,,,,,T^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^',
       'TTTTTT^~~^TTTTTTTT==...........TTTTTTTTTTTTTTT==.,,,,,,,,,,T^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^',
       'T.T...^~~^TTTTTTTT==..T....T...TTTTTTTTTTTTTTT==.,,,,,,,,,,T^^^^^^^^^^^^^^^^^^^^^^^^^^^^T^^^^^^^',
-      'T.....^~~^TTTT.TTT==...........TTTTTTTTTTTTTTT==...........T^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^',
+      'T.....^~~^TTTT.TTT==...........TTT.TTTTTTTTTTT==...........T^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^',
       '======HHHH======================================^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^',
       '======HHHH==================*===================^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^',
       'T.....^~~^TTTT..S.......,,,,,,.TTTTTTTTTTTTTTTTT^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^T^^^^^^^',
@@ -253,7 +254,8 @@ grove on each side. **Optional.**
 | (19, 23) | Mía's house | `casa_mia` |
 | (15, 3) | the mine | `mina1` (arrive at (5, 24) facing up) |
 
-**Gates:**
+**Gates.** The user's rule: **nothing blocks the way to Villa Ocote** (Ruta 5's two gates go away in this phase).
+In town, only the gym door waits for the quest: Petra's apprentice stands in it until the Silenciador is broken.
 - `aprendiz` at `[22, 9, 'down']`, aside `[21, 9]`, road `[]`, back `'down'`,
   `opens: () => flag('silenciadorRoto')`.
   - Closed: «…» / "(He can't speak. He points north, toward the mine.)"
@@ -549,6 +551,7 @@ New `TRAINERS` entries. Route trainers get `rematch: true`; the rest don't.
 
 ```ts
 armando: { id: 'armando', name: 'Leñador Armando', defenseMode: 'listen', rematch: true, team: [['ardillita', 12], ['pajarito', 12]] },
+lucia: { id: 'lucia', name: 'Pintora Lucía', defenseMode: 'listen', rematch: true, team: [['hojadillo', 13], ['mariposita', 13]] },  // built; add rematch
 elena: { id: 'elena', name: 'Campista Elena', defenseMode: 'listen', rematch: true, team: [['colibri', 12], ['espinita', 13]] },
 julio: { id: 'julio', name: 'Pescador Julio', defenseMode: 'listen', rematch: true, team: [['hojadillo', 13], ['colibri', 13]] },
 rosa: { id: 'rosa', name: 'Campista Rosa', defenseMode: 'listen', rematch: true, team: [['espinita', 13], ['ardillita', 14]] },

@@ -23,4 +23,10 @@ const arrived = await t.game(() => [window.__game.G.save.x, window.__game.G.save
 t.check('you come out of the tunnel high on the mountain, still walking up', arrived.join() === '90,4,up', arrived);
 await t.shot('ruta5');
 await go('ruta5', 90, 4, 'down', 1, 'and the tunnel leads back into the cave', 'ruta4');
+
+// Halfway along Ruta 5's road west, Pintora Lucía spots you from a gap in the pines.
+await t.fromSave({ map: 'ruta5', x: 40, y: 12, dir: 'left', party: [['gotita', 15]] });
+await t.walk('left', 6);
+const said = await t.nextText();
+t.check('Pintora Lucía stops you on the long road', said.includes('pintando'), said);
 await t.end();
