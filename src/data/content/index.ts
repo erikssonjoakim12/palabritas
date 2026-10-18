@@ -50,8 +50,11 @@ export interface CoreSource {
 /** New theme items per level: 3 words (2-10), 4 short phrases (11-20), then 3 sentences. */
 export const themeItemsPerLevel = (level: number) => (level <= 10 || level > 20 ? 3 : 4);
 
-/** New core words per level: 2 at level 2, +1 every second level (119 by level 20). */
-export const coreItemsPerLevel = (level: number) => (level >= 2 && level <= 20 ? 2 + Math.floor((level - 2) / 2) : 0);
+/**
+ * New core items per level: 2 at level 2, +1 every second level (119 by level 20); then 4 a level for 21-40
+ * (the A2 band: about 2 words and 2 sentences).
+ */
+export const coreItemsPerLevel = (level: number) => (level >= 2 && level <= 20 ? 2 + Math.floor((level - 2) / 2) : level >= 21 && level <= 40 ? 4 : 0);
 
 /** Split an ordered list into tiers, starting at level 2. */
 function splitIntoLevels(lines: string[]): Record<number, string[]> {
