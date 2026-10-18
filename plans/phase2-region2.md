@@ -84,7 +84,7 @@ Also: `isMaleLook` gets `hood` for `silencioso` and `capataz`. Female grunts use
 | `ruta5` ✓ **built** | 96×29 | (-116, -164) | add `left: { to: 'ocote', offset: -2 }`, `up: { to: 'canon', offset: -4 }`; it already has `down: { to: 'cerro_eco', offset: -2, scenery: true }`: keep it |
 | `cerro_eco` ✓ **built** | 54×44 | (-114, -135) | scenery only: `up` Ruta 5 (offset 2), `right` Ruta 3 (offset 0) |
 | `canon` | 24×30 | (-112, -194) | `down: { to: 'ruta5', offset: 4 }` |
-| `ocote` | 32×28 | (-148, -162) | `right: { to: 'ruta5', offset: 2 }`, `down: { to: 'ruta6', offset: 2 }` (Ruta 6 comes in phase 3; until then the south road ends at the guard) |
+| `ocote` ✓ **built, bigger** | 40×32 | (-156, -166) | `right: { to: 'ruta5', offset: -2 }` (Ruta 5 has `left: { to: 'ocote', offset: 2 }`); phase 3 adds `down: { to: 'ruta6', offset: -6 }` (the south road is x 22–23) |
 
 The cave (`ruta4`) links Ruta 3 and Ruta 5 by doors. Inside, it climbs **up and to the right** (in at the
 bottom left, out at the top right), so outside, Ruta 5's tunnel is up and to the right of the cave mouth on
@@ -234,6 +234,12 @@ grove on each side. **Optional.**
 ```
 
 ### 4.2 Villa Ocote (`ocote`)
+
+**As built** (the user asked for a bigger town with extra houses): 40×32, see `src/world/maps.ts`. Besides the
+buildings below it has a pottery workshop (`taller_ocote`, Don Ramiro), Doña Lucha's house (`casa_lucha`, the
+healer), Doña Toña's house (`casa_tona`, the cook), Nando's house (`casa_nando`) and the old
+couple's house (`casa_abuelos`). Every coordinate in this section is from the first, smaller draft: the map
+file is the truth now.
 
 - `name: 'Villa Ocote'`, `outdoor: true`, `ground: 'town'`, `roof: 'clay'`,
   `style: { trees: 'pine', walls: 'adobe' }`.
@@ -678,12 +684,12 @@ back to town! But... some got lost on the way." The 8 word objects appear with t
 | id | The word | Content item | Lying at | Owner | Their sentence (the gap is the word) |
 |---|---|---|---|---|---|
 | `olla` | la olla | `cocina` | `mina1` (30, 13) | `vendedora` | «Esta ___ es de barro. ¿La quieres?» / "This ___ is made of clay. Do you want it?" |
-| `tortilla` | la tortilla | core | `ocote` (3, 11), behind the Palacentro | `cocinera` | «Hago una ___ de maíz para el desayuno.» / "I make a corn ___ for breakfast." |
-| `bueyes` | los bueyes | ad hoc | `canon` (4, 13) | `chepe` | «¿Viste mis ___? ¡Se escaparon!» / "Have you seen my ___? They ran away!" |
+| `tortilla` | la tortilla | core | `ocote` (3, 11), west of the plaza | `cocinera` | «Hago una ___ de maíz para el desayuno.» / "I make a corn ___ for breakfast." |
+| `bueyes` | los bueyes | ad hoc | `ruta5` (53, 8), the clearing on the clifftop trail | `chepe` | «Mis ___ se llaman Lucero y Canelo.» / "My ___ are called Lucero and Canelo." (built; the oxen run off later, in §8.3) |
 | `historia` | la historia | `historia` | `mina2` (8, 13) | `abuelo_ocote` | «Te voy a contar la ___ de Villa Ocote.» / "I'm going to tell you the ___ of Villa Ocote." |
 | `marimba` | la marimba | `musica` | `ruta5` (3, 10), by the west road | `musico` | «Toco la ___ todas las noches en la plaza.» / "I play the ___ every night in the plaza." |
-| `medicina` | la medicina | `salud` | `ocote` (29, 24), behind the school | `curandera` | «Para el dolor de cabeza, toma esta ___.» / "For a headache, take this ___." |
-| `pelota` | la pelota | `deportes` | `ocote` (20, 4), by the mine | `futbolista` | «¿Jugamos con la ___?» / "Shall we play with the ___?" |
+| `medicina` | la medicina | `salud` | `ocote` (29, 18), behind the school | `curandera` | «Para el dolor de cabeza, toma esta ___.» / "For a headache, take this ___." |
+| `pelota` | la pelota | `deportes` | `ocote` (22, 4), by the mine | `futbolista` | «¿Jugamos con la ___?» / "Shall we play with the ___?" |
 | `pregunta` | la pregunta | `preguntas` | `mina2` (24, 18), by the broken Silenciador | `maestro_ocote` | «Hoy tengo una ___ para ti.» / "Today I have a ___ for you." |
 
 **Picking one up** (script `palabraPerdida`, the object's id tells which): `speak()` the word, then

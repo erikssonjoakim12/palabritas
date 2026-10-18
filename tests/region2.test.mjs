@@ -39,8 +39,8 @@ const s4 = await t.save();
 t.check('the Capataz battles you', r.said.some((x) => x.includes('Silenciador')), r.said.slice(0, 3));
 t.check('the Silenciador breaks and Petra comes back', s4.flags.silenciadorRoto && s4.flags.petraVolvio, s4.flags);
 t.check('you’re back in Villa Ocote', s4.map === 'ocote', [s4.map, s4.x, s4.y]);
-r = await talk('ocote', 24, 12, 'up', { choices: ['La olla grande'] });
-t.check('the town talks again', r.said.some((x) => x.includes('ollas')), r.said);
+r = await talk('ocote', 15, 24, 'up');
+t.check('the town talks again', r.said.some((x) => x.includes('mensaje')), r.said);
 
 // 5. The gym: riddles open the stone doors; Tito and Rosario see you; Petra gives the Clay Medal.
 const gym = { map: 'gym_ocote', party: strong, flags: { silenciadorRoto: true, petraVolvio: true } };

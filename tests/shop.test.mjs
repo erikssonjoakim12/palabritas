@@ -40,7 +40,8 @@ const half = await t.game(() => Math.floor(window.__game.stats(window.__game.G.s
 t.check('Revivir brings a fainted one back with half its PS', s.party[0].hp === half && !s.bag.revivir, { hp: s.party[0].hp, half });
 
 await t.game(() => { window.__game.G.save.repel = 3; Math.random = () => 0; }); // every grass step would meet one
-const said = await t.walk('right', 3);
+await t.walk('right', 3);
+const said = await t.nextText();
 s = await t.save();
 t.check('no wild Palabritas while the Repelente lasts, then it wears off', s.x === 6 && !s.repel && said.includes('Repelente'), { x: s.x, said });
 await t.end();

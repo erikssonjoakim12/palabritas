@@ -72,12 +72,12 @@ simulated: Marina can be reached, and the wrong currents lead back to the start.
 
 | Map | Size | World top-left | Connections |
 |---|---|---|---|
-| `ruta6` | 36×70 | (-150, -134) | `up: { to: 'ocote', offset: -2 }`, `down: { to: 'ruta7', offset: 2 }` |
+| `ruta6` | 36×70 | (-150, -134) | `up: { to: 'ocote', offset: 6 }` (Villa Ocote was built bigger: 40 wide at x -156), `down: { to: 'ruta7', offset: 2 }` |
 | `ruta7` | 32×46 | (-152, -64) | `up: { to: 'ruta6', offset: -2 }`, `down: { to: 'carey', offset: 0 }` |
 | `carey` | 32×26 | (-152, -18) | `up: { to: 'ruta7', offset: 0 }`, `down: { to: 'tortugas', offset: 2 }`, `right: { to: 'ruta8', offset: 2 }` (Ruta 8 comes in phase 4; the east road ends at the guard until then) |
 | `tortugas` | 34×22 | (-154, 8) | `up: { to: 'carey', offset: -2 }` |
 
-Villa Ocote already has `down: { to: 'ruta6', offset: 2 }` from phase 2; add Ruta 6 and it connects.
+Add `down: { to: 'ruta6', offset: -6 }` to Villa Ocote (its south road is at x 22–23, Ruta 6's top road at x 16–17).
 Ruta 6's east edge (world x -115) runs beside the Cerro del Eco (x -114..-61, y -135..-92), which the game draws
 next to it. The Cerro's river comes down from the highlands and leaves its west edge at world y -93..-92, which is
 Ruta 6's river (its rows 41–42): end those two rows with `~~` at x 34–35 instead of `TT`, so the river flows on.

@@ -148,6 +148,11 @@ const exhibit = (x: number, y: number, es: string, en: string) => [{ x, y, es, e
 /** Villa Ocote can't speak until the Silenciador in the mine breaks. */
 const ocoteMuted = () => !flag('silenciadorRoto');
 
+/** A lost word of Villa Ocote (region2.ts LOST_WORDS), lying around once the Silenciador breaks. */
+const lostWord = (id: string, x: number, y: number): NpcDef => ({
+  id: `palabra_${id}`, x, y, object: 'palabra', script: 'palabraPerdida', show: () => flag('silenciadorRoto') && !flag(`palabra:${id}`),
+});
+
 /** A Palacentro inside: the nurse, the healing machine, and whoever else is there. */
 const centro = (id: string, exit: MapDef['exit'], more: NpcDef[] = [], extra: Partial<MapDef> = {}): MapDef => ({
   id,
@@ -835,7 +840,12 @@ export const MAPS: Record<string, MapDef> = {
     connections: { down: { to: 'cerro_eco', offset: -2, scenery: true }, left: { to: 'ocote', offset: 2 } },
     doors: [{ x: 90, y: 5, to: 'ruta4', tx: 52, ty: 1, dir: 'down' }],
     // Halfway along the road, in a gap in the pines: she sees both lanes.
-    npcs: [{ id: 'lucia', x: 34, y: 10, look: 'painter', dir: 'down', script: 'lucia', sight: 2 }],
+    npcs: [
+      { id: 'lucia', x: 34, y: 10, look: 'painter', dir: 'down', script: 'lucia', sight: 2 },
+      // Two of Villa Ocote's lost words blew all the way out here.
+      lostWord('marimba', 3, 10),
+      lostWord('bueyes', 53, 8),
+    ],
     signs: [{ x: 16, y: 13, es: 'RUTA 5. Al oeste: Villa Ocote. Al norte: el Cañón del Guardabarranco.', en: 'ROUTE 5. West: Villa Ocote. North: Guardabarranco Canyon.' }],
     gates: [
       {
@@ -972,6 +982,9 @@ export const MAPS: Record<string, MapDef> = {
       { id: 'lucas_ocote', x: 17, y: 14, look: 'lucas', dir: 'right', script: 'lucas_ocote', show: () => !flag('silenciadorRoto'), mime: '(It’s Lucas! He stamps his foot. He looks furious that he can’t talk.)' },
       { id: 'musico', x: 13, y: 16, look: 'musico', dir: 'right', script: 'musico', mime: '(He lifts his mallets over an invisible marimba... and puts them down again.)' },
       { id: 'futbolista', x: 17, y: 24, look: 'boy', dir: 'right', script: 'futbolista', turns: true, mime: '(He bounces on his toes and mimes kicking a ball.)' },
+      lostWord('tortilla', 3, 11),
+      lostWord('medicina', 29, 18),
+      lostWord('pelota', 22, 4),
     ],
   },
 
@@ -1172,6 +1185,7 @@ export const MAPS: Record<string, MapDef> = {
       { id: 'palanca', x: 12, y: 2, object: 'palanca', script: 'palanca' },
       { id: 'compuerta', x: 20, y: 9, object: 'compuerta', script: 'compuerta', show: () => !flag('compuertaAbierta') },
       itemBall('pocion_mina', 33, 7, 'pocion'),
+      lostWord('olla', 30, 13),
     ],
   },
 
@@ -1226,6 +1240,9 @@ export const MAPS: Record<string, MapDef> = {
       { id: 'silenciador', x: 22, y: 14, object: 'silenciador', script: 'silenciadorObj', show: () => !flag('silenciadorRoto') },
       { id: 'petra_mina', x: 22, y: 21, look: 'petra', dir: 'up', script: 'petra_mina', show: () => flag('capatazHuyo') && !flag('petraVolvio') },
       itemBall('repelente_mina', 26, 2, 'repelente'),
+      lostWord('historia', 8, 13),
+      lostWord('pregunta', 24, 18),
+      { id: 'nota', x: 22, y: 15, object: 'nota', script: 'notaCapataz', show: () => flag('capatazHuyo') && !flag('notaLeida') },
     ],
   },
 };

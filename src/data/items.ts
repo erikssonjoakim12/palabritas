@@ -42,6 +42,7 @@ export const ITEM_DEFS: Record<string, ItemDef> = {
   hamaca: key('hamaca', 'Hamaca', 'Hammock', true),
   chocoyitoBebe: key('chocoyitoBebe', 'Chocoyito bebé', 'Baby Chocoyito'),
   traje: key('traje', 'Pieza del traje', 'Costume piece', true),
+  palabras: { ...key('palabras', 'Palabras perdidas', 'Lost words', true), use: 'verPalabras' },
 };
 
 /** What each shop sells, by the shop's map id. */

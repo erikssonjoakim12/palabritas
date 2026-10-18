@@ -1,13 +1,16 @@
 import { sfx } from '../engine/sfx';
 import { frames } from '../engine/loop';
 import { G, flag, setFlag } from '../game/state';
-import { info } from '../ui/textbox';
+import { addItem, takeItem } from '../game/bag';
+import { record } from '../game/learning';
+import { itemBySpanish, adHocItem } from '../data/content';
+import { info, say, setSpeaker } from '../ui/textbox';
 import { ask } from '../ui/menu';
-import { chooseText } from '../ui/challenge';
+import { challenge, chooseText } from '../ui/challenge';
 import { trainerBattle } from '../battle/battle';
 import { TRAINERS } from '../data/trainers';
 import { speak } from '../lang/speech';
-import { warp, refreshNpcs, walkNpc, placeNpc, setFade, type ScriptFn } from './world';
+import { warp, refreshNpcs, walkNpc, placeNpc, setFade, fadeOut, fadeIn, type ScriptFn } from './world';
 import { MAPS, type Line } from './maps';
 import { lines, trainerFight, blackout } from './scripts';
 
@@ -87,6 +90,9 @@ async function capataz() {
   setFlag('silenciadorRoto');
   refreshNpcs();
   await info('¡El Silenciador se rompió! Las palabras salen volando...', { en: 'The Silenciador broke! The words are flying out...' });
+  await info('¡Las palabras vuelan hacia el pueblo! Pero... algunas se perdieron por el camino.', {
+    en: 'The words are flying back to town! But... some got lost on the way.',
+  });
   await lines(['Esto no se acaba aquí. ¡Don Sigilo se va a enterar! ¡Shhh!', 'This isn’t over. Don Sigilo is going to hear about this! Shhh!']);
   await walkNpc('capataz', ['right', 'right', 'right', 'up', 'up']);
   setFlag('capatazHuyo');
@@ -104,6 +110,190 @@ async function capataz() {
   setFlag('petraVolvio');
   await warp('ocote', 19, 4, 'down');
   await info('¡Se oyen voces por todo el pueblo! Villa Ocote habla otra vez.', { en: 'Voices everywhere in town! Villa Ocote is talking again.' });
+}
+
+/** The note the Capataz dropped as he ran: it points at Equipo Silencio's next plan (phase 3). */
+async function notaCapataz() {
+  await info('Es una nota. ¡Se le cayó al Capataz!', { en: 'It’s a note. The Capataz dropped it!' });
+  const note = 'Capataz: cuando termines aquí, ve al sur, a Playa Carey. Callada te espera allá. —Don Sigilo';
+  await untilRight(
+    `«${note}» ¿Quién espera en Playa Carey?`,
+    'Read the note: who is waiting at Playa Carey?',
+    'Callada',
+    ['Petra', 'Mía'],
+    ['Mmm, no. Lee la nota otra vez.', 'Hmm, no. Read the note again.'],
+  );
+  await lines(['Equipo Silencio tiene otro plan... en la playa.', 'Equipo Silencio has another plan... at the beach.']);
+  setFlag('notaLeida');
+  refreshNpcs();
+}
+
+// ---------- The lost words (plans/phase2-region2.md §6.1) ----------
+
+/*
+  When the Silenciador broke, eight words got lost on the way home. Each one belongs to one person in Villa
+  Ocote, who can talk again except for that word. You find them (glowing speech bubbles in town, on Ruta 5 and
+  in the mine) and give each back by completing its owner's sentence in Spanish. All eight: a party.
+  Flags: palabra:<id> (found), devuelta:<id> (given back), palabrasDone. The key item 'palabras' counts the
+  words you carry.
+*/
+interface LostWord {
+  word: string;
+  en: string;
+  /** Their sentence, with ___ where the word goes. */
+  gap: Line;
+  /** What to look for, while the word is missing (English). */
+  hint: string;
+  thanks: Line;
+  /** What they say at the party, using their word. */
+  party: Line;
+  look: string;
+  reward: () => Promise<void>;
+}
+
+const give = async (id: string, n: number, es: string, en: string) => {
+  addItem(id, n);
+  sfx('caught');
+  await info(`¡{name} recibió ${es}!`, { en: `{name} received ${en}!` });
+};
+const pay = async (n: number) => {
+  G.save.money += n;
+  sfx('caught');
+  await info(`¡{name} recibió ${n}!`, { en: `{name} received ${n}!` });
+};
+
+export const LOST_WORDS: Record<string, LostWord> = {
+  olla: {
+    word: 'la olla', en: 'the pot', look: 'lady',
+    gap: ['Esta ___ es de barro. ¿La quieres?', 'This ___ is made of clay. Do you want it?'],
+    hint: 'something made of clay, for cooking',
+    thanks: ['¡Mi olla! «Esta olla es de barro.» ¡Ya lo puedo decir! Toma, un regalo.', 'My pot! "This pot is made of clay." I can say it now! Here, a gift.'],
+    party: ['¡Esta olla es para la sopa de la fiesta!', 'This pot is for the party soup!'],
+    reward: () => give('superpocion', 1, 'una Superpoción', 'a Super Potion'),
+  },
+  tortilla: {
+    word: 'la tortilla', en: 'the tortilla', look: 'lady',
+    gap: ['Hago una ___ de maíz para el desayuno.', 'I make a corn ___ for breakfast.'],
+    hint: 'something round and flat, made of corn',
+    thanks: ['¡Una tortilla de maíz! Ya puedo decirlo. Toma, para el camino.', 'A corn tortilla! I can say it now. Here, for the road.'],
+    party: ['¡Prueben la tortilla! Está calientita.', 'Try the tortilla! It’s nice and warm.'],
+    reward: () => give('pocion', 2, 'dos Pociones', 'two Potions'),
+  },
+  bueyes: {
+    word: 'los bueyes', en: 'the oxen', look: 'man',
+    gap: ['Mis ___ se llaman Lucero y Canelo.', 'My ___ are called Lucero and Canelo.'],
+    hint: 'big strong animals that pull his cart',
+    thanks: ['¡Los bueyes! «Mis bueyes se llaman Lucero y Canelo.» ¡Gracias, muchach{o/a}!', 'The oxen! "My oxen are called Lucero and Canelo." Thank you, kid!'],
+    party: ['Mañana llevo los bueyes al mercado... ¡pero hoy bailo!', 'Tomorrow I take the oxen to market... but today I dance!'],
+    reward: () => pay(300),
+  },
+  historia: {
+    word: 'la historia', en: 'the history, the story', look: 'abuelo',
+    gap: ['Te voy a contar la ___ de Villa Ocote.', 'I’m going to tell you the ___ of Villa Ocote.'],
+    hint: 'what old people tell about the past',
+    thanks: ['¡La historia! Ahora sí te la puedo contar...', 'The history! Now I can tell it to you...'],
+    party: ['Esta noche también es parte de la historia de Villa Ocote.', 'Tonight is also part of Villa Ocote’s history.'],
+    reward: () => pay(200),
+  },
+  marimba: {
+    word: 'la marimba', en: 'the marimba', look: 'musico',
+    gap: ['Toco la ___ todas las noches en la plaza.', 'I play the ___ every night in the plaza.'],
+    hint: 'a wooden instrument you play with mallets',
+    thanks: ['¡La marimba! ¡La música volvió! Toma, para que nada te moleste en el camino.', 'The marimba! The music is back! Here, so nothing bothers you on the road.'],
+    party: ['¡Y ahora... la marimba!', 'And now... the marimba!'],
+    reward: () => give('repelente', 1, 'un Repelente', 'a Repel'),
+  },
+  medicina: {
+    word: 'la medicina', en: 'the medicine', look: 'granny',
+    gap: ['Para el dolor de cabeza, toma esta ___.', 'For a headache, take this ___.'],
+    hint: 'what you take when you’re sick',
+    thanks: ['¡La medicina! Toma, para tus Palabritas. ¡La salud es lo primero!', 'The medicine! Here, for your Palabritas. Health comes first!'],
+    party: ['Si alguien baila demasiado, ¡aquí tengo medicina!', 'If anyone dances too much, I have medicine here!'],
+    reward: () => give('superpocion', 2, 'dos Superpociones', 'two Super Potions'),
+  },
+  pelota: {
+    word: 'la pelota', en: 'the ball', look: 'boy',
+    gap: ['¿Jugamos con la ___?', 'Shall we play with the ___?'],
+    hint: 'something round you kick',
+    thanks: ['¡La pelota! ¡Golazo! Toma, te las regalo.', 'The ball! What a goal! Here, they’re yours.'],
+    party: ['¡Después de la fiesta, todos a jugar con la pelota!', 'After the party, everyone come play with the ball!'],
+    reward: () => give('palabola', 3, 'tres Palabolas', 'three Palabolas'),
+  },
+  pregunta: {
+    word: 'la pregunta', en: 'the question', look: 'man',
+    gap: ['Hoy tengo una ___ para ti.', 'Today I have a ___ for you.'],
+    hint: 'what you ask when you want to know something',
+    thanks: ['¡La pregunta! Sin preguntas no hay escuela. ¡Gracias!', 'The question! Without questions there’s no school. Thank you!'],
+    party: ['Tengo una pregunta: ¿quién quiere más tortillas?', 'I have a question: who wants more tortillas?'],
+    reward: async () => {},
+  },
+};
+const LOST_IDS = Object.keys(LOST_WORDS);
+
+/** Picking up a lost word (an object 'palabra_<id>'). */
+const palabraPerdida: ScriptFn = async (c) => {
+  const id = c.npc!.def.id.replace('palabra_', '');
+  const w = LOST_WORDS[id];
+  sfx('alert');
+  speak(w.word);
+  await info(`¡Una palabra perdida! Dice: «${w.word}».`, { en: `A lost word! It says: "${w.word}" (${w.en}).` });
+  setFlag(`palabra:${id}`);
+  addItem('palabras');
+  refreshNpcs();
+  await info('¿De quién será? Alguien en Villa Ocote la está buscando.', { en: 'Whose could it be? Someone in Villa Ocote is looking for it.' });
+};
+
+/** The bag's lost words: the ones you carry. */
+async function verPalabras() {
+  const carried = LOST_IDS.filter((id) => flag(`palabra:${id}`) && !flag(`devuelta:${id}`)).map((id) => LOST_WORDS[id]);
+  if (!carried.length) return info('No llevas ninguna palabra perdida.', { en: 'You aren’t carrying any lost words.' });
+  await info(`Llevas: ${carried.map((w) => `«${w.word}»`).join(', ')}.`, { en: `You carry: ${carried.map((w) => `"${w.word}" (${w.en})`).join(', ')}.` });
+}
+
+/**
+ * A townsperson who lost a word: until it's back they stumble over it; with the word in your bag you complete
+ * their sentence (it counts as practice). Afterwards, their usual lines.
+ */
+const owner = (id: string, usual: ScriptFn): ScriptFn => async (c) => {
+  const w = LOST_WORDS[id];
+  if (flag(`devuelta:${id}`)) return usual(c);
+  const [gapEs, gapEn] = w.gap;
+  if (!flag(`palabra:${id}`)) {
+    await say(gapEs.replace('___', '…'), { en: `(A word is missing: "${gapEn}". Something like: ${w.hint}.)` });
+    return lines(['¡Ay, no me sale la palabra!', 'Oh, the word won’t come out!']);
+  }
+  await lines(['¿Tienes mi palabra? ¡Ayúdame a decirlo!', 'Do you have my word? Help me say it!']);
+  const item = itemBySpanish(w.word) ?? adHocItem([w.word], w.en);
+  const r = await challenge({ item, mode: 'type', title: '💬 Palabra perdida', label: `Completa: «${gapEs}»`, allowHelp: true });
+  record(item, r.mode, r.grade, r.helped);
+  if (r.grade === 'wrong') return lines(['Mmm, no... esa no es mi palabra.', 'Hmm, no... that’s not my word.']);
+  setFlag(`devuelta:${id}`);
+  takeItem('palabras');
+  sfx('levelup');
+  await lines(w.thanks);
+  await w.reward();
+  if (LOST_IDS.every((k) => flag(`devuelta:${k}`))) await fiesta();
+};
+
+/** All eight words are back: the town throws a party in the plaza that night. */
+async function fiesta() {
+  await lines(['¡Todos hablan otra vez! ¡Esta noche hay fiesta en la plaza!', 'Everyone’s talking again! Tonight there’s a party in the plaza!']);
+  await fadeOut(16);
+  await warp('ocote', 19, 13, 'down', false);
+  setFade(0.55); // evening
+  await info('Esa noche, todo Villa Ocote se reúne alrededor de la fuente...', { en: 'That night, all of Villa Ocote gathers around the fountain...' });
+  for (const id of LOST_IDS) {
+    setSpeaker(LOST_WORDS[id].look);
+    if (id === 'marimba') sfx('levelup');
+    await say(LOST_WORDS[id].party[0], { en: LOST_WORDS[id].party[1] });
+  }
+  setSpeaker('petra');
+  await lines(['Gracias a ti, Villa Ocote tiene todas sus palabras.', 'Thanks to you, Villa Ocote has all its words.']);
+  setSpeaker();
+  await give('superbola', 5, 'cinco Superbolas', 'five Super Balls');
+  await give('revivir', 2, 'dos Revivir', 'two Revives');
+  setFlag('palabrasDone');
+  await fadeIn(16);
 }
 
 // ---------- The gym ----------
@@ -197,6 +387,9 @@ const talk = (...ls: Line[]): ScriptFn => () => lines(...ls);
 
 export const REGION2: Record<string, ScriptFn> = {
   mensajeOcote,
+  notaCapataz,
+  palabraPerdida,
+  verPalabras,
   palanca,
   capataz,
   adivinanza,
@@ -254,12 +447,12 @@ export const REGION2: Record<string, ScriptFn> = {
     ['¡Yo escribí el mensaje en el suelo! ¿Lo leíste?', 'I wrote the message on the ground! Did you read it?'],
     ['Ahora puedo hablar todo lo que quiero. ¡Bla, bla, bla!', 'Now I can talk as much as I want. Blah, blah, blah!'],
   ),
-  abuelo_ocote: talk(
+  abuelo_ocote: owner('historia', talk(
     ['Hace muchos años, esta mina daba el mejor barro del país.', 'Many years ago, this mine gave the best clay in the country.'],
     ['Con ese barro, los alfareros de Villa Ocote hacían ollas para toda Nicaragua.', 'With that clay, the potters of Villa Ocote made pots for all of Nicaragua.'],
     ['¿Y sabes por qué el pueblo se llama así? El ocote es la madera del pino. ¡Arde muy bien y huele rico!', 'And do you know why the town has this name? Ocote is pine wood. It burns well and smells nice!'],
-  ),
-  async vendedora() {
+  )),
+  vendedora: owner('olla', async () => {
     await lines(['¿Te gustan mis ollas? ¡Las hago a mano!', 'Do you like my pots? I make them by hand!']);
     const i = await chooseText('¿Cuál prefieres?', 'Which one do you prefer?', ['La olla grande', 'La jarra pequeña']);
     await lines(
@@ -267,30 +460,30 @@ export const REGION2: Record<string, ScriptFn> = {
         ? ['¡La olla grande! Perfecta para cocinar gallo pinto para toda la familia.', 'The big pot! Perfect for cooking gallo pinto for the whole family.']
         : ['¡La jarra pequeña! Ideal para tomar agua fresquita.', 'The little jug! Ideal for drinking nice cool water.'],
     );
-  },
-  chepe: talk(
+  }),
+  chepe: owner('bueyes', talk(
     ['¡Buenas! Soy Don Chepe. Con mi carreta llevo las ollas del pueblo al mercado.', 'Hello! I’m Don Chepe. With my cart I take the town’s pots to the market.'],
     ['Mis bueyes se llaman Lucero y Canelo. ¡Son muy fuertes y muy tranquilos!', 'My oxen are called Lucero and Canelo. They’re very strong and very calm!'],
-  ),
+  )),
   lucas_ocote: talk(['...', '(Lucas can’t talk either.)']),
-  musico: async () => {
+  musico: owner('marimba', async () => {
     await lines(['La marimba es el instrumento de Nicaragua.', 'The marimba is Nicaragua’s instrument.']);
     if (await ask('¿Te gusta la música?', { en: 'Do you like music?' })) await lines(['¡A mí también! La música alegra el pueblo.', 'Me too! Music makes the town happy.']);
     else await lines(['¿No? ¡Pues escucha esto!', 'No? Well, listen to this!']);
     sfx('levelup');
-  },
-  futbolista: talk(
+  }),
+  futbolista: owner('pelota', talk(
     ['¡Cuando sea grande, voy a jugar en la selección!', 'When I grow up, I’m going to play for the national team!'],
     ['¿Sabías que en Nicaragua el deporte más popular es el béisbol? Pero a mí me gusta más el fútbol.', 'Did you know that in Nicaragua the most popular sport is baseball? But I like soccer more.'],
-  ),
-  cocinera: talk(
+  )),
+  cocinera: owner('tortilla', talk(
     ['¿Ya desayunaste? Aquí comemos gallo pinto con tortilla.', 'Have you had breakfast? Here we eat gallo pinto with tortillas.'],
     ['Las tortillas se hacen con masa de maíz. ¡Y se cocinan en el comal!', 'Tortillas are made with corn dough. And they’re cooked on the comal (griddle)!'],
-  ),
-  curandera: talk(
+  )),
+  curandera: owner('medicina', talk(
     ['¿Te duele algo? Un té de manzanilla lo cura todo.', 'Does anything hurt? Chamomile tea cures everything.'],
     ['Mis plantas curan a la gente... ¡y a las Palabritas también!', 'My plants heal people... and Palabritas too!'],
-  ),
+  )),
   chepe_esposa: talk(['Mi esposo cuida los bueyes como a sus hijos.', 'My husband looks after the oxen like his children.']),
   alfarera_mama: talk(['Toda mi familia trabaja con barro. ¡Hasta el niño!', 'My whole family works with clay. Even the boy!']),
   alfarero_nino: talk(['¡Hice una ollita! Bueno... parece un plato.', 'I made a little pot! Well... it looks like a plate.']),
@@ -310,7 +503,7 @@ export const REGION2: Record<string, ScriptFn> = {
     ['¡Bienvenid{o/a} al museo! Este museo guarda la historia de la región.', 'Welcome to the museum! This museum keeps the history of the region.'],
     ['¿Sabías que aquí vivían armadillos gigantes? ¡Mira el fósil!', 'Did you know giant armadillos lived here? Look at the fossil!'],
   ),
-  async maestro_ocote() {
+  maestro_ocote: owner('pregunta', async () => {
     await lines(
       ['¡Hola! Soy el profesor Rubén. Hoy practicamos las preguntas: ¿qué?, ¿dónde?, ¿cuándo?', 'Hi! I’m Professor Rubén. Today we’re practicing questions: what?, where?, when?'],
       ['A ver... ¿cómo se pregunta «Where is the mine?»', 'Let’s see... how do you ask "Where is the mine?"'],
@@ -323,7 +516,7 @@ export const REGION2: Record<string, ScriptFn> = {
       ['Casi. «Dónde» es para lugares. ¡Otra vez!', 'Almost. "Dónde" is for places. Again!'],
     );
     await lines(['¡Muy bien! «Dónde» es para preguntar por un lugar.', 'Very good! "Dónde" is for asking about a place.']);
-  },
+  }),
   alumno1: talk(['¿Qué es más difícil: el español o las matemáticas?', 'What’s harder: Spanish or math?']),
   alumna1: talk(['A mí me gusta mucho la clase de música.', 'I really like music class.']),
 };
