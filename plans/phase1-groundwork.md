@@ -198,7 +198,9 @@ battles only).
 
 ---
 
-## 7. The bus (*el bus*, fast travel)
+## 7. The bus (*el bus*, fast travel) — ⏸ paused
+
+**Paused** (the user: there are no big roads yet). Build it once the world has them; Petra doesn't mention it.
 
 **Stops:** each town with a stop has `busStop: { x, y, dir }` (where you arrive) and a bus driver NPC,
 `cobrador`, standing next to a sign.

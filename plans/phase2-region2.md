@@ -82,19 +82,18 @@ Also: `isMaleLook` gets `hood` for `silencioso` and `capataz`. Female grunts use
 
 | Map | Size | World top-left | Connections (exact offsets) |
 |---|---|---|---|
-| `ruta5` ✓ **built** | 96×29 | (-116, -164) | add `left: { to: 'ocote', offset: -2 }`, `up: { to: 'canon', offset: -4 }`; it already has `down: { to: 'cerro_eco', offset: -2, scenery: true }`: keep it |
-| `cerro_eco` ✓ **built** | 54×44 | (-114, -135) | scenery only: `up` Ruta 5 (offset 2), `right` Ruta 3 (offset 0) |
+| `ruta5` ✓ **built** | 96×29 | (-116, -164) | add `left: { to: 'ocote', offset: -2 }`, `up: { to: 'canon', offset: -4 }`; it already has `down: { to: 'ruta3', offset: -56, scenery: true }`: keep it |
 | `canon` | 24×30 | (-112, -194) | `down: { to: 'ruta5', offset: 4 }` |
 | `ocote` ✓ **built, bigger** | 40×32 | (-156, -166) | `right: { to: 'ruta5', offset: -2 }` (Ruta 5 has `left: { to: 'ocote', offset: 2 }`); phase 3 adds `down: { to: 'ruta6', offset: -6 }` (the south road is x 22–23) |
 
 The cave (`ruta4`) links Ruta 3 and Ruta 5 by doors. Inside, it climbs **up and to the right** (in at the
 bottom left, out at the top right), so outside, Ruta 5's tunnel is up and to the right of the cave mouth on
 Ruta 3: the tunnel is at world (-26, -159), the mouth at (-56, -133). The mountain between them is Ruta 5's
-south-east rock and Ruta 3's top rock, which meet. The Cerro del Eco is the mountain's west slope, left of Ruta 3
-and under Ruta 5's west part. These maps join through **scenery connections** (`scenery: true`: they place the
-map in the world and are never walked across). The game draws every map within a few tiles of the one you're
-on, connected or not, so the scenery is whole. Ruta 5's ravine river runs down the Cerro into a lake, then
-bends down and to the left and leaves the Cerro's west edge at world y -93..-92: Ruta 6's river (phase 3).
+south-east rock and Ruta 3's top rock, which meet: Ruta 5 sits on Ruta 3 with a **scenery connection**
+(`scenery: true`: it places the map in the world and is never walked across). The game draws every map within a
+few tiles of the one you're on, connected or not. **One river** runs from the canyon's waterfall down the canyon,
+bends left at its foot into Ruta 5's ravine, under the bridge, and ends in a round pond at the bottom of Ruta 5.
+(A "Cerro del Eco" scenery map once filled the gap west of Ruta 3; it was removed: nothing needs it yet.)
 
 ---
 

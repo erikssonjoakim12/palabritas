@@ -547,11 +547,7 @@ async function petra() {
   G.save.medals.push('Barro');
   sfx('badge');
   await info('¡{name} recibió la Medalla Barro!', { en: '{name} received the Clay Medal!' });
-  await lines(
-    ['Con esta medalla puedes bajar al sur, hasta el mar.', 'With this medal you can go south, down to the sea.'],
-    ['Y una cosa más: ¡pronto el bus va a llegar hasta Villa Ocote! Vas a poder viajar a los pueblos que conoces.', 'And one more thing: soon the bus will come all the way to Villa Ocote! You’ll be able to travel to towns you know.'],
-  );
-  setFlag('busOpen');
+  await lines(['Con esta medalla puedes bajar al sur, hasta el mar.', 'With this medal you can go south, down to the sea.']);
   if (!MAPS.ruta6) {
     await info('¡Felicidades! Terminaste la segunda parte de Palabritas.', { en: 'Congratulations! You finished the second part of Palabritas.' });
     await info('Sigue entrenando a tus Palabritas y atrapando nuevas. ¡Pronto habrá más aventuras!', {

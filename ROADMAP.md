@@ -56,7 +56,7 @@ local words (*chunche*, *tuani*, *¡ideay!*, *va pues*). Great B1/B2 content: re
 - **Ruta 4: the cave** ("Cueva del Eco") — map ✓, wild Palabritas on every step ✓ (Ecolín, Ochopatas, Cuernito: placeholder art), 5 trainers ✓ (new kinds: Espeleólogo, Exploradora, Arqueólogo; you defend by listening); about as long as Ruta 3 (each ~100 steps). Bats, cave beetles, spiders (designs to come).
 - **Ruta 5** ✓: out of the cave's tunnel high on the mountain (up and to the right of the way in, like the
   cave inside), down a clifftop trail and west over the ravine bridge to Villa Ocote; Lucas's first battle;
-  the canyon path north. The **Cerro del Eco** (scenery) joins the cave's two sides on the world map.
+  the canyon path north. One river runs from the canyon's waterfall through Ruta 5's ravine to a pond.
 - **Region 2** ✓ (mostly; see plans/phase2-region2.md): Villa Ocote (a bigger potters' town that lost its
   words), the clay mine and Equipo Silencio, Petra's gym (Medalla Barro), the Cañón del Guardabarranco,
   7 new Palabrita families with their themes, the lost words, Beto's hat, the echo room fossil (Caparazonte),

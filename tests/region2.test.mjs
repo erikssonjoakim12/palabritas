@@ -60,7 +60,7 @@ await talk('gym_ocote', 4, 4, 'up', { choices: ['el reloj'] });
 t.check('the third riddle opens its door', await flags('adivinanza:piedra3'));
 r = await talk('gym_ocote', 5, 2, 'up');
 const s5 = await t.save();
-t.check('Petra gives you the Medalla Barro', s5.flags.medalBarro && s5.medals.includes('Barro') && s5.flags.busOpen, s5.medals);
+t.check('Petra gives you the Medalla Barro', s5.flags.medalBarro && s5.medals.includes('Barro'), s5.medals);
 await t.shot('gym');
 
 // 6. The road south: closed until Ruta 6 is built (phase 3), even with the medal.
