@@ -248,6 +248,13 @@ const TUNNEL_MOUTH: TileArt = {
   rows: [15, 12, 9, 7, 5, 4, 3].map((y) => ART.caveMouth.rows[y]).concat(Array(9).fill('.'.repeat(16))),
 };
 
+/** What a lone plant (palm, cactus) stands on: the ground beside it (sand on a beach, the track in a meadow). */
+function groundUnder(env: TileEnv): Img {
+  const nb = neighbors(env);
+  const beside = [nb.s, nb.w, nb.e, nb.n].find((c) => !!c && '.:s='.includes(c));
+  return beside ? tileImage(beside, env) : underImage(env, 'ground');
+}
+
 /** Water, with a line of foam where it meets a beach (sand on that side). */
 function waterImage(env: TileEnv): Img {
   const nb = neighbors(env);
@@ -343,7 +350,7 @@ function render(ch: string, env: TileEnv): Img {
     case 's':
       return paintArt(ART.sand);
     case 'y':
-      return stack(underImage(env, 'ground'), paintArt(ART.cactus));
+      return stack(groundUnder(env), paintArt(ART.cactus));
     case 'A':
       return stack(underImage(env, 'ground'), paintArt(neighbors(env).n === 'A' ? ART.lighthouse : ART.lighthouseTop));
     case '*':
@@ -355,7 +362,8 @@ function render(ch: string, env: TileEnv): Img {
     case 'I':
       return paintArt(ART.pine);
     case 'J':
-      return paintArt(ART.palm);
+      // The palm's own grass is left out: it stands on whatever ground is beside it.
+      return stack(groundUnder(env), paintArt(ART.palm, grid(ART.palm.rows).map((row) => row.map((c) => ('012'.includes(c) ? '.' : c)))));
     case '>':
       return paintArt(ART.ledgeRight);
     case 'v':

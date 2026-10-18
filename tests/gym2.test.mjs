@@ -1,5 +1,5 @@
 // Petra's gym (split from region2.test, which got too long): three riddles open the stone doors, Tito and
-// Rosario see you, Petra gives the Medalla Barro. And the south guard holds the road until Ruta 6 exists.
+// Rosario see you, Petra gives the Medalla Barro. And the south guard stops you without it.
 import { start } from './lib.mjs';
 
 const t = await start('gym2');
@@ -36,9 +36,9 @@ const s5 = await t.save();
 t.check('Petra gives you the Medalla Barro', s5.flags.medalBarro && s5.medals.includes('Barro'), [s5.medals, r.said.slice(0, 3), r.said.slice(-3)]);
 await t.shot('gym');
 
-// The road south: closed until Ruta 6 is built (phase 3), even with the medal.
-await t.fromSave({ map: 'ocote', x: 23, y: 28, dir: 'down', party: strong, flags: { silenciadorRoto: true, medalBarro: true } });
+// The road south: closed without the medal (with it you go down to Ruta 6: region3.test).
+await t.fromSave({ map: 'ocote', x: 23, y: 28, dir: 'down', party: strong, flags: { silenciadorRoto: true } });
 const said = await t.walk('down', 3);
 r = await t.play();
-t.check('the south guard stops you (the bridge is down)', (await t.pos())[2] < 30 && [said, ...r.said].join(' ').includes('puente'), [said, r.said]);
+t.check('the south guard stops you without the medal', (await t.pos())[2] < 30 && [said, ...r.said].join(' ').includes('Medalla Barro'), [said, r.said]);
 await t.end();

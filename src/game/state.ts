@@ -63,6 +63,10 @@ export interface SaveData {
   fossilDay?: string;
   /** Rematch trainers: the day of your last battle with each (they ask again on a later day). */
   rematch: Record<string, string>;
+  /** El Pelícano Feliz: today's shift as a waiter (which round, which orders, whether you heard the order). */
+  restaurante?: { round: number; orders: number[]; heard: boolean };
+  /** The day of your last full shift at the restaurant (one a day after the first time). */
+  restauranteDia?: string;
   /** Private classes: the day of the last one at each school (one a day). */
   lessons: Record<string, string>;
   medals: string[];

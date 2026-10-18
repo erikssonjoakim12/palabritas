@@ -33,3 +33,12 @@ export function gradeOrder(answer: string, id: string, n: number): Grade | null 
   const agrees = n === 1 ? one : many;
   return agrees && normalize(answer).includes(normalize(right)) ? 'perfect' : 'close';
 }
+
+/**
+ * Telling the cook a table's order: the answer must contain every dish (accents, case, «un/una» and «por favor»
+ * don't matter). null = something's missing (it counts as wrong).
+ */
+export function gradeDish(answer: string, required: string[]): Grade | null {
+  const a = loose(answer);
+  return required.every((dish) => a.includes(loose(dish))) ? 'perfect' : null;
+}

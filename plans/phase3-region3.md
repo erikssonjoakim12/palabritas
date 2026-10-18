@@ -1,6 +1,13 @@
 # Phase 3 — Region 3: the Pacific coast (Villa Ocote → Playa Carey, gym 3)
 
-**Goal:** you can play from the Medalla Barro to the **Medalla Ola**.
+**Goal:** you can play from the Medalla Barro to the **Medalla Ola**. ✓ **Built.** As built (the map file is the truth):
+- **Ruta 6** was redrawn about twice as long as Ruta 3 (211 steps; the user asked): switchbacks through the pines, a
+  fenced cattle meadow (Esteban stands in the first fence gap), the river and bridge, switchbacks through dry forest.
+  Its trainers' spots changed with it.
+- **Levels:** Petra went up to 21 (gym 2), so the coast's route trainers went up about 2 (Ruta 6 17–19, Ruta 7 19–20),
+  Equipo Silencio 19–21, Callada 22–23; wild levels too. Pajarito evolves at 14 now, so wild tables use Palomón.
+- **The hatchlings** start two rows up, beside the nests, and walk down to the shore.
+- The restaurant rounds are kept in `G.save.restaurante`.
 
 **The route:**
 1. Down Ruta 6 from the pine highlands, through dry forest, a big meadow and over a river.

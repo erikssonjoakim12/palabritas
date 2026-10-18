@@ -31,8 +31,11 @@ export const frameAlpha = () => alpha;
  */
 const jobs: (() => void)[] = [];
 function runJobs(deadline?: IdleDeadline) {
-  do jobs.shift()!();
-  while (jobs.length && deadline && !deadline.didTimeout && deadline.timeRemaining() > 3);
+  // The queue may have been emptied (clearIdle on a new map) since this run was scheduled.
+  while (jobs.length) {
+    jobs.shift()!();
+    if (!deadline || deadline.didTimeout || deadline.timeRemaining() <= 3) break;
+  }
   if (jobs.length) scheduleJobs();
 }
 function scheduleJobs() {

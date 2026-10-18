@@ -24,6 +24,7 @@ import { speak, canListen } from '../lang/speech';
 import { SCRIPTS, scriptedStep, warp, currentMap, refreshNpcs, npcById, pickEncounter, facingTile, MUTED_MIME, type ScriptCtx } from './world';
 import { gateOf, closedLines, FRESHWATER, type Line } from './maps';
 import { REGION2 } from './region2';
+import { REGION3 } from './region3';
 import { TILES } from '../art/tiles';
 import { notNow } from '../ui/bag';
 import { MINI_BALL, BALL_COLORS, drawPattern } from '../art/balls';
@@ -262,6 +263,7 @@ const S: Record<string, (c: ScriptCtx) => Promise<void>> = {
     const likes = await ask('¿Te gusta pescar?', { en: 'Do you like fishing?' }, ['Sí, me gusta.', 'No, no me gusta.']);
     if (likes) await lines(['¡A mí también! Me gusta mucho.', 'Me too! I like it a lot.']);
     else await lines(['¿No? ¡Pues a mí me encanta!', 'No? Well, I love it!']);
+    if (flag('lalo')) await lines(['¿Viste a mi hermano Lalo? ¡Le encanta pescar más que a mí!', 'Did you see my brother Lalo? He loves fishing even more than me!']);
     if (itemCount('cana')) await lines(['¡Tienes una caña! Prueba en el lago.', 'You have a fishing rod! Try it in the lake.']);
   },
 
@@ -888,5 +890,5 @@ async function starterTraining(sp: string) {
 }
 
 export function registerScripts() {
-  Object.assign(SCRIPTS, S, REGION2);
+  Object.assign(SCRIPTS, S, REGION2, REGION3);
 }
