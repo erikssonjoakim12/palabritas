@@ -2,7 +2,8 @@ import { G, today, type ItemProg, type Mon } from './state';
 import { THEMES, poolUpTo, type Item } from '../data/content';
 import type { Mode } from '../data/species';
 import type { Grade } from '../lang/check';
-import { levelItems, itemsUpTo, maxLevel } from './curriculum';
+import { levelItems, itemsUpTo, maxLevel, answersToMaster, REVIEW_GAP, REVIEW_SHARE } from './curriculum';
+export { REVIEW_GAP, REVIEW_SHARE };
 import { pickRandom, hash } from './random';
 
 const HOUR = 3_600_000;
@@ -24,13 +25,9 @@ export const OBEY_THRESHOLD = 0.7;
     (level 12 reviews level 7) answered well again since the Palabrita reached its current
     level. Spreading it over every level keeps the workload smooth.
 */
-export const REVIEW_GAP = 5;
-export const REVIEW_SHARE = 0.5;
 
 export function masteryRule(tier: number): { answers: number; days: number } {
-  if (tier <= 20) return { answers: 1, days: 1 };
-  if (tier <= 40) return { answers: 2, days: 1 };
-  return { answers: 2, days: 2 };
+  return { answers: answersToMaster(tier), days: tier <= 40 ? 1 : 2 };
 }
 
 export function prog(id: string): ItemProg {

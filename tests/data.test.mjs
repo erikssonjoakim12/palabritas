@@ -28,7 +28,26 @@ const report = await t.game(() => {
 });
 for (const [id, problems] of Object.entries(report)) t.check(`Palabrita ${id}`, problems.length === 0, problems.join('; '));
 
-// Families that grew a new first stage keep their words (Species.seed): Mariposita and Sillón as before.
+// The work per level (new items × the answers each needs, plus the review) never goes down, for any Palabrita.
+const drops = await t.game(() => {
+  const { curriculum: C, SPECIES } = window.__game;
+  const out = [];
+  for (const sp of Object.keys(SPECIES)) {
+    let last = 0;
+    for (let L = 2; L <= 35; L++) {
+      const items = C.levelItems(sp, L);
+      const review = L - C.REVIEW_GAP >= 2 ? Math.ceil(C.levelItems(sp, L - C.REVIEW_GAP).length * C.REVIEW_SHARE) : 0;
+      const work = items.reduce((s, i) => s + C.answersToMaster(i.tier), 0) + review;
+      if (work < last) out.push(`${sp} ${L}: ${last}→${work}`);
+      last = work;
+    }
+  }
+  return out;
+});
+t.check('the work per level never goes down', drops.length === 0, drops.slice(0, 5).join(', '));
+
+// Mariposita and Sillón keep their words (they must not change by accident: saves have them). The snapshot was
+// taken after the families grew and the levels were evened out; regenerate it only on purpose.
 const before = JSON.parse(readFileSync(new URL('./fixtures/words-before-families.json', import.meta.url), 'utf8'));
 const after = await t.game((sps) => Object.fromEntries(sps.map((sp) => [sp, window.__game.curriculum.itemsUpTo(sp, 30).map((i) => i.id)])), Object.keys(before));
 for (const sp of Object.keys(before)) t.check(`${sp} keeps its words up to level 30`, JSON.stringify(after[sp]) === JSON.stringify(before[sp]), `${after[sp].length} vs ${before[sp].length}`);

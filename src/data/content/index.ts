@@ -51,10 +51,15 @@ export interface CoreSource {
 export const themeItemsPerLevel = (level: number) => (level <= 10 || level > 20 ? 3 : 4);
 
 /**
- * New core items per level: 2 at level 2, +1 every second level (119 by level 20); then 4 a level for 21-40
- * (the A2 band: about 2 words and 2 sentences).
+ * New core items per level for 21-40 (the A2 band). Chosen so the work per level never goes down: from 21 an
+ * item needs two good answers, and the level-up review covers half of the items from five levels back, which
+ * shrinks once it reaches the smaller 21+ levels. Expected answers per level: 21-24: 23, 25-26: 24, 27-30: 26,
+ * 31: 27, 32-34: 28, 35-38: 30, 39-40: 32 (levels 2-20 climb from 5 to 21). tools/sim.mjs checks it.
  */
-export const coreItemsPerLevel = (level: number) => (level >= 2 && level <= 20 ? 2 + Math.floor((level - 2) / 2) : level >= 21 && level <= 40 ? 4 : 0);
+const A2_CORE = [5, 5, 5, 5, 5, 7, 8, 8, 8, 8, 8, 8, 8, 8, 9, 9, 9, 9, 10, 10];
+
+/** New core items per level: 2 at level 2, +1 every second level (119 by level 20); then A2_CORE for 21-40. */
+export const coreItemsPerLevel = (level: number) => (level >= 2 && level <= 20 ? 2 + Math.floor((level - 2) / 2) : (A2_CORE[level - 21] ?? 0));
 
 /** Split an ordered list into tiers, starting at level 2. */
 function splitIntoLevels(lines: string[]): Record<number, string[]> {
@@ -116,7 +121,7 @@ export const spanishKey = (es: string) => es.toLowerCase().replace(/[¡!¿?.,]/g
 const BY_KEY = new Map<string, Item>();
 export const itemBySpanish = (es: string): Item | undefined => BY_KEY.get(spanishKey(es));
 
-function build(src: { id: string; name: string; en: string }, tiers: Record<number, string[]>): Theme {
+function build(src: { id: string; name: string; en: string }, tiers: Record<number, string[]>, byLevel = true): Theme {
   const levels: Record<number, Item[]> = {};
   for (const [tierStr, lines] of Object.entries(tiers)) {
     const tier = Number(tierStr);
@@ -128,6 +133,9 @@ function build(src: { id: string; name: string; en: string }, tiers: Record<numb
       if (shared) {
         if (shared.theme === src.id) throw new Error(`Duplicate item in ${src.id}: ${accept[0]}`);
         for (const a of accept) if (!shared.accept.includes(a)) shared.accept.push(a);
+        // A shared item counts at its lowest level in any list (an A2 word that a theme teaches at level 8 is a
+        // level 8 word there: one good answer masters it). Practice topics' tiers are difficulty bands, not levels.
+        if (byLevel) shared.tier = Math.min(shared.tier, tier);
         return shared;
       }
       const item: Item = { id: `${src.id}:${accept[0]}`, theme: src.id, tier, es: accept[0], accept, en: line.slice(eq + 3).trim() };
@@ -144,7 +152,7 @@ function build(src: { id: string; name: string; en: string }, tiers: Record<numb
 
 build(core, splitCoreBands(core));
 for (const src of [perro, tiempo, comida, naturaleza, numeros, colores, casa, cuerpo, cocina, deportes, musica, salud, historia, latinoamerica, presente, preguntas, gustar]) {
-  build(src, src.levels ? splitIntoLevels(src.levels) : (src.tiers ?? {}));
+  build(src, src.levels ? splitIntoLevels(src.levels) : (src.tiers ?? {}), !!src.levels);
 }
 
 export function tierItems(themeId: string, tier: number): Item[] {

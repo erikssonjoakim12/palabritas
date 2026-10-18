@@ -4,7 +4,11 @@ const browser = await launch();
 const page = await newPage(browser);
 page.on('pageerror', (e) => console.log('PAGE ERROR', e.message));
 await page.goto(BASE + '/', { waitUntil: 'networkidle0' });
-const out = await page.evaluate(async () => {
+// SIM_RIGHT=1 node tools/sim.mjs: every answer right (the shape of the curve without luck). Default 0.85.
+const RIGHT = Number(process.env.SIM_RIGHT ?? 0.85);
+// SIM_SP=piedrita: which Palabrita to level (default a starter).
+const SP = process.env.SIM_SP ?? 'salchichita';
+const out = await page.evaluate(async ([RIGHT, SP]) => {
   const state = await import('/src/game/state.ts');
   const L = await import('/src/game/learning.ts');
   const M = await import('/src/game/mon.ts');
@@ -25,9 +29,9 @@ const out = await page.evaluate(async () => {
 
   // Simulation: answers per level for a starter.
   const runs = [];
-  for (const run of [0, 1, 2]) {
+  for (const run of [0, 1, 2, 3, 4, 5, 6, 7]) {
     state.G.save = state.newSave();
-    const mon = M.newMon('salchichita', 5);
+    const mon = M.newMon(SP, 5);
     state.G.save.party = [mon];
     let answers = 0, start = 0;
     const per = {};
@@ -35,7 +39,7 @@ const out = await page.evaluate(async () => {
     while (mon.level < 31 && answers < 8000) {
       const item = L.pickForMon(mon, recent);
       recent.push(item.id); if (recent.length > 3) recent.shift();
-      const grade = Math.random() < 0.85 ? 'perfect' : 'wrong';
+      const grade = Math.random() < RIGHT ? 'perfect' : 'wrong';
       await new Promise((res) => setTimeout(res, 1));
       L.record(item, 'type', grade, false);
       answers++;
@@ -58,6 +62,6 @@ const out = await page.evaluate(async () => {
   r.migrated = Object.keys(state.G.save.prog);
   localStorage.removeItem('palabritas.save.v1');
   return r;
-});
+}, [RIGHT, SP]);
 console.log(JSON.stringify(out, null, 1));
 await browser.close();
