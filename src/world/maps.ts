@@ -68,6 +68,8 @@ export interface GateDef {
   at: [x: number, y: number, dir: Dir];
   /** Where the guard waits once the road is open. */
   aside: [x: number, y: number];
+  /** Once open, the guard (aside) runs this script instead of the open lines (Beto and his hat). */
+  openScript?: string;
   /** What the guard acts out on a muted map (see MapDef.muted). */
   mime?: string;
   /** The rest of the road beside the guard. */
@@ -343,6 +345,7 @@ export const MAPS: Record<string, MapDef> = {
       {
         id: 'beto',
         look: 'beto',
+        openScript: 'betoSombrero',
         opens: () => flag('palabolas'),
         at: [10, 1, 'down'],
         aside: [13, 2],
@@ -675,12 +678,12 @@ export const MAPS: Record<string, MapDef> = {
       '%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%;;;;;;;;;;;;;;;%',
       '%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%;;;;;;;;;;;;;;;%',
       '%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%;;;%%;;;;;;;;;;%',
-      '%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%;;;%%;;;;;;;;;;%',
-      '%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%;;;;;;;;;;%%;;;%',
-      '%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%;;;;;;;;;;%%;;;%',
-      '%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%;;;;;;;;;;;;;;;%',
-      '%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%;;;;;;;;;;;;;;;%',
-      '%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%;;;%%%%%%%',
+      '%%%;;;;;;;%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%;;;%%;;;;;;;;;;%',
+      '%%%;;;;;;;%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%;;;;;;;;;;%%;;;%',
+      '%%%;;;;;;;%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%;;;;;;;;;;%%;;;%',
+      '%%%;;;;;;;%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%;;;;;;;;;;;;;;;%',
+      '%%%%%%;%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%;;;;;;;;;;;;;;;%',
+      '%%%%%%;%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%;;;%%%%%%%',
       '%%;;;;;;;;;;;;;%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%;;;%%%%%%%',
       '%%;;;;;;;;;;;;;%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%;;;%%%%%%%',
       '%%;;;;%%;;;;;;;;;;;;;;;;;;;;;;;%%%%%%%%%%%%%%%;;;%%%%%%%',
@@ -732,6 +735,11 @@ export const MAPS: Record<string, MapDef> = {
       { id: 'rocio', x: 21, y: 36, look: 'exploradora', dir: 'left', script: 'rocio', sight: 3 },
       // Halfway, in a dead-end room south of the big chamber.
       itemBall('pocion_cueva', 32, 35, 'pocion'),
+      // The echo room behind the cracked wall (shout five times, §8.2), with the shell fossil.
+      { id: 'pared_eco', x: 6, y: 9, object: 'paredRota', script: 'paredEco', show: () => !flag('ecoAbierto') },
+      itemBall('fosil_cueva', 6, 4, 'fosil'),
+      // Beto's hat, on an Ecolín's head in Rocío's side room (§8.1).
+      { id: 'ecolin_sombrero', x: 16, y: 33, object: 'ecolinSombrero', script: 'ecolinSombrero', show: () => !flag('sombreroEncontrado') },
     ],
   },
 
@@ -796,8 +804,8 @@ export const MAPS: Record<string, MapDef> = {
   // Out of the cave, west to the next town (with the second gym). The cave climbs up and to the right inside,
   // so you come out high on the mountain, up and to the right of the way in (Ruta 3): a tunnel in the cliff, then
   // a trail along the clifftop, down past a clearing to the road, and west over the ravine bridge. The mountain
-  // below the trail is the same rock as Ruta 3's. The canyon (north) comes later in phase 2: until
-  // then a hiker keeps that path closed. Rows from plans/phase2-region2.md §3.
+  // below the trail is the same rock as Ruta 3's. The canyon is north, up the path by the bridge.
+  // Rows from plans/phase2-region2.md §3.
   ruta5: {
     id: 'ruta5',
     name: 'Ruta 5',
@@ -838,29 +846,36 @@ export const MAPS: Record<string, MapDef> = {
       'TTTTTT^~~^TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^',
       'TTTTTT^~~^TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^',
     ],
-    connections: { down: { to: 'cerro_eco', offset: -2, scenery: true }, left: { to: 'ocote', offset: 2 } },
+    style: { trees: 'pine' },
+    connections: { down: { to: 'cerro_eco', offset: -2, scenery: true }, left: { to: 'ocote', offset: 2 }, up: { to: 'canon', offset: -4 } },
+    encounters: {
+      rate: 0.12,
+      table: [
+        { sp: 'ardillita', min: 10, max: 13, w: 30 },
+        { sp: 'colibri', min: 10, max: 13, w: 25 },
+        { sp: 'espinita', min: 11, max: 13, w: 20 },
+        { sp: 'hojadillo', min: 10, max: 12, w: 15 },
+        { sp: 'pajarito', min: 10, max: 12, w: 10 },
+      ],
+    },
+    // The foot of the clifftop trail: Lucas catches up with you (rival battle #1).
+    triggers: [
+      { x: 46, y: 10, script: 'lucasRuta5' },
+      { x: 47, y: 10, script: 'lucasRuta5' },
+    ],
     doors: [{ x: 90, y: 5, to: 'ruta4', tx: 52, ty: 1, dir: 'down' }],
     // Halfway along the road, in a gap in the pines: she sees both lanes.
     npcs: [
       { id: 'lucia', x: 34, y: 10, look: 'painter', dir: 'down', script: 'lucia', sight: 2 },
+      { id: 'armando', x: 70, y: 2, look: 'lenador', dir: 'down', script: 'armando', sight: 2 },
+      { id: 'elena', x: 14, y: 10, look: 'campista', dir: 'down', script: 'elena', sight: 2 },
+      { id: 'gaby', x: 20, y: 8, look: 'ornitologa', dir: 'left', script: 'gaby', turns: true },
+      { id: 'lucas', x: 35, y: 11, look: 'lucas', dir: 'right', script: 'lucas', show: () => flag('lucasAqui') },
       // Two of Villa Ocote's lost words blew all the way out here.
       lostWord('marimba', 3, 10),
       lostWord('bueyes', 53, 8),
     ],
     signs: [{ x: 16, y: 13, es: 'RUTA 5. Al oeste: Villa Ocote. Al norte: el Cañón del Guardabarranco.', en: 'ROUTE 5. West: Villa Ocote. North: Guardabarranco Canyon.' }],
-    gates: [
-      {
-        id: 'derrumbe',
-        look: 'hiker',
-        opens: () => false,
-        at: [18, 1, 'down'],
-        aside: [18, 3],
-        road: [[19, 1]],
-        back: 'down',
-        closed: [['¡Cuidado! Hubo un derrumbe y el camino al cañón está cerrado.', 'Careful! There was a landslide and the path to the canyon is closed.']],
-        open: [['El camino al cañón ya está abierto.', 'The path to the canyon is open now.']],
-      },
-    ],
   },
 
   // ---------- Region 2: Villa Ocote, the clay mine and Petra's gym ----------
@@ -986,6 +1001,7 @@ export const MAPS: Record<string, MapDef> = {
       lostWord('tortilla', 3, 11),
       lostWord('medicina', 29, 18),
       lostWord('pelota', 22, 4),
+      { id: 'buey2', x: 32, y: 18, object: 'buey', script: 'buey', show: () => flag('bueyes') && !flag('buey2') },
     ],
   },
 
@@ -1245,6 +1261,67 @@ export const MAPS: Record<string, MapDef> = {
       lostWord('historia', 8, 13),
       lostWord('pregunta', 24, 18),
       { id: 'nota', x: 22, y: 15, object: 'nota', script: 'notaCapataz', show: () => flag('capatazHuyo') && !flag('notaLeida') },
+    ],
+  },
+
+  // A deep river canyon north of Ruta 5, like Somoto's: paths on both banks, three bridges, a waterfall pool at the
+  // top with a grove on each side. Optional; the rare Guardabarranco lives here.
+  canon: {
+    id: 'canon',
+    name: 'Cañón del Guardabarranco',
+    outdoor: true,
+    floor: '.',
+    ground: 'grass',
+    border: '^',
+    style: { trees: 'pine' },
+    rows: [
+      '^^^,,,,~~~~~~~~~,,,,,^^^',
+      '^^^,,,,~~~~~~~~~,,,,,^^^',
+      '^^^,,,,~~~~~~~~~,,,,,^^^',
+      '^^^,,,,~~~~~~~~~,,,,,^^^',
+      '^^^.......~~~........^^^',
+      '^^^.T.....~~~......T.^^^',
+      '^^^.......HHH........^^^',
+      '^^^.......HHH........^^^',
+      '^^^.......~~~.,,,,,,.^^^',
+      '^^^,,,,,,.~~~.,,,,,,.^^^',
+      '^^^,,,,,,.~~~.,,,,,,.^^^',
+      '^^^,,,,,,.~~~.,,,,,,.^^^',
+      '^^^,,,,,,.~~~........^^^',
+      '^^^.......~~~......T.^^^',
+      '^^^..*....HHH........^^^',
+      '^^^.....T.HHH....*...^^^',
+      '^^^.......~~~........^^^',
+      '^^^^^^....~~~.,,,,,,.^^^',
+      '^^^^^^....~~~.,,,,,,.^^^',
+      '^^^^^^....~~~.,,,,,,.^^^',
+      '^^^.......~~~.,,,,,,.^^^',
+      '^^^...T...~~~........^^^',
+      '^^^.......HHH....T...^^^',
+      '^^^.......HHH........^^^',
+      '^^^....*..~~~.==.....^^^',
+      '^^^,,,,,,.~~~.==..^^^^^^',
+      '^^^,,,,,,.~~~.==..^^^^^^',
+      '^^^,,,,,,.~~~.==..^^^^^^',
+      '^^^,,,,,,^^^^^==^^^^^^^^',
+      '^^^^^^^^^^^^^^==^^^^^^^^',
+    ],
+    connections: { down: { to: 'ruta5', offset: 4 } },
+    encounters: {
+      rate: 0.12,
+      table: [
+        { sp: 'colibri', min: 12, max: 14, w: 30 },
+        { sp: 'ardillita', min: 12, max: 14, w: 25 },
+        { sp: 'espinita', min: 12, max: 15, w: 25 },
+        { sp: 'mariposita', min: 12, max: 13, w: 15 },
+        { sp: 'guardabarranco', min: 13, max: 15, w: 5 },
+      ],
+    },
+    npcs: [
+      { id: 'julio', x: 9, y: 18, look: 'fisher', dir: 'left', script: 'julio', sight: 3 },
+      { id: 'rosa', x: 16, y: 13, look: 'campista', dir: 'down', script: 'rosa', sight: 2 },
+      itemBall('superpocion_canon', 3, 0, 'superpocion'),
+      { id: 'buey1', x: 19, y: 2, object: 'buey', script: 'buey', show: () => flag('bueyes') && !flag('buey1') },
     ],
   },
 };

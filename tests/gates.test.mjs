@@ -1,5 +1,5 @@
-// Gate guards stop you and walk you back until their road opens: Beto (Palabolas), the officer in
-// Ciudad Brisa (the Breeze Medal) and the road worker on Ruta 5 (the next town isn't built yet).
+// Gate guards stop you and walk you back until their road opens: Beto (Palabolas) and the officer in
+// Ciudad Brisa (the Breeze Medal). Ruta 5's roads are open: to Villa Ocote and up to the canyon.
 import { start } from './lib.mjs';
 
 const t = await start('gates');
@@ -23,5 +23,5 @@ await passes('Beto, once you have Palabolas,', { map: 'limon', x: 11, y: 3, dir:
 await guard('The officer', { map: 'brisa', x: 3, y: 8, dir: 'left', flags: { palabolas: true } }, 'left', ['brisa', 2, 8]);
 await passes('The officer, once you have the medal,', { map: 'brisa', x: 3, y: 8, dir: 'left', flags: { palabolas: true, medalBrisa: true } }, 'left', 'ruta3');
 await passes('Ruta 5 (the road worker went home: Villa Ocote is built)', { map: 'ruta5', x: 3, y: 12, dir: 'left' }, 'left', 'ocote');
-await guard('The hiker at the landslide', { map: 'ruta5', x: 19, y: 3, dir: 'up' }, 'up', ['ruta5', 19, 2]);
+await passes('The canyon path (the landslide is cleared)', { map: 'ruta5', x: 19, y: 3, dir: 'up' }, 'up', 'canon');
 await t.end();

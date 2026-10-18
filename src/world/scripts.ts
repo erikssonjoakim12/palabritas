@@ -30,7 +30,8 @@ export async function lines(...ls: Line[]) {
   for (const [es, en] of ls) await say(es, { en });
 }
 
-const talkMode = (): Mode => (canListen() ? 'speak' : 'type');
+/** Speak when the device can listen, otherwise write. */
+export const talkMode = (): Mode => (canListen() ? 'speak' : 'type');
 
 /** The nurse and the cashier in a muted town (they talk; they're too busy to have noticed). */
 const LUCKY_YOU: Line = ['¿Tú puedes hablar? ¡Qué suerte! Aquí todos perdieron la voz.', 'You can talk? Lucky you! Everyone here lost their voice.'];
@@ -363,6 +364,7 @@ const S: Record<string, (c: ScriptCtx) => Promise<void>> = {
   /** A gate guard (maps.ts): why the road is closed, or that you may pass now. */
   async gate(c) {
     const g = gateOf(currentMap(), c.npc!.def.id)!;
+    if (g.opens() && g.openScript) return SCRIPTS[g.openScript](c);
     await lines(...(g.opens() ? g.open : closedLines(g)));
   },
 
@@ -865,6 +867,7 @@ async function starterTraining(sp: string) {
   }
   G.save.starterChoice = undefined;
   giveMon(sp, STARTER_LEVEL);
+  G.save.starterPicked = sp;
   setFlag('starter');
   sfx('caught');
   await lines([`¡Excelente! Ya sabes las primeras palabras de ${s.name}.`, `Excellent! You know ${s.name}’s first words now.`]);

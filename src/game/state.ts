@@ -57,6 +57,10 @@ export interface SaveData {
   repel?: number;
   /** The starter you picked, while Professor Ceiba's training is still going on. */
   starterChoice?: string;
+  /** The starter you took (Lucas takes the one strong against it). */
+  starterPicked?: string;
+  /** The day you lent the shell fossil to the museum (it wakes up the next day). */
+  fossilDay?: string;
   medals: string[];
   prog: Record<string, ItemProg>;
   seen: string[];
@@ -150,6 +154,7 @@ function migrate(s: SaveData) {
     s.flags.ruta5East = true;
   }
   s.money ??= 0;
+  s.starterPicked ??= ['salchichita', 'gotita', 'aguacatito'].find((sp) => s.caught.includes(sp));
   // The Ruta 2 potion became a general item ball.
   if (s.flags.pocionRuta2) Object.assign(s.flags, { 'item:pocion_ruta2': true, itemTip: true });
   delete s.flags.pocionRuta2;

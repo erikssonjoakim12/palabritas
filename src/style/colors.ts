@@ -142,6 +142,8 @@ export const OBJECT_PALS: Record<string, Pal> = {
   palabra: ['', '#f8f8d0', '#e0a830', SPRITE_INK],
   nota: ['', '#f8f8f0', '#b8b0a0', SPRITE_INK],
   buey: ['', '#f0e8d8', '#a07858', SPRITE_INK],
+  paredRota: ['', '#c8a880', '#987050', SPRITE_INK],
+  ecolinSombrero: ['', '#48a040', '#7a6090', SPRITE_INK],
 };
 
 /** Palabola colors in the healing machine (normal, flash). */

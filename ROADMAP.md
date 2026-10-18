@@ -54,8 +54,13 @@ local words (*chunche*, *tuani*, *¡ideay!*, *va pues*). Great B1/B2 content: re
   mostly mandatory trainers; new common Palabritas from the dry-forest and farm pools (birds, bugs, small
   mammals: designs to come). A small **Palacentro** at the end, outside the cave.
 - **Ruta 4: the cave** ("Cueva del Eco") — map ✓, wild Palabritas on every step ✓ (Ecolín, Ochopatas, Cuernito: placeholder art), 5 trainers ✓ (new kinds: Espeleólogo, Exploradora, Arqueólogo; you defend by listening); about as long as Ruta 3 (each ~100 steps). Bats, cave beetles, spiders (designs to come).
-- **Ruta 5** — map ✓: a short route out of the cave, west to the next town (gym 2). A road worker
-  blocks the town until it's built.
+- **Ruta 5** ✓: out of the cave's tunnel high on the mountain (up and to the right of the way in, like the
+  cave inside), down a clifftop trail and west over the ravine bridge to Villa Ocote; Lucas's first battle;
+  the canyon path north. The **Cerro del Eco** (scenery) joins the cave's two sides on the world map.
+- **Region 2** ✓ (mostly; see plans/phase2-region2.md): Villa Ocote (a bigger potters' town that lost its
+  words), the clay mine and Equipo Silencio, Petra's gym (Medalla Barro), the Cañón del Guardabarranco,
+  7 new Palabrita families with their themes, the lost words, Beto's hat, the echo room fossil (Caparazonte),
+  Don Chepe's oxen and Gaby's bird.
 - **Dry-forest trees** ✓: every tree so far is the dry tropical forest's (mostly green, some dry ones,
   mixed by themselves). The old pine is kept for a colder biome later, and a palm tree is ready for the beaches.
 
@@ -77,7 +82,7 @@ Route trainers sit between the previous leader and the next one.
 | # | City / habitat | Type | Team | Top level | Route trainers before it |
 |---|---|---|---|---|---|
 | 1 ✓ | Ciudad Brisa | Volador (birds) | 2 | 12 | 3-6 |
-| 2 | Villa Ocote, a pine-highland town past the cave | Roca / Tierra | 2-3 | 19 | 10-16 |
+| 2 ✓ | Villa Ocote, a pine-highland town past the cave | Roca / Tierra | 3 | 19 | 12-16 |
 | 3 | beach town | Agua | 3 | 25 | 16-22 |
 | 4 | volcano town | Fuego | 3 | 31 | 22-28 |
 | 5 | rainforest town | Planta / Veneno | 3-4 | 37 | 28-34 |
@@ -128,7 +133,7 @@ themes grow from the creatures, as you said.
 4. **Pueblo Amanecer** ✓ expansion (water south/east, the west ledge).
 5. **Ruta 3, its Palacentro, and the cave** (maps ✓), with new Palabritas (your designs) and trainers (Nv 10-16).
 6. **Content for levels 21-40** (A2 core words and sentences), needed before gym 3.
-7. **Gym 2** and its town, then onward region by region.
+7. **Gym 2** ✓ and its town, then onward region by region.
 
 The detailed plan for gyms 2-4 (places, story, side quests, Palabritas, Spanish, systems, build order):
 [PLAN_GYMS_2-4.md](PLAN_GYMS_2-4.md).

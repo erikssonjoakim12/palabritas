@@ -1,18 +1,19 @@
 import { sfx } from '../engine/sfx';
 import { frames } from '../engine/loop';
-import { G, flag, setFlag } from '../game/state';
-import { addItem, takeItem } from '../game/bag';
+import { G, flag, setFlag, today } from '../game/state';
+import { addItem, takeItem, itemCount } from '../game/bag';
+import { giveMon } from '../game/mon';
 import { record } from '../game/learning';
 import { itemBySpanish, adHocItem } from '../data/content';
 import { info, say, setSpeaker } from '../ui/textbox';
 import { ask } from '../ui/menu';
 import { challenge, chooseText } from '../ui/challenge';
-import { trainerBattle } from '../battle/battle';
+import { trainerBattle, wildBattle } from '../battle/battle';
 import { TRAINERS } from '../data/trainers';
 import { speak } from '../lang/speech';
-import { warp, refreshNpcs, walkNpc, placeNpc, setFade, fadeOut, fadeIn, type ScriptFn } from './world';
-import { MAPS, type Line } from './maps';
-import { lines, trainerFight, blackout } from './scripts';
+import { warp, refreshNpcs, walkNpc, placeNpc, setFade, fadeOut, fadeIn, currentMap, type ScriptFn } from './world';
+import { MAPS, gateOf, type Line } from './maps';
+import { lines, trainerFight, blackout, talkMode } from './scripts';
 
 /*
   Region 2: Villa Ocote, the town that lost its words, the Mina de Barro and Petra's gym.
@@ -185,7 +186,7 @@ export const LOST_WORDS: Record<string, LostWord> = {
     hint: 'big strong animals that pull his cart',
     thanks: ['¡Los bueyes! «Mis bueyes se llaman Lucero y Canelo.» ¡Gracias, muchach{o/a}!', 'The oxen! "My oxen are called Lucero and Canelo." Thank you, kid!'],
     party: ['Mañana llevo los bueyes al mercado... ¡pero hoy bailo!', 'Tomorrow I take the oxen to market... but today I dance!'],
-    reward: () => pay(300),
+    reward: () => pay(150),
   },
   historia: {
     word: 'la historia', en: 'the history, the story', look: 'abuelo',
@@ -296,6 +297,185 @@ async function fiesta() {
   await fadeIn(16);
 }
 
+// ---------- Ruta 5 and the canyon ----------
+
+/** The starter that's strong against yours: the one Lucas took. */
+const RIVAL_STARTER: Record<string, string> = { salchichita: 'gotita', gotita: 'aguacatito', aguacatito: 'salchichita' };
+export const lucasStarter = () => RIVAL_STARTER[G.save.starterPicked ?? ''] ?? 'gotita';
+
+/** The foot of the clifftop trail: Lucas catches up with you (rival battle #1). */
+async function lucasRuta5() {
+  if (flag('lucas1')) return;
+  sfx('alert');
+  setFlag('lucasAqui');
+  placeNpc('lucas', 35, 11, 'right');
+  await walkNpc('lucas', Array(10).fill('right'));
+  await lines(
+    ['¡{name}! ¡Por fin te alcancé!', '{name}! I finally caught up with you!'],
+    ['Cuando te fuiste, la Profesora Ceiba me dio una Palabrita a mí también. ¡Mira!', 'When you left, Professor Ceiba gave me a Palabrita too. Look!'],
+    ['Elegí la más fuerte contra la tuya. ¡Vamos a ver quién aprendió más palabras!', 'I chose the strongest one against yours. Let’s see who learned more words!'],
+  );
+  const lucas = { ...TRAINERS.lucas1, team: [[lucasStarter(), 15], ['pajarito', 12]] as [string, number][] };
+  const res = await trainerBattle(lucas, { look: 'lucas', outro: ['¡Ay! Estudiaste mucho, ¿verdad?', 'Ugh! You studied a lot, didn’t you?'] });
+  if (res === 'lose') {
+    // He'll be back next time you come down the trail.
+    setFlag('lucasAqui', false);
+    refreshNpcs();
+    return blackout();
+  }
+  setFlag('lucas1');
+  await lines(['Bueno, voy a Villa Ocote. ¡Dicen que el gimnasio es de tipo Roca!', 'Well, I’m going to Villa Ocote. They say the gym is Rock-type!']);
+  await walkNpc('lucas', ['down', ...Array(8).fill('left')]);
+  setFlag('lucasAqui', false);
+  refreshNpcs();
+}
+
+/** Gaby the birdwatcher: describe the guardabarranco, then show her one. */
+async function gaby() {
+  if (flag('gabyDone')) return lines(['El guardabarranco viaja por toda América. ¡Como yo!', 'The guardabarranco travels all over the Americas. Like me!']);
+  const hasBird = [...G.save.party, ...G.save.box].some((m) => m.sp === 'guardabarranco');
+  if (flag('gabyPregunta')) {
+    if (!hasBird) return lines(['Dicen que vive en el cañón. Si atrapas uno, ¡enséñamelo!', 'They say it lives in the canyon. If you catch one, show me!']);
+    await lines(['¡Un guardabarranco! ¡Es precioso! Gracias por enseñármelo.', 'A guardabarranco! It’s beautiful! Thank you for showing me.']);
+    addItem('superbola', 3);
+    sfx('caught');
+    await info('¡{name} recibió tres Superbolas!', { en: '{name} received three Super Balls!' });
+    return setFlag('gabyDone');
+  }
+  await lines(
+    ['Busco el guardabarranco, el ave nacional de Nicaragua.', 'I’m looking for the guardabarranco, Nicaragua’s national bird.'],
+    ['Tiene el pecho verde, el cuerpo color canela y la cola larga, con dos plumas como raquetas.', 'It has a green chest, a cinnamon body and a long tail, with two feathers like rackets.'],
+  );
+  await untilRight(
+    '¿Cuál es el guardabarranco?',
+    'Which one is the guardabarranco?',
+    'Un pájaro con la cola larga y dos plumas como raquetas',
+    ['Un pájaro pequeño con la cola corta y el pico amarillo', 'Un pájaro grande, negro, con la cabeza roja'],
+    ['Mmm, no. Escucha otra vez: la cola larga, con dos plumas como raquetas.', 'Hmm, no. Listen again: a long tail, with two feathers like rackets.'],
+  );
+  setFlag('gabyPregunta');
+  await lines(['¡Exacto! Dicen que vive en el cañón. Si atrapas uno, ¡enséñamelo!', 'Exactly! They say it lives in the canyon. If you catch one, show me!']);
+}
+
+// ---------- Side quests ----------
+
+/** Beto's hat: an Ecolín wears it in the cave's side room. */
+async function ecolinSombrero() {
+  sfx('alert');
+  await lines(['¡Un Ecolín con un sombrero verde!', 'An Ecolín wearing a green hat!']);
+  const res = await wildBattle('ecolin', 12);
+  if (res === 'lose') return blackout();
+  if (res === 'run') return;
+  await info('¡Se le cayó el sombrero! Es verde... ¿de quién será?', { en: 'It dropped the hat! It’s green... whose could it be?' });
+  addItem('sombrero');
+  setFlag('sombreroEncontrado');
+  refreshNpcs();
+}
+
+/** Beto, once his road is open: he wants his hat back. */
+async function betoSombrero() {
+  if (flag('sombreroDevuelto')) return lines(['¡Con mi sombrero, el sol ya no me molesta!', 'With my hat, the sun doesn’t bother me anymore!']);
+  if (!itemCount('sombrero')) return lines(...(gateOf(currentMap(), 'beto')!.open as Line[]));
+  await lines(['¿Ese es mi sombrero? A ver... ¿de qué color es?', 'Is that my hat? Let’s see... what color is it?']);
+  const item = itemBySpanish('verde') ?? adHocItem(['verde', 'Es verde'], 'green');
+  const r = await challenge({ item, mode: talkMode(), title: '🎩 El sombrero', label: '¿De qué color es el sombrero? · What color is the hat?' });
+  record(item, r.mode, r.grade, r.helped);
+  if (r.grade === 'wrong') return lines(['Mmm, no... el mío es de otro color.', 'Hmm, no... mine is a different color.']);
+  takeItem('sombrero');
+  setFlag('sombreroDevuelto');
+  await lines(['¡Sí, es mi sombrero verde! ¡Muchas gracias!', 'Yes, it’s my green hat! Thank you so much!']);
+  addItem('palabola', 5);
+  sfx('caught');
+  await info('¡{name} recibió cinco Palabolas!', { en: '{name} received five Palabolas!' });
+}
+
+/** The echo room's cracked wall: shout, and write what the echo says back. Five rounds break it. */
+const ECHO: [string, string][] = [['hola', 'hello'], ['eco', 'echo'], ['la cueva', 'the cave'], ['amigo', 'friend'], ['¿Hay alguien?', 'Is anybody there?']];
+async function paredEco() {
+  await lines(['La pared tiene grietas. Del otro lado se oye un eco...', 'The wall is cracked. From the other side you hear an echo...']);
+  if (!(await ask('¿Quieres gritar algo?', { en: 'Do you want to shout something?' }))) return;
+  await info('¡Escucha el eco y escribe lo que dice!', { en: 'Listen to the echo and write what it says!' });
+  for (const [es, en] of ECHO) {
+    const item = itemBySpanish(es) ?? adHocItem([es], en);
+    while (true) {
+      const r = await challenge({ item, mode: 'listen', title: '🔊 El eco' });
+      record(item, r.mode, r.grade, r.helped);
+      if (r.grade !== 'wrong') break;
+      await lines(['El eco se apagó... ¡Otra vez!', 'The echo faded... Again!']);
+    }
+  }
+  for (let i = 0; i < 3; i++) {
+    sfx('bump');
+    await frames(10);
+  }
+  setFlag('ecoAbierto');
+  refreshNpcs();
+  await info('¡La pared tiembla... y se rompe! Detrás hay una sala escondida.', { en: 'The wall shakes... and breaks! Behind it is a hidden room.' });
+}
+
+/** The museum curator: she wakes the shell fossil up overnight (Caparazonte). */
+async function curadora() {
+  if (flag('caparazonte')) return lines(['¿Cómo está Caparazonte? ¡Cuídalo mucho! Es parte de la historia.', 'How is Caparazonte? Take good care of it! It’s part of history.']);
+  if (flag('fosilEntregado')) {
+    if (G.save.fossilDay === today()) return lines(['Todavía está durmiendo. ¡Vuelve mañana!', 'It’s still sleeping. Come back tomorrow!']);
+    await lines(['¡Despertó! Se llama Caparazonte. Vivió hace diez mil años... ¡y ahora es tuyo!', 'It woke up! It’s called Caparazonte. It lived ten thousand years ago... and now it’s yours!']);
+    const where = giveMon('caparazonte', 15);
+    sfx('caught');
+    await info('¡{name} recibió a Caparazonte!', { en: '{name} received Caparazonte!' });
+    if (where === 'box') await info('Tu equipo está lleno: Caparazonte fue a la Caja de Palabritas.', { en: 'Your team is full: Caparazonte went to the storage box.' });
+    return setFlag('caparazonte');
+  }
+  if (itemCount('fosil')) {
+    await lines(['¡Un fósil de caparazón! Con mi máquina puedo despertarlo... pero tarda un día.', 'A shell fossil! With my machine I can wake it up... but it takes a day.']);
+    if (!(await ask('¿Me lo prestas?', { en: 'Will you lend it to me?' }))) return lines(['Está bien. Si cambias de idea, aquí estoy.', 'All right. If you change your mind, I’m here.']);
+    takeItem('fosil');
+    setFlag('fosilEntregado');
+    G.save.fossilDay = today();
+    return lines(['¡Gracias! Vuelve mañana para ver qué pasa.', 'Thank you! Come back tomorrow to see what happens.']);
+  }
+  await lines(
+    ['¡Bienvenid{o/a} al museo! Este museo guarda la historia de la región.', 'Welcome to the museum! This museum keeps the history of the region.'],
+    ['¿Sabías que aquí vivían armadillos gigantes? ¡Mira el fósil!', 'Did you know giant armadillos lived here? Look at the fossil!'],
+  );
+}
+
+/** Don Chepe's oxen ran off with the noise from the mine: one in the canyon, one behind the school. */
+async function chepeBueyes() {
+  if (flag('bueyesDone')) return lines(['Mañana llevamos la carreta al mercado. ¡Así es la vida en el campo!', 'Tomorrow we take the cart to the market. That’s life in the countryside!']);
+  const where = 'Uno se fue al norte del cañón, cerca de la cascada. El otro está aquí en el pueblo, detrás de la escuela.';
+  if (flag('bueyes')) {
+    if (!flag('buey1') || !flag('buey2')) return say(where, { en: 'One went to the north of the canyon, near the waterfall. The other is here in town, behind the school.' });
+    await lines(['¡Lucero! ¡Canelo! ¡Mis bueyes! ¡Gracias, gracias!', 'Lucero! Canelo! My oxen! Thank you, thank you!']);
+    addItem('superpocion', 2);
+    G.save.money += 300;
+    sfx('caught');
+    await info('¡{name} recibió dos Superpociones y $300!', { en: '{name} received two Super Potions and $300!' });
+    return setFlag('bueyesDone');
+  }
+  await lines(['¡Ay, mis bueyes! Con el ruido de la mina, se escaparon.', 'Oh, my oxen! With the noise from the mine, they ran off.']);
+  speak(where);
+  await untilRight(
+    '¿Dónde está el primer buey?',
+    '🎧 Listen to Don Chepe: where is the first ox?',
+    'Cerca de la cascada',
+    ['En la mina', 'En la playa'],
+    ['Mmm, no. ¡Escucha otra vez!', 'Hmm, no. Listen again!'],
+    where,
+  );
+  setFlag('bueyes');
+  refreshNpcs();
+  await lines(['¡Eso! Y el otro está detrás de la escuela. ¿Me ayudas a traerlos?', 'That’s it! And the other one is behind the school. Will you help me bring them back?']);
+}
+
+/** An ox: it follows you back to Don Chepe. */
+const buey: ScriptFn = async (c) => {
+  sfx('alert');
+  await lines(['¡Muuu!', 'Moo!']);
+  await info('El buey te sigue hasta Don Chepe.', { en: 'The ox follows you back to Don Chepe.' });
+  setFlag(c.npc!.def.id);
+  refreshNpcs();
+};
+
 // ---------- The gym ----------
 
 interface Riddle {
@@ -388,6 +568,38 @@ const talk = (...ls: Line[]): ScriptFn => () => lines(...ls);
 export const REGION2: Record<string, ScriptFn> = {
   mensajeOcote,
   notaCapataz,
+  lucasRuta5,
+  gaby,
+  ecolinSombrero,
+  betoSombrero,
+  paredEco,
+  curadora,
+  buey,
+  lucas: talk(['¡Te voy a ganar la próxima vez!', 'I’m going to beat you next time!']),
+  armando: () =>
+    trainerFight('armando', {
+      intro: ['¡Cuidado! Estoy cortando leña. Bueno... ¿luchamos?', 'Careful! I’m chopping firewood. Well... shall we battle?'],
+      defeated: ['¡Uf! Más fuerte que un pino.', 'Phew! Stronger than a pine.'],
+      after: ['Los pinos de aquí huelen a ocote. ¡Me encanta ese olor!', 'The pines here smell of ocote. I love that smell!'],
+    }),
+  elena: () =>
+    trainerFight('elena', {
+      intro: ['¡Hola! Acampo aquí todos los veranos. ¿Una batalla?', 'Hi! I camp here every summer. A battle?'],
+      defeated: ['¡Ay, se me apagó la fogata!', 'Oh, my campfire went out!'],
+      after: ['De noche se ven muchas estrellas en la montaña.', 'At night you can see lots of stars in the mountains.'],
+    }),
+  julio: () =>
+    trainerFight('julio', {
+      intro: ['¡Shh! Los peces se asustan. Bueno, ¡luchemos rápido!', 'Shh! The fish get scared. Well, let’s battle fast!'],
+      defeated: ['Se me escapó... ¡como un pez!', 'It got away... like a fish!'],
+      after: ['Abajo del puente hay mojarras. Con una caña, ¡pescas muchas!', 'Under the bridge there are mojarras. With a rod you catch lots!'],
+    }),
+  rosa: () =>
+    trainerFight('rosa', {
+      intro: ['¿Viste el guardabarranco? ¡Yo tampoco! ¿Luchamos mientras esperamos?', 'Did you see the guardabarranco? Me neither! Shall we battle while we wait?'],
+      defeated: ['¡Qué buen{o/a} eres!', 'You’re so good!'],
+      after: ['Dicen que vive al final del cañón, cerca de la cascada.', 'They say it lives at the end of the canyon, near the waterfall.'],
+    }),
   palabraPerdida,
   verPalabras,
   palanca,
@@ -461,10 +673,7 @@ export const REGION2: Record<string, ScriptFn> = {
         : ['¡La jarra pequeña! Ideal para tomar agua fresquita.', 'The little jug! Ideal for drinking nice cool water.'],
     );
   }),
-  chepe: owner('bueyes', talk(
-    ['¡Buenas! Soy Don Chepe. Con mi carreta llevo las ollas del pueblo al mercado.', 'Hello! I’m Don Chepe. With my cart I take the town’s pots to the market.'],
-    ['Mis bueyes se llaman Lucero y Canelo. ¡Son muy fuertes y muy tranquilos!', 'My oxen are called Lucero and Canelo. They’re very strong and very calm!'],
-  )),
+  chepe: owner('bueyes', chepeBueyes),
   lucas_ocote: talk(['...', '(Lucas can’t talk either.)']),
   musico: owner('marimba', async () => {
     await lines(['La marimba es el instrumento de Nicaragua.', 'The marimba is Nicaragua’s instrument.']);
@@ -498,10 +707,6 @@ export const REGION2: Record<string, ScriptFn> = {
     ['Este es el taller. Aquí hacemos ollas, jarras y tinajas.', 'This is the workshop. Here we make pots, jugs and water jars.'],
     ['Primero amasamos el barro, luego le damos forma y después lo cocinamos en el horno.', 'First we knead the clay, then we shape it, and after that we bake it in the kiln.'],
     ['Petra aprendió aquí, conmigo. ¡Ahora es mejor que yo!', 'Petra learned here, with me. Now she’s better than me!'],
-  ),
-  curadora: talk(
-    ['¡Bienvenid{o/a} al museo! Este museo guarda la historia de la región.', 'Welcome to the museum! This museum keeps the history of the region.'],
-    ['¿Sabías que aquí vivían armadillos gigantes? ¡Mira el fósil!', 'Did you know giant armadillos lived here? Look at the fossil!'],
   ),
   maestro_ocote: owner('pregunta', async () => {
     await lines(

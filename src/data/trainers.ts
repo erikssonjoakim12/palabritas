@@ -42,6 +42,12 @@ export const TRAINERS: Record<string, TrainerDef> = {
   tito: { id: 'tito', name: 'Alfarero Tito', defenseMode: 'type', team: [['ollita', 15], ['piedrita', 15]] },
   rosario: { id: 'rosario', name: 'Minera Rosario', defenseMode: 'type', team: [['piedrita', 16]] },
   petra: { id: 'petra', name: 'Líder Petra', defenseMode: 'type', team: [['piedrita', 16], ['ollita', 17], ['petroglifon', 19]] },
-  // Ruta 5
+  // Ruta 5 and the canyon (you defend by listening in the highlands).
+  armando: { id: 'armando', name: 'Leñador Armando', defenseMode: 'listen', team: [['ardillita', 12], ['pajarito', 12]] },
+  elena: { id: 'elena', name: 'Campista Elena', defenseMode: 'listen', team: [['colibri', 12], ['espinita', 13]] },
+  julio: { id: 'julio', name: 'Pescador Julio', defenseMode: 'listen', team: [['hojadillo', 13], ['colibri', 13]] },
+  rosa: { id: 'rosa', name: 'Campista Rosa', defenseMode: 'listen', team: [['espinita', 13], ['ardillita', 14]] },
+  // Your rival. His first Palabrita is the starter strong against yours (region2.ts lucasStarter).
+  lucas1: { id: 'lucas1', name: 'Lucas', defenseMode: 'type', team: [['gotita', 15], ['pajarito', 12]] },
   lucia: { id: 'lucia', name: 'Pintora Lucía', defenseMode: 'listen', team: [['hojadillo', 13], ['mariposita', 13]] },
 };
