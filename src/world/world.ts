@@ -76,7 +76,7 @@ function neighborsOf(m: MapDef): Neighbor[] {
 let edgeNpcs: NpcRT[] = [];
 let fade = 0;
 let banner: HTMLElement | null = null;
-let grassOverlay: Img | null = null;
+const grassOverlays: Record<string, Img> = {};
 
 export const player = {
   x: 0,
@@ -673,7 +673,8 @@ export function renderWorld(g: CanvasRenderingContext2D) {
   g.clip();
   for (const [tx, ty] of under) {
     if (TILES[tileAt(tx, ty)].kind !== 'tallgrass') continue;
-    g.drawImage((grassOverlay ??= tallGrassImage()), tx * T - camX, ty * T - camY);
+    const ch = tileAt(tx, ty);
+    g.drawImage((grassOverlays[ch] ??= tallGrassImage(ch)), tx * T - camX, ty * T - camY);
   }
   g.restore();
   if (map.night) drawNight(g, 72, 68 - hop);

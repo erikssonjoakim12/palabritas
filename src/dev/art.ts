@@ -71,7 +71,7 @@ const TILE_NAMES: Record<string, string> = {
   h: 'wall', w: 'window', d: 'door', c: 'Palacentro sign', G: 'gym sign', a: 'bakery sign', _: 'wood floor',
   '+': 'tile floor', x: 'Palacentro floor', '#': 'inside wall', k: 'table', B: 'bed', L: 'shelf', P: 'plant',
   V: 'TV', C: 'counter', Q: 'computer', n: 'sofa', u: 'poster', m: 'exit mat', R: 'rug',
-  '^': 'mountain', ':': 'rocky ground', O: 'cave entrance', '%': 'cave wall', ';': 'cave floor', e: 'cave exit', D: 'tunnel (walk south into it)', H: 'bridge / pier', F: 'fountain (2×2)', U: 'market stall / pottery shelf', K: 'mine rails', W: 'mine support', Z: 'ladder (to the floor above or below)', '8': 'current up', '2': 'current down', '4': 'current left', '6': 'current right',
+  '^': 'mountain', ':': 'rocky ground', O: 'cave entrance', '%': 'cave wall', ';': 'cave floor', e: 'cave exit', D: 'tunnel (walk south into it)', H: 'bridge / pier', F: 'fountain (2×2)', U: 'market stall / pottery shelf', K: 'mine rails', W: 'mine support', Z: 'ladder (to the floor above or below)', s: 'sand', y: 'cactus', z: 'dry tall grass (zacate)', A: 'lighthouse', '8': 'current up', '2': 'current down', '4': 'current left', '6': 'current right',
 };
 const INDOOR = '_+x#kBLPVCQnumR';
 

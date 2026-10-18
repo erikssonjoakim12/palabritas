@@ -17,6 +17,7 @@ import type { MapStyle } from '../art/tiles';
   %  cave wall     ;  cave floor                    e  cave exit (walk down to leave)
   D  tunnel under a cliff (a door you walk south into)   H  bridge / pier
   F  fountain (2×2)  U  market stall / pottery shelf   K  mine rails  W  mine support
+  s  sand          y  cactus      z  dry tall grass (wild Palabritas)   A  lighthouse (its top has the lamp)
   Z  ladder between cave floors (stand it away from the walls; you arrive on it, like Gold/Silver)
 */
 

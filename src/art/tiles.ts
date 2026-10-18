@@ -1,6 +1,6 @@
 import { makeCanvas, type Img } from './pixel';
 import { ART, ROCK_EDGES, type TileArt } from '../style/tiles';
-import { ROOFS, OUTDOOR, CAVE_STYLES, type Pal } from '../style/colors';
+import { ROOFS, OUTDOOR, CAVE_STYLES, type Pal, ACCENT } from '../style/colors';
 import type { Dir } from '../engine/input';
 
 /*
@@ -117,6 +117,10 @@ export const TILES: Record<string, TileDef> = {
   F: solid({ look: { es: 'Una fuente. El agua suena muy bonito.', en: 'A fountain. The water sounds lovely.' } }),
   U: solid({ look: { es: 'Ollas, jarras y tinajas de barro.', en: 'Clay pots, jugs and water jars.' } }),
   K: open(),
+  s: open(),
+  y: solid({ look: { es: 'Un cactus. ¡No lo toques, pica!', en: 'A cactus. Don’t touch it, it’s prickly!' } }),
+  z: open({ kind: 'tallgrass' }),
+  A: solid({ look: { es: 'El faro. De noche, su luz guía a los barcos.', en: 'The lighthouse. At night, its light guides the boats.' } }),
   W: solid(),
   R: open(),
   ' ': solid(),
@@ -244,6 +248,22 @@ const TUNNEL_MOUTH: TileArt = {
   rows: [15, 12, 9, 7, 5, 4, 3].map((y) => ART.caveMouth.rows[y]).concat(Array(9).fill('.'.repeat(16))),
 };
 
+/** Water, with a line of foam where it meets a beach (sand on that side). */
+function waterImage(env: TileEnv): Img {
+  const nb = neighbors(env);
+  const sandy = (c: string) => c === 's' || (c === '.' && env.ground === 'sand');
+  if (![nb.n, nb.s, nb.w, nb.e].some(sandy)) return paintArt(ART.water);
+  const g = grid(ART.water.rows);
+  const foam = (x: number, y: number) => (g[y][x] = (x + y) % 3 ? 'f' : '0');
+  for (let i = 0; i < 16; i++) {
+    if (sandy(nb.n)) (foam(i, 0), i % 2 || foam(i, 1));
+    if (sandy(nb.s)) (foam(i, 15), i % 2 || foam(i, 14));
+    if (sandy(nb.w)) (foam(0, i), i % 2 || foam(1, i));
+    if (sandy(nb.e)) (foam(15, i), i % 2 || foam(14, i));
+  }
+  return paintArt({ ...ART.water, extra: { f: ACCENT.foam } }, g);
+}
+
 /** Bridges and piers: planks across the way you walk, with rails where the bridge ends at the sides. */
 function bridgeImage(env: TileEnv): Img {
   const nb = neighbors(env);
@@ -318,6 +338,14 @@ function render(ch: string, env: TileEnv): Img {
       return paintArt(ART.grassGround);
     case ',':
       return paintArt(ART.tallGrass);
+    case 'z':
+      return paintArt(ART.dryGrass);
+    case 's':
+      return paintArt(ART.sand);
+    case 'y':
+      return stack(underImage(env, 'ground'), paintArt(ART.cactus));
+    case 'A':
+      return stack(underImage(env, 'ground'), paintArt(neighbors(env).n === 'A' ? ART.lighthouse : ART.lighthouseTop));
     case '*':
       return paintArt(ART.flowers);
     case 'T':
@@ -377,7 +405,7 @@ function render(ch: string, env: TileEnv): Img {
     case '6':
       return stack(paintArt(ART.water), paintArt(ART.currentArrow, turn(grid(ART.currentArrow.rows), { 8: 0, 6: 1, 2: 2, 4: 3 }[ch]!)));
     case '~':
-      return paintArt(ART.water);
+      return waterImage(env);
     case 'f':
       return stack(underImage(env, 'ground'), paintArt(ART.fence));
     case 'S':
@@ -469,4 +497,5 @@ export function renderMap(m: MapLook): Img {
 }
 
 /** Tall grass drawn over the player's feet. */
-export const tallGrassImage = () => paintArt(ART.tallGrass);
+/** The tall grass drawn over your feet: green, or dry (zacate) for 'z'. */
+export const tallGrassImage = (ch = ',') => paintArt(ch === 'z' ? ART.dryGrass : ART.tallGrass);

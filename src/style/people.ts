@@ -171,6 +171,45 @@ export const HEADS: Record<string, Facing> = {
       '....311111333...',
     ],
   },
+  /** A cowboy hat (sabaneros): a dented crown and a wide brim turned up at the ends. */
+  cowboy: {
+    down: [
+      '.....33..33.....',
+      '....32233223....',
+      '....32222223....',
+      '33..32222223..33',
+      '3233333333333323',
+      '..331111111133..',
+      '.33111311311133.',
+      '.31111311311113.',
+      '..331111111133..',
+      '...3311111133...',
+    ],
+    up: [
+      '.....33..33.....',
+      '....32233223....',
+      '....32222223....',
+      '33..32222223..33',
+      '3233333333333323',
+      '..333333333333..',
+      '.31333333333313.',
+      '.31133333333113.',
+      '..333333333333..',
+      '...3333333333...',
+    ],
+    side: [
+      '......33.33.....',
+      '.....32232223...',
+      '.....32222223...',
+      '..33.32222223.33',
+      '..32333333333323',
+      '...31111333333..',
+      '...31311333333..',
+      '...31311333333..',
+      '...311111133....',
+      '....31111133....',
+    ],
+  },
   /** A hood over the hair, the face showing (Equipo Silencio). */
   hood: {
     down: [
@@ -458,8 +497,11 @@ export interface Look {
  * hides the hair, so for hooded looks the look itself says (silencioso, capataz; silenciosa is a woman).
  */
 const MALE_HEADS = ['cap', 'crew', 'helmet', 'safari'];
-const MALE_LOOKS = ['silencioso', 'capataz'];
+const MALE_LOOKS = ['silencioso', 'capataz', 'vaquero'];
 export const isMaleLook = (lookId?: string) => !!lookId && (MALE_LOOKS.includes(lookId) || MALE_HEADS.includes(LOOKS[lookId]?.head));
+
+/** A hood over long hair (Callada): the same as the hood overworld; the portrait shows the hair. */
+HEADS.hoodLong = HEADS.hood;
 
 /** Who looks like what. Change a color or head here to restyle a character. */
 export const LOOKS: Record<string, Look> = {
@@ -504,6 +546,18 @@ export const LOOKS: Record<string, Look> = {
   lucas: { head: 'cap', body: 'pants', color: 'teal' },
   abuelo: { head: 'crew', body: 'coat', color: 'gray' },
   musico: { head: 'crew', body: 'pants', color: 'yellow' },
+  // Region 3: the coast.
+  surfista: { head: 'long', body: 'pants', color: 'blue' },
+  banista: { head: 'longColor', body: 'dress', color: 'yellow' },
+  salvavidas: { head: 'cap', body: 'pants', color: 'red' },
+  vaquero: { head: 'cowboy', body: 'pants', color: 'brown' },
+  vaquera: { head: 'cowboy', body: 'dress', color: 'khaki' },
+  observador: { head: 'safari', body: 'pants', color: 'green' },
+  voluntaria: { head: 'long', body: 'pants', color: 'green' },
+  marina: { head: 'longColor', body: 'pants', color: 'blue' },
+  callada: { head: 'hoodLong', body: 'dress', color: 'black' },
+  farero: { head: 'crew', body: 'coat', color: 'blue' },
+  lalo: { head: 'cap', body: 'pants', color: 'brown' },
 };
 
 // ---------- Objects in the world (same 3-color sprite rules) ----------
@@ -813,6 +867,138 @@ export const OBJECTS_ART: Record<string, { pal: Pal; rows: string[] }> = {
       '.....322223.....',
       '......3223......',
       '.......33.......',
+      '................',
+    ],
+  },
+  /** A small wooden fishing boat (panga). */
+  panga: {
+    pal: OBJECT_PALS.panga,
+    rows: [
+      '................',
+      '................',
+      '................',
+      '................',
+      '................',
+      '................',
+      '.....3....3.....',
+      '....313..313....',
+      '.33331333313333.',
+      '3111111111111113',
+      '3222222222222223',
+      '3222222222222223',
+      '.33222222222233.',
+      '..322222222223..',
+      '...3333333333...',
+      '................',
+    ],
+  },
+  /** A bottle in the sand, with a rolled-up paper inside. */
+  botella: {
+    pal: OBJECT_PALS.botella,
+    rows: [
+      '................',
+      '................',
+      '................',
+      '................',
+      '................',
+      '................',
+      '................',
+      '...33333333.....',
+      '..322222222333..',
+      '..3221111222223.',
+      '..3221111222223.',
+      '..322222222333..',
+      '...33333333.....',
+      '................',
+      '................',
+      '................',
+    ],
+  },
+  /** A turtle nest: a little mound of sand with eggs. */
+  nido: {
+    pal: OBJECT_PALS.nido,
+    rows: [
+      '................',
+      '................',
+      '................',
+      '................',
+      '................',
+      '................',
+      '........33......',
+      '.....333113.....',
+      '...3311111133...',
+      '..321111111223..',
+      '.32211111111223.',
+      '3222211221112223',
+      '.32222222212223.',
+      '..322222222223..',
+      '...3322222233...',
+      '.....333333.....',
+    ],
+  },
+  /** A sea turtle hatchling. */
+  tortuguita: {
+    pal: OBJECT_PALS.tortuguita,
+    rows: [
+      '................',
+      '................',
+      '................',
+      '................',
+      '................',
+      '.....33...33....',
+      '....311333113...',
+      '....32222223333.',
+      '...3222222221113',
+      '...3222222221113',
+      '...3222222221113',
+      '...322222222333.',
+      '....32222223....',
+      '....311333113...',
+      '.....33...33....',
+      '................',
+    ],
+  },
+  /** A sparkle on the sand: something is buried here. */
+  brillo: {
+    pal: OBJECT_PALS.brillo,
+    rows: [
+      '................',
+      '................',
+      '................',
+      '.......11.......',
+      '.......11.......',
+      '.......11.......',
+      '.......11.......',
+      '...1111221111...',
+      '...1111221111...',
+      '.......11.......',
+      '.......11.......',
+      '.......11.......',
+      '.......11.......',
+      '................',
+      '................',
+      '................',
+    ],
+  },
+  /** The volunteers’ tent. */
+  tienda: {
+    pal: OBJECT_PALS.tienda,
+    rows: [
+      '................',
+      '................',
+      '.......33.......',
+      '......3113......',
+      '......3113......',
+      '.....311113.....',
+      '....31111113....',
+      '....31111113....',
+      '...3111111113...',
+      '...3111221113...',
+      '..311112211113..',
+      '.31111122111113.',
+      '.31111222211113.',
+      '3111112222111113',
+      '.33333333333333.',
       '................',
     ],
   },

@@ -37,6 +37,12 @@ export const OUTDOOR = {
   sand: ['#f8f0d0', '#f0e0b0', '#d8c088', INK] as Pal,
   /** The fountain's stone (and its water, as extra colors in tiles.ts). */
   stone: ['#f0f0e8', '#c8c8c0', '#909088', INK] as Pal,
+  /** Dry tall grass (zacate) and dune grass. */
+  dryGrass: ['#f0e8a8', '#d8b860', '#9a7830', INK] as Pal,
+  /** Cactus: the lit side, the green, the spines. */
+  cactus: ['#f8f0d0', '#88c858', '#3a7a30', INK] as Pal,
+  /** The lighthouse: white and red stripes. */
+  lighthouse: ['#f8f8f0', '#d05050', '#a8a8b0', INK] as Pal,
   /** Rocky ground in the mountains. */
   dirt: ['#f8f0d0', '#e8d8a8', '#b8a070', INK] as Pal,
 };
@@ -88,6 +94,8 @@ export const ACCENT = {
   railDark: '#686878',
   sleeper: '#986840',
   sleeperDark: '#684020',
+  lamp: '#f8e070',
+  foam: '#f8f8ff',
 };
 
 /** Roof colors: [highlight, light, dark, outline]. Each town picks one (see maps.ts). */
@@ -147,6 +155,12 @@ export const OBJECT_PALS: Record<string, Pal> = {
   nota: ['', '#f8f8f0', '#b8b0a0', SPRITE_INK],
   buey: ['', '#f0e8d8', '#a07858', SPRITE_INK],
   paredRota: ['', '#c8a880', '#987050', SPRITE_INK],
+  panga: ['', '#e8c890', '#a06838', SPRITE_INK],
+  botella: ['', '#f8f0d8', '#58a878', SPRITE_INK],
+  nido: ['', '#f8f8f0', '#e0c898', SPRITE_INK],
+  tortuguita: ['', '#a8d880', '#4a8a48', SPRITE_INK],
+  brillo: ['', '#f8f8f8', '#f8d850', SPRITE_INK],
+  tienda: ['', '#f0c078', '#c06030', SPRITE_INK],
   ecolinSombrero: ['', '#48a040', '#7a6090', SPRITE_INK],
 };
 

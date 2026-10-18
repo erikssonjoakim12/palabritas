@@ -51,7 +51,7 @@ function face(p: Pix) {
 function hairBack(p: Pix, look: Look, hair: string) {
   if (look.head === 'long' || look.head === 'longColor' || look.head === 'helmetLong') p.ellipse(24, 21, 12.5, 14, hair);
   if (look.head === 'short') p.ellipse(24, 16, 11.5, 11, hair);
-  if (look.head === 'hood') p.ellipse(24, 19, 13.5, 15, hair);
+  if (look.head === 'hood' || look.head === 'hoodLong') p.ellipse(24, 19, 13.5, 15, hair);
 }
 
 function hairFront(p: Pix, look: Look, hair: string, color: string) {
@@ -90,8 +90,16 @@ function hairFront(p: Pix, look: Look, hair: string, color: string) {
       p.rect(21, 3, 6, 5, '#f0f0d0').rect(22, 4, 4, 3, '#f8f8a0'); // the headlamp
       break;
     case 'hood':
+    case 'hoodLong':
       p.ellipse(24, 8, 11, 6, hair);
       p.rect(13, 10, 3, 15, hair).rect(32, 10, 3, 15, hair);
+      if (look.head === 'hoodLong') p.rect(16, 11, 2, 14, HAIR).rect(30, 11, 2, 14, HAIR); // long hair under the hood
+      break;
+    case 'cowboy':
+      p.rect(15, 11, 2, 5, hair).rect(31, 11, 2, 5, hair);
+      p.ellipse(24, 11, 18, 3, shade(color)); // the wide brim
+      p.rect(16, 2, 16, 9, color).rect(22, 2, 4, 2, shade(color, 0.6)); // the crown and its dent
+      p.rect(16, 8, 16, 2, shade(color, 0.5)); // the band
       break;
     case 'safari':
       p.rect(15, 11, 2, 5, hair).rect(31, 11, 2, 5, hair);
@@ -107,7 +115,7 @@ function front(look: Look): Img {
   const color = CLOTHES[look.color] ?? CLOTHES.blue;
   // Colored long hair (Paloma, the nurse); the bob is for older women, so it's gray.
   // A hood is the outfit's color, like the colored hair.
-  const hair = look.head === 'longColor' || look.head === 'hood' ? color : look.head === 'short' ? GRAY_HAIR : HAIR;
+  const hair = look.head === 'longColor' || look.head === 'hood' || look.head === 'hoodLong' ? color : look.head === 'short' ? GRAY_HAIR : HAIR;
   const p = new Pix(48, 48);
   hairBack(p, look, hair);
   body(p, look, color);
