@@ -33,6 +33,15 @@ export const TRAINERS: Record<string, TrainerDef> = {
   federico: { id: 'federico', name: 'Arqueólogo Federico', defenseMode: 'listen', team: [['cuernito', 13], ['ochopatas', 14]] },
   javier: { id: 'javier', name: 'Espeleólogo Javier', defenseMode: 'listen', team: [['ecolin', 14], ['ecolin', 14], ['ochopatas', 15]] },
   rocio: { id: 'rocio', name: 'Exploradora Rocío', defenseMode: 'listen', team: [['ochopatas', 14], ['cuernito', 15]] },
+  // Region 2: the mine (Equipo Silencio) and Petra's gym. You defend by listening in the mine, by typing in the gym.
+  silencioso1: { id: 'silencioso1', name: 'Silencioso', defenseMode: 'listen', team: [['ollita', 13], ['piedrita', 13]] },
+  silencioso2: { id: 'silencioso2', name: 'Silenciosa', defenseMode: 'listen', team: [['ecolin', 13], ['ochopatas', 14]] },
+  silencioso3: { id: 'silencioso3', name: 'Silencioso', defenseMode: 'listen', team: [['piedrita', 14], ['ecolin', 14]] },
+  silencioso4: { id: 'silencioso4', name: 'Silenciosa', defenseMode: 'listen', team: [['ollita', 14], ['ochopatas', 15]] },
+  capataz: { id: 'capataz', name: 'Capataz Silencioso', defenseMode: 'listen', team: [['piedrita', 15], ['ollita', 15], ['piedrita', 16]] },
+  tito: { id: 'tito', name: 'Alfarero Tito', defenseMode: 'type', team: [['ollita', 15], ['piedrita', 15]] },
+  rosario: { id: 'rosario', name: 'Minera Rosario', defenseMode: 'type', team: [['piedrita', 16]] },
+  petra: { id: 'petra', name: 'Líder Petra', defenseMode: 'type', team: [['piedrita', 16], ['ollita', 17], ['petroglifon', 19]] },
   // Ruta 5
   lucia: { id: 'lucia', name: 'Pintora Lucía', defenseMode: 'listen', team: [['hojadillo', 13], ['mariposita', 13]] },
 };

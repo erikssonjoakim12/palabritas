@@ -22,6 +22,6 @@ await guard('Beto', { map: 'limon', x: 11, y: 3, dir: 'up' }, 'up', ['limon', 11
 await passes('Beto, once you have Palabolas,', { map: 'limon', x: 11, y: 3, dir: 'up', flags: { palabolas: true } }, 'up', 'ruta2');
 await guard('The officer', { map: 'brisa', x: 3, y: 8, dir: 'left', flags: { palabolas: true } }, 'left', ['brisa', 2, 8]);
 await passes('The officer, once you have the medal,', { map: 'brisa', x: 3, y: 8, dir: 'left', flags: { palabolas: true, medalBrisa: true } }, 'left', 'ruta3');
-await guard('The road worker', { map: 'ruta5', x: 3, y: 12, dir: 'left' }, 'left', ['ruta5', 2, 12]);
+await passes('Ruta 5 (the road worker went home: Villa Ocote is built)', { map: 'ruta5', x: 3, y: 12, dir: 'left' }, 'left', 'ocote');
 await guard('The hiker at the landslide', { map: 'ruta5', x: 19, y: 3, dir: 'up' }, 'up', ['ruta5', 19, 2]);
 await t.end();

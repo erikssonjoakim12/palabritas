@@ -346,6 +346,11 @@ function render(ch: string, env: TileEnv): Img {
     case 'e':
       return stack(paintArt(caveArt(env, 'floor', ART.caveFloor)), paintArt(caveArt(env, 'floor', ART.caveExitOverlay)));
     case 'D':
+      // Outdoors a tunnel in the mountain; in caves a shaft in the cave rock.
+      if (!env.outdoor) {
+        const floor = paintArt(caveArt(env, 'floor', ART.caveFloor));
+        return stack(rockImage(caveArt(env, 'wall', ART.caveWall), env, CAVE_WALL_CHARS + 'D', floor), paintArt(caveArt(env, 'wall', TUNNEL_MOUTH)));
+      }
       return stack(rockImage(rockArt(env), env, MOUNTAIN_CHARS, underImage(env, 'ground')), paintArt(rockArt(env, TUNNEL_MOUTH)));
     case 'H':
       return bridgeImage(env);
@@ -356,8 +361,14 @@ function render(ch: string, env: TileEnv): Img {
       const rows = ART.fountain.rows.slice(qy, qy + 16).map((r) => r.slice(qx, qx + 16));
       return stack(underImage(env, 'ground'), paintArt({ ...ART.fountain, rows }));
     }
-    case 'U':
-      return stack(underImage(env, env.outdoor ? 'ground' : 'floor'), paintArt(ART.stall));
+    case 'U': {
+      // Outdoors a market stall; indoors a pottery shelf (a wooden top instead of the striped awning).
+      if (env.outdoor) return stack(underImage(env, 'ground'), paintArt(ART.stall));
+      const g = grid(ART.stall.rows);
+      (setRow(g, 0, '3'), setRow(g, 1, '0'), setRow(g, 2, '1'), setRow(g, 3, '3'));
+      g[4] = [...'.3............3.'];
+      return stack(underImage(env, 'floor'), paintArt(ART.stall, g));
+    }
     case 'K':
       return stack(paintArt(caveArt(env, 'floor', ART.caveFloor)), paintArt(ART.rails));
     case 'W':

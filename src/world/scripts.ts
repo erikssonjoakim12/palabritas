@@ -18,22 +18,26 @@ import { spriteCanvas, pickFrom } from '../ui/party';
 import { startMenu } from '../ui/startmenu';
 import { wildBattle, trainerBattle } from '../battle/battle';
 import { speak, canListen } from '../lang/speech';
-import { SCRIPTS, scriptedStep, warp, currentMap, refreshNpcs, npcById, pickEncounter, facingTile, type ScriptCtx } from './world';
-import { gateOf, FRESHWATER, type Line } from './maps';
+import { SCRIPTS, scriptedStep, warp, currentMap, refreshNpcs, npcById, pickEncounter, facingTile, MUTED_MIME, type ScriptCtx } from './world';
+import { gateOf, closedLines, FRESHWATER, type Line } from './maps';
+import { REGION2 } from './region2';
 import { TILES } from '../art/tiles';
 import { notNow } from '../ui/bag';
 import { MINI_BALL, BALL_COLORS, drawPattern } from '../art/balls';
 
 
-async function lines(...ls: Line[]) {
+export async function lines(...ls: Line[]) {
   for (const [es, en] of ls) await say(es, { en });
 }
 
 const talkMode = (): Mode => (canListen() ? 'speak' : 'type');
 
+/** The nurse and the cashier in a muted town (they talk; they're too busy to have noticed). */
+const LUCKY_YOU: Line = ['¿Tú puedes hablar? ¡Qué suerte! Aquí todos perdieron la voz.', 'You can talk? Lucky you! Everyone here lost their voice.'];
+
 // ---------- Shared flows ----------
 
-async function blackout() {
+export async function blackout() {
   // Like Gold/Silver: losing costs half your money.
   const lost = Math.floor(G.save.money / 2);
   G.save.money -= lost;
@@ -87,7 +91,7 @@ interface TrainerLines {
   after: Line;
 }
 
-async function trainerFight(id: string, l: TrainerLines) {
+export async function trainerFight(id: string, l: TrainerLines) {
   if (flag(`beat:${id}`)) return lines(l.after);
   await lines(l.intro);
   if (!flag('defenseTip')) {
@@ -359,7 +363,7 @@ const S: Record<string, (c: ScriptCtx) => Promise<void>> = {
   /** A gate guard (maps.ts): why the road is closed, or that you may pass now. */
   async gate(c) {
     const g = gateOf(currentMap(), c.npc!.def.id)!;
-    await lines(...(g.opens() ? g.open : g.closed));
+    await lines(...(g.opens() ? g.open : closedLines(g)));
   },
 
   /** Stepping onto the road beside a guard: stopped and sent back. */
@@ -368,7 +372,8 @@ const S: Record<string, (c: ScriptCtx) => Promise<void>> = {
     if (!g || g.opens()) return;
     sfx('alert');
     setSpeaker(g.look);
-    await lines(...g.closed);
+    if (currentMap().muted?.()) await say('…', { en: g.mime ?? MUTED_MIME });
+    else await lines(...closedLines(g));
     await scriptedStep(g.back);
   },
 
@@ -470,6 +475,7 @@ const S: Record<string, (c: ScriptCtx) => Promise<void>> = {
 
   /** The shop: pick something, then ask for it in Spanish (written or spoken). */
   async cajera() {
+    if (currentMap().muted?.()) await lines(LUCKY_YOU);
     await say('¡Bienvenid{o/a} a la tienda! ¿Qué deseas comprar?', { en: 'Welcome to the shop! What would you like to buy?', noWait: true });
     const shop = SHOPS[currentMap().id] ?? SHOPS.tienda_brisa;
     while (true) {
@@ -551,6 +557,7 @@ const S: Record<string, (c: ScriptCtx) => Promise<void>> = {
   },
 
   async enfermera() {
+    if (currentMap().muted?.()) await lines(LUCKY_YOU);
     await lines(['¡Hola! Bienvenidos al Palacentro.', 'Hi! Welcome to the Palacentro.']);
     if (await ask('¿Quieres que cure a tus Palabritas?', { en: 'Would you like me to heal your Palabritas?' })) {
       await lines(['Un momento, por favor...', 'One moment, please...']);
@@ -789,11 +796,9 @@ const S: Record<string, (c: ScriptCtx) => Promise<void>> = {
       ['Con esta medalla, todos sabrán que hablas el idioma del viento.', 'With this medal, everyone will know you speak the language of the wind.'],
       ['La próxima vez, mi Palomón y yo volaremos más alto. ¡Ya verás!', 'Next time, my Palomón and I will fly higher. You’ll see!'],
     );
-    await info('¡Felicidades! Terminaste la primera parte de Palabritas.', { en: 'Congratulations! You finished the first part of Palabritas.' });
-    await info('Sigue entrenando a tus Palabritas y atrapando nuevas. ¡Pronto habrá más aventuras!', {
-      en: 'Keep training your Palabritas and catching new ones. More adventures are coming soon!',
-    });
   },
+
+  silenciadorObj: () => lines(['Una máquina gris con un embudo. Tiene un letrero: «SHHH».', 'A gray machine with a funnel. It has a sign: "SHHH".']),
 };
 
 async function pickStarter(sp: string) {
@@ -873,5 +878,5 @@ async function starterTraining(sp: string) {
 }
 
 export function registerScripts() {
-  Object.assign(SCRIPTS, S);
+  Object.assign(SCRIPTS, S, REGION2);
 }

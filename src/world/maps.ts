@@ -38,6 +38,10 @@ export interface NpcDef {
   turns?: boolean;
   /** Item balls: what's inside (key in ITEM_DEFS). */
   item?: string;
+  /** On a muted map: what they act out (the EN line; the Spanish is «…»). */
+  mime?: string;
+  /** Talks even on a muted map (Equipo Silencio, the nurse, the cashier...). */
+  speaksWhenMuted?: boolean;
 }
 
 export interface Conn {
@@ -63,11 +67,13 @@ export interface GateDef {
   at: [x: number, y: number, dir: Dir];
   /** Where the guard waits once the road is open. */
   aside: [x: number, y: number];
+  /** What the guard acts out on a muted map (see MapDef.muted). */
+  mime?: string;
   /** The rest of the road beside the guard. */
   road: [x: number, y: number][];
   /** The way you're sent back when stopped. */
   back: Dir;
-  closed: Line[];
+  closed: Line[] | (() => Line[]);
   open: Line[];
 }
 
@@ -83,6 +89,11 @@ export interface MapDef {
   floor: string;
   /** Outdoors: pale dotted town ground, green route grass or beach sand for '.'. */
   ground?: 'town' | 'grass' | 'sand';
+  /**
+   * While true, nobody here can speak: talking to a person shows «…» (with their mime in English), and signs
+   * are faded. Villa Ocote until the Silenciador breaks.
+   */
+  muted?: () => boolean;
   /** Tree, wall, rock and cave looks (art/tiles.ts MapStyle). */
   style?: MapStyle;
   /** Drawn dark, with light around you (night scenes). */
@@ -122,15 +133,31 @@ const CENTRO = ['##u####u##', 'PxxxxxxxxP', 'xxxCCCCxxx', 'xxxxxxxxQx', 'xxxxxxx
 /** An item ball on the ground, like Gold/Silver's: picked up once (scripts.ts, itemBall). */
 const itemBall = (id: string, x: number, y: number, item: string): NpcDef => ({ id, x, y, object: 'palabola', item, script: 'itemBall', show: () => !flag(`item:${id}`) });
 const MAQUINA: NpcDef = { id: 'maquina', x: 5, y: 1, object: 'maquina', script: 'maquina' };
+const TIENDA = ['P########P', '++++++++++', '+C++++kk++', '+C++++kk++', '++++++++++', '++++kk++++', '++++++++++', '++++m+++++'];
+const CAJERA: NpcDef = { id: 'cajera', x: 0, y: 2, look: 'cashier', dir: 'right', script: 'cajera', speaksWhenMuted: true };
+/** A shop inside: the cashier behind the counter. What it sells is in SHOPS (data/items.ts), by map id. */
+const tienda = (id: string, exit: MapDef['exit'], extra: Partial<MapDef> = {}): MapDef => ({
+  id, name: 'Tienda', outdoor: false, floor: '+', rows: TIENDA, exit, npcs: [CAJERA], ...extra,
+});
+/** A home: the HOUSE rows (or others) and whoever lives there. */
+const casa = (id: string, name: string, exit: MapDef['exit'], npcs: NpcDef[], extra: Partial<MapDef> = {}): MapDef => ({
+  id, name, outdoor: false, floor: '_', rows: HOUSE, exit, npcs, ...extra,
+});
+/** A museum exhibit on a two-tile table: the same text from both tiles. */
+const exhibit = (x: number, y: number, es: string, en: string) => [{ x, y, es, en }, { x: x + 1, y, es, en }];
+/** Villa Ocote can't speak until the Silenciador in the mine breaks. */
+const ocoteMuted = () => !flag('silenciadorRoto');
+
 /** A Palacentro inside: the nurse, the healing machine, and whoever else is there. */
-const centro = (id: string, exit: MapDef['exit'], more: NpcDef[] = []): MapDef => ({
+const centro = (id: string, exit: MapDef['exit'], more: NpcDef[] = [], extra: Partial<MapDef> = {}): MapDef => ({
   id,
   name: 'Palacentro',
   outdoor: false,
   floor: 'x',
   rows: CENTRO,
   exit,
-  npcs: [{ id: 'enfermera', x: 4, y: 1, look: 'nurse', dir: 'down', script: 'enfermera' }, MAQUINA, ...more],
+  npcs: [{ id: 'enfermera', x: 4, y: 1, look: 'nurse', dir: 'down', script: 'enfermera', speaksWhenMuted: true }, MAQUINA, ...more],
+  ...extra,
 });
 
 export const MAPS: Record<string, MapDef> = {
@@ -499,15 +526,7 @@ export const MAPS: Record<string, MapDef> = {
     npcs: [{ id: 'marta', x: 17, y: 4, look: 'lady', dir: 'down', script: 'marta', turns: true }],
   },
 
-  tienda_brisa: {
-    id: 'tienda_brisa',
-    name: 'Tienda',
-    outdoor: false,
-    floor: '+',
-    rows: ['P########P', '++++++++++', '+C++++kk++', '+C++++kk++', '++++++++++', '++++kk++++', '++++++++++', '++++m+++++'],
-    exit: { to: 'brisa', x: 5, y: 7 },
-    npcs: [{ id: 'cajera', x: 0, y: 2, look: 'cashier', dir: 'right', script: 'cajera' }],
-  },
+  tienda_brisa: tienda('tienda_brisa', { to: 'brisa', x: 5, y: 7 }),
 
   centro_brisa: centro('centro_brisa', { to: 'brisa', x: 5, y: 13 }),
 
@@ -771,8 +790,8 @@ export const MAPS: Record<string, MapDef> = {
   // Out of the cave, west to the next town (with the second gym). The cave climbs up and to the right inside,
   // so you come out high on the mountain, up and to the right of the way in (Ruta 3): a tunnel in the cliff, then
   // a trail along the clifftop, down past a clearing to the road, and west over the ravine bridge. The mountain
-  // below the trail is the same rock as Ruta 3's. Villa Ocote (west) and the canyon (north) come in phase 2: until
-  // then the road worker and a hiker keep those roads closed. Rows from plans/phase2-region2.md §3.
+  // below the trail is the same rock as Ruta 3's. The canyon (north) comes later in phase 2: until
+  // then a hiker keeps that path closed. Rows from plans/phase2-region2.md §3.
   ruta5: {
     id: 'ruta5',
     name: 'Ruta 5',
@@ -813,26 +832,12 @@ export const MAPS: Record<string, MapDef> = {
       'TTTTTT^~~^TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^',
       'TTTTTT^~~^TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^',
     ],
-    connections: { down: { to: 'cerro_eco', offset: -2, scenery: true } },
+    connections: { down: { to: 'cerro_eco', offset: -2, scenery: true }, left: { to: 'ocote', offset: 2 } },
     doors: [{ x: 90, y: 5, to: 'ruta4', tx: 52, ty: 1, dir: 'down' }],
     // Halfway along the road, in a gap in the pines: she sees both lanes.
     npcs: [{ id: 'lucia', x: 34, y: 10, look: 'painter', dir: 'down', script: 'lucia', sight: 2 }],
     signs: [{ x: 16, y: 13, es: 'RUTA 5. Al oeste: Villa Ocote. Al norte: el Cañón del Guardabarranco.', en: 'ROUTE 5. West: Villa Ocote. North: Guardabarranco Canyon.' }],
     gates: [
-      {
-        id: 'obrero',
-        look: 'worker',
-        opens: () => false,
-        at: [1, 11, 'right'],
-        aside: [2, 10],
-        road: [[1, 12]],
-        back: 'right',
-        closed: [
-          ['¡Hola! Lo siento, el camino a Villa Ocote está cerrado.', 'Hi! Sorry, the road to Villa Ocote is closed.'],
-          ['Estamos arreglando el camino. ¡Vuelve pronto!', 'We’re fixing the road. Come back soon!'],
-        ],
-        open: [['¡Ya terminamos! Puedes pasar.', 'We’re done! You can go through.']],
-      },
       {
         id: 'derrumbe',
         look: 'hiker',
@@ -846,6 +851,383 @@ export const MAPS: Record<string, MapDef> = {
       },
     ],
   },
+
+  // ---------- Region 2: Villa Ocote, the clay mine and Petra's gym ----------
+
+  // A potters' town in the pines, under the mountain with the clay mine. Bigger than the towns before: a plaza
+  // with a fountain and pottery stalls, a museum, a school, a workshop and plenty of homes. Nobody can speak
+  // until the Silenciador in the mine breaks (muted). The east road comes from Ruta 5; the south road goes down
+  // to the sea (Ruta 6, phase 3: add `down: { to: 'ruta6', offset: -6 }` then).
+  ocote: {
+    id: 'ocote',
+    name: 'Villa Ocote',
+    outdoor: true,
+    floor: '.',
+    ground: 'town',
+    roof: 'clay',
+    style: { trees: 'pine', walls: 'adobe' },
+    muted: ocoteMuted,
+    rows: [
+      '^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^',
+      '^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^',
+      'TT^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^TT',
+      'TTT^^^^^^^^^^^^^^^^O^^^^^^^^^^^^^^^^^TTT',
+      'TT.................==.................TT',
+      'TT.ooooo.rrrr.rrrr.==..pppppp..rrrrr..TT',
+      'TT.ooooo.rrrr.rrrr.==..pppppp..rrrrr..TT',
+      'TT.hwcwh.hwMh.hwwh.==..hwGwwh..hwwwh..TT',
+      'TT.hwdwh.hwdh.hwdh.==..hhdhhh..hwdwh..TT',
+      'TT....*............==......*..........TT',
+      'TT..T..............==..............T..TT',
+      'TT..........==========UU=UU===........TT',
+      'TT..........==================......S.TT',
+      'TT..........============================',
+      'TT..........=======FF===================',
+      'TT..........=======FF=========........TT',
+      'TT..........==================........TT',
+      'TT..........==================........TT',
+      'TT..*......g..........==....g........*TT',
+      'TT.bbbbbbb..rrrr.rrrr.==..rrrrrr.rrrrrTT',
+      'TT.bbbbbbb..rrrr.rrrr.==..rrrrrr.rrrrrTT',
+      'TT.hwwwwwh..hwwh.hwwh.==..hwwwwh.hwwwhTT',
+      'TT.hwwdwwh..hwdh.hwdh.==..hwdwwh.hwdwhTT',
+      'TT......S.............==.......S......TT',
+      'TT....................==..............TT',
+      'TT.rrrrrr..rrrr.......==..rrrr...T....TT',
+      'TT.rrrrrr..rrrr.......==..rrrr........TT',
+      'TT.hwwwwh..hwwh.......==..hwwh...*....TT',
+      'TT.hwwdwh..hwdh.......==..hwdh........TT',
+      'TT.*..............T...==....*......T..TT',
+      'TTTTTTTTTTTTTTTTTTTTTT==TTTTTTTTTTTTTTTT',
+      'TTTTTTTTTTTTTTTTTTTTTT==TTTTTTTTTTTTTTTT',
+    ],
+    connections: { right: { to: 'ruta5', offset: -2 } },
+    doors: [
+      { x: 19, y: 3, to: 'mina1', tx: 5, ty: 24 },
+      { x: 5, y: 8, to: 'centro_ocote', tx: 4, ty: 7 },
+      { x: 11, y: 8, to: 'tienda_ocote', tx: 4, ty: 6 },
+      { x: 16, y: 8, to: 'casa_lucha', tx: 4, ty: 6 },
+      { x: 25, y: 8, to: 'gym_ocote', tx: 4, ty: 14 },
+      { x: 33, y: 8, to: 'casa_ocote2', tx: 4, ty: 6 },
+      { x: 6, y: 22, to: 'museo_ocote', tx: 5, ty: 6 },
+      { x: 14, y: 22, to: 'casa_mia', tx: 4, ty: 6 },
+      { x: 19, y: 22, to: 'casa_nando', tx: 4, ty: 6 },
+      { x: 28, y: 22, to: 'escuela_ocote', tx: 4, ty: 6 },
+      { x: 35, y: 22, to: 'casa_chepe', tx: 4, ty: 6 },
+      { x: 6, y: 28, to: 'taller_ocote', tx: 4, ty: 5 },
+      { x: 13, y: 28, to: 'casa_tona', tx: 4, ty: 6 },
+      { x: 28, y: 28, to: 'casa_abuelos', tx: 4, ty: 6 },
+    ],
+    signs: [
+      { x: 36, y: 12, es: 'VILLA OCOTE. El pueblo del barro.', en: 'VILLA OCOTE. The town of clay.' },
+      { x: 8, y: 23, es: 'MUSEO DE VILLA OCOTE. Fósiles y piedras pintadas.', en: 'VILLA OCOTE MUSEUM. Fossils and painted stones.' },
+      { x: 31, y: 23, es: 'ESCUELA. ¡Clases para entrenadores!', en: 'SCHOOL. Lessons for trainers!' },
+    ],
+    triggers: [
+      { x: 37, y: 13, script: 'mensajeOcote' },
+      { x: 37, y: 14, script: 'mensajeOcote' },
+    ],
+    gates: [
+      {
+        id: 'aprendiz',
+        look: 'alfarero',
+        opens: () => flag('silenciadorRoto'),
+        at: [25, 9, 'down'],
+        aside: [24, 9],
+        road: [],
+        back: 'down',
+        mime: '(He can’t speak. He points north, toward the mine.)',
+        closed: [['La líder no está. ¡Fue a la mina!', 'The leader isn’t here. She went to the mine!']],
+        open: [['¡Petra te espera adentro!', 'Petra is waiting for you inside!']],
+      },
+      {
+        id: 'guarda_sur',
+        look: 'officer',
+        // Ruta 6 comes in phase 3: until it's there, the road south stays closed even with the medal.
+        opens: () => flag('medalBarro') && !!MAPS.ruta6,
+        at: [22, 30, 'up'],
+        aside: [21, 29],
+        road: [[23, 30]],
+        back: 'up',
+        mime: '(He shakes his head and points back toward town.)',
+        closed: () =>
+          flag('medalBarro')
+            ? [
+                ['¡Tienes la Medalla Barro! Pero el puente del río se cayó.', 'You have the Clay Medal! But the river bridge fell down.'],
+                ['Lo están arreglando. ¡Vuelve pronto!', 'They’re fixing it. Come back soon!'],
+              ]
+            : [
+                ['El camino al sur baja hasta el mar. Es largo y peligroso.', 'The road south goes down to the sea. It’s long and dangerous.'],
+                ['Solo pueden pasar los entrenadores con la Medalla Barro.', 'Only trainers with the Clay Medal may pass.'],
+              ],
+        open: [['¡Tienes la Medalla Barro! Buen viaje.', 'You have the Clay Medal! Have a good trip.']],
+      },
+    ],
+    npcs: [
+      { id: 'mia', x: 15, y: 23, look: 'girl', dir: 'down', script: 'mia', mime: '(She points at the ground by the east road, where she wrote a message.)' },
+      { id: 'abuelo_ocote', x: 21, y: 16, look: 'abuelo', dir: 'left', script: 'abuelo_ocote', turns: true, mime: '(He points at the mine, then at his mouth, and shakes his head sadly.)' },
+      { id: 'vendedora', x: 24, y: 11, look: 'lady', dir: 'down', script: 'vendedora', mime: '(She holds up a clay pot and opens her mouth, but nothing comes out.)' },
+      { id: 'chepe', x: 35, y: 17, look: 'man', dir: 'left', script: 'chepe', mime: '(He counts on his fingers: one, two... and looks around for something.)' },
+      { id: 'carreta', x: 36, y: 17, object: 'carreta', script: 'carreta' },
+      { id: 'lucas_ocote', x: 17, y: 14, look: 'lucas', dir: 'right', script: 'lucas_ocote', show: () => !flag('silenciadorRoto'), mime: '(It’s Lucas! He stamps his foot. He looks furious that he can’t talk.)' },
+      { id: 'musico', x: 13, y: 16, look: 'musico', dir: 'right', script: 'musico', mime: '(He lifts his mallets over an invisible marimba... and puts them down again.)' },
+      { id: 'futbolista', x: 17, y: 24, look: 'boy', dir: 'right', script: 'futbolista', turns: true, mime: '(He bounces on his toes and mimes kicking a ball.)' },
+    ],
+  },
+
+  centro_ocote: centro('centro_ocote', { to: 'ocote', x: 5, y: 9 }, [], { muted: ocoteMuted }),
+  tienda_ocote: tienda('tienda_ocote', { to: 'ocote', x: 11, y: 9 }, { muted: ocoteMuted }),
+  casa_lucha: casa('casa_lucha', 'Casa de Doña Lucha', { to: 'ocote', x: 16, y: 9 }, [
+    { id: 'curandera', x: 5, y: 3, look: 'granny', dir: 'down', script: 'curandera', mime: '(She holds her head as if it hurts, then points at a little bottle.)' },
+  ], { rows: [
+      '##P##L##',
+      '________',
+      '_kk__PP_',
+      '_kk_____',
+      '________',
+      'P_____B_',
+      '____m___',
+  ], muted: ocoteMuted }),
+  casa_ocote2: casa('casa_ocote2', 'Casa de los Alfareros', { to: 'ocote', x: 33, y: 9 }, [
+    { id: 'alfarera_mama', x: 5, y: 2, look: 'lady', dir: 'down', script: 'alfarera_mama' },
+    { id: 'alfarero_nino', x: 3, y: 4, look: 'boy', dir: 'up', script: 'alfarero_nino' },
+  ], { muted: ocoteMuted }),
+  casa_mia: casa('casa_mia', 'Casa de Mía', { to: 'ocote', x: 14, y: 23 }, [
+    { id: 'mia_mama', x: 5, y: 2, look: 'lady', dir: 'down', script: 'mia_mama' },
+  ], { muted: ocoteMuted }),
+  casa_nando: casa('casa_nando', 'Casa de Nando', { to: 'ocote', x: 19, y: 23 }, [
+    { id: 'nando_papa', x: 5, y: 3, look: 'man', dir: 'left', script: 'nando_papa' },
+  ], { muted: ocoteMuted }),
+  casa_chepe: casa('casa_chepe', 'Casa de Don Chepe', { to: 'ocote', x: 35, y: 23 }, [
+    { id: 'chepe_esposa', x: 5, y: 2, look: 'lady', dir: 'down', script: 'chepe_esposa' },
+  ], { muted: ocoteMuted }),
+  casa_tona: casa('casa_tona', 'Casa de Doña Toña', { to: 'ocote', x: 13, y: 29 }, [
+    { id: 'cocinera', x: 2, y: 2, look: 'lady', dir: 'down', script: 'cocinera', mime: '(She pats some dough between her hands and sighs.)' },
+  ], { rows: [
+      '##L##V##',
+      '_CCC____',
+      '________',
+      '_kk_____',
+      '_kk_____',
+      '______B_',
+      '____m___',
+  ], muted: ocoteMuted }),
+  casa_abuelos: casa('casa_abuelos', 'Casa de los Abuelos', { to: 'ocote', x: 28, y: 29 }, [
+    { id: 'abuela_ocote', x: 5, y: 2, look: 'granny', dir: 'down', script: 'abuela_ocote' },
+    { id: 'abuelo_dormido', x: 6, y: 4, look: 'abuelo', dir: 'down', script: 'abuelo_dormido' },
+  ], { muted: ocoteMuted }),
+  taller_ocote: casa('taller_ocote', 'Taller de Alfarería', { to: 'ocote', x: 6, y: 29 }, [
+    { id: 'ramiro', x: 5, y: 2, look: 'alfarero', dir: 'down', script: 'ramiro' },
+  ], { rows: [
+      '##########',
+      '_UUU__UUU_',
+      '__________',
+      '_kk____kk_',
+      '__________',
+      'P________P',
+      '____m_____',
+  ], muted: ocoteMuted }),
+
+  museo_ocote: {
+    id: 'museo_ocote',
+    name: 'Museo de Villa Ocote',
+    outdoor: false,
+    floor: '+',
+    rows: [
+      '############',
+      '+kk+kk++kk++',
+      '++++++++++++',
+      '+kk++++++kk+',
+      '++++++++++++',
+      'P++++++++++P',
+      '++++++++++++',
+      '+++++mm+++++',
+    ],
+    exit: { to: 'ocote', x: 6, y: 23 },
+    muted: ocoteMuted,
+    signs: [
+      ...exhibit(1, 1, 'Un fósil de gliptodonte: un armadillo gigante de hace diez mil años.', 'A glyptodon fossil: a giant armadillo from ten thousand years ago.'),
+      ...exhibit(4, 1, 'Una piedra con petroglifos: personas, soles y espirales.', 'A stone with petroglyphs: people, suns and spirals.'),
+      ...exhibit(8, 1, 'Cerámica antigua de la región. ¡Los alfareros de hoy usan el mismo barro!', 'Ancient pottery from this region. Today’s potters use the same clay!'),
+      ...exhibit(1, 3, 'Huellas muy antiguas, encontradas cerca de un lago.', 'Very old footprints, found near a lake.'),
+      ...exhibit(9, 3, 'Un mapa de toda América, con un guardabarranco pintado.', 'A map of all the Americas, with a guardabarranco painted on it.'),
+    ],
+    npcs: [{ id: 'curadora', x: 6, y: 2, look: 'prof', dir: 'down', script: 'curadora' }],
+  },
+
+  escuela_ocote: {
+    id: 'escuela_ocote',
+    name: 'Escuela',
+    outdoor: false,
+    floor: '_',
+    rows: [
+      '##L##L##L#',
+      '__________',
+      '__________',
+      '_kk_kk_kk_',
+      '__________',
+      '_kk_kk_kk_',
+      '__________',
+      '____m_____',
+    ],
+    exit: { to: 'ocote', x: 28, y: 23 },
+    muted: ocoteMuted,
+    npcs: [
+      { id: 'maestro_ocote', x: 4, y: 1, look: 'man', dir: 'down', script: 'maestro_ocote' },
+      { id: 'alumno1', x: 2, y: 4, look: 'boy', dir: 'up', script: 'alumno1' },
+      { id: 'alumna1', x: 6, y: 6, look: 'girl', dir: 'up', script: 'alumna1' },
+    ],
+  },
+
+  // Petra's gym: pottery shelves with a stone door in each row; a riddle opens each door. Both trainers are in
+  // the way (the shelf rows leave no way around their lines of sight).
+  gym_ocote: {
+    id: 'gym_ocote',
+    name: 'Gimnasio de Villa Ocote',
+    outdoor: false,
+    floor: '_',
+    rows: [
+      '##L####L##',
+      '__________',
+      '__________',
+      'UUUU_UUUUU',
+      '__________',
+      '__________',
+      '__________',
+      'UUUUUU_UUU',
+      '__________',
+      '__________',
+      '__________',
+      'UU_UUUUUUU',
+      '__________',
+      '__________',
+      '__________',
+      '____mm____',
+    ],
+    exit: { to: 'ocote', x: 25, y: 9 },
+    npcs: [
+      { id: 'petra', x: 5, y: 1, look: 'petra', dir: 'down', script: 'petra' },
+      { id: 'tito', x: 1, y: 9, look: 'alfarero', dir: 'right', script: 'tito', sight: 8 },
+      { id: 'rosario', x: 8, y: 5, look: 'minera', dir: 'left', script: 'rosario', sight: 8 },
+      { id: 'guia_ocote', x: 7, y: 13, look: 'man', dir: 'left', script: 'guia_ocote' },
+      { id: 'piedra1', x: 2, y: 11, object: 'puertaPiedra', script: 'adivinanza', show: () => !flag('adivinanza:piedra1') },
+      { id: 'piedra2', x: 6, y: 7, object: 'puertaPiedra', script: 'adivinanza', show: () => !flag('adivinanza:piedra2') },
+      { id: 'piedra3', x: 4, y: 3, object: 'puertaPiedra', script: 'adivinanza', show: () => !flag('adivinanza:piedra3') },
+    ],
+  },
+
+  // The clay mine, under the mountain north of town: Equipo Silencio's hideout. Floor 1 has the lever that opens
+  // the gate to the shaft down; floor 2 has the Silenciador and the Capataz.
+  mina1: {
+    id: 'mina1',
+    name: 'Mina de Barro',
+    outdoor: false,
+    banner: true,
+    floor: ';',
+    border: '%',
+    style: { cave: 'clay' },
+    rows: [
+      '%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%',
+      '%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%',
+      '%%%%;;;;;;;;;;%%%%%%%%%%%%%%%%%%%%%%',
+      '%%%%;;;;;;;;;;%%%%%%%%%%%%%%%%%%%%%%',
+      '%%%%;;;;;;;;;;%%%%%%%%%%%%%%%%%%%%%%',
+      '%%%%%%%%;%%%%%%%%%%%%%%%%%%%%%%%%%%%',
+      '%%%%%%%%;%%%%%%%%%%%%%%%%%%%%%%%%%%%',
+      '%%%%%%%%;%%%%%%%%%%%%;;;;;;;;;;;;;%%',
+      '%%;;;;;;;;;;;;;%%%%%%;;;;;;;;;;;;;%%',
+      '%%;;;;;;;;;;;;;;;;;;;;;;;;;;;W;;;;%%',
+      '%%;;;;;;;;;;;;;;;;;;%;;;W;;;;W;;;;%%',
+      '%%;;;;;;;;;;;;;%%%%%%;;;W;;;;W;;;;%%',
+      '%%;KKKKKKKKKKK;%%%%%%;;;W;;;;W;;;;%%',
+      '%%;;;;;;;;;;;;;%%%%%%;;;W;;;;W;;;;%%',
+      '%%;;;;;;;;;;;;;%%%%%%;;;W;;;;W;;;;%%',
+      '%%;;;;;;;;;;;;;%%%%%%;;;W;;;;W;;;;%%',
+      '%%%%;;;%%%%%%%%%%%%%%;;;W;;;;W;;;;%%',
+      '%%%%;;;%%%%%%%%%%%%%%;;;W;;;;;;;;;%%',
+      '%%%%;;;%%%%%%%%%%%%%%;;;W;;;;;;D;;%%',
+      '%%%%;;;%%%%%%%%%%%%%%;;;;;;;;;;;;;%%',
+      '%%%%;;;%%%%%%%%%%%%%%;KKKKKKKKKKK;%%',
+      '%%%%;;;%%%%%%%%%%%%%%;;;;;;;;;;;;;%%',
+      '%%%%;;;%%%%%%%%%%%%%%%%%%%%%%%%%%%%%',
+      '%%%%;;;%%%%%%%%%%%%%%%%%%%%%%%%%%%%%',
+      '%%%%;;;%%%%%%%%%%%%%%%%%%%%%%%%%%%%%',
+      '%%%%%e%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%',
+    ],
+    exit: { to: 'ocote', x: 19, y: 4 },
+    doors: [{ x: 31, y: 18, to: 'mina2', tx: 3, ty: 2, dir: 'down' }],
+    encounters: {
+      rate: 0.08,
+      everywhere: true,
+      table: [
+        { sp: 'piedrita', min: 11, max: 14, w: 40 },
+        { sp: 'ollita', min: 11, max: 14, w: 35 },
+        { sp: 'ochopatas', min: 11, max: 13, w: 15 },
+        { sp: 'ecolin', min: 11, max: 13, w: 10 },
+      ],
+    },
+    npcs: [
+      { id: 'silencioso1', x: 4, y: 18, look: 'silencioso', dir: 'right', script: 'silencioso1', sight: 2 },
+      { id: 'silencioso2', x: 10, y: 4, look: 'silenciosa', dir: 'left', script: 'silencioso2', sight: 2 },
+      { id: 'palanca', x: 12, y: 2, object: 'palanca', script: 'palanca' },
+      { id: 'compuerta', x: 20, y: 9, object: 'compuerta', script: 'compuerta', show: () => !flag('compuertaAbierta') },
+      itemBall('pocion_mina', 33, 7, 'pocion'),
+    ],
+  },
+
+  mina2: {
+    id: 'mina2',
+    name: 'Mina de Barro',
+    outdoor: false,
+    floor: ';',
+    border: '%',
+    style: { cave: 'clay' },
+    rows: [
+      '%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%',
+      '%%%D%%%%%%%%%%%%%%%%%%%%%%%%%%',
+      '%%;;;;;%%%%%%%;;;;;;;;;;;;;%%%',
+      '%%;;;;;%%%%%%%;;;;;;;;;;;;;%%%',
+      '%%;;;;;%%%%%%%;;;;;;;;;;;;;%%%',
+      '%%;;;;;%%%%%%%;;;;%%%%%%%%%%%%',
+      '%%;;;;;%%%%%%%;;;;%%%%%%%%%%%%',
+      '%%;;;;;%%%%%%%;;;;%%%%%%%%%%%%',
+      '%%;;;;;;;;;;;;;;;%%%%%%%%%%%%%',
+      '%%;;;;;%%%;%%%;;;%%%%%%%%%%%%%',
+      '%%%%%%%%%%%%%%;;;%%%%%%%%%%%%%',
+      '%%%%%%%%%%%%%%;;;%%%%%%%%%%%%%',
+      '%%%%%%%%%%%%%%;;;%;;;%%%%;;;%%',
+      '%%%%;;;;;;;;;;;;;%;;;%%%%;;;%%',
+      '%%%%;;;;;;;;;;;;;%;;;;;;;;;;%%',
+      '%%%%;;;;;;;;;;;;;%;;;;;;;;;;%%',
+      '%%%%%;;%%%%%%%%%%%;;;;;;;;;;%%',
+      '%%%%%;%%%%%%%%%%%%;;;;;;;;;;%%',
+      '%%%%;;;;;;;;;;;;;;;;;;;;;;;;%%',
+      '%%%%;;;KKKKKKKKKKK;;;;;;;;;;%%',
+      '%%%%;;;;;;;;;;;;;;;;;;;;;;;;%%',
+      '%%%%%%%%%%%%%%%%%%;;;;;;;;;;%%',
+      '%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%',
+      '%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%',
+    ],
+    doors: [{ x: 3, y: 1, to: 'mina1', tx: 31, ty: 19, dir: 'down' }],
+    encounters: {
+      rate: 0.08,
+      everywhere: true,
+      table: [
+        { sp: 'piedrita', min: 13, max: 15, w: 35 },
+        { sp: 'ollita', min: 13, max: 15, w: 30 },
+        { sp: 'ochopatas', min: 13, max: 15, w: 20 },
+        { sp: 'ecolin', min: 13, max: 15, w: 15 },
+      ],
+    },
+    npcs: [
+      { id: 'silencioso3', x: 10, y: 9, look: 'silencioso', dir: 'up', script: 'silencioso3', sight: 1 },
+      { id: 'silencioso4', x: 6, y: 16, look: 'silenciosa', dir: 'left', script: 'silencioso4', sight: 1 },
+      { id: 'capataz', x: 22, y: 15, look: 'capataz', dir: 'down', script: 'capataz', sight: 3, show: () => !flag('capatazHuyo') },
+      { id: 'silenciador', x: 22, y: 14, object: 'silenciador', script: 'silenciadorObj', show: () => !flag('silenciadorRoto') },
+      { id: 'petra_mina', x: 22, y: 21, look: 'petra', dir: 'up', script: 'petra_mina', show: () => flag('capatazHuyo') && !flag('petraVolvio') },
+      itemBall('repelente_mina', 26, 2, 'repelente'),
+    ],
+  },
 };
 
 // Each gate's guard (on the road, or aside once it's open) and the tiles where you get stopped.
@@ -853,12 +1235,15 @@ for (const m of Object.values(MAPS)) {
   for (const g of m.gates ?? []) {
     const [x, y, dir] = g.at;
     (m.npcs ??= []).push(
-      { id: g.id, x, y, look: g.look, dir, script: 'gate', show: () => !g.opens() },
+      { id: g.id, x, y, look: g.look, dir, script: 'gate', show: () => !g.opens(), mime: g.mime },
       { id: `${g.id}_aside`, x: g.aside[0], y: g.aside[1], look: g.look, dir: 'down', script: 'gate', turns: true, show: g.opens },
     );
     (m.triggers ??= []).push(...g.road.map(([x, y]) => ({ x, y, script: 'gateStop' })));
   }
 }
+
+/** A gate's closed lines, which can change with the story. */
+export const closedLines = (g: GateDef) => (typeof g.closed === 'function' ? g.closed() : g.closed);
 
 /** The gate a guard (on the road or aside) belongs to. */
 export const gateOf = (m: MapDef, npcId: string) => m.gates?.find((g) => npcId === g.id || npcId === `${g.id}_aside`);

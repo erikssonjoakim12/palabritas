@@ -366,19 +366,24 @@ function checkTrainers(): boolean {
   return false;
 }
 
+/** What someone on a muted map acts out, when they have no mime of their own. */
+export const MUTED_MIME = '(They try to speak, but no words come out!)';
+
 function interact() {
   const fx = player.x + DX[player.dir];
   const fy = player.y + DY[player.dir];
   let n = npcAt(fx, fy);
   if (!n && TILES[tileAt(fx, fy)].kind === 'counter') n = npcAt(fx + DX[player.dir], fy + DY[player.dir]);
+  const muted = !!map.muted?.();
   if (n) {
     if (n.def.look) n.dir = OPP[player.dir];
-    runScript(SCRIPTS[n.def.script], { npc: n });
+    if (muted && n.def.look && !n.def.speaksWhenMuted) runScript(() => say('…', { en: n.def.mime ?? MUTED_MIME }), { npc: n });
+    else runScript(SCRIPTS[n.def.script], { npc: n });
     return;
   }
   const sign = map.signs?.find((s) => s.x === fx && s.y === fy);
   if (sign) {
-    runScript(() => say(sign.es, { en: sign.en }));
+    runScript(() => (muted ? say('…', { en: '(The letters have faded away.)' }) : say(sign.es, { en: sign.en })));
     return;
   }
   const { look, script, kind } = TILES[tileAt(fx, fy)];

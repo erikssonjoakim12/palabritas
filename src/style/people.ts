@@ -502,6 +502,8 @@ export const LOOKS: Record<string, Look> = {
   alfarero: { head: 'crew', body: 'coat', color: 'brown' },
   minera: { head: 'helmetLong', body: 'pants', color: 'brown' },
   lucas: { head: 'cap', body: 'pants', color: 'teal' },
+  abuelo: { head: 'crew', body: 'coat', color: 'gray' },
+  musico: { head: 'crew', body: 'pants', color: 'yellow' },
 };
 
 // ---------- Objects in the world (same 3-color sprite rules) ----------
