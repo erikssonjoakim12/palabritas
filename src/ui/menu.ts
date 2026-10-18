@@ -14,6 +14,8 @@ export interface MenuOpts {
   disabled?: boolean[];
   /** Called when the cursor moves (e.g. to show move details). */
   onMove?: (i: number) => void;
+  /** A small picture before each option (e.g. a move's type symbol). */
+  icons?: (Node | undefined)[];
 }
 
 /** A Game Boy style menu, navigable with the pad or by tapping. */
@@ -28,6 +30,8 @@ export function menu(options: string[], opts: MenuOpts = {}): Promise<number> {
   if (opts.title) box.appendChild(el('div', 'menu-title', opts.title));
   const rows = options.map((o, i) => {
     const r = el('div', 'opt', o);
+    const icon = opts.icons?.[i];
+    if (icon) r.prepend(icon);
     if (opts.disabled?.[i]) r.classList.add('disabled');
     box.appendChild(r);
     return r;

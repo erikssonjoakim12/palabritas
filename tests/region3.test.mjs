@@ -1,4 +1,4 @@
-// Region 3 in checkpoints: Villa Ocote's south guard lets you down to Ruta 6 with the medal; Lucas on Ruta 7;
+// Region 3 in checkpoints: Villa Ocote's south guard lets you down to Ruta 6 with the medal; Lucas at the beach;
 // la noche de la arribada (counting eggs, Callada, the hatchlings, Paslamita); the restaurant, Don Lalo's rod
 // and the bottle. The gym is in gym3.test.
 import { start } from './lib.mjs';
@@ -17,11 +17,11 @@ await t.fromSave({ map: 'ocote', x: 23, y: 28, dir: 'down', party, flags: { sile
 await t.walk('down', 4);
 t.check('with the Clay Medal, the south road leads to Ruta 6', (await t.pos())[0] === 'ruta6', await t.pos());
 
-// Lucas, rival #2: he has your starter's counter, evolved.
-await t.fromSave({ map: 'ruta7', x: 14, y: 5, dir: 'down', party, starterPicked: 'aguacatito', flags: { lucas1: true } });
+// Lucas, rival #2, at the turtle beach (after the town): he has your starter's counter, evolved.
+await t.fromSave({ map: 'tortugas', x: 22, y: 1, dir: 'down', party, starterPicked: 'aguacatito', flags: { lucas1: true } });
 await t.walk('down', 1);
 let r = await t.play();
-t.check('Lucas battles you on Ruta 7 with an evolved starter', (await flags()).lucas2 && r.said.some((x) => x.includes('Hamburguesón')), r.said.filter((x) => x.includes('envía')));
+t.check('Lucas battles you at the turtle beach with an evolved starter', (await flags()).lucas2 && r.said.some((x) => x.includes('Hamburguesón')), r.said.filter((x) => x.includes('envía')));
 
 // The arribada: Tania counts eggs (you write the numbers)...
 await t.fromSave({ map: 'tortugas', x: 18, y: 9, dir: 'up', party });

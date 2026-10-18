@@ -18,6 +18,10 @@ import { chooseItem, useOnMon, notNow } from '../ui/bag';
 import { takeItem, itemCount, prizeMoney, money } from '../game/bag';
 import { ITEM_DEFS } from '../data/items';
 import { menu } from '../ui/menu';
+import { typeIcon } from '../art/typeIcon';
+
+/** An element with a small picture in front of its text. */
+const withIcon = (icon: Node, e: HTMLElement) => (e.prepend(icon), e);
 import { pickMon, hpClass } from '../ui/party';
 import { canListen } from '../lang/speech';
 import type { TrainerDef } from '../data/trainers';
@@ -353,6 +357,7 @@ async function runBattle(cfg: Config): Promise<BattleResult> {
     const i = await menu(
       moves.map((m) => `${MODE_INFO[m.mode].icon} ${m.name}`),
       {
+        icons: moves.map((m) => typeIcon(m.type)),
         cancel: true,
         pos: { left: 0, right: 0, bottom: 0 },
         onMove: (k) => {
@@ -362,7 +367,7 @@ async function runBattle(cfg: Config): Promise<BattleResult> {
           const vs = eff > 1 ? '¡Muy eficaz!' : eff === 0 ? 'No le afecta' : eff < 1 ? 'Poco eficaz' : '';
           detail.innerHTML = '';
           detail.append(
-            el('div', '', `TIPO/${m.type.toUpperCase()}`),
+            withIcon(typeIcon(m.type), el('div', '', `TIPO/${m.type.toUpperCase()}`)),
             el('div', '', `PODER ${mi.power}${vs ? ` · ${vs}` : ''}`),
             el('div', 'muted', `${mi.icon} ${mi.es}: ${mi.en}`),
           );
@@ -450,7 +455,7 @@ async function runBattle(cfg: Config): Promise<BattleResult> {
    */
   const playerAttack = async (move: Move, prep: ChallengeResult | null) => {
     if (!prep) return;
-    await info(`¡${myName()} usó ${move.name}!`, { auto: 700 });
+    await info(`¡${myName()} usó ${move.name}!`, { auto: 700, icon: typeIcon(move.type) });
     if (prep.grade === 'wrong') {
       sfx('miss');
       await info('¡Pero no acertó!', { auto: 900, en: 'But it missed!' });
@@ -469,7 +474,7 @@ async function runBattle(cfg: Config): Promise<BattleResult> {
   const enemyAttack = async () => {
     const moves = knownMoves(enemy);
     const move = moves[Math.floor(Math.random() * moves.length)];
-    await info(`¡${enemyLabel()} usó ${move.name}!`, { auto: 700 });
+    await info(`¡${enemyLabel()} usó ${move.name}!`, { auto: 700, icon: typeIcon(move.type) });
     // Wild Palabritas hit a bit softer; trainers let you defend with Spanish.
     let mult = trainer ? 1 : 0.7;
     let defended = false;

@@ -8,6 +8,8 @@
   Equipo Silencio 19–21, Callada 22–23; wild levels too. Pajarito evolves at 14 now, so wild tables use Palomón.
 - **The hatchlings** start two rows up, beside the nests, and walk down to the shore.
 - The restaurant rounds are kept in `G.save.restaurante`.
+- **Lucas #2** waits at the top of the turtle beach (the user: not right after Ruta 6's battles, but after the town
+  and its Palacentro), not on Ruta 7.
 
 **The route:**
 1. Down Ruta 6 from the pine highlands, through dry forest, a big meadow and over a river.

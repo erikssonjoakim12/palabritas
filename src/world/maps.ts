@@ -1382,7 +1382,7 @@ export const MAPS: Record<string, MapDef> = {
     ],
   },
 
-  // The coast: the sea on the west, dunes and palms, two rocky points with a gap at the road. Lucas waits near the top.
+  // The coast: the sea on the west, dunes and palms, two rocky points with a gap at the road.
   ruta7: {
     id: 'ruta7',
     name: 'Ruta 7',
@@ -1449,10 +1449,6 @@ export const MAPS: Record<string, MapDef> = {
       ],
     },
     fishing: { table: [{ sp: 'mojarrita', min: 12, max: 18, w: 40 }, { sp: 'mordisquito', min: 16, max: 22, w: 30 }, { sp: 'cangrejito', min: 14, max: 20, w: 30 }] },
-    triggers: [
-      { x: 14, y: 6, script: 'lucasRuta7' },
-      { x: 15, y: 6, script: 'lucasRuta7' },
-    ],
     npcs: [
       { id: 'surfista1', x: 13, y: 10, look: 'surfista', dir: 'right', script: 'surfista1', sight: 1 },
       { id: 'banista1', x: 16, y: 17, look: 'banista', dir: 'left', script: 'banista1', sight: 2 },
@@ -1461,7 +1457,6 @@ export const MAPS: Record<string, MapDef> = {
       { id: 'banista2', x: 20, y: 40, look: 'banista', dir: 'left', script: 'banista2', sight: 4 },
       { id: 'turista_r7', x: 22, y: 26, look: 'tourist', dir: 'down', script: 'turista_r7', sight: 2 },
       { id: 'botella', x: 8, y: 20, object: 'botella', script: 'botella', show: () => !flag('botellaLeida') },
-      { id: 'lucas7', x: 14, y: 13, look: 'lucas', dir: 'up', script: 'lucas7', show: () => flag('lucasRuta7') },
     ],
   },
 
@@ -1679,7 +1674,15 @@ export const MAPS: Record<string, MapDef> = {
       ],
     },
     fishing: { table: [{ sp: 'mojarrita', min: 12, max: 18, w: 40 }, { sp: 'mordisquito', min: 16, max: 22, w: 30 }, { sp: 'cangrejito', min: 14, max: 20, w: 30 }] },
-    npcs: [{ id: 'voluntaria', x: 18, y: 8, look: 'voluntaria', dir: 'down', script: 'voluntaria' }],
+    // Lucas (rival #2) comes up from the beach the first time you arrive.
+    triggers: [
+      { x: 22, y: 2, script: 'lucasPlaya' },
+      { x: 23, y: 2, script: 'lucasPlaya' },
+    ],
+    npcs: [
+      { id: 'voluntaria', x: 18, y: 8, look: 'voluntaria', dir: 'down', script: 'voluntaria' },
+      { id: 'lucas_playa', x: 22, y: 10, look: 'lucas', dir: 'up', script: 'lucas_playa', show: () => flag('lucasPlaya') },
+    ],
   },
 
   cabana_tortugas: casa('cabana_tortugas', 'Cabaña de los Voluntarios', { to: 'tortugas', x: 16, y: 7 }, [

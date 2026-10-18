@@ -472,3 +472,6 @@ mark.diff { background: #ffd23a; color: var(--ink); border-radius: 3px; padding:
   z-index: 50;
   text-align: center;
 }
+
+/* A move's type symbol (art/typeIcon.ts): a tiny pixel picture in the text's size. */
+.type-icon { width: 1em; height: 1em; image-rendering: pixelated; vertical-align: -0.08em; margin-right: 0.3em; }

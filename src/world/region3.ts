@@ -35,30 +35,31 @@ const gift = async (id: string, n: number, es: string, en: string) => {
   await info(`¡{name} recibió ${es}!`, { en: `{name} received ${en}!` });
 };
 
-// ---------- The rival: Lucas, battle #2 (Ruta 7) ----------
+// ---------- The rival: Lucas, battle #2 (the turtle beach, after Playa Carey and its Palacentro) ----------
 
-async function lucasRuta7() {
+async function lucasPlaya() {
   if (flag('lucas2')) return;
   sfx('alert');
-  setFlag('lucasRuta7');
-  placeNpc('lucas7', 14, 13, 'up');
-  await walkNpc('lucas7', Array(Math.max(0, 13 - (G.save.y + 1))).fill('up'));
+  setFlag('lucasPlaya');
+  placeNpc('lucas_playa', G.save.x, 10, 'up');
+  await walkNpc('lucas_playa', Array(Math.max(0, 10 - (G.save.y + 1))).fill('up'));
   await lines(
-    ['¡{name}! ¿Ya tienes la Medalla Barro? ¡Yo también!', '{name}! You have the Clay Medal already? Me too!'],
+    ['¡{name}! ¿Vienes a ver las tortugas? ¡Yo también!', '{name}! Have you come to see the turtles? Me too!'],
+    ['¿Ya tienes la Medalla Barro? ¡Yo también!', 'You have the Clay Medal already? Me too!'],
     ['Mi Palabrita evolucionó. ¡Mira qué fuerte está!', 'My Palabrita evolved. Look how strong it is!'],
   );
   const starter = lucasStarter();
   const team: [string, number][] = [[SPECIES[starter].evolves?.to ?? starter, 22], ['hojadillo', 19], ['palomon', 20]];
   const res = await trainerBattle({ ...TRAINERS.lucas2, team }, { look: 'lucas', outro: ['¡No puede ser! ¿Cuántas palabras sabes?', 'It can’t be! How many words do you know?'] });
   if (res === 'lose') {
-    setFlag('lucasRuta7', false);
+    setFlag('lucasPlaya', false);
     refreshNpcs();
     return blackout();
   }
   setFlag('lucas2');
   await lines(['Voy a entrenar con las olas. ¡Nos vemos en el volcán!', 'I’m going to train with the waves. See you at the volcano!']);
-  await walkNpc('lucas7', ['down', 'down', 'down', 'down', 'down', 'down']);
-  setFlag('lucasRuta7', false);
+  await walkNpc('lucas_playa', ['down', 'down', 'down', 'down', 'down', 'down']);
+  setFlag('lucasPlaya', false);
   refreshNpcs();
 }
 
@@ -322,7 +323,7 @@ async function marina() {
 const fight = (id: string, intro: Line, defeated: Line, after: Line): ScriptFn => () => trainerFight(id, { intro, defeated, after });
 
 export const REGION3: Record<string, ScriptFn> = {
-  lucasRuta7,
+  lucasPlaya,
   voluntaria,
   voluntariaNoche,
   callada,
@@ -357,7 +358,7 @@ export const REGION3: Record<string, ScriptFn> = {
   banista_gym: fight('banista_gym', ['Marina está justo ahí. ¡Pero primero yo!', 'Marina is right there. But me first!'], ['¡Vas a ganarle, ya verás!', 'You’re going to beat her, you’ll see!'], ['Las Palabritas de Marina son de tipo Agua. ¡Usa plantas o electricidad!', 'Marina’s Palabritas are Water type. Use plants or electricity!']),
 
   // ---------- People ----------
-  lucas7: talk(['¡La próxima vez te gano!', 'Next time I’ll beat you!']),
+  lucas_playa: talk(['¡La próxima vez te gano!', 'Next time I’ll beat you!']),
   marinaNoche: () => lines(...(flag('beat:callada') ? [['¡Las tortuguitas! ¡Guíalas al mar!', 'The baby turtles! Guide them to the sea!'] as Line] : [['Hay que detener a Callada. ¡Yo cuido los nidos!', 'We have to stop Callada. I’ll guard the nests!'] as Line])),
   nido: talk(['Un nido de tortuga. Los huevos están calientitos en la arena.', 'A turtle nest. The eggs are nice and warm in the sand.']),
   tortuguita: talk(['¡Es una tortuguita! Mira hacia el mar.', 'It’s a baby turtle! It’s looking toward the sea.']),

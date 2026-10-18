@@ -21,6 +21,8 @@ export interface SayOpts {
   noWait?: boolean;
   /** Advance by itself after this many ms (still skippable). */
   auto?: number;
+  /** A small picture before the text (e.g. the type symbol of the move being used). */
+  icon?: Node;
 }
 
 /**
@@ -51,6 +53,10 @@ export function say(raw: string, opts: SayOpts = {}): Promise<void> {
   const b = ensureBox();
   b.innerHTML = '';
   const textEl = el('div', 'tb-text');
+  // The text types itself into its own node, so an icon before it stays put.
+  const words = document.createTextNode('');
+  if (opts.icon) textEl.append(opts.icon);
+  textEl.append(words);
   const enEl = el('div', 'tb-en', en);
   enEl.hidden = true;
   const arrow = el('div', 'tb-arrow', '▼');
@@ -85,7 +91,7 @@ export function say(raw: string, opts: SayOpts = {}): Promise<void> {
     const chars = [...text];
     const finishTyping = () => {
       clearInterval(timer);
-      textEl.textContent = text;
+      words.data = text;
       done = true;
       if (opts.noWait) return finish();
       arrow.hidden = false;
@@ -93,7 +99,7 @@ export function say(raw: string, opts: SayOpts = {}): Promise<void> {
     };
     const timer = setInterval(() => {
       shown = Math.min(chars.length, shown + 2);
-      textEl.textContent = chars.slice(0, shown).join('');
+      words.data = chars.slice(0, shown).join('');
       if (shown >= chars.length) finishTyping();
     }, 22);
     const advance = () => {
