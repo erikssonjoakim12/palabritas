@@ -17,6 +17,7 @@ import type { MapStyle } from '../art/tiles';
   %  cave wall     ;  cave floor                    e  cave exit (walk down to leave)
   D  tunnel under a cliff (a door you walk south into)   H  bridge / pier
   F  fountain (2×2)  U  market stall / pottery shelf   K  mine rails  W  mine support
+  Z  ladder between cave floors (stand it away from the walls; you arrive on it, like Gold/Silver)
 */
 
 /** A line of dialog: Spanish, and English for the EN button. */
@@ -1130,7 +1131,8 @@ export const MAPS: Record<string, MapDef> = {
   },
 
   // The clay mine, under the mountain north of town: Equipo Silencio's hideout. Floor 1 has the lever that opens
-  // the gate to the shaft down; floor 2 has the Silenciador and the Capataz.
+  // the gate to the ladder down; floor 2 has the Silenciador and the Capataz. Like Gold/Silver, you arrive on a ladder and
+  // step off it.
   mina1: {
     id: 'mina1',
     name: 'Mina de Barro',
@@ -1158,7 +1160,7 @@ export const MAPS: Record<string, MapDef> = {
       '%%;;;;;;;;;;;;;%%%%%%;;;W;;;;W;;;;%%',
       '%%%%;;;%%%%%%%%%%%%%%;;;W;;;;W;;;;%%',
       '%%%%;;;%%%%%%%%%%%%%%;;;W;;;;;;;;;%%',
-      '%%%%;;;%%%%%%%%%%%%%%;;;W;;;;;;D;;%%',
+      '%%%%;;;%%%%%%%%%%%%%%;;;W;;;;;;Z;;%%',
       '%%%%;;;%%%%%%%%%%%%%%;;;;;;;;;;;;;%%',
       '%%%%;;;%%%%%%%%%%%%%%;KKKKKKKKKKK;%%',
       '%%%%;;;%%%%%%%%%%%%%%;;;;;;;;;;;;;%%',
@@ -1168,7 +1170,7 @@ export const MAPS: Record<string, MapDef> = {
       '%%%%%e%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%',
     ],
     exit: { to: 'ocote', x: 19, y: 4 },
-    doors: [{ x: 31, y: 18, to: 'mina2', tx: 3, ty: 2, dir: 'down' }],
+    doors: [{ x: 31, y: 18, to: 'mina2', tx: 4, ty: 4, dir: 'down' }],
     encounters: {
       rate: 0.08,
       everywhere: true,
@@ -1198,10 +1200,10 @@ export const MAPS: Record<string, MapDef> = {
     style: { cave: 'clay' },
     rows: [
       '%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%',
-      '%%%D%%%%%%%%%%%%%%%%%%%%%%%%%%',
+      '%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%',
       '%%;;;;;%%%%%%%;;;;;;;;;;;;;%%%',
       '%%;;;;;%%%%%%%;;;;;;;;;;;;;%%%',
-      '%%;;;;;%%%%%%%;;;;;;;;;;;;;%%%',
+      '%%;;Z;;%%%%%%%;;;;;;;;;;;;;%%%',
       '%%;;;;;%%%%%%%;;;;%%%%%%%%%%%%',
       '%%;;;;;%%%%%%%;;;;%%%%%%%%%%%%',
       '%%;;;;;%%%%%%%;;;;%%%%%%%%%%%%',
@@ -1222,7 +1224,7 @@ export const MAPS: Record<string, MapDef> = {
       '%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%',
       '%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%',
     ],
-    doors: [{ x: 3, y: 1, to: 'mina1', tx: 31, ty: 19, dir: 'down' }],
+    doors: [{ x: 4, y: 4, to: 'mina1', tx: 31, ty: 18, dir: 'down' }],
     encounters: {
       rate: 0.08,
       everywhere: true,

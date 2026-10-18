@@ -107,6 +107,7 @@ export const TILES: Record<string, TileDef> = {
   ';': open(),
   e: open({ kind: 'mat' }),
   D: open({ kind: 'door' }),
+  Z: open({ kind: 'door' }),
   // Water currents, by numpad direction: 8 up, 2 down, 4 left, 6 right.
   '8': open({ current: 'up' }),
   '2': open({ current: 'down' }),
@@ -345,12 +346,9 @@ function render(ch: string, env: TileEnv): Img {
       return paintArt(caveArt(env, 'floor', ART.caveFloor));
     case 'e':
       return stack(paintArt(caveArt(env, 'floor', ART.caveFloor)), paintArt(caveArt(env, 'floor', ART.caveExitOverlay)));
+    case 'Z':
+      return stack(paintArt(caveArt(env, 'floor', ART.caveFloor)), paintArt(ART.ladder));
     case 'D':
-      // Outdoors a tunnel in the mountain; in caves a shaft in the cave rock.
-      if (!env.outdoor) {
-        const floor = paintArt(caveArt(env, 'floor', ART.caveFloor));
-        return stack(rockImage(caveArt(env, 'wall', ART.caveWall), env, CAVE_WALL_CHARS + 'D', floor), paintArt(caveArt(env, 'wall', TUNNEL_MOUTH)));
-      }
       return stack(rockImage(rockArt(env), env, MOUNTAIN_CHARS, underImage(env, 'ground')), paintArt(rockArt(env, TUNNEL_MOUTH)));
     case 'H':
       return bridgeImage(env);

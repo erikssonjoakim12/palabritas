@@ -402,6 +402,29 @@ export const ART: Record<string, TileArt> = {
   },
   caveWall: { pal: CAVE.wall, rows: rockRows },
   caveFloor: { pal: CAVE.floor, rows: pebbleRows },
+  /** A ladder between cave floors: a dark hole in the floor with a wooden ladder in it. */
+  ladder: {
+    pal: OUTDOOR.fence,
+    extra: { k: CAVE.dark },
+    rows: [
+      '................',
+      '..333333333333..',
+      '.3kkkkkkkkkkkk3.',
+      '.3k3111111113k3.',
+      '.3k3000000003k3.',
+      '.3k3222222223k3.',
+      '.3k3kkkkkkkk3k3.',
+      '.3k3111111113k3.',
+      '.3k3000000003k3.',
+      '.3k3222222223k3.',
+      '.3k3kkkkkkkk3k3.',
+      '.3k3111111113k3.',
+      '.3k3000000003k3.',
+      '.3k3222222223k3.',
+      '.33333333333333.',
+      '................',
+    ],
+  },
   /** The way out of a cave: daylight on the floor. */
   caveExitOverlay: {
     pal: CAVE.floor,

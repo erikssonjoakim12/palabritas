@@ -36,6 +36,7 @@ marked "in the way" can't be walked past, and seams line up with their neighbors
 | `U` market stall | A wooden counter under a striped awning, with goods on it: clay pots here. Indoors, the same tile works as pottery shelves. |
 | `K` mine rails | Two rails with wooden sleepers on cave floor. |
 | `W` wooden mine support | Two posts and a beam. |
+| `Z` ladder ✓ **built** | A hole in the cave floor with a wooden ladder, standing away from the walls (Gold/Silver style): the mine's floors are joined by ladders, and you arrive on the ladder. The mine rows in §4.4 still show the first draft's `D`: the maps file is the truth. |
 | style `trees: 'pine'` | Ruta 5, the canyon, Villa Ocote: `'T'` is mostly pines. |
 | roof `'clay'` | Terracotta: Villa Ocote. |
 | style `walls: 'adobe'` | Warm ochre walls: Villa Ocote. |
