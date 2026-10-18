@@ -313,6 +313,7 @@ export const MAPS: Record<string, MapDef> = {
       table: [
         { sp: 'pajarito', min: 2, max: 3, w: 50 },
         { sp: 'conejito', min: 2, max: 4, w: 50 },
+        { sp: 'gusanito', min: 2, max: 3, w: 30 },
       ],
     },
   },
@@ -482,7 +483,7 @@ export const MAPS: Record<string, MapDef> = {
       table: [
         { sp: 'pajarito', min: 3, max: 5, w: 35 },
         { sp: 'conejito', min: 3, max: 5, w: 35 },
-        { sp: 'mariposita', min: 4, max: 6, w: 30 },
+        { sp: 'gusanito', min: 3, max: 6, w: 30 },
       ],
     },
   },
@@ -659,7 +660,8 @@ export const MAPS: Record<string, MapDef> = {
       table: [
         { sp: 'hojadillo', min: 7, max: 11, w: 40 },
         { sp: 'pajarito', min: 7, max: 11, w: 30 },
-        { sp: 'mariposita', min: 7, max: 11, w: 30 },
+        { sp: 'capullito', min: 7, max: 9, w: 15 },
+        { sp: 'mariposita', min: 10, max: 11, w: 15 },
       ],
     },
     // Trainers look like Ruta 2's. Those in the passes and spurs can't be walked past unseen.

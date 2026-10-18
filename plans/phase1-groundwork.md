@@ -319,7 +319,7 @@ battles only).
 
 ---
 
-## 12. Changes to existing Palabrita families
+## 12. Changes to existing Palabrita families ✓
 
 As specified in [palabritas.md](palabritas.md) §1:
 - **Gusanito → Capullito → Mariposita:** Mariposita becomes the third stage.
@@ -372,7 +372,7 @@ Valeria's "after" line stays (she paints butterflies; her Gusanitos will become 
 
 ---
 
-## 13. The A2 core, levels 21–35
+## 13. The A2 core, levels 21–35 ✓
 
 From [content.md](content.md) §1.
 - `coreItemsPerLevel(level)` returns 4 for levels 21–40: 2 words + 2 sentences.

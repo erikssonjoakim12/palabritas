@@ -487,8 +487,11 @@ const S: Record<string, (c: ScriptCtx) => Promise<void>> = {
       return lines(['Es un sillón muy cómodo... ¿Se movió un poco?', 'It’s a very comfy armchair... Did it just move a little?']);
     }
     sfx('alert');
-    await lines(['¡El sillón se movió! ¡Es una Palabrita!', 'The armchair moved! It’s a Palabrita!']);
-    const res = await wildBattle('sillon', 5);
+    await lines(
+      ['¡El sillón se movió! ¡Es una Palabrita!', 'The armchair moved! It’s a Palabrita!'],
+      ['¡No era el sillón... era el cojín!', 'It wasn’t the armchair... it was the cushion!'],
+    );
+    const res = await wildBattle('cojincito', 5);
     if (res === 'lose') return blackout();
     if (res === 'caught' || res === 'win') setFlag('sillonDone');
   },

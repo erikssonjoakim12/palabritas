@@ -326,6 +326,102 @@ const DRAW: Record<string, Draw> = {
     p.rect(19, 34, 2, 4, '#3a3a42').rect(24, 34, 2, 4, '#3a3a42');
     p.outline(K);
   },
+  /** A chubby caterpillar with rainbow stripes and tiny pink feet. */
+  gusanito(p) {
+    const stripes = ['#e85858', '#f0a040', '#f0d850', '#68c060', '#5890e0', '#9070d0'];
+    stripes.forEach((c, i) => p.ellipse(10 + i * 6, 32 - Math.sin(i / 1.6) * 4, 6, 7, c));
+    p.ellipse(42, 24, 6, 7, '#68c060');
+    p.ellipse(41, 22, 1.5, 2, K).set(40, 21, W);
+    p.line(40, 17, 37, 11, K).line(44, 17, 46, 11, K);
+    for (let i = 0; i < 6; i++) p.rect(8 + i * 6, 38, 2, 2, '#f0a0b8');
+    p.outline(K);
+  },
+  /** A sleepy cocoon wrapped in leaves, colorful wing tips peeking out. */
+  capullito(p) {
+    const leaf = '#78b048', dark = '#4a7a28';
+    p.line(24, 2, 24, 8, '#6a4a28');
+    p.poly([[13, 40], [24, 46], [35, 40], [37, 18], [24, 7], [11, 18]], leaf);
+    for (const y of [16, 24, 32]) p.line(13, y, 35, y + 4, dark);
+    p.poly([[11, 28], [4, 22], [8, 34]], '#e86890').poly([[37, 28], [44, 22], [40, 34]], '#5890e0');
+    p.line(19, 22, 22, 22, K).line(26, 22, 29, 22, K);
+    p.outline(K);
+  },
+  /** A lean, fast hare with big feet and a number pattern on its fur. */
+  liebron(p) {
+    const fur = '#c8b090', light = '#f0e0c8', dark = '#8a7050';
+    p.poly([[18, 14], [14, 0], [20, 2], [22, 13]], fur).poly([[26, 13], [28, 0], [33, 3], [30, 15]], fur);
+    p.ellipse(24, 32, 11, 12, fur);
+    p.ellipse(24, 34, 6, 8, light);
+    p.ellipse(24, 18, 8, 7, fur);
+    p.ellipse(21, 17, 1.5, 2, K).ellipse(27, 17, 1.5, 2, K);
+    p.set(20, 16, W).set(26, 16, W);
+    p.rect(30, 26, 2, 5, dark).rect(33, 26, 3, 1, dark).rect(33, 30, 3, 1, dark); // a "1" and "2" on its fur
+    p.ellipse(15, 45, 7, 2.5, dark).ellipse(33, 45, 7, 2.5, dark);
+    p.outline(K);
+  },
+  /** A floating red cushion with a tassel and sleepy eyes. */
+  cojincito(p) {
+    const red = '#d05050', dark = '#983030', gold = '#f0c050';
+    p.poly([[8, 18], [24, 13], [40, 18], [42, 34], [24, 39], [6, 34]], red);
+    p.poly([[24, 30], [40, 26], [42, 34], [24, 39]], dark);
+    p.line(40, 18, 46, 12, gold).ellipse(46, 11, 2, 2, gold);
+    p.line(17, 25, 21, 25, K).line(27, 25, 31, 25, K);
+    p.ellipse(24, 31, 2, 1, K);
+    p.ellipse(24, 45, 10, 2, '#c8c8d0');
+    p.outline(K);
+  },
+  /** A big armadillo whose shell is a pile of dry leaves, with a flowering bush on its back. */
+  hojarasco(p) {
+    const leaf = '#c89848', dark = '#8a6428', skin = '#a89070';
+    p.ellipse(26, 30, 18, 13, leaf);
+    for (let i = 0; i < 7; i++) p.ellipse(13 + i * 4.5, 24 + (i % 2) * 6, 3, 2, dark);
+    p.ellipse(26, 16, 9, 6, '#4a9a40');
+    p.ellipse(22, 13, 2, 2, '#f080a0').ellipse(30, 14, 2, 2, '#f0e060');
+    p.ellipse(8, 34, 6, 5, skin);
+    p.ellipse(6, 32, 1.5, 2, K);
+    p.rect(14, 41, 5, 5, skin).rect(32, 41, 5, 5, skin);
+    p.outline(K);
+  },
+  /** A big purple bat with ears like satellite dishes and a wide mouth. */
+  murcielon(p) {
+    const fur = '#6a4888', wing = '#4a3070', ear = '#e8a0c0';
+    p.poly([[24, 26], [1, 8], [0, 34], [7, 28], [11, 38], [16, 30], [22, 38]], wing);
+    p.poly([[24, 26], [47, 8], [48, 34], [41, 28], [37, 38], [32, 30], [26, 38]], wing);
+    p.ellipse(13, 9, 7, 8, fur).ellipse(35, 9, 7, 8, fur);
+    p.ellipse(13, 9, 4, 5, ear).ellipse(35, 9, 4, 5, ear);
+    p.ellipse(24, 25, 12, 12, fur);
+    p.ellipse(19, 21, 2, 2.5, K).ellipse(29, 21, 2, 2.5, K);
+    p.rect(18, 28, 12, 3, K).set(19, 29, W).set(28, 29, W);
+    p.outline('#22103a');
+  },
+  /** A huge hairy tarantula with striped legs and eight eyes in a row. */
+  taranton(p) {
+    const fur = '#5a3818', band = '#e08038';
+    for (let i = 0; i < 4; i++) {
+      const y = 20 + i * 6;
+      p.line(16, y, 4, y - 5 + i * 2, fur).line(4, y - 5 + i * 2, 1, y + 8, fur).line(16, y + 1, 5, y - 4 + i * 2, fur);
+      p.line(32, y, 44, y - 5 + i * 2, fur).line(44, y - 5 + i * 2, 47, y + 8, fur).line(32, y + 1, 43, y - 4 + i * 2, fur);
+      p.set(6, y - 4 + i * 2, band).set(42, y - 4 + i * 2, band).set(3, y + 3, band).set(45, y + 3, band);
+    }
+    p.ellipse(24, 34, 13, 11, fur).ellipse(24, 36, 6, 4, band);
+    p.ellipse(24, 20, 11, 9, fur);
+    for (let i = 0; i < 8; i++) p.set(17 + i * 2, 17, i % 2 ? K : '#f0d040');
+    p.rect(20, 25, 2, 3, '#f0e8e0').rect(26, 25, 2, 3, '#f0e8e0');
+    p.outline('#1a0a04');
+  },
+  /** A Hercules beetle with a long double horn and a rainbow-shiny shell. */
+  herculeo(p) {
+    const shell = '#3a7a6a', dark = '#1e4a40', horn = '#2a2a30';
+    for (const y of [30, 36, 42]) p.line(13, y, 3, y + 4, dark).line(35, y, 45, y + 4, dark);
+    p.ellipse(24, 33, 15, 12, shell);
+    p.line(24, 22, 24, 45, dark);
+    p.ellipse(17, 28, 4, 3, '#e8a0c0').ellipse(31, 28, 4, 3, '#a0d0f0').ellipse(18, 38, 3, 2, '#f0e080');
+    p.ellipse(24, 19, 8, 5, dark);
+    p.poly([[21, 17], [27, 17], [26, 1], [22, 4]], horn);
+    p.poly([[22, 20], [26, 20], [30, 10], [27, 9]], horn);
+    p.ellipse(20, 20, 1.5, 1.5, W).ellipse(28, 20, 1.5, 1.5, W);
+    p.outline('#0a1410');
+  },
   sillon(p) {
     const rd = '#c8463e', dr = '#8e2a26', cu = '#e86a5a', wd = '#7a4a22';
     p.ellipse(24, 9, 14, 5, rd);

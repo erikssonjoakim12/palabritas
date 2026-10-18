@@ -2,6 +2,7 @@
 // level up to 30 (none twice); evolutions point to real Palabritas; the art page loads cleanly.
 import { start } from './lib.mjs';
 import { BASE } from '../tools/browser.mjs';
+import { readFileSync } from 'fs';
 
 const t = await start('data');
 await t.page.goto(BASE + '/', { waitUntil: 'networkidle0' });
@@ -26,6 +27,11 @@ const report = await t.game(() => {
   return out;
 });
 for (const [id, problems] of Object.entries(report)) t.check(`Palabrita ${id}`, problems.length === 0, problems.join('; '));
+
+// Families that grew a new first stage keep their words (Species.seed): Mariposita and Sillón as before.
+const before = JSON.parse(readFileSync(new URL('./fixtures/words-before-families.json', import.meta.url), 'utf8'));
+const after = await t.game((sps) => Object.fromEntries(sps.map((sp) => [sp, window.__game.curriculum.itemsUpTo(sp, 30).map((i) => i.id)])), Object.keys(before));
+for (const sp of Object.keys(before)) t.check(`${sp} keeps its words up to level 30`, JSON.stringify(after[sp]) === JSON.stringify(before[sp]), `${after[sp].length} vs ${before[sp].length}`);
 
 // Every item a shop sells can be ordered: «Quiero una X» and «Quiero dos Xs» (also without accents).
 const orders = await t.game(async () => {

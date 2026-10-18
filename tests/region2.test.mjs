@@ -1,6 +1,6 @@
 // Region 2's story, in checkpoints (each part starts from its own save): Ruta 5 → Villa Ocote and the message
 // on the ground → a muted town → the mine's lever → the Capataz: the Silenciador breaks, Petra comes, the town
-// talks again → the gym: three riddles, two trainers and Petra (Medalla Barro) → the south guard.
+// talks again. The gym is in gym2.test.
 import { start } from './lib.mjs';
 
 const t = await start('region2');
@@ -42,30 +42,4 @@ t.check('you’re back in Villa Ocote', s4.map === 'ocote', [s4.map, s4.x, s4.y]
 r = await talk('ocote', 15, 24, 'up');
 t.check('the town talks again', r.said.some((x) => x.includes('mensaje')), r.said);
 
-// 5. The gym: riddles open the stone doors; Tito and Rosario see you; Petra gives the Clay Medal.
-const gym = { map: 'gym_ocote', party: strong, flags: { silenciadorRoto: true, petraVolvio: true } };
-await t.fromSave({ ...gym, x: 2, y: 12, dir: 'up' });
-await t.press('z');
-await t.play({ choices: ['el gato'] });
-t.check('the first riddle opens its door', await flags('adivinanza:piedra1'));
-await t.walk('up', 3);
-r = await t.play();
-t.check('Alfarero Tito battles you', await flags('beat:tito'), r.said.slice(0, 2));
-r = await talk('gym_ocote', 6, 8, 'up', { choices: ['la olla'] });
-t.check('the second riddle opens its door', await flags('adivinanza:piedra2'));
-await t.walk('up', 3);
-await t.play();
-t.check('Minera Rosario battles you', await flags('beat:rosario'));
-await talk('gym_ocote', 4, 4, 'up', { choices: ['el reloj'] });
-t.check('the third riddle opens its door', await flags('adivinanza:piedra3'));
-r = await talk('gym_ocote', 5, 2, 'up');
-const s5 = await t.save();
-t.check('Petra gives you the Medalla Barro', s5.flags.medalBarro && s5.medals.includes('Barro'), s5.medals);
-await t.shot('gym');
-
-// 6. The road south: closed until Ruta 6 is built (phase 3), even with the medal.
-await t.fromSave({ map: 'ocote', x: 23, y: 28, dir: 'down', party: strong, flags: { silenciadorRoto: true, medalBarro: true } });
-const said = await t.walk('down', 3);
-r = await t.play();
-t.check('the south guard stops you (the bridge is down)', (await t.pos())[2] < 30 && [said, ...r.said].join(' ').includes('puente'), [said, r.said]);
 await t.end();

@@ -14,7 +14,13 @@ import { openBag } from './bag';
 import { money } from '../game/bag';
 import { dueCount } from '../game/review';
 
-const DEX_ORDER = ['salchichita', 'hamburgueson', 'gotita', 'nubarron', 'aguacatito', 'aguacatono', 'pajarito', 'palomon', 'conejito', 'mariposita', 'sillon', 'hojadillo', 'ecolin', 'ochopatas', 'cuernito', 'ardillita', 'ardillon', 'colibri', 'zumbador', 'espinita', 'puercoespin', 'piedrita', 'petroglifon', 'ollita', 'tinajon', 'caparazonte', 'gliptodon', 'guardabarranco'];
+const DEX_ORDER = [
+  'salchichita', 'hamburgueson', 'gotita', 'nubarron', 'aguacatito', 'aguacatono',
+  'pajarito', 'palomon', 'conejito', 'liebron', 'gusanito', 'capullito', 'mariposita', 'cojincito', 'sillon',
+  'hojadillo', 'hojarasco', 'ecolin', 'murcielon', 'ochopatas', 'taranton', 'cuernito', 'herculeo',
+  'ardillita', 'ardillon', 'colibri', 'zumbador', 'espinita', 'puercoespin', 'piedrita', 'petroglifon', 'ollita', 'tinajon',
+  'caparazonte', 'gliptodon', 'guardabarranco',
+];
 
 /** The START menu. Resolves a script to run after it closes (an item used from the bag), if any. */
 export async function startMenu(): Promise<string | undefined> {

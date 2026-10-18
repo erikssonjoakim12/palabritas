@@ -15,20 +15,20 @@ export interface TrainerDef {
 
 export const TRAINERS: Record<string, TrainerDef> = {
   sofia: { id: 'sofia', name: 'Niña Sofía', defenseMode: 'choose', team: [['conejito', 3]], rematch: true },
-  mateo: { id: 'mateo', name: 'Joven Mateo', defenseMode: 'choose', team: [['mariposita', 3], ['pajarito', 3]] },
+  mateo: { id: 'mateo', name: 'Joven Mateo', defenseMode: 'choose', team: [['gusanito', 3], ['pajarito', 3]] },
   tomas: { id: 'tomas', name: 'Excursionista Tomás', defenseMode: 'choose', team: [['conejito', 4], ['pajarito', 4]] },
-  valeria: { id: 'valeria', name: 'Pintora Valeria', defenseMode: 'choose', team: [['mariposita', 5], ['mariposita', 5]], rematch: true },
-  andres: { id: 'andres', name: 'Joven Andrés', defenseMode: 'type', team: [['pajarito', 5], ['conejito', 6], ['mariposita', 6]], rematch: true },
-  ivan: { id: 'ivan', name: 'Aprendiz Iván', defenseMode: 'choose', team: [['pajarito', 7], ['mariposita', 7]] },
+  valeria: { id: 'valeria', name: 'Pintora Valeria', defenseMode: 'choose', team: [['gusanito', 5], ['capullito', 5]], rematch: true },
+  andres: { id: 'andres', name: 'Joven Andrés', defenseMode: 'type', team: [['pajarito', 5], ['conejito', 6], ['gusanito', 6]], rematch: true },
+  ivan: { id: 'ivan', name: 'Aprendiz Iván', defenseMode: 'choose', team: [['pajarito', 7], ['capullito', 7]] },
   paloma: { id: 'paloma', name: 'Líder Paloma', defenseMode: 'type', team: [['pajarito', 9], ['palomon', 12]] },
   // Ruta 3
   rodrigo: { id: 'rodrigo', name: 'Excursionista Rodrigo', defenseMode: 'type', team: [['conejito', 9], ['pajarito', 9]] },
-  isabel: { id: 'isabel', name: 'Pintora Isabel', defenseMode: 'type', team: [['mariposita', 9], ['hojadillo', 9]], rematch: true },
+  isabel: { id: 'isabel', name: 'Pintora Isabel', defenseMode: 'type', team: [['capullito', 9], ['hojadillo', 9]], rematch: true },
   pablo: { id: 'pablo', name: 'Joven Pablo', defenseMode: 'type', team: [['pajarito', 10], ['conejito', 10]] },
   kevin: { id: 'kevin', name: 'Turista Kevin', defenseMode: 'choose', team: [['pajarito', 10], ['mariposita', 10]] },
   camila: { id: 'camila', name: 'Niña Camila', defenseMode: 'type', team: [['hojadillo', 10], ['mariposita', 11]] },
   ernesto: { id: 'ernesto', name: 'Excursionista Ernesto', defenseMode: 'type', team: [['conejito', 10], ['hojadillo', 11], ['pajarito', 11]], rematch: true },
-  marcos: { id: 'marcos', name: 'Joven Marcos', defenseMode: 'listen', team: [['sillon', 11], ['pajarito', 11]] },
+  marcos: { id: 'marcos', name: 'Joven Marcos', defenseMode: 'listen', team: [['cojincito', 11], ['pajarito', 11]] },
   // Cueva del Eco: here you defend by listening (it's the cave of echoes).
   raul: { id: 'raul', name: 'Espeleólogo Raúl', defenseMode: 'listen', team: [['ecolin', 11], ['ecolin', 12]] },
   daniela: { id: 'daniela', name: 'Exploradora Daniela', defenseMode: 'listen', team: [['ochopatas', 12], ['cuernito', 13]] },

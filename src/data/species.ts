@@ -37,6 +37,11 @@ export interface Species {
   dex: { es: string; en: string };
   /** Evolves into another species at a level (at the end of a battle turn, like in the anime). */
   evolves?: { to: string; level: number };
+  /**
+   * The family's word sample is seeded with this id instead of the first form's: when a family grows a new first
+   * stage (Gusanito before Mariposita), the Palabritas people already have keep exactly their words.
+   */
+  seed?: string;
 }
 
 const m = (name: string, type: Type, mode: Mode, level?: number): Move => ({ name, type, mode, level });
@@ -110,32 +115,6 @@ export const SPECIES: Record<string, Species> = {
       en: 'It counts everything it sees. If it loses count, it starts again.',
     },
   },
-  mariposita: {
-    id: 'mariposita',
-    name: 'Mariposita',
-    types: ['Bicho', 'Volador'],
-    theme: 'colores',
-    base: { hp: 42, atk: 44, def: 45, spd: 60 },
-    moves: [m('Polvillo', 'Bicho', 'choose'), m('Aleteo', 'Volador', 'type'), m('Arcoíris', 'Normal', 'listen', 5), m('Vuelo Colorido', 'Bicho', 'speak', 8)],
-    catchRate: 0.5,
-    dex: {
-      es: 'Sus alas cambian de color según su humor.',
-      en: 'Its wings change color depending on its mood.',
-    },
-  },
-  sillon: {
-    id: 'sillon',
-    name: 'Sillón',
-    types: ['Normal', 'Fantasma'],
-    theme: 'casa',
-    base: { hp: 60, atk: 52, def: 68, spd: 22 },
-    moves: [m('Cojinazo', 'Normal', 'choose'), m('Resorte', 'Normal', 'type'), m('Crujido', 'Fantasma', 'listen', 7), m('Siesta Eterna', 'Fantasma', 'speak', 12)],
-    catchRate: 0.35,
-    dex: {
-      es: 'Parece un sillón normal, pero se mueve de noche. Le encantan los cojines esponjosos.',
-      en: 'It looks like a normal armchair, but it moves at night. It loves fluffy cushions.',
-    },
-  },
   // ----- Ruta 3 and the Cueva del Eco -----
   hojadillo: {
     id: 'hojadillo',
@@ -189,17 +168,34 @@ export const SPECIES: Record<string, Species> = {
       en: 'Its shell shines in many colors in the dark. With its horn it lifts big rocks.',
     },
   },
-  palomon: {
-    id: 'palomon',
-    name: 'Palomón',
-    types: ['Normal', 'Volador'],
-    theme: 'naturaleza',
-    base: { hp: 62, atk: 58, def: 55, spd: 70 },
-    moves: [m('Picotazo', 'Volador', 'choose'), m('Golpe Rápido', 'Normal', 'type'), m('Ataque Ala', 'Volador', 'listen'), m('Remolino Aéreo', 'Volador', 'speak')],
-    catchRate: 0.2,
+  gusanito: {
+    id: 'gusanito',
+    name: 'Gusanito',
+    types: ['Bicho'],
+    theme: 'colores',
+    // Mariposita was its own Palabrita before Gusanito came: its words stay the same.
+    seed: 'mariposita',
+    base: { hp: 40, atk: 36, def: 40, spd: 44 },
+    moves: [m('Polvillo', 'Bicho', 'choose'), m('Seda', 'Bicho', 'type'), m('Arcoíris', 'Normal', 'listen', 5), m('Vuelo Colorido', 'Bicho', 'speak', 8)],
+    catchRate: 0.65,
     dex: {
-      es: 'La paloma más grande del cielo. Vuela más rápido que el viento.',
-      en: 'The biggest dove in the sky. It flies faster than the wind.',
+      es: 'Come hojas todo el día. Sus rayas tienen todos los colores del arcoíris.',
+      en: 'It eats leaves all day. Its stripes have every color of the rainbow.',
+    },
+  },
+  cojincito: {
+    id: 'cojincito',
+    name: 'Cojincito',
+    types: ['Normal', 'Fantasma'],
+    theme: 'casa',
+    // Sillón was its own Palabrita before Cojincito came: its words stay the same.
+    seed: 'sillon',
+    base: { hp: 44, atk: 38, def: 54, spd: 32 },
+    moves: [m('Cojinazo', 'Normal', 'choose'), m('Resorte', 'Normal', 'type'), m('Crujido', 'Fantasma', 'listen', 7), m('Siesta Eterna', 'Fantasma', 'speak', 12)],
+    catchRate: 0.5,
+    dex: {
+      es: 'Un cojín que flota de noche. Si te sientas encima, se ríe.',
+      en: 'A cushion that floats at night. If you sit on it, it laughs.',
     },
   },
   // ----- Region 2: the pine highlands -----
@@ -300,10 +296,10 @@ export const SPECIES: Record<string, Species> = {
  * An evolved form: the same theme, moves and words as the form before it (its learning simply
  * continues), with a new name, types, art, stats and dex entry.
  */
-function evolution(from: string, level: number, s: Pick<Species, 'id' | 'name' | 'types' | 'base' | 'dex'>) {
+function evolution(from: string, level: number, s: Pick<Species, 'id' | 'name' | 'types' | 'base' | 'dex'> & { catchRate?: number }) {
   const prev = SPECIES[from];
   prev.evolves = { to: s.id, level };
-  SPECIES[s.id] = { ...s, theme: prev.theme, starter: prev.starter, moves: prev.moves, catchRate: prev.catchRate / 2 };
+  SPECIES[s.id] = { ...s, theme: prev.theme, starter: prev.starter, moves: prev.moves, catchRate: s.catchRate ?? prev.catchRate / 2 };
 }
 
 evolution('salchichita', 16, {
@@ -396,6 +392,101 @@ evolution('caparazonte', 30, {
   dex: {
     es: 'Su caparazón es grande como un carro. Antes, los gliptodontes vivían en toda América.',
     en: 'Its shell is as big as a car. Long ago, glyptodons lived all over the Americas.',
+  },
+});
+
+// ----- Families that grew (plans/palabritas.md §1) -----
+evolution('gusanito', 7, {
+  id: 'capullito',
+  name: 'Capullito',
+  types: ['Bicho'],
+  base: { hp: 46, atk: 28, def: 66, spd: 28 },
+  dex: {
+    es: 'Duerme envuelto en hojas. Adentro, sus alas cambian de color.',
+    en: 'It sleeps wrapped in leaves. Inside, its wings change color.',
+  },
+});
+evolution('capullito', 10, {
+  id: 'mariposita',
+  name: 'Mariposita',
+  types: ['Bicho', 'Volador'],
+  base: { hp: 42, atk: 44, def: 45, spd: 60 },
+  catchRate: 0.3,
+  dex: {
+    es: 'Sus alas cambian de color según su humor.',
+    en: 'Its wings change color depending on its mood.',
+  },
+});
+evolution('pajarito', 14, {
+  id: 'palomon',
+  name: 'Palomón',
+  types: ['Normal', 'Volador'],
+  base: { hp: 62, atk: 58, def: 55, spd: 70 },
+  catchRate: 0.25,
+  dex: {
+    es: 'La paloma más grande del cielo. Vuela más rápido que el viento.',
+    en: 'The biggest dove in the sky. It flies faster than the wind.',
+  },
+});
+evolution('conejito', 18, {
+  id: 'liebron',
+  name: 'Liebrón',
+  types: ['Normal'],
+  base: { hp: 62, atk: 66, def: 55, spd: 88 },
+  dex: {
+    es: 'Corre tan rápido que cuenta sus pasos de mil en mil.',
+    en: 'It runs so fast it counts its steps a thousand at a time.',
+  },
+});
+evolution('cojincito', 18, {
+  id: 'sillon',
+  name: 'Sillón',
+  types: ['Normal', 'Fantasma'],
+  base: { hp: 60, atk: 52, def: 68, spd: 22 },
+  catchRate: 0.25,
+  dex: {
+    es: 'Parece un sillón normal, pero se mueve de noche. Le encantan los cojines esponjosos.',
+    en: 'It looks like a normal armchair, but it moves at night. It loves fluffy cushions.',
+  },
+});
+evolution('hojadillo', 24, {
+  id: 'hojarasco',
+  name: 'Hojarasco',
+  types: ['Planta', 'Tierra'],
+  base: { hp: 72, atk: 72, def: 90, spd: 50 },
+  dex: {
+    es: 'Su caparazón es un montón de hojas secas. En primavera le salen flores.',
+    en: 'Its shell is a pile of dry leaves. In spring, flowers grow on it.',
+  },
+});
+evolution('ecolin', 22, {
+  id: 'murcielon',
+  name: 'Murcielón',
+  types: ['Volador', 'Siniestro'],
+  base: { hp: 68, atk: 70, def: 60, spd: 88 },
+  dex: {
+    es: 'Sus orejas oyen una hoja caer al otro lado de la cueva.',
+    en: 'Its ears hear a leaf fall on the other side of the cave.',
+  },
+});
+evolution('ochopatas', 24, {
+  id: 'taranton',
+  name: 'Tarantón',
+  types: ['Bicho', 'Veneno'],
+  base: { hp: 66, atk: 80, def: 64, spd: 64 },
+  dex: {
+    es: 'Tiene ocho ojos en fila. Con cuatro mira adelante y con cuatro, atrás.',
+    en: 'It has eight eyes in a row. Four look ahead and four look behind.',
+  },
+});
+evolution('cuernito', 26, {
+  id: 'herculeo',
+  name: 'Hercúleo',
+  types: ['Bicho', 'Lucha'],
+  base: { hp: 72, atk: 92, def: 80, spd: 48 },
+  dex: {
+    es: 'Levanta cien veces su peso. Su caparazón brilla con todos los colores.',
+    en: 'It lifts a hundred times its weight. Its shell shines with every color.',
   },
 });
 
