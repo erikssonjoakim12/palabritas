@@ -229,6 +229,71 @@ export const SPECIES: Record<string, Species> = {
       en: 'There’s always something tasty cooking inside. Nobody knows what it is.',
     },
   },
+  ardillita: {
+    id: 'ardillita',
+    name: 'Ardillita',
+    types: ['Normal'],
+    theme: 'deportes',
+    base: { hp: 42, atk: 48, def: 38, spd: 70 },
+    moves: [m('Voltereta', 'Normal', 'choose'), m('Patada', 'Lucha', 'type'), m('Silbato', 'Normal', 'listen'), m('Salto Mortal', 'Lucha', 'speak')],
+    catchRate: 0.55,
+    dex: {
+      es: 'Hace ejercicio todas las mañanas. Su cola es más grande que su cuerpo.',
+      en: 'It exercises every morning. Its tail is bigger than its body.',
+    },
+  },
+  colibri: {
+    id: 'colibri',
+    name: 'Colibrí',
+    types: ['Volador'],
+    theme: 'musica',
+    base: { hp: 36, atk: 44, def: 36, spd: 80 },
+    moves: [m('Pico Fino', 'Volador', 'choose'), m('Tararear', 'Normal', 'type'), m('Melodía', 'Normal', 'listen'), m('Concierto', 'Volador', 'speak')],
+    catchRate: 0.5,
+    dex: {
+      es: 'Mueve las alas ochenta veces por segundo. Su zumbido suena como una canción.',
+      en: 'It beats its wings eighty times a second. Its hum sounds like a song.',
+    },
+  },
+  espinita: {
+    id: 'espinita',
+    name: 'Espinita',
+    types: ['Normal'],
+    theme: 'salud',
+    base: { hp: 46, atk: 44, def: 52, spd: 38 },
+    moves: [m('Pinchazo', 'Normal', 'choose'), m('Agujas', 'Acero', 'type'), m('Cola Prensil', 'Normal', 'listen'), m('Lluvia de Púas', 'Acero', 'speak')],
+    catchRate: 0.5,
+    dex: {
+      es: 'De bebé, sus púas son suaves. Le encanta comer fruta madura.',
+      en: 'As a baby its spines are soft. It loves to eat ripe fruit.',
+    },
+  },
+  caparazonte: {
+    id: 'caparazonte',
+    name: 'Caparazonte',
+    types: ['Roca', 'Tierra'],
+    theme: 'historia',
+    base: { hp: 52, atk: 56, def: 78, spd: 24 },
+    moves: [m('Caparazón', 'Normal', 'choose'), m('Excavar', 'Tierra', 'type'), m('Eco Antiguo', 'Roca', 'listen'), m('Cola Maza', 'Roca', 'speak')],
+    catchRate: 0.3,
+    dex: {
+      es: 'Vivió hace diez mil años. Un museo lo despertó, ¡y ahora quiere ver el mundo!',
+      en: 'It lived ten thousand years ago. A museum woke it up, and now it wants to see the world!',
+    },
+  },
+  guardabarranco: {
+    id: 'guardabarranco',
+    name: 'Guardabarranco',
+    types: ['Normal', 'Volador'],
+    theme: 'latinoamerica',
+    base: { hp: 60, atk: 62, def: 58, spd: 84 },
+    moves: [m('Picotazo', 'Volador', 'choose'), m('Cola Raqueta', 'Normal', 'type'), m('Canto del Barranco', 'Normal', 'listen'), m('Vuelo Turquesa', 'Volador', 'speak')],
+    catchRate: 0.15,
+    dex: {
+      es: 'Es el ave nacional de Nicaragua. Viaja por toda América y conoce muchos países.',
+      en: 'It’s Nicaragua’s national bird. It travels all over the Americas and knows many countries.',
+    },
+  },
 };
 
 /**
@@ -290,6 +355,47 @@ evolution('ollita', 21, {
   dex: {
     es: 'Guarda agua fresca todo el año. En los días de calor, la comparte con todos.',
     en: 'It keeps fresh water all year. On hot days it shares it with everyone.',
+  },
+});
+
+evolution('ardillita', 20, {
+  id: 'ardillon',
+  name: 'Ardillón',
+  types: ['Normal', 'Lucha'],
+  base: { hp: 64, atk: 72, def: 56, spd: 90 },
+  dex: {
+    es: 'Gana todas las carreras del bosque. Después, hace cien abdominales.',
+    en: 'It wins every race in the forest. Then it does a hundred sit-ups.',
+  },
+});
+evolution('colibri', 22, {
+  id: 'zumbador',
+  name: 'Zumbador',
+  types: ['Volador', 'Eléctrico'],
+  base: { hp: 54, atk: 64, def: 50, spd: 104 },
+  dex: {
+    es: 'Cuando canta, las flores se abren. Su garganta brilla como una lámpara.',
+    en: 'When it sings, flowers open. Its throat shines like a lamp.',
+  },
+});
+evolution('espinita', 22, {
+  id: 'puercoespin',
+  name: 'Puercoespín',
+  types: ['Normal', 'Acero'],
+  base: { hp: 72, atk: 70, def: 84, spd: 48 },
+  dex: {
+    es: 'Cuida a los Palabritas heridos del bosque. Dicen que sus púas curan.',
+    en: 'It looks after hurt Palabritas in the forest. They say its spines heal.',
+  },
+});
+evolution('caparazonte', 30, {
+  id: 'gliptodon',
+  name: 'Gliptodón',
+  types: ['Roca', 'Tierra'],
+  base: { hp: 90, atk: 84, def: 110, spd: 30 },
+  dex: {
+    es: 'Su caparazón es grande como un carro. Antes, los gliptodontes vivían en toda América.',
+    en: 'Its shell is as big as a car. Long ago, glyptodons lived all over the Americas.',
   },
 });
 

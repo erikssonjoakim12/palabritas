@@ -207,6 +207,125 @@ const DRAW: Record<string, Draw> = {
     p.ellipse(24, 36, 3, 2, K);
     p.outline('#2a1008');
   },
+  /** A squirrel with a huge two-tone bushy tail, mid-cartwheel. */
+  ardillita(p) {
+    const fur = '#c07838', light = '#f0c890', dark = '#7a4418';
+    p.ellipse(33, 20, 13, 17, dark).ellipse(33, 19, 9, 13, light);
+    p.ellipse(19, 31, 10, 11, fur);
+    p.ellipse(19, 34, 5, 6, light);
+    p.ellipse(16, 17, 8, 7, fur);
+    p.poly([[11, 13], [10, 5], [15, 10]], fur).poly([[19, 11], [21, 4], [23, 11]], fur);
+    p.ellipse(13, 16, 1.5, 2, K).ellipse(19, 16, 1.5, 2, K);
+    p.set(12, 15, W).set(18, 15, W);
+    p.ellipse(16, 20, 1.5, 1, dark);
+    p.rect(12, 41, 4, 4, dark).rect(21, 41, 4, 4, dark);
+    p.outline(K);
+  },
+  /** A big acrobatic squirrel with a red sweatband and a pom-pom tail. */
+  ardillon(p) {
+    const fur = '#b06830', light = '#f0c890', dark = '#6a3a14', band = '#d04048';
+    p.ellipse(35, 18, 12, 16, dark).ellipse(35, 17, 9, 12, light);
+    p.ellipse(20, 32, 12, 13, fur).ellipse(20, 35, 6, 7, light);
+    p.ellipse(18, 14, 9, 8, fur);
+    p.poly([[12, 10], [11, 1], [16, 7]], fur).poly([[21, 8], [24, 0], [26, 8]], fur);
+    p.rect(10, 9, 17, 3, band);
+    p.ellipse(15, 15, 1.5, 2, K).ellipse(21, 15, 1.5, 2, K);
+    p.line(4, 26, 10, 30, fur).line(30, 26, 38, 22, fur);
+    p.rect(12, 43, 5, 4, dark).rect(23, 43, 5, 4, dark);
+    p.outline(K);
+  },
+  /** A tiny hummingbird with a shiny green throat, wings a blur, humming music notes. */
+  colibri(p) {
+    const green = '#3a9a58', throat = '#78e0a0', wing = '#c8e8f0', note = '#5860c8';
+    p.ellipse(17, 18, 11, 6, wing).ellipse(31, 16, 11, 6, wing);
+    p.ellipse(24, 28, 7, 10, green);
+    p.ellipse(24, 30, 4, 5, throat);
+    p.ellipse(24, 18, 6, 6, green);
+    p.line(30, 18, 44, 20, '#3a3a42');
+    p.ellipse(22, 17, 1.5, 1.5, K).set(21, 16, W);
+    p.poly([[21, 37], [27, 37], [24, 46]], green);
+    p.rect(6, 6, 2, 6, note).ellipse(5, 12, 2, 1.5, note).rect(38, 4, 2, 5, note).ellipse(37, 9, 2, 1.5, note);
+    p.outline(K);
+  },
+  /** A bigger hummingbird with a needle beak and a glowing throat, leaving music notes behind. */
+  zumbador(p) {
+    const green = '#28804a', throat = '#f8e060', wing = '#d8f0f8', note = '#5860c8';
+    p.ellipse(15, 18, 13, 7, wing).ellipse(33, 15, 13, 7, wing);
+    p.ellipse(22, 29, 9, 12, green).ellipse(22, 31, 5, 6, throat);
+    p.ellipse(22, 16, 7, 7, green);
+    p.line(29, 16, 47, 14, '#3a3a42');
+    p.ellipse(20, 15, 1.5, 1.5, K).set(19, 14, W);
+    p.poly([[18, 40], [26, 40], [22, 47]], green);
+    p.rect(3, 30, 2, 6, note).ellipse(2, 36, 2, 1.5, note).rect(40, 30, 2, 6, note).ellipse(39, 36, 2, 1.5, note);
+    p.outline(K);
+  },
+  /** A baby porcupine with soft spines and a curly gripping tail. */
+  espinita(p) {
+    const spine = '#c8b090', body = '#8a6848', face = '#e8c8a0';
+    for (let a = 0; a < 9; a++) {
+      const ang = Math.PI + (a / 8) * Math.PI;
+      p.line(24, 30, 24 + Math.cos(ang) * 18, 30 + Math.sin(ang) * 16, spine);
+    }
+    p.ellipse(24, 32, 15, 11, body);
+    p.ellipse(15, 33, 7, 6, face);
+    p.ellipse(13, 31, 1.5, 2, K).set(12, 30, W);
+    p.ellipse(9, 35, 1.5, 1, K);
+    p.line(39, 34, 45, 30, body).line(45, 30, 43, 25, body).line(43, 25, 40, 27, body);
+    p.rect(17, 42, 4, 3, body).rect(28, 42, 4, 3, body);
+    p.outline(K);
+  },
+  /** A round porcupine with a doctor's head mirror; its spines look like syringes. */
+  puercoespin(p) {
+    const spine = '#d8d8e0', body = '#6a5038', face = '#e8c8a0';
+    for (let a = 0; a < 11; a++) {
+      const ang = Math.PI + (a / 10) * Math.PI;
+      p.line(24, 30, 24 + Math.cos(ang) * 22, 30 + Math.sin(ang) * 20, spine);
+    }
+    p.ellipse(24, 32, 18, 13, body);
+    p.ellipse(14, 33, 8, 7, face);
+    p.ellipse(12, 31, 1.5, 2, K).set(11, 30, W);
+    p.ellipse(13, 23, 4, 3, '#f0f0f8').ellipse(13, 23, 2, 1.5, '#a0c8e0');
+    p.rect(16, 43, 5, 4, body).rect(29, 43, 5, 4, body);
+    p.outline(K);
+  },
+  /** A small ancient armadillo with a domed bony shell, cracked like old stone. */
+  caparazonte(p) {
+    const shell = '#a89878', dark = '#706048', skin = '#c8b090';
+    p.ellipse(26, 30, 15, 12, shell);
+    for (const x of [16, 22, 28, 34]) p.line(x, 20, x - 1, 40, dark);
+    p.line(14, 30, 39, 30, dark);
+    p.ellipse(10, 34, 6, 5, skin);
+    p.ellipse(8, 32, 1.5, 2, K).set(7, 31, W);
+    p.poly([[40, 34], [46, 38], [40, 38]], skin);
+    p.rect(15, 40, 4, 4, skin).rect(31, 40, 4, 4, skin);
+    p.outline(K);
+  },
+  /** A giant prehistoric armadillo with a huge dome shell and a spiked tail club. */
+  gliptodon(p) {
+    const shell = '#988868', dark = '#605038', skin = '#c0a888';
+    p.ellipse(24, 26, 20, 16, shell);
+    for (let y = 14; y < 40; y += 5) for (let x = 8 + (y % 2) * 2; x < 42; x += 6) p.ellipse(x, y, 1.5, 1.5, dark);
+    p.ellipse(6, 32, 5, 5, skin);
+    p.ellipse(4, 30, 1.5, 2, K);
+    p.rect(42, 30, 4, 4, dark).set(46, 29, dark).set(46, 34, dark);
+    p.rect(12, 40, 6, 6, skin).rect(30, 40, 6, 6, skin);
+    p.outline(K);
+  },
+  /** Nicaragua's national bird: turquoise brows, green body, rust belly, a long tail with two racket tips. */
+  guardabarranco(p) {
+    const green = '#4a9a48', turq = '#40c8d0', rust = '#c06030', tail = '#2a7a90';
+    p.line(28, 30, 40, 44, tail).line(29, 30, 41, 44, tail);
+    p.line(26, 30, 30, 46, tail).line(27, 30, 31, 46, tail);
+    p.ellipse(41, 44, 3, 2.5, tail).ellipse(31, 46, 3, 2.5, tail);
+    p.ellipse(22, 26, 10, 9, green);
+    p.ellipse(21, 30, 6, 5, rust);
+    p.ellipse(18, 15, 7, 7, green);
+    p.line(12, 12, 23, 11, turq);
+    p.line(11, 16, 4, 18, '#3a3a42');
+    p.ellipse(16, 15, 1.5, 1.5, K).set(15, 14, W);
+    p.rect(19, 34, 2, 4, '#3a3a42').rect(24, 34, 2, 4, '#3a3a42');
+    p.outline(K);
+  },
   sillon(p) {
     const rd = '#c8463e', dr = '#8e2a26', cu = '#e86a5a', wd = '#7a4a22';
     p.ellipse(24, 9, 14, 5, rd);
