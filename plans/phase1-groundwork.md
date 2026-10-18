@@ -235,8 +235,10 @@ battles only).
 
 ## 8. Rematches (*¡Revancha!*)
 
-- `TrainerDef.rematch?: boolean`: true for route trainers, false (left out) for gym leaders, the rival,
-  Equipo Silencio and gym trainers.
+- `TrainerDef.rematch?: boolean`: **one or two per route** (the user's choice), picked because they're fun:
+  Niña Sofía, Pintora Valeria, Joven Andrés, Pintora Isabel, Excursionista Ernesto, Arqueólogo Federico, Pintora
+  Lucía, Leñador Armando, Pescador Julio. Never gym leaders, the rival, Equipo Silencio or gym trainers.
+- **The mark:** a ready rematch trainer has a small «!» over their head (smaller and quieter than the alert).
 - **Remembering:** after a win, `G.save.rematch[id] = today()`. Add `s.rematch ??= {}` to `migrate()`.
 - **Talking to a beaten rematch trainer:**
   - On a later day than `rematch[id]`: «¡Hola otra vez! ¿Quieres la revancha?», then `ask()`.
@@ -265,6 +267,11 @@ battles only).
 **The teacher's script** (one per school; the town's topic is data):
 - «¡Bienvenid{o/a} a la escuela! ¿Qué quieres estudiar hoy?» with a
   `menu(['CLASE PARTICULAR', 'TEMA DEL DÍA', 'Nada'])`.
+- **REPASO** ✓ (the user's addition: the main reason to visit a school; free, any time): up to 10 of your
+  learned words and phrases that are due for review, the most overdue first (fading, then due), from every
+  list (core and themes). Right answers push the next review further out and bring loyalty back. Nothing due:
+  «¡Estás al día!», and an offer of the topic of the day. The start menu shows «Repaso: N» while words are due,
+  and the nurse mentions it when 15 or more are waiting.
 - **CLASE PARTICULAR** ($200, once per day per school: `lesson:<mapId> = today()`):
   1. Pick a Palabrita.
   2. A drill of up to 10 of its current items: the level's new items first, then its review items (use

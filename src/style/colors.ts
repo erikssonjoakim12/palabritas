@@ -65,6 +65,10 @@ export const CAVE = {
   daylight: '#f8f8e8',
 };
 
+/** Night scenes: the dark blue laid over the world (a soft circle of light stays around you). */
+export const NIGHT = 'rgba(16, 24, 64, 0.62)';
+export const NIGHT_CLEAR = 'rgba(16, 24, 64, 0)';
+
 /** Accent colors used by individual tiles (letters in tiles.ts). */
 export const ACCENT = {
   windowYellow: '#e8d090',

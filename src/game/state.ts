@@ -61,6 +61,10 @@ export interface SaveData {
   starterPicked?: string;
   /** The day you lent the shell fossil to the museum (it wakes up the next day). */
   fossilDay?: string;
+  /** Rematch trainers: the day of your last battle with each (they ask again on a later day). */
+  rematch: Record<string, string>;
+  /** Private classes: the day of the last one at each school (one a day). */
+  lessons: Record<string, string>;
   medals: string[];
   prog: Record<string, ItemProg>;
   seen: string[];
@@ -91,6 +95,8 @@ export function newSave(): SaveData {
     gender: 'boy',
     money: 0,
     bag: {},
+    rematch: {},
+    lessons: {},
     medals: [],
     prog: {},
     seen: [],
@@ -141,6 +147,8 @@ function migrate(s: SaveData) {
   const old = s as unknown as { esferas?: number; palabolas?: number };
   s.bag ??= {};
   s.box ??= [];
+  s.rematch ??= {};
+  s.lessons ??= {};
   s.gender ??= 'boy';
   // Pueblo Amanecer grew 6 columns to the west (the plateau): keep you where you were.
   if (!s.flags.amanecerWide) {

@@ -12,6 +12,7 @@ import { info, say } from './textbox';
 import { pickMon, showDetails, listMenu, spriteCanvas, detailBox, wordRow, openDetail } from './party';
 import { openBag } from './bag';
 import { money } from '../game/bag';
+import { dueCount } from '../game/review';
 
 const DEX_ORDER = ['salchichita', 'hamburgueson', 'gotita', 'nubarron', 'aguacatito', 'aguacatono', 'pajarito', 'palomon', 'conejito', 'mariposita', 'sillon', 'hojadillo', 'ecolin', 'ochopatas', 'cuernito', 'ardillita', 'ardillon', 'colibri', 'zumbador', 'espinita', 'puercoespin', 'piedrita', 'petroglifon', 'ollita', 'tinajon', 'caparazonte', 'gliptodon', 'guardabarranco'];
 
@@ -21,7 +22,9 @@ export async function startMenu(): Promise<string | undefined> {
   let sel = 0;
   while (true) {
     const opts = ['PALABRITAS', 'MOCHILA', 'DICCIONARIO', 'TARJETA', 'GUARDAR', 'AJUSTES', 'SALIR'];
-    const i = await menu(opts, { cancel: true, pos: { right: 0, top: 0 }, initial: sel, disabled: [!G.save.party.length] });
+    // Words due for review (the schools' REPASO), so you know when it's time.
+    const due = dueCount();
+    const i = await menu(opts, { cancel: true, pos: { right: 0, top: 0 }, initial: sel, disabled: [!G.save.party.length], title: due ? `Repaso: ${due}` : undefined });
     sel = Math.max(0, i);
     if (i === 0) await PalabritasMenu();
     else if (i === 1) {

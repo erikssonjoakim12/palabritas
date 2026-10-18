@@ -8,6 +8,8 @@ import type { Img } from '../art/pixel';
 import { MAPS, type MapDef, type NpcDef, type Conn, type EncounterEntry } from './maps';
 import { worldLayout } from './layout';
 import { G, flag, saveGame, playerLook } from '../game/state';
+import { rematchReady } from '../game/rematch';
+import { NIGHT, NIGHT_CLEAR } from '../style/colors';
 import { itemCount } from '../game/bag';
 import { closeText, say, setSpeaker } from '../ui/textbox';
 
@@ -491,6 +493,26 @@ export function updateWorld() {
 
 // ---------- Rendering ----------
 
+/** A small «!» over a trainer who's ready for a rematch: quieter than the alert bubble. */
+function drawRematchMark(g: CanvasRenderingContext2D, x: number, y: number) {
+  g.fillStyle = '#202028';
+  g.fillRect(x + 6, y - 9, 5, 8);
+  g.fillStyle = '#ffffff';
+  g.fillRect(x + 7, y - 8, 3, 6);
+  g.fillStyle = '#d83838';
+  g.fillRect(x + 8, y - 7, 1, 3);
+  g.fillRect(x + 8, y - 3, 1, 1);
+}
+
+/** Night: everything dark blue except a soft circle of light around you. */
+function drawNight(g: CanvasRenderingContext2D, cx: number, cy: number) {
+  const light = g.createRadialGradient(cx, cy, 18, cx, cy, 52);
+  light.addColorStop(0, NIGHT_CLEAR);
+  light.addColorStop(1, NIGHT);
+  g.fillStyle = light;
+  g.fillRect(0, 0, W, H);
+}
+
 function drawBubble(g: CanvasRenderingContext2D, x: number, y: number) {
   g.fillStyle = '#202028';
   g.fillRect(x + 4, y - 12, 9, 11);
@@ -621,6 +643,7 @@ export function renderWorld(g: CanvasRenderingContext2D) {
         else g.drawImage(framesFor(n.def.look ?? 'man')[n.dir][n.off?.frame ?? 0], sx, sy - 4);
         n.overlay?.(g, sx, sy);
         if (n.bubble > 0) drawBubble(g, sx, sy - 4);
+        else if (rematchReady(n.def.id)) drawRematchMark(g, sx, sy - 4);
       },
     });
   }
@@ -653,6 +676,7 @@ export function renderWorld(g: CanvasRenderingContext2D) {
     g.drawImage((grassOverlay ??= tallGrassImage()), tx * T - camX, ty * T - camY);
   }
   g.restore();
+  if (map.night) drawNight(g, 72, 68 - hop);
   if (fade > 0) {
     g.fillStyle = `rgba(0,0,0,${fade})`;
     g.fillRect(0, 0, W, H);

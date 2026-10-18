@@ -4,6 +4,7 @@ import { buildCreatureArt, CREATURE_ART } from '../art/creatures';
 import { portrait } from '../art/portraits';
 import { personFrames, buildObjects, OBJECTS } from '../art/chars';
 import { renderMap } from '../art/tiles';
+import { NIGHT } from '../style/colors';
 import { MAPS, type MapDef } from '../world/maps';
 import { worldLayout } from '../world/layout';
 import { LOOKS } from '../style/people';
@@ -110,6 +111,10 @@ function mapWithPeople(m: MapDef) {
   for (const n of m.npcs ?? []) {
     if (n.object) g.drawImage(OBJECTS[n.object], n.x * 16, n.y * 16);
     else g.drawImage(personFrames(n.look ?? 'man')[n.dir ?? 'down'][0], n.x * 16, n.y * 16 - 4);
+  }
+  if (m.night) {
+    g.fillStyle = NIGHT;
+    g.fillRect(0, 0, img.width, img.height);
   }
   return img;
 }

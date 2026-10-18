@@ -1,7 +1,10 @@
 import { overlay, el, gp } from '../engine/screen';
 import { sfx } from '../engine/sfx';
 import { frames } from '../engine/loop';
-import { G, flag, setFlag, saveGame } from '../game/state';
+import { G, flag, setFlag, today } from '../game/state';
+import { rematchReady, rematchTeam } from '../game/rematch';
+import { dueCount } from '../game/review';
+import { drill } from './school';
 import { addItem, itemCount, money } from '../game/bag';
 import { ITEM_DEFS, SHOPS, amountOf } from '../data/items';
 import { gradeOrder } from '../lang/order';
@@ -93,7 +96,7 @@ interface TrainerLines {
 }
 
 export async function trainerFight(id: string, l: TrainerLines) {
-  if (flag(`beat:${id}`)) return lines(l.after);
+  if (flag(`beat:${id}`)) return afterBeaten(id, l);
   await lines(l.intro);
   if (!flag('defenseTip')) {
     setFlag('defenseTip');
@@ -104,6 +107,21 @@ export async function trainerFight(id: string, l: TrainerLines) {
   const res = await trainerBattle(TRAINERS[id], { look: npcById(id)?.def.look, outro: l.defeated });
   if (res === 'lose') return blackout();
   setFlag(`beat:${id}`);
+  if (TRAINERS[id].rematch) G.save.rematch[id] = today();
+}
+
+/** A beaten trainer: the rematch trainers ask for one (once a day); everyone else just talks. */
+async function afterBeaten(id: string, l: TrainerLines) {
+  const t = TRAINERS[id];
+  if (!rematchReady(id)) {
+    await lines(l.after);
+    if (t.rematch) await lines(['¡Mañana quiero la revancha!', 'Tomorrow I want a rematch!']);
+    return;
+  }
+  if (!(await ask('¡Hola otra vez! ¿Quieres la revancha?', { en: 'Hi again! Do you want a rematch?' }))) return lines(['¡Otro día será!', 'Another day, then!']);
+  const res = await trainerBattle(rematchTeam(t), { look: npcById(id)?.def.look, outro: l.defeated, prize: 0.5 });
+  if (res === 'lose') return blackout();
+  G.save.rematch[id] = today();
 }
 
 const MICHI_Q = adHocItem(
@@ -123,7 +141,7 @@ async function askAboutMichi(): Promise<boolean> {
   return r.grade !== 'wrong';
 }
 
-function showCreature(sp: string) {
+export function showCreature(sp: string) {
   const box = el('div', 'box');
   Object.assign(box.style, { left: gp(48), top: gp(6), padding: gp(4) });
   const c = spriteCanvas(sp, 48);
@@ -566,6 +584,8 @@ const S: Record<string, (c: ScriptCtx) => Promise<void>> = {
       await healingMachine();
       G.save.heal = { map: currentMap().id, x: 4, y: 3 };
       await lines(['¡Listo! Tus Palabritas están sanas. ¡Vuelve pronto!', 'Done! Your Palabritas are healthy. Come back soon!']);
+      const due = dueCount();
+      if (due >= 15) await lines([`Por cierto: tienes ${due} palabras para repasar. ¡En la escuela te ayudan!`, `By the way: you have ${due} words to review. The school can help!`]);
     } else {
       await lines(['¡Vuelve pronto!', 'Come back soon!']);
     }
@@ -846,25 +866,9 @@ async function starterTraining(sp: string) {
     await lines([`¿Seguimos con las palabras de ${s.name}?`, `Shall we continue with ${s.name}’s words?`]);
   }
   closeText();
-  const hide = showCreature(sp);
-  try {
-    let asked = 0;
-    while (queue.length) {
-      const item = queue.shift()!;
-      const done = words.length - queue.length - 1;
-      const r = await challenge({ item, mode: isUnseen(item) ? 'choose' : 'type', title: `Palabras ${done}/${words.length}` });
-      record(item, r.mode, r.grade, r.helped);
-      saveGame();
-      if (!isLearned(item)) queue.push(item);
-      if (++asked % 6 === 0 && queue.length) {
-        if (!(await ask('¡Vas muy bien! ¿Seguimos?', { en: 'You’re doing great! Shall we continue?' }))) {
-          return lines(['Muy bien. Vuelve a hablar conmigo cuando quieras seguir.', 'All right. Talk to me again whenever you want to continue.']);
-        }
-      }
-    }
-  } finally {
-    hide();
-  }
+  const known = words.length - queue.length;
+  const finished = await drill(queue, { sp, title: (done) => `Palabras ${known + done}/${words.length}`, again: (item) => !isLearned(item) });
+  if (!finished) return lines(['Muy bien. Vuelve a hablar conmigo cuando quieras seguir.', 'All right. Talk to me again whenever you want to continue.']);
   G.save.starterChoice = undefined;
   giveMon(sp, STARTER_LEVEL);
   G.save.starterPicked = sp;

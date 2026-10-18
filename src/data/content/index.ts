@@ -7,7 +7,7 @@ import { naturaleza } from './naturaleza';
 import { numeros } from './numeros';
 import { colores } from './colores';
 import { casa } from './casa';
-import { presente } from './trainers';
+import { presente, preguntas, gustar } from './trainers';
 import { cuerpo } from './cuerpo';
 import { cocina } from './cocina';
 import { deportes } from './deportes';
@@ -140,7 +140,7 @@ function build(src: { id: string; name: string; en: string }, tiers: Record<numb
 }
 
 build(core, splitCoreBands(core));
-for (const src of [perro, tiempo, comida, naturaleza, numeros, colores, casa, cuerpo, cocina, deportes, musica, salud, historia, latinoamerica, presente]) {
+for (const src of [perro, tiempo, comida, naturaleza, numeros, colores, casa, cuerpo, cocina, deportes, musica, salud, historia, latinoamerica, presente, preguntas, gustar]) {
   build(src, src.levels ? splitIntoLevels(src.levels) : (src.tiers ?? {}));
 }
 

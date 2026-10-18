@@ -148,6 +148,19 @@ const casa = (id: string, name: string, exit: MapDef['exit'], npcs: NpcDef[], ex
 });
 /** A museum exhibit on a two-tile table: the same text from both tiles. */
 const exhibit = (x: number, y: number, es: string, en: string) => [{ x, y, es, en }, { x: x + 1, y, es, en }];
+const ESCUELA = ['##L##L##L#', '__________', '__________', '_kk_kk_kk_', '__________', '_kk_kk_kk_', '__________', '____m_____'];
+/** A school: the teacher at the front (lessons: world/school.ts) and two students. */
+const escuela = (id: string, exit: MapDef['exit'], teacher: NpcDef, students: NpcDef[], extra: Partial<MapDef> = {}): MapDef => ({
+  id, name: 'Escuela', outdoor: false, floor: '_', rows: ESCUELA, exit, npcs: [teacher, ...students], ...extra,
+});
+/**
+ * A night version of a map (plans/phase1-groundwork.md §10): the same place drawn dark, with other people. For
+ * cutscenes only, so it has no way in or out of its own (no connections, doors, triggers, gates or encounters).
+ */
+const night = (m: MapDef, id: string, changes: Partial<MapDef>): MapDef => ({
+  ...m, id, night: true, banner: false, connections: undefined, doors: undefined, triggers: undefined, gates: undefined, encounters: undefined, ...changes,
+});
+
 /** Villa Ocote can't speak until the Silenciador in the mine breaks. */
 const ocoteMuted = () => !flag('silenciadorRoto');
 
@@ -1027,29 +1040,16 @@ export const MAPS: Record<string, MapDef> = {
     npcs: [{ id: 'curadora', x: 6, y: 2, look: 'prof', dir: 'down', script: 'curadora' }],
   },
 
-  escuela_ocote: {
-    id: 'escuela_ocote',
-    name: 'Escuela',
-    outdoor: false,
-    floor: '_',
-    rows: [
-      '##L##L##L#',
-      '__________',
-      '__________',
-      '_kk_kk_kk_',
-      '__________',
-      '_kk_kk_kk_',
-      '__________',
-      '____m_____',
-    ],
-    exit: { to: 'ocote', x: 28, y: 23 },
-    muted: ocoteMuted,
-    npcs: [
-      { id: 'maestro_ocote', x: 4, y: 1, look: 'man', dir: 'down', script: 'maestro_ocote' },
+  escuela_ocote: escuela(
+    'escuela_ocote',
+    { to: 'ocote', x: 28, y: 23 },
+    { id: 'maestro_ocote', x: 4, y: 1, look: 'man', dir: 'down', script: 'maestro_ocote' },
+    [
       { id: 'alumno1', x: 2, y: 4, look: 'boy', dir: 'up', script: 'alumno1' },
       { id: 'alumna1', x: 6, y: 6, look: 'girl', dir: 'up', script: 'alumna1' },
     ],
-  },
+    { muted: ocoteMuted },
+  ),
 
   // Petra's gym: pottery shelves with a stone door in each row; a riddle opens each door. Both trainers are in
   // the way (the shelf rows leave no way around their lines of sight).
@@ -1267,6 +1267,21 @@ export const MAPS: Record<string, MapDef> = {
     ],
   },
 };
+
+// The lost words' party (region2.ts fiesta): Villa Ocote at night, everyone around the fountain.
+MAPS.ocote_noche = night(MAPS.ocote, 'ocote_noche', {
+  npcs: [
+    { id: 'petra_fiesta', x: 19, y: 12, look: 'petra', dir: 'down', script: 'petra_mina' },
+    { id: 'vendedora_fiesta', x: 17, y: 13, look: 'lady', dir: 'right', script: 'vendedora' },
+    { id: 'cocinera_fiesta', x: 22, y: 13, look: 'lady', dir: 'left', script: 'cocinera' },
+    { id: 'musico_fiesta', x: 17, y: 14, look: 'musico', dir: 'right', script: 'musico' },
+    { id: 'curandera_fiesta', x: 22, y: 14, look: 'granny', dir: 'left', script: 'curandera' },
+    { id: 'abuelo_fiesta', x: 17, y: 15, look: 'abuelo', dir: 'right', script: 'abuelo_ocote' },
+    { id: 'chepe_fiesta', x: 22, y: 15, look: 'man', dir: 'left', script: 'chepe' },
+    { id: 'futbolista_fiesta', x: 18, y: 17, look: 'boy', dir: 'up', script: 'futbolista' },
+    { id: 'maestro_fiesta', x: 21, y: 17, look: 'man', dir: 'up', script: 'maestro_ocote' },
+  ],
+});
 
 // Each gate's guard (on the road, or aside once it's open) and the tiles where you get stopped.
 for (const m of Object.values(MAPS)) {

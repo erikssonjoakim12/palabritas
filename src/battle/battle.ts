@@ -7,7 +7,7 @@ import { portrait } from '../art/portraits';
 import type { Img } from '../art/pixel';
 import { LINEUP_BALL, BALL_COLORS, FAINTED_COLORS, EMPTY_COLORS, drawPattern } from '../art/balls';
 import { G, playerLook, type Mon } from '../game/state';
-import { stats, monName, checkLevelUps, firstAble, markSeen, keepMon, newMon, knownMoves, newMoves, evolutionsDue, evolve } from '../game/mon';
+import { stats, monName, checkLevelUps, firstAble, markSeen, keepMon, newMon, knownMoves, newMoves, evolutionsDue, evolve, type LevelUp } from '../game/mon';
 import { SPECIES, MODE_INFO, type Move } from '../data/species';
 import { effectiveness } from '../data/types';
 import { THEMES, type Item } from '../data/content';
@@ -234,9 +234,26 @@ interface Config {
   trainer?: TrainerDef;
   look?: string;
   outro?: [es: string, en: string];
+  /** The share of the normal prize money (rematches pay half). */
+  prize?: number;
 }
 
 type Action = { type: 'fight'; move: Move } | { type: 'switch'; mon: Mon } | { type: 'ball'; id: string } | { type: 'item' } | { type: 'run' };
+
+/** The messages for level-ups (and the moves they bring): after a battle, a lesson or a review. */
+export async function announceLevelUps(ups: LevelUp[], each?: () => void) {
+  for (const up of ups) {
+    sfx('levelup');
+    each?.();
+    await info(`¡${monName(up.mon)} subió al nivel ${up.to}!`);
+    for (const mv of newMoves(up.mon, up.from, up.to)) {
+      sfx('perfect');
+      await info(`¡${monName(up.mon)} aprendió ${mv.name}! (${MODE_INFO[mv.mode].icon} ${MODE_INFO[mv.mode].es})`, {
+        en: `${monName(up.mon)} learned ${mv.name}! It's a "${MODE_INFO[mv.mode].en}" move.`,
+      });
+    }
+  }
+}
 
 export function wildBattle(sp: string, level: number) {
   return runBattle({ kind: 'wild', team: [newMon(sp, level)] });
@@ -246,7 +263,7 @@ export function wildBattle(sp: string, level: number) {
  * look: how the trainer looks (key in LOOKS), for their portrait.
  * outro: what they say in battle when you win.
  */
-export function trainerBattle(t: TrainerDef, opts: { look?: string; outro?: [es: string, en: string] } = {}) {
+export function trainerBattle(t: TrainerDef, opts: { look?: string; outro?: [es: string, en: string]; prize?: number } = {}) {
   return runBattle({ kind: 'trainer', team: t.team.map(([sp, l]) => newMon(sp, l)), trainer: t, ...opts });
 }
 
@@ -296,17 +313,7 @@ async function runBattle(cfg: Config): Promise<BattleResult> {
     const ok = landed && me.hp > 0;
     landed = false;
     if (!ok) return;
-    for (const up of checkLevelUps()) {
-      sfx('levelup');
-      hud?.update();
-      await info(`¡${monName(up.mon)} subió al nivel ${up.to}!`);
-      for (const mv of newMoves(up.mon, up.from, up.to)) {
-        sfx('perfect');
-        await info(`¡${monName(up.mon)} aprendió ${mv.name}! (${MODE_INFO[mv.mode].icon} ${MODE_INFO[mv.mode].es})`, {
-          en: `${monName(up.mon)} learned ${mv.name}! It's a "${MODE_INFO[mv.mode].en}" move.`,
-        });
-      }
-    }
+    await announceLevelUps(checkLevelUps(), () => hud?.update());
     for (const mon of evolutionsDue()) await evolveNow(mon);
   };
 
@@ -684,7 +691,7 @@ async function runBattle(cfg: Config): Promise<BattleResult> {
       await slide(enemyF, ENEMY_POS.x);
       await info(`¡Venciste a ${trainer.name}!`);
       if (cfg.outro) await say(cfg.outro[0], { en: cfg.outro[1] });
-      const prize = prizeMoney(cfg.team);
+      const prize = Math.round(prizeMoney(cfg.team) * (cfg.prize ?? 1));
       G.save.money += prize;
       sfx('levelup');
       await info(`¡Ganaste ${money(prize)}!`, { en: `You won ${money(prize)}!` });

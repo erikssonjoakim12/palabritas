@@ -11,9 +11,10 @@ import { challenge, chooseText } from '../ui/challenge';
 import { trainerBattle, wildBattle } from '../battle/battle';
 import { TRAINERS } from '../data/trainers';
 import { speak } from '../lang/speech';
-import { warp, refreshNpcs, walkNpc, placeNpc, setFade, fadeOut, fadeIn, currentMap, type ScriptFn } from './world';
+import { warp, refreshNpcs, walkNpc, placeNpc, setFade, fadeOut, currentMap, type ScriptFn } from './world';
 import { MAPS, gateOf, type Line } from './maps';
 import { lines, trainerFight, blackout, talkMode } from './scripts';
+import { teacher } from './school';
 
 /*
   Region 2: Villa Ocote, the town that lost its words, the Mina de Barro and Petra's gym.
@@ -280,8 +281,7 @@ const owner = (id: string, usual: ScriptFn): ScriptFn => async (c) => {
 async function fiesta() {
   await lines(['¡Todos hablan otra vez! ¡Esta noche hay fiesta en la plaza!', 'Everyone’s talking again! Tonight there’s a party in the plaza!']);
   await fadeOut(16);
-  await warp('ocote', 19, 13, 'down', false);
-  setFade(0.55); // evening
+  await warp('ocote_noche', 19, 16, 'up', false);
   await info('Esa noche, todo Villa Ocote se reúne alrededor de la fuente...', { en: 'That night, all of Villa Ocote gathers around the fountain...' });
   for (const id of LOST_IDS) {
     setSpeaker(LOST_WORDS[id].look);
@@ -294,7 +294,7 @@ async function fiesta() {
   await give('superbola', 5, 'cinco Superbolas', 'five Super Balls');
   await give('revivir', 2, 'dos Revivir', 'two Revives');
   setFlag('palabrasDone');
-  await fadeIn(16);
+  await warp('ocote', 19, 16, 'down', false);
 }
 
 // ---------- Ruta 5 and the canyon ----------
@@ -704,20 +704,8 @@ export const REGION2: Record<string, ScriptFn> = {
     ['Primero amasamos el barro, luego le damos forma y después lo cocinamos en el horno.', 'First we knead the clay, then we shape it, and after that we bake it in the kiln.'],
     ['Petra aprendió aquí, conmigo. ¡Ahora es mejor que yo!', 'Petra learned here, with me. Now she’s better than me!'],
   ),
-  maestro_ocote: owner('pregunta', async () => {
-    await lines(
-      ['¡Hola! Soy el profesor Rubén. Hoy practicamos las preguntas: ¿qué?, ¿dónde?, ¿cuándo?', 'Hi! I’m Professor Rubén. Today we’re practicing questions: what?, where?, when?'],
-      ['A ver... ¿cómo se pregunta «Where is the mine?»', 'Let’s see... how do you ask "Where is the mine?"'],
-    );
-    await untilRight(
-      '«Where is the mine?»',
-      'Choose the right question.',
-      '¿Dónde está la mina?',
-      ['¿Qué es la mina?', '¿Cuándo es la mina?'],
-      ['Casi. «Dónde» es para lugares. ¡Otra vez!', 'Almost. "Dónde" is for places. Again!'],
-    );
-    await lines(['¡Muy bien! «Dónde» es para preguntar por un lugar.', 'Very good! "Dónde" is for asking about a place.']);
-  }),
+  // Profesor Rubén: Villa Ocote's topics are questions and liking things.
+  maestro_ocote: owner('pregunta', teacher(['preguntas', 'gustar'])),
   alumno1: talk(['¿Qué es más difícil: el español o las matemáticas?', 'What’s harder: Spanish or math?']),
   alumna1: talk(['A mí me gusta mucho la clase de música.', 'I really like music class.']),
 };
