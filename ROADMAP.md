@@ -82,7 +82,7 @@ Route trainers sit between the previous leader and the next one.
 | # | City / habitat | Type | Team | Top level | Route trainers before it |
 |---|---|---|---|---|---|
 | 1 ✓ | Ciudad Brisa | Volador (birds) | 2 | 12 | 3-6 |
-| 2 ✓ | Villa Ocote, a pine-highland town past the cave | Roca / Tierra | 3 | 19 | 12-16 |
+| 2 ✓ | Villa Ocote, a pine-highland town past the cave | Roca / Tierra | 3 | 21 | 12-18 |
 | 3 | beach town | Agua | 3 | 25 | 16-22 |
 | 4 | volcano town | Fuego | 3 | 31 | 22-28 |
 | 5 | rainforest town | Planta / Veneno | 3-4 | 37 | 28-34 |

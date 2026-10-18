@@ -561,14 +561,14 @@ lucia: { id: 'lucia', name: 'Pintora Lucía', defenseMode: 'listen', rematch: tr
 elena: { id: 'elena', name: 'Campista Elena', defenseMode: 'listen', rematch: true, team: [['colibri', 12], ['espinita', 13]] },
 julio: { id: 'julio', name: 'Pescador Julio', defenseMode: 'listen', rematch: true, team: [['hojadillo', 13], ['colibri', 13]] },
 rosa: { id: 'rosa', name: 'Campista Rosa', defenseMode: 'listen', rematch: true, team: [['espinita', 13], ['ardillita', 14]] },
-silencioso1: { id: 'silencioso1', name: 'Silencioso', defenseMode: 'listen', team: [['ollita', 13], ['piedrita', 13]] },
-silencioso2: { id: 'silencioso2', name: 'Silenciosa', defenseMode: 'listen', team: [['ecolin', 13], ['ochopatas', 14]] },
-silencioso3: { id: 'silencioso3', name: 'Silencioso', defenseMode: 'listen', team: [['piedrita', 14], ['ecolin', 14]] },
-silencioso4: { id: 'silencioso4', name: 'Silenciosa', defenseMode: 'listen', team: [['ollita', 14], ['ochopatas', 15]] },
-capataz: { id: 'capataz', name: 'Capataz Silencioso', defenseMode: 'listen', team: [['piedrita', 15], ['ollita', 15], ['piedrita', 16]] },
-tito: { id: 'tito', name: 'Alfarero Tito', defenseMode: 'type', team: [['ollita', 15], ['piedrita', 15]] },
-rosario: { id: 'rosario', name: 'Minera Rosario', defenseMode: 'type', team: [['piedrita', 16]] },
-petra: { id: 'petra', name: 'Líder Petra', defenseMode: 'type', team: [['piedrita', 16], ['ollita', 17], ['petroglifon', 19]] },
+silencioso1: { id: 'silencioso1', name: 'Silencioso', defenseMode: 'listen', team: [['ollita', 15], ['piedrita', 15]] },
+silencioso2: { id: 'silencioso2', name: 'Silenciosa', defenseMode: 'listen', team: [['ecolin', 15], ['ochopatas', 16]] },
+silencioso3: { id: 'silencioso3', name: 'Silencioso', defenseMode: 'listen', team: [['piedrita', 16], ['ecolin', 16]] },
+silencioso4: { id: 'silencioso4', name: 'Silenciosa', defenseMode: 'listen', team: [['ollita', 16], ['ochopatas', 17]] },
+capataz: { id: 'capataz', name: 'Capataz Silencioso', defenseMode: 'listen', team: [['piedrita', 16], ['ollita', 17], ['piedrita', 17]] },
+tito: { id: 'tito', name: 'Alfarero Tito', defenseMode: 'type', team: [['ollita', 17], ['piedrita', 17]] },
+rosario: { id: 'rosario', name: 'Minera Rosario', defenseMode: 'type', team: [['piedrita', 17], ['ollita', 18]] },
+petra: { id: 'petra', name: 'Líder Petra', defenseMode: 'type', team: [['piedrita', 17], ['ollita', 19], ['petroglifon', 21]] },
 lucas1: { id: 'lucas1', name: 'Lucas', defenseMode: 'type', team: [['<counter starter>', 15], ['pajarito', 12]] },  // §7
 ```
 

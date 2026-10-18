@@ -292,7 +292,7 @@ A fishing village on a bay: the beach and pier on the west, the lighthouse on it
 the surf school (the gym), the restaurant *El Pelícano Feliz*, Don Lalo's house.
 - Roads: north (Ruta 7), south (the turtle beach), east (Ruta 8, guarded until the Medalla Ola).
 - `name: 'Playa Carey'`, `outdoor: true`, `ground: 'sand'`, `roof: 'blue'`, `border: 'T'`.
-- `busStop: { x: 15, y: 2, dir: 'down' }`.
+- ~~`busStop: { x: 15, y: 2, dir: 'down' }`~~: the bus is paused (phase 1 §7); leave the stop out for now.
 
 **Doors:**
 
@@ -441,22 +441,22 @@ same rows; no wild encounters. Its people are in §8.
 
 ## 7. Trainers
 
-Route trainers get `rematch: true`. `defenseMode: 'listen'` for the region (the A2 listening level).
+Rematches: **two per route** (the user's rule; phase 1 §8): Ruta 6 Observador Hugo and Pescador Mario, Ruta 7 Pescador Chalo and Turista Jenny. `defenseMode: 'listen'` for the region (the A2 listening level).
 
 ```ts
-ramon: { id: 'ramon', name: 'Leñador Ramón', defenseMode: 'listen', rematch: true, team: [['ardillita', 15], ['colibri', 15]] },
-laura: { id: 'laura', name: 'Campista Laura', defenseMode: 'listen', rematch: true, team: [['espinita', 15], ['ardillita', 16]] },
-esteban: { id: 'esteban', name: 'Vaquero Esteban', defenseMode: 'listen', rematch: true, team: [['conejito', 16], ['hojadillo', 16]] },
-juana: { id: 'juana', name: 'Vaquera Juana', defenseMode: 'listen', rematch: true, team: [['liebron', 18]] },
+ramon: { id: 'ramon', name: 'Leñador Ramón', defenseMode: 'listen', team: [['ardillita', 15], ['colibri', 15]] },
+laura: { id: 'laura', name: 'Campista Laura', defenseMode: 'listen', team: [['espinita', 15], ['ardillita', 16]] },
+esteban: { id: 'esteban', name: 'Vaquero Esteban', defenseMode: 'listen', team: [['conejito', 16], ['hojadillo', 16]] },
+juana: { id: 'juana', name: 'Vaquera Juana', defenseMode: 'listen', team: [['liebron', 18]] },
 hugo: { id: 'hugo', name: 'Observador Hugo', defenseMode: 'listen', rematch: true, team: [['pajarito', 16], ['colibri', 17], ['palomon', 17]] },
 mario: { id: 'mario', name: 'Pescador Mario', defenseMode: 'listen', rematch: true, team: [['mojarrita', 16], ['mojarrita', 17], ['mojarrita', 17]] },
-andrea: { id: 'andrea', name: 'Campista Andrea', defenseMode: 'listen', rematch: true, team: [['ollita', 17], ['espinita', 18]] },
-tono: { id: 'tono', name: 'Vaquero Toño', defenseMode: 'listen', rematch: true, team: [['liebron', 18], ['hojadillo', 18]] },
-surfista1: { id: 'surfista1', name: 'Surfista Nico', defenseMode: 'listen', rematch: true, team: [['cangrejito', 18], ['pelicanito', 18]] },
-banista1: { id: 'banista1', name: 'Bañista Sara', defenseMode: 'listen', rematch: true, team: [['coquito', 18], ['cangrejito', 18]] },
+andrea: { id: 'andrea', name: 'Campista Andrea', defenseMode: 'listen', team: [['ollita', 17], ['espinita', 18]] },
+tono: { id: 'tono', name: 'Vaquero Toño', defenseMode: 'listen', team: [['liebron', 18], ['hojadillo', 18]] },
+surfista1: { id: 'surfista1', name: 'Surfista Nico', defenseMode: 'listen', team: [['cangrejito', 18], ['pelicanito', 18]] },
+banista1: { id: 'banista1', name: 'Bañista Sara', defenseMode: 'listen', team: [['coquito', 18], ['cangrejito', 18]] },
 pescador_r7: { id: 'pescador_r7', name: 'Pescador Chalo', defenseMode: 'listen', rematch: true, team: [['mojarrita', 17], ['mordisquito', 18]] },
-surfista2: { id: 'surfista2', name: 'Surfista Vale', defenseMode: 'listen', rematch: true, team: [['pelicanito', 19], ['mordisquito', 19]] },
-banista2: { id: 'banista2', name: 'Bañista Maripaz', defenseMode: 'listen', rematch: true, team: [['coquito', 19], ['cangrejito', 19]] },
+surfista2: { id: 'surfista2', name: 'Surfista Vale', defenseMode: 'listen', team: [['pelicanito', 19], ['mordisquito', 19]] },
+banista2: { id: 'banista2', name: 'Bañista Maripaz', defenseMode: 'listen', team: [['coquito', 19], ['cangrejito', 19]] },
 turista_r7: { id: 'turista_r7', name: 'Turista Jenny', defenseMode: 'choose', rematch: true, team: [['pelicanito', 19], ['coquito', 19]] },
 silencioso8: { id: 'silencioso8', name: 'Silencioso', defenseMode: 'listen', team: [['cangrejito', 18], ['ecolin', 19]] },
 silencioso9: { id: 'silencioso9', name: 'Silenciosa', defenseMode: 'listen', team: [['ochopatas', 19], ['piedrita', 19]] },
