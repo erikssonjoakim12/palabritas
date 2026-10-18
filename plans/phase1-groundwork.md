@@ -299,6 +299,8 @@ battles only).
 
 - `MapDef.muted?: () => boolean`. While it's true, talking to a person (`look`) on that map shows «…»
   (EN: «They try to speak, but no words come out!») instead of their script.
+- An NPC can have `mime?: string`: its own EN line for what they act out while muted (phase 2 §6.1); the
+  Spanish is still «…».
 - Signs also show «…» (EN: «The letters have faded away.»).
 - NPCs with `speaksWhenMuted: true` (Equipo Silencio, and the child with the message) still use their
   scripts.

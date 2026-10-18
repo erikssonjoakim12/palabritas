@@ -54,6 +54,8 @@ marked "in the way" can't be walked past, and seams line up with their neighbors
 | `ecolinSombrero` | an Ecolín wearing a green hat |
 | `buey` | an ox |
 | `vitrina` | a museum display case |
+| `palabra` | a lost word: a small glowing speech bubble with letters in it (§6.1) |
+| `nota` | a folded paper (the Capataz's note, §6.1) |
 
 **New looks** (`LOOKS`, plus heads where needed). Portraits come with them; add the hood to `portraits.ts`.
 
@@ -571,7 +573,8 @@ Lines (`trainerFight(id, { intro, defeated, after })`, each `[es, en]`):
 
 ## 6. The story: the muted town
 
-**Flags:** `mensajeLeido`, `compuertaAbierta`, `silenciadorRoto`, `petraVolvio`, `medalBarro`, `busOpen`.
+**Flags:** `mensajeLeido`, `compuertaAbierta`, `silenciadorRoto`, `petraVolvio`, `medalBarro`, `busOpen`
+(and the lost words' flags in §6.1).
 
 **1. `mensajeOcote`** (the trigger at the east entrance, once):
 - «En el suelo, alguien escribió algo con un palo...» / "Someone wrote something on the ground with a stick..."
@@ -612,6 +615,115 @@ here lost their voice."
      waiting!"
 5. Fade, then warp to Villa Ocote (15, 4) facing down. Set `petraVolvio`. The town talks again; NPCs now use
    their "after" lines (§9).
+
+### 6.1 Las palabras perdidas (the lost words)
+
+The town's words were *stolen*, so getting them back should be the learning, not just a flag. The Silenciador
+breaks, most words fly home, but **eight get lost on the way**. Each one belongs to one person, who can talk
+again except for that one word. You find the words and give each back by **completing its owner's
+sentence in Spanish**. It's optional: the gym only needs the mine (§6). But it sends you back through Ruta 5,
+the canyon and the mine, which is the play time this region needs.
+
+**Flags:** `palabra:<id>` (found), `devuelta:<id>` (given back), `palabrasDone` (all 8 back, then the party).
+**Key item:** `palabras` «Palabras perdidas» (in `ITEM_DEFS` like `traje`): its count is found minus given
+back. Using it from the bag lists the words you carry, each as `wordRow` (tap to hear it).
+
+**Before the mine: muted, but not blank.** Instead of a bare «…», each muted person mimes. The Spanish stays
+«…»; the EN button tells you what they do. (`MapDef.muted` from phase 1 §11 gets an optional per-NPC
+`mime: string` for that EN line.)
+
+| Person | Mime (EN) |
+|---|---|
+| `vendedora` | (She holds up a clay pot and opens her mouth, but nothing comes out.) |
+| `abuelo_ocote` | (He points at the mine, then at his mouth, and shakes his head sadly.) |
+| `chepe` | (He counts on his fingers: one, two... and looks around for something.) |
+| `nina_mensaje` (Mía) | (She points at the ground, where she wrote the message.) |
+| `lucas` | (Lucas stamps his foot. He looks furious that he can't talk.) |
+| `cocinera` | (She pats some dough between her hands and sighs.) |
+| `musico` | (He lifts his mallets over the marimba... and puts them down again.) |
+| `curandera` | (She holds her head as if it hurts, then points at a little bottle.) |
+| `futbolista` | (He bounces on his toes and mimes kicking something.) |
+| anyone else | (They try to speak, but no words come out!) |
+
+**The cutscene in the mine** (§6 step 5) gets one more line after «¡El Silenciador se rompió!»:
+«¡Las palabras vuelan hacia el pueblo! Pero... algunas se perdieron por el camino.» / "The words are flying
+back to town! But... some got lost on the way." The 8 word objects appear with the same `refreshNpcs()`.
+
+**New people in Villa Ocote** (add to §4.2; all speak once `silenciadorRoto`):
+
+| id | Where | Look | Who |
+|---|---|---|---|
+| `cocinera` | (8, 11) facing down | `lady` | Doña Toña, who makes tortillas |
+| `musico` | (12, 16) facing right | `man` | Don Memo, the marimba player in the plaza |
+| `curandera` | (10, 20) facing down | `granny` | Doña Lucha, who knows every remedy |
+| `futbolista` | (9, 24) facing right | `boy` | Nando, who always wants to play |
+
+**The lost words** (object `palabra`: a small glowing speech bubble with letters in it;
+`show: () => flag('silenciadorRoto') && !flag('palabra:<id>')`). Use the real content item where it exists
+(`itemBySpanish`) so answering counts toward mastery; otherwise `adHocItem`.
+
+| id | The word | Content item | Lying at | Owner | Their sentence (the gap is the word) |
+|---|---|---|---|---|---|
+| `olla` | la olla | `cocina` | `mina1` (30, 13) | `vendedora` | «Esta ___ es de barro. ¿La quieres?» / "This ___ is made of clay. Do you want it?" |
+| `tortilla` | la tortilla | core | `ocote` (3, 11), behind the Palacentro | `cocinera` | «Hago una ___ de maíz para el desayuno.» / "I make a corn ___ for breakfast." |
+| `bueyes` | los bueyes | ad hoc | `canon` (4, 13) | `chepe` | «¿Viste mis ___? ¡Se escaparon!» / "Have you seen my ___? They ran away!" |
+| `historia` | la historia | `historia` | `mina2` (8, 13) | `abuelo_ocote` | «Te voy a contar la ___ de Villa Ocote.» / "I'm going to tell you the ___ of Villa Ocote." |
+| `marimba` | la marimba | `musica` | `ruta5` (3, 10), by the west road | `musico` | «Toco la ___ todas las noches en la plaza.» / "I play the ___ every night in the plaza." |
+| `medicina` | la medicina | `salud` | `ocote` (29, 24), behind the school | `curandera` | «Para el dolor de cabeza, toma esta ___.» / "For a headache, take this ___." |
+| `pelota` | la pelota | `deportes` | `ocote` (20, 4), by the mine | `futbolista` | «¿Jugamos con la ___?» / "Shall we play with the ___?" |
+| `pregunta` | la pregunta | `preguntas` | `mina2` (24, 18), by the broken Silenciador | `maestro_ocote` | «Hoy tengo una ___ para ti.» / "Today I have a ___ for you." |
+
+**Picking one up** (script `palabraPerdida`, the object's id tells which): `speak()` the word, then
+«¡Una palabra perdida! Dice: «la olla».» / "A lost word! It says: 'la olla' (the pot)." Set `palabra:<id>`,
+add one `palabras`, and `refreshNpcs()`.
+
+**Talking to an owner** (one shared script `duenoPalabra`, looked up by NPC id):
+- **Word not given back, and you don't have it:** they say their sentence with «…» in the gap, then «¡Ay, no
+  me sale la palabra!» / "Oh, the word won't come out!" The EN shows the sentence with "___" and a hint
+  ("something made of clay"), so you know what to look for.
+- **You have it:** «¿Tienes mi palabra?» Then a `type` (or `speak`) challenge: label «Completa: «Esta ___ es
+  de barro.»», answer = the word, `allowHelp: true`.
+  - Right: they say the whole sentence, happily. Set `devuelta:<id>`, take one `palabras`, give the reward.
+  - Wrong: «Mmm, no... esa no es mi palabra.» / "Hmm, no... that's not my word." Nothing changes; try again.
+- **Given back:** their normal lines (§9).
+
+| Owner | Thanks / reward |
+|---|---|
+| `vendedora` | «¡Mi olla! Llévate una, es un regalo.» / "My pot! Take one, it's a gift." 1 Superpoción |
+| `cocinera` | «¡Ya puedo decirlo! Toma, para el camino.» / "I can say it now! Here, for the road." 2 Pociones |
+| `chepe` | «¡Mis bueyes! ¡Ahora puedo pedir ayuda!» / "My oxen! Now I can ask for help!" **This starts §8.3**: before his word is back, Don Chepe can't ask for help with the oxen |
+| `abuelo_ocote` | He tells the town's history (his §9 lines) and gives $200 |
+| `musico` | He plays: a short marimba tune (a new `sfx('marimba')`, quiet). «¡La música volvió!» / "The music is back!" 1 Repelente |
+| `curandera` | 2 Superpociones: «Para tus Palabritas. ¡La salud es lo primero!» / "For your Palabritas. Health comes first!" |
+| `futbolista` | «¡Golazo!» / "What a goal!" 3 Palabolas |
+| `maestro_ocote` | **This opens his lesson menu** (phase 1 §9): before, he can only say the gap sentence |
+
+**All 8 back: «La fiesta de las palabras»** (`palabrasDone`):
+1. The last thank-you ends with Mía running up (`placeNpc`, then `walkNpc`): «¡Todos hablan otra vez! ¡Esta
+   noche hay fiesta en la plaza!» / "Everyone's talking again! Tonight there's a party in the plaza!"
+2. Fade to `ocote_noche` (the same rows, `night: true`, phase 1 §10). The 8 owners stand around the fountain;
+   Don Memo plays the marimba.
+3. Each owner says one line **using their word** (a free review), e.g. «¡Qué rica la tortilla!» / "The
+   tortilla is so tasty!", «¡Esta olla es para la sopa de la fiesta!» / "This pot is for the party soup!"
+4. Petra: «Gracias a ti, Villa Ocote tiene todas sus palabras.» / "Thanks to you, Villa Ocote has all its
+   words." She gives 5 Superbolas and 2 Revivir.
+5. Fade back to day. Set `palabrasDone`. Afterwards the plaza's people mention the party now and then.
+
+**A note for later (foreshadowing):** after the Capataz's battle, he drops a note: an object `nota` where he
+stood. Reading it is a `chooseText`:
+«Capataz: cuando termines aquí, ve al sur, a Playa Carey. Callada te espera allá. —Don Sigilo» / "Foreman:
+when you're done here, go south to Playa Carey. Callada is waiting for you there. —Don Sigilo", with the
+question «¿Quién espera en Playa Carey?» and the choices Callada / Petra / Mía. This points at phase 3's
+turtle night.
+
+**Objects to add to §1:** `palabra` (a glowing speech bubble with letters), `nota` (a folded paper).
+
+**Tests:** add to `quests2.test`:
+- after `silenciadorRoto`, a word can be picked up (`palabra:olla`, one `palabras`);
+- an owner without the word says the gap sentence; with it, the right answer sets `devuelta:olla` and gives
+  the reward, and a wrong one changes nothing;
+- Don Chepe's oxen quest waits for his word;
+- with all 8 back, the party runs and sets `palabrasDone`.
 
 ---
 
@@ -687,7 +799,7 @@ like everyone, and visibly angry). After the mine, he's gone (`show`).
 
 ### 8.3 Los bueyes perdidos (flags `bueyes`, `buey1`, `buey2`, `bueyesDone`)
 
-1. **Don Chepe** (after `silenciadorRoto`):
+1. **Don Chepe** (once his lost word is back, `devuelta:bueyes`, §6.1):
    - «¡Ay, mis bueyes! Con el ruido de la mina, se escaparon.» / "Oh, my oxen! With the noise from the mine,
      they ran off."
    - «Uno se fue al norte del Cañón, cerca de la cascada. El otro está aquí en el pueblo, detrás de la
@@ -792,7 +904,11 @@ While muted, everyone says «…». After `petraVolvio`:
 | `alfarero_nino` | «¡Hice una ollita! Bueno... parece un plato.» / "I made a little pot! Well... it looks like a plate." |
 | `mia_mama` | «Mía es muy valiente. ¡Escribió ese mensaje sola!» / "Mía is very brave. She wrote that message by herself!" |
 | `alumno1` / `alumna1` | «¿Qué es más difícil: el español o las matemáticas?» / "What's harder: Spanish or math?" · «A mí me gusta mucho la clase de música.» / "I really like music class." |
-| `maestro_ocote` | the lesson menu (phase 1 §9) |
+| `maestro_ocote` | the lesson menu (phase 1 §9), once his lost word is back (§6.1) |
+| `cocinera` (Doña Toña) | «¿Ya desayunaste? Aquí comemos gallo pinto con tortilla.» / "Have you had breakfast? Here we eat gallo pinto with tortillas." |
+| `musico` (Don Memo) | «La marimba es el instrumento de Nicaragua. ¿Te gusta la música?» / "The marimba is Nicaragua's instrument. Do you like music?" |
+| `curandera` (Doña Lucha) | «¿Te duele algo? Un té de manzanilla lo cura todo.» / "Does anything hurt? Chamomile tea cures everything." |
+| `futbolista` (Nando) | «Cuando sea grande, ¡voy a jugar en la selección!» / "When I grow up, I'm going to play for the national team!" |
 
 ---
 
