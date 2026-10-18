@@ -42,6 +42,11 @@ export interface NpcDef {
 export interface Conn {
   to: string;
   offset: number;
+  /**
+   * Only for the view: the maps sit side by side in the world and each draws the other at its edge, but you
+   * can't walk across (a mountain over a cave). Its edges should be solid.
+   */
+  scenery?: boolean;
 }
 
 /**
@@ -598,7 +603,7 @@ export const MAPS: Record<string, MapDef> = {
       '^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^',
       '^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^',
     ],
-    connections: { right: { to: 'brisa', offset: -27 } },
+    connections: { right: { to: 'brisa', offset: -27 }, left: { to: 'cerro_eco', offset: 3, scenery: true } },
     doors: [
       { x: 4, y: 2, to: 'ruta4', tx: 4, ty: 38 },
       { x: 11, y: 5, to: 'centro_ruta3', tx: 4, ty: 7 },
@@ -704,6 +709,67 @@ export const MAPS: Record<string, MapDef> = {
     ],
   },
 
+  // The mountain over the Cueva del Eco, seen from outside: only scenery, so the world drawing joins the cave's
+  // way in (Ruta 3, east) to its way out (Ruta 5's tunnel, north). Ruta 5's ravine river runs down it to a lake.
+  cerro_eco: {
+    id: 'cerro_eco',
+    name: 'Cerro del Eco',
+    outdoor: true,
+    floor: '.',
+    ground: 'grass',
+    style: { trees: 'pine' },
+    rows: [
+      'TTTT^~~^TTTTTTTTTT^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^',
+      'TTTT^~~^TTTTTTTTTT^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^',
+      'TTTT^~~^TTTTTTTTTT^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^',
+      'TTTT^~~^TTTT^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^',
+      'TTTT^~~^TTTTT^^^^^^^^^^^^^^^^T^^^^^^^^^^^^^^^^^^^^^^^^',
+      'TTTT^~~^TTTTT^^^^^^^^^^^^^^^^^^^^^^^^^^^^T^^^^^^^T^^^^',
+      'TTTT^~~^TTTTTT^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^',
+      'TTTT^~~^TTTTTT^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^',
+      'TTTT^~~^TTTTTT^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^',
+      'TTTT^~~^TTTTTT^^^^^^^^^T^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^',
+      'TTTT^~~^TTTTTT^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^',
+      'TTTT^~~^TTTTTT^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^',
+      'TTTT~~~~~~~TTT^^^^^^^^^^^^^^^^^^^^^^T^^^^^^^^^^^^^^^^^',
+      'TT~~~~~~~~~~~T^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^',
+      'T~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^',
+      'T~~~~~~~~~~~~~T^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^',
+      'T~~~~~~~~~~~~~TT^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^',
+      'T~~~~~~~~~~~~~TTT^^^^^^^^^^^^^^^^^^^^T^^^^^^^^^^^^^^^^',
+      'TT~~~~~~~~~~~TTTTT^^^^^^^^^^^^^^^^^^^^T^^^^^^^^^^^^^^^',
+      'TTTT~~~~~~~TTTTTTTT^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^',
+      'TTTTT~~TTTTTTTTTTTTT^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^',
+      'TTTT~~TTTTTTTTTTTTTTT^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^',
+      'TTTT~~TTTTTTTTTTTTTTTT^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^',
+      'TTTT~~TTTTTTTTTTTTTTTTT^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^',
+      'TTTT~~TTTTTTTTTTTTTTTTTT^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^',
+      'TTTT~~TTTTTTTTTTTTTTTTTT^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^',
+      'TTTT~~TTTTTTTTTTTTTTTTTT^^^^^^^^^^^^^^^^^^^^^^^T^^^^^^',
+      'TTTTT~~TTTTTTTTTTTTTTTTT^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^',
+      'TTTTT~~TTTTTTTTTTTTTTTTT^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^',
+      'TTTTTT~~TTTTTTTTTTTTTTTT^^^^^^^^^^^^^^^^^^^^^T^^^^^^^^',
+      'TTTTTT~~TTTTTTTTTTTTTTTT^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^',
+      'TTTTTTT~~TTTTTTTTTTTTTTT^^^^^^^^^^T^^^^^^^^^^^^^^^^^^^',
+      'TTTTTTT~~TTTTTTTTTTTTTTT^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^',
+      'TTTTTTTT~~TTTTTTTTTTTTTTT^^^^^^^^^^^^^^^^^^^^^^^^^^^^^',
+      'TTTTTTTT~~TTTTTTTTTTTTTTTT^^^^^^^^^^^^^^^^^^^^^^^^^^^^',
+      'TTTTTTTTT~~TTTTTTTTTTTTTTTTT^^^^^^^^^^^^^^^^^^^^^^^^^^',
+      'TTTTTTTTT~~TTTTTTTTTTTTTTTTTTTT^^^^^^^TTTTTTTT^^^^^^^^',
+      'TTTTTTTTTT~~TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT^^^^^^',
+      'TTTTTTTTTT~~TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT^^^^^',
+      'TTTTTTTTTT~~TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT^^^',
+      'TTTTTTTTTT~~TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT^^',
+      'TTTTTTTTTT~~TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT^^',
+      'TTTTTTTTTT~~TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT^^',
+      'TTTTTTTTT~~TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT^^',
+      'TTTTTTTTT~~TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT^^',
+      'TTTTTTTT~~TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT^^',
+      'TTTTTTTT~~TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT^^',
+    ],
+    connections: { up: { to: 'ruta5', offset: 2, scenery: true }, right: { to: 'ruta3', offset: -3, scenery: true } },
+  },
+
   // Out of the cave, west to the next town (with the second gym). The town isn't built yet,
   // so a road worker blocks the way for now.
   ruta5: {
@@ -743,6 +809,7 @@ export const MAPS: Record<string, MapDef> = {
       'TTTTTT^~~^TTTTTTTTTT^^^:::^^^^^^',
       'TTTTTT^~~^TTTTTTTTTT^^^^D^^^^^^^',
     ],
+    connections: { down: { to: 'cerro_eco', offset: -2, scenery: true } },
     doors: [{ x: 24, y: 25, to: 'ruta4', tx: 52, ty: 1, dir: 'down' }],
     signs: [{ x: 16, y: 13, es: 'RUTA 5. Al oeste: Villa Ocote. Al norte: el Cañón del Guardabarranco.', en: 'ROUTE 5. West: Villa Ocote. North: Guardabarranco Canyon.' }],
     gates: [

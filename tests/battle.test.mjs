@@ -22,6 +22,7 @@ await t.game(() => {
   g.healParty();
   g.G.save.flags.palabolas = true;
   g.G.save.bag = { palabola: 5 };
+  Math.random = () => 0; // the ball always holds (the luck of a catch isn't what this tests)
   g.loadMap('ruta1', 3, 3, 'down');
 });
 let caught = false;

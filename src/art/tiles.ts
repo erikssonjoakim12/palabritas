@@ -19,7 +19,7 @@ export interface MapStyle {
   walls?: 'plain' | 'adobe';
   /** '^' and 'O': tan rock (default) | black volcanic rock. */
   rock?: 'rock' | 'basalt';
-  /** '%', ';', 'e', 'D' in caves: brown (default) | red clay | black basalt. */
+  /** '%', ';', 'e' in caves: brown (default) | red clay | black basalt. */
   cave?: 'cave' | 'clay' | 'basalt';
 }
 
@@ -228,7 +228,16 @@ function rockImage(art: TileArt, env: TileEnv, rockChars: string, under: Img): I
   if (!isRock(nb.e)) edge(E.e, 16 - E.e[0].length, 0, E.e[0].length, 16);
   return stack(under, paintArt(art, g));
 }
-const MOUNTAIN_CHARS = '^O';
+const MOUNTAIN_CHARS = '^OD';
+
+/**
+ * A tunnel mouth you walk south into ('D', Ruta 5's way back into the cave): the cave mouth turned 180°
+ * and half as tall, so its dark opening meets the ground north of it.
+ */
+const TUNNEL_MOUTH: TileArt = {
+  ...ART.caveMouth,
+  rows: [15, 12, 9, 7, 5, 4, 3].map((y) => ART.caveMouth.rows[y]).concat(Array(9).fill('.'.repeat(16))),
+};
 
 /** Bridges and piers: planks across the way you walk, with rails where the bridge ends at the sides. */
 function bridgeImage(env: TileEnv): Img {
@@ -333,8 +342,7 @@ function render(ch: string, env: TileEnv): Img {
     case 'e':
       return stack(paintArt(caveArt(env, 'floor', ART.caveFloor)), paintArt(caveArt(env, 'floor', ART.caveExitOverlay)));
     case 'D':
-      // A dark passage under a cliff (you walk south into it): the cave mouth's dark arch, on the ground.
-      return stack(paintArt(env.outdoor ? ART.dirt : caveArt(env, 'floor', ART.caveFloor)), paintArt(rockArt(env, ART.caveMouth)));
+      return stack(rockImage(rockArt(env), env, MOUNTAIN_CHARS, underImage(env, 'ground')), paintArt(rockArt(env, TUNNEL_MOUTH)));
     case 'H':
       return bridgeImage(env);
     case '8':

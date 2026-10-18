@@ -60,7 +60,7 @@ first uses them:
 
 | Char | Tile | Solid | Kind / notes | Phase |
 |---|---|---|---|---|
-| `D` | dark passage under a cliff (a tunnel you walk *south* into) | no | `door` | 2 (Ruta 5) |
+| `D` | tunnel mouth in a cliff you walk *south* into (the cave mouth turned 180°, half as tall) | no | `door` | 2 (Ruta 5) |
 | `H` | wooden bridge / pier planks (drawn over water) | no | planks run across the water: check neighbors | 2 |
 | `F` | plaza fountain (2×2: picks its quarter from neighbors) | yes | look: «Una fuente con agua fresca.» | 2 |
 | `U` | market stall (awning + goods) | yes | the goods' text comes from a sign entry at that spot | 2 |

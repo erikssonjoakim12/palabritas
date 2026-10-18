@@ -30,7 +30,7 @@ marked "in the way" can't be walked past, and seams line up with their neighbors
 
 | What | Notes |
 |---|---|
-| `D` dark passage ✓ **already built** (with the Ruta 5 fix) | Rock on both sides, with the dark opening of a tunnel going south under the cliff, drawn with `CAVE.dark` fading from the bottom. Walkable; `kind: 'door'`. |
+| `D` dark passage ✓ **already built** (with the Ruta 5 fix) | Mountain rock with the cave mouth turned 180° and half as tall: the dark opening meets the ground north of it. Walkable; `kind: 'door'`. |
 | `H` wooden bridge ✓ **already built** | Planks across the water: horizontal boards when there's water above and below, vertical ones when water is left and right. Rope rails on both edges. |
 | `F` fountain | 2×2: stone rim, water inside, a spout. Each quarter picks its corner from its neighbors (like the table). |
 | `U` market stall | A wooden counter under a striped awning, with goods on it: clay pots here. Indoors, the same tile works as pottery shelves. |
@@ -79,12 +79,15 @@ Also: `isMaleLook` gets `hood` for `silencioso` and `capataz`. Female grunts use
 
 | Map | Size | World top-left | Connections (exact offsets) |
 |---|---|---|---|
-| `ruta5` (replaced) | 32×26 | (-116, -164) | `left: { to: 'ocote', offset: -2 }`, `up: { to: 'canon', offset: -4 }` |
+| `ruta5` (replaced) | 32×26 | (-116, -164) | `left: { to: 'ocote', offset: -2 }`, `up: { to: 'canon', offset: -4 }` (it already has `down: { to: 'cerro_eco', offset: -2, scenery: true }`: keep it) |
+| `cerro_eco` ✓ **already built** | 54×47 | (-114, -138) | scenery only: `up` Ruta 5, `right` Ruta 3 |
 | `canon` | 24×30 | (-112, -194) | `down: { to: 'ruta5', offset: 4 }` |
 | `ocote` | 32×28 | (-148, -162) | `right: { to: 'ruta5', offset: 2 }`, `down: { to: 'ruta6', offset: 2 }` (Ruta 6 comes in phase 3; until then the south road ends at the guard) |
 
-The cave (`ruta4`) links Ruta 3 and Ruta 5 by doors, so these maps join the world drawing on the art page
-only once phase 4's loop through Pueblo Amanecer exists. That's expected.
+The cave (`ruta4`) links Ruta 3 and Ruta 5 by doors. Outside, the Cerro del Eco (the mountain over the cave)
+joins them in the world drawing with **scenery connections** (`scenery: true`: drawn side by side, never walked
+across), so Ruta 5 already sits at its spot above. Phase 3's Ruta 6 (x -150..-115) runs down the Cerro's west
+side: give Ruta 6 trees along that edge.
 
 ---
 

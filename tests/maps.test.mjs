@@ -41,15 +41,20 @@ const report = await t.game(() => {
     m.rows.forEach((r, i) => r.length !== w && say(`row ${i} is ${r.length} wide, not ${w}`));
     m.rows.forEach((r, y) => [...r].forEach((ch, x) => !TILES[ch] && say(`unknown tile '${ch}' at ${x},${y}`)));
 
-    // Connections: the other map connects back, and at least part of the edge is walkable on both sides.
+    // Connections: the other map connects back, and at least part of the edge is walkable on both sides
+    // (scenery connections are only for the view: nothing lines up to walk across).
     for (const [dir, conn] of Object.entries(m.connections ?? {})) {
       const n = MAPS[conn.to];
       if (!n) { say(`connection ${dir} to missing map ${conn.to}`); continue; }
       const back = n.connections?.[OPP[dir]];
-      if (!back || back.to !== m.id || back.offset !== -conn.offset) say(`${conn.to} doesn't connect back ${OPP[dir]} with offset ${-conn.offset}`);
+      if (!back || back.to !== m.id || back.offset !== -conn.offset || !back.scenery !== !conn.scenery) say(`${conn.to} doesn't connect back ${OPP[dir]} with offset ${-conn.offset}`);
       const pairs = seam(m, dir, conn);
       const both = pairs.filter(([[x, y], [x2, y2]]) => open(m, x, y) && open(n, x2, y2));
       const dead = pairs.filter(([[x, y], [x2, y2]]) => open(m, x, y) && inside(n, x2, y2) && !open(n, x2, y2));
+      if (conn.scenery) {
+        if (both.length) say(`scenery connection ${dir} to ${conn.to}: walkable tiles line up`);
+        continue;
+      }
       if (!both.length) say(`connection ${dir} to ${conn.to}: no walkable tile lines up`);
       if (dead.length) say(`connection ${dir} to ${conn.to}: open edge tiles face a wall at ${dead.map(([[x, y]]) => `${x},${y}`).join(' ')}`);
     }
@@ -96,7 +101,7 @@ const report = await t.game(() => {
     const exits = [];
     for (const d of m.doors ?? []) exits.push([d.x, d.y]);
     for (const [dir, conn] of Object.entries(m.connections ?? {})) {
-      if (!MAPS[conn.to]) continue;
+      if (!MAPS[conn.to] || conn.scenery) continue;
       for (const [[x, y]] of seam(m, dir, conn)) if (open(m, x, y)) { exits.push([x, y]); arrivals.push([x, y]); }
     }
     if (m.exit) m.rows.forEach((r, y) => [...r].forEach((ch, x) => TILES[ch]?.kind === 'mat' && exits.push([x, y])));

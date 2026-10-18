@@ -290,7 +290,7 @@ function tryMove(d: Dir) {
       return;
     }
     const conn = map.connections?.[d];
-    if (conn) crossConnection(d, conn);
+    if (conn && !conn.scenery) crossConnection(d, conn);
     else bump();
     return;
   }
