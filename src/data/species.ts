@@ -202,6 +202,33 @@ export const SPECIES: Record<string, Species> = {
       en: 'The biggest dove in the sky. It flies faster than the wind.',
     },
   },
+  // ----- Region 2: the pine highlands -----
+  piedrita: {
+    id: 'piedrita',
+    name: 'Piedrita',
+    types: ['Roca'],
+    theme: 'cuerpo',
+    base: { hp: 48, atk: 52, def: 70, spd: 28 },
+    moves: [m('Lanzarrocas', 'Roca', 'choose'), m('Cabezazo', 'Normal', 'type'), m('Grabado', 'Roca', 'listen'), m('Avalancha', 'Roca', 'speak')],
+    catchRate: 0.45,
+    dex: {
+      es: 'Tiene una cara dibujada hace mil años. Cuando se aburre, se dibuja otra.',
+      en: 'It has a face drawn a thousand years ago. When it gets bored, it draws a new one.',
+    },
+  },
+  ollita: {
+    id: 'ollita',
+    name: 'Ollita',
+    types: ['Tierra'],
+    theme: 'cocina',
+    base: { hp: 50, atk: 46, def: 62, spd: 40 },
+    moves: [m('Tapazo', 'Normal', 'choose'), m('Barro', 'Tierra', 'type'), m('Hervor', 'Fuego', 'listen'), m('Olla Exprés', 'Tierra', 'speak')],
+    catchRate: 0.5,
+    dex: {
+      es: 'Siempre tiene algo rico cocinándose adentro. Nadie sabe qué es.',
+      en: 'There’s always something tasty cooking inside. Nobody knows what it is.',
+    },
+  },
 };
 
 /**
@@ -242,6 +269,27 @@ evolution('aguacatito', 16, {
   dex: {
     es: 'El hueso de un Aguacatito echó raíces. Algún día será un árbol grande.',
     en: 'An Aguacatito pit put down roots. One day it will be a big tree.',
+  },
+});
+
+evolution('piedrita', 18, {
+  id: 'petroglifon',
+  name: 'Petroglifón',
+  types: ['Roca', 'Tierra'],
+  base: { hp: 70, atk: 78, def: 96, spd: 36 },
+  dex: {
+    es: 'Las espirales de su cuerpo brillan de noche. Cuenta historias muy antiguas.',
+    en: 'The spirals on its body glow at night. It tells very old stories.',
+  },
+});
+evolution('ollita', 21, {
+  id: 'tinajon',
+  name: 'Tinajón',
+  types: ['Tierra', 'Agua'],
+  base: { hp: 80, atk: 62, def: 84, spd: 44 },
+  dex: {
+    es: 'Guarda agua fresca todo el año. En los días de calor, la comparte con todos.',
+    en: 'It keeps fresh water all year. On hot days it shares it with everyone.',
   },
 });
 

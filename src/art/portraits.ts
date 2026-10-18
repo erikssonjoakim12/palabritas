@@ -26,7 +26,7 @@ const SKIN_DARK = shade(SKIN, 0.85);
 
 function body(p: Pix, look: Look, color: string) {
   const dark = shade(color);
-  if (look.body === 'coat') {
+  if (look.body === 'coat' && look.color !== 'black') {
     // An open lab coat over a dark shirt.
     p.poly([[9, 47], [12, 34], [18, 29], [30, 29], [36, 34], [39, 47]], W);
     p.poly([[30, 29], [36, 34], [39, 47], [33, 47]], '#d8d8e0');
@@ -51,6 +51,7 @@ function face(p: Pix) {
 function hairBack(p: Pix, look: Look, hair: string) {
   if (look.head === 'long' || look.head === 'longColor' || look.head === 'helmetLong') p.ellipse(24, 21, 12.5, 14, hair);
   if (look.head === 'short') p.ellipse(24, 16, 11.5, 11, hair);
+  if (look.head === 'hood') p.ellipse(24, 19, 13.5, 15, hair);
 }
 
 function hairFront(p: Pix, look: Look, hair: string, color: string) {
@@ -88,6 +89,10 @@ function hairFront(p: Pix, look: Look, hair: string, color: string) {
       p.rect(12, 12, 24, 2, shade(color)); // the brim
       p.rect(21, 3, 6, 5, '#f0f0d0').rect(22, 4, 4, 3, '#f8f8a0'); // the headlamp
       break;
+    case 'hood':
+      p.ellipse(24, 8, 11, 6, hair);
+      p.rect(13, 10, 3, 15, hair).rect(32, 10, 3, 15, hair);
+      break;
     case 'safari':
       p.rect(15, 11, 2, 5, hair).rect(31, 11, 2, 5, hair);
       p.ellipse(24, 12, 17, 3, shade(color)); // the wide brim
@@ -101,7 +106,8 @@ function hairFront(p: Pix, look: Look, hair: string, color: string) {
 function front(look: Look): Img {
   const color = CLOTHES[look.color] ?? CLOTHES.blue;
   // Colored long hair (Paloma, the nurse); the bob is for older women, so it's gray.
-  const hair = look.head === 'longColor' ? color : look.head === 'short' ? GRAY_HAIR : HAIR;
+  // A hood is the outfit's color, like the colored hair.
+  const hair = look.head === 'longColor' || look.head === 'hood' ? color : look.head === 'short' ? GRAY_HAIR : HAIR;
   const p = new Pix(48, 48);
   hairBack(p, look, hair);
   body(p, look, color);

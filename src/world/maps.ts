@@ -16,6 +16,7 @@ import type { MapStyle } from '../art/tiles';
   ^  mountain      :  rocky ground                  O  cave entrance
   %  cave wall     ;  cave floor                    e  cave exit (walk down to leave)
   D  tunnel under a cliff (a door you walk south into)   H  bridge / pier
+  F  fountain (2×2)  U  market stall / pottery shelf   K  mine rails  W  mine support
 */
 
 /** A line of dialog: Spanish, and English for the EN button. */

@@ -35,6 +35,8 @@ export const OUTDOOR = {
   adobe: ['#f0d8b0', '#c89868', '#a06838', INK] as Pal,
   /** Beach sand (ground: 'sand'). */
   sand: ['#f8f0d0', '#f0e0b0', '#d8c088', INK] as Pal,
+  /** The fountain's stone (and its water, as extra colors in tiles.ts). */
+  stone: ['#f0f0e8', '#c8c8c0', '#909088', INK] as Pal,
   /** Rocky ground in the mountains. */
   dirt: ['#f8f0d0', '#e8d8a8', '#b8a070', INK] as Pal,
 };
@@ -75,6 +77,13 @@ export const ACCENT = {
   breadCrust: '#c07838',
   breadLight: '#e8b860',
   martBlue: '#3858c0',
+  stallRed: '#d05058',
+  stallWhite: '#f8f8f0',
+  clayPot: '#c87048',
+  railLight: '#c8c8d0',
+  railDark: '#686878',
+  sleeper: '#986840',
+  sleeperDark: '#684020',
 };
 
 /** Roof colors: [highlight, light, dark, outline]. Each town picks one (see maps.ts). */
@@ -116,6 +125,8 @@ export const CLOTHES: Record<string, string> = {
   orange: '#e08038',
   khaki: '#b8a060',
   yellow: '#e0c040',
+  /** Equipo Silencio. */
+  black: '#383848',
 };
 
 export const OBJECT_PALS: Record<string, Pal> = {
@@ -123,6 +134,14 @@ export const OBJECT_PALS: Record<string, Pal> = {
   michi: ['', '#f0f0e8', '#e09848', SPRITE_INK],
   armchair: ['', '#f0b0b8', '#d05058', SPRITE_INK],
   maquina: ['', '#e8e8e0', '#a0a0a8', SPRITE_INK],
+  carreta: ['', '#d8a868', '#906048', SPRITE_INK],
+  palanca: ['', '#c8c8d0', '#d04048', SPRITE_INK],
+  compuerta: ['', '#c89058', '#7a4a24', SPRITE_INK],
+  silenciador: ['', '#d0d0d8', '#686878', SPRITE_INK],
+  puertaPiedra: ['', '#d8d0c0', '#908878', SPRITE_INK],
+  palabra: ['', '#f8f8d0', '#e0a830', SPRITE_INK],
+  nota: ['', '#f8f8f0', '#b8b0a0', SPRITE_INK],
+  buey: ['', '#f0e8d8', '#a07858', SPRITE_INK],
 };
 
 /** Palabola colors in the healing machine (normal, flash). */

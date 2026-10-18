@@ -171,6 +171,45 @@ export const HEADS: Record<string, Facing> = {
       '....311111333...',
     ],
   },
+  /** A hood over the hair, the face showing (Equipo Silencio). */
+  hood: {
+    down: [
+      '.....333333.....',
+      '....32222223....',
+      '...3222222223...',
+      '..322222222223..',
+      '..322333333223..',
+      '..323111111323..',
+      '..323131131323..',
+      '..323131131323..',
+      '..323111111323..',
+      '...3233333323...',
+    ],
+    up: [
+      '.....333333.....',
+      '....32222223....',
+      '...3222222223...',
+      '..322222222223..',
+      '..322222222223..',
+      '..322222222223..',
+      '..322222222223..',
+      '..322222222223..',
+      '..332222222233..',
+      '...3333333333...',
+    ],
+    side: [
+      '.....333333.....',
+      '....32222223....',
+      '...3222222223...',
+      '..32222222223...',
+      '..33332222223...',
+      '..31111322223...',
+      '..31311322223...',
+      '..31311322223...',
+      '..31111322223...',
+      '...3111132223...',
+    ],
+  },
   /** A hard hat with a headlamp (cavers). */
   helmet: {
     down: [
@@ -414,8 +453,13 @@ export interface Look {
   color: string;
 }
 
-/** Male characters (a cap, a hard hat, an explorer's hat or the men's haircut) talk with a male voice. */
-export const isMaleLook = (lookId?: string) => !!lookId && ['cap', 'crew', 'helmet', 'safari'].includes(LOOKS[lookId]?.head);
+/**
+ * Male characters (a cap, a hard hat, an explorer's hat or the men's haircut) talk with a male voice. A hood
+ * hides the hair, so for hooded looks the look itself says (silencioso, capataz; silenciosa is a woman).
+ */
+const MALE_HEADS = ['cap', 'crew', 'helmet', 'safari'];
+const MALE_LOOKS = ['silencioso', 'capataz'];
+export const isMaleLook = (lookId?: string) => !!lookId && (MALE_LOOKS.includes(lookId) || MALE_HEADS.includes(LOOKS[lookId]?.head));
 
 /** Who looks like what. Change a color or head here to restyle a character. */
 export const LOOKS: Record<string, Look> = {
@@ -447,6 +491,17 @@ export const LOOKS: Record<string, Look> = {
   espeleologo: { head: 'helmet', body: 'pants', color: 'orange' },
   exploradora: { head: 'helmetLong', body: 'pants', color: 'yellow' },
   arqueologo: { head: 'safari', body: 'pants', color: 'khaki' },
+  // Region 2: the pine highlands and Villa Ocote.
+  silencioso: { head: 'hood', body: 'pants', color: 'black' },
+  silenciosa: { head: 'hood', body: 'dress', color: 'black' },
+  capataz: { head: 'hood', body: 'coat', color: 'black' },
+  petra: { head: 'bun', body: 'dress', color: 'brown' },
+  lenador: { head: 'crew', body: 'pants', color: 'red' },
+  campista: { head: 'long', body: 'pants', color: 'teal' },
+  ornitologa: { head: 'safari', body: 'pants', color: 'green' },
+  alfarero: { head: 'crew', body: 'coat', color: 'brown' },
+  minera: { head: 'helmetLong', body: 'pants', color: 'brown' },
+  lucas: { head: 'cap', body: 'pants', color: 'teal' },
 };
 
 // ---------- Objects in the world (same 3-color sprite rules) ----------
@@ -536,6 +591,182 @@ export const OBJECTS_ART: Record<string, { pal: Pal; rows: string[] }> = {
       '3333333333333333',
       '.32..........23.',
       '.33..........33.',
+      '................',
+    ],
+  },
+  /** Don Chepe’s ox-cart: a plank box over a big wooden wheel. */
+  carreta: {
+    pal: OBJECT_PALS.carreta,
+    rows: [
+      '................',
+      '................',
+      '.33333333333333.',
+      '.31111111111113.',
+      '.31212121212113.',
+      '.31111111111113.',
+      '.33333333333333.',
+      '..3222222222223.',
+      '..3333333333333.',
+      '....33333.......',
+      '...3211123......',
+      '..321333123.....',
+      '..313222313.....',
+      '..321333123.....',
+      '...3211123......',
+      '....33333.......',
+    ],
+  },
+  /** The mine lever (opens the gate). */
+  palanca: {
+    pal: OBJECT_PALS.palanca,
+    rows: [
+      '................',
+      '..........33....',
+      '.........3223...',
+      '.........3223...',
+      '.........333....',
+      '........313.....',
+      '.......313......',
+      '......313.......',
+      '.....313........',
+      '....3333333.....',
+      '...311111113....',
+      '...313333313....',
+      '...311111113....',
+      '...313333313....',
+      '...311111113....',
+      '...333333333....',
+    ],
+  },
+  /** A wooden mine gate: it blocks the tunnel until the lever is pulled. */
+  compuerta: {
+    pal: OBJECT_PALS.compuerta,
+    rows: [
+      '3333333333333333',
+      '3112112112112113',
+      '3112112112112113',
+      '3222222222222223',
+      '3112112112112113',
+      '3112112112112113',
+      '3112112112112113',
+      '3112112112112113',
+      '3222222222222223',
+      '3112112112112113',
+      '3112112112112113',
+      '3112112112112113',
+      '3112112112112113',
+      '3222222222222223',
+      '3112112112112113',
+      '3333333333333333',
+    ],
+  },
+  /** The Silenciador: a gray machine with a funnel that eats words. */
+  silenciador: {
+    pal: OBJECT_PALS.silenciador,
+    rows: [
+      '....33333333....',
+      '...3111111113...',
+      '....31111113....',
+      '.....311113.....',
+      '......3113......',
+      '..333333333333..',
+      '..311111111113..',
+      '..313333333313..',
+      '..312121221213..',
+      '..313333333313..',
+      '..311111111113..',
+      '..312212212213..',
+      '..311111111113..',
+      '..322222222223..',
+      '..333333333333..',
+      '...33......33...',
+    ],
+  },
+  /** A stone door with a carved spiral (the gym’s riddles). */
+  puertaPiedra: {
+    pal: OBJECT_PALS.puertaPiedra,
+    rows: [
+      '...3333333333...',
+      '..311111111113..',
+      '.31111111111113.',
+      '.31112222221113.',
+      '.31121111112113.',
+      '.31121222212113.',
+      '.31121211212113.',
+      '.31121211112113.',
+      '.31121222222113.',
+      '.31121111111113.',
+      '.31112222222113.',
+      '.31111111111113.',
+      '.32111111111123.',
+      '.32222222222223.',
+      '.33333333333333.',
+      '................',
+    ],
+  },
+  /** A lost word: a little glowing speech bubble. */
+  palabra: {
+    pal: OBJECT_PALS.palabra,
+    rows: [
+      '.............2..',
+      '..3333333333....',
+      '.311111111113...',
+      '31111111111113..',
+      '31212212122113..',
+      '31212212121213..',
+      '31122122121113..',
+      '31111111111113..',
+      '.311111111113...',
+      '..33331333333...',
+      '.....313........',
+      '....33..........',
+      '..........2.....',
+      '..2.............',
+      '................',
+      '................',
+    ],
+  },
+  /** A folded note. */
+  nota: {
+    pal: OBJECT_PALS.nota,
+    rows: [
+      '................',
+      '................',
+      '................',
+      '................',
+      '...3333333333...',
+      '...3111111123...',
+      '...3122221113...',
+      '...3111111113...',
+      '...3122222213...',
+      '...3111111113...',
+      '...3122221113...',
+      '...3111111113...',
+      '...3333333333...',
+      '................',
+      '................',
+      '................',
+    ],
+  },
+  /** An ox (Don Chepe’s). */
+  buey: {
+    pal: OBJECT_PALS.buey,
+    rows: [
+      '................',
+      '................',
+      '.3...3..........',
+      '.33333..........',
+      '3111113333333...',
+      '3131111111111113',
+      '3111111111211113',
+      '.311111112221113',
+      '..31111111111113',
+      '..33111111111133',
+      '...31111111113..',
+      '...3113..3113...',
+      '...3113..3113...',
+      '...3223..3223...',
+      '...3333..3333...',
       '................',
     ],
   },

@@ -150,6 +150,63 @@ const DRAW: Record<string, Draw> = {
     p.ellipse(20, 19, 1.5, 1.5, W).ellipse(28, 19, 1.5, 1.5, W);
     p.outline('#101828');
   },
+  /** A round gray pebble with a carved petroglyph face and stick-figure arms. */
+  piedrita(p) {
+    const stone = '#a8a8b0', dark = '#7e7e88', carve = '#3a3a42';
+    p.line(11, 30, 4, 23, carve).line(4, 23, 3, 18, carve).line(4, 23, 1, 22, carve);
+    p.line(37, 30, 44, 23, carve).line(44, 23, 45, 18, carve).line(44, 23, 47, 22, carve);
+    p.ellipse(24, 31, 15, 13, stone);
+    p.ellipse(29, 36, 9, 6, dark);
+    p.ellipse(19, 27, 2.5, 2.5, carve).ellipse(29, 27, 2.5, 2.5, carve);
+    p.set(19, 27, stone).set(29, 27, stone); // carved ring eyes
+    p.line(19, 35, 29, 35, carve).set(18, 34, carve).set(30, 34, carve); // a carved smile
+    p.line(18, 43, 16, 47, carve).line(30, 43, 32, 47, carve);
+    p.outline(K);
+  },
+  /** A tall standing stone covered in glowing carved spirals, with stone arms. */
+  petroglifon(p) {
+    const stone = '#908878', hi = '#b8b0a0', glow = '#a0e0d0', carve = '#3a3a42';
+    p.poly([[14, 22], [2, 13], [5, 9], [15, 16]], stone).poly([[34, 22], [46, 13], [43, 9], [33, 16]], stone);
+    p.poly([[14, 47], [11, 10], [18, 2], [30, 2], [37, 10], [34, 47]], stone);
+    p.poly([[16, 46], [14, 11], [19, 5], [22, 5], [19, 12], [21, 46]], hi);
+    for (const [x, y] of [[24, 24], [24, 37]]) {
+      p.line(x - 4, y + 3, x + 4, y + 3, glow).line(x + 4, y + 3, x + 4, y - 3, glow).line(x + 4, y - 3, x - 3, y - 3, glow);
+      p.line(x - 3, y - 3, x - 3, y + 1, glow).line(x - 3, y + 1, x + 2, y + 1, glow).line(x + 2, y + 1, x + 2, y - 1, glow);
+    }
+    p.rect(18, 11, 4, 3, carve).rect(27, 11, 4, 3, carve);
+    p.set(19, 12, glow).set(28, 12, glow);
+    p.outline(K);
+  },
+  /** A small clay cooking pot with painted zigzags, steam puffing from its lid. */
+  ollita(p) {
+    const clay = '#c87048', dark = '#904828', paint = '#f0d8b0', steam = '#f0f0f8';
+    p.ellipse(18, 7, 4, 3, steam).ellipse(26, 4, 3, 2.5, steam).ellipse(31, 9, 3, 2, steam);
+    p.rect(5, 26, 5, 7, clay).rect(38, 26, 5, 7, clay);
+    p.ellipse(24, 32, 16, 13, clay);
+    p.ellipse(31, 37, 8, 7, dark);
+    p.rect(11, 15, 26, 4, dark);
+    p.ellipse(24, 14, 5, 2, dark);
+    for (let x = 12; x < 36; x += 4) p.line(x, 25, x + 2, 23, paint).line(x + 2, 23, x + 4, 25, paint);
+    p.ellipse(19, 31, 2, 2.5, K).ellipse(29, 31, 2, 2.5, K);
+    p.set(18, 30, W).set(28, 30, W);
+    p.rect(22, 36, 4, 1, K);
+    p.outline('#3a1810');
+  },
+  /** A big round clay water jar (tinaja) with a cork for a hat; water sloshes at its neck. */
+  tinajon(p) {
+    const clay = '#b86040', dark = '#80401f', cork = '#d8b070', water = '#5aa8f0';
+    p.ellipse(24, 31, 21, 16, clay);
+    p.ellipse(34, 36, 10, 9, dark);
+    p.rect(15, 9, 18, 8, clay);
+    p.rect(13, 8, 22, 3, dark);
+    p.rect(17, 11, 14, 2, water);
+    p.rect(18, 1, 12, 8, cork).rect(18, 1, 12, 2, '#b08850');
+    for (let x = 8; x < 40; x += 6) p.line(x, 22, x + 3, 20, '#e8c8a0').line(x + 3, 20, x + 6, 22, '#e8c8a0');
+    p.ellipse(18, 29, 2, 3, K).ellipse(30, 29, 2, 3, K);
+    p.set(17, 28, W).set(29, 28, W);
+    p.ellipse(24, 36, 3, 2, K);
+    p.outline('#2a1008');
+  },
   sillon(p) {
     const rd = '#c8463e', dr = '#8e2a26', cu = '#e86a5a', wd = '#7a4a22';
     p.ellipse(24, 9, 14, 5, rd);

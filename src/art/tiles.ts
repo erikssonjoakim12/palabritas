@@ -113,6 +113,10 @@ export const TILES: Record<string, TileDef> = {
   '4': open({ current: 'left' }),
   '6': open({ current: 'right' }),
   H: open(),
+  F: solid({ look: { es: 'Una fuente. El agua suena muy bonito.', en: 'A fountain. The water sounds lovely.' } }),
+  U: solid({ look: { es: 'Ollas, jarras y tinajas de barro.', en: 'Clay pots, jugs and water jars.' } }),
+  K: open(),
+  W: solid(),
   R: open(),
   ' ': solid(),
 };
@@ -345,6 +349,19 @@ function render(ch: string, env: TileEnv): Img {
       return stack(rockImage(rockArt(env), env, MOUNTAIN_CHARS, underImage(env, 'ground')), paintArt(rockArt(env, TUNNEL_MOUTH)));
     case 'H':
       return bridgeImage(env);
+    case 'F': {
+      // A 2×2 fountain: this tile's quarter is the one away from its fountain neighbors.
+      const nb = neighbors(env);
+      const [qx, qy] = [nb.w === 'F' ? 16 : 0, nb.n === 'F' ? 16 : 0];
+      const rows = ART.fountain.rows.slice(qy, qy + 16).map((r) => r.slice(qx, qx + 16));
+      return stack(underImage(env, 'ground'), paintArt({ ...ART.fountain, rows }));
+    }
+    case 'U':
+      return stack(underImage(env, env.outdoor ? 'ground' : 'floor'), paintArt(ART.stall));
+    case 'K':
+      return stack(paintArt(caveArt(env, 'floor', ART.caveFloor)), paintArt(ART.rails));
+    case 'W':
+      return stack(paintArt(caveArt(env, 'floor', ART.caveFloor)), paintArt(ART.minePost));
     case '8':
     case '2':
     case '4':
