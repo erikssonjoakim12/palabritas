@@ -290,6 +290,85 @@ export const SPECIES: Record<string, Species> = {
       en: 'It’s Nicaragua’s national bird. It travels all over the Americas and knows many countries.',
     },
   },
+  // ----- Region 3: the coast -----
+  cangrejito: {
+    id: 'cangrejito',
+    name: 'Cangrejito',
+    types: ['Agua'],
+    theme: 'playa',
+    base: { hp: 42, atk: 58, def: 56, spd: 36 },
+    moves: [m('Pinza', 'Normal', 'choose'), m('Burbuja', 'Agua', 'type'), m('Ola', 'Agua', 'listen'), m('Martillazo', 'Agua', 'speak')],
+    catchRate: 0.55,
+    dex: {
+      es: 'Camina de lado por la playa. Si ve una toalla, se la lleva.',
+      en: 'It walks sideways along the beach. If it sees a towel, it takes it.',
+    },
+  },
+  coquito: {
+    id: 'coquito',
+    name: 'Coquito',
+    types: ['Planta'],
+    theme: 'frutas',
+    base: { hp: 50, atk: 44, def: 58, spd: 36 },
+    moves: [m('Cabezazo', 'Normal', 'choose'), m('Agua de Coco', 'Agua', 'type'), m('Hoja de Palma', 'Planta', 'listen'), m('Lluvia de Cocos', 'Planta', 'speak')],
+    catchRate: 0.5,
+    dex: {
+      es: 'Cae de las palmeras cuando hay viento. Por dentro tiene agua dulce y fresca.',
+      en: 'It falls from palm trees when it’s windy. Inside it has sweet, fresh water.',
+    },
+  },
+  mordisquito: {
+    id: 'mordisquito',
+    name: 'Mordisquito',
+    types: ['Agua'],
+    theme: 'mar',
+    base: { hp: 46, atk: 60, def: 42, spd: 58 },
+    moves: [m('Aleta', 'Agua', 'choose'), m('Mordisco', 'Siniestro', 'type'), m('Remolino', 'Agua', 'listen'), m('Tiburonazo', 'Agua', 'speak')],
+    catchRate: 0.4,
+    dex: {
+      es: 'Nada en el mar desde que nace. Si se le cae un diente, le crece otro.',
+      en: 'It swims in the sea from birth. If it loses a tooth, a new one grows.',
+    },
+  },
+  mojarrita: {
+    id: 'mojarrita',
+    name: 'Mojarrita',
+    types: ['Agua'],
+    theme: 'pesca',
+    base: { hp: 38, atk: 34, def: 40, spd: 58 },
+    moves: [m('Salpicar', 'Agua', 'choose'), m('Coletazo', 'Normal', 'type'), m('Burbujitas', 'Agua', 'listen'), m('Gran Salto', 'Normal', 'speak')],
+    catchRate: 0.7,
+    dex: {
+      es: 'El pez más común del río. Salta tan alto que a veces cae en el bote del pescador.',
+      en: 'The most common fish in the river. It jumps so high it sometimes lands in the fisherman’s boat.',
+    },
+  },
+  pelicanito: {
+    id: 'pelicanito',
+    name: 'Pelicanito',
+    types: ['Agua', 'Volador'],
+    theme: 'viaje',
+    base: { hp: 48, atk: 46, def: 44, spd: 56 },
+    moves: [m('Picotazo', 'Volador', 'choose'), m('Clavado', 'Agua', 'type'), m('Viento de Mar', 'Volador', 'listen'), m('Vuelo Largo', 'Volador', 'speak')],
+    catchRate: 0.5,
+    dex: {
+      es: 'Lleva sus cosas en la bolsa del pico. Siempre está listo para viajar.',
+      en: 'It carries its things in its beak pouch. It’s always ready to travel.',
+    },
+  },
+  paslamita: {
+    id: 'paslamita',
+    name: 'Paslamita',
+    types: ['Agua'],
+    theme: 'familia',
+    base: { hp: 52, atk: 40, def: 60, spd: 40 },
+    moves: [m('Placaje', 'Normal', 'choose'), m('Pistola Agua', 'Agua', 'type'), m('Arena Mojada', 'Tierra', 'listen'), m('Gran Ola', 'Agua', 'speak')],
+    catchRate: 0.45,
+    dex: {
+      es: 'Nace en la arena y corre al mar. De grande, vuelve a la misma playa para tener a sus bebés.',
+      en: 'It hatches in the sand and runs to the sea. As an adult it returns to the same beach to have its babies.',
+    },
+  },
 };
 
 /**
@@ -487,6 +566,58 @@ evolution('cuernito', 26, {
   dex: {
     es: 'Levanta cien veces su peso. Su caparazón brilla con todos los colores.',
     en: 'It lifts a hundred times its weight. Its shell shines with every color.',
+  },
+});
+
+// ----- The coast -----
+evolution('cangrejito', 22, {
+  id: 'cangrejon',
+  name: 'Cangrejón',
+  types: ['Agua', 'Lucha'],
+  base: { hp: 66, atk: 92, def: 80, spd: 40 },
+  dex: {
+    es: 'Sus pinzas son guantes de boxeo. Practica en la playa todos los días.',
+    en: 'Its claws are boxing gloves. It trains on the beach every day.',
+  },
+});
+evolution('coquito', 26, {
+  id: 'cocotero',
+  name: 'Cocotero',
+  types: ['Planta', 'Agua'],
+  base: { hp: 80, atk: 70, def: 76, spd: 48 },
+  dex: {
+    es: 'Da sombra a toda la playa. Los turistas descansan debajo de él.',
+    en: 'It shades the whole beach. Tourists rest underneath it.',
+  },
+});
+evolution('mordisquito', 25, {
+  id: 'mordiscon',
+  name: 'Mordiscón',
+  types: ['Agua', 'Siniestro'],
+  base: { hp: 74, atk: 98, def: 62, spd: 80 },
+  dex: {
+    es: 'Algunos viven en el gran lago de Nicaragua: ¡un tiburón de agua dulce!',
+    en: 'Some live in Nicaragua’s great lake: a freshwater shark!',
+  },
+});
+evolution('pelicanito', 22, {
+  id: 'maleticano',
+  name: 'Maletícano',
+  types: ['Agua', 'Volador'],
+  base: { hp: 70, atk: 70, def: 64, spd: 76 },
+  dex: {
+    es: 'Ha volado a todos los países de América. Su bolsa está llena de recuerdos.',
+    en: 'It has flown to every country in the Americas. Its pouch is full of souvenirs.',
+  },
+});
+evolution('paslamita', 28, {
+  id: 'paslamona',
+  name: 'Paslamona',
+  types: ['Agua', 'Tierra'],
+  base: { hp: 96, atk: 64, def: 92, spd: 44 },
+  dex: {
+    es: 'Cada año vuelve a su playa con miles de tortugas. ¡Es la noche de la arribada!',
+    en: 'Every year it returns to its beach with thousands of turtles. It’s the night of the arribada!',
   },
 });
 

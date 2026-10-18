@@ -20,6 +20,8 @@ const DEX_ORDER = [
   'hojadillo', 'hojarasco', 'ecolin', 'murcielon', 'ochopatas', 'taranton', 'cuernito', 'herculeo',
   'ardillita', 'ardillon', 'colibri', 'zumbador', 'espinita', 'puercoespin', 'piedrita', 'petroglifon', 'ollita', 'tinajon',
   'caparazonte', 'gliptodon', 'guardabarranco',
+  'cangrejito', 'cangrejon', 'coquito', 'cocotero', 'pelicanito', 'maleticano', 'mojarrita', 'mordisquito', 'mordiscon',
+  'paslamita', 'paslamona',
 ];
 
 /** The START menu. Resolves a script to run after it closes (an item used from the bag), if any. */

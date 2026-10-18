@@ -422,6 +422,117 @@ const DRAW: Record<string, Draw> = {
     p.ellipse(20, 20, 1.5, 1.5, W).ellipse(28, 20, 1.5, 1.5, W);
     p.outline('#0a1410');
   },
+  /** A small red crab with one big claw and eyes on stalks. */
+  cangrejito(p) {
+    const red = '#d85040', dark = '#a03028';
+    for (const x of [12, 16, 32, 36]) p.line(x, 34, x - (x < 24 ? 6 : -6), 42, dark);
+    p.ellipse(24, 31, 13, 9, red).ellipse(26, 35, 10, 4, dark);
+    p.ellipse(8, 22, 7, 6, red).poly([[3, 18], [8, 22], [2, 24]], '#f0f0e8'); // the big claw
+    p.ellipse(39, 24, 4, 4, red);
+    p.line(20, 24, 19, 15, dark).line(28, 24, 29, 15, dark);
+    p.ellipse(19, 14, 2.5, 2.5, W).ellipse(29, 14, 2.5, 2.5, W).set(19, 14, K).set(29, 14, K);
+    p.line(21, 30, 27, 30, K);
+    p.outline(K);
+  },
+  /** A huge crab with boxing-glove claws. */
+  cangrejon(p) {
+    const red = '#c84030', dark = '#902820', glove = '#e84848';
+    for (const x of [12, 16, 32, 36]) p.line(x, 36, x - (x < 24 ? 8 : -8), 46, dark);
+    p.ellipse(24, 32, 16, 11, red).ellipse(26, 37, 12, 5, dark);
+    p.ellipse(6, 20, 6, 7, glove).ellipse(42, 20, 6, 7, glove);
+    p.line(10, 26, 14, 30, red).line(38, 26, 34, 30, red);
+    p.line(20, 22, 18, 12, dark).line(28, 22, 30, 12, dark);
+    p.ellipse(18, 11, 2.5, 2.5, W).ellipse(30, 11, 2.5, 2.5, W).set(18, 11, K).set(30, 11, K);
+    p.line(19, 31, 29, 31, K);
+    p.outline(K);
+  },
+  /** A green coconut with a cute face and a little palm-leaf tuft on top. */
+  coquito(p) {
+    const green = '#6ab040', dark = '#3a7a28', leaf = '#4a9a38';
+    p.poly([[24, 12], [14, 4], [20, 10]], leaf).poly([[24, 12], [34, 3], [28, 10]], leaf).poly([[24, 12], [24, 1], [26, 11]], leaf);
+    p.ellipse(24, 29, 16, 16, green);
+    p.ellipse(30, 34, 9, 9, dark);
+    p.ellipse(18, 27, 2, 2.5, K).ellipse(29, 27, 2, 2.5, K).set(17, 26, W).set(28, 26, W);
+    p.ellipse(23, 34, 2, 1, K);
+    p.outline(K);
+  },
+  /** A coconut-palm creature: a coconut head on a curved trunk, swaying frond arms. */
+  cocotero(p) {
+    const trunk = '#a87848', green = '#4a9a38', nut = '#8a5a30';
+    p.poly([[22, 47], [27, 47], [31, 22], [25, 22]], trunk);
+    for (const [x, y] of [[4, 18], [44, 14], [10, 6], [38, 4]]) p.line(28, 16, x, y, green).line(28, 17, x, y + 1, green);
+    p.ellipse(28, 17, 8, 7, green);
+    p.ellipse(24, 23, 4, 4, nut).ellipse(32, 23, 4, 4, nut);
+    p.ellipse(25, 15, 1.5, 2, K).ellipse(31, 15, 1.5, 2, K);
+    p.outline(K);
+  },
+  /** A big bull shark with a wide grin full of teeth and a scar. */
+  mordiscon(p) {
+    const blue = '#5a7898', belly = '#d8e0e8';
+    p.poly([[2, 30], [40, 18], [46, 28], [40, 38], [6, 36]], blue);
+    p.poly([[20, 22], [26, 6], [30, 20]], blue).poly([[2, 30], [0, 18], [8, 30]], blue).poly([[2, 34], [0, 44], [8, 34]], blue);
+    p.poly([[10, 34], [40, 34], [40, 38], [6, 36]], belly);
+    p.line(28, 32, 44, 30, K);
+    for (let x = 30; x < 44; x += 3) p.set(x, 31, W);
+    p.ellipse(38, 24, 1.8, 1.8, K).set(37, 23, W);
+    p.line(32, 20, 36, 26, '#e8a0a0');
+    p.outline(K);
+  },
+  /** A small round striped fish (mojarra) with big surprised eyes. */
+  mojarrita(p) {
+    const silver = '#b8c8d8', stripe = '#6a88a8', fin = '#e8a050';
+    p.poly([[6, 26], [0, 16], [0, 36]], fin);
+    p.ellipse(24, 26, 17, 12, silver);
+    for (const x of [16, 22, 28]) p.line(x, 16, x, 36, stripe);
+    p.poly([[20, 14], [28, 6], [32, 15]], fin);
+    p.ellipse(34, 22, 4, 4, W).ellipse(34, 22, 2, 2, K);
+    p.ellipse(40, 29, 2, 1.5, K);
+    p.outline(K);
+  },
+  /** A brown pelican chick whose pouch looks like a little backpack. */
+  pelicanito(p) {
+    const brown = '#a88868', light = '#e8d8c0', beak = '#e8b848';
+    p.ellipse(22, 32, 13, 11, brown).ellipse(20, 35, 7, 6, light);
+    p.ellipse(28, 16, 7, 7, light);
+    p.poly([[32, 16], [47, 20], [33, 20]], beak).ellipse(38, 24, 6, 4, '#d89838');
+    p.ellipse(28, 14, 1.5, 2, K).set(27, 13, W);
+    p.rect(17, 42, 3, 5, beak).rect(25, 42, 3, 5, beak);
+    p.outline(K);
+  },
+  /** A big pelican whose beak pouch is a travel suitcase covered in stickers. */
+  maleticano(p) {
+    const brown = '#8a6848', light = '#e8d8c0', beak = '#e8b848', bag = '#7a4a28';
+    p.poly([[4, 36], [12, 22], [22, 30]], brown);
+    p.ellipse(20, 32, 15, 12, brown).ellipse(18, 36, 8, 6, light);
+    p.ellipse(28, 12, 7, 7, light);
+    p.poly([[32, 11], [47, 14], [34, 16]], beak);
+    p.rect(30, 18, 16, 12, bag).rect(36, 16, 4, 2, K);
+    p.rect(32, 20, 4, 3, '#58a8e8').rect(40, 24, 4, 3, '#e85858').rect(33, 25, 3, 3, '#f0d040');
+    p.ellipse(28, 10, 1.5, 2, K);
+    p.rect(14, 43, 3, 4, beak).rect(22, 43, 3, 4, beak);
+    p.outline(K);
+  },
+  /** An olive ridley hatchling with big eyes and a heart-shaped shell. */
+  paslamita(p) {
+    const shell = '#7a8a48', skin = '#a8b878', dark = '#4a5a28';
+    p.ellipse(8, 24, 6, 3, skin).ellipse(40, 24, 6, 3, skin).ellipse(12, 38, 5, 3, skin).ellipse(36, 38, 5, 3, skin);
+    p.poly([[24, 44], [10, 30], [12, 20], [18, 17], [24, 22], [30, 17], [36, 20], [38, 30]], shell);
+    p.line(24, 22, 24, 40, dark).line(16, 28, 32, 28, dark);
+    p.ellipse(24, 13, 6, 5, skin);
+    p.ellipse(21, 12, 2, 2.5, K).ellipse(27, 12, 2, 2.5, K).set(20, 11, W).set(26, 11, W);
+    p.outline(K);
+  },
+  /** A big mother sea turtle with a wide olive shell and strong flippers. */
+  paslamona(p) {
+    const shell = '#6a7a40', skin = '#98a868', dark = '#3a4a20';
+    p.poly([[2, 26], [12, 20], [14, 30]], skin).poly([[46, 26], [36, 20], [34, 30]], skin);
+    p.ellipse(10, 42, 7, 3, skin).ellipse(38, 42, 7, 3, skin);
+    p.ellipse(24, 32, 18, 13, shell);
+    for (const [x, y] of [[18, 28], [30, 28], [24, 36], [16, 37], [32, 37]]) p.ellipse(x, y, 3.5, 3, dark);
+    p.ellipse(24, 14, 7, 6, skin);
+    p.ellipse(21, 13, 1.5, 2, K).ellipse(27, 13, 1.5, 2, K);
+    p.outline(K);
+  },
   sillon(p) {
     const rd = '#c8463e', dr = '#8e2a26', cu = '#e86a5a', wd = '#7a4a22';
     p.ellipse(24, 9, 14, 5, rd);
