@@ -307,7 +307,7 @@ Don Sigilo. New heads: cowboy hat, bandana and hood. The rest reuse existing hea
 |---|---|---|---|---|---|---|
 | 2 | 10–15 | 12–14 | 15 + 12 | grunts 13–15, Capataz 16 | 15–16 | 17 · 19 · **21** (raised) |
 | 3 | 14–19 (fishing 10–22) | 15–20 | 22 + 19–20 | grunts 18–20, Callada 21–22 | 20–22 | 22 · 23 · **25** |
-| 4 | 19–26 | 21–26 | 28 + 25–26 | grunts 24–26, Don Sigilo 27–29 | 26–28 | 28 · 29 · **31** |
+| 4 | 15–25 (user) | 18–26 (user) | 28 + 25–26 | grunts 23–25, Don Sigilo 27–29 | 25–26 | 28 · 29 · **31** |
 
 ---
 

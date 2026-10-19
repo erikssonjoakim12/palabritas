@@ -13,6 +13,19 @@
 7. Side quests: a hammock for Mom, the lost parakeet chick, the haunted house, the Torovenado costumes, and
    the legend of the Carreta Nagua.
 
+**Updated 2026-10-19** for what changed while regions 2 and 3 were built (the user's decisions are marked):
+- **Files:** maps go in a new `src/world/maps/region4.ts` (add it in `maps/index.ts`); scripts in a new
+  `src/world/region4.ts` (registered like `REGION3`); trainers in `src/data/trainers.ts`.
+- **The bus is paused**, so Ciudad Chispa has no bus stop or bus driver.
+- **Sugarcane is `|`**: `Z` is the mine ladder now.
+- **Levels (user):** wild Palabritas 15–25 and trainers 18–26 (gym trainers too); Lucas 28, Don Sigilo 27–29 and
+  Don Tizón 28·29·31 stay. Nothing in regions 1–3 is above these (checked).
+- **Lucas #3 (user):** at the volcano's ranger station, after you can rest, not right after the rangers' battles (§10).
+- **Day and night (user):** the clock only changes looks. The festival is still a story night scene. Lit torches
+  and the festival get warm light like the windows (`art/lights.ts`).
+- **Rematches:** 1–2 trainers per route (the user's rule): Ruta 8 has 2, the volcano 1, Ruta 9 1.
+- **Tests:** only what's needed (the user's rule): one checkpoint test for the story, one for the quests.
+
 **Read first:** CLAUDE.md · PLAN_GYMS_2-4.md §4 · src/world/region3.ts (how a region's story is built) ·
 [palabritas.md](palabritas.md) §1 · [content.md](content.md) §1 and §2.
 
@@ -38,7 +51,7 @@ Amanecer's plateau).
 | `i` ash | Gray ground with darker grains. |
 | `j` lava | Glowing orange with dark crust (2 frames if tiles animate). Solid. |
 | `X` steam vent | A crack with white steam. Solid. |
-| `Z` sugarcane | Tall green stalks, `kind: 'tallgrass'`. |
+| `|` sugarcane | Tall green stalks, `kind: 'tallgrass'`. (`Z` is the mine ladder.) |
 | `l` cobblestone | Rounded gray stones. |
 | `q` church roof | White or cream, joining like roofs. |
 | `N` bell tower | White with a bell in an arch. |
@@ -53,7 +66,7 @@ Amanecer's plateau).
 | `vaca` | a cow |
 | `cajaCohetes` | a crate of fireworks |
 | `chocoyitoBebe` | a tiny green chick |
-| `antorchaRoja`, `antorchaAzul`, `antorchaVerde`, `antorchaAmarilla` | torches; each has an unlit and a lit image (the lit one glows at night) |
+| `antorchaRoja`, `antorchaAzul`, `antorchaVerde`, `antorchaAmarilla` | torches; each has an unlit and a lit image (lit ones give light like windows: `art/lights.ts`) |
 | `puertaTaller` | a heavy wooden door |
 | `lampara` | an old oil lamp with a ghostly face |
 | `hamaca` | a striped hammock |
@@ -84,7 +97,10 @@ Amanecer's plateau).
 | `laderas` | 30×34 | (-72, -48) | `down: { to: 'chispa', offset: 4 }` |
 | `amanecer` (existing) | | | add `left: { to: 'ruta9', offset: 8 }` |
 
-Playa Carey already has `right: { to: 'ruta8', offset: 2 }`.
+Add `right: { to: 'ruta8', offset: 2 }` to Playa Carey (its east road is rows 10–11). Its east gate then opens
+with just `flag('medalOla')` (drop the `!!MAPS.ruta8` check). Checked again on 2026-10-19: Carey's east edge is
+at world x −120 and Pueblo Amanecer's west edge at 0, so Ruta 8 + Ciudad Chispa + Ruta 9 (44 + 36 + 40 = 120)
+still fit exactly, and nothing overlaps.
 
 **The loop closes:** Pueblo Amanecer's west plateau joins Ruta 9. The plateau's ledge means you can come
 home that way but not leave by it, as in Gold/Silver. From now on, every outdoor map is connected, so the
@@ -99,22 +115,22 @@ The lava tube (`tubo`), the crater (`crater`) and the interiors are door-linked.
 - `name: 'Ruta 8'`, `outdoor: true`, `ground: 'grass'`, `style: { trees: 'dry' }`.
 - **The lagoon:** fish from the pier.
 - **The farm:** fenced, with cows (objects `vaca1`, `vaca2`: «¡Muuu!»). The farmer is a trainer by the road.
-- **The sugarcane fields:** the training spot, reached only through the opening at (14–15, 18–19).
+- **The sugarcane fields** (`|`): the training spot, reached only through the opening at (14–15, 18–19).
 
 **Encounters** (rate 0.12):
 
 | Palabrita | Levels | w |
 |---|---|---|
-| garrobito | 19–22 | 25 |
-| hormiguita | 19–22 | 25 |
-| zopilotito | 19–22 | 20 |
-| hojadillo | 20–23 | 10 |
-| liebron | 20–23 | 10 |
-| cuernito | 21–23 | 5 |
-| herculeo | 24–25 | 3 |
-| tinajon | 21–23 | 2 |
+| garrobito | 15–18 | 25 |
+| hormiguita | 15–18 | 25 |
+| zopilotito | 16–18 | 20 |
+| hojadillo | 16–19 | 10 |
+| liebron | 17–19 | 10 |
+| cuernito | 17–19 | 5 |
+| herculeo | 19–20 | 3 |
+| tinajon | 18–20 | 2 |
 
-**Fishing** (the lagoon): mojarrita 14–20 (w 60), mordisquito 18–22 (w 40).
+**Fishing** (the lagoon): mojarrita 14–19 (w 60), mordisquito 17–20 (w 40).
 
 **Item:** `itemBall('revivir_r8', 40, 28, 'revivir')`.
 
@@ -155,16 +171,16 @@ volcano." Put an `S` tile there (it's grass in the rows).
       'TTTTTTTTTT==============================TTTT',
       'TTTTTTTTTTTTTT::TTTTTTTTTTTTTTTTTTTTT.======',
       'TTTTTTTTTTTTTT::TTTTTTTTTTTTTTTTTTTTTT======',
-      'TTTZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZT.......T',
-      'TTTZZZZZ:::::::::::::::::::::::ZZZZT.,,,,,.T',
-      'TTTZZZZZZZZZZZZZZZZZZZZZZZZZZ::ZZZZT.,,,,,.T',
-      'TTTZZZZZZZZZZZZZZZZZZZZZZZZZZ::ZZZZT.,,,,,.T',
-      'TTTZZZZZZZZZZZZZZZZZZZZZZZZZZ::ZZZZT.,,,,,.T',
-      'TTTZZZZZZZZZZZZZZZZZZZZZZZZZZ::ZZZZT.,,,,,.T',
-      'TTTZZZZZZZZZZZZZZZZZZZZZZZZZZ::ZZZZT.,,,,,.T',
-      'TTTZZZZZZZZZZZZZZZZZZZZZZZZZZ::ZZZZT.,,,,,.T',
-      'TTTZ:::::::::::::::::::::::::::ZZZZT.......T',
-      'TTTZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZT.......T',
+      'TTT||||||||||||||||||||||||||||||||T.......T',
+      'TTT|||||:::::::::::::::::::::::||||T.,,,,,.T',
+      'TTT||||||||||||||||||||||||||::||||T.,,,,,.T',
+      'TTT||||||||||||||||||||||||||::||||T.,,,,,.T',
+      'TTT||||||||||||||||||||||||||::||||T.,,,,,.T',
+      'TTT||||||||||||||||||||||||||::||||T.,,,,,.T',
+      'TTT||||||||||||||||||||||||||::||||T.,,,,,.T',
+      'TTT||||||||||||||||||||||||||::||||T.,,,,,.T',
+      'TTT|:::::::::::::::::::::::::::||||T.......T',
+      'TTT||||||||||||||||||||||||||||||||T.......T',
       'TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT',
       'TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT',
 ```
@@ -181,7 +197,6 @@ A colonial town, inspired by Masaya, with the volcano on the horizon:
 
 **Basics:**
 - `name: 'Ciudad Chispa'`, `outdoor: true`, `ground: 'town'`, `roof: 'red'`, `style: { trees: 'dry' }`.
-- `busStop: { x: 6, y: 13, dir: 'down' }`.
 - **Exits:** west to Ruta 8, east to Ruta 9, and north on the trail up the volcano (x 24–25).
 
 **Doors:**
@@ -213,7 +228,6 @@ A colonial town, inspired by Masaya, with the volcano on the horizon:
 
 | id | Where | Notes |
 |---|---|---|
-| `cobrador_chispa` | (7, 13) | the bus |
 | `hamaquera` | (12, 21) | the hammock stall, quest §11.1 |
 | `mascarero` | (20, 21) | the mask stall, quest §11.4 |
 | `fritanguera` | (24, 21) | the street-food stall, *fritanga*; a costume piece |
@@ -225,7 +239,7 @@ Remove the draft's `polvorero_triste`: the gate guard covers him.
 **Signs:**
 - (9, 12): «CIUDAD CHISPA. ¡La ciudad de las fiestas!» / "CIUDAD CHISPA. The city of festivals!"
 - (26, 13): «TALLER DE PÓLVORA. Líder: Don Tizón.» / "FIREWORKS WORKSHOP. Leader: Don Tizón."
-- (7, 14): «PARADA DE BUS» / "BUS STOP"
+- (7, 14): «MERCADO DE ARTESANÍAS. ¡Hamacas, máscaras y más!» / "CRAFTS MARKET. Hammocks, masks and more!"
 - Stalls:
   - row 20 x 10–12: «Hamacas hechas a mano.» / "Handmade hammocks."
   - x 19–21: «Máscaras y trajes de fiesta.» / "Masks and festival costumes."
@@ -293,7 +307,7 @@ Remove the draft's `polvorero_triste`: the gate guard covers him.
       '++++mm++++',
 ```
 
-- `casa_embrujada` (two rooms, both `night: true`; Palabritas everywhere, rate 0.1: cojincito 20–23 (w 70),
+- `casa_embrujada` (two rooms, both `night: true`; Palabritas everywhere, rate 0.1: cojincito 20–22 (w 70),
   sillon 22–24 (30)):
 
   **The hall** (10×8), exit `{ to: 'chispa', x: 5, y: 27 }`, door `{ x: 4, y: 0, to: 'cuarto_embrujado',
@@ -336,7 +350,7 @@ Remove the draft's `polvorero_triste`: the gate guard covers him.
   | zopilotito | 22–25 | 25 |
   | liebron | 22–25 | 20 |
   | palomon | 22–25 | 15 |
-  | hormigon | 22–24 | 10 |
+  | hormigon | 23–25 | 10 |
 
 - **People:**
   - `abuelo_leyenda` (4, 8) facing right (look `granny`; make it a man: a `crew` head with gray hair, as in
@@ -387,13 +401,14 @@ Steam vents. The rangers' station on the middle terrace has a bed: rest heals yo
 
 **Basics:**
 - `name: 'Volcán Chocoyo'`, `outdoor: true`, `border: '^'`, `style: { rock: 'basalt' }`.
-- **Encounters** (rate 0.12): chispita 21–24 (w 35), garrobito 21–24 (30), zopilotito 22–24 (20),
-  chocoyito 22–24 (15).
+- **Encounters** (rate 0.12): chispita 19–22 (w 35), garrobito 19–21 (30), zopilotito 19–22 (20),
+  chocoyito 20–22 (15).
 - **Doors:**
   - (19, 16) → `estacion` (`HOUSE`-like, with the bed `B`). The ranger Doña Elsa (look `guardaparque`):
     «¿Estás cansad{o/a}? Descansa un poco en la cama.» / "Are you tired? Rest a bit on the bed."
     - The bed heals your team. Set `G.save.heal` here.
     - She also gives quest §11.2.
+    - **Lucas is here** (rival #3, §10): he rests, then battles you before you go on up.
   - (14, 2) → `tubo` at (3, 22) facing up.
 
 **People:**
@@ -404,7 +419,6 @@ Steam vents. The rangers' station on the middle terrace has a bed: rest heals yo
 | `vulcanologa1` | (23, 11) right, sight 2 | Vulcanóloga Clara | **in the way** |
 | `guardaparque2` | (12, 4) right, sight 2 | Guardaparque Mauricio | **in the way** |
 
-**Trigger:** `(13..14, 4)` → `lucasVolcan` (rival #3, §10), once. It's right before the lava tube.
 
 ```
       '^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^',
@@ -451,11 +465,11 @@ Steam vents. The rangers' station on the middle terrace has a bed: rest heals yo
 
   | Palabrita | Levels | w |
   |---|---|---|
-  | ecolin | 21–24 | 30 |
-  | murcielon | 22–25 | 20 |
-  | ochopatas | 21–24 | 20 |
-  | taranton | 24–25 | 10 |
-  | chispita | 22–24 | 20 |
+  | ecolin | 20–22 | 30 |
+  | murcielon | 21–23 | 20 |
+  | ochopatas | 20–22 | 20 |
+  | taranton | 22–23 | 10 |
+  | chispita | 21–23 | 20 |
 
 - **Exit:** `exit: { to: 'laderas', x: 14, y: 3 }` (the `e` at (3, 23)).
 - **Door up:** `{ x: 36, y: 1, to: 'crater', tx: 5, ty: 24, dir: 'up' }`.
@@ -499,7 +513,7 @@ has made camp on the north rim with the stolen fireworks.
 
 - `name: 'Cráter del Chocoyo'`, `outdoor: true` (not in the world layout: door-linked), `border: '^'`,
   `style: { rock: 'basalt' }`.
-- **Encounters** (grass only, rate 0.15): chocoyito 22–25 (w 75), chispita 22–24 (25).
+- **Encounters** (grass only, rate 0.15): chocoyito 22–24 (w 75), chispita 22–24 (25).
 - **Door:** `{ x: 5, y: 25, to: 'tubo', tx: 36, ty: 2, dir: 'down' }`.
 - **People:**
 
@@ -595,31 +609,34 @@ has made camp on the north rim with the stolen fireworks.
 
 ## 8. Trainers
 
+Levels: route trainers 18–26, rising along the way (the user, 2026-10-19). Rematches: Rigo and Lidia on Ruta 8,
+Clara on the volcano, Bruno on Ruta 9.
+
 ```ts
-campesino: { id: 'campesino', name: 'Campesino Rigo', defenseMode: 'listen', rematch: true, team: [['garrobito', 21], ['hormiguita', 21]] },
-vaquera_r8: { id: 'vaquera_r8', name: 'Vaquera Chela', defenseMode: 'listen', rematch: true, team: [['liebron', 22], ['zopilotito', 22]] },
-pescadora_r8: { id: 'pescadora_r8', name: 'Pescadora Iris', defenseMode: 'listen', rematch: true, team: [['mojarrita', 21], ['mojarrita', 22], ['mordisquito', 22]] },
-turista_r8: { id: 'turista_r8', name: 'Turista Mike', defenseMode: 'choose', rematch: true, team: [['pelicanito', 22], ['coquito', 22]] },
-cortador: { id: 'cortador', name: 'Cortador Juan', defenseMode: 'listen', rematch: true, team: [['hormiguita', 22], ['garrobito', 23]] },
-cortadora: { id: 'cortadora', name: 'Cortadora Lidia', defenseMode: 'listen', rematch: true, team: [['zopilotito', 23], ['hormiguita', 23]] },
-granjero: { id: 'granjero', name: 'Granjero Pancho', defenseMode: 'listen', rematch: true, team: [['conejito', 22], ['liebron', 23]] },
-ciclista: { id: 'ciclista', name: 'Ciclista Óscar', defenseMode: 'listen', rematch: true, team: [['garrobito', 23], ['zopilotito', 23]] },
-guardaparque1: { id: 'guardaparque1', name: 'Guardaparque Raquel', defenseMode: 'listen', rematch: true, team: [['chispita', 23], ['garrobito', 24]] },
-vulcanologa1: { id: 'vulcanologa1', name: 'Vulcanóloga Clara', defenseMode: 'listen', rematch: true, team: [['chispita', 24], ['zopilotito', 24]] },
-guardaparque2: { id: 'guardaparque2', name: 'Guardaparque Mauricio', defenseMode: 'listen', rematch: true, team: [['chocoyito', 24], ['garrobito', 25]] },
-vulcanologo2: { id: 'vulcanologo2', name: 'Vulcanólogo Erick', defenseMode: 'listen', rematch: true, team: [['ecolin', 24], ['taranton', 25]] },
-silencioso5: { id: 'silencioso5', name: 'Silencioso', defenseMode: 'listen', team: [['ecolin', 24], ['piedrita', 25]] },
-silencioso6: { id: 'silencioso6', name: 'Silenciosa', defenseMode: 'listen', team: [['ochopatas', 25], ['ollita', 25]] },
-silencioso7: { id: 'silencioso7', name: 'Silencioso', defenseMode: 'listen', team: [['petroglifon', 25], ['murcielon', 25]] },
+campesino: { id: 'campesino', name: 'Campesino Rigo', defenseMode: 'listen', rematch: true, team: [['garrobito', 18], ['hormiguita', 18]] },
+vaquera_r8: { id: 'vaquera_r8', name: 'Vaquera Chela', defenseMode: 'listen', team: [['liebron', 19], ['zopilotito', 19]] },
+pescadora_r8: { id: 'pescadora_r8', name: 'Pescadora Iris', defenseMode: 'listen', team: [['mojarrita', 18], ['mojarrita', 19], ['mordisquito', 19]] },
+turista_r8: { id: 'turista_r8', name: 'Turista Mike', defenseMode: 'choose', team: [['pelicanito', 19], ['coquito', 19]] },
+cortador: { id: 'cortador', name: 'Cortador Juan', defenseMode: 'listen', team: [['hormiguita', 19], ['garrobito', 20]] },
+cortadora: { id: 'cortadora', name: 'Cortadora Lidia', defenseMode: 'listen', rematch: true, team: [['zopilotito', 20], ['hormiguita', 20]] },
+granjero: { id: 'granjero', name: 'Granjero Pancho', defenseMode: 'listen', team: [['conejito', 20], ['liebron', 21]] },
+ciclista: { id: 'ciclista', name: 'Ciclista Óscar', defenseMode: 'listen', team: [['garrobito', 21], ['zopilotito', 21]] },
+guardaparque1: { id: 'guardaparque1', name: 'Guardaparque Raquel', defenseMode: 'listen', team: [['chispita', 21], ['garrobito', 22]] },
+vulcanologa1: { id: 'vulcanologa1', name: 'Vulcanóloga Clara', defenseMode: 'listen', rematch: true, team: [['chispita', 22], ['zopilotito', 22]] },
+guardaparque2: { id: 'guardaparque2', name: 'Guardaparque Mauricio', defenseMode: 'listen', team: [['chocoyito', 22], ['garrobito', 23]] },
+vulcanologo2: { id: 'vulcanologo2', name: 'Vulcanólogo Erick', defenseMode: 'listen', team: [['ecolin', 23], ['taranton', 23]] },
+silencioso5: { id: 'silencioso5', name: 'Silencioso', defenseMode: 'listen', team: [['ecolin', 23], ['piedrita', 24]] },
+silencioso6: { id: 'silencioso6', name: 'Silenciosa', defenseMode: 'listen', team: [['ochopatas', 24], ['ollita', 24]] },
+silencioso7: { id: 'silencioso7', name: 'Silencioso', defenseMode: 'listen', team: [['petroglifon', 24], ['murcielon', 25]] },
 sigilo: { id: 'sigilo', name: 'Don Sigilo', defenseMode: 'type', team: [['murcielon', 27], ['taranton', 28], ['petroglifon', 29]] },
 lucas3: { id: 'lucas3', name: 'Lucas', defenseMode: 'type', team: [['<counter starter, 2nd form>', 28], ['hojarasco', 25], ['palomon', 25], ['cangrejon', 26]] },
-polvorera: { id: 'polvorera', name: 'Polvorera Gloria', defenseMode: 'type', team: [['chispita', 26], ['chispita', 26]] },
-malabarista: { id: 'malabarista', name: 'Malabarista Ricky', defenseMode: 'type', team: [['chocoyito', 27], ['garrobito', 27]] },
-fritanguero: { id: 'fritanguero', name: 'Fritanguero Neno', defenseMode: 'type', team: [['garrobito', 27], ['chispita', 28]] },
+polvorera: { id: 'polvorera', name: 'Polvorera Gloria', defenseMode: 'type', team: [['chispita', 25], ['chispita', 25]] },
+malabarista: { id: 'malabarista', name: 'Malabarista Ricky', defenseMode: 'type', team: [['chocoyito', 25], ['garrobito', 26]] },
+fritanguero: { id: 'fritanguero', name: 'Fritanguero Neno', defenseMode: 'type', team: [['garrobito', 26], ['chispita', 26]] },
 tizon: { id: 'tizon', name: 'Líder Don Tizón', defenseMode: 'type', team: [['chocoyote', 28], ['coheton', 29], ['brasita', 31]] },
-campesina_r9: { id: 'campesina_r9', name: 'Campesina Tula', defenseMode: 'listen', rematch: true, team: [['zopilotito', 24], ['liebron', 25]] },
+campesina_r9: { id: 'campesina_r9', name: 'Campesina Tula', defenseMode: 'listen', team: [['zopilotito', 24], ['liebron', 25]] },
 ciclista_r9: { id: 'ciclista_r9', name: 'Ciclista Bruno', defenseMode: 'listen', rematch: true, team: [['garrobito', 25], ['hormigon', 25]] },
-excursionista_r9: { id: 'excursionista_r9', name: 'Excursionista Lila', defenseMode: 'listen', rematch: true, team: [['palomon', 25], ['liebron', 26]] },
+excursionista_r9: { id: 'excursionista_r9', name: 'Excursionista Lila', defenseMode: 'listen', team: [['palomon', 25], ['liebron', 26]] },
 ```
 
 Lines (each `[es, en]`):
@@ -709,14 +726,17 @@ Lines (each `[es, en]`):
 
 ## 10. The rival: Lucas, battle #3
 
-**`lucasVolcan`** (the trigger at the top of the slopes, once, flag `lucas3`):
-1. «¡{name}! ¿Tú también vienes por los Silenciosos?» / "{name}! Are you after the Silenciosos too?"
-2. «Antes de entrar, una batalla. ¡Esta vez sí te gano!» / "Before we go in, a battle. This time I'll beat
-   you for sure!"
+**At the ranger station** (`estacion`, the user's choice: not right after the rangers' battles). Lucas
+(`lucas_estacion`, `show: () => !flag('lucas3')`) sits by the door. Flag `lucas3`.
+1. Entering the first time (a trigger inside the door): «¡{name}! ¿Tú también vienes por los Silenciosos?» /
+   "{name}! Are you after the Silenciosos too?" «Descansa primero en la cama. ¡Quiero una batalla justa!» /
+   "Rest on the bed first. I want a fair fight!"
+2. After the bed heals you (or if you talk to him, or walk to the door): «¡Ahora sí! ¡Esta vez sí te gano!» /
+   "Now we're talking! This time I'll beat you for sure!"
 3. The battle (`lucas3`). Defeated: «Otra vez... Bueno. Eres muy buen{o/a}, de verdad.» / "Again... OK.
    You're really good, honestly."
 4. «Ve tú al cráter. Yo bajo a avisar a los guardaparques. ¡Ten cuidado!» / "You go to the crater. I'll go
-   down and tell the rangers. Be careful!" He walks down and leaves.
+   down and tell the rangers. Be careful!" He walks out and leaves. If you lose, he stays and asks again.
 
 From here on, Lucas is a friend more than a rival. That pays off later.
 
@@ -828,7 +848,7 @@ From here on, Lucas is a friend more than a rival. That pays off later.
    - «¿Qué no debes hacer?» → «Salir a la calle» / «Dormir» / «Comer»
 3. **Done:** «¡Pusiste mucha atención! Toma esta campanita. Dicen que espanta a los fantasmas.» / "You paid
    close attention! Take this little bell. They say it scares ghosts away."
-   - `addItem('campanita')`, a key item with no use yet: a teaser for the Ghost-type Elite Four member. Set
+   - `addItem('campanita')`, a new key item (add it to `ITEM_DEFS` like `hamaca`) with no use yet: a teaser for the Ghost-type Elite Four member. Set
      `leyenda`.
 
 ---
@@ -877,9 +897,11 @@ Ruta 9 → the plateau → the ledge into Pueblo Amanecer.
 
 ## 15. Tests
 
+Keep them short (the user's rule: only what's strictly necessary), in checkpoints like region3.test.
+
 | Test | What it checks |
 |---|---|
-| `region4.test` | Carey's east gate → Ruta 8 → Ciudad Chispa (the theft cutscene; the trail opens) → the slopes (3 rangers; Lucas #3; the bed heals) → the tube → the crater (a rim grunt + Don Sigilo; the crates) → back in Chispa: the festival night (fireworks drawn, the parade moves) → the workshop: the wrong torch order resets, the right one opens the door, the 3 trainers, Don Tizón, `medalChispa` → Ruta 9 → hop down into Amanecer. |
+| `region4.test` | Carey's east gate → Ruta 8 → Ciudad Chispa (the theft cutscene; the trail opens) → the slopes (the bed heals; Lucas #3 at the station) → the tube → the crater (a rim grunt + Don Sigilo; the crates) → back in Chispa: the festival night (fireworks drawn, the parade moves) → the workshop: the wrong torch order resets, the right one opens the door, the 3 trainers, Don Tizón, `medalChispa` → Ruta 9 → hop down into Amanecer. |
 | `quests4.test` | The hammock: bargaining lowers the price, buying needs money, Mom takes it, and the snoring hammock gives a Hamaquita battle. The chick. The haunted house: 3 rounds, then the Lamparita battle and $500. Torovenado: 5 pieces by name, then the parade gives Mascarita. The legend: 3 questions and the bell. |
 | `maps.test`, `data.test` | stay green; the art page's World view now shows the whole loop. |
 
