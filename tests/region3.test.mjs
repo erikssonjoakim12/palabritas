@@ -34,7 +34,7 @@ t.check('counting the eggs (digits or words)', (await flags()).huevosContados &&
 
 // ...then Callada (after her grunts), the hatchlings, and Paslamita.
 const grunts = { 'beat:silencioso8': true, 'beat:silencioso9': true, 'beat:silencioso10': true };
-await t.fromSave({ map: 'tortugas_noche', x: 20, y: 14, dir: 'down', party, flags: { noche: true, huevosContados: true, ...grunts } });
+await t.fromSave({ map: 'tortugas_noche', x: 20, y: 14, dir: 'down', party, flags: { huevosContados: true, ...grunts } });
 await t.press('z');
 r = await t.play();
 const s = await t.save();

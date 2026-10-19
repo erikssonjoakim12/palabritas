@@ -1,5 +1,5 @@
-// Walking: crossing between maps without a fade (and back), hopping down a ledge (never up), and
-// a trainer-like NPC (Sam) who stops you only once.
+// Walking: crossing between maps without a fade (and back), a door and its mat, hopping down a ledge (never up),
+// a trainer-like NPC (Sam) who stops you only once, and the clock's night outdoors.
 import { start, sleep } from './lib.mjs';
 
 const t = await start('walk');
@@ -16,6 +16,13 @@ t.check('walking north from Villa Limón crosses into Ruta 2', (await t.pos())[0
 await t.shot('crossed');
 await hold('ArrowDown', 1100);
 t.check('and back south into Villa Limón', (await t.pos())[0] === 'limon', await t.pos());
+await t.warp('limon', 4, 7, 'up');
+await t.walk('up', 1);
+await t.waitIdle();
+t.check('a door leads into the bakery', (await t.pos())[0] === 'panaderia', await t.pos());
+await t.walk('down', 1);
+await t.waitIdle();
+t.check('the mat leads back out', (await t.pos())[0] === 'limon', await t.pos());
 
 await t.fromSave({ map: 'amanecer', x: 3, y: 7, dir: 'right', party: [['gotita', 6]] });
 await hold('ArrowRight', 900);

@@ -13,8 +13,8 @@
 7. Side quests: a hammock for Mom, the lost parakeet chick, the haunted house, the Torovenado costumes, and
    the legend of the Carreta Nagua.
 
-**Read first:** CLAUDE.md · PLAN_GYMS_2-4.md §4 · [phase3-region3.md](phase3-region3.md) (it must be
-done) · [palabritas.md](palabritas.md) §4 · [content.md](content.md) §2 and §3.
+**Read first:** CLAUDE.md · PLAN_GYMS_2-4.md §4 · src/world/region3.ts (how a region's story is built) ·
+[palabritas.md](palabritas.md) §1 · [content.md](content.md) §1 and §2.
 
 **Work in this order:**
 1. Tiles and looks (§1).

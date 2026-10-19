@@ -2,7 +2,8 @@
 
 Everything between the Breeze Medal and the fourth medal: places, story, side quests, Palabritas,
 evolutions, Spanish, new systems and the order to build it in. Built phase by phase from the detailed specs in
-[plans/](plans/README.md), with a playable game after every phase.
+[plans/](plans/README.md), with a playable game after every phase. **Status:** regions 2 and 3 are built (§2, §3);
+region 4 is next ([plans/phase4-region4.md](plans/phase4-region4.md)).
 Big picture: [ROADMAP.md](ROADMAP.md) · learning rules: [LEARNING_PLAN.md](LEARNING_PLAN.md) · animals: [BIOMES.md](BIOMES.md).
 
 **At a glance**
@@ -56,93 +57,30 @@ of the game.
 
 ---
 
-## 2. Region 2 — the pine highlands: Ciudad Brisa → Villa Ocote (gym 2)
+## 2. Region 2 — the pine highlands ✓ built
 
-Inspired by Nicaragua's north (Estelí, Madriz): cool mountains, pine forests, deep canyons, pottery and Ice Age
-fossils. It looks nothing like the green lowland farms before gym 1. Here the trees are **pines** (the pine
-tile we kept), with a few green broadleaf trees mixed in.
-Already built: Ruta 3, Cueva del Eco (Ruta 4), Ruta 5 and the Palacentro by the cave. Ruta 3's mountains and
-the cave already fit; Ruta 5 gets pines.
+Ciudad Brisa → Ruta 3 → Cueva del Eco → Ruta 5 → **Villa Ocote**, inspired by Nicaragua's north (pines, canyons,
+pottery, Ice Age fossils). The code is the truth (src/world/maps.ts, region2.ts); in short:
+- **Story, the muted town:** nobody in Villa Ocote can speak. A message in the dirt sends you to the Mina de
+  Barro, where you beat the Capataz Silencioso and break the Silenciador; the town talks again. Then the lost
+  words (8 of them to give back) and the party at night.
+- **Side quests:** Beto's hat, the echo room and its fossil (Caparazonte, revived the next day), Don Chepe's
+  oxen, Gaby's bird (the guardabarranco in the Cañón del Guardabarranco). Lucas's first battle is on Ruta 5.
+- **Gym 2, Petra (Roca/Tierra):** three riddle doors; Piedrita 17, Ollita 19, Petroglifón 21; Medalla Barro.
+- **Changed from the plan:** the bus is paused (no big roads yet); the Cerro del Eco was left out; levels were
+  raised (the user plays a lot before each gym) and are being play-tested.
 
-### Places
-- **Ruta 5**, longer at its west end. The road worker finishes the bridge over a ravine, and the bridge leads to
-  Villa Ocote. Pines, and grass with Ardillita, Colibrí and Espinita. Lucas waits here (rival battle #1).
-- **Cañón del Guardabarranco** (optional): a deep, narrow canyon off Ruta 5, like Somoto's, with a river at the
-  bottom and rarer Palabritas. The guardabarranco (the "ravine guard") lives here.
-- **Villa Ocote** (town, ~30×26). Named after the *ocote*, the resin-rich pine of the north. Cool, misty
-  mornings and tall pines around the plaza.
-  - Adobe and pine-wood houses with clay-tile roofs, and an ox-cart parked in the street.
-  - Petra's pottery workshop (the north is famous for its pottery), which is the gym.
-  - A museum (Ice Age fossils and petroglyphs), a school and a bus stop.
-  - Palacentro, shop and a few houses.
-  - North exit to the mine. South exit to Ruta 6, guarded until you have the Medalla Barro.
-- **La Mina de Barro** (dungeon, 2 floors). An old clay mine with cave rules (wild Palabritas on every step),
-  rails, wooden supports and Equipo Silencio.
+## 3. Region 3 — the Pacific coast ✓ built
 
-### Story: the muted town
-1. You arrive and **everyone's dialogue is "…"**. Signs are blank. A child has scratched a message in the dirt
-   (you read it): *«¡AYUDA! Los Silenciosos se llevaron nuestras palabras. Están en la mina.»*
-2. The gym is locked: Petra went into the mine alone.
-3. In the mine: 4 grunts, a lever door, and at the bottom **el Silenciador**, a machine that "eats" the town's
-   words. You beat the **Capataz Silencioso** and the machine breaks.
-4. Words fly back to town. Every NPC talks again and some thank you (*«¡Puedo hablar otra vez!»*). Petra
-   opens the gym.
-
-### Side quests
-| Quest | What you do | Spanish practiced | Reward |
-|---|---|---|---|
-| **El sombrero de Beto** | In the cave's side room, a special Ecolín is wearing Beto's green hat. Beat it and it drops the hat. Bring it back to Beto in Villa Limón (the bus helps). He asks: *«¿De qué color es?»* | colors, describing things | 5 Palabolas; Beto becomes a rematch trainer |
-| **La sala del eco** | A cracked wall in Cueva del Eco. The echo whispers words, and you repeat 5 of them: first typing, then saying them. The wall opens to a fossil nook (Fósil Caparazón). The museum revives it, but only *tomorrow* (the real date). | listening, speaking | **Caparazonte** (level 15) |
-| **Los bueyes perdidos** | Don Chepe the ox-cart driver lost his two oxen. He tells you where they went: *«Uno se fue al norte, cerca del árbol grande. El otro está detrás de la casa amarilla.»* | directions: norte/sur, cerca de, detrás de, al lado de | Superpociones, money |
-| **El pájaro nacional** | Gaby the birdwatcher describes the guardabarranco: *«Tiene la cola larga, con dos plumas como raquetas.»* Pick the right bird out of three, then find it in the canyon (a rare encounter) and show it to her. | reading a description, body parts | 3 Superbolas |
-
-### Gym 2: Gimnasio de Barro — Petra (Roca/Tierra)
-- **Puzzle: the talking stones.** Three stone doors carved with petroglyphs, each with a riddle in Spanish:
-  *«Tengo cuatro patas y digo "miau". ¿Quién soy?»* Answer it (type or say it) and the door rolls aside.
-- **Gym trainers:** Alfarero Tito, Minera Lupita.
-- **Petra's team:** Piedrita 16, Ollita 17, Petroglifón 19.
-- **Her Spanish:** questions and *gustar* (*«¿Te gusta el barro? ¡A mí me encanta!»*).
-- **Reward:** Medalla Barro, and the road south (Ruta 6) opens.
-
----
-
-## 3. Region 3 — the Pacific coast: Villa Ocote → Playa Carey (gym 3)
-
-### Places
-- **Ruta 6** (~130 steps). Down from the pine highlands: pine slopes first, then dry forest with cacti, a dry
-  riverbed, a river with a wooden bridge, and a big yellow-grass meadow (*zacatal*, an optional place to train). Ledges step down toward the sea. About 8 trainers
-  (cowboys, a birdwatcher, a fisherman at the river).
-- **Ruta 7** (~90 steps). Sand, palms, dunes and tide pools. Lucas waits at the start (rival battle #2).
-  About 6 trainers (surfer, swimmer, fisherman). Fishing spots.
-- **Playa Carey** (town, ~32×24). A fishing village:
-  - Wooden houses, a pier with *pangas* (boats), the fish market and a lighthouse on the point.
-  - The restaurant *El Pelícano Feliz*, and the surf school, which is the gym.
-  - Palacentro, shop (now with Superbolas), school and bus stop.
-- **Playa de las Tortugas** (south, ~34×22). A turtle reserve. By day: dunes and grass. At night: the
-  *arribada*, when hundreds of sea turtles come ashore to lay eggs.
-
-### Story: la noche de la arribada
-1. The gym is closed: *«Marina está en la Playa de las Tortugas. ¡Esta noche es la arribada!»*
-2. Rest at the Palacentro until night (a night scene). On the beach, the volunteer asks you to count eggs in
-   a nest: *«¿Cuántos huevos hay?» — «Ochenta y cinco.»* That's numbers to 100.
-3. Equipo Silencio is stealing eggs to sell: 3 grunts, then **Callada**.
-4. The hatchlings have to reach the sea. You walk ahead and guide them (*«¡Por aquí! ¡Al mar!»*).
-5. Marina thanks you and opens the gym. The volunteer gives you **Paslamita** (level 18), a sea turtle.
-
-### Side quests
-| Quest | What you do | Spanish practiced | Reward |
-|---|---|---|---|
-| **El Pelícano Feliz** | The waiter is sick. Take the orders from 3 tables by listening to the guests (*«Quisiera una sopa de pescado y un jugo de piña»*), then tell the cook (graded like the shop order). It gets harder each round, and you can do it again each day for money. | listening, ordering food (*quisiera, para mí, la cuenta*) | money, Superpociones |
-| **La caña de pescar** | Don Lalo, the brother of the fisherman in Pueblo Amanecer (who loves fishing!), gives you a fishing lesson: *la caña, el anzuelo, tirar, esperar, ¡pica!* | a small topic, plus listening | **the fishing rod**: fish wherever there's water (Amanecer's lake, the pond on Ruta 2, the sea, rivers) |
-| **Mensaje en una botella** | A bottle washes up on Ruta 7 with a treasure map in Spanish: *«Desde el faro, camina al sur hasta la palmera torcida. Luego gira a la izquierda: diez pasos.»* | reading, directions, numbers | a Revivir, Superbolas |
-
-### Gym 3: Escuela de Surf — Marina (Agua)
-- **Puzzle: the currents.** A pool where current tiles slide you along until you stop. Ride the right currents
-  to reach Marina.
-- **Gym trainers:** a surfer, a lifeguard, a swimmer.
-- **Marina's team:** Cangrejón 22, Maletícano 23, Mordiscón 25.
-- **Her Spanish:** *ir a* + verb (*«¡Vas a ver! ¡Te voy a ganar!»*).
-- **Reward:** Medalla Ola.
+Villa Ocote → Ruta 6 → Ruta 7 → **Playa Carey** and the Playa de las Tortugas (src/world/region3.ts):
+- **Ruta 6** winds down about twice Ruta 3's walking length: pine switchbacks, a fenced meadow, the river and
+  bridge, dry forest. **Ruta 7** is the coast: sand, palms, tide pools, the bottle.
+- **Story, la noche de la arribada:** the gym is closed; Tania the volunteer counts eggs with you (numbers to
+  100), you beat 3 grunts and Callada, guide the hatchlings to the sea, and get **Paslamita**.
+- **Lucas's second battle** is at the top of the turtle beach, after the town and its Palacentro (the user
+  didn't want it right after Ruta 6's battles).
+- **Side quests:** waiting tables at El Pelícano Feliz (daily), Don Lalo's fishing rod, the message in a bottle.
+- **Gym 3, Marina (Agua):** ride the currents to her; Cangrejón 22, Maletícano 23, Mordiscón 25; Medalla Ola.
 
 ---
 
@@ -329,20 +267,20 @@ Where those answers come from, gyms 2–4:
 
 | System | What it does | Notes |
 |---|---|---|
-| **Caja de Palabritas** (storage box) | Use the computer in any Palacentro to deposit and withdraw. Catches go to the box when your team is full. | **Must**: today the team is capped at 6 with no storage |
-| **New items** | Superpoción ($250, heals 50), Superbola ($200, easier catch), Revivir ($600), Repelente ($200, no wild battles for 100 steps; great in caves), and a key-items pocket (fishing rod, fossil, Beto's hat) | the bag and shop already exist |
-| **Gifts and fossils** | One helper gives you a Palabrita (to the box if your team is full). The fossil revives "tomorrow" by the real date. | |
-| **Fishing** | Face water and press A, with each map having its own fishing table | unlocked by the rod (region 3) |
-| **El bus** (fast travel) | Colorful "chicken buses" stop in Amanecer, Limón, Brisa, Ocote, Carey and Chispa. Pay $40 and say where you're going: *«Quiero ir a Playa Carey.»* Only towns you've visited. | unlocked after gym 2; practices *ir a* |
-| **Rematches** | Trainers you've beaten can battle again the next day, their teams keeping pace with yours. Half the money. | daily practice |
-| **Lessons** | The teacher at each school: a private class for one of your Palabritas (its current words and review) for money, or the town's grammar topic | like Profesora Ceiba's training, which you liked |
-| **Riddle doors** (gym 2) | A door that opens after a correct answer | a kind of gate |
-| **Currents** (gym 3) | Tiles that slide you until you stop | |
+| **Caja de Palabritas** (storage box) ✓ | Use the computer in any Palacentro to deposit and withdraw. Catches go to the box when your team is full. | |
+| **New items** ✓ | Superpoción ($250, heals 50), Superbola ($200, easier catch), Revivir ($600), Repelente ($200, no wild battles for 100 steps; great in caves), and a key-items pocket (fishing rod, fossil, Beto's hat) | the bag and shop already exist |
+| **Gifts and fossils** ✓ | One helper gives you a Palabrita (to the box if your team is full). The fossil revives "tomorrow" by the real date. | |
+| **Fishing** ✓ | Face water and press A, with each map having its own fishing table | unlocked by the rod (region 3) |
+| **El bus** (fast travel) | Colorful "chicken buses" stop in Amanecer, Limón, Brisa, Ocote, Carey and Chispa. Pay $40 and say where you're going: *«Quiero ir a Playa Carey.»* Only towns you've visited. | ⏸ paused (no big roads yet); practices *ir a* |
+| **Rematches** ✓ | Trainers you've beaten can battle again the next day, their teams keeping pace with yours. Half the money. | 1–2 trainers per route, marked with a small «!» when ready |
+| **Lessons** ✓ | The teacher at each school: a private class for one of your Palabritas (its current words and review) for money, or the town's grammar topic | like Profesora Ceiba's training, which you liked |
+| **Riddle doors** (gym 2) ✓ | A door that opens after a correct answer | a kind of gate |
+| **Currents** (gym 3) ✓ | Tiles that slide you until you stop | |
 | **Torches** (gym 4) | Light them in order; a wrong order resets them | |
-| **Tree style per map** | Pines in the highlands; the green/dry mix in the lowlands, mostly dry around the volcano | a map setting |
-| **Night scenes** | A dark tint with a glow around you, for the *arribada*, the festival night and the haunted house | night maps are their own scenes; no day/night clock |
-| **The muted town** | While the flag is on, everyone on that map just says "…" | |
-| **Cutscene walking** | NPCs walk set paths (the rival arriving, the parade) | reuses the trainer walk |
+| **Tree style per map** ✓ | Pines in the highlands; the green/dry mix in the lowlands, mostly dry around the volcano | a map setting |
+| **Night scenes** ✓ | A dark tint with a glow around you, for the *arribada*, the festival night and the haunted house | night maps are their own scenes. Separately, the phone's clock darkens every outdoor map from 19 to 6 (`DAY_CYCLE`), with lit windows |
+| **The muted town** ✓ | While the flag is on, everyone on that map just says "…" | |
+| **Cutscene walking** ✓ | NPCs walk set paths (the rival arriving, the parade) | reuses the trainer walk |
 
 Nice to have, if there's time: animated water and lava (two frames, like Gold/Silver).
 
@@ -364,10 +302,10 @@ in black basalt.
 fireworks maker, park ranger, birdwatcher, vendor, potter, and Equipo Silencio's hooded grunts, Callada and
 Don Sigilo. New heads: cowboy hat, bandana and hood. The rest reuse existing heads in new colors.
 
-### Levels (after the -15% you asked for; tune after you play)
+### Levels (tune after you play; trainers.ts has the real numbers)
 | Region | Wild | Route trainers | Rival | Villains | Gym trainers | Leader |
 |---|---|---|---|---|---|---|
-| 2 | 10–15 | 12–14 | 15 + 12 | grunts 13–15, Capataz 16 | 15–16 | 16 · 17 · **19** |
+| 2 | 10–15 | 12–14 | 15 + 12 | grunts 13–15, Capataz 16 | 15–16 | 17 · 19 · **21** (raised) |
 | 3 | 14–19 (fishing 10–22) | 15–20 | 22 + 19–20 | grunts 18–20, Callada 21–22 | 20–22 | 22 · 23 · **25** |
 | 4 | 19–26 | 21–26 | 28 + 25–26 | grunts 24–26, Don Sigilo 27–29 | 26–28 | 28 · 29 · **31** |
 
@@ -381,17 +319,17 @@ trainer, quest step and line of dialogue, and the Spanish content. Build from th
 Every phase ends with a playable game, all tests green, the art page checked, the pace measured, and a commit
 and push.
 
-1. **Groundwork.** The systems from §8 that everything else needs:
+1. ✓ **Groundwork.** The systems from §8 that everything else needs:
    - storage box, items, gifts, rematches, lessons, night scenes, the muted town, cutscene walking;
    - the changes to existing families (§5) with placeholder art;
    - the A2 core for levels 21–35.
-2. **Region 2.**
+2. ✓ **Region 2.**
    - Tiles, then Ruta 5's extension and bridge, the canyon, Villa Ocote and its interiors, the mine.
    - Lucas #1 and Equipo Silencio's first chapter.
    - Gym 2 and its 4 side quests.
-   - The region's Palabritas and their 7 themes, the bus (Brisa, Limón, Ocote) and lesson topics.
+   - The region's Palabritas and their 7 themes, and lesson topics (the bus is paused).
    - **Playable to the Medalla Barro.**
-3. **Region 3.**
+3. ✓ **Region 3.**
    - Tiles, fishing, Rutas 6–7, Playa Carey, the turtle beach (day and night).
    - Lucas #2, the *arribada*, gym 3 and its quests.
    - The region's Palabritas and their 6 themes.

@@ -10,15 +10,13 @@ plans/", and it reads:
 
 | Phase | File | Ends with |
 |---|---|---|
-| 1 | [phase1-groundwork.md](phase1-groundwork.md) | the systems every region needs, the family changes, the A2 core Spanish |
-| 2 | [phase2-region2.md](phase2-region2.md) | the pine highlands: playable to the Medalla Barro |
-| 3 | [phase3-region3.md](phase3-region3.md) | the Pacific coast: playable to the Medalla Ola |
+| 1–3 | built ✓ (their specs were removed: the code is the truth, and git history has them) | the groundwork, the pine highlands (Medalla Barro), the Pacific coast (Medalla Ola) |
 | 4 | [phase4-region4.md](phase4-region4.md) | volcanoes and dry forest: playable to the Medalla Chispa |
 | 5 | [phase5-polish.md](phase5-polish.md) | a full playthrough test, the pace check, docs, the art brief |
 
 **Shared:**
-- [palabritas.md](palabritas.md): all 46 new Palabritas, ready to paste.
-- [content.md](content.md): the A2 core (levels 21–35), the 21 new themes and the school topics.
+- [palabritas.md](palabritas.md): region 4's Palabritas, ready to paste.
+- [content.md](content.md): region 4's themes and school topics.
 
 **What the specs promise:**
 - Every map in them was **drawn and checked** before it was written down: every way in and out is reachable

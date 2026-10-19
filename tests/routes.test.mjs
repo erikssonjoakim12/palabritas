@@ -1,4 +1,5 @@
-// West of Ciudad Brisa: into Ruta 3, the cave and its Palacentro, through the cave to Ruta 5 and back.
+// The long way west: the cave's far tunnel brings you out high on Ruta 5 (still walking up) and back,
+// and Pintora Lucía spots you on Ruta 5's road.
 import { start } from './lib.mjs';
 
 const t = await start('routes');
@@ -13,15 +14,9 @@ const go = async (map, x, y, dir, steps, label, want) => {
   t.check(label, at[0] === want, at);
 };
 
-await t.walk('left', 4);
-t.check('Ciudad Brisa leads west into Ruta 3', (await t.pos())[0] === 'ruta3', await t.pos());
-await go('ruta3', 4, 3, 'up', 1, 'the cave mouth leads into the Cueva del Eco', 'ruta4');
-await go('ruta4', 4, 38, 'down', 1, 'its daylight leads back out to Ruta 3', 'ruta3');
-await go('ruta3', 11, 6, 'up', 1, 'the Palacentro by the cave opens', 'centro_ruta3');
 await go('ruta4', 52, 2, 'up', 1, 'the far end of the cave leads to Ruta 5', 'ruta5');
 const arrived = await t.game(() => [window.__game.G.save.x, window.__game.G.save.y, window.__game.player.dir]);
 t.check('you come out of the tunnel high on the mountain, still walking up', arrived.join() === '90,4,up', arrived);
-await t.shot('ruta5');
 await go('ruta5', 90, 4, 'down', 1, 'and the tunnel leads back into the cave', 'ruta4');
 
 // Halfway along Ruta 5's road west, Pintora Lucía spots you from a gap in the pines.

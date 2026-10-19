@@ -1,15 +1,19 @@
 # Palabritas — roadmap
 
 Where the game is going: mechanics, world, gyms, and what you learn along the way.
-Status: **plan** (nothing below is built yet unless marked ✓). Learning details: [LEARNING_PLAN.md](LEARNING_PLAN.md).
+Status: **gyms 1–3 are playable** (✓ marks what's built). Next: region 4 and gym 4 ([plans/](plans/README.md)).
+Learning details: [LEARNING_PLAN.md](LEARNING_PLAN.md).
 
-## 1. Quick mechanic changes
+## 1. Built so far ✓
 
-| Change | Notes |
-|---|---|
-| **Critical hits are 50/50** ✓ | A perfect answer (not "tap the meaning") hits ×1.5 half the time and ×1 the other half. "Almost" stays ×0.75, help ×0.5, wrong = miss. |
-| **Male voices for male characters** ✓ | Each character gets a voice: male or female (from their look). The game picks a male Spanish voice when the phone has one; if not, it lowers the pitch of the voice it has. Phones differ: Android usually has one Google es-MX/es-US voice; some have several. |
-| **Choose boy or girl** ✓ | At the start of a new game. Changes your overworld sprite and battle portraits, and the Spanish people use with you: «¿Estás **listo/lista**?», «Bienvenido/Bienvenida», «¡Qué cansado/cansada!». That also teaches gender agreement. |
+- **Mechanics:** 50/50 critical hits on perfect answers; male and female voices; boy or girl (the Spanish
+  adapts: «¿Estás lista?»); evolutions mid-battle; storage box, items, gifts, fishing, rematches (a small «!»),
+  schools with lessons and REPASO; gate guards, ledges, caves with ladders, currents.
+- **World:** Pueblo Amanecer to Playa Carey: Rutas 1–7, the Cueva del Eco, Villa Ocote and its mine, the
+  Cañón del Guardabarranco, Playa Carey and the turtle beach. Rival Lucas (twice) and Equipo Silencio.
+- **Day and night** by the phone's clock (golden at 18, night from 19, morning by 7), with lit windows, plus
+  story night scenes.
+- **Paused:** the bus (fast travel), until there are big roads.
 
 ## 2. Evolutions (starters first) ✓
 
@@ -45,34 +49,8 @@ rainforest animals live along rivers). Animals, visual hooks and color direction
 Nicaraguan flavor for later: **voseo** («vos sos», «¿qué querés?») is everyday Spanish there, plus
 local words (*chunche*, *tuani*, *¡ideay!*, *va pues*). Great B1/B2 content: regional variety.
 
-### Map changes, near term
-
-- **Pueblo Amanecer** ✓: water to the south and east (for SURF later), and a **ledge** to the west: you can see a
-  route down there but can't climb up to it yet. Later you come back from the other side and jump down.
-- **Ruta 3** (west of Ciudad Brisa) — map ✓, 7 trainers ✓ (Ruta 2 looks), Hojadillo in the grass ✓, more Palabritas to come: an **officer** blocks it until you have the Breeze Medal ("only tough
-  trainers may pass"). Mountains instead of trees; the path goes left, up, left; tall grass, **ledges**,
-  mostly mandatory trainers; new common Palabritas from the dry-forest and farm pools (birds, bugs, small
-  mammals: designs to come). A small **Palacentro** at the end, outside the cave.
-- **Ruta 4: the cave** ("Cueva del Eco") — map ✓, wild Palabritas on every step ✓ (Ecolín, Ochopatas, Cuernito: placeholder art), 5 trainers ✓ (new kinds: Espeleólogo, Exploradora, Arqueólogo; you defend by listening); about as long as Ruta 3 (each ~100 steps). Bats, cave beetles, spiders (designs to come).
-- **Ruta 5** ✓: out of the cave's tunnel high on the mountain (up and to the right of the way in, like the
-  cave inside), down a clifftop trail and west over the ravine bridge to Villa Ocote; Lucas's first battle;
-  the canyon path north. One river runs from the canyon's waterfall through Ruta 5's ravine to a pond.
-- **Region 2** ✓ (mostly; see plans/phase2-region2.md): Villa Ocote (a bigger potters' town that lost its
-  words), the clay mine and Equipo Silencio, Petra's gym (Medalla Barro), the Cañón del Guardabarranco,
-  7 new Palabrita families with their themes, the lost words, Beto's hat, the echo room fossil (Caparazonte),
-  Don Chepe's oxen and Gaby's bird.
-- **Dry-forest trees** ✓: every tree so far is the dry tropical forest's (mostly green, some dry ones,
-  mixed by themselves). The old pine is kept for a colder biome later, and a palm tree is ready for the beaches.
-
-New world mechanics this needs:
-
-| Mechanic | What |
-|---|---|
-| Ledges ✓ | One-way tiles: jump down (with a little hop), can't walk up. |
-| Mountain/cliff tiles ✓ | Rocky walls and mountain ground for routes outside towns. |
-| Cave tileset ✓ | Rock walls, cave floor, entrance; maybe darkness later. |
-| Gate guards ✓ | Generalize Beto: "blocks the way until a flag/medal", reusable for every gate. |
-| SURF (later) | Ride a Palabrita over water; needs a field-move system (like Gold/Silver's HMs). |
+New world mechanics still to come: **SURF** (ride a Palabrita over water, a field-move system like Gold/Silver's
+HMs) and **torches** (gym 4).
 
 ## 4. Gyms and the level curve
 
@@ -125,15 +103,9 @@ Mapped onto the game (each gym leader's battle uses that region's grammar):
 Each new kind of Palabrita brings a theme (sloths → the rainforest; turtles → lakes and boats...);
 themes grow from the creatures, as you said.
 
-## 6. Suggested order of work
+## 6. Order of work
 
-1. **Quick changes:** 50/50 critical hits, boy/girl choice (with gendered Spanish), male/female voices.
-2. **Evolutions** ✓ for the three starters (system + placeholder art).
-3. **World mechanics** ✓: ledges, mountain/cliff tiles, cave tiles, reusable gate guards.
-4. **Pueblo Amanecer** ✓ expansion (water south/east, the west ledge).
-5. **Ruta 3, its Palacentro, and the cave** (maps ✓), with new Palabritas (your designs) and trainers (Nv 10-16).
-6. **Content for levels 21-40** (A2 core words and sentences), needed before gym 3.
-7. **Gym 2** ✓ and its town, then onward region by region.
-
-The detailed plan for gyms 2-4 (places, story, side quests, Palabritas, Spanish, systems, build order):
-[PLAN_GYMS_2-4.md](PLAN_GYMS_2-4.md).
+1. **Region 4 and gym 4** (the volcanoes, Ciudad Chispa, Lucas #3, Don Sigilo): [plans/phase4-region4.md](plans/phase4-region4.md).
+2. **Polish** (a full playthrough test, the pace check): [plans/phase5-polish.md](plans/phase5-polish.md).
+3. Then gyms 5–8 (§4), with the B1 Spanish (§5), planned the same way as gyms 2–4
+   ([PLAN_GYMS_2-4.md](PLAN_GYMS_2-4.md)).

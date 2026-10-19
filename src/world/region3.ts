@@ -80,7 +80,6 @@ async function voluntaria() {
   if (!(await ask('¿Quieres esperar aquí hasta la noche?', { en: 'Do you want to wait here until night?' }))) return lines(['Está bien. ¡Vuelve antes de que oscurezca!', 'All right. Come back before it gets dark!']);
   await fadeOut(24);
   await info('Esa noche...', { en: 'That night...' });
-  setFlag('noche');
   await warp('tortugas_noche', G.save.x, G.save.y, G.save.dir, false);
 }
 

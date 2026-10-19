@@ -9,50 +9,6 @@ const W = '#ffffff';
 type Draw = (p: Pix) => void;
 
 const DRAW: Record<string, Draw> = {
-  gotita(p) {
-    const b = '#5aa8f0', d = '#2f6fc8';
-    p.ellipse(24, 30, 14, 13, d);
-    p.poly([[24, 4], [11, 26], [37, 26]], b);
-    p.ellipse(22, 28, 13, 12, b);
-    p.ellipse(17, 21, 2.5, 4, W);
-    p.ellipse(19, 30, 2, 3, K).ellipse(29, 30, 2, 3, K);
-    p.set(18, 29, W).set(28, 29, W);
-    p.set(23, 35, K).set(24, 36, K).set(25, 35, K);
-    p.rect(14, 34, 3, 1, '#f7a0b0').rect(31, 34, 3, 1, '#f7a0b0');
-    p.outline('#183060');
-  },
-  pajarito(p) {
-    const br = '#9a6a42', dk = '#6b4426', or = '#f39a2b';
-    p.poly([[5, 26], [14, 24], [16, 32], [3, 35]], dk);
-    p.ellipse(24, 30, 13, 11, br);
-    p.ellipse(27, 33, 8, 7, '#f3dcb0');
-    p.poly([[28, 9], [30, 3], [33, 9]], dk);
-    p.ellipse(31, 17, 9, 9, br);
-    p.poly([[39, 15], [46, 18], [39, 21]], or);
-    p.ellipse(33, 15, 1.5, 2, K);
-    p.set(33, 14, W);
-    p.rect(35, 19, 2, 1, '#f39aa0');
-    p.ellipse(19, 29, 8, 5, dk);
-    p.rect(22, 41, 2, 4, or).rect(28, 41, 2, 4, or);
-    p.rect(20, 45, 6, 1, or).rect(26, 45, 6, 1, or);
-    p.outline('#3b2412');
-  },
-  conejito(p) {
-    const wh = '#f4f4f4', gr = '#c9c9d6', pk = '#f6a6b8';
-    p.ellipse(18, 11, 4, 10, wh).ellipse(30, 11, 4, 10, wh);
-    p.ellipse(18, 12, 2, 7, pk).ellipse(30, 12, 2, 7, pk);
-    p.ellipse(24, 37, 11, 9, gr);
-    p.ellipse(23, 36, 10, 8, wh);
-    p.ellipse(17, 45, 4, 2, wh).ellipse(31, 45, 4, 2, wh);
-    p.ellipse(24, 24, 11, 9, wh);
-    p.ellipse(19, 23, 1.5, 2, K).ellipse(29, 23, 1.5, 2, K);
-    p.set(19, 22, W).set(29, 22, W);
-    p.rect(23, 26, 2, 1, pk);
-    p.set(22, 28, K).set(25, 28, K);
-    p.rect(15, 26, 2, 1, pk).rect(32, 26, 2, 1, pk);
-    p.stamp(22, 34, ['111', '001', '111', '001', '111'], gr);
-    p.outline('#4a4a5a');
-  },
   mariposita(p) {
     p.ellipse(13, 17, 11, 10, '#f37ab8').ellipse(35, 17, 11, 10, '#f37ab8');
     p.ellipse(16, 33, 8, 8, '#5ab8f0').ellipse(32, 33, 8, 8, '#5ab8f0');
@@ -67,43 +23,8 @@ const DRAW: Record<string, Draw> = {
   },
   // ----- Placeholders for the starters' evolutions, until the real art arrives -----
   /** A dachshund in a burger: buns, patty, lettuce and cheese, the dog's head and tail sticking out. */
-  hamburgueson(p) {
-    const bun = '#e8a050', bunDk = '#c07830', dog = '#8a4a20', patty = '#5a2e14';
-    p.ellipse(9, 22, 6, 6, dog).ellipse(6, 27, 3, 4, '#6c3717'); // head and ear
-    p.poly([[40, 26], [46, 16], [44, 28]], dog); // tail
-    p.ellipse(24, 38, 18, 5, bun).ellipse(24, 40, 17, 3, bunDk); // bottom bun
-    p.rect(8, 31, 32, 4, patty);
-    p.poly([[7, 30], [41, 30], [39, 33], [9, 33]], '#58b030'); // lettuce
-    p.rect(9, 29, 30, 2, '#f8c838'); // cheese
-    p.ellipse(24, 23, 17, 9, bun).ellipse(24, 27, 17, 3, bunDk); // top bun
-    for (const [x, y] of [[16, 18], [22, 16], [29, 17], [34, 21], [19, 22], [27, 21]]) p.rect(x, y, 2, 1, '#fff4d0'); // sesame
-    p.rect(14, 41, 3, 5, dog).rect(31, 41, 3, 5, dog); // legs
-    p.set(7, 20, K).set(3, 23, K);
-    p.rect(1, 23, 3, 2, '#e880a8'); // tongue
-    p.outline('#3a1c08');
-  },
   /** A grumpy storm cloud with raindrops. */
-  nubarron(p) {
-    const lt = '#c8d0e8', dk = '#8890b0', drop = '#5aa8f0';
-    p.ellipse(14, 24, 10, 9, lt).ellipse(28, 18, 13, 12, lt).ellipse(37, 26, 9, 8, lt).ellipse(24, 28, 16, 8, lt);
-    p.ellipse(25, 33, 17, 4, dk);
-    p.ellipse(20, 23, 2, 3, K).ellipse(30, 23, 2, 3, K);
-    p.set(19, 22, W).set(29, 22, W);
-    p.line(17, 19, 22, 21, K).line(33, 19, 28, 21, K); // grumpy brows
-    p.rect(23, 29, 4, 1, K);
-    for (const [x, y] of [[13, 41], [22, 44], [31, 41], [38, 45], [8, 45]]) p.ellipse(x, y, 1.5, 2.5, drop);
-    p.outline('#404868');
-  },
   /** A young avocado tree: a slim trunk, leaves, and a little avocado with a face. */
-  aguacatono(p) {
-    const leaf = '#4aa84a', leafDk = '#2f6b2a', trunk = '#8b5a2b', fruit = '#2f5928', flesh = '#c9e27a';
-    p.rect(22, 26, 4, 18, trunk).ellipse(24, 45, 8, 2, '#6c3717'); // trunk and roots
-    p.ellipse(15, 15, 9, 6, leafDk).ellipse(33, 14, 9, 6, leafDk).ellipse(24, 9, 8, 7, leaf);
-    p.ellipse(13, 19, 7, 4, leaf).ellipse(35, 18, 7, 4, leaf);
-    p.ellipse(31, 30, 5, 7, fruit).ellipse(31, 31, 3, 5, flesh); // a little avocado
-    p.set(30, 29, K).set(33, 29, K).set(31, 32, K).set(32, 32, K);
-    p.outline('#163314');
-  },
   // ----- Placeholders for the cave Palabritas, until the real art arrives -----
   /** A bat with big ears and spread wings. */
   ecolin(p) {
@@ -347,18 +268,6 @@ const DRAW: Record<string, Draw> = {
     p.outline(K);
   },
   /** A lean, fast hare with big feet and a number pattern on its fur. */
-  liebron(p) {
-    const fur = '#c8b090', light = '#f0e0c8', dark = '#8a7050';
-    p.poly([[18, 14], [14, 0], [20, 2], [22, 13]], fur).poly([[26, 13], [28, 0], [33, 3], [30, 15]], fur);
-    p.ellipse(24, 32, 11, 12, fur);
-    p.ellipse(24, 34, 6, 8, light);
-    p.ellipse(24, 18, 8, 7, fur);
-    p.ellipse(21, 17, 1.5, 2, K).ellipse(27, 17, 1.5, 2, K);
-    p.set(20, 16, W).set(26, 16, W);
-    p.rect(30, 26, 2, 5, dark).rect(33, 26, 3, 1, dark).rect(33, 30, 3, 1, dark); // a "1" and "2" on its fur
-    p.ellipse(15, 45, 7, 2.5, dark).ellipse(33, 45, 7, 2.5, dark);
-    p.outline(K);
-  },
   /** A floating red cushion with a tassel and sleepy eyes. */
   cojincito(p) {
     const red = '#d05050', dark = '#983030', gold = '#f0c050';
