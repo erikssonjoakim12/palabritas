@@ -1,8 +1,8 @@
 # Palabritas — learning plan
 
 How a Palabrita's levels map to real Spanish learning, and what material is still to write.
-Status: **the core list goes to level 50** (A1, A2 and the first B1 steps in src/data/content/core.ts); the 28
-themes go to level 35–37, and above that a Palabrita learns from the core alone until its theme grows. The rules below live in src/data/content/index.ts and src/game/curriculum.ts; `tools/sim.mjs` measures them.
+Status: **every Palabrita has its Spanish up to level 50**: the core list (A1, A2 and the first B1 steps in
+src/data/content/core.ts) and all 28 themes (157 lines each). Browse it all on the dictionary page (palabras.html). The rules below live in src/data/content/index.ts and src/game/curriculum.ts; `tools/sim.mjs` measures them.
 
 ## Two tracks in every level
 
@@ -63,9 +63,7 @@ Latinoamérica, playa, frutas, mar, pesca, viaje, familia). Region 4 adds 8 more
 
 | For | What |
 |---|---|
-| Region 4 | 8 themes, 2 school topics ([plans/content.md](plans/content.md)) |
-| Levels 36–50 (themes) | 40–45 more sentences per theme |
-| Levels 51–60 | B1 core sentences |
+| Levels 51–60 | B1 core sentences, and 30 more sentences per theme |
 | Levels 61–100 | B2–C1 sentences (a candidate for Claude-generated items) |
 
 Latin American Spanish throughout; worth a native speaker's skim, but nothing waits for it.

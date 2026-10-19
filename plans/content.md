@@ -12,7 +12,7 @@ what the EN button shows.
     prescription).
   - The same Spanish twice in **one** list makes the build throw.
 - A theme is one list, easiest first: 27 words (levels 2–10, 3 per level), 40 short phrases (11–20, 4 per
-  level), then sentences (3 per level from 21). **117 lines reach level ~37.**
+  level), then sentences (3 per level from 21). **157 lines reach level 50** (every theme in the game has that).
 - After adding content, `npm test -- data` checks every Palabrita has words at every level to 30. Then run
   `node tools/sim.mjs` to see answers per level.
 
