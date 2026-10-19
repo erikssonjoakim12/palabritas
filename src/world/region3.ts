@@ -1,3 +1,4 @@
+import { fanfare } from '../audio/bgm';
 import { sfx } from '../engine/sfx';
 import { frames } from '../engine/loop';
 import { G, flag, setFlag, today } from '../game/state';
@@ -308,7 +309,7 @@ async function marina() {
   setFlag('beat:marina');
   setFlag('medalOla');
   G.save.medals.push('Ola');
-  sfx('badge');
+  fanfare('medalla', 'badge');
   await info('¡{name} recibió la Medalla Ola!', { en: '{name} received the Wave Medal!' });
   await lines(['Con esta medalla puedes ir al este, hacia el volcán. Dicen que en Ciudad Chispa preparan una gran fiesta.', 'With this medal you can go east, toward the volcano. They say Ciudad Chispa is preparing a big festival.']);
 }

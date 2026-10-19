@@ -1,3 +1,4 @@
+import { fanfare } from '../audio/bgm';
 import { overlay, el, gp } from '../engine/screen';
 import { sfx } from '../engine/sfx';
 import { frames } from '../engine/loop';
@@ -819,7 +820,7 @@ const S: Record<string, (c: ScriptCtx) => Promise<void>> = {
       ['Usaste cada palabra perfectamente. Hasta las mías... ¡Nunca había visto algo así!', 'You used every word perfectly. Even mine... I’ve never seen anything like it!'],
       ['Está bien. Te la ganaste. Toma, es tuya.', 'All right. You earned it. Here, it’s yours.'],
     );
-    sfx('badge');
+    fanfare('medalla', 'badge');
     await info('¡{name} recibió la Medalla Brisa!', { en: '{name} received the Breeze Medal!' });
     await lines(
       ['Con esta medalla, todos sabrán que hablas el idioma del viento.', 'With this medal, everyone will know you speak the language of the wind.'],

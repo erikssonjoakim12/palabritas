@@ -34,6 +34,8 @@ export interface Settings {
   /** Read normal dialog aloud automatically (challenges and listening moments always speak). */
   dialogVoice: boolean;
   slowVoice: boolean;
+  /** Music on or off (sound effects stay). */
+  music: boolean;
 }
 
 export interface SaveData {
@@ -106,7 +108,7 @@ export function newSave(): SaveData {
     seen: [],
     caught: [],
     heal: { map: 'casa', x: 2, y: 4 },
-    settings: { textScale: 6, dialogVoice: false, slowVoice: false },
+    settings: { textScale: 6, dialogVoice: false, slowVoice: false, music: true },
     playMs: 0,
     answers: 0,
     correct: 0,
@@ -154,6 +156,7 @@ function migrate(s: SaveData) {
   s.rematch ??= {};
   s.lessons ??= {};
   s.gender ??= 'boy';
+  s.settings.music ??= true;
   // Pueblo Amanecer grew 6 columns to the west (the plateau): keep you where you were.
   if (!s.flags.amanecerWide) {
     if (s.map === 'amanecer') s.x += 6;

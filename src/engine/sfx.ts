@@ -2,6 +2,18 @@
 
 let ac: AudioContext | null = null;
 
+/** The one audio context (sound effects and music share it). */
+export function audioContext(): AudioContext | null {
+  if (!ac) {
+    try {
+      ac = new AudioContext();
+    } catch {
+      ac = null;
+    }
+  }
+  return ac;
+}
+
 export function unlockAudio() {
   if (!ac) {
     try {

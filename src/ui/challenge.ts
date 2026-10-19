@@ -1,6 +1,7 @@
 import { el } from '../engine/screen';
 import { input } from '../engine/input';
 import { sfx } from '../engine/sfx';
+import { duck, DUCK } from '../audio/bgm';
 import { check, diffMarks, REASONS, type CheckResult, type Grade } from '../lang/check';
 import { speak, listen, canListen, stopSpeaking } from '../lang/speech';
 import { MODE_INFO, type Mode } from '../data/species';
@@ -138,6 +139,8 @@ export function challenge(spec: ChallengeSpec): Promise<ChallengeResult> {
     let helped = false;
     let speechAttempts = 0;
     const blockGame = input.push(() => {}); // swallow game buttons while answering
+    // The music makes room: a whisper while answering, silence for listening and speaking (the user's rule).
+    const releaseMusic = duck(mode === 'listen' || mode === 'speak' ? DUCK.silent : DUCK.challenge);
     const grade = (answer: string, speech: boolean): CheckResult => {
       const custom = spec.validate?.(answer);
       return custom ? { grade: custom, target: item.es } : check(answer, item.accept, speech);
@@ -310,6 +313,7 @@ export function challenge(spec: ChallengeSpec): Promise<ChallengeResult> {
         stopSpeaking();
         hidePanel();
         blockGame();
+        releaseMusic();
         resolve({ grade, helped, mode, answer });
       }
     };

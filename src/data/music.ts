@@ -672,3 +672,43 @@ export const SONGS: Song[] = [
     ],
   },
 ];
+
+/**
+ * Which song plays where. Maps not listed: Palacentros and gyms by their kind, other buildings the song of the
+ * place you walked in from (their exit). A muted town plays nothing (region2.ts: Villa Ocote before the words
+ * come back).
+ */
+export const MAP_MUSIC: Record<string, string> = {
+  amanecer: 'amanecer',
+  ruta1: 'ruta',
+  ruta2: 'ruta',
+  ruta9: 'ruta',
+  limon: 'limon',
+  brisa: 'brisa',
+  ruta3: 'pinos',
+  ruta5: 'pinos',
+  canon: 'pinos',
+  ruta6: 'pinos',
+  ruta4: 'cueva',
+  mina1: 'cueva',
+  mina2: 'cueva',
+  tubo: 'cueva',
+  casa_embrujada: 'cueva',
+  cuarto_embrujado: 'cueva',
+  ocote: 'ocote',
+  ocote_noche: 'ocote',
+  ruta7: 'costa',
+  tortugas: 'costa',
+  tortugas_noche: 'noche',
+  carey: 'carey',
+  ruta8: 'fuego',
+  laderas: 'fuego',
+  crater: 'fuego',
+  chispa: 'chispa',
+  chispa_noche: 'chispa',
+};
+
+/** Battle songs: gym leaders, Equipo Silencio, every other trainer, and wild Palabritas. */
+export const BATTLE_MUSIC = { leader: 'lider', silencio: 'silencio', trainer: 'entrenador', wild: 'salvaje' };
+/** Equipo Silencio's trainers (by id): their own battle song. */
+export const SILENCIO_TRAINERS = /^(silencioso\d+|capataz|callada|sigilo)$/;

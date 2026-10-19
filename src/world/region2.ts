@@ -1,3 +1,4 @@
+import { fanfare } from '../audio/bgm';
 import { sfx } from '../engine/sfx';
 import { frames } from '../engine/loop';
 import { G, flag, setFlag, today } from '../game/state';
@@ -545,7 +546,7 @@ async function petra() {
   setFlag('beat:petra');
   setFlag('medalBarro');
   G.save.medals.push('Barro');
-  sfx('badge');
+  fanfare('medalla', 'badge');
   await info('¡{name} recibió la Medalla Barro!', { en: '{name} received the Clay Medal!' });
   await lines(['Con esta medalla puedes bajar al sur, hasta el mar.', 'With this medal you can go south, down to the sea.']);
   if (!MAPS.ruta6) {

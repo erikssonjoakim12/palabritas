@@ -19,6 +19,7 @@ import { takeItem, itemCount, prizeMoney, money } from '../game/bag';
 import { ITEM_DEFS } from '../data/items';
 import { menu } from '../ui/menu';
 import { typeIcon } from '../art/typeIcon';
+import { setBattleMusic, battleMusicFor, playOverlay, clearOverlay } from '../audio/bgm';
 
 /** An element with a small picture in front of its text. */
 const withIcon = (icon: Node, e: HTMLElement) => (e.prepend(icon), e);
@@ -296,6 +297,7 @@ async function runBattle(cfg: Config): Promise<BattleResult> {
   closeText();
   overlay.querySelectorAll('.banner').forEach((b) => b.remove()); // the place-name banner
   setScene(battleScene);
+  setBattleMusic(battleMusicFor(trainer));
   let hud: Hud | null = null;
 
   const myName = () => monName(me);
@@ -327,6 +329,7 @@ async function runBattle(cfg: Config): Promise<BattleResult> {
   /** Evolution right in the battle: the sprite flickers between the two forms, then changes. */
   const evolveNow = async (mon: Mon) => {
     const from = monName(mon);
+    playOverlay('evolucion', false);
     await info(`¿Qué? ¡${from} está evolucionando!`, { en: `What? ${from} is evolving!` });
     const to = SPECIES[mon.sp].evolves!.to;
     if (mon === me && meF) {
@@ -339,6 +342,7 @@ async function runBattle(cfg: Config): Promise<BattleResult> {
       meF.img = newImg;
     }
     evolve(mon);
+    clearOverlay();
     sfx('caught');
     hud?.update();
     await info(`¡Felicidades! ¡${from} evolucionó a ${monName(mon)}!`, { en: `Congratulations! ${from} evolved into ${monName(mon)}!` });
@@ -689,9 +693,12 @@ async function runBattle(cfg: Config): Promise<BattleResult> {
     ball = null;
     lineups = {};
     setScene(prevScene);
+    setBattleMusic(null); // the map's song again (after a wild win's or a catch's jingle)
   }
 
   async function finish(r: BattleResult) {
+    if (r === 'win') playOverlay(trainer ? 'victoria' : 'ganaste', !trainer);
+    if (r === 'caught') playOverlay('atrapado');
     if (r === 'win' && trainer) {
       // The trainer comes back out to admit defeat.
       hud?.show('enemy', false);

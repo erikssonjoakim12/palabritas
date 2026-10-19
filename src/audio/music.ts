@@ -5,7 +5,7 @@
 
   A song is a melody and a chord per bar (data/music.ts); the harmony, bass and drums are built from the chords
   in the song's style. Notes are written like 'A4:2' (the note and octave, then its length in steps; a step is
-  a sixteenth note) and 'r:4' is a rest. Not in the game yet: the music page (musica.html) plays the samples.
+  a sixteenth note) and 'r:4' is a rest. In the game: audio/bgm.ts. The music page (musica.html) plays every song.
 */
 
 export type Style = 'walk' | 'calm' | 'battle' | 'son' | 'cave' | 'jingle';
@@ -193,10 +193,15 @@ export class MusicPlayer {
   private timer = 0;
   private muted = new Set<Voice>();
   private volume = 0.7;
+  /** Lowered while Spanish is spoken or a word challenge is open (audio/bgm.ts). */
+  private duckLevel = 1;
   playing: string | null = null;
 
+  /** The game passes its shared audio context; the music page makes its own. */
+  constructor(private getContext?: () => AudioContext | null) {}
+
   private context() {
-    this.ac ??= new AudioContext();
+    this.ac ??= this.getContext?.() ?? new AudioContext();
     if (this.ac.state === 'suspended') void this.ac.resume();
     return this.ac;
   }
@@ -288,7 +293,7 @@ export class MusicPlayer {
     const ac = this.context();
     const { voices, intro, steps } = arrange(song);
     this.master = ac.createGain();
-    this.master.gain.value = this.volume;
+    this.master.gain.value = this.volume * this.duckLevel;
     this.master.connect(ac.destination);
     for (const v of ['melody', 'harmony', 'bass', 'drums'] as Voice[]) {
       this.gains[v] = ac.createGain();
@@ -338,7 +343,14 @@ export class MusicPlayer {
 
   setVolume(v: number) {
     this.volume = v;
-    if (this.master) this.master.gain.value = v;
+    if (this.master) this.master.gain.value = v * this.duckLevel;
+  }
+
+  /** Fade to a fraction of the volume (quickly, so a challenge never starts over loud music). */
+  setDuck(level: number) {
+    if (level === this.duckLevel) return;
+    this.duckLevel = level;
+    if (this.master && this.ac) this.master.gain.setTargetAtTime(this.volume * level, this.ac.currentTime, 0.05);
   }
 
   setMuted(voice: Voice, muted: boolean) {

@@ -13,6 +13,7 @@ import { pickMon, showDetails, listMenu, spriteCanvas, detailBox, wordRow, openD
 import { openBag } from './bag';
 import { money } from '../game/bag';
 import { dueCount } from '../game/review';
+import { musicSettingChanged } from '../audio/bgm';
 
 /** The START menu. Resolves a script to run after it closes (an item used from the bag), if any. */
 export async function startMenu(): Promise<string | undefined> {
@@ -122,7 +123,7 @@ async function settings() {
   while (true) {
     const st = G.save.settings;
     const i = await menu(
-      [`Texto: ${sizes[st.textScale]}`, `Voz en diálogos: ${st.dialogVoice ? 'Sí' : 'No'}`, `Voz lenta: ${st.slowVoice ? 'Sí' : 'No'}`, 'Volver'],
+      [`Texto: ${sizes[st.textScale]}`, `Voz en diálogos: ${st.dialogVoice ? 'Sí' : 'No'}`, `Voz lenta: ${st.slowVoice ? 'Sí' : 'No'}`, `Música: ${st.music ? 'Sí' : 'No'}`, 'Volver'],
       { cancel: true, pos: { right: 0, top: 0 }, initial: sel, title: 'AJUSTES' },
     );
     sel = Math.max(0, i);
@@ -131,7 +132,10 @@ async function settings() {
       setTextScale(st.textScale);
     } else if (i === 1) st.dialogVoice = !st.dialogVoice;
     else if (i === 2) st.slowVoice = !st.slowVoice;
-    else {
+    else if (i === 3) {
+      st.music = !st.music;
+      musicSettingChanged();
+    } else {
       saveGame();
       return;
     }

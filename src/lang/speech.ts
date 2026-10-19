@@ -1,3 +1,4 @@
+import { duck, DUCK } from '../audio/bgm';
 // Text-to-speech and speech recognition through the browser (Chrome on Android
 // has good Latin American voices and recognition).
 
@@ -63,12 +64,16 @@ export function speak(text: string, slow = false, male = false): Promise<void> {
   u.lang = v?.lang ?? 'es-MX';
   u.rate = slow ? 0.6 : speechSettings.rate;
   if (male && !maleVoice) u.pitch = MALE_PITCH;
-  return new Promise((resolve) => {
-    const timeout = setTimeout(resolve, 1500 + t.length * 120);
-    u.onend = u.onerror = () => {
+  // The music drops while Spanish is spoken.
+  const release = duck(DUCK.speaking);
+  return new Promise<void>((resolve) => {
+    const done = () => {
       clearTimeout(timeout);
+      release();
       resolve();
     };
+    const timeout = setTimeout(done, 1500 + t.length * 120);
+    u.onend = u.onerror = done;
     speechSynthesis.speak(u);
   });
 }
@@ -135,9 +140,13 @@ export function listen(onPartial?: (text: string) => void): ListenHandle {
     };
     rec.onend = () => resolve(finals.length ? finals : lastPartial ? [lastPartial] : []);
   });
+  // Silence while the microphone listens: it must hear you, not the music.
+  const release = duck(DUCK.silent);
+  void result.then(release, release);
   try {
     rec.start();
   } catch (err) {
+    release();
     return { result: Promise.reject(err), stop() {} };
   }
   return { result, stop: () => rec.stop() };

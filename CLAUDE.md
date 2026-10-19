@@ -18,7 +18,7 @@ Spanish) · [BIOMES.md](BIOMES.md) (animals per region).
 |---|---|
 | `npm run dev` | dev server (the user runs their own for the phone: never stop it) |
 | `npm run art` | the art review page (`/art.html`): every sprite, tile, map and the stitched world |
-| `npm run music` | the music samples (`/musica.html`): Game Boy-style songs, not in the game yet (audio/music.ts, data/music.ts) |
+| `npm run music` | the music page (`/musica.html`): every song and jingle, with voices to mute |
 | `npm run words` | the dictionary (`/palabras.html`): every word and phrase, its lists and levels, who learns it |
 | `npm run typecheck` / `npm run build` | |
 | `npm test` | every browser test; `npm test -- cave maps` runs some. Uses a dev server on **port 5181**, starting and stopping its own if none is there |
@@ -57,6 +57,7 @@ Spanish) · [BIOMES.md](BIOMES.md) (animals per region).
 | Scripts (every NPC, quest, trainer talk) | `src/world/scripts.ts` (`SCRIPTS`) |
 | Overworld engine: walking, ledges, doors, gates, encounters, drawing | `src/world/world.ts`, `src/world/layout.ts` |
 | Battles | `src/battle/battle.ts` |
+| Music | `src/audio/music.ts` (the player), `src/data/music.ts` (the songs, which plays where), `src/audio/bgm.ts` (the game's music: maps, battles, jingles, quieter for Spanish) |
 | Dialog, menus, challenges | `src/ui/textbox.ts` (`say`, `info`), `src/ui/menu.ts` (`menu`, `ask`), `src/ui/challenge.ts` |
 | Tile logic (solid, kinds, auto-edges) / tile art | `src/art/tiles.ts` / `src/style/tiles.ts` |
 | People and objects | `src/style/people.ts` (heads, bodies, `LOOKS`, `OBJECTS_ART`), `src/art/portraits.ts` (battle portraits) |

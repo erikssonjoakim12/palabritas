@@ -1,3 +1,4 @@
+import { fanfare } from '../audio/bgm';
 import { sfx } from '../engine/sfx';
 import { frames } from '../engine/loop';
 import { G, flag, setFlag } from '../game/state';
@@ -207,7 +208,7 @@ async function tizon() {
   setFlag('beat:tizon');
   setFlag('medalChispa');
   G.save.medals.push('Chispa');
-  sfx('badge');
+  fanfare('medalla', 'badge');
   await info('¡{name} recibió la Medalla Chispa!', { en: '{name} received the Spark Medal!' });
   await lines(
     ['¡Cuatro medallas! Eso es la mitad del camino.', 'Four medals! That’s halfway.'],

@@ -12,6 +12,7 @@ import { rematchReady } from '../game/rematch';
 import { NIGHT, NIGHT_CLEAR } from '../style/colors';
 import { lightAt, drawLights, skyAt, type Light } from '../art/lights';
 import { drawFireworks } from '../art/fireworks';
+import { setMapMusic, musicFor } from '../audio/bgm';
 import { itemCount } from '../game/bag';
 import { closeText, say, setSpeaker } from '../ui/textbox';
 
@@ -150,6 +151,7 @@ export function loadMap(id: string, x: number, y: number, dir: Dir) {
   }
   Object.assign(G.save, { map: id, x, y, dir });
   if ((map.outdoor || map.banner) && map.name !== prevName) showBanner(map.name);
+  setMapMusic(musicFor(map));
 }
 
 export function refreshNpcs() {
