@@ -32,7 +32,9 @@ root.append(controls);
 const KINDS = [
   ['route', 'Routes'],
   ['town', 'Towns'],
+  ['place', 'Places'],
   ['battle', 'Battles'],
+  ['jingle', 'After battles and jingles'],
 ] as const;
 const cards: { id: string; card: HTMLElement; button: HTMLButtonElement }[] = [];
 const refresh = () => {
@@ -47,20 +49,20 @@ for (const [kind, title] of KINDS) {
   const grid = el('div', '', 'songs');
   for (const song of SONGS.filter((s) => s.kind === kind)) {
     // Arranging checks every bar fits (a mistake shows up as an error on the page and in data.test).
-    const { steps } = arrange(song);
-    const seconds = Math.round((steps * 60) / song.bpm / song.stepsPerBeat);
+    const { intro, steps } = arrange(song);
+    const seconds = Math.round(((steps - intro) * 60) / song.bpm / song.stepsPerBeat);
     const card = el('div', '', 'song');
     const button = el('button', '▶ Play');
     button.addEventListener('click', () => {
       if (player.playing === song.id) player.stop();
-      else player.play(song);
+      else player.play(song, refresh);
       refresh();
     });
     card.append(
       el('h3', song.name),
       el('div', song.en, 'en'),
       el('p', song.note),
-      el('div', `${song.chords.length} bars · ${song.bpm} bpm · ${song.barSteps === 12 ? '6/8' : '4/4'} · loops every ${seconds} s`, 'facts'),
+      el('div', `${song.chords.length} bars${song.intro ? ` + a ${song.intro.melody.length}-bar intro` : ''} · ${song.bpm} bpm · ${song.barSteps === 12 ? '6/8' : '4/4'} · ${song.once ? `plays once (${seconds} s)` : `loops every ${seconds} s`}`, 'facts'),
       button,
     );
     grid.append(card);

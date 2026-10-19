@@ -8,7 +8,7 @@
   a sixteenth note) and 'r:4' is a rest. Not in the game yet: the music page (musica.html) plays the samples.
 */
 
-export type Style = 'walk' | 'calm' | 'battle' | 'son';
+export type Style = 'walk' | 'calm' | 'battle' | 'son' | 'cave' | 'jingle';
 export type Voice = 'melody' | 'harmony' | 'bass' | 'drums';
 export type Timbre = 'pulse50' | 'pulse25' | 'pulse12' | 'marimba' | 'wave';
 
@@ -16,7 +16,7 @@ export interface Song {
   id: string;
   name: string;
   en: string;
-  kind: 'route' | 'town' | 'battle';
+  kind: 'route' | 'town' | 'place' | 'battle' | 'jingle';
   /** What it's meant to feel like (shown on the music page). */
   note: string;
   /** Beats per minute; a beat is `stepsPerBeat` steps (4 = quarter notes, 6 = dotted quarters for 6/8). */
@@ -31,6 +31,10 @@ export interface Song {
   chords: string[];
   /** One string of notes per bar. */
   melody: string[];
+  /** Played once before the loop starts (battles: the run into the fight). */
+  intro?: { chords: string[]; melody: string[] };
+  /** Jingles play once (the default is to loop). */
+  once?: boolean;
 }
 
 interface Note {
@@ -94,6 +98,18 @@ const STYLES: Record<Style, Record<Exclude<Voice, 'melody'>, Pattern>> = {
     harmony: (r, s) => [[2, null], [1, at(r, 4, third(s))], [1, at(r, 4, fifth(s))]],
     drums: () => [[2, 'k'], [2, 'h'], [2, 's'], [1, 'h'], [1, 'k'], [2, 'k'], [2, 'h'], [2, 's'], [2, 'h']],
   },
+  // Caves: a long low note, sparse echoing notes, no beat.
+  cave: {
+    bass: (r) => [[16, at(r, 2, 0)]],
+    harmony: (r, s) => [[4, null], [2, at(r, 5, fifth(s))], [2, null], [4, at(r, 4, third(s))], [4, null]],
+    drums: () => [[16, null]],
+  },
+  // Jingles: the chord held under the tune.
+  jingle: {
+    bass: (r) => [[16, at(r, 2, 0)]],
+    harmony: (r, s) => [[16, at(r, 4, third(s))]],
+    drums: () => [[16, null]],
+  },
   // Son nica (6/8): the marimba rolls a broken chord up and down; the bass on the two big beats.
   son: {
     bass: (r, s) => [[6, at(r, 2, 0)], [6, at(r, 2, fifth(s))]],
@@ -112,26 +128,36 @@ function fill(pattern: [number, number | 'k' | 's' | 'h' | null][], start: numbe
   }
 }
 
-/** A song as notes per voice, and its length. Throws if a bar's melody doesn't fit the bar. */
-export function arrange(song: Song): { voices: Record<Voice, Note[]>; steps: number } {
-  if (song.melody.length !== song.chords.length) throw new Error(`${song.id}: ${song.melody.length} bars of melody, ${song.chords.length} of chords`);
+/**
+ * A song as notes per voice: the intro (if any), then the part that loops. `intro` is where the loop starts and
+ * `steps` where it ends. Throws if a bar's melody doesn't fit the bar.
+ */
+export function arrange(song: Song): { voices: Record<Voice, Note[]>; intro: number; steps: number } {
   const voices: Record<Voice, Note[]> = { melody: [], harmony: [], bass: [], drums: [] };
-  song.melody.forEach((bar, b) => {
-    const start = b * song.barSteps;
+  const intro = song.intro ? addBars(song, song.intro.chords, song.intro.melody, 0, voices, 'intro') : 0;
+  const steps = addBars(song, song.chords, song.melody, intro, voices, 'bar');
+  return { voices, intro, steps };
+}
+
+/** Bars of melody and chords into the voices, from `from` steps on; returns where they end. */
+function addBars(song: Song, chordBars: string[], melody: string[], from: number, voices: Record<Voice, Note[]>, what: string) {
+  if (melody.length !== chordBars.length) throw new Error(`${song.id}: ${melody.length} ${what}s of melody, ${chordBars.length} of chords`);
+  melody.forEach((bar, b) => {
+    const start = from + b * song.barSteps;
     let t = 0;
     for (const n of parseNotes(bar)) {
       if (n.pitch !== null) voices.melody.push({ step: start + t, len: n.len, pitch: n.pitch });
       t += n.len;
     }
-    if (t !== song.barSteps) throw new Error(`${song.id}: bar ${b + 1} has ${t} steps, not ${song.barSteps}`);
-    const chords = song.chords[b].split(' ');
+    if (t !== song.barSteps) throw new Error(`${song.id}: ${what} ${b + 1} has ${t} steps, not ${song.barSteps}`);
+    const chords = chordBars[b].split(' ');
     const part = song.barSteps / chords.length;
     chords.forEach((name, c) => {
       const { root, shape } = parseChord(name);
       for (const v of ['harmony', 'bass', 'drums'] as const) fill(STYLES[song.style][v](root, shape), start + c * part, part, voices[v]);
     });
   });
-  return { voices, steps: song.melody.length * song.barSteps };
+  return from + melody.length * song.barSteps;
 }
 
 // ---------- Sound ----------
@@ -253,11 +279,14 @@ export class MusicPlayer {
     src.stop(t + len + 0.02);
   }
 
-  /** Play a song from the start, looping, until stop() or another play(). */
-  play(song: Song) {
+  /**
+   * Play a song from the start: its intro once, then the loop until stop() or another play(). A jingle (`once`)
+   * plays once and then calls `onEnd`.
+   */
+  play(song: Song, onEnd?: () => void) {
     this.stop();
     const ac = this.context();
-    const { voices, steps } = arrange(song);
+    const { voices, intro, steps } = arrange(song);
     this.master = ac.createGain();
     this.master.gain.value = this.volume;
     this.master.connect(ac.destination);
@@ -272,15 +301,26 @@ export class MusicPlayer {
     const notes = (Object.entries(voices) as [Voice, Note[]][]).flatMap(([voice, ns]) => ns.map((n) => ({ ...n, voice }))).sort((a, b) => a.step - b.step);
     let start = ac.currentTime + 0.1;
     let i = 0;
+    const loopFrom = notes.findIndex((n) => n.step >= intro);
+    const end = start + steps * step;
     const schedule = () => {
-      while (ac.currentTime + AHEAD > start + notes[i].step * step) {
+      if (i === notes.length) {
+        // A jingle: done once the last note has sounded.
+        if (ac.currentTime > end) {
+          this.stop();
+          onEnd?.();
+        }
+        return;
+      }
+      while (i < notes.length && ac.currentTime + AHEAD > start + notes[i].step * step) {
         const n = notes[i];
         const t = start + n.step * step;
         if (typeof n.pitch === 'number') this.tone(n.voice, timbre[n.voice], n.pitch, t, n.len * step);
         else this.drum(n.pitch, t);
-        if (++i === notes.length) {
-          i = 0;
-          start += steps * step;
+        if (++i === notes.length && !song.once) {
+          // Loop: back to the first note after the intro, one loop later.
+          i = loopFrom;
+          start += (steps - intro) * step;
         }
       }
     };
