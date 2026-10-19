@@ -45,6 +45,16 @@ export const OUTDOOR = {
   lighthouse: ['#f8f8f0', '#d05050', '#a8a8b0', INK] as Pal,
   /** Rocky ground in the mountains. */
   dirt: ['#f8f0d0', '#e8d8a8', '#b8a070', INK] as Pal,
+  /** Volcanic ash on the volcano's slopes and the crater rim. */
+  ash: ['#d8d4d0', '#b0a8a8', '#787070', INK] as Pal,
+  /** Lava: glow, flow, crust (and a dark crust as an extra color in tiles.ts). */
+  lava: ['#f8e070', '#f09030', '#c04818', INK] as Pal,
+  /** Steam from a vent. */
+  steam: ['#ffffff', '#d0d0d8', '#504848', INK] as Pal,
+  /** Sugarcane: the light leaves, the stalks, the shade. */
+  cane: ['#d0f098', '#6ab048', '#2e6a28', INK] as Pal,
+  /** Cobblestones in Ciudad Chispa's plaza. */
+  cobble: ['#e8e4dc', '#c4bcb0', '#8c8478', INK] as Pal,
 };
 
 /** Tree leaves (a light, b mid, c shade) and trunks (k, K): green and dry-season trees. */
@@ -127,6 +137,8 @@ export const ROOFS: Record<string, Pal> = {
   red: ['#f8d8d0', '#e8a8a0', '#c06058', INK],
   purple: ['#e8d8f8', '#c8a8e8', '#8868b8', INK],
   brown: ['#f0e0c8', '#c8a080', '#906848', INK],
+  /** The church in Ciudad Chispa (roof tile 'q'). */
+  cream: ['#fff8e8', '#f0e0c0', '#c8b088', INK],
 };
 
 // ---------- Indoors ----------
@@ -182,6 +194,17 @@ export const OBJECT_PALS: Record<string, Pal> = {
   brillo: ['', '#f8f8f8', '#f8d850', SPRITE_INK],
   tienda: ['', '#f0c078', '#c06030', SPRITE_INK],
   ecolinSombrero: ['', '#48a040', '#7a6090', SPRITE_INK],
+  // Region 4.
+  vaca: ['', '#f8f8f0', '#685048', SPRITE_INK],
+  cajaCohetes: ['', '#d8a868', '#d04840', SPRITE_INK],
+  chocoyitoBebe: ['', '#a8e078', '#e88838', SPRITE_INK],
+  antorchaRoja: ['', '#f8d058', '#d04040', SPRITE_INK],
+  antorchaAzul: ['', '#a8d8f8', '#4868d0', SPRITE_INK],
+  antorchaVerde: ['', '#c8f088', '#40a040', SPRITE_INK],
+  antorchaAmarilla: ['', '#f8f0a8', '#e0b020', SPRITE_INK],
+  puertaTaller: ['', '#c89058', '#7a4a24', SPRITE_INK],
+  lampara: ['', '#a8c8f8', '#c8a040', SPRITE_INK],
+  perezosito: ['', '#c8a880', '#d84848', SPRITE_INK],
 };
 
 /** Palabola colors in the healing machine (normal, flash). */

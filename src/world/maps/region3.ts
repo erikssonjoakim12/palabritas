@@ -1,5 +1,5 @@
 import { flag } from '../../game/state';
-import { itemBall, tienda, casa, escuela, night, centro, MAPS, type MapDef, type NpcDef } from './kit';
+import { itemBall, tienda, casa, escuela, night, centro, type MapDef, type NpcDef } from './kit';
 
 // Region 3: the Pacific coast: Rutas 6 and 7, Playa Carey and the turtle beach.
 export const REGION3_MAPS: Record<string, MapDef> = {
@@ -228,7 +228,7 @@ export const REGION3_MAPS: Record<string, MapDef> = {
       '~~~~~~~sssssss==....==TTTTTTTTTT',
       '~~~~~~~TTTTTTTTTTTTT==TTTTTTTTTT',
     ],
-    connections: { up: { to: 'ruta7', offset: 0 }, down: { to: 'tortugas', offset: 2 } },
+    connections: { up: { to: 'ruta7', offset: 0 }, down: { to: 'tortugas', offset: 2 }, right: { to: 'ruta8', offset: 2 } },
     doors: [
       { x: 11, y: 5, to: 'centro_carey', tx: 4, ty: 7 },
       { x: 19, y: 5, to: 'tienda_carey', tx: 4, ty: 6 },
@@ -248,18 +248,15 @@ export const REGION3_MAPS: Record<string, MapDef> = {
       {
         id: 'guarda_este',
         look: 'officer',
-        opens: () => flag('medalOla') && !!MAPS.ruta8,
+        opens: () => flag('medalOla'),
         at: [31, 11, 'left'],
         aside: [30, 11],
         road: [[31, 10]],
         back: 'left',
-        closed: () =>
-          flag('medalOla')
-            ? [['¡Tienes la Medalla Ola! Pero el camino al volcán todavía está cerrado. ¡Vuelve pronto!', 'You have the Wave Medal! But the road to the volcano is still closed. Come back soon!']]
-            : [
-                ['El camino al este va al volcán. ¡Es muy peligroso!', 'The road east goes to the volcano. It’s very dangerous!'],
-                ['Vuelve con la Medalla Ola.', 'Come back with the Wave Medal.'],
-              ],
+        closed: [
+          ['El camino al este va al volcán. ¡Es muy peligroso!', 'The road east goes to the volcano. It’s very dangerous!'],
+          ['Vuelve con la Medalla Ola.', 'Come back with the Wave Medal.'],
+        ],
         open: [['¡Tienes la Medalla Ola! Buen viaje al volcán.', 'You have the Wave Medal! Have a good trip to the volcano.']],
       },
       {

@@ -34,7 +34,7 @@ export const REGION1_MAPS: Record<string, MapDef> = {
       'TTTTTTTT~~~~~~~~~~~~~~~~~~~~~~',
       'TTTTTTTT~~~~~~~~~~~~~~~~~~~~~~',
     ],
-    connections: { up: { to: 'ruta1', offset: -6 } },
+    connections: { up: { to: 'ruta1', offset: -6 }, left: { to: 'ruta9', offset: 8 } },
     doors: [
       { x: 11, y: 6, to: 'casa', tx: 3, ty: 6 },
       { x: 20, y: 6, to: 'lab', tx: 4, ty: 8 },
@@ -48,6 +48,8 @@ export const REGION1_MAPS: Record<string, MapDef> = {
       { id: 'lucas', x: 17, y: 2, look: 'boy', dir: 'left', script: 'lucas', turns: true },
       { id: 'pescador', x: 22, y: 14, look: 'fisher', dir: 'down', script: 'pescador' },
       { id: 'sam', x: 13, y: 8, look: 'tourist', dir: 'down', script: 'sam', turns: true, sight: 3 },
+      // On the plateau: the route you could see from town at the very start (reached from Ruta 9).
+      itemBall('meseta_amanecer', 2, 4, 'superpocion'),
     ],
     triggers: [
       { x: 14, y: 1, script: 'needStarter' },

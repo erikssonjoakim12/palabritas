@@ -120,6 +120,13 @@ export const TILES: Record<string, TileDef> = {
   s: open(),
   y: solid({ look: { es: 'Un cactus. ¡No lo toques, pica!', en: 'A cactus. Don’t touch it, it’s prickly!' } }),
   z: open({ kind: 'tallgrass' }),
+  i: open(),
+  j: solid({ look: { es: '¡Lava! Está muy caliente. ¡No te acerques!', en: 'Lava! It’s very hot. Don’t get close!' } }),
+  X: solid({ look: { es: 'Sale vapor caliente de la tierra. ¡Huele a azufre!', en: 'Hot steam comes out of the ground. It smells like sulfur!' } }),
+  '|': open({ kind: 'tallgrass' }),
+  l: open(),
+  q: solid(),
+  N: solid({ look: { es: 'El campanario de la iglesia. ¡Las campanas suenan los domingos!', en: 'The church bell tower. The bells ring on Sundays!' } }),
   A: solid({ look: { es: 'El faro. De noche, su luz guía a los barcos.', en: 'The lighthouse. At night, its light guides the boats.' } }),
   W: solid(),
   R: open(),
@@ -167,7 +174,7 @@ const setCol = (g: Grid, x: number, ch: string) => g.forEach((row) => (row[x] = 
 
 // ---------- Neighbors ----------
 
-const ROOF_CHARS = 'rbop';
+const ROOF_CHARS = 'rbopq';
 const WALL_CHARS = 'hwdcGaM';
 const roofKey = (ch: string) => (ch === 'b' ? 'r' : ch);
 
@@ -202,7 +209,7 @@ function roofImage(ch: string, env: TileEnv): Img {
   if (!same(nb.s)) (setRow(g, 13, '3'), setRow(g, 14, '0'), setRow(g, 15, '3'));
   if (!same(nb.w)) (setCol(g, 0, '3'), g.forEach((r, y) => y > 1 && y < 13 && (r[1] = '0')));
   if (!same(nb.e)) (setCol(g, 15, '3'), g.forEach((r, y) => y > 1 && y < 13 && (r[14] = '2')));
-  const color = ch === 'o' ? 'red' : ch === 'p' ? 'purple' : env.roof ?? 'red';
+  const color = ch === 'o' ? 'red' : ch === 'p' ? 'purple' : ch === 'q' ? 'cream' : env.roof ?? 'red';
   return paintArt(ART.roof, g, color);
 }
 
@@ -349,6 +356,18 @@ function render(ch: string, env: TileEnv): Img {
       return paintArt(ART.dryGrass);
     case 's':
       return paintArt(ART.sand);
+    case 'i':
+      return paintArt(ART.ash);
+    case 'j':
+      return paintArt(ART.lava);
+    case 'X':
+      return stack(paintArt(ART.ash), paintArt(ART.steamVent));
+    case '|':
+      return paintArt(ART.sugarcane);
+    case 'l':
+      return paintArt(ART.cobble);
+    case 'N':
+      return stack(underImage(env, 'ground'), paintArt(neighbors(env).n === 'N' ? ART.tower : ART.bellTower));
     case 'y':
       return stack(groundUnder(env), paintArt(ART.cactus));
     case 'A':
@@ -422,6 +441,7 @@ function render(ch: string, env: TileEnv): Img {
     case 'b':
     case 'o':
     case 'p':
+    case 'q':
       return roofImage(ch, env);
     case 'h':
       return wallImage(env);
@@ -506,4 +526,4 @@ export function renderMap(m: MapLook): Img {
 
 /** Tall grass drawn over the player's feet. */
 /** The tall grass drawn over your feet: green, or dry (zacate) for 'z'. */
-export const tallGrassImage = (ch = ',') => paintArt(ch === 'z' ? ART.dryGrass : ART.tallGrass);
+export const tallGrassImage = (ch = ',') => paintArt(ch === 'z' ? ART.dryGrass : ch === '|' ? ART.sugarcane : ART.tallGrass);

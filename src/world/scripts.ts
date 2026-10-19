@@ -25,6 +25,7 @@ import { SCRIPTS, scriptedStep, warp, currentMap, refreshNpcs, npcById, pickEnco
 import { gateOf, closedLines, FRESHWATER, type Line } from './maps';
 import { REGION2 } from './region2';
 import { REGION3 } from './region3';
+import { REGION4 } from './region4';
 import { TILES } from '../art/tiles';
 import { notNow } from '../ui/bag';
 import { MINI_BALL, BALL_COLORS, drawPattern } from '../art/balls';
@@ -890,5 +891,5 @@ async function starterTraining(sp: string) {
 }
 
 export function registerScripts() {
-  Object.assign(SCRIPTS, S, REGION2, REGION3);
+  Object.assign(SCRIPTS, S, REGION2, REGION3, REGION4);
 }

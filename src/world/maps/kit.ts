@@ -23,6 +23,8 @@ import type { MapStyle } from '../../art/tiles';
   F  fountain (2×2)  U  market stall / pottery shelf   K  mine rails  W  mine support
   s  sand          y  cactus      z  dry tall grass (wild Palabritas)   A  lighthouse (its top has the lamp)
   Z  ladder between cave floors (stand it away from the walls; you arrive on it, like Gold/Silver)
+  i  volcanic ash    j  lava        X  steam vent    |  sugarcane (tall grass)    l  cobblestones
+  q  church roof (cream)            N  bell tower (2 tall: the bell on top)
 */
 
 /** A line of dialog: Spanish, and English for the EN button. */

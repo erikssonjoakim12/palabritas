@@ -335,6 +335,86 @@ export const ART: Record<string, TileArt> = {
   },
   /** Dry tall grass (zacate), also dune grass on beaches: the tall-grass tufts, yellow. */
   dryGrass: { pal: OUTDOOR.dryGrass, rows: tile8(['00000000', '02000200', '21202120', '21121120', '02111200', '10222010', '01000100', '00000000']) },
+// ----- Region 4: the volcano and Ciudad Chispa -----
+  /** Volcanic ash: gray ground with darker grains. */
+  ash: { pal: OUTDOOR.ash, rows: tile8(['00000000', '00010000', '00000002', '01000000', '00000100', '20000000', '00100010', '00000000']) },
+  /** Lava: glowing orange with dark crust (k). */
+  lava: {
+    pal: OUTDOOR.lava,
+    extra: { k: '#4a2a28' },
+    rows: tile8(['11001111', '10000111', '11001k11', '1111kkk1', 'k1111k11', 'kk112111', '1k110011', '11120001']),
+  },
+  /** A steam vent: a crack in the ash with white steam (drawn over ash). */
+  steamVent: {
+    pal: OUTDOOR.steam,
+    rows: [
+      '................',
+      '.....0011.......',
+      '....001110......',
+      '...00111100.....',
+      '....0011100.....',
+      '......0110......',
+      '.....00110......',
+      '......0110......',
+      '.......10.......',
+      '................',
+      '.......2........',
+      '......222.......',
+      '.....22322......',
+      '......232.......',
+      '.......2........',
+      '................',
+    ],
+  },
+  /** Sugarcane: tall stalks with leaves (tall grass: wild Palabritas). */
+  sugarcane: { pal: OUTDOOR.cane, rows: tile8(['01200120', '01210121', '02200220', '01200120', '11201120', '01200120', '01210121', '02200220']) },
+  /** Cobblestones: rows of rounded stones. */
+  cobble: { pal: OUTDOOR.cobble, rows: tile8(['01120112', '11120112', '11121112', '22222222', '12011120', '12111120', '12111121', '22222222']) },
+  /** The church's bell tower: the top has the bell in an arch (drawn over the ground). */
+  bellTower: {
+    pal: OUTDOOR.wall,
+    extra: { y: ACCENT.lamp, k: '#403840' },
+    rows: [
+      '......3333......',
+      '.....322223.....',
+      '....32222223....',
+      '...3222222223...',
+      '..333333333333..',
+      '..300000000003..',
+      '..300333333003..',
+      '..3003kkkk3003..',
+      '..303kkyykk303..',
+      '..303kyyyyk303..',
+      '..303kyyyyk303..',
+      '..303kkyykk303..',
+      '..300000000003..',
+      '..300000000003..',
+      '..300000000003..',
+      '..300000000003..',
+    ],
+  },
+  /** The bell tower below its top: plain wall with a slit window. */
+  tower: {
+    pal: OUTDOOR.wall,
+    rows: [
+      '..300000000003..',
+      '..300000000003..',
+      '..300001100003..',
+      '..300013310003..',
+      '..300013310003..',
+      '..300013310003..',
+      '..300011110003..',
+      '..300000000003..',
+      '..300000000003..',
+      '..301000000103..',
+      '..300000000003..',
+      '..300000000003..',
+      '..300000000003..',
+      '..300100001003..',
+      '..300000000003..',
+      '..333333333333..',
+    ],
+  },
   /** A tall columnar cactus with two arms (drawn over the ground). */
   cactus: {
     pal: OUTDOOR.cactus,
