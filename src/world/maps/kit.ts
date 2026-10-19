@@ -97,8 +97,8 @@ export interface MapDef {
   border?: string;
   rows: string[];
   floor: string;
-  /** Outdoors: pale dotted town ground, green route grass or beach sand for '.'. */
-  ground?: 'town' | 'grass' | 'sand';
+  /** Outdoors: pale dotted town ground, green route grass, beach sand or volcanic ash for '.' (and under rock edges). */
+  ground?: 'town' | 'grass' | 'sand' | 'ash';
   /**
    * While true, nobody here can speak: talking to a person shows «…» (with their mime in English), and signs
    * are faded. Villa Ocote until the Silenciador breaks.

@@ -28,7 +28,7 @@ export interface MapLook {
   rows: string[];
   outdoor: boolean;
   floor: string;
-  ground?: 'town' | 'grass' | 'sand';
+  ground?: 'town' | 'grass' | 'sand' | 'ash';
   roof?: string;
   style?: MapStyle;
   /** The tile all around the map's edges (default: trees outdoors, nothing indoors). */
@@ -186,13 +186,15 @@ function neighbors(env: TileEnv) {
 function groundArt(env: TileEnv, ch: '.' | '='): TileArt {
   // Like Johto, paths are the same pale dotted ground as towns.
   if (ch === '=' || env.ground === 'town') return ART.townGround;
-  return env.ground === 'sand' ? ART.sand : ART.grassGround;
+  return env.ground === 'sand' ? ART.sand : env.ground === 'ash' ? ART.ash : ART.grassGround;
 }
 
 /** The same art in another palette (map styles: adobe walls, basalt rock, clay caves). */
 const withPal = (art: TileArt, pal?: Pal): TileArt => (pal ? { ...art, pal } : art);
 const wallArt = (env: TileEnv) => withPal(ART.wall, env.style?.walls === 'adobe' ? OUTDOOR.adobe : undefined);
 const rockArt = (env: TileEnv, art: TileArt = ART.rock) => withPal(art, env.style?.rock === 'basalt' ? OUTDOOR.basalt : undefined);
+/** Ledges in the map's ground colors: green on routes, gray on the volcano's ash. */
+const ledgeArt = (env: TileEnv, art: TileArt) => withPal(art, env.ground === 'ash' ? OUTDOOR.ash : undefined);
 const caveArt = (env: TileEnv, part: 'wall' | 'floor', art: TileArt) => withPal(art, CAVE_STYLES[env.style?.cave ?? '']?.[part]);
 
 function underImage(env: TileEnv, under: 'ground' | 'floor' | 'auto'): Img {
@@ -384,9 +386,9 @@ function render(ch: string, env: TileEnv): Img {
       // The palm's own grass is left out: it stands on whatever ground is beside it.
       return stack(groundUnder(env), paintArt(ART.palm, grid(ART.palm.rows).map((row) => row.map((c) => ('012'.includes(c) ? '.' : c)))));
     case '>':
-      return paintArt(ART.ledgeRight);
+      return paintArt(ledgeArt(env, ART.ledgeRight));
     case 'v':
-      return paintArt(ART.ledgeDown);
+      return paintArt(ledgeArt(env, ART.ledgeDown));
     case 'Y':
       return paintArt(ART.lemonTree);
     case '^':
