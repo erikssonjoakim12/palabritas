@@ -76,13 +76,17 @@ export const NIGHT = 'rgba(16, 24, 64, 0.56)';
 export const NIGHT_CLEAR = 'rgba(16, 24, 64, 0)';
 
 /**
- * The clock's time of day outdoors (state.ts dayTime): the world is multiplied by these, like Gold/Silver's
- * evening and night palettes. Lighter than night scenes, since there's no light around you.
+ * The day outdoors, by the clock (art/lights.ts skyAt): the world is multiplied by the tint, like Gold/Silver's
+ * evening and night palettes, and windows shine by `light`. The colors fade from one hour to the next:
+ * day until 17, golden at 18, night from 19, morning back by 7. Lighter than night scenes (no light around you).
  */
-export const DAYTIME_TINT = {
-  dusk: '#f8b890',
-  night: '#7080c8',
-};
+export const DAY_CYCLE: { h: number; tint: string; light: number }[] = [
+  { h: 6, tint: '#7080c8', light: 1 },
+  { h: 7, tint: '#ffffff', light: 0 },
+  { h: 17, tint: '#ffffff', light: 0 },
+  { h: 18, tint: '#f8b890', light: 0.3 },
+  { h: 19, tint: '#7080c8', light: 1 },
+];
 
 /** Warm light from windows and lamps at night (art/lights.ts), added over the dark. */
 export const NIGHT_LIGHT = {

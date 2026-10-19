@@ -7,10 +7,10 @@ import { personFrames, OBJECTS, type Frames } from '../art/chars';
 import type { Img } from '../art/pixel';
 import { MAPS, type MapDef, type NpcDef, type Conn, type EncounterEntry } from './maps';
 import { worldLayout } from './layout';
-import { G, flag, saveGame, playerLook, dayTime } from '../game/state';
+import { G, flag, saveGame, playerLook, clockHour } from '../game/state';
 import { rematchReady } from '../game/rematch';
-import { NIGHT, NIGHT_CLEAR, DAYTIME_TINT } from '../style/colors';
-import { lightAt, drawLights, type Light } from '../art/lights';
+import { NIGHT, NIGHT_CLEAR } from '../style/colors';
+import { lightAt, drawLights, skyAt, type Light } from '../art/lights';
 import { itemCount } from '../game/bag';
 import { closeText, say, setSpeaker } from '../ui/textbox';
 
@@ -514,15 +514,16 @@ function drawNight(g: CanvasRenderingContext2D, cx: number, cy: number) {
   g.fillRect(0, 0, W, H);
 }
 
-/** Dusk and night by the clock, outdoors: the whole view multiplied by the time's color. */
-function drawDayTime(g: CanvasRenderingContext2D) {
-  const t = dayTime();
-  if (t === 'day') return;
+/** Evening and night by the clock, outdoors: the whole view multiplied by the sky's color, and the windows lit. */
+function drawDayTime(g: CanvasRenderingContext2D, camX: number, camY: number) {
+  const sky = skyAt(clockHour());
+  if (sky.light === 0) return; // full day
   g.save();
   g.globalCompositeOperation = 'multiply';
-  g.fillStyle = DAYTIME_TINT[t];
+  g.fillStyle = sky.tint;
   g.fillRect(0, 0, W, H);
   g.restore();
+  drawLights(g, lights, -camX, -camY, sky.light);
 }
 
 function drawBubble(g: CanvasRenderingContext2D, x: number, y: number) {
@@ -695,9 +696,10 @@ export function renderWorld(g: CanvasRenderingContext2D) {
     g.drawImage((grassOverlays[ch] ??= tallGrassImage(ch)), tx * T - camX, ty * T - camY);
   }
   g.restore();
-  if (map.night) drawNight(g, 72, 68 - hop);
-  else if (map.outdoor) drawDayTime(g);
-  if (map.night || (map.outdoor && dayTime() === 'night')) drawLights(g, lights, -camX, -camY);
+  if (map.night) {
+    drawNight(g, 72, 68 - hop);
+    drawLights(g, lights, -camX, -camY);
+  } else if (map.outdoor) drawDayTime(g, camX, camY);
   if (fade > 0) {
     g.fillStyle = `rgba(0,0,0,${fade})`;
     g.fillRect(0, 0, W, H);
