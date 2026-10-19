@@ -69,7 +69,7 @@ for (const id of Object.keys(LOOKS)) {
 
 // ---------- Map tiles and whole maps ----------
 
-/** What each tile character is (the legend in world/maps.ts). */
+/** What each tile character is (the legend in world/maps/kit.ts). */
 const TILE_NAMES: Record<string, string> = {
   '.': 'ground', g: 'grass patch', ',': 'tall grass', '=': 'path', '*': 'flowers', T: 'tree (green · dry mix)', t: 'dry tree', I: 'pine (later biome)', J: 'palm (beaches, later)', Y: 'lemon tree',
   '~': 'water', f: 'fence', S: 'sign', r: 'roof (town color)', b: 'roof', o: 'roof (Palacentro)', p: 'roof (gym)',
@@ -151,7 +151,7 @@ const world = section('World', 'All towns and routes together, placed by their c
   card(world, `${spots.length} outdoor maps`, [c], 1);
 }
 
-const maps = section('Maps', 'Every map on its own, with its people and objects (some only appear at certain points in the story). Layout: world/maps.ts.');
+const maps = section('Maps', 'Every map on its own, with its people and objects (some only appear at certain points in the story). Layout: world/maps/ (one file per region).');
 for (const m of Object.values(MAPS)) card(maps, `${m.name} (${m.id})`, [mapWithPeople(m)], 2);
 
 // ---------- App icons: our mascot, from the game's own sprite ----------

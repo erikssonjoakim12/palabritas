@@ -60,7 +60,7 @@ of the game.
 ## 2. Region 2 — the pine highlands ✓ built
 
 Ciudad Brisa → Ruta 3 → Cueva del Eco → Ruta 5 → **Villa Ocote**, inspired by Nicaragua's north (pines, canyons,
-pottery, Ice Age fossils). The code is the truth (src/world/maps.ts, region2.ts); in short:
+pottery, Ice Age fossils). The code is the truth (src/world/maps/region1.ts and region2.ts, src/world/region2.ts); in short:
 - **Story, the muted town:** nobody in Villa Ocote can speak. A message in the dirt sends you to the Mina de
   Barro, where you beat the Capataz Silencioso and break the Silenciador; the town talks again. Then the lost
   words (8 of them to give back) and the party at night.

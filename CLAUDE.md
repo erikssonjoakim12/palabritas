@@ -51,7 +51,7 @@ Spanish) · [BIOMES.md](BIOMES.md) (animals per region).
 | Spanish content | `src/data/content/` (core list, one file per theme, practice topics) |
 | Palabritas, moves, types | `src/data/species.ts`, `src/data/types.ts` |
 | Trainers, items | `src/data/trainers.ts`, `src/data/items.ts`, `src/game/bag.ts` |
-| Maps (every town, route, interior) | `src/world/maps.ts` (tile legend at the top) |
+| Maps (every town, route, interior) | `src/world/maps/`: one file per region (`region1.ts`...), `kit.ts` (tile legend, types, shared rooms), `index.ts` |
 | Scripts (every NPC, quest, trainer talk) | `src/world/scripts.ts` (`SCRIPTS`) |
 | Overworld engine: walking, ledges, doors, gates, encounters, drawing | `src/world/world.ts`, `src/world/layout.ts` |
 | Battles | `src/battle/battle.ts` |
@@ -64,7 +64,8 @@ Spanish) · [BIOMES.md](BIOMES.md) (animals per region).
 
 ## Recipes
 
-**A map** (in `MAPS`, src/world/maps.ts). Each row is a string of tiles (legend at the top of the file).
+**A map** (in its region's file in src/world/maps/; a new region gets a new file, added in `index.ts`). Each row
+is a string of tiles (legend at the top of `kit.ts`).
 - **Outdoor** maps join seamlessly through `connections: { left: { to, offset } }`. The other map must
   connect back with the opposite direction and `-offset`. Put walkable tiles on both sides of the seam.
   `border` sets the tile drawn around the map (default: trees). The game draws every map within a few tiles
@@ -120,7 +121,7 @@ The same Spanish in two lists is one shared item, which is fine and intended.
 1. Add an entry to `TILES` (src/art/tiles.ts): solid?, kind, ledge, look text.
 2. Add a case in `render()`.
 3. Add its art in `ART` (src/style/tiles.ts). Its palette goes in colors.ts.
-4. Add its name in `TILE_NAMES` (src/dev/art.ts) and in the legend in maps.ts.
+4. Add its name in `TILE_NAMES` (src/dev/art.ts) and in the legend in maps/kit.ts.
 
 Edges that join up with their neighbors (roofs, rock) are computed in art/tiles.ts.
 

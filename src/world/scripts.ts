@@ -381,7 +381,7 @@ const S: Record<string, (c: ScriptCtx) => Promise<void>> = {
     await lines(['Los limones de Villa Limón son los mejores del mundo.', 'The lemons of Lemon Village are the best in the world.']);
   },
 
-  /** A gate guard (maps.ts): why the road is closed, or that you may pass now. */
+  /** A gate guard (world/maps/): why the road is closed, or that you may pass now. */
   async gate(c) {
     const g = gateOf(currentMap(), c.npc!.def.id)!;
     if (g.opens() && g.openScript) return SCRIPTS[g.openScript](c);
@@ -733,7 +733,7 @@ const S: Record<string, (c: ScriptCtx) => Promise<void>> = {
       after: ['Aquí nadie me molesta. Bueno, solo los Ochopatas.', 'Nobody bothers me here. Well, only the Ochopatas.'],
     }),
 
-  /** An item ball (maps.ts, itemBall): what's inside goes in your bag, once. */
+  /** An item ball (maps/kit.ts, itemBall): what's inside goes in your bag, once. */
   async itemBall(c) {
     const { id, item } = c.npc!.def;
     if (!item || flag(`item:${id}`)) return;

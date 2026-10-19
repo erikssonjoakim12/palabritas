@@ -42,7 +42,7 @@ src/
   art/            all pixel art, drawn in code
 ```
 
-Adding words: edit a file in `src/data/content/`. Adding a map: add it to `src/world/maps.ts`.
+Adding words: edit a file in `src/data/content/`. Adding a map: add it to its region's file in `src/world/maps/`.
 
 ## Changing the look
 
@@ -52,7 +52,7 @@ All visual style lives in `src/style/` (modeled on Pokémon Gold/Silver's daytim
 - `tiles.ts`: 16×16 tile art as text (digits pick palette colors, `.` is transparent).
 - `people.ts`: heads, bodies, and which character wears what (`LOOKS`). Overworld objects.
 
-Each town picks its ground and roof color in `maps.ts` (`ground: 'town'`, `roof: 'green'`).
+Each town picks its ground and roof color in its map (`ground: 'town'`, `roof: 'green'`).
 Walking speed is `WALK_SPEED` in `src/world/world.ts`. UI text-box colors are the CSS
 variables at the top of `src/style.css`.
 

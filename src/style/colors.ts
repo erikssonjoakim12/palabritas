@@ -118,7 +118,7 @@ export const ACCENT = {
   foam: '#f8f8ff',
 };
 
-/** Roof colors: [highlight, light, dark, outline]. Each town picks one (see maps.ts). */
+/** Roof colors: [highlight, light, dark, outline]. Each town picks one (see world/maps/). */
 export const ROOFS: Record<string, Pal> = {
   clay: ['#f8d8c0', '#e09870', '#b05838', INK],
   green: ['#d8f0c8', '#b8d898', '#789858', INK],

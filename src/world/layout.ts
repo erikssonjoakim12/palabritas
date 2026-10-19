@@ -2,7 +2,7 @@ import { MAPS, type MapDef } from './maps';
 
 /*
   Like Gold/Silver, every town and route is its own map, joined to its neighbors by
-  `connections` (see maps.ts). This works out where each outdoor map sits in one big world
+  `connections` (see world/maps/). This works out where each outdoor map sits in one big world
   grid (in tiles), so the game can draw the neighbors at the edges and the art page can show
   the whole world. Change a map freely: only its connection offsets have to line up.
 */
