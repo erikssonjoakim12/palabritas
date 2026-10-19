@@ -18,6 +18,7 @@ Spanish) · [BIOMES.md](BIOMES.md) (animals per region).
 |---|---|
 | `npm run dev` | dev server (the user runs their own for the phone: never stop it) |
 | `npm run art` | the art review page (`/art.html`): every sprite, tile, map and the stitched world |
+| `npm run music` | the music samples (`/musica.html`): Game Boy-style songs, not in the game yet (audio/music.ts, data/music.ts) |
 | `npm run words` | the dictionary (`/palabras.html`): every word and phrase, its lists and levels, who learns it |
 | `npm run typecheck` / `npm run build` | |
 | `npm test` | every browser test; `npm test -- cave maps` runs some. Uses a dev server on **port 5181**, starting and stopping its own if none is there |

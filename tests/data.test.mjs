@@ -80,4 +80,8 @@ t.check('the art page loads without errors', artErrors.length === 0, artErrors.j
 await art.goto(BASE + '/palabras.html', { waitUntil: 'networkidle0' });
 const rowsShown = await art.evaluate(() => document.querySelectorAll('#words tr').length);
 t.check('the dictionary page loads and lists the words', artErrors.length === 0 && rowsShown > 3000, [rowsShown, ...artErrors]);
+// The music page arranges every song when it loads: a bar that doesn't fit throws (nothing plays: the test is silent).
+await art.goto(BASE + '/musica.html', { waitUntil: 'networkidle0' });
+const songs = await art.evaluate(() => document.querySelectorAll('.song').length);
+t.check('the music page loads and every song fits its bars', artErrors.length === 0 && songs === 6, [songs, ...artErrors]);
 await t.end();
