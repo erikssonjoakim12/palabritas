@@ -65,15 +65,16 @@ export interface CoreSource {
 export const themeItemsPerLevel = (level: number) => (level <= 10 || level > 20 ? 3 : 4);
 
 /**
- * New core items per level for 21-40 (the A2 band). Chosen so the work per level never goes down: from 21 an
+ * New core items per level for 21-50 (A2, then B1 from 41). Chosen so the work per level never goes down: from 21 an
  * item needs two good answers, and the level-up review covers half of the items from five levels back, which
- * shrinks once it reaches the smaller 21+ levels. Expected answers per level: 21-24: 23, 25-26: 24, 27-30: 26,
- * 31: 27, 32-34: 28, 35-38: 30, 39-40: 32 (levels 2-20 climb from 5 to 21). tools/sim.mjs checks it.
+ * shrinks once it reaches the smaller 21+ levels. Answers per level (tools/sim.mjs, all right): 2-20 climb from 5 to
+ * 21, then 24 at 21 up to 33 from 33 to 40. From 41 an item needs its answers on two different days (the simulator
+ * can't skip days); data.test checks that the work never goes down up to 50.
  */
-const A2_CORE = [5, 5, 5, 5, 5, 7, 8, 8, 8, 8, 8, 8, 8, 8, 9, 9, 9, 9, 10, 10];
+const LATE_CORE = [5, 5, 5, 5, 5, 7, 8, 8, 8, 8, 8, 8, 8, 8, 9, 9, 9, 9, 10, 10, 10, 10, 10, 10, 11, 11, 11, 11, 12, 12];
 
-/** New core items per level: 2 at level 2, +1 every second level (119 by level 20); then A2_CORE for 21-40. */
-export const coreItemsPerLevel = (level: number) => (level >= 2 && level <= 20 ? 2 + Math.floor((level - 2) / 2) : (A2_CORE[level - 21] ?? 0));
+/** New core items per level: 2 at level 2, +1 every second level (119 by level 20); then LATE_CORE for 21-50. */
+export const coreItemsPerLevel = (level: number) => (level >= 2 && level <= 20 ? 2 + Math.floor((level - 2) / 2) : (LATE_CORE[level - 21] ?? 0));
 
 /** Split an ordered list into tiers, starting at level 2. */
 function splitIntoLevels(lines: string[]): Record<number, string[]> {

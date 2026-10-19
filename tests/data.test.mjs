@@ -1,5 +1,5 @@
 // Data checks without playing: every Palabrita has art, a known theme, moves, and words for every
-// level up to 30 (none twice); evolutions point to real Palabritas; the art page and the dictionary load cleanly.
+// level up to 50 (none twice); evolutions point to real Palabritas; the art page and the dictionary load cleanly.
 import { start } from './lib.mjs';
 import { BASE } from '../tools/browser.mjs';
 import { readFileSync } from 'fs';
@@ -18,8 +18,8 @@ const report = await t.game(() => {
     if (sp.moves.length !== 4) p.push(`${sp.moves.length} moves`);
     if (sp.evolves && !g.SPECIES[sp.evolves.to]) p.push(`evolves into unknown ${sp.evolves.to}`);
     const max = g.curriculum.maxLevel(sp.id);
-    if (max < 30) p.push(`words only up to level ${max}`);
-    for (let l = 2; l <= Math.min(30, max); l++) if (!g.curriculum.levelItems(sp.id, l).length) p.push(`no words at level ${l}`);
+    if (max < 50) p.push(`words only up to level ${max}`);
+    for (let l = 2; l <= Math.min(50, max); l++) if (!g.curriculum.levelItems(sp.id, l).length) p.push(`no words at level ${l}`);
     const ids = g.curriculum.allItems(sp.id).map((i) => i.id);
     if (new Set(ids).size !== ids.length) p.push('a word twice');
     out[sp.id] = p;
@@ -38,7 +38,7 @@ const drops = await t.game(() => {
   const out = [];
   for (const sp of Object.keys(SPECIES)) {
     let last = 0;
-    for (let L = 2; L <= 35; L++) {
+    for (let L = 2; L <= 50; L++) {
       const items = C.levelItems(sp, L);
       const review = L - C.REVIEW_GAP >= 2 ? Math.ceil(C.levelItems(sp, L - C.REVIEW_GAP).length * C.REVIEW_SHARE) : 0;
       const work = items.reduce((s, i) => s + C.answersToMaster(i.tier), 0) + review;

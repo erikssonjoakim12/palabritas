@@ -1,13 +1,15 @@
 # Palabritas — learning plan
 
 How a Palabrita's levels map to real Spanish learning, and what material is still to write.
-Status: **levels 2–35 have their Spanish** (the A1 and A2 core in src/data/content/core.ts, 20 themes, school
-topics). The rules below live in src/data/content/index.ts and src/game/curriculum.ts; `tools/sim.mjs` measures them.
+Status: **the core list goes to level 50** (A1, A2 and the first B1 steps in src/data/content/core.ts); the 28
+themes go to level 35–37, and above that a Palabrita learns from the core alone until its theme grows. The rules below live in src/data/content/index.ts and src/game/curriculum.ts; `tools/sim.mjs` measures them.
 
 ## Two tracks in every level
 
 - **Core Spanish:** the high-frequency words and sentences everyone needs, in one list, most useful first:
-  ~650 A1 words (levels 2–20), then the A2 core (sentences and words, levels 21–35).
+  ~650 A1 words (levels 2–20), the A2 core (21–40), then B1 (41–50): about 20 lines per level, each level one
+  grammar step (the imperfect, preterite vs imperfect, pronouns, the perfect, future, conditional, por/para,
+  opinions, connectors, commands, a first subjunctive with ojalá/espero que, si and cuando).
   - The **first 7 core words are universal** (levels 2–4): *hola, sí, no, yo, tú, gracias, por favor*.
   - **Starters walk the list in order**: all three teach the same ~119 most useful words by level 20, whichever
     one you pick. Starters can't be found in the wild before gym 4.
@@ -23,8 +25,8 @@ topics). The rules below live in src/data/content/index.ts and src/game/curricul
 
 *A good answer = correct or almost (e.g. a missing accent), without 💡 help.*
 
-- **New core items per level:** 2 + (level − 2) ÷ 2 for levels 2–20 (119 by level 20); for 21–40 a fixed
-  schedule of 5–10 (`A2_CORE`).
+- **New core items per level:** 2 + (level − 2) ÷ 2 for levels 2–20 (119 by level 20); for 21–50 a fixed
+  schedule of 5–12 (`LATE_CORE`).
 - **New theme items per level:** 3 words (2–10), 4 short phrases (11–20), 3 sentences (21+).
 - **Mastered after:** 1 good answer (levels 2–20), 2 (21–40), 2 on different days (41+).
 - **Rolling review:** to level up, also re-answer **half of the items from 5 levels back** (level 12 reviews
@@ -37,12 +39,13 @@ Answers per level, measured with the real code (a starter):
 | Levels | Answers per level |
 |---|---|
 | 2–20 | climbs from 5 to 21 |
-| 21–24 | 23 |
-| 25–30 | 24–26 |
-| 31–34 | 27–28 |
-| 35–40 | 30–32 |
+| 21–24 | 24–25 |
+| 25–30 | 26–31 |
+| 31–34 | 32–33 |
+| 35–40 | 33 |
+| 41–50 | the same or more (checked by data.test); answers on two different days |
 
-### Levels 41–100 (sentences, to write later)
+### Levels 41–100
 
 | Levels | Band | Grammar | Mastered after |
 |---|---|---|---|
@@ -61,8 +64,8 @@ Latinoamérica, playa, frutas, mar, pesca, viaje, familia). Region 4 adds 8 more
 | For | What |
 |---|---|
 | Region 4 | 8 themes, 2 school topics ([plans/content.md](plans/content.md)) |
-| Levels 36–40 | the rest of the A2 core |
-| Levels 41–60 | B1 core sentences and theme sentences |
+| Levels 36–50 (themes) | 40–45 more sentences per theme |
+| Levels 51–60 | B1 core sentences |
 | Levels 61–100 | B2–C1 sentences (a candidate for Claude-generated items) |
 
 Latin American Spanish throughout; worth a native speaker's skim, but nothing waits for it.

@@ -36,7 +36,7 @@ const out = await page.evaluate(async ([RIGHT, SP]) => {
     let answers = 0, start = 0;
     const per = {};
     const recent = [];
-    while (mon.level < 31 && answers < 8000) {
+    while (mon.level < 41 && answers < 16000) {
       const item = L.pickForMon(mon, recent);
       recent.push(item.id); if (recent.length > 3) recent.shift();
       const grade = Math.random() < RIGHT ? 'perfect' : 'wrong';
@@ -48,7 +48,7 @@ const out = await page.evaluate(async ([RIGHT, SP]) => {
     runs.push(per);
   }
   r.answers = {};
-  for (let l = 5; l <= 30; l++) r.answers[l] = Math.round(runs.reduce((s, x) => s + (x[l] ?? 0), 0) / runs.length);
+  for (let l = 5; l <= 40; l++) r.answers[l] = Math.round(runs.reduce((s, x) => s + (x[l] ?? 0), 0) / runs.length);
   r.defensePaj7 = [...new Set(Array.from({ length: 30 }, () => L.defenseItem({ sp: 'pajarito', level: 7 }).es))];
   r.pajL6 = C.levelItems('pajarito', 6).map((i) => i.es);
   r.defenseL2 = [...new Set(Array.from({ length: 20 }, () => L.defenseItem({ sp: 'conejito', level: 2 }).es))];
