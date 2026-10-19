@@ -72,7 +72,7 @@ export const CAVE = {
 };
 
 /** Night scenes: the dark blue laid over the world (a soft circle of light stays around you). */
-export const NIGHT = 'rgba(16, 24, 64, 0.62)';
+export const NIGHT = 'rgba(16, 24, 64, 0.56)';
 export const NIGHT_CLEAR = 'rgba(16, 24, 64, 0)';
 
 /**
@@ -81,7 +81,14 @@ export const NIGHT_CLEAR = 'rgba(16, 24, 64, 0)';
  */
 export const DAYTIME_TINT = {
   dusk: '#f8b890',
-  night: '#6878c0',
+  night: '#7080c8',
+};
+
+/** Warm light from windows and lamps at night (art/lights.ts), added over the dark. */
+export const NIGHT_LIGHT = {
+  core: 'rgba(132, 104, 44, 1)',
+  glow: 'rgba(104, 76, 28, 0.6)',
+  clear: 'rgba(90, 66, 24, 0)',
 };
 
 /** Accent colors used by individual tiles (letters in tiles.ts). */

@@ -5,6 +5,7 @@ import { portrait } from '../art/portraits';
 import { personFrames, buildObjects, OBJECTS } from '../art/chars';
 import { renderMap } from '../art/tiles';
 import { NIGHT } from '../style/colors';
+import { mapLights, drawLights } from '../art/lights';
 import { MAPS, type MapDef } from '../world/maps';
 import { worldLayout } from '../world/layout';
 import { LOOKS } from '../style/people';
@@ -120,6 +121,7 @@ function mapWithPeople(m: MapDef) {
   if (m.night) {
     g.fillStyle = NIGHT;
     g.fillRect(0, 0, img.width, img.height);
+    drawLights(g, mapLights(m));
   }
   return img;
 }

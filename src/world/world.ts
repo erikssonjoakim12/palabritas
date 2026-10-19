@@ -10,6 +10,7 @@ import { worldLayout } from './layout';
 import { G, flag, saveGame, playerLook, dayTime } from '../game/state';
 import { rematchReady } from '../game/rematch';
 import { NIGHT, NIGHT_CLEAR, DAYTIME_TINT } from '../style/colors';
+import { lightAt, drawLights, type Light } from '../art/lights';
 import { itemCount } from '../game/bag';
 import { closeText, say, setSpeaker } from '../ui/textbox';
 
@@ -136,7 +137,7 @@ export function loadMap(id: string, x: number, y: number, dir: Dir) {
   npcs = (map.npcs ?? []).map((def) => npc(def));
   neighbors = neighborsOf(map);
   edgeNpcs = neighbors.flatMap(({ m, dx, dy }) => (m.npcs ?? []).map((def) => npc(def, dx, dy)));
-  ({ grid, w: gridW } = gridFor(map));
+  ({ grid, w: gridW, lights } = gridFor(map));
   prepareNeighbors();
   // Maps change between versions: never leave a loaded save standing inside a wall.
   [x, y] = nearestFree(x, y);
@@ -541,6 +542,7 @@ function drawBubble(g: CanvasRenderingContext2D, x: number, y: number) {
  */
 let grid: Img[] = [];
 let gridW = 0;
+let lights: Light[] = [];
 /** A map's tile layout, kept per map: just references to tile images (about 10 KB a map). */
 interface Grid {
   grid: Img[];
@@ -548,6 +550,8 @@ interface Grid {
   h: number;
   /** Tiles filled in so far (it can be built a few tiles at a time, in spare moments). */
   done: number;
+  /** Windows and lamps that shine at night, in the home map's pixels. */
+  lights: Light[];
   fill: (i: number) => void;
 }
 const grids = new Map<string, Grid>();
@@ -563,8 +567,11 @@ function gridOf(home: MapDef): Grid {
     const n = inMap(home, tx, ty) ? undefined : near.find(({ m, dx, dy }) => inMap(m, tx - dx, ty - dy));
     const [m, x, y] = n ? [n.m, tx - n.dx, ty - n.dy] : [home, tx, ty];
     grid[i] = tileImage(tileOf(m, x, y), envAt(m, x, y));
+    const l = lightAt(m, x, y);
+    if (l) lights.push({ ...l, x: l.x + (tx - x) * T, y: l.y + (ty - y) * T });
   };
-  g = { grid, w, h, done: 0, fill };
+  const lights: Light[] = [];
+  g = { grid, w, h, done: 0, fill, lights };
   grids.set(home.id, g);
   return g;
 }
@@ -690,6 +697,7 @@ export function renderWorld(g: CanvasRenderingContext2D) {
   g.restore();
   if (map.night) drawNight(g, 72, 68 - hop);
   else if (map.outdoor) drawDayTime(g);
+  if (map.night || (map.outdoor && dayTime() === 'night')) drawLights(g, lights, -camX, -camY);
   if (fade > 0) {
     g.fillStyle = `rgba(0,0,0,${fade})`;
     g.fillRect(0, 0, W, H);
