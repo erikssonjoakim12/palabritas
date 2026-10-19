@@ -122,8 +122,8 @@ export const direcciones: ThemeSource = {
   en: 'Directions',
   tiers: {
     1: [
-      'a la derecha = on the right',
-      'a la izquierda = on the left',
+      'a la derecha = to the right, on the right',
+      'a la izquierda = to the left, on the left',
       'todo recto | derecho = straight ahead',
       'al norte = to the north',
       'al sur = to the south',
@@ -162,7 +162,7 @@ export const ira: ThemeSource = {
     1: [
       'Voy a nadar = I’m going to swim',
       'Vas a ganar = You’re going to win',
-      'Va a llover = It’s going to rain',
+      'Va a llover = It’s going to rain / Is it going to rain?',
       'Vamos a comer = We’re going to eat',
       'Van a bailar = They’re going to dance',
       'Voy a dormir = I’m going to sleep',
@@ -226,6 +226,83 @@ export const restaurante: ThemeSource = {
       '¿Podemos pagar por separado? = Can we pay separately?',
       'Para la niña, un vaso de leche = For the girl, a glass of milk',
       'De postre quiero un helado de coco = For dessert I want a coconut ice cream',
+    ],
+  },
+};
+
+// Ciudad Chispa's school (region 4): shopping and bargaining (also the hammock quest), and the preterite.
+export const compras: ThemeSource = {
+  id: 'compras',
+  name: 'De compras',
+  en: 'Shopping and bargaining',
+  tiers: {
+    1: [
+      '¿Cuánto cuesta? = How much is it?',
+      'Es muy caro = It’s very expensive',
+      'Es barato = It’s cheap',
+      'Me lo llevo = I’ll take it',
+      'Solo estoy mirando = I’m just looking',
+      '¿Tiene otro color? = Do you have another color?',
+      'cien córdobas = a hundred córdobas',
+      'la última oferta = the last offer',
+    ],
+    2: [
+      '¿Me lo deja en quinientos? = Will you let me have it for five hundred?',
+      '¿Me hace un descuento? = Can you give me a discount?',
+      'Es mi último precio = It’s my final price',
+      'No tengo tanto dinero = I don’t have that much money',
+      '¿Lo tiene más grande? = Do you have it bigger?',
+      'Es para un regalo = It’s for a present',
+      '¿Aceptan tarjeta? = Do you take cards?',
+      'Está bien, trato hecho = OK, it’s a deal',
+    ],
+    3: [
+      'Esta hamaca está muy bonita, ¿cuánto vale? = This hammock is very pretty, how much is it?',
+      'En la otra tienda está más barata = In the other shop it’s cheaper',
+      'Si compro dos, ¿me hace precio? = If I buy two, will you give me a better price?',
+      'Le doy cuatrocientos y no más = I’ll give you four hundred and no more',
+      'Está hecha a mano en Masaya = It’s handmade in Masaya',
+      'La quiero para mi mamá = I want it for my mom',
+      'Muchas gracias, que le vaya bien = Thank you very much, have a good day',
+      'Vuelvo más tarde, voy a pensarlo = I’ll come back later, I’m going to think about it',
+    ],
+  },
+};
+
+export const pasado: ThemeSource = {
+  id: 'pasado',
+  name: 'El pasado',
+  en: 'The past (preterite)',
+  tiers: {
+    1: [
+      'Hablé = I spoke',
+      'Comí = I ate',
+      'Viví = I lived',
+      'Fui = I went, I was',
+      'Hice = I did, I made',
+      'Vi = I saw',
+      'Tuve = I had',
+      'Dije = I said',
+    ],
+    2: [
+      'Ayer compré una hamaca = Yesterday I bought a hammock',
+      'Anoche vi los fuegos artificiales = Last night I saw the fireworks',
+      '¿Qué hiciste ayer? = What did you do yesterday?',
+      'Fuimos al volcán = We went to the volcano',
+      'Ella bailó toda la noche = She danced all night',
+      'Tuvimos mucha suerte = We were very lucky',
+      'Comimos vigorón en el parque = We ate vigorón in the park',
+      'No dijo nada = He didn’t say anything',
+    ],
+    3: [
+      'El año pasado viajé a Masaya con mi familia = Last year I traveled to Masaya with my family',
+      'Don Tizón hizo mil cohetes ayer = Don Tizón made a thousand rockets yesterday',
+      'Subimos al cráter y vimos la lava = We climbed to the crater and saw the lava',
+      '¿Cuándo llegaste a Ciudad Chispa? = When did you get to Ciudad Chispa?',
+      'Encontré al chocoyito en la cueva = I found the little parakeet in the cave',
+      'Los Silenciosos se llevaron los cohetes = The Silenciosos took the rockets',
+      'Primero llovió y después salió el sol = First it rained and then the sun came out',
+      'Fue la mejor fiesta de mi vida = It was the best party of my life',
     ],
   },
 };

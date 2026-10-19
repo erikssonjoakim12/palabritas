@@ -78,7 +78,7 @@ export const latinoamerica: ThemeSource = {
     'el país vecino = the neighboring country',
     'la moneda de Nicaragua es el córdoba = the currency of Nicaragua is the córdoba',
     // ----- Levels 21+: sentences (3 per level): a typical thing or two from each country -----
-    'El guardabarranco es el ave nacional de Nicaragua = The guardabarranco is the national bird of Nicaragua',
+    'El guardabarranco es el ave nacional de Nicaragua = The guardabarranco is Nicaragua’s national bird',
     'En México se comen tacos y tamales = In Mexico people eat tacos and tamales',
     'El canal de Panamá une dos océanos = The Panama Canal joins two oceans',
     'En Costa Rica hay muchos volcanes y playas = In Costa Rica there are many volcanoes and beaches',

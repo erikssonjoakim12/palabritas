@@ -613,7 +613,8 @@ has made camp on the north rim with the stolen fireworks.
 ## 8. Trainers
 
 Levels: route trainers 18–26, rising along the way (the user, 2026-10-19). Rematches: Rigo and Lidia on Ruta 8,
-Clara on the volcano, Bruno on Ruta 9.
+Clara on the volcano, Bruno on Ruta 9. **Brasita's family only on bosses** (the user): Don Tizón (Brasaurio 32);
+wild Brasita stays rare.
 
 ```ts
 campesino: { id: 'campesino', name: 'Campesino Rigo', defenseMode: 'listen', rematch: true, team: [['liebron', 18], ['hormiguita', 18]] },
@@ -624,7 +625,7 @@ cortador: { id: 'cortador', name: 'Cortador Juan', defenseMode: 'listen', team: 
 cortadora: { id: 'cortadora', name: 'Cortadora Lidia', defenseMode: 'listen', rematch: true, team: [['zopilotito', 20], ['hormiguita', 20]] },
 granjero: { id: 'granjero', name: 'Granjero Pancho', defenseMode: 'listen', team: [['conejito', 20], ['liebron', 21]] },
 ciclista: { id: 'ciclista', name: 'Ciclista Óscar', defenseMode: 'listen', team: [['liebron', 21], ['zopilotito', 21]] },
-guardaparque1: { id: 'guardaparque1', name: 'Guardaparque Raquel', defenseMode: 'listen', team: [['chispita', 21], ['brasita', 22]] },
+guardaparque1: { id: 'guardaparque1', name: 'Guardaparque Raquel', defenseMode: 'listen', team: [['chispita', 21], ['zopilotito', 22]] },
 vulcanologa1: { id: 'vulcanologa1', name: 'Vulcanóloga Clara', defenseMode: 'listen', rematch: true, team: [['chispita', 22], ['zopilotito', 22]] },
 guardaparque2: { id: 'guardaparque2', name: 'Guardaparque Mauricio', defenseMode: 'listen', team: [['chocoyito', 22], ['zopilotito', 23]] },
 vulcanologo2: { id: 'vulcanologo2', name: 'Vulcanólogo Erick', defenseMode: 'listen', team: [['ecolin', 23], ['taranton', 23]] },
@@ -634,11 +635,11 @@ silencioso7: { id: 'silencioso7', name: 'Silencioso', defenseMode: 'listen', tea
 sigilo: { id: 'sigilo', name: 'Don Sigilo', defenseMode: 'type', team: [['murcielon', 27], ['taranton', 28], ['petroglifon', 29]] },
 lucas3: { id: 'lucas3', name: 'Lucas', defenseMode: 'type', team: [['<counter starter, 2nd form>', 28], ['hojarasco', 25], ['palomon', 25], ['cangrejon', 26]] },
 polvorera: { id: 'polvorera', name: 'Polvorera Gloria', defenseMode: 'type', team: [['chispita', 25], ['chispita', 25]] },
-malabarista: { id: 'malabarista', name: 'Malabarista Ricky', defenseMode: 'type', team: [['chocoyito', 25], ['brasita', 26]] },
+malabarista: { id: 'malabarista', name: 'Malabarista Ricky', defenseMode: 'type', team: [['chocoyito', 25], ['coheton', 26]] },
 fritanguero: { id: 'fritanguero', name: 'Fritanguero Neno', defenseMode: 'type', team: [['chocoyote', 26], ['chispita', 26]] },
 tizon: { id: 'tizon', name: 'Líder Don Tizón', defenseMode: 'type', team: [['chocoyote', 28], ['coheton', 29], ['brasaurio', 32]] },
 campesina_r9: { id: 'campesina_r9', name: 'Campesina Tula', defenseMode: 'listen', team: [['zopilotito', 24], ['liebron', 25]] },
-ciclista_r9: { id: 'ciclista_r9', name: 'Ciclista Bruno', defenseMode: 'listen', rematch: true, team: [['brasita', 25], ['hormigon', 25]] },
+ciclista_r9: { id: 'ciclista_r9', name: 'Ciclista Bruno', defenseMode: 'listen', rematch: true, team: [['zopilotito', 25], ['hormigon', 25]] },
 excursionista_r9: { id: 'excursionista_r9', name: 'Excursionista Lila', defenseMode: 'listen', team: [['palomon', 25], ['liebron', 26]] },
 ```
 

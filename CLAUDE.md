@@ -113,7 +113,8 @@ No script needed.
 1. Write one file in `src/data/content/` with one list, easiest first: 27 words (levels 2–10), then 40 short
    phrases (11–20), then sentences (3 per level from 21). About 117 lines reaches level ~37.
 2. Lines look like `'el perro | el can = the dog'` (the first form is shown; the others are accepted too).
-3. Import it in `index.ts` and add it to the `build` list.
+3. Import it in `index.ts` and add it to the `LATER` list (new lists never move words existing Palabritas have).
+4. The same Spanish in two lists must have the same English (`npm test -- data` checks it).
 
 The same Spanish in two lists is one shared item, which is fine and intended.
 

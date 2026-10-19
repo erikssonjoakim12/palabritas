@@ -15,7 +15,7 @@ export const perro: ThemeSource = {
     'la oreja = the ear',
     'la nariz = the nose',
     'los ojos = the eyes',
-    'el pelo = the fur',
+    'el pelo = the hair, the fur',
     'la boca = the mouth',
     'los dientes = the teeth',
     'la correa = the leash',
@@ -37,7 +37,7 @@ export const perro: ThemeSource = {
 
     // ----- Levels 11-20: short phrases (4 per level) -----
     '¡Ven! | ¡Ven aquí! = Come! (to a dog)',
-    '¡Siéntate! = Sit!',
+    '¡Siéntate! = Sit! / Sit down',
     '¡Quieto! = Stay!',
     '¡Buen perro! = Good dog!',
     '¡Muy bien! = Very good!',

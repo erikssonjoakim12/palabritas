@@ -32,7 +32,7 @@ export const deportes: ThemeSource = {
     'la camiseta del equipo = the team shirt',
     'el ejercicio = the exercise',
     'sudar = to sweat',
-    'la meta = the finish line',
+    'la meta = the goal, the finish line',
     'el aficionado | la aficionada = the fan',
     'el marcador = the score',
     // ----- Levels 11-20: short phrases (4 per level): cheering, who won, what you play -----
@@ -58,7 +58,7 @@ export const deportes: ThemeSource = {
     'la final = the final',
     'el partido de hoy = today’s game',
     'el equipo contrario = the other team',
-    '¡Fuera! = Out!',
+    '¡Fuera! = Out! / outside',
     '¡Jonrón! = Home run!',
     'un buen lanzamiento = a good pitch',
     '¡Qué golazo! = What a great goal!',

@@ -33,7 +33,7 @@ export const numeros: ThemeSource = {
     'cincuenta = fifty',
     'cien = one hundred',
     'el número = the number',
-    'contar = to count',
+    'contar = to count, to tell',
 
     // ----- Levels 11-20: short phrases (4 per level) -----
     'sesenta = sixty',
@@ -46,9 +46,9 @@ export const numeros: ThemeSource = {
     'tercero = third',
     'último = last',
     'la mitad = half',
-    'el doble = double',
-    'más = plus / more',
-    'menos = minus / less',
+    'el doble = double, twice as much',
+    'más = more, plus',
+    'menos = less, minus',
     'dos conejos = two rabbits',
     'tres zanahorias = three carrots',
     'muchos conejos = many rabbits',

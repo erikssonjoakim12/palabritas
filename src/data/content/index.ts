@@ -7,7 +7,7 @@ import { naturaleza } from './naturaleza';
 import { numeros } from './numeros';
 import { colores } from './colores';
 import { casa } from './casa';
-import { presente, preguntas, gustar, direcciones, ira, restaurante } from './trainers';
+import { presente, preguntas, gustar, direcciones, ira, restaurante, compras, pasado } from './trainers';
 import { playa } from './playa';
 import { frutas } from './frutas';
 import { mar } from './mar';
@@ -21,6 +21,14 @@ import { musica } from './musica';
 import { salud } from './salud';
 import { historia } from './historia';
 import { latinoamerica } from './latinoamerica';
+import { fiesta } from './fiesta';
+import { conversacion } from './conversacion';
+import { ciudad } from './ciudad';
+import { ropa } from './ropa';
+import { rutina } from './rutina';
+import { emociones } from './emociones';
+import { animales } from './animales';
+import { trabajo } from './trabajo';
 
 /**
  * A theme is a slice of Spanish. Lines look like `"el perro | el can = the dog"`:
@@ -125,6 +133,8 @@ export const ITEMS: Record<string, Item> = {};
 /** What makes two lines "the same Spanish": the shown form, ignoring case and ¡!¿?.,. */
 export const spanishKey = (es: string) => es.toLowerCase().replace(/[¡!¿?.,]/g, '').trim();
 const BY_KEY = new Map<string, Item>();
+/** The same Spanish with different English in two lists (the first list's English wins, so the other is lost). data.test lists them. */
+export const EN_CONFLICTS: string[] = [];
 export const itemBySpanish = (es: string): Item | undefined => BY_KEY.get(spanishKey(es));
 
 function build(src: { id: string; name: string; en: string }, tiers: Record<number, string[]>, byLevel = true): Theme {
@@ -138,6 +148,8 @@ function build(src: { id: string; name: string; en: string }, tiers: Record<numb
       const shared = BY_KEY.get(spanishKey(accept[0]));
       if (shared) {
         if (shared.theme === src.id) throw new Error(`Duplicate item in ${src.id}: ${accept[0]}`);
+        const en = line.slice(eq + 3).trim();
+        if (en !== shared.en) EN_CONFLICTS.push(`${accept[0]}: ${shared.theme} «${shared.en}» / ${src.id} «${en}»`);
         for (const a of accept) if (!shared.accept.includes(a)) shared.accept.push(a);
         // A shared item counts at its lowest level in any list (an A2 word that a theme teaches at level 8 is a
         // level 8 word there: one good answer masters it). Practice topics' tiers are difficulty bands, not levels.
@@ -160,6 +172,13 @@ build(core, splitCoreBands(core));
 for (const src of [perro, tiempo, comida, naturaleza, numeros, colores, casa, cuerpo, cocina, deportes, musica, salud, historia, latinoamerica, playa, frutas, mar, pesca, viaje, familia, presente, preguntas, gustar, direcciones, ira, restaurante]) {
   build(src, src.levels ? splitIntoLevels(src.levels) : (src.tiers ?? {}), !!src.levels);
 }
+/**
+ * Lists added after players had saves (region 4 on; add new themes and topics here). A word they share with an
+ * earlier list keeps that list's level, so new content never moves the words existing Palabritas already have.
+ * Their own Palabritas still meet the word at its place in their list.
+ */
+const LATER: ThemeSource[] = [fiesta, conversacion, ciudad, ropa, rutina, emociones, animales, trabajo, compras, pasado];
+for (const src of LATER) build(src, src.levels ? splitIntoLevels(src.levels) : (src.tiers ?? {}), false);
 
 export function tierItems(themeId: string, tier: number): Item[] {
   return THEMES[themeId].levels[tier] ?? [];

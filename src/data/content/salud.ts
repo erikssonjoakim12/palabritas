@@ -38,9 +38,9 @@ export const salud: ThemeSource = {
     // ----- Levels 11-20: short phrases (4 per level): what's wrong, the doctor's questions, get well -----
     'Me siento mal = I feel bad',
     'Tengo fiebre = I have a fever',
-    '¿Qué te pasa? = What’s wrong with you?',
+    '¿Qué te pasa? = What’s wrong?',
     '¡Que te mejores! = Get well soon!',
-    '¡Salud! = Bless you!',
+    '¡Salud! = Cheers! / Bless you!',
     'Tómate la pastilla = Take the pill',
     'Tengo tos = I have a cough',
     'Estoy enfermo | Estoy enferma = I’m sick',

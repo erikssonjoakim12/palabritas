@@ -369,6 +369,116 @@ export const SPECIES: Record<string, Species> = {
       en: 'It hatches in the sand and runs to the sea. As an adult it returns to the same beach to have its babies.',
     },
   },
+  // ----- Region 4: the volcanoes and dry forest -----
+  /** The user's fire lizard: rare and slow to grow, then very powerful (Brasaurio at 32, Volcasaurio at 50). */
+  brasita: {
+    id: 'brasita',
+    name: 'Brasita',
+    types: ['Fuego'],
+    theme: 'animales',
+    base: { hp: 45, atk: 60, def: 45, spd: 55 },
+    moves: [m('Brasas', 'Fuego', 'choose'), m('Coletazo', 'Normal', 'type'), m('Calor del Sol', 'Fuego', 'listen'), m('Llamarada', 'Fuego', 'speak')],
+    catchRate: 0.3,
+    dex: {
+      es: 'Toma el sol en las piedras del volcán. Las brasas de su cola nunca se apagan.',
+      en: 'It sunbathes on the volcano’s rocks. The embers on its tail never go out.',
+    },
+  },
+  hormiguita: {
+    id: 'hormiguita',
+    name: 'Hormiguita',
+    types: ['Bicho', 'Planta'],
+    theme: 'trabajo',
+    base: { hp: 40, atk: 56, def: 50, spd: 52 },
+    moves: [m('Pellizco', 'Bicho', 'choose'), m('Cortar Hoja', 'Planta', 'type'), m('Trabajo en Equipo', 'Normal', 'listen'), m('Hoja Gigante', 'Planta', 'speak')],
+    catchRate: 0.55,
+    dex: {
+      es: 'Trabaja todo el día. Lleva hojas más grandes que su cuerpo.',
+      en: 'It works all day. It carries leaves bigger than its body.',
+    },
+  },
+  /** A firefly whose tail throws sparks like a firework. */
+  chispita: {
+    id: 'chispita',
+    name: 'Chispita',
+    types: ['Bicho', 'Fuego'],
+    theme: 'fiesta',
+    base: { hp: 38, atk: 56, def: 36, spd: 68 },
+    moves: [m('Chispa', 'Fuego', 'choose'), m('Zumbido', 'Bicho', 'type'), m('Luz de Fiesta', 'Fuego', 'listen'), m('Fuegos Artificiales', 'Fuego', 'speak')],
+    catchRate: 0.5,
+    dex: {
+      es: 'Una luciérnaga con la cola llena de chispas. Le encantan las fiestas y la música.',
+      en: 'A firefly with a tail full of sparks. It loves parties and music.',
+    },
+  },
+  chocoyito: {
+    id: 'chocoyito',
+    name: 'Chocoyito',
+    types: ['Normal', 'Volador'],
+    theme: 'conversacion',
+    base: { hp: 42, atk: 46, def: 40, spd: 66 },
+    moves: [m('Picotazo', 'Volador', 'choose'), m('Charla', 'Normal', 'type'), m('Repetir', 'Normal', 'listen'), m('Grito del Volcán', 'Fuego', 'speak')],
+    catchRate: 0.5,
+    dex: {
+      es: 'Repite todo lo que oye. Si le hablas en español, ¡te contesta en español!',
+      en: 'It repeats everything it hears. Talk to it in Spanish and it answers in Spanish!',
+    },
+  },
+  zopilotito: {
+    id: 'zopilotito',
+    name: 'Zopilotito',
+    types: ['Volador', 'Siniestro'],
+    theme: 'ciudad',
+    base: { hp: 50, atk: 48, def: 46, spd: 50 },
+    moves: [m('Picotazo', 'Volador', 'choose'), m('Barrer', 'Normal', 'type'), m('Vuelo en Círculos', 'Volador', 'listen'), m('Sombra Negra', 'Siniestro', 'speak')],
+    catchRate: 0.5,
+    dex: {
+      es: 'Limpia las calles de la ciudad. Sin él, todo estaría sucio.',
+      en: 'It cleans the city streets. Without it, everything would be dirty.',
+    },
+  },
+  /** A fawn in a festival mask (a gift from the Torovenado costume quest). */
+  venadito: {
+    id: 'venadito',
+    name: 'Venadito',
+    types: ['Normal'],
+    theme: 'ropa',
+    base: { hp: 46, atk: 52, def: 46, spd: 60 },
+    moves: [m('Cornada', 'Normal', 'choose'), m('Disfraz', 'Normal', 'type'), m('Desfile', 'Normal', 'listen'), m('Baile del Toro', 'Lucha', 'speak')],
+    catchRate: 0.3,
+    dex: {
+      es: 'Un venadito que se pone una máscara de fiesta. ¡Le encanta disfrazarse y bailar!',
+      en: 'A fawn that puts on a festival mask. It loves dressing up and dancing!',
+    },
+  },
+  /** A sloth asleep in the hammock you buy for Mom. */
+  perezosito: {
+    id: 'perezosito',
+    name: 'Perezosito',
+    types: ['Normal', 'Psíquico'],
+    theme: 'rutina',
+    base: { hp: 80, atk: 40, def: 60, spd: 30 },
+    moves: [m('Bostezo', 'Normal', 'choose'), m('Balanceo', 'Normal', 'type'), m('Canción de Cuna', 'Psíquico', 'listen'), m('Siesta', 'Psíquico', 'speak')],
+    catchRate: 0.3,
+    dex: {
+      es: 'Duerme en una hamaca casi todo el día. Se despierta tarde, desayuna... ¡y vuelve a dormir!',
+      en: 'It sleeps in a hammock most of the day. It wakes up late, has breakfast... and goes back to sleep!',
+    },
+  },
+  /** The haunted house's lamp. */
+  lamparita: {
+    id: 'lamparita',
+    name: 'Lamparita',
+    types: ['Fantasma', 'Fuego'],
+    theme: 'emociones',
+    base: { hp: 50, atk: 64, def: 48, spd: 62 },
+    moves: [m('Llama Fantasma', 'Fantasma', 'choose'), m('Luz Triste', 'Fuego', 'type'), m('Susurro', 'Fantasma', 'listen'), m('Fuego Azul', 'Fuego', 'speak')],
+    catchRate: 0.3,
+    dex: {
+      es: 'Cambia de color con su humor: azul si está triste, rojo si está enojada.',
+      en: 'It changes color with its mood: blue when sad, red when angry.',
+    },
+  },
 };
 
 /**
@@ -653,6 +763,77 @@ evolution('paslamita', 28, {
   },
 });
 
+evolution('brasita', 32, {
+  id: 'brasaurio',
+  name: 'Brasaurio',
+  types: ['Fuego'],
+  base: { hp: 70, atk: 92, def: 70, spd: 80 },
+  dex: {
+    es: 'Su piel es dura como la roca volcánica. Cuando ruge, le salen chispas de la boca.',
+    en: 'Its skin is as hard as volcanic rock. When it roars, sparks fly from its mouth.',
+  },
+});
+evolution('brasaurio', 50, {
+  id: 'volcasaurio',
+  name: 'Volcasaurio',
+  types: ['Fuego', 'Dragón'],
+  base: { hp: 95, atk: 125, def: 95, spd: 105 },
+  dex: {
+    es: 'Dicen que duerme dentro del volcán. Cuando despierta, toda la montaña tiembla.',
+    en: 'They say it sleeps inside the volcano. When it wakes up, the whole mountain shakes.',
+  },
+});
+evolution('hormiguita', 22, {
+  id: 'hormigon',
+  name: 'Hormigón',
+  types: ['Bicho', 'Roca'],
+  base: { hp: 66, atk: 84, def: 92, spd: 40 },
+  dex: {
+    es: 'Su cuerpo es de cemento. Ayuda a construir casas y puentes.',
+    en: 'Its body is made of concrete. It helps build houses and bridges.',
+  },
+});
+evolution('chispita', 26, {
+  id: 'coheton',
+  name: 'Cohetón',
+  types: ['Bicho', 'Fuego'],
+  base: { hp: 58, atk: 90, def: 54, spd: 96 },
+  dex: {
+    es: 'Un escarabajo enorme. Cuando se emociona, sale disparado al cielo como un cohete y deja una estela de colores.',
+    en: 'A huge beetle. When it gets excited, it shoots into the sky like a rocket and leaves a trail of colors.',
+  },
+});
+evolution('chocoyito', 25, {
+  id: 'chocoyote',
+  name: 'Chocoyote',
+  types: ['Fuego', 'Volador'],
+  base: { hp: 64, atk: 72, def: 58, spd: 90 },
+  dex: {
+    es: 'Hace su nido dentro del cráter del volcán. El humo no le molesta.',
+    en: 'It nests inside the volcano’s crater. The smoke doesn’t bother it.',
+  },
+});
+evolution('zopilotito', 28, {
+  id: 'zopiloton',
+  name: 'Zopilotón',
+  types: ['Volador', 'Siniestro'],
+  base: { hp: 80, atk: 74, def: 66, spd: 70 },
+  dex: {
+    es: 'Vuela en círculos sobre la ciudad. Desde arriba, conoce todas las calles.',
+    en: 'It circles over the city. From above, it knows every street.',
+  },
+});
+evolution('venadito', 30, {
+  id: 'torovenado',
+  name: 'Torovenado',
+  types: ['Normal', 'Lucha'],
+  base: { hp: 74, atk: 86, def: 70, spd: 80 },
+  dex: {
+    es: 'Baila en el desfile del Torovenado. Tiene cuernos de toro y astas de venado.',
+    en: 'It dances in the Torovenado parade. It has a bull’s horns and a deer’s antlers.',
+  },
+});
+
 /** The first form of a Palabrita's line (its words are chosen by the first form). */
 export function firstForm(id: string): string {
   const prev = Object.values(SPECIES).find((s) => s.evolves?.to === id);
@@ -676,4 +857,6 @@ export const DEX_ORDER = [
   'caparazonte', 'gliptodon', 'guardabarranco',
   'cangrejito', 'cangrejon', 'coquito', 'cocotero', 'pelicanito', 'maleticano', 'mojarrita', 'mordisquito', 'mordiscon',
   'paslamita', 'paslamona',
+  'brasita', 'brasaurio', 'volcasaurio', 'hormiguita', 'hormigon', 'zopilotito', 'zopiloton', 'chocoyito', 'chocoyote',
+  'chispita', 'coheton', 'lamparita', 'perezosito', 'venadito', 'torovenado',
 ];

@@ -28,6 +28,10 @@ const report = await t.game(() => {
 });
 for (const [id, problems] of Object.entries(report)) t.check(`Palabrita ${id}`, problems.length === 0, problems.join('; '));
 
+// The same Spanish in two lists must mean the same thing: only the first list's English is kept.
+const conflicts = await t.game(() => window.__game.content.EN_CONFLICTS);
+t.check('shared Spanish has the same English everywhere', conflicts.length === 0, conflicts.join(' · '));
+
 // The work per level (new items × the answers each needs, plus the review) never goes down, for any Palabrita.
 const drops = await t.game(() => {
   const { curriculum: C, SPECIES } = window.__game;
