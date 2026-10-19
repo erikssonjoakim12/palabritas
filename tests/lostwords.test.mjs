@@ -1,4 +1,4 @@
-// Villa Ocote's lost words (phase 2 §6.1): pick one up, its owner stumbles over the word until you complete
+// Villa Ocote's lost words: pick one up, its owner stumbles over the word until you complete
 // their sentence (a wrong answer changes nothing), the eighth one starts the party. Plus the Capataz's note.
 import { start } from './lib.mjs';
 

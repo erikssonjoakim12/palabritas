@@ -155,7 +155,7 @@ const escuela = (id: string, exit: MapDef['exit'], teacher: NpcDef, students: Np
   id, name: 'Escuela', outdoor: false, floor: '_', rows: ESCUELA, exit, npcs: [teacher, ...students], ...extra,
 });
 /**
- * A night version of a map (plans/phase1-groundwork.md §10): the same place drawn dark, with other people. For
+ * A night version of a map (a story night scene): the same place drawn dark, with other people. For
  * cutscenes only, so it has no way in or out of its own (no connections, doors, triggers, gates or encounters).
  */
 const night = (m: MapDef, id: string, changes: Partial<MapDef>): MapDef => ({
@@ -763,7 +763,6 @@ export const MAPS: Record<string, MapDef> = {
   // so you come out high on the mountain, up and to the right of the way in (Ruta 3): a tunnel in the cliff, then
   // a trail along the clifftop, down past a clearing to the road, and west over the ravine bridge. The mountain
   // below the trail is the same rock as Ruta 3's. The canyon is north, up the path by the bridge.
-  // Rows from plans/phase2-region2.md §3.
   ruta5: {
     id: 'ruta5',
     name: 'Ruta 5',
@@ -772,7 +771,7 @@ export const MAPS: Record<string, MapDef> = {
     ground: 'grass',
     // You come up out of the cave's tunnel at the bottom (still walking up), go north through the pines,
     // then west over the ravine bridge. Villa Ocote (west) and the canyon (north) come in phase 2: until
-    // then the road worker and a hiker keep those roads closed. Rows from plans/phase2-region2.md §3.
+    // then the road worker and a hiker keep those roads closed.
     rows: [
       'TTTTTT^~~^TTTTTTTT==TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT',
       'TTTTTT^~~^TTTTTTTT==TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT',

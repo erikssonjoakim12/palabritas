@@ -1,7 +1,7 @@
 import { overlay, el } from '../engine/screen';
 import { input } from '../engine/input';
 import { sfx } from '../engine/sfx';
-import { CREATURE_ART } from '../art/creatures';
+import { creatureArt } from '../art/creatures';
 import { G, type Mon } from '../game/state';
 import { stats, monName } from '../game/mon';
 import { lealtad, levelProgress, isLearned, peekProg, isFading, OBEY_THRESHOLD } from '../game/learning';
@@ -18,7 +18,7 @@ export function spriteCanvas(sp: string, size = 48) {
   const g = c.getContext('2d')!;
   g.imageSmoothingEnabled = false;
   // Fit the sprite in the square without stretching it, standing on the bottom.
-  const img = CREATURE_ART[sp].front;
+  const img = creatureArt(sp).front;
   const k = size / Math.max(img.width, img.height);
   g.drawImage(img, Math.round((size - img.width * k) / 2), Math.round(size - img.height * k), img.width * k, img.height * k);
   return c;

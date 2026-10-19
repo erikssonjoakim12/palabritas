@@ -20,7 +20,7 @@ import { lucasStarter } from './region2';
 import { drill, teacher } from './school';
 
 /*
-  Region 3: the Pacific coast (plans/phase3-region3.md). Down Ruta 6 to the sea, along Ruta 7 to Playa Carey,
+  Region 3: the Pacific coast (PLAN_GYMS_2-4.md §3). Down Ruta 6 to the sea, along Ruta 7 to Playa Carey,
   la noche de la arribada on the turtle beach (Equipo Silencio and Callada), and Marina's surf school.
 */
 

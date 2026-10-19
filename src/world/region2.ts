@@ -18,7 +18,7 @@ import { teacher } from './school';
 
 /*
   Region 2: Villa Ocote, the town that lost its words, the Mina de Barro and Petra's gym.
-  The story (plans/phase2-region2.md §6): a message on the ground sends you to the mine; Equipo Silencio's
+  The story: a message on the ground sends you to the mine; Equipo Silencio's
   Capataz runs the Silenciador there; when it breaks, the town talks again and Petra opens her gym.
   While the town is muted (MapDef.muted), people only mime: the engine shows «…» instead of these scripts.
 */
@@ -130,7 +130,7 @@ async function notaCapataz() {
   refreshNpcs();
 }
 
-// ---------- The lost words (plans/phase2-region2.md §6.1) ----------
+// ---------- The lost words ----------
 
 /*
   When the Silenciador broke, eight words got lost on the way home. Each one belongs to one person in Villa

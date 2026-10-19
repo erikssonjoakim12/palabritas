@@ -5,9 +5,8 @@ const browser = await launch();
 const page = await newPage(browser);
 await page.goto(BASE + '/art.html', { waitUntil: 'networkidle0' });
 const size = await page.evaluate(async ([id, s]) => {
-  const { CREATURE_ART, buildCreatureArt } = await import('/src/art/creatures.ts');
-  buildCreatureArt();
-  const a = CREATURE_ART[id];
+  const { creatureArt } = await import('/src/art/creatures.ts');
+  const a = creatureArt(id);
   const c = document.createElement('canvas');
   c.width = (a.front.width + a.back.width + 4) * s; c.height = Math.max(a.front.height, a.back.height) * s;
   const g = c.getContext('2d'); g.imageSmoothingEnabled = false; g.fillStyle = '#f8f8f8'; g.fillRect(0, 0, c.width, c.height);

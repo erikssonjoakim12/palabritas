@@ -14,8 +14,8 @@ import { currentMap, type ScriptFn } from './world';
 import { lines, showCreature } from './scripts';
 
 /*
-  Studying outside battles: the reusable drill (the starter's first words, the school), and the school teacher
-  (plans/phase1-groundwork.md §9). Every town with a gym has a school, so these come back in every region:
+  Studying outside battles: the reusable drill (the starter's first words, the school), and the school teacher.
+  Every town with a gym has a school, so these come back in every region:
     REPASO: the words due for review (spaced repetition), most overdue first. Free; keeps loyalty up.
     CLASE PARTICULAR: one Palabrita's current level (new words, then its review). $200, once a day per school.
     TEMA DEL DÍA: 8 questions on the town's grammar topic (two topics, one each day).

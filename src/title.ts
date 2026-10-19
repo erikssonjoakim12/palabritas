@@ -2,7 +2,7 @@ import { W, H, overlay, el, setTextScale } from './engine/screen';
 import { setScene, nextFrame } from './engine/loop';
 import { input } from './engine/input';
 import { sfx, unlockAudio } from './engine/sfx';
-import { CREATURE_ART } from './art/creatures';
+import { creatureArt } from './art/creatures';
 import { G, hasSave, loadGame, newSave, deleteSave, saveGame } from './game/state';
 import { initSpeech } from './lang/speech';
 import { say, closeText } from './ui/textbox';
@@ -27,7 +27,7 @@ const titleScene = {
     const bob = (i: number) => Math.round(Math.sin(t / 15 + i * 2) * 2);
     // The three starters, standing on the grass (centered on x, feet at y).
     const stand = (sp: string, x: number, y: number) => {
-      const img = CREATURE_ART[sp].front;
+      const img = creatureArt(sp).front;
       g.drawImage(img, Math.round(x - img.width / 2), y - img.height);
     };
     stand('salchichita', 32, 104 + bob(0));

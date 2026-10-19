@@ -1,7 +1,7 @@
 import { W, H, overlay, el } from '../engine/screen';
 import { setScene, getScene, nextFrame, frames } from '../engine/loop';
 import { sfx } from '../engine/sfx';
-import { CREATURE_ART } from '../art/creatures';
+import { creatureArt } from '../art/creatures';
 import { OBJECTS } from '../art/chars';
 import { portrait } from '../art/portraits';
 import type { Img } from '../art/pixel';
@@ -108,8 +108,8 @@ function drawLineup(g: CanvasRenderingContext2D, team: Mon[], x: number, y: numb
 
 const fighter = (img: Img, x: number, y: number): Fighter => ({ img, x, y, blink: 0, sink: 0, hidden: false, lunge: 0 });
 /** The opponent's side shows Palabritas from the front, yours from the back. Both start off-screen. */
-const enemyFighter = (mon: Mon) => fighter(CREATURE_ART[mon.sp].front, -SLOT, ENEMY_POS.y);
-const myFighter = (mon: Mon) => fighter(CREATURE_ART[mon.sp].back, W, ME_POS.y);
+const enemyFighter = (mon: Mon) => fighter(creatureArt(mon.sp).front, -SLOT, ENEMY_POS.y);
+const myFighter = (mon: Mon) => fighter(creatureArt(mon.sp).back, W, ME_POS.y);
 
 async function lunge(f: Fighter, dir: number) {
   for (let i = 0; i <= 10; i++) {
@@ -330,7 +330,7 @@ async function runBattle(cfg: Config): Promise<BattleResult> {
     await info(`¿Qué? ¡${from} está evolucionando!`, { en: `What? ${from} is evolving!` });
     const to = SPECIES[mon.sp].evolves!.to;
     if (mon === me && meF) {
-      const [oldImg, newImg] = [CREATURE_ART[mon.sp].back, CREATURE_ART[to].back];
+      const [oldImg, newImg] = [creatureArt(mon.sp).back, creatureArt(to).back];
       for (let i = 0; i < 12; i++) {
         meF.img = i % 2 ? oldImg : newImg;
         sfx('blip');

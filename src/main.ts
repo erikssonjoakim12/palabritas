@@ -4,7 +4,6 @@ import { layout } from './engine/screen';
 import { initInput } from './engine/input';
 import { startLoop } from './engine/loop';
 import { buildObjects } from './art/chars';
-import { buildCreatureArt } from './art/creatures';
 import { registerScripts } from './world/scripts';
 import { runTitle } from './title';
 
@@ -67,7 +66,6 @@ if (document.fullscreenEnabled || root.webkitRequestFullscreen) {
 
 initInput();
 buildObjects();
-buildCreatureArt();
 registerScripts();
 startLoop();
 runTitle();
@@ -98,7 +96,7 @@ if (import.meta.env.DEV) {
   ]).then(([state, world, battle, mon, maps, textbox, species, content, curriculum, learning, tiles, creatures, people, trainers, items]) => {
     (window as any).__game = {
       ...state, ...world, ...battle, ...mon, ...maps,
-      fill: textbox.fill, SPECIES: species.SPECIES, TILES: tiles.TILES, CREATURE_ART: creatures.CREATURE_ART, LOOKS: people.LOOKS,
+      fill: textbox.fill, SPECIES: species.SPECIES, TILES: tiles.TILES, creatureArt: creatures.creatureArt, CREATURE_IDS: creatures.CREATURE_IDS, LOOKS: people.LOOKS,
       OBJECTS_ART: people.OBJECTS_ART, TRAINERS: trainers.TRAINERS, ITEM_DEFS: items.ITEM_DEFS, SHOPS: items.SHOPS,
       content, curriculum, learning,
     };

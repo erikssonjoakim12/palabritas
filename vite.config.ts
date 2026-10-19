@@ -25,6 +25,12 @@ function phoneQr(): Plugin {
 export default defineConfig(({ mode }) => ({
   base: './',
   // The game, plus the art review page (art.html) so the art can be checked on any device.
-  build: { rollupOptions: { input: { main: 'index.html', art: 'art.html' } } },
+  // The code both pages share is one chunk, named for what it is (the bundler would name it after any one file).
+  build: {
+    rollupOptions: {
+      input: { main: 'index.html', art: 'art.html' },
+      output: { chunkFileNames: (c) => (c.isDynamicEntry ? 'assets/[name]-[hash].js' : 'assets/shared-[hash].js') },
+    },
+  },
   plugins: mode === 'phone' ? [basicSsl(), phoneQr()] : [],
 }));

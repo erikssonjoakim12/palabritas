@@ -13,7 +13,7 @@ const report = await t.game(() => {
   const out = {};
   for (const sp of Object.values(g.SPECIES)) {
     const p = [];
-    if (!g.CREATURE_ART[sp.id]) p.push('no art');
+    if (!g.CREATURE_IDS.includes(sp.id)) p.push('no art');
     if (!g.content.THEMES[sp.theme]) p.push(`unknown theme ${sp.theme}`);
     if (sp.moves.length !== 4) p.push(`${sp.moves.length} moves`);
     if (sp.evolves && !g.SPECIES[sp.evolves.to]) p.push(`evolves into unknown ${sp.evolves.to}`);
