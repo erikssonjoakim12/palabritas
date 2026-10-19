@@ -64,11 +64,18 @@ const search = Object.assign(el('input'), { type: 'search', placeholder: 'Search
 const filter = el('select');
 filter.append(Object.assign(el('option', 'All lists'), { value: '' }));
 for (const t of lists) filter.append(Object.assign(el('option', t.name), { value: t.id }));
+// A level range (from-to); empty means any level. Topics have difficulty bands, not levels, so a range leaves them out.
+const maxLevel = Math.max(...lists.filter((t) => !isTopic(t.id)).map((t) => t.maxTier));
+const levelInput = (placeholder: string) => Object.assign(el('input'), { type: 'number', min: '2', max: String(maxLevel), placeholder, inputMode: 'numeric' });
+const levelFrom = levelInput('Nv');
+const levelTo = levelInput('Nv');
+const levels = el('label');
+levels.append('Levels ', levelFrom, ' – ', levelTo);
 const sharedOnly = Object.assign(el('input'), { type: 'checkbox' });
 const sharedLabel = el('label');
 sharedLabel.append(sharedOnly, ' shared only');
 const count = el('span', '', 'count');
-controls.append(search, filter, sharedLabel, count);
+controls.append(search, filter, levels, sharedLabel, count);
 root.append(controls);
 
 const table = el('table');
@@ -83,15 +90,20 @@ const rows = items.map((item) => {
   for (const { list, tier } of u) where_.append(el('span', where(list, tier), `chip${list === 'core' ? ' core' : isTopic(list) ? ' topic' : ''}`));
   tr.append(es, el('td', item.en), where_);
   table.append(tr);
-  return { tr, item, lists: new Set(u.map((x) => x.list)), text: plain(`${item.accept.join(' ')} ${item.en}`) };
+  return { tr, item, uses: u, lists: new Set(u.map((x) => x.list)), text: plain(`${item.accept.join(' ')} ${item.en}`) };
 });
 root.append(wrapped(table));
 
 function update() {
   const q = plain(search.value.trim());
+  const [from, to] = [Number(levelFrom.value) || 0, Number(levelTo.value) || Infinity];
+  const ranged = from > 0 || to < Infinity;
+  // A word matches if one of its places is in the chosen list (if any) and the level range (if any).
+  const placeOk = (p: { list: string; tier: number }) =>
+    (!filter.value || p.list === filter.value) && (!ranged || (!isTopic(p.list) && p.tier >= from && p.tier <= to));
   let shown = 0;
   for (const r of rows) {
-    const ok = (!q || r.text.includes(q)) && (!filter.value || r.lists.has(filter.value)) && (!sharedOnly.checked || r.lists.size > 1);
+    const ok = (!q || r.text.includes(q)) && r.uses.some(placeOk) && (!sharedOnly.checked || r.lists.size > 1);
     r.tr.hidden = !ok;
     if (ok) shown++;
   }
@@ -99,5 +111,7 @@ function update() {
 }
 search.addEventListener('input', update);
 filter.addEventListener('change', update);
+levelFrom.addEventListener('input', update);
+levelTo.addEventListener('input', update);
 sharedOnly.addEventListener('change', update);
 update();
