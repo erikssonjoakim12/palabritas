@@ -66,7 +66,11 @@ export const REGION1_MAPS: Record<string, MapDef> = {
     floor: '_',
     rows: ['LL##V###', '________', '__kk____', '__kk____', '________', 'B______P', '___m____'],
     exit: { to: 'amanecer', x: 11, y: 7 },
-    npcs: [{ id: 'mama', x: 1, y: 3, look: 'mom', dir: 'right', script: 'mama' }],
+    npcs: [
+      // Mom's hammock from Ciudad Chispa, with a sloth asleep in it (region4.ts).
+      { id: 'perezosito_hamaca', x: 1, y: 4, object: 'perezosito', script: 'perezositoHamaca', show: () => flag('hamacaEntregada') && !flag('perezosito') },
+      { id: 'mama', x: 1, y: 3, look: 'mom', dir: 'right', script: 'mama' },
+    ],
   },
 
   lab: {

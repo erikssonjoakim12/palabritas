@@ -1,6 +1,9 @@
 # Phase 4 — Region 4: volcanoes and dry forest (Playa Carey → Ciudad Chispa, gym 4)
 
-**Goal:** you can play from the Medalla Ola to the **Medalla Chispa**.
+**Goal:** you can play from the Medalla Ola to the **Medalla Chispa**. ✓ **Built** (2026-10-19), in 4 stages.
+As built: the code is the truth (src/world/maps/region4.ts, src/world/region4.ts); the main differences from below:
+no bandana head (cutters wear straw hats), the festival can be replayed from the mask seller for the Torovenado,
+and Elsa offers the rest (the bed) by talking to her.
 
 **The route:**
 1. East on Ruta 8, through hot dry forest, past a lagoon, a farm and sugarcane fields.

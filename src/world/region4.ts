@@ -1,6 +1,11 @@
 import { sfx } from '../engine/sfx';
 import { frames } from '../engine/loop';
 import { G, flag, setFlag } from '../game/state';
+import { addItem, takeItem, itemCount, money } from '../game/bag';
+import { giveMon } from '../game/mon';
+import { itemBySpanish, adHocItem } from '../data/content';
+import { challenge, chooseText } from '../ui/challenge';
+import { wildBattle } from '../battle/battle';
 import { SPECIES } from '../data/species';
 import { TRAINERS } from '../data/trainers';
 import { trainerBattle } from '../battle/battle';
@@ -10,7 +15,7 @@ import { launchFirework } from '../art/fireworks';
 import { warp, refreshNpcs, walkNpc, fadeOut, type ScriptFn, type ScriptCtx } from './world';
 import type { Line } from './maps';
 import { TORCHES } from './maps/region4';
-import { lines, trainerFight, blackout, heal } from './scripts';
+import { lines, trainerFight, blackout, heal, talkMode } from './scripts';
 import { lucasStarter } from './region2';
 import { teacher } from './school';
 
@@ -19,7 +24,8 @@ import { teacher } from './school';
   (getting ready for its festival), the Volcán Chocoyo, and Ruta 9 home to Pueblo Amanecer.
   The story: the fireworks are stolen when you arrive; you get them back from Don Sigilo in the crater (Lucas
   battles you at the rangers' station on the way), the festival night follows, then Don Tizón's torch puzzle and
-  battle. The side quests come next.
+  battle. Side quests: a hammock for Mom (bargaining), the lost parakeet chick, the haunted house's lamp, the
+  Torovenado costume, and the legend of the Carreta Nagua.
 */
 
 /** Lines said by someone other than the person you talked to (Don Tizón in a cutscene...). */
@@ -65,6 +71,12 @@ async function elsa() {
   if (!flag('elsaHablada')) {
     await lines(['Soy Elsa, guardaparque del volcán. ¡Qué valiente eres, subiendo con tanto humo!', 'I’m Elsa, the volcano’s park ranger. You’re so brave, climbing with all this smoke!']);
     setFlag('elsaHablada');
+  }
+  if (!flag('chocoyitoBusca')) await chocoyitoBusca();
+  else if (flag('chocoyitoDone') && !flag('chocoyitoPremio')) {
+    await lines(['¡Gracias por salvar al chocoyito! Toma, para que las Palabritas salvajes no te molesten.', 'Thanks for saving the baby parakeet! Here, so wild Palabritas don’t bother you.']);
+    setFlag('chocoyitoPremio');
+    await gift('repelente', 5, 'cinco Repelentes', 'five Repels');
   }
   if (!(await ask('¿Estás cansad{o/a}? ¿Quieres descansar en la cama?', { en: 'Are you tired? Do you want to rest on the bed?' }))) return lines(['¡Ten cuidado allá arriba!', 'Be careful up there!']);
   await heal();
@@ -138,6 +150,8 @@ async function festival() {
   const loop: ('up' | 'down' | 'left' | 'right')[] = [...Array(5).fill('right'), ...Array(3).fill('down'), ...Array(5).fill('left'), ...Array(3).fill('up')];
   const from = (i: number) => [...loop.slice(i), ...loop.slice(0, i)];
   await Promise.all([walkNpc('bailarina1', from(0)), walkNpc('bailarin1', from(5)), walkNpc('bailarina2', from(8)), walkNpc('bailarin2', from(13))]);
+  if (flag('torovenadoListo') && !flag('venaditoRecibido')) await torovenadoDance();
+  if (flag('fiestaDone')) return;
   await as('tizon', ['¡Mira, {name}! ¡Este cohete es para ti!', 'Look, {name}! This rocket is for you!']);
   launchFirework(true);
   sfx('levelup');
@@ -218,6 +232,249 @@ async function vueltaACasa() {
   );
   await heal();
   await info('Tus Palabritas se recuperaron.', { en: 'Your Palabritas recovered.' });
+  if (itemCount('hamaca')) await hamacaParaMama();
+}
+
+// ---------- Side quests ----------
+
+const shuffled = <T>(xs: T[]) => [...xs].sort(() => Math.random() - 0.5);
+/** A multiple-choice question: true when the right answer (the first option) is picked. */
+async function question(label: string, en: string, right: string, wrong: string[]) {
+  const options = shuffled([right, ...wrong]);
+  return options[await chooseText(label, en, options)] === right;
+}
+const gift = async (id: string, n: number, es: string, en: string) => {
+  addItem(id, n);
+  sfx('caught');
+  await info(`¡{name} recibió ${es}!`, { en: `{name} received ${en}!` });
+};
+/** A real content item when there is one (answering counts toward mastery), else a one-off. */
+const item = (es: string, en: string) => itemBySpanish(es) ?? adHocItem([es], en);
+
+// ----- Una hamaca para mamá: bargaining in Spanish, then Mom, then the sloth asleep in it -----
+
+const PRICES = [900, 750, 600, 500];
+const GOOD = ['¡Es muy caro!', '¿Me hace un descuento?', '¿Me la deja en quinientos?'];
+const RUDE = ['¡Dame la hamaca!', 'No me gustan las hamacas.', '¡Qué hamaca tan fea!'];
+const BUY = 'Me la llevo.';
+const LEAVE = 'Mejor no, gracias.';
+
+async function hamaquera() {
+  if (flag('hamacaComprada')) return lines(['¿Le gustó la hamaca a tu mamá? ¡Son las mejores de Masaya!', 'Did your mom like the hammock? They’re the best in Masaya!']);
+  await lines(['¡Hamacas, hamacas! Hechas a mano aquí en Ciudad Chispa. ¿Te gusta esta?', 'Hammocks, hammocks! Handmade here in Ciudad Chispa. Do you like this one?']);
+  let step = 0;
+  for (let turn = 0; ; turn++) {
+    const price = PRICES[step];
+    await lines([`Cuesta ${price} córdobas.`, `It costs ${price} córdobas (${price} in the game).`]);
+    const options = shuffled([GOOD[turn % GOOD.length], RUDE[turn % RUDE.length], BUY, LEAVE]);
+    const said = options[await chooseText('¿Qué le dices?', 'What do you say? (Bargain politely to lower the price.)', options)];
+    if (said === LEAVE) return lines(['¡Aquí estoy si cambias de idea!', 'I’m here if you change your mind!']);
+    if (RUDE.includes(said)) {
+      await lines(['¡Qué maleducad{o/a}! Así no se habla.', 'How rude! That’s no way to talk.']);
+      continue;
+    }
+    if (said === BUY) {
+      if (G.save.money < price) return lines(['No tienes suficiente dinero. ¡Vuelve cuando tengas más!', 'You don’t have enough money. Come back when you have more!']);
+      G.save.money -= price;
+      sfx('caught');
+      addItem('hamaca');
+      setFlag('hamacaComprada');
+      await info(`¡{name} compró la hamaca por ${money(price)}!`, { en: `{name} bought the hammock for ${money(price)}!` });
+      return lines(['Es para tu mamá, ¿verdad? ¡Qué lindo!', 'It’s for your mom, right? How sweet!']);
+    }
+    if (step === PRICES.length - 1) {
+      await lines(['¡No, no! Quinientos es mi último precio.', 'No, no! Five hundred is my final price.']);
+      continue;
+    }
+    step++;
+    await lines(['Mmm... Bueno, porque eres muy amable.', 'Hmm... OK, because you’re very polite.']);
+  }
+}
+
+/** Mom gets the hammock (talking to her, or coming home over the plateau). */
+export async function hamacaParaMama() {
+  setSpeaker('mom');
+  await lines(
+    ['¿Una hamaca? ¿De Ciudad Chispa? ¡Qué bonita! La voy a colgar en tu cuarto.', 'A hammock? From Ciudad Chispa? How pretty! I’ll hang it in your room.'],
+    ['Toma, para tu viaje.', 'Here, for your trip.'],
+  );
+  setSpeaker();
+  takeItem('hamaca');
+  setFlag('hamacaEntregada');
+  await gift('superpocion', 3, 'tres Superpociones', 'three Super Potions');
+}
+
+async function perezositoHamaca() {
+  await info('¡La hamaca está roncando! ¿Qué es eso?', { en: 'The hammock is snoring! What’s that?' });
+  sfx('alert');
+  await lines(['¡Hay un perezoso dormido en la hamaca!', 'There’s a sloth asleep in the hammock!']);
+  const res = await wildBattle('perezosito', 22);
+  if (res === 'lose') return blackout();
+  if (res === 'run') return;
+  setFlag('perezosito');
+  refreshNpcs();
+}
+
+// ----- El chocoyito perdido: directions from the ranger, the lava tube, the nest -----
+
+async function chocoyitoBusca() {
+  await lines(
+    ['¡Ay! Un chocoyito bebé se cayó del nido. Creo que está dentro del tubo de lava.', 'Oh! A baby parakeet fell out of its nest. I think it’s inside the lava tube.'],
+    ['Entras, vas a la izquierda y sigues hacia arriba. Está en un rincón oscuro.', 'You go in, go left and keep going up. It’s in a dark corner.'],
+  );
+  while (!(await question('¿Dónde está el chocoyito?', 'Where is the baby parakeet?', 'En el tubo de lava, a la izquierda', ['En la laguna', 'En el taller']))) {
+    await lines(['No, no. Escucha otra vez: en el tubo de lava, a la izquierda.', 'No, no. Listen again: in the lava tube, on the left.']);
+  }
+  setFlag('chocoyitoBusca');
+  refreshNpcs();
+  await lines(['¡Eso! Su nido está en el cráter, del lado este.', 'That’s it! Its nest is in the crater, on the east side.']);
+}
+
+async function chocoyitoBebe() {
+  await info('¡Pío, pío!', { en: 'Cheep, cheep!' });
+  addItem('chocoyitoBebe');
+  setFlag('chocoyitoEncontrado');
+  sfx('caught');
+  refreshNpcs();
+  await info('¡{name} encontró al chocoyito bebé!', { en: '{name} found the baby parakeet!' });
+}
+
+async function nidoChocoyos() {
+  if (!itemCount('chocoyitoBebe')) return lines(['Un nido de chocoyos. ¡Pío, pío!', 'A parakeets’ nest. Cheep, cheep!']);
+  if (!(await ask('¿Pones al chocoyito en el nido?', { en: 'Put the baby parakeet in the nest?' }))) return;
+  takeItem('chocoyitoBebe');
+  setFlag('chocoyitoDone');
+  sfx('heal');
+  await info('¡Su mamá está feliz!', { en: 'Its mom is happy!' });
+}
+
+// ----- La casa embrujada: the lamp whispers its feelings; you repeat them -----
+
+const LAMP = [
+  ['Estoy muy triste', 'I’m very sad'],
+  ['Me siento solo', 'I feel lonely'],
+  ['Tengo miedo de la oscuridad', 'I’m afraid of the dark'],
+];
+
+async function duenoEmbrujada() {
+  if (flag('lamparaCalmada') && !flag('embrujadaPagada')) {
+    await lines(['¡Gracias! Ya puedo dormir en mi casa.', 'Thanks! Now I can sleep in my house.']);
+    G.save.money += 500;
+    setFlag('embrujadaPagada');
+    sfx('caught');
+    return info(`¡{name} recibió ${money(500)}!`, { en: `{name} received ${money(500)}!` });
+  }
+  if (flag('embrujadaPagada')) return lines(['Mi casa está tranquila otra vez. ¡Gracias!', 'My house is quiet again. Thanks!']);
+  await lines(
+    ['Mi casa vieja está embrujada. De noche se mueven los muebles... ¡y una lámpara llora!', 'My old house is haunted. At night the furniture moves... and a lamp cries!'],
+    ['Si la calmas, te pago quinientos.', 'If you calm it, I’ll pay you five hundred.'],
+    ['La casa está en la esquina, al sur de la escuela.', 'The house is on the corner, south of the school.'],
+  );
+  setFlag('embrujadaHablada');
+}
+
+async function lampara() {
+  await info('La lámpara te habla en voz muy baja...', { en: 'The lamp speaks to you very quietly...' });
+  for (const [es, en] of LAMP) {
+    while (true) {
+      const r = await challenge({ item: item(es, en), mode: 'listen', title: '🏮 La lámpara', label: 'La lámpara susurra. Escribe lo que dice. · The lamp whispers. Write what it says.' });
+      if (r.grade !== 'wrong') break;
+      await info('La lámpara suspira...', { en: 'The lamp sighs...' });
+    }
+    await info('La lámpara brilla un poco más...', { en: 'The lamp glows a little brighter...' });
+  }
+  await info('¡La lámpara ya no está triste! Ahora brilla de color rojo... ¿está enojada? ¡No, quiere jugar!', {
+    en: 'The lamp isn’t sad anymore! Now it’s glowing red... is it angry? No, it wants to play!',
+  });
+  const res = await wildBattle('lamparita', 23);
+  if (res === 'lose') return blackout();
+  setFlag('lamparaCalmada');
+  refreshNpcs();
+}
+
+// ----- Los trajes del Torovenado: five people found the costume's pieces; name each one -----
+
+/** A piece of the costume, who holds it, and what they say otherwise. */
+interface Piece {
+  id: string;
+  es: string;
+  en: string;
+  who: Line;
+}
+const PIECES: Piece[] = [
+  { id: 'sombrero', es: 'el sombrero', en: 'the hat', who: ['Esta semana son las fiestas patronales. ¡Me encanta mi vestido azul!', 'This week is the patron saint festival. I love my blue dress!'] },
+  { id: 'capa', es: 'la capa', en: 'the cape', who: ['¡Esta noche hay cohetes! ¡Bum, bum, bum!', 'Tonight there are rockets! Boom, boom, boom!'] },
+  { id: 'botas', es: 'las botas', en: 'the boots', who: ['¿Un vigorón? Yuca, chicharrón y ensalada de repollo. ¡Riquísimo!', 'A vigorón? Cassava, pork rinds and cabbage salad. Delicious!'] },
+  { id: 'mascara', es: 'la máscara', en: 'the mask', who: ['Bienvenid{o/a} a la iglesia. Las campanas suenan todos los domingos.', 'Welcome to the church. The bells ring every Sunday.'] },
+  { id: 'falda', es: 'la falda', en: 'the skirt', who: ['En el mercado siempre pido un descuento. ¡Es parte de la diversión!', 'At the market I always ask for a discount. It’s part of the fun!'] },
+];
+const piecesFound = () => PIECES.filter((p) => flag(`traje:${p.id}`)).length;
+
+/** Someone holding a piece of the costume: name it in Spanish and they give it to you. */
+const holder = (piece: Piece): ScriptFn => async () => {
+  if (!flag('torovenado') || flag(`traje:${piece.id}`)) return lines(piece.who);
+  await lines(['¡Hola! ¿Qué buscas?', 'Hi! What are you looking for?']);
+  const r = await challenge({ item: item(piece.es, piece.en), mode: talkMode(), title: '🎭 El Torovenado', label: '¿Qué pieza del traje buscas? · Which costume piece are you looking for?' });
+  if (r.grade === 'wrong') return lines(['Mmm, no tengo eso.', 'Hmm, I don’t have that.']);
+  setFlag(`traje:${piece.id}`);
+  addItem('traje');
+  sfx('caught');
+  await lines(['¡Aquí está! Para el Torovenado.', 'Here it is! For the Torovenado.']);
+  if (piecesFound() === PIECES.length) await info('¡Tienes las cinco piezas! Llévaselas al vendedor de máscaras.', { en: 'You have all five pieces! Take them to the mask seller.' });
+};
+
+async function mascarero() {
+  if (!flag('cohetesRecuperados')) return lines(['Máscaras de toro, de venado, de diablito... ¡Para el desfile del Torovenado!', 'Bull masks, deer masks, little devil masks... For the Torovenado parade!']);
+  if (!flag('torovenado')) {
+    await lines(
+      ['¡Ay, el traje del Torovenado se perdió en el robo! La gente del pueblo encontró las piezas...', 'Oh, the Torovenado costume got lost in the theft! The townspeople found the pieces...'],
+      ['La señora del vestido azul tiene el sombrero. El niño de la plaza tiene la capa.', 'The lady in the blue dress has the hat. The boy in the square has the cape.'],
+      ['La señora de la fritanga tiene las botas. El sacristán de la iglesia tiene la máscara.', 'The fritanga lady has the boots. The church sexton has the mask.'],
+      ['La niña de la escuela tiene la falda.', 'The girl at the school has the skirt.'],
+    );
+    return setFlag('torovenado');
+  }
+  if (piecesFound() < PIECES.length) return lines([`Tienes ${piecesFound()} de 5 piezas. ¡Sigue buscando!`, `You have ${piecesFound()} of 5 pieces. Keep looking!`]);
+  if (!flag('torovenadoListo')) {
+    setFlag('torovenadoListo');
+    await lines(['¡El traje está completo! Esta noche, ¡tú vas a bailar en el desfile!', 'The costume is complete! Tonight, you’re going to dance in the parade!']);
+  }
+  if (flag('venaditoRecibido')) return lines(['¡Bailaste muy bien en el desfile!', 'You danced really well in the parade!']);
+  if (!flag('fiestaDone')) return lines(['¡Te veo en el desfile!', 'See you at the parade!']);
+  if (await ask('¡Esta noche hay otro desfile! ¿Vamos?', { en: 'There’s another parade tonight! Shall we go?' })) await festival();
+}
+
+/** At the festival, with the costume: you dance, and the mask seller's fawn comes with you. */
+async function torovenadoDance() {
+  await info('¡{name} baila en el desfile con el traje del Torovenado!', { en: '{name} dances in the parade in the Torovenado costume!' });
+  sfx('levelup');
+  await as('man', ['¡Qué bien bailaste! Este venadito no se quiere separar de ti. ¡Llévatelo!', 'You danced so well! This little fawn doesn’t want to leave you. Take it with you!']);
+  const where = giveMon('venadito', 20);
+  setFlag('venaditoRecibido');
+  sfx('caught');
+  await info('¡{name} recibió a Venadito!', { en: '{name} received Venadito!' });
+  if (where === 'box') await info('Tu equipo está lleno: Venadito fue a la Caja de Palabritas.', { en: 'Your team is full: Venadito went to the storage box.' });
+}
+
+// ----- La leyenda de la Carreta Nagua: a story in the past tense, then three questions -----
+
+async function abueloLeyenda() {
+  if (flag('leyenda')) return lines(['De noche, si oyes una carreta... ¡no salgas a la calle!', 'At night, if you hear a cart... don’t go out into the street!']);
+  if (!(await ask('¿Quieres oír una leyenda? Es un poco de miedo...', { en: 'Want to hear a legend? It’s a little scary...' }))) return lines(['Otro día, entonces.', 'Another day, then.']);
+  await lines(
+    ['Hace muchos años, en las noches oscuras, la gente oía un ruido en la calle.', 'Many years ago, on dark nights, people heard a noise in the street.'],
+    ['Era una carreta vieja, tirada por dos bueyes flacos.', 'It was an old cart, pulled by two thin oxen.'],
+    ['La manejaba la Muerte, y nadie se atrevía a mirarla.', 'Death drove it, and nobody dared to look at it.'],
+    ['Por eso, cuando oyes una carreta de noche, ¡no salgas a la calle!', 'That’s why, when you hear a cart at night, don’t go out into the street!'],
+  );
+  const right =
+    (await question('¿Qué oía la gente?', 'What did people hear?', 'Un ruido en la calle', ['Una canción', 'Un perro'])) &&
+    (await question('¿Qué tiraba la carreta?', 'What pulled the cart?', 'Dos bueyes flacos', ['Un caballo', 'Nada'])) &&
+    (await question('¿Qué no debes hacer?', 'What mustn’t you do?', 'Salir a la calle', ['Dormir', 'Comer']));
+  if (!right) return lines(['Mmm... ¿estabas escuchando? Vuelve y te la cuento otra vez.', 'Hmm... were you listening? Come back and I’ll tell it again.']);
+  await lines(['¡Pusiste mucha atención! Toma esta campanita. Dicen que espanta a los fantasmas.', 'You paid close attention! Take this little bell. They say it scares ghosts away.']);
+  setFlag('leyenda');
+  await gift('campanita', 1, 'una Campanita', 'a Little bell');
 }
 
 const talk = (...ls: Line[]): ScriptFn => () => lines(...ls);
@@ -247,6 +504,21 @@ export const REGION4: Record<string, ScriptFn> = {
   ),
   vueltaACasa,
 
+  // ---------- Side quests ----------
+  hamaquera,
+  perezositoHamaca,
+  chocoyitoBebe,
+  nidoChocoyos,
+  dueno_embrujada: duenoEmbrujada,
+  lampara,
+  mascarero,
+  senora_azul: holder(PIECES[0]),
+  nino_plaza: holder(PIECES[1]),
+  fritanguera: holder(PIECES[2]),
+  sacristan: holder(PIECES[3]),
+  nina_escuela_chispa: holder(PIECES[4]),
+  abuelo_leyenda: abueloLeyenda,
+
   // ---------- Trainers ----------
   polvorera: fight('polvorera', ['Hago cohetes de todos los colores. ¿Cuál te gusta más?', 'I make rockets in every color. Which one do you like best?'], ['¡Me salió un cohete apagado!', 'My rocket fizzled out!'], ['El rojo es el más difícil de hacer.', 'Red is the hardest to make.']),
   malabarista: fight('malabarista', ['¡Hago malabares con fuego! ¿Ves? ¡Ups!', 'I juggle with fire! See? Oops!'], ['¡Se me cayeron todas las antorchas!', 'I dropped all my torches!'], ['Para ganar, como en los malabares: práctica, práctica, práctica.', 'To win, it’s like juggling: practice, practice, practice.']),
@@ -272,21 +544,7 @@ export const REGION4: Record<string, ScriptFn> = {
 
   // ---------- People ----------
   vaca: talk(['¡Muuu!', 'Moo!']),
-  hamaquera: talk(['¡Hamacas, hamacas! Hechas a mano aquí en Ciudad Chispa.', 'Hammocks, hammocks! Handmade here in Ciudad Chispa.']),
-  mascarero: talk(['Máscaras de toro, de venado, de diablito... ¡Para el desfile del Torovenado!', 'Bull masks, deer masks, little devil masks... For the Torovenado parade!']),
-  fritanguera: talk(['¿Un vigorón? Yuca, chicharrón y ensalada de repollo. ¡Riquísimo!', 'A vigorón? Cassava, pork rinds and cabbage salad. Delicious!']),
-  senora_azul: talk(['Esta semana son las fiestas patronales. ¡Me encanta mi vestido azul!', 'This week is the patron saint festival. I love my blue dress!']),
-  nino_plaza: talk(['¡Esta noche hay cohetes! ¡Bum, bum, bum!', 'Tonight there are rockets! Boom, boom, boom!']),
   hija_tizon: talk(['Mi papá hace los mejores cohetes de Nicaragua. ¡Cuando explotan parecen flores!', 'My dad makes the best rockets in Nicaragua. When they burst they look like flowers!']),
-  dueno_embrujada: talk(['Mi casa vieja está embrujada. De noche se mueven los muebles... ¡y una lámpara llora!', 'My old house is haunted. At night the furniture moves... and a lamp cries!']),
-  sacristan: talk(['Bienvenid{o/a} a la iglesia. Las campanas suenan todos los domingos.', 'Welcome to the church. The bells ring every Sunday.']),
   maestro_chispa: teacher(['compras', 'pasado']),
-  nina_escuela_chispa: talk(['En el mercado siempre pido un descuento. ¡Es parte de la diversión!', 'At the market I always ask for a discount. It’s part of the fun!']),
   alumno_chispa: talk(['Ayer fui al volcán con mi papá. ¡Vimos mucho humo!', 'Yesterday I went to the volcano with my dad. We saw lots of smoke!']),
-  abuelo_leyenda: () =>
-    lines(
-      flag('leyenda')
-        ? ['De noche, si oyes una carreta... ¡no salgas a la calle!', 'At night, if you hear a cart... don’t go out into the street!']
-        : ['Este camino es muy viejo. Mi abuelo me contaba leyendas de aquí.', 'This road is very old. My grandfather used to tell me legends from here.'],
-    ),
 };

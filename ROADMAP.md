@@ -1,7 +1,7 @@
 # Palabritas — roadmap
 
 Where the game is going: mechanics, world, gyms, and what you learn along the way.
-Status: **gyms 1–3 are playable** (✓ marks what's built). Next: region 4 and gym 4 ([plans/](plans/README.md)).
+Status: **gyms 1–4 are playable** (✓ marks what's built). Next: polish ([plans/phase5-polish.md](plans/phase5-polish.md)).
 Learning details: [LEARNING_PLAN.md](LEARNING_PLAN.md).
 
 ## 1. Built so far ✓
@@ -9,8 +9,9 @@ Learning details: [LEARNING_PLAN.md](LEARNING_PLAN.md).
 - **Mechanics:** 50/50 critical hits on perfect answers; male and female voices; boy or girl (the Spanish
   adapts: «¿Estás lista?»); evolutions mid-battle; storage box, items, gifts, fishing, rematches (a small «!»),
   schools with lessons and REPASO; gate guards, ledges, caves with ladders, currents.
-- **World:** Pueblo Amanecer to Playa Carey: Rutas 1–7, the Cueva del Eco, Villa Ocote and its mine, the
-  Cañón del Guardabarranco, Playa Carey and the turtle beach. Rival Lucas (twice) and Equipo Silencio.
+- **World:** the whole loop, Pueblo Amanecer to Ciudad Chispa and home: Rutas 1–9, the Cueva del Eco, Villa
+  Ocote and its mine, the Cañón del Guardabarranco, Playa Carey and the turtle beach, Ciudad Chispa and the
+  Volcán Chocoyo. Rival Lucas (three times) and Equipo Silencio up to Don Sigilo.
 - **Day and night** by the phone's clock (golden at 18, night from 19, morning by 7), with lit windows, plus
   story night scenes.
 - **Paused:** the bus (fast travel), until there are big roads.
@@ -62,7 +63,7 @@ Route trainers sit between the previous leader and the next one.
 | 1 ✓ | Ciudad Brisa | Volador (birds) | 2 | 12 | 3-6 |
 | 2 ✓ | Villa Ocote, a pine-highland town past the cave | Roca / Tierra | 3 | 21 | 12-18 |
 | 3 ✓ | Playa Carey, a fishing village on the Pacific | Agua | 3 | 25 | 17-21 |
-| 4 | Ciudad Chispa, the volcano town | Fuego | 3 | 32 | 18-26 |
+| 4 ✓ | Ciudad Chispa, the volcano town | Fuego | 3 | 32 | 18-26 |
 | 5 | rainforest town | Planta / Veneno | 3-4 | 37 | 28-34 |
 | 6 | the lake archipelago, stormy | Eléctrico | 4 | 43 | 34-40 |
 | 7 | cloud-forest highlands | Psíquico (emotions) | 4 | 50 | 40-47 |
@@ -105,7 +106,7 @@ themes grow from the creatures, as you said.
 
 ## 6. Order of work
 
-1. **Region 4 and gym 4** (the volcanoes, Ciudad Chispa, Lucas #3, Don Sigilo): [plans/phase4-region4.md](plans/phase4-region4.md).
+1. ✓ **Region 4 and gym 4** (the volcanoes, Ciudad Chispa, Lucas #3, Don Sigilo).
 2. **Polish** (a full playthrough test, the pace check): [plans/phase5-polish.md](plans/phase5-polish.md).
 3. Then gyms 5–8 (§4), with the B1 Spanish (§5), planned the same way as gyms 2–4
    ([PLAN_GYMS_2-4.md](PLAN_GYMS_2-4.md)).

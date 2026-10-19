@@ -2,8 +2,8 @@
 
 Everything between the Breeze Medal and the fourth medal: places, story, side quests, Palabritas,
 evolutions, Spanish, new systems and the order to build it in. Built phase by phase from the detailed specs in
-[plans/](plans/README.md), with a playable game after every phase. **Status:** regions 2 and 3 are built (§2, §3);
-region 4 is next ([plans/phase4-region4.md](plans/phase4-region4.md)).
+[plans/](plans/README.md), with a playable game after every phase. **Status:** regions 2, 3 and 4 are built
+(region 4 as in [plans/phase4-region4.md](plans/phase4-region4.md)). Next: polish (plans/phase5-polish.md).
 Big picture: [ROADMAP.md](ROADMAP.md) · learning rules: [LEARNING_PLAN.md](LEARNING_PLAN.md) · animals: [BIOMES.md](BIOMES.md).
 
 **At a glance**

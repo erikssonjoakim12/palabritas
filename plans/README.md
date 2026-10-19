@@ -11,7 +11,7 @@ plans/", and it reads:
 | Phase | File | Ends with |
 |---|---|---|
 | 1–3 | built ✓ (their specs were removed: the code is the truth, and git history has them) | the groundwork, the pine highlands (Medalla Barro), the Pacific coast (Medalla Ola) |
-| 4 | [phase4-region4.md](phase4-region4.md) | volcanoes and dry forest: playable to the Medalla Chispa |
+| 4 | built ✓ ([phase4-region4.md](phase4-region4.md), kept for its decisions) | volcanoes and dry forest: playable to the Medalla Chispa |
 | 5 | [phase5-polish.md](phase5-polish.md) | a full playthrough test, the pace check, docs, the art brief |
 
 **Shared:**

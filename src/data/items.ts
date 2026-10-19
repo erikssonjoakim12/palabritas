@@ -42,6 +42,8 @@ export const ITEM_DEFS: Record<string, ItemDef> = {
   hamaca: key('hamaca', 'Hamaca', 'Hammock', true),
   chocoyitoBebe: key('chocoyitoBebe', 'Chocoyito bebé', 'Baby Chocoyito'),
   traje: key('traje', 'Pieza del traje', 'Costume piece', true),
+  /** The Carreta Nagua legend's reward: no use yet (a teaser for later). */
+  campanita: key('campanita', 'Campanita', 'Little bell', true),
   palabras: { ...key('palabras', 'Palabras perdidas', 'Lost words', true), use: 'verPalabras' },
 };
 

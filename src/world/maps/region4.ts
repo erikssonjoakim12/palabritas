@@ -275,6 +275,7 @@ export const REGION4_MAPS: Record<string, MapDef> = {
       '___d____',
     ],
     doors: [{ x: 3, y: 6, to: 'casa_embrujada', tx: 4, ty: 1, dir: 'down' }],
+    npcs: [{ id: 'lampara', x: 3, y: 1, object: 'lampara', script: 'lampara', show: () => !flag('lamparaCalmada') }],
     encounters: { rate: 0.1, everywhere: true, table: [{ sp: 'cojincito', min: 20, max: 22, w: 70 }, { sp: 'sillon', min: 22, max: 24, w: 30 }] },
   },
 
@@ -499,6 +500,7 @@ export const REGION4_MAPS: Record<string, MapDef> = {
     npcs: [
       { id: 'vulcanologo2', x: 33, y: 12, look: 'vulcanologo', dir: 'left', script: 'vulcanologo2', sight: 3 },
       itemBall('revivir_tubo', 36, 17, 'revivir'),
+      { id: 'chocoyito_bebe', x: 5, y: 10, object: 'chocoyitoBebe', script: 'chocoyitoBebe', show: () => flag('chocoyitoBusca') && !flag('chocoyitoEncontrado') },
     ],
   },
   // The crater: a walkway of ash around the lava lake. Parakeets nest on the east side; Equipo Silencio camps on
@@ -547,6 +549,7 @@ export const REGION4_MAPS: Record<string, MapDef> = {
       { id: 'sigilo', x: 16, y: 3, look: 'sigilo', dir: 'down', script: 'sigilo', sight: 1, show: () => !flag('sigiloSeFue') },
       { id: 'cohetes1', x: 14, y: 2, object: 'cajaCohetes', script: 'cohetes', show: () => !flag('cohetesRecuperados') },
       { id: 'cohetes2', x: 18, y: 2, object: 'cajaCohetes', script: 'cohetes', show: () => !flag('cohetesRecuperados') },
+      { id: 'nido_chocoyos', x: 30, y: 12, object: 'nido', script: 'nidoChocoyos' },
     ],
   },
 };

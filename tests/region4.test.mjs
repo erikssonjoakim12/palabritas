@@ -24,7 +24,7 @@ t.check('the fireworks are stolen as you arrive, and the volcano trail opens', (
 await t.fromSave({ map: 'estacion', x: 4, y: 6, dir: 'up', party, flags: { cohetesRobados: true }, starterPicked: 'aguacatito' });
 await t.walk('up', 1);
 await t.play();
-r = await talk('estacion', 5, 4, 'up');
+r = await talk('estacion', 5, 4, 'up', { choose: (opts) => (opts.includes('Sí') ? 'Sí' : undefined), choices: ['En el tubo'] });
 const s = await t.save();
 t.check('resting at the station heals you there', s.flags.descansoVolcan && s.heal.map === 'estacion', s.heal);
 t.check('then Lucas battles you with his evolved starter', s.flags.lucas3 && r.said.some((x) => x.includes('Hamburguesón')), r.said.filter((x) => x.includes('envía')));

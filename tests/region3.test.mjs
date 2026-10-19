@@ -4,7 +4,8 @@
 import { start } from './lib.mjs';
 
 const t = await start('region3');
-const party = [['nubarron', 32], ['aguacatono', 32]];
+// Level 35: since Nubarrón became Agua/Eléctrico, Callada's Petroglifón (Tierra) hits it twice as hard.
+const party = [['nubarron', 35], ['aguacatono', 35]];
 const flags = async () => (await t.save()).flags;
 const talk = async (map, x, y, dir, opts) => {
   await t.warp(map, x, y, dir);
