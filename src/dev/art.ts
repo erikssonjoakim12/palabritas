@@ -9,7 +9,7 @@ import { MAPS, type MapDef } from '../world/maps';
 import { worldLayout } from '../world/layout';
 import { LOOKS } from '../style/people';
 import { PALETTE } from '../style/colors';
-import { SPECIES } from '../data/species';
+import { SPECIES, DEX_ORDER } from '../data/species';
 import type { Img } from '../art/pixel';
 
 const root = document.getElementById('art')!;
@@ -49,7 +49,12 @@ function card(grid: HTMLElement, label: string, images: Img[], scale: number) {
 buildCreatureArt();
 
 const mons = section('Palabritas', 'Front (the opponent sees this) and back (yours in battle). Palabritas with hand-made art (style/palabritas.ts) have a real back view; the others use their mirrored front.');
-for (const [id, art] of Object.entries(CREATURE_ART)) card(mons, SPECIES[id]?.name ?? `${id[0].toUpperCase()}${id.slice(1)} (art only)`, [art.front, art.back], 3);
+// In dex order (with the dex's numbers), then art that isn't in the game yet.
+const dexNo = (id: string) => (DEX_ORDER.includes(id) ? DEX_ORDER.indexOf(id) : DEX_ORDER.length);
+for (const id of Object.keys(CREATURE_ART).sort((a, b) => dexNo(a) - dexNo(b))) {
+  const label = SPECIES[id] ? `${String(dexNo(id) + 1).padStart(3, '0')} ${SPECIES[id].name}` : `${id[0].toUpperCase()}${id.slice(1)} (art only)`;
+  card(mons, label, [CREATURE_ART[id].front, CREATURE_ART[id].back], 3);
+}
 
 const people = section('Battle portraits', 'Shown at the start and end of trainer battles. Built from each person\'s look, like the overworld sprites.');
 card(people, 'You, boy (front · back)', [portrait('player'), portrait('player', 'back')], 3);

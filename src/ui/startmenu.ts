@@ -3,7 +3,7 @@ import { sfx } from '../engine/sfx';
 import { G, saveGame } from '../game/state';
 import { monName } from '../game/mon';
 import { totalLearned, isLearned } from '../game/learning';
-import { SPECIES } from '../data/species';
+import { SPECIES, DEX_ORDER } from '../data/species';
 import { THEMES } from '../data/content';
 import { allItems } from '../game/curriculum';
 import { speak } from '../lang/speech';
@@ -13,16 +13,6 @@ import { pickMon, showDetails, listMenu, spriteCanvas, detailBox, wordRow, openD
 import { openBag } from './bag';
 import { money } from '../game/bag';
 import { dueCount } from '../game/review';
-
-const DEX_ORDER = [
-  'salchichita', 'hamburgueson', 'nacatamastin', 'gotita', 'nubarron', 'huracan', 'aguacatito', 'aguacatono', 'aguacatero',
-  'pajarito', 'palomon', 'conejito', 'liebron', 'gusanito', 'capullito', 'mariposita', 'cojincito', 'sillon',
-  'hojadillo', 'hojarasco', 'ecolin', 'murcielon', 'ochopatas', 'taranton', 'cuernito', 'herculeo',
-  'ardillita', 'ardillon', 'colibri', 'zumbador', 'espinita', 'puercoespin', 'piedrita', 'petroglifon', 'ollita', 'tinajon',
-  'caparazonte', 'gliptodon', 'guardabarranco',
-  'cangrejito', 'cangrejon', 'coquito', 'cocotero', 'pelicanito', 'maleticano', 'mojarrita', 'mordisquito', 'mordiscon',
-  'paslamita', 'paslamona',
-];
 
 /** The START menu. Resolves a script to run after it closes (an item used from the bag), if any. */
 export async function startMenu(): Promise<string | undefined> {

@@ -394,7 +394,7 @@ evolution('salchichita', 16, {
 evolution('gotita', 16, {
   id: 'nubarron',
   name: 'Nubarrón',
-  types: ['Agua'],
+  types: ['Agua', 'Eléctrico'],
   base: { hp: 66, atk: 64, def: 80, spd: 60 },
   dex: {
     es: 'Muchas gotas juntas forman un nubarrón. Cuando se enoja, truena.',
@@ -426,7 +426,7 @@ evolution('hamburgueson', 36, {
 evolution('nubarron', 36, {
   id: 'huracan',
   name: 'Huracán',
-  types: ['Agua'],
+  types: ['Agua', 'Eléctrico'],
   base: { hp: 80, atk: 84, def: 90, spd: 86 },
   dex: {
     es: 'Cuando muchos nubarrones se juntan, nace un huracán. Sus rayos iluminan toda la costa.',
@@ -667,3 +667,13 @@ export const STARTER_LEVEL = 5;
 
 export const learnLevel = (m: Move) => m.level ?? MODE_INFO[m.mode].learnAt;
 
+/** The Palabritas' numbers (the dex in the START menu, and the art page): families together, starters first. */
+export const DEX_ORDER = [
+  'salchichita', 'hamburgueson', 'nacatamastin', 'gotita', 'nubarron', 'huracan', 'aguacatito', 'aguacatono', 'aguacatero',
+  'pajarito', 'palomon', 'conejito', 'liebron', 'gusanito', 'capullito', 'mariposita', 'cojincito', 'sillon',
+  'hojadillo', 'hojarasco', 'ecolin', 'murcielon', 'ochopatas', 'taranton', 'cuernito', 'herculeo',
+  'ardillita', 'ardillon', 'colibri', 'zumbador', 'espinita', 'puercoespin', 'piedrita', 'petroglifon', 'ollita', 'tinajon',
+  'caparazonte', 'gliptodon', 'guardabarranco',
+  'cangrejito', 'cangrejon', 'coquito', 'cocotero', 'pelicanito', 'maleticano', 'mojarrita', 'mordisquito', 'mordiscon',
+  'paslamita', 'paslamona',
+];

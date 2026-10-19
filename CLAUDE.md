@@ -99,7 +99,7 @@ No script needed.
    catchRate, dex in Spanish and English.
 2. Evolved forms use `evolution(from, level, {...})`: they keep the family's theme, moves and words.
 3. Art: a placeholder drawing in `DRAW` (src/art/creatures.ts) until the user's art arrives.
-4. Add it to `DEX_ORDER` (src/ui/startmenu.ts), next to its family.
+4. Add it to `DEX_ORDER` (src/data/species.ts), next to its family.
 5. `npm test -- data` checks it.
 
 **The user's art** (PNG front + back, any size):
