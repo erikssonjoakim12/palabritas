@@ -412,6 +412,38 @@ evolution('aguacatito', 16, {
   },
 });
 
+// The starters' final forms (Nv 36), like Gen 2's.
+evolution('hamburgueson', 36, {
+  id: 'nacatamastin',
+  name: 'Nacatamastín',
+  types: ['Fuego'],
+  base: { hp: 80, atk: 94, def: 76, spd: 90 },
+  dex: {
+    es: 'Se envuelve en hojas de plátano como un nacatamal. Es serio, fuerte y muy leal.',
+    en: 'It wraps itself in banana leaves like a nacatamal. It’s serious, strong and very loyal.',
+  },
+});
+evolution('nubarron', 36, {
+  id: 'huracan',
+  name: 'Huracán',
+  types: ['Agua'],
+  base: { hp: 80, atk: 84, def: 90, spd: 86 },
+  dex: {
+    es: 'Cuando muchos nubarrones se juntan, nace un huracán. Sus rayos iluminan toda la costa.',
+    en: 'When many storm clouds come together, a hurricane is born. Its lightning lights up the whole coast.',
+  },
+});
+evolution('aguacatono', 36, {
+  id: 'aguacatero',
+  name: 'Aguacatero',
+  types: ['Planta'],
+  base: { hp: 92, atk: 86, def: 98, spd: 64 },
+  dex: {
+    es: 'Un árbol de aguacate que camina despacio. Comparte sus aguacates con quien lo cuida.',
+    en: 'An avocado tree that walks slowly. It shares its avocados with whoever looks after it.',
+  },
+});
+
 evolution('piedrita', 18, {
   id: 'petroglifon',
   name: 'Petroglifón',

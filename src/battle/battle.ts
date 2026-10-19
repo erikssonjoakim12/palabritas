@@ -189,7 +189,10 @@ function buildHud(getEnemy: () => Mon, getMe: () => Mon): Hud {
   overlay.appendChild(root);
   const set = (h: ReturnType<typeof mk>, mon: Mon) => {
     const s = stats(mon);
-    h.name.textContent = monName(mon);
+    const name = monName(mon);
+    h.name.textContent = name;
+    // Long names (Guardabarranco, Nacatamastín, nicknames) get smaller letters instead of running off the box.
+    h.name.style.fontSize = name.length > 10 ? `${10 / name.length}em` : '';
     h.lv.textContent = `:N${mon.level}`;
     h.fill.style.width = `${Math.max(0, (100 * mon.hp) / s.maxHp)}%`;
     h.bar.className = `hpbar ${hpClass(mon.hp, s.maxHp)}`;

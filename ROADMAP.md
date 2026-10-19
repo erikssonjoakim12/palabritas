@@ -22,9 +22,9 @@ The theme and learned words stay; base stats go up; new name and art.
 | Gotita (raindrop) | Nv 16 | **Nubarrón** (a rain cloud; "nubarrón" = big storm cloud) | Agua |
 | Aguacatito (avocado) | Nv 16 | **Aguacatoño** (a sapling: *aguacate* + *retoño*, "sprout") | Planta |
 
-Level 16 = after the first gym (12), before the second (~19). A second evolution (~Nv 36) comes later;
-reserved name: Aguacatoño → **Aguacatero** (the full avocado tree; *aguacatero* = avocado tree).
-Placeholder art (shape drawings) until the real art arrives.
+Level 16 = after the first gym (12), before the second (~19). The final forms come at **Nv 36**, with the
+user's art: Hamburguesón → **Nacatamastín** (a mastiff wrapped like a *nacatamal*), Nubarrón → **Huracán**
+(a stormy tornado), Aguacatoño → **Aguacatero** (the full avocado tree; *aguacatero* = avocado tree).
 
 ## 3. The world: a Nicaragua-inspired country
 

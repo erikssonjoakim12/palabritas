@@ -15,7 +15,7 @@ import { money } from '../game/bag';
 import { dueCount } from '../game/review';
 
 const DEX_ORDER = [
-  'salchichita', 'hamburgueson', 'gotita', 'nubarron', 'aguacatito', 'aguacatono',
+  'salchichita', 'hamburgueson', 'nacatamastin', 'gotita', 'nubarron', 'huracan', 'aguacatito', 'aguacatono', 'aguacatero',
   'pajarito', 'palomon', 'conejito', 'liebron', 'gusanito', 'capullito', 'mariposita', 'cojincito', 'sillon',
   'hojadillo', 'hojarasco', 'ecolin', 'murcielon', 'ochopatas', 'taranton', 'cuernito', 'herculeo',
   'ardillita', 'ardillon', 'colibri', 'zumbador', 'espinita', 'puercoespin', 'piedrita', 'petroglifon', 'ollita', 'tinajon',
