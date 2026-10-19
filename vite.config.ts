@@ -24,11 +24,11 @@ function phoneQr(): Plugin {
 // Chrome only allows the microphone on secure pages.
 export default defineConfig(({ mode }) => ({
   base: './',
-  // The game, plus the art review page (art.html) so the art can be checked on any device.
+  // The game, plus the art review page (art.html) and the dictionary (palabras.html), to check on any device.
   // The code both pages share is one chunk, named for what it is (the bundler would name it after any one file).
   build: {
     rollupOptions: {
-      input: { main: 'index.html', art: 'art.html' },
+      input: { main: 'index.html', art: 'art.html', palabras: 'palabras.html' },
       output: { chunkFileNames: (c) => (c.isDynamicEntry ? 'assets/[name]-[hash].js' : 'assets/shared-[hash].js') },
     },
   },

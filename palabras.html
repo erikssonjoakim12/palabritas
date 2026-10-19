@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Palabritas words</title>
+    <style>
+      body { font-family: system-ui, sans-serif; background: #f4f4ec; color: #222; margin: 0; padding: 16px; }
+      h1 { font-size: 20px; margin: 0 0 4px; }
+      h2 { font-size: 16px; margin: 24px 0 8px; border-bottom: 2px solid #ccc; padding-bottom: 4px; }
+      p { margin: 4px 0; color: #555; font-size: 14px; }
+      a { color: #2a6a9a; }
+      .controls { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 12px 0; position: sticky; top: 0; background: #f4f4ec; padding: 8px 0; z-index: 1; }
+      .controls input[type='search'] { flex: 1 1 220px; font-size: 16px; padding: 6px 8px; border: 1px solid #bbb; border-radius: 6px; }
+      .controls select { font-size: 14px; padding: 6px; border-radius: 6px; border: 1px solid #bbb; max-width: 100%; }
+      .controls label { font-size: 14px; white-space: nowrap; }
+      .count { font-size: 13px; color: #666; }
+      table { border-collapse: collapse; width: 100%; background: #fff; font-size: 14px; }
+      th, td { text-align: left; vertical-align: top; padding: 6px 8px; border-bottom: 1px solid #e4e4dc; }
+      th { background: #e8e8dc; font-weight: 600; }
+      td.es { font-weight: 600; }
+      .alt { display: block; font-weight: 400; color: #777; font-size: 12px; }
+      .chip { display: inline-block; background: #eef2e4; border: 1px solid #d4dcc4; border-radius: 10px; padding: 1px 7px; margin: 1px 2px 1px 0; font-size: 12px; white-space: nowrap; }
+      .chip.core { background: #e4ecf6; border-color: #c4d0e4; }
+      .chip.topic { background: #f6ece4; border-color: #e4d0c4; }
+      .fam { color: #666; font-size: 12px; }
+      .wrap { overflow-x: auto; }
+    </style>
+  </head>
+  <body>
+    <!-- The dictionary: every word and phrase the game teaches (npm run words, or palabras.html next to the game). -->
+    <h1>Palabritas words</h1>
+    <p>
+      Every word and phrase the game teaches, built from <code>src/data/content/</code> the same way the game builds it.
+      The same Spanish in two lists is one shared word. Art: <a href="art.html">art.html</a>.
+    </p>
+    <div id="words"></div>
+    <script type="module" src="/src/dev/words.ts"></script>
+  </body>
+</html>

@@ -1,5 +1,5 @@
 // Data checks without playing: every Palabrita has art, a known theme, moves, and words for every
-// level up to 30 (none twice); evolutions point to real Palabritas; the art page loads cleanly.
+// level up to 30 (none twice); evolutions point to real Palabritas; the art page and the dictionary load cleanly.
 import { start } from './lib.mjs';
 import { BASE } from '../tools/browser.mjs';
 import { readFileSync } from 'fs';
@@ -77,4 +77,7 @@ const artErrors = [];
 art.on('pageerror', (e) => artErrors.push(e.message));
 await art.goto(BASE + '/art.html', { waitUntil: 'networkidle0' });
 t.check('the art page loads without errors', artErrors.length === 0, artErrors.join(' | '));
+await art.goto(BASE + '/palabras.html', { waitUntil: 'networkidle0' });
+const rowsShown = await art.evaluate(() => document.querySelectorAll('#words tr').length);
+t.check('the dictionary page loads and lists the words', artErrors.length === 0 && rowsShown > 3000, [rowsShown, ...artErrors]);
 await t.end();

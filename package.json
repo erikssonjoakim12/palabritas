@@ -10,6 +10,7 @@
     "preview": "vite preview --host",
     "typecheck": "tsc --noEmit",
     "art": "vite --open /art.html",
+    "words": "vite --open /palabras.html",
     "test": "node tests/run.mjs"
   },
   "devDependencies": {
