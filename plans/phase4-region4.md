@@ -18,12 +18,15 @@
   `src/world/region4.ts` (registered like `REGION3`); trainers in `src/data/trainers.ts`.
 - **The bus is paused**, so Ciudad Chispa has no bus stop or bus driver.
 - **Sugarcane is `|`**: `Z` is the mine ladder now.
-- **Levels (user):** wild Palabritas 15–25 and trainers 18–26 (gym trainers too); Lucas 28, Don Sigilo 27–29 and
-  Don Tizón 28·29·31 stay. Nothing in regions 1–3 is above these (checked).
+- **Levels (user):** wild Palabritas 15–25 and trainers 18–26 (gym trainers too); Lucas 28 and Don Sigilo 27–29
+  stay; Don Tizón's ace is Brasaurio at 32 (the user). Nothing in regions 1–3 is above these (checked).
 - **Lucas #3 (user):** at the volcano's ranger station, after you can rest, not right after the rangers' battles (§10).
 - **Day and night (user):** the clock only changes looks. The festival is still a story night scene. Lit torches
   and the festival get warm light like the windows (`art/lights.ts`).
 - **Rematches:** 1–2 trainers per route (the user's rule): Ruta 8 has 2, the volcano 1, Ruta 9 1.
+- **Palabritas (user):** Brasita (the user's art) is the first stage of a late, powerful family: Brasaurio at
+  32, Volcasaurio at 50; Garrobito is dropped. Chispita is a firefly, Venadito (was Mascarita) a masked fawn,
+  Perezosito (was Hamaquita) a sloth in the hammock. Lamparita stays.
 - **Tests:** only what's needed (the user's rule): one checkpoint test for the story, one for the quests.
 
 **Read first:** CLAUDE.md · PLAN_GYMS_2-4.md §4 · src/world/region3.ts (how a region's story is built) ·
@@ -70,7 +73,7 @@ Amanecer's plateau).
 | `puertaTaller` | a heavy wooden door |
 | `lampara` | an old oil lamp with a ghostly face |
 | `hamaca` | a striped hammock |
-| `hamaquita` | the hammock with a face, asleep |
+| `perezosito` | the striped hammock with a sloth asleep in it |
 
 **Looks:**
 
@@ -121,9 +124,9 @@ The lava tube (`tubo`), the crater (`crater`) and the interiors are door-linked.
 
 | Palabrita | Levels | w |
 |---|---|---|
-| garrobito | 15–18 | 25 |
-| hormiguita | 15–18 | 25 |
-| zopilotito | 16–18 | 20 |
+| hormiguita | 15–18 | 30 |
+| zopilotito | 16–18 | 25 |
+| brasita | 15–17 | 8 |
 | hojadillo | 16–19 | 10 |
 | liebron | 17–19 | 10 |
 | cuernito | 17–19 | 5 |
@@ -346,9 +349,9 @@ Remove the draft's `polvorero_triste`: the gate guard covers him.
 
   | Palabrita | Levels | w |
   |---|---|---|
-  | garrobito | 22–25 | 30 |
-  | zopilotito | 22–25 | 25 |
-  | liebron | 22–25 | 20 |
+  | zopilotito | 22–25 | 35 |
+  | brasita | 22–24 | 10 |
+  | liebron | 22–25 | 25 |
   | palomon | 22–25 | 15 |
   | hormigon | 23–25 | 10 |
 
@@ -401,8 +404,8 @@ Steam vents. The rangers' station on the middle terrace has a bed: rest heals yo
 
 **Basics:**
 - `name: 'Volcán Chocoyo'`, `outdoor: true`, `border: '^'`, `style: { rock: 'basalt' }`.
-- **Encounters** (rate 0.12): chispita 19–22 (w 35), garrobito 19–21 (30), zopilotito 19–22 (20),
-  chocoyito 20–22 (15).
+- **Encounters** (rate 0.12): chispita 19–22 (w 35), chocoyito 20–22 (25), zopilotito 19–22 (20),
+  brasita 19–21 (15).
 - **Doors:**
   - (19, 16) → `estacion` (`HOUSE`-like, with the bed `B`). The ranger Doña Elsa (look `guardaparque`):
     «¿Estás cansad{o/a}? Descansa un poco en la cama.» / "Are you tired? Rest a bit on the bed."
@@ -613,17 +616,17 @@ Levels: route trainers 18–26, rising along the way (the user, 2026-10-19). Rem
 Clara on the volcano, Bruno on Ruta 9.
 
 ```ts
-campesino: { id: 'campesino', name: 'Campesino Rigo', defenseMode: 'listen', rematch: true, team: [['garrobito', 18], ['hormiguita', 18]] },
+campesino: { id: 'campesino', name: 'Campesino Rigo', defenseMode: 'listen', rematch: true, team: [['liebron', 18], ['hormiguita', 18]] },
 vaquera_r8: { id: 'vaquera_r8', name: 'Vaquera Chela', defenseMode: 'listen', team: [['liebron', 19], ['zopilotito', 19]] },
 pescadora_r8: { id: 'pescadora_r8', name: 'Pescadora Iris', defenseMode: 'listen', team: [['mojarrita', 18], ['mojarrita', 19], ['mordisquito', 19]] },
 turista_r8: { id: 'turista_r8', name: 'Turista Mike', defenseMode: 'choose', team: [['pelicanito', 19], ['coquito', 19]] },
-cortador: { id: 'cortador', name: 'Cortador Juan', defenseMode: 'listen', team: [['hormiguita', 19], ['garrobito', 20]] },
+cortador: { id: 'cortador', name: 'Cortador Juan', defenseMode: 'listen', team: [['hormiguita', 19], ['zopilotito', 20]] },
 cortadora: { id: 'cortadora', name: 'Cortadora Lidia', defenseMode: 'listen', rematch: true, team: [['zopilotito', 20], ['hormiguita', 20]] },
 granjero: { id: 'granjero', name: 'Granjero Pancho', defenseMode: 'listen', team: [['conejito', 20], ['liebron', 21]] },
-ciclista: { id: 'ciclista', name: 'Ciclista Óscar', defenseMode: 'listen', team: [['garrobito', 21], ['zopilotito', 21]] },
-guardaparque1: { id: 'guardaparque1', name: 'Guardaparque Raquel', defenseMode: 'listen', team: [['chispita', 21], ['garrobito', 22]] },
+ciclista: { id: 'ciclista', name: 'Ciclista Óscar', defenseMode: 'listen', team: [['liebron', 21], ['zopilotito', 21]] },
+guardaparque1: { id: 'guardaparque1', name: 'Guardaparque Raquel', defenseMode: 'listen', team: [['chispita', 21], ['brasita', 22]] },
 vulcanologa1: { id: 'vulcanologa1', name: 'Vulcanóloga Clara', defenseMode: 'listen', rematch: true, team: [['chispita', 22], ['zopilotito', 22]] },
-guardaparque2: { id: 'guardaparque2', name: 'Guardaparque Mauricio', defenseMode: 'listen', team: [['chocoyito', 22], ['garrobito', 23]] },
+guardaparque2: { id: 'guardaparque2', name: 'Guardaparque Mauricio', defenseMode: 'listen', team: [['chocoyito', 22], ['zopilotito', 23]] },
 vulcanologo2: { id: 'vulcanologo2', name: 'Vulcanólogo Erick', defenseMode: 'listen', team: [['ecolin', 23], ['taranton', 23]] },
 silencioso5: { id: 'silencioso5', name: 'Silencioso', defenseMode: 'listen', team: [['ecolin', 23], ['piedrita', 24]] },
 silencioso6: { id: 'silencioso6', name: 'Silenciosa', defenseMode: 'listen', team: [['ochopatas', 24], ['ollita', 24]] },
@@ -631,11 +634,11 @@ silencioso7: { id: 'silencioso7', name: 'Silencioso', defenseMode: 'listen', tea
 sigilo: { id: 'sigilo', name: 'Don Sigilo', defenseMode: 'type', team: [['murcielon', 27], ['taranton', 28], ['petroglifon', 29]] },
 lucas3: { id: 'lucas3', name: 'Lucas', defenseMode: 'type', team: [['<counter starter, 2nd form>', 28], ['hojarasco', 25], ['palomon', 25], ['cangrejon', 26]] },
 polvorera: { id: 'polvorera', name: 'Polvorera Gloria', defenseMode: 'type', team: [['chispita', 25], ['chispita', 25]] },
-malabarista: { id: 'malabarista', name: 'Malabarista Ricky', defenseMode: 'type', team: [['chocoyito', 25], ['garrobito', 26]] },
-fritanguero: { id: 'fritanguero', name: 'Fritanguero Neno', defenseMode: 'type', team: [['garrobito', 26], ['chispita', 26]] },
-tizon: { id: 'tizon', name: 'Líder Don Tizón', defenseMode: 'type', team: [['chocoyote', 28], ['coheton', 29], ['brasita', 31]] },
+malabarista: { id: 'malabarista', name: 'Malabarista Ricky', defenseMode: 'type', team: [['chocoyito', 25], ['brasita', 26]] },
+fritanguero: { id: 'fritanguero', name: 'Fritanguero Neno', defenseMode: 'type', team: [['chocoyote', 26], ['chispita', 26]] },
+tizon: { id: 'tizon', name: 'Líder Don Tizón', defenseMode: 'type', team: [['chocoyote', 28], ['coheton', 29], ['brasaurio', 32]] },
 campesina_r9: { id: 'campesina_r9', name: 'Campesina Tula', defenseMode: 'listen', team: [['zopilotito', 24], ['liebron', 25]] },
-ciclista_r9: { id: 'ciclista_r9', name: 'Ciclista Bruno', defenseMode: 'listen', rematch: true, team: [['garrobito', 25], ['hormigon', 25]] },
+ciclista_r9: { id: 'ciclista_r9', name: 'Ciclista Bruno', defenseMode: 'listen', rematch: true, team: [['brasita', 25], ['hormigon', 25]] },
 excursionista_r9: { id: 'excursionista_r9', name: 'Excursionista Lila', defenseMode: 'listen', team: [['palomon', 25], ['liebron', 26]] },
 ```
 
@@ -715,7 +718,7 @@ Lines (each `[es, en]`):
 - **The parade:** dancers (looks `dancer1..4`, colorful dresses and masks) walk in a loop around the plaza
   with `walkNpc`.
 - **The Torovenado:** if you finished §11.4, you dance in the parade. A cutscene: you walk with the dancers
-  for a loop. Then the mask vendor gives `giveMon('mascarita', 20)`.
+  for a loop. Then the mask vendor gives `giveMon('venadito', 20)`.
 - **Don Tizón:** «¡Mira, {name}! ¡Este cohete es para ti!» / "Look, {name}! This rocket is for you!" A big
   burst. «Mañana te espero en el taller. ¡Ven list{o/a}!» / "Tomorrow I'll be waiting at the workshop. Come
   ready!"
@@ -744,7 +747,7 @@ From here on, Lucas is a friend more than a rival. That pays off later.
 
 ## 11. Side quests
 
-### 11.1 Una hamaca para mamá (flags `hamacaComprada`, `hamacaEntregada`, `hamaquita`)
+### 11.1 Una hamaca para mamá (flags `hamacaComprada`, `hamacaEntregada`, `perezosito`)
 
 1. **The hammock vendor (`hamaquera`):**
    - «¡Hamacas, hamacas! Hechas a mano aquí en Ciudad Chispa. ¿Te gusta esta?» / "Hammocks, hammocks!
@@ -766,10 +769,11 @@ From here on, Lucas is a friend more than a rival. That pays off later.
      Chispa? How pretty! I'll hang it in your room."
    - Remove it, set `hamacaEntregada`, and give 3 Superpociones: «Toma, para tu viaje.» / "Here, for your
      trip."
-5. **The hammock in your room:** the object `hamaquita` at (1, 4) in `casa`, with
-   `show: () => flag('hamacaEntregada') && !flag('hamaquita')`.
-   - «¡La hamaca está roncando! ¿Qué es eso?» / "The hammock is snoring! What's that?"
-   - Then `wildBattle('hamaquita', 22)`. Caught or beaten sets `hamaquita`; if you run, it stays.
+5. **The hammock in your room:** the object `perezosito` at (1, 4) in `casa`, with
+   `show: () => flag('hamacaEntregada') && !flag('perezosito')`.
+   - «¡La hamaca está roncando! ¿Qué es eso?» / "The hammock is snoring! What's that?" «¡Hay un perezoso
+     dormido en la hamaca!» / "There's a sloth asleep in the hammock!"
+   - Then `wildBattle('perezosito', 22)`. Caught or beaten sets `perezosito`; if you run, it stays.
 
 ### 11.2 El chocoyito perdido (flags `chocoyitoBusca`, `chocoyitoEncontrado`, `chocoyitoDone`)
 
@@ -826,7 +830,7 @@ From here on, Lucas is a friend more than a rival. That pays off later.
 3. **All 5:**
    - The vendor: «¡El traje está completo! Esta noche, ¡tú vas a bailar en el desfile!» / "The costume is
      complete! Tonight, you're going to dance in the parade!"
-   - Set `torovenadoListo`. At the festival you dance, then get Mascarita (§9.4).
+   - Set `torovenadoListo`. At the festival you dance, then get Venadito (§9.4).
    - If the festival was already done: the apprentice offers it again.
 
 ### 11.5 La leyenda de la Carreta Nagua (flags `leyenda`)
@@ -889,8 +893,8 @@ Ruta 9 → the plateau → the ledge into Pueblo Amanecer.
 
 ## 14. Palabritas and content
 
-- **Palabritas** ([palabritas.md](palabritas.md) §4): Garrobito/Brasita (the user's art), Hormiguita/
-  Hormigón, Chispita/Cohetón, Chocoyito/Chocoyote, Zopilotito/Zopilotón, Mascarita/Torovenado, Hamaquita,
+- **Palabritas** ([palabritas.md](palabritas.md) §1): Brasita (the user's art)/Brasaurio/Volcasaurio, Hormiguita/
+  Hormigón, Chispita/Cohetón, Chocoyito/Chocoyote, Zopilotito/Zopilotón, Venadito/Torovenado, Perezosito,
   Lamparita.
 - **Themes:** fiesta, conversacion, ciudad, ropa, rutina, emociones, animales, trabajo.
 - **Topics:** compras, pasado ([content.md](content.md)).
@@ -902,7 +906,7 @@ Keep them short (the user's rule: only what's strictly necessary), in checkpoint
 | Test | What it checks |
 |---|---|
 | `region4.test` | Carey's east gate → Ruta 8 → Ciudad Chispa (the theft cutscene; the trail opens) → the slopes (the bed heals; Lucas #3 at the station) → the tube → the crater (a rim grunt + Don Sigilo; the crates) → back in Chispa: the festival night (fireworks drawn, the parade moves) → the workshop: the wrong torch order resets, the right one opens the door, the 3 trainers, Don Tizón, `medalChispa` → Ruta 9 → hop down into Amanecer. |
-| `quests4.test` | The hammock: bargaining lowers the price, buying needs money, Mom takes it, and the snoring hammock gives a Hamaquita battle. The chick. The haunted house: 3 rounds, then the Lamparita battle and $500. Torovenado: 5 pieces by name, then the parade gives Mascarita. The legend: 3 questions and the bell. |
+| `quests4.test` | The hammock: bargaining lowers the price, buying needs money, Mom takes it, and the snoring hammock gives a Perezosito battle. The chick. The haunted house: 3 rounds, then the Lamparita battle and $500. Torovenado: 5 pieces by name, then the parade gives Venadito. The legend: 3 questions and the bell. |
 | `maps.test`, `data.test` | stay green; the art page's World view now shows the whole loop. |
 
 ## 16. Done when

@@ -213,7 +213,7 @@ Examples:
 
 ### La ropa (`ropa`): Clothes
 
-**Family:** Mascarita → Torovenado. **Focus:** Clothes beyond the core list, getting dressed, describing outfits and costumes.
+**Family:** Venadito → Torovenado. **Focus:** Clothes beyond the core list, getting dressed, describing outfits and costumes.
 
 **Levels 2–10, the 27 words (in this order):**
 
@@ -271,7 +271,7 @@ Examples:
 
 ### La rutina (`rutina`): Daily routine
 
-**Family:** Hamaquita. **Focus:** The day from waking up to sleeping, time and frequency, rest and naps.
+**Family:** Perezosito (a sloth in a hammock). **Focus:** The day from waking up to sleeping, time and frequency, rest and naps.
 
 **Note:** Reflexive routine verbs (levantarse, acostarse, bañarse...) are in the core; here, use them in sentences rather than as words.
 
@@ -391,7 +391,7 @@ Examples:
 
 ### Los animales (`animales`): Animals
 
-**Family:** Garrobito → Brasita. **Focus:** Animals of Nicaragua (the garrobo, monkeys, the sloth) and the farm, where they live and what they eat.
+**Family:** Brasita → Brasaurio → Volcasaurio. **Focus:** Animals of Nicaragua (the garrobo, monkeys, the sloth) and the farm, where they live and what they eat.
 
 **Levels 2–10, the 27 words (in this order):**
 

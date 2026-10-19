@@ -115,10 +115,10 @@ Villa Ocote → Ruta 6 → Ruta 7 → **Playa Carey** and the Playa de las Tortu
 ### Side quests
 | Quest | What you do | Spanish practiced | Reward |
 |---|---|---|---|
-| **Una hamaca para mamá** | Buy a hammock at the market by bargaining: *«¿Cuánto cuesta?», «Es muy caro», «¿Me lo deja en quinientos?»*. The final price depends on what you say. Take it home to Mom (via Ruta 9). She hangs it in your room, and a wild **Hamaquita** is asleep in it. | prices, numbers, polite requests | Hamaquita, a package from Mom |
+| **Una hamaca para mamá** | Buy a hammock at the market by bargaining: *«¿Cuánto cuesta?», «Es muy caro», «¿Me lo deja en quinientos?»*. The final price depends on what you say. Take it home to Mom (via Ruta 9). She hangs it in your room, and a wild **Perezosito** (a sloth) is asleep in it. | prices, numbers, polite requests | Perezosito, a package from Mom |
 | **El chocoyito perdido** | A ranger's parakeet chick fell into the lava tube. Find it and bring it back up, following her instructions (*arriba, abajo, dentro, fuera*). | directions, prepositions | Repelentes, Chocoyitos to catch on the crater rim |
 | **La casa embrujada** | A colonial house where the lights flicker. A ghostly lamp whispers sentences, and you calm it by repeating what it said. Three rooms. Cojincitos and a rare Sillón live there. | listening (whole sentences) | **Lamparita**, money |
-| **Los trajes del Torovenado** | The parade lost its costume: *la máscara, el sombrero, la capa, las botas, la falda*. People describe who has each piece (*«La señora del vestido azul tiene el sombrero»*). | clothes, describing people | you dance in the parade; **Mascarita** (level 20) |
+| **Los trajes del Torovenado** | The parade lost its costume: *la máscara, el sombrero, la capa, las botas, la falda*. People describe who has each piece (*«La señora del vestido azul tiene el sombrero»*). | clothes, describing people | you dance in the parade; **Venadito** (level 20) |
 | **La leyenda de la Carreta Nagua** (small) | An old man on Ruta 9 tells the legend. Answer 3 questions about it. | listening to a story, the past tense | a key item; teases the Ghost-type Elite Four member |
 
 ### Gym 4: Taller de Pólvora — Don Tizón (Fuego)
@@ -126,7 +126,7 @@ Villa Ocote → Ruta 6 → Ruta 7 → **Playa Carey** and the Playa de las Tortu
   Después, el azul. Luego, el verde. Al final, el amarillo.»* Get the order wrong and it fizzles out, so you
   start again.
 - **Gym trainers:** a fireworks maker, a fire juggler, a street-food cook.
-- **Don Tizón's team:** Chocoyote 28, Cohetón 29, Brasita 31.
+- **Don Tizón's team:** Chocoyote 28, Cohetón 29, Brasaurio 32 (Brasita's second stage).
 - **His Spanish:** the past tense (*«¡Ayer hice mil cohetes!»*).
 - **Reward:** Medalla Chispa.
 
@@ -188,25 +188,24 @@ are used until your art arrives.
 |---|---|---|---|---|---|
 | **Hormiguita** | Bicho/Planta | el trabajo | → Hormigón at 22 | Ruta 8, the sugarcane fields | a red leafcutter ant carrying a leaf bigger than itself, wearing a tiny hard hat |
 | **Hormigón** | Bicho/Roca | el trabajo | | Ruta 8 (rare) | a big ant built from gray concrete blocks (*hormigón* = concrete!), carrying a stone slab |
-| **Garrobito** | Normal | los animales | → **Brasita** at 24 | Ruta 8, sunny rocks on the volcano | a small spiny-tailed iguana (*garrobo*) sunbathing, orange spines along its back |
-| **Brasita** (your art) | Fuego | los animales | (third stage later) | the volcano; Don Tizón | (art exists) |
+| **Brasita** (your art) | Fuego | los animales | → **Brasaurio** at 32 → **Volcasaurio** (Fuego/Dragón) at 50: late and very powerful | Ruta 8, the volcano, Ruta 9 (lower levels, rare); Brasaurio is Don Tizón's ace | (art exists) |
 | **Chispita** | Fuego | la fiesta | → Cohetón at 26 | the volcano, Ciudad Chispa | a little firework spark: a star-shaped body with a fuse tail |
 | **Cohetón** | Fuego/Eléctrico | la fiesta | | Don Tizón | a firework rocket with a grinning face, colorful stripes and a sparkling tail |
 | **Chocoyito** | Normal/Volador | la conversación | → Chocoyote at 25 | the crater rim | a green parakeet (*chocoyo*) with an orange forehead and a chatty open beak |
 | **Chocoyote** | Fuego/Volador | la conversación | | Don Tizón | a big parakeet with flame-colored wing tips, living in a volcano crater |
 | **Zopilotito** | Volador/Siniestro | la ciudad | → Zopilotón at 28 | Ruta 8, the volcano slopes | a scruffy black vulture chick with a bald gray head, holding a tiny broom |
 | **Zopilotón** | Volador/Siniestro | la ciudad | | evolve it (wild in later regions) | a big black vulture with broad wings and a street-sweeper's cap |
-| **Mascarita** | Fantasma/Normal | la ropa | → Torovenado at 30 | gift (costume quest) | a colorful floating festival mask with ribbons |
+| **Venadito** | Normal | la ropa | → Torovenado (Normal/Lucha) at 30 | gift (costume quest) | a fawn wearing a colorful festival mask with ribbons |
 | **Torovenado** | Fantasma/Lucha | la ropa | | | a dancing festival costume: bull horns, deer antlers, a mask and ribbons |
-| **Hamaquita** | Normal | la rutina | | gift (hammock quest) | a striped Nicaraguan hammock that's always asleep, with a little face in the middle |
+| **Perezosito** | Normal/Psíquico | la rutina | | gift (hammock quest) | a baby sloth asleep in a striped Nicaraguan hammock |
 | **Lamparita** | Fantasma/Fuego | las emociones | | the haunted house | an old oil lamp with a ghostly flame face |
 
 **Art priority** (if you want to make real art in order): gym leaders' aces and gifts first (Petroglifón,
-Mordiscón, Cohetón, Paslamita, Caparazonte, Mascarita), then the commons you'll see most (Ardillita,
-Colibrí, Cangrejito, Coquito, Chispita, Chocoyito, Gusanito, Garrobito), then the rest.
+Mordiscón, Cohetón, Paslamita, Caparazonte, Venadito, Brasaurio), then the commons you'll see most (Ardillita,
+Colibrí, Cangrejito, Coquito, Chispita, Chocoyito, Gusanito, Hormiguita), then the rest.
 
 **Words stay with the family.** Evolutions keep their words. When a new first stage goes in front of an
-existing Palabrita (Gusanito before Mariposita, Cojincito before Sillón, Garrobito before Brasita), the family
+existing Palabrita (Gusanito before Mariposita, Cojincito before Sillón), the family
 keeps the old word sample, so Mariposita and Sillón that players already have don't get new words.
 
 ---
@@ -307,7 +306,7 @@ Don Sigilo. New heads: cowboy hat, bandana and hood. The rest reuse existing hea
 |---|---|---|---|---|---|---|
 | 2 | 10–15 | 12–14 | 15 + 12 | grunts 13–15, Capataz 16 | 15–16 | 17 · 19 · **21** (raised) |
 | 3 | 14–19 (fishing 10–22) | 15–20 | 22 + 19–20 | grunts 18–20, Callada 21–22 | 20–22 | 22 · 23 · **25** |
-| 4 | 15–25 (user) | 18–26 (user) | 28 + 25–26 | grunts 23–25, Don Sigilo 27–29 | 25–26 | 28 · 29 · **31** |
+| 4 | 15–25 (user) | 18–26 (user) | 28 + 25–26 | grunts 23–25, Don Sigilo 27–29 | 25–26 | 28 · 29 · **32** |
 
 ---
 
@@ -360,7 +359,7 @@ so the build keeps them easy to change (see the rule below).
    - Gusanito → Capullito → Mariposita (Rutas 1–2 get Gusanito);
    - Pajarito → Palomón at 14;
    - Cojincito before Sillón;
-   - Garrobito before Brasita.
+   - ~~Garrobito before Brasita~~: changed on 2026-10-19, Brasita is the first stage (→ 32 → 50).
 
    **Yes.**
 4. ✓ **Pace — decided:** as much play as the level curve needs. It should take time, but never get boring:

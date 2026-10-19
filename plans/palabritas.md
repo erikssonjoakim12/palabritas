@@ -26,15 +26,17 @@ ready to paste into `src/data/species.ts`: the object entries go inside `SPECIES
 ## 1. Region 4 — volcanoes and dry forest
 
 ```ts
-garrobito: {
-  id: 'garrobito', name: 'Garrobito', types: ['Normal'], theme: 'animales',
-  base: { hp: 44, atk: 50, def: 44, spd: 60 },
-  moves: [m('Coletazo', 'Normal', 'choose'), m('Arañazo', 'Normal', 'type'), m('Calor del Sol', 'Fuego', 'listen'), m('Llamarada', 'Fuego', 'speak')],
-  catchRate: 0.5,
-  dex: { es: 'Pasa el día tomando el sol en las piedras. Le dicen «garrobo» en Nicaragua.', en: 'It spends the day sunbathing on rocks. In Nicaragua they call it «garrobo».' },
+brasita: {   // the user's art; a late, powerful family (the user: 32 and 50)
+  id: 'brasita', name: 'Brasita', types: ['Fuego'], theme: 'animales',
+  base: { hp: 45, atk: 60, def: 45, spd: 55 },
+  moves: [m('Brasas', 'Fuego', 'choose'), m('Coletazo', 'Normal', 'type'), m('Calor del Sol', 'Fuego', 'listen'), m('Llamarada', 'Fuego', 'speak')],
+  catchRate: 0.3,
+  dex: { es: 'Toma el sol en las piedras del volcán. Las brasas de su cola nunca se apagan.', en: 'It sunbathes on the volcano’s rocks. The embers on its tail never go out.' },
 },
-evolution('garrobito', 24, { id: 'brasita', name: 'Brasita', types: ['Fuego'], base: { hp: 64, atk: 82, def: 60, spd: 80 },   // the user's art
-  dex: { es: 'Vive cerca de los volcanes. Las brasas de su cola nunca se apagan.', en: 'It lives near volcanoes. The embers on its tail never go out.' } });
+evolution('brasita', 32, { id: 'brasaurio', name: 'Brasaurio', types: ['Fuego'], base: { hp: 70, atk: 92, def: 70, spd: 80 },
+  dex: { es: 'Su piel es dura como la roca volcánica. Cuando ruge, le salen chispas de la boca.', en: 'Its skin is as hard as volcanic rock. When it roars, sparks fly from its mouth.' } });
+evolution('brasaurio', 50, { id: 'volcasaurio', name: 'Volcasaurio', types: ['Fuego', 'Dragón'], base: { hp: 95, atk: 125, def: 95, spd: 105 },
+  dex: { es: 'Dicen que duerme dentro del volcán. Cuando despierta, toda la montaña tiembla.', en: 'They say it sleeps inside the volcano. When it wakes up, the whole mountain shakes.' } });
 
 hormiguita: {
   id: 'hormiguita', name: 'Hormiguita', types: ['Bicho', 'Planta'], theme: 'trabajo',
@@ -46,15 +48,15 @@ hormiguita: {
 evolution('hormiguita', 22, { id: 'hormigon', name: 'Hormigón', types: ['Bicho', 'Roca'], base: { hp: 66, atk: 84, def: 92, spd: 40 },
   dex: { es: 'Su cuerpo es de cemento. Ayuda a construir casas y puentes.', en: 'Its body is made of concrete. It helps build houses and bridges.' } });
 
-chispita: {
-  id: 'chispita', name: 'Chispita', types: ['Fuego'], theme: 'fiesta',
+chispita: {   // a firefly (the user: mix with animals)
+  id: 'chispita', name: 'Chispita', types: ['Bicho', 'Fuego'], theme: 'fiesta',
   base: { hp: 38, atk: 56, def: 36, spd: 68 },
-  moves: [m('Chispa', 'Fuego', 'choose'), m('Pirueta', 'Normal', 'type'), m('Petardo', 'Fuego', 'listen'), m('Fuegos Artificiales', 'Fuego', 'speak')],
+  moves: [m('Chispa', 'Fuego', 'choose'), m('Zumbido', 'Bicho', 'type'), m('Luz de Fiesta', 'Fuego', 'listen'), m('Fuegos Artificiales', 'Fuego', 'speak')],
   catchRate: 0.5,
-  dex: { es: 'Nace cuando alguien enciende un cohete. Le encantan las fiestas y la música.', en: 'It’s born when someone lights a rocket. It loves parties and music.' },
+  dex: { es: 'Una luciérnaga con la cola llena de chispas. Le encantan las fiestas y la música.', en: 'A firefly with a tail full of sparks. It loves parties and music.' },
 },
-evolution('chispita', 26, { id: 'coheton', name: 'Cohetón', types: ['Fuego', 'Eléctrico'], base: { hp: 58, atk: 90, def: 54, spd: 96 },
-  dex: { es: 'Sube al cielo y explota en mil colores, ¡pero siempre vuelve a casa!', en: 'It flies into the sky and bursts into a thousand colors, but it always comes home!' } });
+evolution('chispita', 26, { id: 'coheton', name: 'Cohetón', types: ['Bicho', 'Fuego'], base: { hp: 58, atk: 90, def: 54, spd: 96 },
+  dex: { es: 'Un escarabajo enorme. Cuando se emociona, sale disparado al cielo como un cohete y deja una estela de colores.', en: 'A huge beetle. When it gets excited, it shoots into the sky like a rocket and leaves a trail of colors.' } });
 
 chocoyito: {
   id: 'chocoyito', name: 'Chocoyito', types: ['Normal', 'Volador'], theme: 'conversacion',
@@ -76,22 +78,22 @@ zopilotito: {
 evolution('zopilotito', 28, { id: 'zopiloton', name: 'Zopilotón', types: ['Volador', 'Siniestro'], base: { hp: 80, atk: 74, def: 66, spd: 70 },
   dex: { es: 'Vuela en círculos sobre la ciudad. Desde arriba, conoce todas las calles.', en: 'It circles over the city. From above, it knows every street.' } });
 
-mascarita: {
-  id: 'mascarita', name: 'Mascarita', types: ['Fantasma', 'Normal'], theme: 'ropa',
+venadito: {   // a fawn in a festival mask (the user: mix with animals)
+  id: 'venadito', name: 'Venadito', types: ['Normal'], theme: 'ropa',
   base: { hp: 46, atk: 52, def: 46, spd: 60 },
-  moves: [m('Susto', 'Fantasma', 'choose'), m('Disfraz', 'Normal', 'type'), m('Desfile', 'Normal', 'listen'), m('Baile del Toro', 'Lucha', 'speak')],
+  moves: [m('Cornada', 'Normal', 'choose'), m('Disfraz', 'Normal', 'type'), m('Desfile', 'Normal', 'listen'), m('Baile del Toro', 'Lucha', 'speak')],
   catchRate: 0.3,
-  dex: { es: 'Una máscara de fiesta con vida. Se pone ropa de colores para bailar.', en: 'A festival mask that’s alive. It puts on colorful clothes to dance.' },
+  dex: { es: 'Un venadito que se pone una máscara de fiesta. ¡Le encanta disfrazarse y bailar!', en: 'A fawn that puts on a festival mask. It loves dressing up and dancing!' },
 },
-evolution('mascarita', 30, { id: 'torovenado', name: 'Torovenado', types: ['Fantasma', 'Lucha'], base: { hp: 74, atk: 86, def: 70, spd: 80 },
-  dex: { es: 'Baila en el desfile del Torovenado. Tiene cuernos de toro y de venado.', en: 'It dances in the Torovenado parade. It has a bull’s horns and a deer’s antlers.' } });
+evolution('venadito', 30, { id: 'torovenado', name: 'Torovenado', types: ['Normal', 'Lucha'], base: { hp: 74, atk: 86, def: 70, spd: 80 },
+  dex: { es: 'Baila en el desfile del Torovenado. Tiene cuernos de toro y astas de venado.', en: 'It dances in the Torovenado parade. It has a bull’s horns and a deer’s antlers.' } });
 
-hamaquita: {
-  id: 'hamaquita', name: 'Hamaquita', types: ['Normal'], theme: 'rutina',
+perezosito: {   // a sloth asleep in the hammock (the user: instead of a hammock)
+  id: 'perezosito', name: 'Perezosito', types: ['Normal', 'Psíquico'], theme: 'rutina',
   base: { hp: 80, atk: 40, def: 60, spd: 30 },
   moves: [m('Bostezo', 'Normal', 'choose'), m('Balanceo', 'Normal', 'type'), m('Canción de Cuna', 'Psíquico', 'listen'), m('Siesta', 'Psíquico', 'speak')],
   catchRate: 0.3,
-  dex: { es: 'Se despierta tarde, se baña, desayuna... ¡y vuelve a dormir!', en: 'It wakes up late, takes a bath, has breakfast... and goes back to sleep!' },
+  dex: { es: 'Duerme en una hamaca casi todo el día. Se despierta tarde, desayuna... ¡y vuelve a dormir!', en: 'It sleeps in a hammock most of the day. It wakes up late, has breakfast... and goes back to sleep!' },
 },
 
 lamparita: {
@@ -105,19 +107,20 @@ lamparita: {
 
 | Palabrita | Look |
 |---|---|
-| Garrobito | a small spiny-tailed iguana (*garrobo*) sunbathing, orange spines along its back |
 | Brasita | (the user's art) |
+| Brasaurio | a bigger fire lizard with rock-hard dark scales and embers along its back |
+| Volcasaurio | a huge volcanic dragon-lizard, lava glowing between its scales |
 | Hormiguita | a red leafcutter ant carrying a leaf bigger than itself, wearing a tiny hard hat |
 | Hormigón | a big ant built from gray concrete blocks, carrying a stone slab |
-| Chispita | a little firework spark: a star-shaped body with a fuse tail |
-| Cohetón | a firework rocket with a grinning face, colorful stripes and a sparkling tail |
+| Chispita | a firefly whose glowing tail throws sparks like a firework |
+| Cohetón | a big beetle with a rocket-shaped shell and a trail of colorful sparks |
 | Chocoyito | a green parakeet (*chocoyo*) with an orange forehead and a chatty open beak |
 | Chocoyote | a big parakeet with flame-colored wing tips |
 | Zopilotito | a scruffy black vulture chick with a bald gray head, holding a tiny broom |
 | Zopilotón | a big black vulture with broad wings and a street-sweeper's cap |
-| Mascarita | a colorful floating festival mask with ribbons |
-| Torovenado | a dancing festival costume: bull horns, deer antlers, a mask and ribbons |
-| Hamaquita | a striped Nicaraguan hammock that's always asleep, with a little face in the middle |
+| Venadito | a fawn wearing a colorful festival mask with ribbons |
+| Torovenado | a dancing stag-bull: deer antlers and bull horns, a festival mask and ribbons |
+| Perezosito | a baby sloth asleep in a striped Nicaraguan hammock |
 | Lamparita | an old oil lamp with a ghostly flame face |
 
 ---
@@ -127,8 +130,8 @@ lamparita: {
 Append region 4's families in the order you meet them:
 
 ```
-garrobito brasita hormiguita hormigon zopilotito zopiloton chocoyito chocoyote chispita coheton
-lamparita hamaquita mascarita torovenado
+brasita brasaurio volcasaurio hormiguita hormigon zopilotito zopiloton chocoyito chocoyote chispita coheton
+lamparita perezosito venadito torovenado
 ```
 
 `data.test` should check that every species is in `DEX_ORDER` exactly once.
@@ -140,9 +143,9 @@ lamparita hamaquita mascarita torovenado
 Done so far: the starters' three stages, Pajarito, Palomón, Conejito, Liebrón, Hojadillo, Mordisquito, Brasita.
 
 1. Gym leaders' strongest Palabritas and the gifts: Petroglifón, Mordiscón, Cohetón, Paslamita,
-   Caparazonte, Mascarita.
+   Caparazonte, Venadito, Brasaurio.
 2. The ones you meet most: Ardillita, Colibrí, Espinita, Cangrejito, Coquito, Chispita, Chocoyito,
-   Gusanito, Garrobito.
+   Gusanito, Hormiguita.
 3. Everything else.
 
 To bring art in, use the recipe in CLAUDE.md ("The user's art").

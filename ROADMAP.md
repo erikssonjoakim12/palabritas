@@ -62,7 +62,7 @@ Route trainers sit between the previous leader and the next one.
 | 1 ✓ | Ciudad Brisa | Volador (birds) | 2 | 12 | 3-6 |
 | 2 ✓ | Villa Ocote, a pine-highland town past the cave | Roca / Tierra | 3 | 21 | 12-18 |
 | 3 ✓ | Playa Carey, a fishing village on the Pacific | Agua | 3 | 25 | 17-21 |
-| 4 | Ciudad Chispa, the volcano town | Fuego | 3 | 31 | 18-26 |
+| 4 | Ciudad Chispa, the volcano town | Fuego | 3 | 32 | 18-26 |
 | 5 | rainforest town | Planta / Veneno | 3-4 | 37 | 28-34 |
 | 6 | the lake archipelago, stormy | Eléctrico | 4 | 43 | 34-40 |
 | 7 | cloud-forest highlands | Psíquico (emotions) | 4 | 50 | 40-47 |
