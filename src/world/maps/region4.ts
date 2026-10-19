@@ -85,6 +85,8 @@ export const REGION4_MAPS: Record<string, MapDef> = {
       { id: 'turista_r8', x: 28, y: 11, look: 'tourist', dir: 'left', script: 'turista_r8', sight: 3 },
       { id: 'cortador', x: 18, y: 25, look: 'cortador', dir: 'right', script: 'cortador', sight: 3 },
       { id: 'cortadora', x: 25, y: 23, look: 'cortador', dir: 'left', script: 'cortadora', sight: 3 },
+      { id: 'cortadora_marta', x: 8, y: 23, look: 'cortador', dir: 'right', script: 'cortadora_marta', sight: 3 },
+      { id: 'cortador_wilmer', x: 22, y: 27, look: 'cortador', dir: 'left', script: 'cortador_wilmer', sight: 3 },
       { id: 'granjero', x: 37, y: 18, look: 'campesino', dir: 'right', script: 'granjero', sight: 2 },
       { id: 'ciclista', x: 39, y: 23, look: 'ciclista', dir: 'left', script: 'ciclista', sight: 2 },
       { id: 'vaca1', x: 37, y: 5, object: 'vaca', script: 'vaca' },
@@ -437,6 +439,9 @@ export const REGION4_MAPS: Record<string, MapDef> = {
       { id: 'guardaparque1', x: 6, y: 20, look: 'guardaparque', dir: 'left', script: 'guardaparque1', sight: 2 },
       { id: 'vulcanologa1', x: 23, y: 11, look: 'vulcanologo', dir: 'right', script: 'vulcanologa1', sight: 2 },
       { id: 'guardaparque2', x: 12, y: 4, look: 'guardaparque', dir: 'right', script: 'guardaparque2', sight: 2 },
+      { id: 'excursionista_noel', x: 5, y: 11, look: 'hiker', dir: 'right', script: 'excursionista_noel', sight: 3 },
+      { id: 'vulcanologa_sara', x: 23, y: 25, look: 'vulcanologo', dir: 'left', script: 'vulcanologa_sara', sight: 3 },
+      { id: 'fotografo_max', x: 20, y: 7, look: 'tourist', dir: 'down', script: 'fotografo_max', sight: 1 },
     ],
   },
   // Elsa lets you rest (it heals); Lucas waits here and battles you on your way out (rival #3, the user's choice).
@@ -543,10 +548,11 @@ export const REGION4_MAPS: Record<string, MapDef> = {
     doors: [{ x: 5, y: 25, to: 'tubo', tx: 36, ty: 2, dir: 'down' }],
     encounters: { rate: 0.15, table: [{ sp: 'chocoyito', min: 22, max: 24, w: 75 }, { sp: 'chispita', min: 22, max: 24, w: 25 }] },
     npcs: [
-      { id: 'silencioso5', x: 5, y: 12, look: 'silencioso', dir: 'left', script: 'silencioso5', sight: 2 },
-      { id: 'silencioso6', x: 26, y: 17, look: 'silenciosa', dir: 'right', script: 'silencioso6', sight: 2 },
+      // On the walkways' outer edge, against the rock: the lava is hot.
+      { id: 'silencioso5', x: 3, y: 12, look: 'silencioso', dir: 'right', script: 'silencioso5', sight: 2 },
+      { id: 'silencioso6', x: 28, y: 17, look: 'silenciosa', dir: 'left', script: 'silencioso6', sight: 2 },
       { id: 'silencioso7', x: 9, y: 2, look: 'silencioso', dir: 'down', script: 'silencioso7', sight: 2 },
-      { id: 'sigilo', x: 16, y: 3, look: 'sigilo', dir: 'down', script: 'sigilo', sight: 1, show: () => !flag('sigiloSeFue') },
+      { id: 'sigilo', x: 16, y: 2, look: 'sigilo', dir: 'down', script: 'sigilo', sight: 2, show: () => !flag('sigiloSeFue') },
       { id: 'cohetes1', x: 14, y: 2, object: 'cajaCohetes', script: 'cohetes', show: () => !flag('cohetesRecuperados') },
       { id: 'cohetes2', x: 18, y: 2, object: 'cajaCohetes', script: 'cohetes', show: () => !flag('cohetesRecuperados') },
       { id: 'nido_chocoyos', x: 30, y: 12, object: 'nido', script: 'nidoChocoyos' },

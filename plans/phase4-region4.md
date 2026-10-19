@@ -2,7 +2,9 @@
 
 **Goal:** you can play from the Medalla Ola to the **Medalla Chispa**. ✓ **Built** (2026-10-19), in 4 stages.
 As built: the code is the truth (src/world/maps/region4.ts, src/world/region4.ts); the main differences from below:
-no bandana head (cutters wear straw hats), the festival can be replayed from the mask seller for the Torovenado,
+no bandana head (cutters wear straw hats); 5 optional trainers more (the sugarcane fields and the volcano's
+side terraces, 22-25, the user: the climb to Don Tizón is the steepest); Don Tizón 27 · 28 · 32; the crater's
+trainers stand back from the lava; the festival can be replayed from the mask seller for the Torovenado,
 and Elsa offers the rest (the bed) by talking to her.
 
 **The route:**
@@ -640,7 +642,7 @@ lucas3: { id: 'lucas3', name: 'Lucas', defenseMode: 'type', team: [['<counter st
 polvorera: { id: 'polvorera', name: 'Polvorera Gloria', defenseMode: 'type', team: [['chispita', 25], ['chispita', 25]] },
 malabarista: { id: 'malabarista', name: 'Malabarista Ricky', defenseMode: 'type', team: [['chocoyito', 25], ['coheton', 26]] },
 fritanguero: { id: 'fritanguero', name: 'Fritanguero Neno', defenseMode: 'type', team: [['chocoyote', 26], ['chispita', 26]] },
-tizon: { id: 'tizon', name: 'Líder Don Tizón', defenseMode: 'type', team: [['chocoyote', 28], ['coheton', 29], ['brasaurio', 32]] },
+tizon: { id: 'tizon', name: 'Líder Don Tizón', defenseMode: 'type', team: [['chocoyote', 27], ['coheton', 28], ['brasaurio', 32]] },
 campesina_r9: { id: 'campesina_r9', name: 'Campesina Tula', defenseMode: 'listen', team: [['zopilotito', 24], ['liebron', 25]] },
 ciclista_r9: { id: 'ciclista_r9', name: 'Ciclista Bruno', defenseMode: 'listen', rematch: true, team: [['zopilotito', 25], ['hormigon', 25]] },
 excursionista_r9: { id: 'excursionista_r9', name: 'Excursionista Lila', defenseMode: 'listen', team: [['palomon', 25], ['liebron', 26]] },

@@ -99,9 +99,15 @@ export const TRAINERS: Record<string, TrainerDef> = {
   campesina_r9: { id: 'campesina_r9', name: 'Campesina Tula', defenseMode: 'listen', team: [['zopilotito', 24], ['liebron', 25]] },
   ciclista_r9: { id: 'ciclista_r9', name: 'Ciclista Bruno', defenseMode: 'listen', rematch: true, team: [['zopilotito', 25], ['hormigon', 25]] },
   excursionista_r9: { id: 'excursionista_r9', name: 'Excursionista Lila', defenseMode: 'listen', team: [['palomon', 25], ['liebron', 26]] },
+  // Optional trainers where the climb to Don Tizón is steepest (the sugarcane fields and the volcano's side terraces).
+  cortadora_marta: { id: 'cortadora_marta', name: 'Cortadora Marta', defenseMode: 'listen', team: [['hormigon', 23], ['hormiguita', 22], ['zopilotito', 22]] },
+  cortador_wilmer: { id: 'cortador_wilmer', name: 'Cortador Wilmer', defenseMode: 'listen', team: [['liebron', 22], ['hormiguita', 23]] },
+  excursionista_noel: { id: 'excursionista_noel', name: 'Excursionista Noel', defenseMode: 'listen', team: [['chocoyito', 23], ['chispita', 23], ['zopilotito', 24]] },
+  vulcanologa_sara: { id: 'vulcanologa_sara', name: 'Vulcanóloga Sara', defenseMode: 'listen', rematch: true, team: [['chispita', 24], ['chocoyote', 25]] },
+  fotografo_max: { id: 'fotografo_max', name: 'Fotógrafo Max', defenseMode: 'choose', team: [['zopilotito', 24], ['chocoyito', 24], ['liebron', 25]] },
   // Region 4's bosses. Lucas #3: region4.ts builds his team from his starter's second form. Brasita's family only
   // appears on bosses (the user): Don Tizón's ace is Brasaurio.
   sigilo: { id: 'sigilo', name: 'Don Sigilo', defenseMode: 'type', team: [['murcielon', 27], ['taranton', 28], ['petroglifon', 29]] },
   lucas3: { id: 'lucas3', name: 'Lucas', defenseMode: 'type', team: [['nubarron', 28], ['hojarasco', 25], ['palomon', 25], ['cangrejon', 26]] },
-  tizon: { id: 'tizon', name: 'Líder Don Tizón', defenseMode: 'type', team: [['chocoyote', 28], ['coheton', 29], ['brasaurio', 32]] },
+  tizon: { id: 'tizon', name: 'Líder Don Tizón', defenseMode: 'type', team: [['chocoyote', 27], ['coheton', 28], ['brasaurio', 32]] },
 };

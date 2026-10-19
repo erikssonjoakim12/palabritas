@@ -126,7 +126,7 @@ Villa Ocote → Ruta 6 → Ruta 7 → **Playa Carey** and the Playa de las Tortu
   Después, el azul. Luego, el verde. Al final, el amarillo.»* Get the order wrong and it fizzles out, so you
   start again.
 - **Gym trainers:** a fireworks maker, a fire juggler, a street-food cook.
-- **Don Tizón's team:** Chocoyote 28, Cohetón 29, Brasaurio 32 (Brasita's second stage).
+- **Don Tizón's team:** Chocoyote 27, Cohetón 28, Brasaurio 32 (Brasita's second stage).
 - **His Spanish:** the past tense (*«¡Ayer hice mil cohetes!»*).
 - **Reward:** Medalla Chispa.
 
@@ -306,7 +306,7 @@ Don Sigilo. New heads: cowboy hat, bandana and hood. The rest reuse existing hea
 |---|---|---|---|---|---|---|
 | 2 | 10–15 | 12–14 | 15 + 12 | grunts 13–15, Capataz 16 | 15–16 | 17 · 19 · **21** (raised) |
 | 3 | 14–19 (fishing 10–22) | 15–20 | 22 + 19–20 | grunts 18–20, Callada 21–22 | 20–22 | 22 · 23 · **25** |
-| 4 | 15–25 (user) | 18–26 (user) | 28 + 25–26 | grunts 23–25, Don Sigilo 27–29 | 25–26 | 28 · 29 · **32** |
+| 4 | 15–25 (user) | 18–26 (user) | 28 + 25–26 | grunts 23–25, Don Sigilo 27–29 | 25–26 | 27 · 28 · **32** |
 
 ---
 

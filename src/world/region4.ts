@@ -520,6 +520,36 @@ export const REGION4: Record<string, ScriptFn> = {
   abuelo_leyenda: abueloLeyenda,
 
   // ---------- Trainers ----------
+  cortadora_marta: fight(
+    'cortadora_marta',
+    ['Aquí en la caña se esconden las mejores Palabritas. ¡Y yo!', 'The best Palabritas hide here in the cane. And so do I!'],
+    ['¡Me cortaste el paso!', 'You cut me off!'],
+    ['Si vienes a entrenar, aquí hay Palabritas todo el día.', 'If you come to train, there are Palabritas here all day.'],
+  ),
+  cortador_wilmer: fight(
+    'cortador_wilmer',
+    ['¡Ey! Estaba descansando a la sombra. ¿Una batalla rápida?', 'Hey! I was resting in the shade. A quick battle?'],
+    ['¡Bueno, vuelvo a mi siesta!', 'Well, back to my nap!'],
+    ['La caña se corta en la época seca, de enero a abril.', 'The cane is cut in the dry season, from January to April.'],
+  ),
+  excursionista_noel: fight(
+    'excursionista_noel',
+    ['Subí por este lado para ver el lago desde arriba. ¿Luchamos?', 'I came up this side to see the lake from above. Shall we battle?'],
+    ['¡Qué vista y qué batalla!', 'What a view, and what a battle!'],
+    ['Desde aquí se ven el lago y las islas. ¡Vale la pena subir!', 'From here you can see the lake and the islands. It’s worth the climb!'],
+  ),
+  vulcanologa_sara: fight(
+    'vulcanologa_sara',
+    ['Mido la temperatura del volcán todos los días. ¡Hoy está caliente, como yo!', 'I measure the volcano’s temperature every day. Today it’s hot, like me!'],
+    ['¡Me bajó la temperatura!', 'My temperature dropped!'],
+    ['Si el humo cambia de color, hay que avisar a todo el pueblo.', 'If the smoke changes color, the whole town has to be warned.'],
+  ),
+  fotografo_max: fight(
+    'fotografo_max',
+    ['¡Sonríe! Bueno, primero una batalla, después la foto.', 'Smile! Well, a battle first, then the photo.'],
+    ['¡Salí movido en la foto!', 'I came out blurry in the photo!'],
+    ['Las mejores fotos del volcán son al amanecer.', 'The best photos of the volcano are at sunrise.'],
+  ),
   polvorera: fight('polvorera', ['Hago cohetes de todos los colores. ¿Cuál te gusta más?', 'I make rockets in every color. Which one do you like best?'], ['¡Me salió un cohete apagado!', 'My rocket fizzled out!'], ['El rojo es el más difícil de hacer.', 'Red is the hardest to make.']),
   malabarista: fight('malabarista', ['¡Hago malabares con fuego! ¿Ves? ¡Ups!', 'I juggle with fire! See? Oops!'], ['¡Se me cayeron todas las antorchas!', 'I dropped all my torches!'], ['Para ganar, como en los malabares: práctica, práctica, práctica.', 'To win, it’s like juggling: practice, practice, practice.']),
   fritanguero: fight('fritanguero', ['¿Hambre? ¡Primero la batalla, después el vigorón!', 'Hungry? First the battle, then the vigorón!'], ['¡Se me quemó la tortilla!', 'My tortilla burned!'], ['Don Tizón come vigorón todos los días. ¡Por eso tiene tanta energía!', 'Don Tizón eats vigorón every day. That’s why he has so much energy!']),
