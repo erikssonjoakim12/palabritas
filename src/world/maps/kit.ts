@@ -108,6 +108,8 @@ export interface MapDef {
   style?: MapStyle;
   /** Drawn dark, with light around you (night scenes). */
   night?: boolean;
+  /** Fireworks in the night sky (the festival in Ciudad Chispa). */
+  fireworks?: boolean;
   /** Roof color for 'r' buildings (key in ROOFS, style/colors.ts). */
   roof?: string;
   connections?: Partial<Record<Dir, Conn>>;

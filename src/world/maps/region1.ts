@@ -54,6 +54,8 @@ export const REGION1_MAPS: Record<string, MapDef> = {
     triggers: [
       { x: 14, y: 1, script: 'needStarter' },
       { x: 15, y: 1, script: 'needStarter' },
+      // Home again, down the ledge from Ruta 9 (region4.ts vueltaACasa).
+      ...[6, 7, 8, 9].map((y) => ({ x: 8, y, script: 'vueltaACasa' })),
     ],
   },
 

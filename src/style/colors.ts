@@ -54,7 +54,7 @@ export const OUTDOOR = {
   /** Sugarcane: the light leaves, the stalks, the shade. */
   cane: ['#d0f098', '#6ab048', '#2e6a28', INK] as Pal,
   /** Cobblestones in Ciudad Chispa's plaza. */
-  cobble: ['#e8e4dc', '#c4bcb0', '#8c8478', INK] as Pal,
+  cobble: ['#e8e4d8', '#d0c8b8', '#b0a898', INK] as Pal,
 };
 
 /** Tree leaves (a light, b mid, c shade) and trunks (k, K): green and dry-season trees. */
@@ -97,6 +97,9 @@ export const DAY_CYCLE: { h: number; tint: string; light: number }[] = [
   { h: 18, tint: '#f8b890', light: 0.3 },
   { h: 19, tint: '#7080c8', light: 1 },
 ];
+
+/** Festival fireworks (art/fireworks.ts). */
+export const FIREWORK_COLORS = ['#f85858', '#f8d048', '#58c8f8', '#78e068', '#e878f0', '#f8f8f8'];
 
 /** Warm light from windows and lamps at night (art/lights.ts), added over the dark. */
 export const NIGHT_LIGHT = {

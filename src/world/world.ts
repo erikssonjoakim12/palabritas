@@ -11,6 +11,7 @@ import { G, flag, saveGame, playerLook, clockHour } from '../game/state';
 import { rematchReady } from '../game/rematch';
 import { NIGHT, NIGHT_CLEAR } from '../style/colors';
 import { lightAt, drawLights, skyAt, type Light } from '../art/lights';
+import { drawFireworks } from '../art/fireworks';
 import { itemCount } from '../game/bag';
 import { closeText, say, setSpeaker } from '../ui/textbox';
 
@@ -699,6 +700,7 @@ export function renderWorld(g: CanvasRenderingContext2D) {
   if (map.night) {
     drawNight(g, 72, 68 - hop);
     drawLights(g, lights, -camX, -camY);
+    if (map.fireworks) drawFireworks(g);
   } else if (map.outdoor) drawDayTime(g, camX, camY);
   if (fade > 0) {
     g.fillStyle = `rgba(0,0,0,${fade})`;

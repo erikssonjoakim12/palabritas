@@ -85,7 +85,7 @@ async function healingMachine() {
   machine.overlay = undefined;
 }
 
-async function heal() {
+export async function heal() {
   sfx('heal');
   healParty();
   await frames(70);

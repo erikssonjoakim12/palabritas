@@ -14,7 +14,7 @@ import { TRAINERS } from '../data/trainers';
 import { speak } from '../lang/speech';
 import { gradeDish } from '../lang/order';
 import { warp, refreshNpcs, walkNpc, placeNpc, fadeOut, type ScriptFn } from './world';
-import { MAPS, type Line } from './maps';
+import type { Line } from './maps';
 import { lines, trainerFight, blackout, talkMode } from './scripts';
 import { lucasStarter } from './region2';
 import { drill, teacher } from './school';
@@ -311,10 +311,6 @@ async function marina() {
   sfx('badge');
   await info('¡{name} recibió la Medalla Ola!', { en: '{name} received the Wave Medal!' });
   await lines(['Con esta medalla puedes ir al este, hacia el volcán. Dicen que en Ciudad Chispa preparan una gran fiesta.', 'With this medal you can go east, toward the volcano. They say Ciudad Chispa is preparing a big festival.']);
-  if (!MAPS.ruta8) {
-    await info('¡Felicidades! Terminaste la tercera parte de Palabritas.', { en: 'Congratulations! You finished the third part of Palabritas.' });
-    await info('Sigue entrenando a tus Palabritas y atrapando nuevas. ¡Pronto habrá más aventuras!', { en: 'Keep training your Palabritas and catching new ones. More adventures are coming soon!' });
-  }
 }
 
 // ---------- Trainers ----------

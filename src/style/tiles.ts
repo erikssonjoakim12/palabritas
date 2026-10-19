@@ -368,8 +368,8 @@ export const ART: Record<string, TileArt> = {
   },
   /** Sugarcane: tall stalks with leaves (tall grass: wild Palabritas). */
   sugarcane: { pal: OUTDOOR.cane, rows: tile8(['01200120', '01210121', '02200220', '01200120', '11201120', '01200120', '01210121', '02200220']) },
-  /** Cobblestones: rows of rounded stones. */
-  cobble: { pal: OUTDOOR.cobble, rows: tile8(['01120112', '11120112', '11121112', '22222222', '12011120', '12111120', '12111121', '22222222']) },
+  /** Cobblestones: pale flagstones with soft joints (dark joints made the plaza look like a wall). */
+  cobble: { pal: OUTDOOR.cobble, rows: tile8(['00010000', '00010000', '00210000', '11111111', '00000001', '00000001', '00000021', '11111111']) },
   /** The church's bell tower: the top has the bell in an arch (drawn over the ground). */
   bellTower: {
     pal: OUTDOOR.wall,

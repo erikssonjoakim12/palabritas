@@ -1,8 +1,22 @@
-import { itemBall, tienda, casa, escuela, centro, type MapDef } from './kit';
+import { flag } from '../../game/state';
+import { itemBall, tienda, casa, escuela, night, centro, type MapDef, type NpcDef } from './kit';
 
 // Region 4: the volcanoes and dry forest. Ruta 8 east from Playa Carey, Ciudad Chispa (a colonial festival town,
 // like Masaya), up the Volcán Chocoyo (the slopes, the lava tube, the crater), and Ruta 9 home to Pueblo Amanecer.
 // Story and quests: world/region4.ts. Plan: plans/phase4-region4.md.
+
+/** The workshop's torches, in the order the poem gives (region4.ts antorcha), and where each stands. */
+export const TORCHES = [
+  { color: 'Roja', es: 'roja', x: 3 },
+  { color: 'Azul', es: 'azul', x: 10 },
+  { color: 'Verde', es: 'verde', x: 1 },
+  { color: 'Amarilla', es: 'amarilla', x: 8 },
+];
+/** A torch: its unlit stand, and the same spot burning once it's lit. */
+const torch = (t: (typeof TORCHES)[number]): NpcDef[] => [
+  { id: `antorcha${t.color}`, x: t.x, y: 5, object: `antorcha${t.color}`, script: 'antorcha', show: () => !flag(`antorcha:${t.color}`) },
+  { id: `antorcha${t.color}On`, x: t.x, y: 5, object: `antorcha${t.color}On`, script: 'antorchaEncendida', show: () => flag(`antorcha:${t.color}`) },
+];
 
 export const REGION4_MAPS: Record<string, MapDef> = {
   // Hot dry forest: a lagoon with a pier, a fenced farm and the sugarcane fields (the training spot, reached only
@@ -140,7 +154,43 @@ export const REGION4_MAPS: Record<string, MapDef> = {
       ...[19, 20, 21].map((x) => ({ x, y: 20, es: 'Máscaras y trajes de fiesta.', en: 'Masks and festival costumes.' })),
       ...[23, 24, 25].map((x) => ({ x, y: 20, es: 'Vigorón, quesillo y tortillas.', en: 'Vigorón, quesillo and tortillas.' })),
     ],
+    // Walking in for the first time: the fireworks are stolen (region4.ts fiestaChispa).
+    triggers: [
+      { x: 2, y: 12, script: 'fiestaChispa' },
+      { x: 2, y: 13, script: 'fiestaChispa' },
+    ],
+    gates: [
+      {
+        id: 'guardaparque_chispa',
+        look: 'guardaparque',
+        opens: () => flag('cohetesRobados'),
+        at: [24, 2, 'down'],
+        aside: [23, 2],
+        road: [[25, 2]],
+        back: 'down',
+        closed: [['El volcán está cerrado hoy. Hay mucho humo.', 'The volcano is closed today. There’s a lot of smoke.']],
+        open: [['¡Los ladrones subieron al volcán! Ten cuidado, {name}.', 'The thieves went up the volcano! Be careful, {name}.']],
+      },
+      {
+        id: 'aprendiz_polvora',
+        look: 'polvorero',
+        opens: () => flag('fiestaDone'),
+        at: [29, 13, 'down'],
+        aside: [28, 13],
+        road: [],
+        back: 'down',
+        closed: () =>
+          flag('cohetesRecuperados')
+            ? [['¡Esta noche es la fiesta! Habla con Don Tizón.', 'Tonight is the festival! Talk to Don Tizón.']]
+            : [['El taller está cerrado. Don Tizón está muy triste...', 'The workshop is closed. Don Tizón is very sad...']],
+        open: [['¡Don Tizón te espera en el taller! Enciende bien las antorchas.', 'Don Tizón is waiting for you in the workshop! Light the torches right.']],
+      },
+    ],
     npcs: [
+      { id: 'tizon_plaza', x: 8, y: 14, look: 'tizon', dir: 'left', script: 'tizon_plaza', show: () => flag('robo') && !flag('cohetesRecuperados') },
+      { id: 'ladron1', x: 24, y: 9, look: 'silencioso', dir: 'up', script: 'ladron', show: () => flag('robo') && !flag('cohetesRobados') },
+      { id: 'ladron2', x: 25, y: 8, look: 'silenciosa', dir: 'up', script: 'ladron', show: () => flag('robo') && !flag('cohetesRobados') },
+      { id: 'tizon_taller', x: 30, y: 13, look: 'tizon', dir: 'left', script: 'tizon_taller', show: () => flag('cohetesRecuperados') && !flag('fiestaDone') },
       { id: 'hamaquera', x: 12, y: 21, look: 'lady', dir: 'up', script: 'hamaquera' },
       { id: 'mascarero', x: 20, y: 21, look: 'man', dir: 'up', script: 'mascarero' },
       { id: 'fritanguera', x: 24, y: 21, look: 'granny', dir: 'up', script: 'fritanguera' },
@@ -251,6 +301,24 @@ export const REGION4_MAPS: Record<string, MapDef> = {
       '+++++mm+++++',
     ],
     exit: { to: 'chispa', x: 29, y: 13 },
+    signs: [
+      {
+        x: 2,
+        y: 4,
+        es: 'Primero, el fuego rojo. Después, el azul. Luego, el verde. Al final, el amarillo.',
+        en: 'First, the red fire. Then, the blue. Next, the green. Finally, the yellow.',
+      },
+    ],
+    npcs: [
+      ...TORCHES.flatMap(torch),
+      { id: 'puerta_taller1', x: 5, y: 4, object: 'puertaTaller', script: 'puertaTaller', show: () => !flag('puertaTallerAbierta') },
+      { id: 'puerta_taller2', x: 6, y: 4, object: 'puertaTaller', script: 'puertaTaller', show: () => !flag('puertaTallerAbierta') },
+      { id: 'polvorera', x: 0, y: 6, look: 'polvorero', dir: 'right', script: 'polvorera', sight: 11 },
+      { id: 'malabarista', x: 11, y: 10, look: 'ciclista', dir: 'left', script: 'malabarista', sight: 11 },
+      { id: 'fritanguero', x: 1, y: 2, look: 'man', dir: 'right', script: 'fritanguero', sight: 4 },
+      { id: 'tizon', x: 5, y: 1, look: 'tizon', dir: 'down', script: 'tizon' },
+      { id: 'guia_chispa', x: 8, y: 12, look: 'polvorero', dir: 'left', script: 'guia_chispa' },
+    ],
   },
 
   // Home: from Ciudad Chispa east to Pueblo Amanecer's plateau, where you jump down the ledge into town.
@@ -370,9 +438,17 @@ export const REGION4_MAPS: Record<string, MapDef> = {
       { id: 'guardaparque2', x: 12, y: 4, look: 'guardaparque', dir: 'right', script: 'guardaparque2', sight: 2 },
     ],
   },
-  estacion: casa('estacion', 'Estación de guardaparques', { to: 'laderas', x: 19, y: 17 }, [
-    { id: 'elsa', x: 5, y: 3, look: 'guardaparque', dir: 'down', script: 'elsa' },
-  ]),
+  // Elsa lets you rest (it heals); Lucas waits here and battles you on your way out (rival #3, the user's choice).
+  estacion: casa(
+    'estacion',
+    'Estación de guardaparques',
+    { to: 'laderas', x: 19, y: 17 },
+    [
+      { id: 'elsa', x: 5, y: 3, look: 'guardaparque', dir: 'down', script: 'elsa' },
+      { id: 'lucas_estacion', x: 3, y: 5, look: 'lucas', dir: 'right', script: 'lucas_estacion', show: () => !flag('lucas3') },
+    ],
+    { triggers: [{ x: 4, y: 5, script: 'lucasEstacion' }] },
+  ),
   tubo: {
     id: 'tubo',
     name: 'Tubo de Lava',
@@ -468,6 +544,26 @@ export const REGION4_MAPS: Record<string, MapDef> = {
       { id: 'silencioso5', x: 5, y: 12, look: 'silencioso', dir: 'left', script: 'silencioso5', sight: 2 },
       { id: 'silencioso6', x: 26, y: 17, look: 'silenciosa', dir: 'right', script: 'silencioso6', sight: 2 },
       { id: 'silencioso7', x: 9, y: 2, look: 'silencioso', dir: 'down', script: 'silencioso7', sight: 2 },
+      { id: 'sigilo', x: 16, y: 3, look: 'sigilo', dir: 'down', script: 'sigilo', sight: 1, show: () => !flag('sigiloSeFue') },
+      { id: 'cohetes1', x: 14, y: 2, object: 'cajaCohetes', script: 'cohetes', show: () => !flag('cohetesRecuperados') },
+      { id: 'cohetes2', x: 18, y: 2, object: 'cajaCohetes', script: 'cohetes', show: () => !flag('cohetesRecuperados') },
     ],
   },
 };
+
+// The festival (region4.ts festival): Ciudad Chispa at night, fireworks over the plaza and dancers around the
+// fountain. The apprentice or Don Tizón ends the night.
+REGION4_MAPS.chispa_noche = night(REGION4_MAPS.chispa, 'chispa_noche', {
+  fireworks: true,
+  npcs: [
+    { id: 'tizon_fiesta', x: 17, y: 11, look: 'tizon', dir: 'down', script: 'tizon_fiesta' },
+    { id: 'aprendiz_fiesta', x: 22, y: 17, look: 'polvorero', dir: 'left', script: 'aprendiz_fiesta' },
+    { id: 'bailarina1', x: 15, y: 12, look: 'bailarina1', dir: 'right', script: 'bailarin' },
+    { id: 'bailarin1', x: 20, y: 12, look: 'bailarin1', dir: 'down', script: 'bailarin' },
+    { id: 'bailarina2', x: 20, y: 15, look: 'bailarina2', dir: 'left', script: 'bailarin' },
+    { id: 'bailarin2', x: 15, y: 15, look: 'bailarin2', dir: 'up', script: 'bailarin' },
+    { id: 'hija_tizon_fiesta', x: 12, y: 16, look: 'girl', dir: 'up', script: 'hija_tizon' },
+    { id: 'senora_azul_fiesta', x: 24, y: 16, look: 'cashier', dir: 'up', script: 'senora_azul' },
+    { id: 'nino_fiesta', x: 11, y: 12, look: 'boy', dir: 'right', script: 'nino_plaza' },
+  ],
+});
