@@ -123,7 +123,7 @@ async function settings() {
   while (true) {
     const st = G.save.settings;
     const i = await menu(
-      [`Texto: ${sizes[st.textScale]}`, `Voz en diálogos: ${st.dialogVoice ? 'Sí' : 'No'}`, `Voz lenta: ${st.slowVoice ? 'Sí' : 'No'}`, `Música: ${st.music ? 'Sí' : 'No'}`, 'Volver'],
+      [`Texto: ${sizes[st.textScale]}`, `Voz en diálogos: ${st.dialogVoice ? 'Sí' : 'No'}`, `Voz lenta: ${st.slowVoice ? 'Sí' : 'No'}`, `Música: ${st.musicLevel ? `${st.musicLevel}%` : 'No'}`, 'Volver'],
       { cancel: true, pos: { right: 0, top: 0 }, initial: sel, title: 'AJUSTES' },
     );
     sel = Math.max(0, i);
@@ -133,7 +133,8 @@ async function settings() {
     } else if (i === 1) st.dialogVoice = !st.dialogVoice;
     else if (i === 2) st.slowVoice = !st.slowVoice;
     else if (i === 3) {
-      st.music = !st.music;
+      // No, 20, 40, 60, 80, 100%, then off again.
+      st.musicLevel = st.musicLevel >= 100 ? 0 : st.musicLevel + 20;
       musicSettingChanged();
     } else {
       saveGame();

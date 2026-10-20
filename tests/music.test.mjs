@@ -1,6 +1,6 @@
 // Music (silent: the test browser is muted): each place plays its song (a building plays the song of the town
 // you came from), battles play theirs, the music drops to a whisper during a word challenge and goes silent for
-// listening, and the Música setting turns it off.
+// listening, and the Música setting (levels, or off) turns it off.
 import { start, sleep } from './lib.mjs';
 
 const t = await start('music');
@@ -37,7 +37,7 @@ await t.play();
 
 // The Música setting.
 await t.game(() => {
-  window.__game.G.save.settings.music = false;
+  window.__game.G.save.settings.musicLevel = 0;
   window.__game.bgm.musicSettingChanged();
 });
 t.check('with Música off, nothing plays', (await music()).playing === null);

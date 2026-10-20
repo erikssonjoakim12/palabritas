@@ -34,8 +34,8 @@ export interface Settings {
   /** Read normal dialog aloud automatically (challenges and listening moments always speak). */
   dialogVoice: boolean;
   slowVoice: boolean;
-  /** Music on or off (sound effects stay). */
-  music: boolean;
+  /** Music volume in percent: 0 (off), 20, 40, 60, 80 or 100. Sound effects stay either way. */
+  musicLevel: number;
 }
 
 export interface SaveData {
@@ -108,7 +108,7 @@ export function newSave(): SaveData {
     seen: [],
     caught: [],
     heal: { map: 'casa', x: 2, y: 4 },
-    settings: { textScale: 6, dialogVoice: false, slowVoice: false, music: true },
+    settings: { textScale: 6, dialogVoice: false, slowVoice: false, musicLevel: 60 },
     playMs: 0,
     answers: 0,
     correct: 0,
@@ -156,7 +156,10 @@ function migrate(s: SaveData) {
   s.rematch ??= {};
   s.lessons ??= {};
   s.gender ??= 'boy';
-  s.settings.music ??= true;
+  // Music was on/off; now it has levels (the user found 100% too loud: 60 is the default).
+  const st = s.settings as Settings & { music?: boolean };
+  st.musicLevel ??= st.music === false ? 0 : 60;
+  delete st.music;
   // Pueblo Amanecer grew 6 columns to the west (the plateau): keep you where you were.
   if (!s.flags.amanecerWide) {
     if (s.map === 'amanecer') s.x += 6;

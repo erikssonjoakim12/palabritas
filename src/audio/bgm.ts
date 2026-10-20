@@ -15,6 +15,8 @@ import { G } from '../game/state';
 */
 
 const BY_ID = new Map(SONGS.map((s) => [s.id, s]));
+/** The music's volume at 100% (it sits under the sound effects and the voice). */
+const FULL = 0.7;
 const player = new MusicPlayer(audioContext);
 
 let mapSong: string | null = null;
@@ -22,10 +24,13 @@ let battleSong: string | null = null;
 /** A jingle (plays once, then gone) or an overlay that loops until cleared (victory, evolution). */
 let overlay: { id: string; once: boolean } | null = null;
 
-const enabled = () => G.save?.settings?.music !== false;
+/** The Música setting, 0-100 (0: off). */
+const level = () => G.save?.settings?.musicLevel ?? 60;
+const enabled = () => level() > 0;
 
 /** Play whatever should play now (or nothing). */
 function refresh() {
+  player.setVolume(FULL * (level() / 100));
   const want = !enabled() ? null : (overlay?.id ?? battleSong ?? mapSong);
   if (want === player.playing) return;
   if (!want) return player.stop();
