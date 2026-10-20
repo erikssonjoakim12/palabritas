@@ -9,18 +9,6 @@ const W = '#ffffff';
 type Draw = (p: Pix) => void;
 
 const DRAW: Record<string, Draw> = {
-  mariposita(p) {
-    p.ellipse(13, 17, 11, 10, '#f37ab8').ellipse(35, 17, 11, 10, '#f37ab8');
-    p.ellipse(16, 33, 8, 8, '#5ab8f0').ellipse(32, 33, 8, 8, '#5ab8f0');
-    p.ellipse(11, 15, 4, 4, '#ffd84a').ellipse(37, 15, 4, 4, '#ffd84a');
-    p.ellipse(15, 34, 3, 3, '#9a5ad0').ellipse(33, 34, 3, 3, '#9a5ad0');
-    p.ellipse(24, 27, 3, 13, '#2a2238');
-    p.ellipse(24, 12, 4, 4, '#2a2238');
-    p.line(22, 9, 17, 3, '#2a2238').line(26, 9, 31, 3, '#2a2238');
-    p.ellipse(17, 3, 1.5, 1.5, '#2a2238').ellipse(31, 3, 1.5, 1.5, '#2a2238');
-    p.set(22, 12, W).set(26, 12, W);
-    p.outline('#2a2238');
-  },
   // ----- Placeholders for the cave Palabritas, until the real art arrives -----
   /** A bat with big ears and spread wings. */
   ecolin(p) {
@@ -36,36 +24,6 @@ const DRAW: Record<string, Draw> = {
     p.rect(22, 26, 5, 1, K).set(22, 27, W).set(26, 27, W); // mouth and little fangs
     p.rect(20, 37, 2, 3, '#4e3a68').rect(26, 37, 2, 3, '#4e3a68');
     p.outline('#2a1a38');
-  },
-  /** A round, hairy tarantula with eight legs. */
-  ochopatas(p) {
-    const fur = '#8a5a34', leg = '#5a3418', band = '#e08038';
-    for (let i = 0; i < 4; i++) {
-      const y = 22 + i * 5;
-      p.line(18, y, 7, y - 6 + i * 2, leg).line(7, y - 6 + i * 2, 3, y + 6, leg).line(18, y + 1, 8, y - 5 + i * 2, leg);
-      p.line(30, y, 41, y - 6 + i * 2, leg).line(41, y - 6 + i * 2, 45, y + 6, leg).line(30, y + 1, 40, y - 5 + i * 2, leg);
-      p.set(7, y - 6 + i * 2, band).set(41, y - 6 + i * 2, band);
-    }
-    p.ellipse(24, 34, 11, 9, fur);
-    p.ellipse(24, 36, 5, 3, band);
-    p.ellipse(24, 22, 9, 8, fur);
-    p.ellipse(20, 21, 2, 2.5, K).ellipse(28, 21, 2, 2.5, K);
-    p.set(19, 20, W).set(27, 20, W);
-    p.set(22, 17, K).set(26, 17, K).set(23, 16, K).set(25, 16, K); // the other little eyes
-    p.rect(21, 27, 2, 2, '#f0e8e0').rect(25, 27, 2, 2, '#f0e8e0'); // fangs
-    p.outline('#2a1408');
-  },
-  /** A rhinoceros beetle: a shiny round shell and a big horn. */
-  cuernito(p) {
-    const shell = '#3a5a8a', hi = '#6a92c8', dark = '#22385a', horn = '#d8c8a0';
-    for (const y of [30, 35, 40]) p.line(14, y, 5, y + 4, dark).line(34, y, 43, y + 4, dark); // legs
-    p.ellipse(24, 32, 14, 11, shell);
-    p.line(24, 22, 24, 43, dark);
-    p.ellipse(18, 28, 4, 3, hi).ellipse(30, 28, 3, 2, hi);
-    p.ellipse(24, 19, 8, 5, dark);
-    p.poly([[21, 17], [27, 17], [29, 3], [24, 8]], horn);
-    p.ellipse(20, 19, 1.5, 1.5, W).ellipse(28, 19, 1.5, 1.5, W);
-    p.outline('#101828');
   },
   /** A round gray pebble with a carved petroglyph face and stick-figure arms. */
   piedrita(p) {
@@ -243,49 +201,6 @@ const DRAW: Record<string, Draw> = {
     p.rect(19, 34, 2, 4, '#3a3a42').rect(24, 34, 2, 4, '#3a3a42');
     p.outline(K);
   },
-  /** A chubby caterpillar with rainbow stripes and tiny pink feet. */
-  gusanito(p) {
-    const stripes = ['#e85858', '#f0a040', '#f0d850', '#68c060', '#5890e0', '#9070d0'];
-    stripes.forEach((c, i) => p.ellipse(10 + i * 6, 32 - Math.sin(i / 1.6) * 4, 6, 7, c));
-    p.ellipse(42, 24, 6, 7, '#68c060');
-    p.ellipse(41, 22, 1.5, 2, K).set(40, 21, W);
-    p.line(40, 17, 37, 11, K).line(44, 17, 46, 11, K);
-    for (let i = 0; i < 6; i++) p.rect(8 + i * 6, 38, 2, 2, '#f0a0b8');
-    p.outline(K);
-  },
-  /** A sleepy cocoon wrapped in leaves, colorful wing tips peeking out. */
-  capullito(p) {
-    const leaf = '#78b048', dark = '#4a7a28';
-    p.line(24, 2, 24, 8, '#6a4a28');
-    p.poly([[13, 40], [24, 46], [35, 40], [37, 18], [24, 7], [11, 18]], leaf);
-    for (const y of [16, 24, 32]) p.line(13, y, 35, y + 4, dark);
-    p.poly([[11, 28], [4, 22], [8, 34]], '#e86890').poly([[37, 28], [44, 22], [40, 34]], '#5890e0');
-    p.line(19, 22, 22, 22, K).line(26, 22, 29, 22, K);
-    p.outline(K);
-  },
-  /** A floating red cushion with a tassel and sleepy eyes. */
-  cojincito(p) {
-    const red = '#d05050', dark = '#983030', gold = '#f0c050';
-    p.poly([[8, 18], [24, 13], [40, 18], [42, 34], [24, 39], [6, 34]], red);
-    p.poly([[24, 30], [40, 26], [42, 34], [24, 39]], dark);
-    p.line(40, 18, 46, 12, gold).ellipse(46, 11, 2, 2, gold);
-    p.line(17, 25, 21, 25, K).line(27, 25, 31, 25, K);
-    p.ellipse(24, 31, 2, 1, K);
-    p.ellipse(24, 45, 10, 2, '#c8c8d0');
-    p.outline(K);
-  },
-  /** A big armadillo whose shell is a pile of dry leaves, with a flowering bush on its back. */
-  hojarasco(p) {
-    const leaf = '#c89848', dark = '#8a6428', skin = '#a89070';
-    p.ellipse(26, 30, 18, 13, leaf);
-    for (let i = 0; i < 7; i++) p.ellipse(13 + i * 4.5, 24 + (i % 2) * 6, 3, 2, dark);
-    p.ellipse(26, 16, 9, 6, '#4a9a40');
-    p.ellipse(22, 13, 2, 2, '#f080a0').ellipse(30, 14, 2, 2, '#f0e060');
-    p.ellipse(8, 34, 6, 5, skin);
-    p.ellipse(6, 32, 1.5, 2, K);
-    p.rect(14, 41, 5, 5, skin).rect(32, 41, 5, 5, skin);
-    p.outline(K);
-  },
   /** A big purple bat with ears like satellite dishes and a wide mouth. */
   murcielon(p) {
     const fur = '#6a4888', wing = '#4a3070', ear = '#e8a0c0';
@@ -297,34 +212,6 @@ const DRAW: Record<string, Draw> = {
     p.ellipse(19, 21, 2, 2.5, K).ellipse(29, 21, 2, 2.5, K);
     p.rect(18, 28, 12, 3, K).set(19, 29, W).set(28, 29, W);
     p.outline('#22103a');
-  },
-  /** A huge hairy tarantula with striped legs and eight eyes in a row. */
-  taranton(p) {
-    const fur = '#5a3818', band = '#e08038';
-    for (let i = 0; i < 4; i++) {
-      const y = 20 + i * 6;
-      p.line(16, y, 4, y - 5 + i * 2, fur).line(4, y - 5 + i * 2, 1, y + 8, fur).line(16, y + 1, 5, y - 4 + i * 2, fur);
-      p.line(32, y, 44, y - 5 + i * 2, fur).line(44, y - 5 + i * 2, 47, y + 8, fur).line(32, y + 1, 43, y - 4 + i * 2, fur);
-      p.set(6, y - 4 + i * 2, band).set(42, y - 4 + i * 2, band).set(3, y + 3, band).set(45, y + 3, band);
-    }
-    p.ellipse(24, 34, 13, 11, fur).ellipse(24, 36, 6, 4, band);
-    p.ellipse(24, 20, 11, 9, fur);
-    for (let i = 0; i < 8; i++) p.set(17 + i * 2, 17, i % 2 ? K : '#f0d040');
-    p.rect(20, 25, 2, 3, '#f0e8e0').rect(26, 25, 2, 3, '#f0e8e0');
-    p.outline('#1a0a04');
-  },
-  /** A Hercules beetle with a long double horn and a rainbow-shiny shell. */
-  herculeo(p) {
-    const shell = '#3a7a6a', dark = '#1e4a40', horn = '#2a2a30';
-    for (const y of [30, 36, 42]) p.line(13, y, 3, y + 4, dark).line(35, y, 45, y + 4, dark);
-    p.ellipse(24, 33, 15, 12, shell);
-    p.line(24, 22, 24, 45, dark);
-    p.ellipse(17, 28, 4, 3, '#e8a0c0').ellipse(31, 28, 4, 3, '#a0d0f0').ellipse(18, 38, 3, 2, '#f0e080');
-    p.ellipse(24, 19, 8, 5, dark);
-    p.poly([[21, 17], [27, 17], [26, 1], [22, 4]], horn);
-    p.poly([[22, 20], [26, 20], [30, 10], [27, 9]], horn);
-    p.ellipse(20, 20, 1.5, 1.5, W).ellipse(28, 20, 1.5, 1.5, W);
-    p.outline('#0a1410');
   },
   /** A small red crab with one big claw and eyes on stalks. */
   cangrejito(p) {
@@ -436,22 +323,6 @@ const DRAW: Record<string, Draw> = {
     p.ellipse(24, 14, 7, 6, skin);
     p.ellipse(21, 13, 1.5, 2, K).ellipse(27, 13, 1.5, 2, K);
     p.outline(K);
-  },
-  sillon(p) {
-    const rd = '#c8463e', dr = '#8e2a26', cu = '#e86a5a', wd = '#7a4a22';
-    p.ellipse(24, 9, 14, 5, rd);
-    p.rect(10, 8, 28, 22, rd);
-    p.rect(4, 21, 9, 18, dr).rect(35, 21, 9, 18, dr);
-    p.ellipse(8, 21, 5, 3, rd).ellipse(40, 21, 5, 3, rd);
-    p.rect(13, 28, 22, 8, cu);
-    p.rect(10, 36, 28, 6, rd);
-    p.rect(8, 42, 3, 5, wd).rect(37, 42, 3, 5, wd);
-    p.set(17, 13, dr).set(24, 11, dr).set(31, 13, dr);
-    p.ellipse(18, 20, 3, 2, W).ellipse(30, 20, 3, 2, W);
-    p.set(18, 20, K).set(30, 20, K).set(19, 20, K).set(29, 20, K);
-    p.line(14, 15, 20, 17, K).line(34, 15, 28, 17, K);
-    p.line(19, 32, 29, 32, dr);
-    p.outline('#3a1210');
   },
   // ----- Placeholders for region 4's Palabritas, until the real art arrives (Brasita has the user's art) -----
   /** A bigger fire lizard with rock-hard dark scales and embers along its back. */
