@@ -185,23 +185,58 @@ html, body {
 .loyalty { font-size: 0.75em; margin-top: calc(var(--px) * 1); }
 
 /* ---------- Title / banners ---------- */
+/* The logo: yellow letters with a thick dark outline and a drop shadow, and a soft shine sweeping across now and then. */
 .title {
   position: absolute;
   left: 0; right: 0;
-  top: calc(var(--px) * 12);
+  top: calc(var(--px) * 11);
   text-align: center;
   font-size: calc(var(--px) * 13);
   color: #ffd23a;
-  text-shadow: calc(var(--px) * 1) calc(var(--px) * 1) 0 #a8521e;
+  text-shadow:
+    calc(var(--px) * -1) calc(var(--px) * -1) 0 #2a2048,
+    calc(var(--px) * 0) calc(var(--px) * -1) 0 #2a2048,
+    calc(var(--px) * 1) calc(var(--px) * -1) 0 #2a2048,
+    calc(var(--px) * -1) calc(var(--px) * 0) 0 #2a2048,
+    calc(var(--px) * 1) calc(var(--px) * 0) 0 #2a2048,
+    calc(var(--px) * -1) calc(var(--px) * 1) 0 #2a2048,
+    calc(var(--px) * 0) calc(var(--px) * 1) 0 #2a2048,
+    calc(var(--px) * 1) calc(var(--px) * 1) 0 #2a2048,
+    calc(var(--px) * 1.5) calc(var(--px) * 2.5) 0 #2a2048;
   letter-spacing: calc(var(--px) * 0.5);
+}
+.title::after {
+  content: attr(data-text);
+  position: absolute;
+  left: 0; right: 0; top: 0;
+  text-shadow: none;
+  color: transparent;
+  background: linear-gradient(110deg, transparent 42%, rgba(255, 255, 255, 0.85) 50%, transparent 58%) no-repeat;
+  background-size: 300% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  animation: shine 4.5s ease-in-out infinite;
+}
+@keyframes shine {
+  0%, 55% { background-position: 100% 0; }
+  85%, 100% { background-position: 0% 0; }
 }
 .subtitle {
   position: absolute;
   left: 0; right: 0;
-  top: calc(var(--px) * 30);
+  top: calc(var(--px) * 31);
   text-align: center;
   font-size: calc(var(--px) * 5);
   color: #fff;
+  text-shadow:
+    calc(var(--px) * -0.6) calc(var(--px) * -0.6) 0 #2a2048,
+    calc(var(--px) * 0) calc(var(--px) * -0.6) 0 #2a2048,
+    calc(var(--px) * 0.6) calc(var(--px) * -0.6) 0 #2a2048,
+    calc(var(--px) * -0.6) calc(var(--px) * 0) 0 #2a2048,
+    calc(var(--px) * 0.6) calc(var(--px) * 0) 0 #2a2048,
+    calc(var(--px) * -0.6) calc(var(--px) * 0.6) 0 #2a2048,
+    calc(var(--px) * 0) calc(var(--px) * 0.6) 0 #2a2048,
+    calc(var(--px) * 0.6) calc(var(--px) * 0.6) 0 #2a2048;
 }
 .blink-text {
   position: absolute;
@@ -210,6 +245,15 @@ html, body {
   text-align: center;
   font-size: calc(var(--px) * 6);
   color: #fff;
+  text-shadow:
+    calc(var(--px) * -0.6) calc(var(--px) * -0.6) 0 #2a2048,
+    calc(var(--px) * 0) calc(var(--px) * -0.6) 0 #2a2048,
+    calc(var(--px) * 0.6) calc(var(--px) * -0.6) 0 #2a2048,
+    calc(var(--px) * -0.6) calc(var(--px) * 0) 0 #2a2048,
+    calc(var(--px) * 0.6) calc(var(--px) * 0) 0 #2a2048,
+    calc(var(--px) * -0.6) calc(var(--px) * 0.6) 0 #2a2048,
+    calc(var(--px) * 0) calc(var(--px) * 0.6) 0 #2a2048,
+    calc(var(--px) * 0.6) calc(var(--px) * 0.6) 0 #2a2048;
   animation: blink 1s steps(2) infinite;
 }
 .banner {

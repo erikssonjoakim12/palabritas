@@ -24,7 +24,11 @@ const titleScene = {
     g.fillRect(0, 98, W, H - 98);
     g.fillStyle = '#5aa04a';
     g.fillRect(0, 98, W, 3);
-    const bob = (i: number) => Math.round(Math.sin(t / 15 + i * 2) * 2);
+    // Each starter hops now and then, one after the other (a 20-frame hop every 3 seconds).
+    const bob = (i: number) => {
+      const f = (t + i * 60) % 180;
+      return f < 20 ? -Math.round(Math.sin((f / 20) * Math.PI) * 6) : 0;
+    };
     // The three starters, standing on the grass (centered on x, feet at y).
     const stand = (sp: string, x: number, y: number) => {
       const img = creatureArt(sp).front;
@@ -61,6 +65,7 @@ function parseName(raw: string): { name: string; full: boolean } {
 export async function runTitle() {
   setScene(titleScene);
   const title = el('div', 'title', 'PALABRITAS');
+  title.dataset.text = 'PALABRITAS'; // the shine (style.css) draws over the same letters
   const sub = el('div', 'subtitle', 'Aprende español con Palabritas');
   const tap = el('div', 'blink-text', 'TOCA PARA EMPEZAR');
   overlay.append(title, sub, tap);
