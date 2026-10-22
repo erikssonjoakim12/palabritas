@@ -321,7 +321,7 @@ export const SPECIES: Record<string, Species> = {
     id: 'mojarrita',
     name: 'Mojarrita',
     types: ['Agua'],
-    // A three-stage line (the user): Mojarrita → Mordisquito (16) → Mordiscón (25), all on the sea theme. La pesca
+    // A three-stage line (the user): Mojarrita → Mordisquito (20) → Mordiscón (38), all on the sea theme. La pesca
     // waits for a new basic fish.
     theme: 'mar',
     base: { hp: 38, atk: 34, def: 40, spd: 58 },
@@ -721,7 +721,7 @@ evolution('coquito', 26, {
     en: 'It shades the whole beach. Tourists rest underneath it.',
   },
 });
-evolution('mojarrita', 16, {
+evolution('mojarrita', 20, {
   id: 'mordisquito',
   name: 'Mordisquito',
   types: ['Agua'],
@@ -732,7 +732,7 @@ evolution('mojarrita', 16, {
     en: 'A Mojarrita that swam down to the sea and grew teeth. If it loses one, a new one grows.',
   },
 });
-evolution('mordisquito', 25, {
+evolution('mordisquito', 38, {
   id: 'mordiscon',
   name: 'Mordiscón',
   types: ['Agua', 'Siniestro'],
