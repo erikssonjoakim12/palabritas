@@ -177,7 +177,7 @@ are used until your art arrives.
 | **Cocotero** | Planta | las frutas | | Ruta 8 (rare) | a coconut-palm creature: a coconut head on a curved trunk, swaying frond arms |
 | **Mordisquito** (your art) | Agua | el mar | → Mordiscón at 25 | fishing in the sea | (art exists) |
 | **Mordiscón** | Agua/Siniestro | el mar | | Marina | a big bull shark with a wide grin full of teeth and a scar |
-| **Mojarrita** | Agua | la pesca | | fishing everywhere | a small round striped fish (*mojarra*) with big surprised eyes |
+| **Mojarrita** | Agua | el mar | → Mordisquito at 16 | fishing everywhere | a small round striped fish (*mojarra*) with big surprised eyes |
 | **Pelicanito** | Agua/Volador | el viaje | → Maletícano at 22 | Ruta 7, the pier | a brown pelican chick whose pouch looks like a little backpack |
 | **Maletícano** | Agua/Volador | el viaje | | Marina | a big pelican whose beak pouch is a travel suitcase covered in stickers |
 | **Paslamita** | Agua | la familia | → Paslamona at 28 | gift (*arribada*) | an olive ridley turtle hatchling with big eyes and a heart-shaped shell |

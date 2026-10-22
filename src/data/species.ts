@@ -317,26 +317,15 @@ export const SPECIES: Record<string, Species> = {
       en: 'It falls from palm trees when it’s windy. Inside it has sweet, fresh water.',
     },
   },
-  mordisquito: {
-    id: 'mordisquito',
-    name: 'Mordisquito',
-    types: ['Agua'],
-    theme: 'mar',
-    base: { hp: 46, atk: 60, def: 42, spd: 58 },
-    moves: [m('Aleta', 'Agua', 'choose'), m('Mordisco', 'Siniestro', 'type'), m('Remolino', 'Agua', 'listen'), m('Tiburonazo', 'Agua', 'speak')],
-    catchRate: 0.4,
-    dex: {
-      es: 'Nada en el mar desde que nace. Si se le cae un diente, le crece otro.',
-      en: 'It swims in the sea from birth. If it loses a tooth, a new one grows.',
-    },
-  },
   mojarrita: {
     id: 'mojarrita',
     name: 'Mojarrita',
     types: ['Agua'],
-    theme: 'pesca',
+    // A three-stage line (the user): Mojarrita → Mordisquito (16) → Mordiscón (25), all on the sea theme. La pesca
+    // waits for a new basic fish.
+    theme: 'mar',
     base: { hp: 38, atk: 34, def: 40, spd: 58 },
-    moves: [m('Salpicar', 'Agua', 'choose'), m('Coletazo', 'Normal', 'type'), m('Burbujitas', 'Agua', 'listen'), m('Gran Salto', 'Normal', 'speak')],
+    moves: [m('Aleta', 'Agua', 'choose'), m('Mordisco', 'Siniestro', 'type'), m('Remolino', 'Agua', 'listen'), m('Tiburonazo', 'Agua', 'speak')],
     catchRate: 0.7,
     dex: {
       es: 'El pez más común del río. Salta tan alto que a veces cae en el bote del pescador.',
@@ -730,6 +719,17 @@ evolution('coquito', 26, {
   dex: {
     es: 'Da sombra a toda la playa. Los turistas descansan debajo de él.',
     en: 'It shades the whole beach. Tourists rest underneath it.',
+  },
+});
+evolution('mojarrita', 16, {
+  id: 'mordisquito',
+  name: 'Mordisquito',
+  types: ['Agua'],
+  base: { hp: 46, atk: 60, def: 42, spd: 58 },
+  catchRate: 0.4,
+  dex: {
+    es: 'Una Mojarrita que bajó al mar y le salieron dientes. Si se le cae uno, le crece otro.',
+    en: 'A Mojarrita that swam down to the sea and grew teeth. If it loses one, a new one grows.',
   },
 });
 evolution('mordisquito', 25, {
