@@ -388,7 +388,14 @@ export const REGION2_MAPS: Record<string, MapDef> = {
     ground: 'grass',
     border: '^',
     style: { trees: 'pine' },
+    // North: the river falls from the highlands (a waterfall to climb one day, with a water Palabrita).
     rows: [
+      '^^^^^^^^^!!!!!^^^^^^^^^^',
+      '^^^^^^^^^!!!!!^^^^^^^^^^',
+      '^^^^^^^^^!!!!!^^^^^^^^^^',
+      '^^^^^^^^^!!!!!^^^^^^^^^^',
+      '^^^^^^^^^!!!!!^^^^^^^^^^',
+      '^^^,,,,~~~~~~~~~,,,,,^^^',
       '^^^,,,,~~~~~~~~~,,,,,^^^',
       '^^^,,,,~~~~~~~~~,,,,,^^^',
       '^^^,,,,~~~~~~~~~,,,,,^^^',
@@ -432,10 +439,10 @@ export const REGION2_MAPS: Record<string, MapDef> = {
       ],
     },
     npcs: [
-      { id: 'julio', x: 9, y: 18, look: 'fisher', dir: 'left', script: 'julio', sight: 3 },
-      { id: 'rosa', x: 16, y: 13, look: 'campista', dir: 'down', script: 'rosa', sight: 2 },
-      itemBall('superpocion_canon', 3, 0, 'superpocion'),
-      { id: 'buey1', x: 19, y: 2, object: 'buey', script: 'buey', show: () => flag('bueyes') && !flag('buey1') },
+      { id: 'julio', x: 9, y: 24, look: 'fisher', dir: 'left', script: 'julio', sight: 3 },
+      { id: 'rosa', x: 16, y: 19, look: 'campista', dir: 'down', script: 'rosa', sight: 2 },
+      itemBall('superpocion_canon', 3, 6, 'superpocion'),
+      { id: 'buey1', x: 19, y: 8, object: 'buey', script: 'buey', show: () => flag('bueyes') && !flag('buey1') },
     ],
   },
 };

@@ -25,7 +25,7 @@ import type { MapStyle } from '../../art/tiles';
   Z  ladder between cave floors (stand it away from the walls; you arrive on it, like Gold/Silver)
   i  volcanic ash    j  lava        X  steam vent    E  black volcanic boulder    |  sugarcane (tall grass)    l  cobblestones
   q  church roof (cream)            N  bell tower (2 tall: the bell on top)
-  [  temple stone    ]  temple stairs    (  temple doorway
+  [  temple stone    ]  temple stairs    (  temple doorway    !  waterfall (climb it one day)
 */
 
 /** A line of dialog: Spanish, and English for the EN button. */

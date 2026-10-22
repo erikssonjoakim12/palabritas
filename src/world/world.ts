@@ -2,7 +2,7 @@ import { W, H, overlay, el, scaleFactor, ctx } from '../engine/screen';
 import { input, type Dir } from '../engine/input';
 import { sfx } from '../engine/sfx';
 import { nextFrame, frames, frameAlpha, whenIdle, clearIdle } from '../engine/loop';
-import { TILES, tallGrassImage, tileImage, tileOf, envAt, isHole } from '../art/tiles';
+import { TILES, tallGrassImage, tileImage, tileOf, envAt, isHole, ANIMATED } from '../art/tiles';
 import { personFrames, OBJECTS, type Frames } from '../art/chars';
 import type { Img } from '../art/pixel';
 import { MAPS, type MapDef, type NpcDef, type Conn, type EncounterEntry } from './maps';
@@ -139,7 +139,7 @@ export function loadMap(id: string, x: number, y: number, dir: Dir) {
   npcs = (map.npcs ?? []).map((def) => npc(def));
   neighbors = neighborsOf(map);
   edgeNpcs = neighbors.flatMap(({ m, dx, dy }) => (m.npcs ?? []).map((def) => npc(def, dx, dy)));
-  ({ grid, w: gridW, lights } = gridFor(map));
+  ({ grid, w: gridW, lights, alt: gridAlt } = gridFor(map));
   prepareNeighbors();
   // Maps change between versions: never leave a loaded save standing inside a wall.
   [x, y] = nearestFree(x, y);
@@ -548,6 +548,7 @@ function drawBubble(g: CanvasRenderingContext2D, x: number, y: number) {
  */
 let grid: Img[] = [];
 let gridW = 0;
+let gridAlt = new Map<number, Img>();
 let lights: Light[] = [];
 /** A map's tile layout, kept per map: just references to tile images (about 10 KB a map). */
 interface Grid {
@@ -558,6 +559,8 @@ interface Grid {
   done: number;
   /** Windows and lamps that shine at night, in the home map's pixels. */
   lights: Light[];
+  /** Animated tiles' second frame (water, lava, flowers, waterfalls), by grid index. */
+  alt: Map<number, Img>;
   fill: (i: number) => void;
 }
 const grids = new Map<string, Grid>();
@@ -572,12 +575,15 @@ function gridOf(home: MapDef): Grid {
     const [tx, ty] = [(i % w) - GRID, Math.floor(i / w) - GRID];
     const n = ownTile(home, tx, ty) ? undefined : near.find(({ m, dx, dy }) => ownTile(m, tx - dx, ty - dy));
     const [m, x, y] = n ? [n.m, tx - n.dx, ty - n.dy] : [home, tx, ty];
-    grid[i] = tileImage(tileOf(m, x, y), envAt(m, x, y));
+    const ch = tileOf(m, x, y);
+    grid[i] = tileImage(ch, envAt(m, x, y));
+    if (ANIMATED.has(ch)) alt.set(i, tileImage(ch, { ...envAt(m, x, y), frame: 1 }));
     const l = lightAt(m, x, y);
     if (l) lights.push({ ...l, x: l.x + (tx - x) * T, y: l.y + (ty - y) * T });
   };
   const lights: Light[] = [];
-  g = { grid, w, h, done: 0, fill, lights };
+  const alt = new Map<number, Img>();
+  g = { grid, w, h, done: 0, fill, lights, alt };
   grids.set(home.id, g);
   return g;
 }
@@ -587,7 +593,7 @@ const TILES_PER_JOB = 8;
 function nextTiles(g: Grid, n = TILES_PER_JOB) {
   for (const end = Math.min(g.grid.length, g.done + n); g.done < end; g.done++) {
     g.fill(g.done);
-    warmUp([g.grid[g.done]]);
+    warmUp([g.grid[g.done], g.alt.get(g.done)].filter((img): img is Img => !!img));
   }
 }
 /** A complete layout, right now (finishing any tiles not prepared yet). */
@@ -628,12 +634,16 @@ function drawTiles(g: CanvasRenderingContext2D, camX: number, camY: number) {
   g.fillStyle = '#000';
   g.fillRect(0, 0, W, H);
   const gridH = grid.length / gridW;
+  // Animated tiles show their second frame half the time (like the Game Boy's water).
+  const second = Math.floor(performance.now() / 500) % 2 === 1;
   for (let ty = Math.floor(camY / T); ty <= Math.floor((camY + H) / T); ty++) {
     const gy = ty + GRID;
     if (gy < 0 || gy >= gridH) continue;
     for (let tx = Math.floor(camX / T); tx <= Math.floor((camX + W) / T); tx++) {
       const gx = tx + GRID;
-      if (gx >= 0 && gx < gridW) g.drawImage(grid[gy * gridW + gx], tx * T - camX, ty * T - camY);
+      if (gx < 0 || gx >= gridW) continue;
+      const i = gy * gridW + gx;
+      g.drawImage((second && gridAlt.get(i)) || grid[i], tx * T - camX, ty * T - camY);
     }
   }
 }

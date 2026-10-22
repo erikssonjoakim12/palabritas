@@ -68,7 +68,7 @@ await t.press('z');
 await t.play({ choices: ['Cerca de la cascada'] });
 t.check('Don Chepe tells you where his oxen went', (await flags()).bueyes);
 await talk('ocote', 32, 19, 'up');
-await talk('canon', 19, 3, 'up');
+await talk('canon', 19, 9, 'up');
 s = await t.save();
 t.check('both oxen follow you', s.flags.buey1 && s.flags.buey2, s.flags);
 await talk('ocote', 34, 17, 'right');

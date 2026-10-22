@@ -56,7 +56,21 @@ export interface TileDef {
 export interface TileEnv extends MapLook {
   x: number;
   y: number;
+  /** Animated tiles (ANIMATED): which of their two frames. */
+  frame?: number;
 }
+
+/** Tiles with a second frame, swapped by the world now and then: water ripples, lava churns, flowers sway, waterfalls fall. */
+export const ANIMATED = new Set(['~', 'j', '*', '!']);
+
+/** A tile's rows moved by (dx, dy) pixels, wrapping around (the patterns repeat, so it's seamless). */
+const shift = (rows: string[], dx: number, dy: number) =>
+  rows.map((_, y) => {
+    const r = rows[(y - dy + rows.length) % rows.length];
+    return r.slice(r.length - dx) + r.slice(0, r.length - dx);
+  });
+/** An animated tile's art for its frame: frame 1 is the pattern moved a little. */
+const framed = (art: TileArt, env: TileEnv, dx: number, dy: number): TileArt => (env.frame ? { ...art, rows: shift(art.rows, dx, dy) } : art);
 
 const solid = (extra: Partial<TileDef> = {}): TileDef => ({ solid: true, ...extra });
 const open = (extra: Partial<TileDef> = {}): TileDef => ({ solid: false, ...extra });
@@ -127,6 +141,7 @@ export const TILES: Record<string, TileDef> = {
   '[': solid({ look: { es: 'Piedras talladas, muy antiguas. Tienen musgo.', en: 'Carved stones, very old. They’re covered in moss.' } }),
   ']': solid({ look: { es: 'Una escalera de piedra, muy empinada.', en: 'A stone stairway, very steep.' } }),
   '(': open({ kind: 'door' }),
+  '!': solid({ look: { es: 'Una cascada enorme. Tal vez algún día puedas subirla...', en: 'A huge waterfall. Maybe one day you can climb it...' } }),
   E: solid({ look: { es: 'Una roca negra con muchos huequitos. ¡Viene del volcán!', en: 'A black rock full of little holes. It comes from the volcano!' } }),
   X: solid({ look: { es: 'Sale vapor caliente de la tierra. ¡Huele a azufre!', en: 'Hot steam comes out of the ground. It smells like sulfur!' } }),
   '|': open({ kind: 'tallgrass' }),
@@ -276,8 +291,9 @@ function groundUnder(env: TileEnv): Img {
 function waterImage(env: TileEnv): Img {
   const nb = neighbors(env);
   const sandy = (c: string) => c === 's' || (c === '.' && env.ground === 'sand');
-  if (![nb.n, nb.s, nb.w, nb.e].some(sandy)) return paintArt(ART.water);
-  const g = grid(ART.water.rows);
+  const water = framed(ART.water, env, 2, 0);
+  if (![nb.n, nb.s, nb.w, nb.e].some(sandy)) return paintArt(water);
+  const g = grid(water.rows);
   const foam = (x: number, y: number) => (g[y][x] = (x + y) % 3 ? 'f' : '0');
   for (let i = 0; i < 16; i++) {
     if (sandy(nb.n)) (foam(i, 0), i % 2 || foam(i, 1));
@@ -345,7 +361,7 @@ export function tileImage(ch: string, env: TileEnv): Img {
   if (ch === 'T') ch = treeAt(env);
   const nb = neighbors(env);
   const st = env.style;
-  const key = [ch, env.ground, env.roof, env.floor, env.outdoor, env.y === 0, nb.n, nb.s, nb.w, nb.e, st?.walls, st?.rock, st?.cave, st?.trees === 'jungle', st?.canopy].join('|');
+  const key = [ch, env.ground, env.roof, env.floor, env.outdoor, env.y === 0, nb.n, nb.s, nb.w, nb.e, st?.walls, st?.rock, st?.cave, st?.trees === 'jungle', st?.canopy, env.frame].join('|');
   let img = cache.get(key);
   if (!img) {
     img = render(ch, env);
@@ -384,7 +400,9 @@ function render(ch: string, env: TileEnv): Img {
     case 'i':
       return paintArt(ART.ash);
     case 'j':
-      return paintArt(ART.lava);
+      return paintArt(framed(ART.lava, env, 1, 1));
+    case '!':
+      return paintArt(framed(ART.waterfall, env, 0, 4));
     case 'X':
       return stack(paintArt(ART.ash), paintArt(ART.steamVent));
     case '|':
@@ -400,7 +418,7 @@ function render(ch: string, env: TileEnv): Img {
     case 'A':
       return stack(underImage(env, 'ground'), paintArt(neighbors(env).n === 'A' ? ART.lighthouse : ART.lighthouseTop));
     case '*':
-      return paintArt(ART.flowers);
+      return paintArt(framed(ART.flowers, env, 1, 0));
     case 'T':
       return paintArt(env.style?.trees === 'jungle' ? ART.jungleTree : ART.tree);
     case '[':

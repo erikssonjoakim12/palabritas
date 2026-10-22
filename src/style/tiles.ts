@@ -241,6 +241,11 @@ export const ART: Record<string, TileArt> = {
     pal: OUTDOOR.water,
     rows: tile8(['22222222', '20222222', '22222222', '22222122', '22222222', '22222222', '21222222', '22222202']),
   },
+  /** A waterfall: white streaks falling down blue water (animated: the streaks move down). */
+  waterfall: {
+    pal: OUTDOOR.water,
+    rows: tile8(['21022120', '21022120', '20122102', '20122102', '12012021', '12012021', '02210212', '02210212']),
+  },
   /** Mountains: rock you can't cross, with outlines and cliff faces where it ends (art/tiles.ts). */
   rock: { pal: OUTDOOR.rock, rows: rockRows },
   dirt: { pal: OUTDOOR.dirt, rows: pebbleRows },

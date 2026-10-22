@@ -97,7 +97,7 @@ export function newSave(): SaveData {
     dir: 'down',
     party: [],
     box: [],
-    flags: { amanecerWide: true, ruta5East: true, rutasCortas: true, sinEstacion: true },
+    flags: { amanecerWide: true, ruta5East: true, rutasCortas: true, sinEstacion: true, canonCascada: true },
     gender: 'boy',
     money: 0,
     bag: {},
@@ -186,6 +186,11 @@ function migrate(s: SaveData) {
     else if (s.map === 'laderas' && s.y >= 13) Object.assign(s, { x: 20, y: 25, dir: 'up' });
     if (s.heal.map === 'estacion') s.heal = { map: 'centro_chispa', x: 4, y: 3 };
     s.flags.sinEstacion = true;
+  }
+  // The canyon grew 6 rows north (the waterfall): stay where you were.
+  if (!s.flags.canonCascada) {
+    if (s.map === 'canon') s.y += 6;
+    s.flags.canonCascada = true;
   }
   if (s.flags.starter && !s.flags.lucasSeFue) Object.assign(s.flags, { lucasEligio: true, lucasSeFue: true });
   s.money ??= 0;
