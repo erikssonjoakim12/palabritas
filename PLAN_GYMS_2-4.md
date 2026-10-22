@@ -80,7 +80,7 @@ Villa Ocote → Ruta 6 → Ruta 7 → **Playa Carey** and the Playa de las Tortu
 - **Lucas's second battle** is at the top of the turtle beach, after the town and its Palacentro (the user
   didn't want it right after Ruta 6's battles).
 - **Side quests:** waiting tables at El Pelícano Feliz (daily), Don Lalo's fishing rod, the message in a bottle.
-- **Gym 3, Marina (Agua):** ride the currents to her; Cangrejón 22, Maletícano 23, Mordiscón 25; Medalla Ola.
+- **Gym 3, Marina (Agua):** ride the currents to her; Maletícano 23, Mordisquito 24, Cangrejón 25 (her strongest: the user); Medalla Ola.
 
 ---
 
@@ -176,7 +176,7 @@ are used until your art arrives.
 | **Coquito** | Planta | las frutas | → Cocotero at 26 | Ruta 7, the turtle beach | a green coconut with a cute face and a little palm-leaf tuft on top |
 | **Cocotero** | Planta | las frutas | | Ruta 8 (rare) | a coconut-palm creature: a coconut head on a curved trunk, swaying frond arms |
 | **Mordisquito** (your art) | Agua | el mar | → Mordiscón at 38 | fishing in the sea | (art exists) |
-| **Mordiscón** | Agua/Siniestro | el mar | | Marina | a big bull shark with a wide grin full of teeth and a scar |
+| **Mordiscón** | Agua/Siniestro | el mar | | evolve a Mordisquito | a big bull shark with a wide grin full of teeth and a scar |
 | **Mojarrita** | Agua | el mar | → Mordisquito at 20 | fishing everywhere | a small round striped fish (*mojarra*) with big surprised eyes |
 | **Pelicanito** | Agua/Volador | el viaje | → Maletícano at 22 | Ruta 7, the pier | a brown pelican chick whose pouch looks like a little backpack |
 | **Maletícano** | Agua/Volador | el viaje | | Marina | a big pelican whose beak pouch is a travel suitcase covered in stickers |

@@ -73,7 +73,7 @@ export const TRAINERS: Record<string, TrainerDef> = {
   surfista_gym: { id: 'surfista_gym', name: 'Surfista Kike', defenseMode: 'type', team: [['cangrejito', 21], ['mordisquito', 21]] },
   salvavidas: { id: 'salvavidas', name: 'Salvavidas Fer', defenseMode: 'type', team: [['pelicanito', 21], ['cangrejito', 21]] },
   banista_gym: { id: 'banista_gym', name: 'Bañista Tere', defenseMode: 'type', team: [['coquito', 22], ['pelicanito', 21]] },
-  marina: { id: 'marina', name: 'Líder Marina', defenseMode: 'type', team: [['cangrejon', 22], ['maleticano', 23], ['mordiscon', 25]] },
+  marina: { id: 'marina', name: 'Líder Marina', defenseMode: 'type', team: [['maleticano', 23], ['mordisquito', 24], ['cangrejon', 25]] },
   // Rival #2: his starter's second form (region3.ts lucasPlaya builds the team).
   lucas2: { id: 'lucas2', name: 'Lucas', defenseMode: 'type', team: [['nubarron', 22], ['hojadillo', 19], ['palomon', 20]] },
   lucia: { id: 'lucia', name: 'Pintora Lucía', defenseMode: 'listen', team: [['hojadillo', 13], ['mariposita', 13]], rematch: true },
