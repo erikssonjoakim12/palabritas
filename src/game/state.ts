@@ -175,7 +175,7 @@ function migrate(s: SaveData) {
   // Brisa end, and anyone on Ruta 8 at its Carey end.
   if (!s.flags.rutasCortas) {
     if (s.map === 'ruta3' && s.y >= 13) Object.assign(s, { x: 62, y: 28, dir: 'left' });
-    if (s.map === 'ruta8') Object.assign(s, { x: 1, y: 10, dir: 'right' });
+    if (s.map === 'ruta8') Object.assign(s, { x: 1, y: 12, dir: 'right' });
     s.flags.rutasCortas = true;
   }
   // The rangers' station on the volcano is gone (Elsa stands outside): stand where its door was, and rest at
