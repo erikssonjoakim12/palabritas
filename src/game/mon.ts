@@ -2,6 +2,10 @@ import { G, uid, type Mon } from './state';
 import { SPECIES, learnLevel, type Move } from '../data/species';
 import { canLevelUp } from './learning';
 
+/** The starter that's strong against yours: the one Lucas takes in the lab. */
+const RIVAL_STARTER: Record<string, string> = { salchichita: 'gotita', gotita: 'aguacatito', aguacatito: 'salchichita' };
+export const lucasStarter = () => RIVAL_STARTER[G.save.starterPicked ?? ''] ?? 'gotita';
+
 export interface Stats {
   maxHp: number;
   atk: number;

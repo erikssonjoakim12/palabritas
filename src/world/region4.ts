@@ -3,7 +3,7 @@ import { sfx } from '../engine/sfx';
 import { frames } from '../engine/loop';
 import { G, flag, setFlag } from '../game/state';
 import { addItem, takeItem, itemCount, money } from '../game/bag';
-import { giveMon } from '../game/mon';
+import { giveMon, lucasStarter } from '../game/mon';
 import { itemBySpanish, adHocItem } from '../data/content';
 import { challenge, chooseText } from '../ui/challenge';
 import { wildBattle } from '../battle/battle';
@@ -17,7 +17,6 @@ import { warp, refreshNpcs, walkNpc, fadeOut, type ScriptFn, type ScriptCtx } fr
 import type { Line } from './maps';
 import { TORCHES } from './maps/region4';
 import { lines, trainerFight, blackout, heal, talkMode } from './scripts';
-import { lucasStarter } from './region2';
 import { teacher } from './school';
 
 /*

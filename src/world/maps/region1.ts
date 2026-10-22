@@ -1,5 +1,9 @@
-import { flag } from '../../game/state';
+import { G, flag } from '../../game/state';
+import { lucasStarter } from '../../game/mon';
 import { HOUSE, itemBall, tienda, lostWord, centro, type MapDef } from './kit';
+
+/** A starter's Palabola is on the lab's table until you take it, or Lucas takes his. */
+const ballOnTable = (sp: string) => G.save.starterPicked !== sp && !(flag('lucasEligio') && lucasStarter() === sp);
 
 // Region 1: Pueblo Amanecer to Ciudad Brisa (gym 1), then west: Ruta 3, the Cueva del Eco and Ruta 5.
 export const REGION1_MAPS: Record<string, MapDef> = {
@@ -45,7 +49,7 @@ export const REGION1_MAPS: Record<string, MapDef> = {
       { x: 16, y: 8, es: 'PUEBLO AMANECER: Donde empieza la aventura.', en: 'DAWN TOWN: Where the adventure begins.' },
     ],
     npcs: [
-      { id: 'lucas', x: 17, y: 2, look: 'boy', dir: 'left', script: 'lucas', turns: true },
+      { id: 'vecinito', x: 17, y: 2, look: 'boy', dir: 'left', script: 'vecinito', turns: true },
       { id: 'pescador', x: 22, y: 14, look: 'fisher', dir: 'down', script: 'pescador' },
       { id: 'sam', x: 13, y: 8, look: 'tourist', dir: 'down', script: 'sam', turns: true, sight: 3 },
       // On the plateau: the route you could see from town at the very start (reached from Ruta 9).
@@ -83,9 +87,11 @@ export const REGION1_MAPS: Record<string, MapDef> = {
     npcs: [
       { id: 'ceiba', x: 6, y: 2, look: 'prof', dir: 'down', script: 'ceiba' },
       { id: 'ayudante', x: 8, y: 6, look: 'man', dir: 'left', script: 'ayudante', turns: true },
-      { id: 'starter_salchichita', x: 2, y: 2, object: 'palabola', script: 'starter_salchichita', show: () => !flag('starter') },
-      { id: 'starter_gotita', x: 3, y: 2, object: 'palabola', script: 'starter_gotita', show: () => !flag('starter') },
-      { id: 'starter_aguacatito', x: 4, y: 2, object: 'palabola', script: 'starter_aguacatito', show: () => !flag('starter') },
+      { id: 'starter_salchichita', x: 2, y: 2, object: 'palabola', script: 'starter_salchichita', show: () => ballOnTable('salchichita') },
+      { id: 'starter_gotita', x: 3, y: 2, object: 'palabola', script: 'starter_gotita', show: () => ballOnTable('gotita') },
+      { id: 'starter_aguacatito', x: 4, y: 2, object: 'palabola', script: 'starter_aguacatito', show: () => ballOnTable('aguacatito') },
+      // Lucas, the professor's other student: he takes the starter strong against yours, then runs off.
+      { id: 'lucas_lab', x: 3, y: 1, look: 'lucas', dir: 'down', script: 'lucasLab', show: () => !flag('lucasSeFue') },
     ],
   },
 

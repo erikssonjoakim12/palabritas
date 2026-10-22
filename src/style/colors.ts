@@ -72,22 +72,16 @@ export const TREES = {
 /** Under the jungle's canopy (style canopy): every tile is multiplied by this, so it's visibly darker. */
 export const CANOPY = '#8ca890';
 
-/** The town map (START → MAPA): one pixel per tile, in the world's own colors. */
+/** The town map (START → MAPA): simple, like the original games'. */
 export const TOWN_MAP = {
   /** Beyond the known world. */
   beyond: '#283850',
-  grass: OUTDOOR.grass[1],
-  trees: OUTDOOR.grass[2],
-  path: OUTDOOR.town[0],
-  sand: OUTDOOR.sand[1],
+  land: OUTDOOR.grass[1],
   water: OUTDOOR.water[2],
-  rock: OUTDOOR.rock[2],
-  basalt: OUTDOOR.basalt[2],
-  ash: OUTDOOR.ash[1],
-  lava: OUTDOOR.lava[1],
-  /** Houses and other buildings. */
-  building: '#c05048',
-  /** You (blinking), and the outline around the place picked. */
+  /** The routes' lines. */
+  path: OUTDOOR.town[0],
+  town: '#c05048',
+  /** You (blinking), and the box around the place picked. */
   you: '#f8f8f8',
   cursor: '#f8d048',
 };

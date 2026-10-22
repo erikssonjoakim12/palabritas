@@ -1,5 +1,5 @@
 // Profesora Ceiba's starter training: pick Gotita, answer its first words (the first one wrong),
-// stop halfway, find the other balls closed, then finish with Ceiba and get Gotita at level 5.
+// stop halfway, find the other balls closed, then finish with Ceiba and get Gotita at level 5; Lucas takes his.
 import { start, sleep } from './lib.mjs';
 
 const t = await start('starter');
@@ -30,4 +30,8 @@ s = await t.save();
 t.check('finished the training', rest.answered > 5, rest.answered);
 t.check('Gotita joined at level 5', s.party.length === 1 && s.party[0].sp === 'gotita' && s.party[0].level === 5, s.party.map((m) => [m.sp, m.level]));
 t.check('starter flag set and choice cleared', s.flags.starter === true && !s.starterChoice, { starter: s.flags.starter, choice: s.starterChoice });
+// Lucas takes the one strong against yours (Aguacatito against Gotita) and runs off; the third stays on the table.
+t.check('Lucas takes Aguacatito and leaves', s.flags.lucasEligio && s.flags.lucasSeFue && rest.said.some((x) => x.includes('Aguacatito')), rest.said.slice(-4));
+const balls = await t.game(() => window.__game.MAPS.lab.npcs.filter((n) => n.object && n.show()).map((n) => n.id));
+t.check('only the third Palabola is left', balls.join() === 'starter_salchichita', balls);
 await t.end();

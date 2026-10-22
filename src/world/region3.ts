@@ -3,7 +3,7 @@ import { sfx } from '../engine/sfx';
 import { frames } from '../engine/loop';
 import { G, flag, setFlag, today } from '../game/state';
 import { addItem, money } from '../game/bag';
-import { giveMon } from '../game/mon';
+import { lucasStarter, giveMon } from '../game/mon';
 import { record } from '../game/learning';
 import { itemBySpanish, adHocItem } from '../data/content';
 import { SPECIES } from '../data/species';
@@ -17,7 +17,6 @@ import { gradeDish } from '../lang/order';
 import { warp, refreshNpcs, walkNpc, placeNpc, fadeOut, type ScriptFn } from './world';
 import type { Line } from './maps';
 import { lines, trainerFight, blackout, talkMode } from './scripts';
-import { lucasStarter } from './region2';
 import { drill, teacher } from './school';
 
 /*

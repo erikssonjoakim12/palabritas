@@ -49,7 +49,7 @@ export const TRAINERS: Record<string, TrainerDef> = {
   elena: { id: 'elena', name: 'Campista Elena', defenseMode: 'listen', team: [['colibri', 12], ['espinita', 13]] },
   julio: { id: 'julio', name: 'Pescador Julio', defenseMode: 'listen', team: [['hojadillo', 13], ['colibri', 13]], rematch: true },
   rosa: { id: 'rosa', name: 'Campista Rosa', defenseMode: 'listen', team: [['espinita', 13], ['ardillita', 14]] },
-  // Your rival. His first Palabrita is the starter strong against yours (region2.ts lucasStarter).
+  // Your rival. His first Palabrita is the starter strong against yours (game/mon.ts lucasStarter).
   lucas1: { id: 'lucas1', name: 'Lucas', defenseMode: 'type', team: [['gotita', 15], ['pajarito', 12]] },
   // Region 3: Ruta 6, Ruta 7, the turtle beach and Marina's surf school (the A2 listening level: defend by listening).
   ramon: { id: 'ramon', name: 'Leñador Ramón', defenseMode: 'listen', team: [['ardillita', 17], ['colibri', 17]] },

@@ -9,7 +9,7 @@ import { drill } from './school';
 import { addItem, itemCount, money } from '../game/bag';
 import { ITEM_DEFS, SHOPS, amountOf } from '../data/items';
 import { gradeOrder } from '../lang/order';
-import { giveMon, healParty, stats, monName, PARTY_MAX } from '../game/mon';
+import { giveMon, healParty, stats, monName, PARTY_MAX, lucasStarter } from '../game/mon';
 import { record, pickFromTheme, isLearned, isUnseen } from '../game/learning';
 import { itemsBetween } from '../game/curriculum';
 import { SPECIES, STARTER_LEVEL, type Mode } from '../data/species';
@@ -22,7 +22,7 @@ import { spriteCanvas, pickFrom } from '../ui/party';
 import { startMenu } from '../ui/startmenu';
 import { wildBattle, trainerBattle } from '../battle/battle';
 import { speak, canListen } from '../lang/speech';
-import { SCRIPTS, scriptedStep, warp, currentMap, refreshNpcs, npcById, pickEncounter, facingTile, MUTED_MIME, type ScriptCtx } from './world';
+import { SCRIPTS, scriptedStep, warp, currentMap, refreshNpcs, npcById, pickEncounter, facingTile, walkNpc, MUTED_MIME, type ScriptCtx } from './world';
 import { gateOf, closedLines, FRESHWATER, type Line } from './maps';
 import { REGION2 } from './region2';
 import { REGION3 } from './region3';
@@ -191,13 +191,20 @@ const S: Record<string, (c: ScriptCtx) => Promise<void>> = {
     await scriptedStep('down');
   },
 
-  async lucas() {
+  async vecinito() {
     if (!flag('starter')) {
       await lines(['¡Hola, {name}! Dicen que la Profesora Ceiba tiene Palabritas nuevas.', 'Hi! They say Professor Ceiba has some new Palabritas.']);
     } else {
       await lines(['¡Qué Palabrita tan bonita! Al norte está la Ruta 1.', 'What a pretty Palabrita! Route 1 is to the north.']);
     }
   },
+
+  /** Lucas in the lab, before you have your Palabrita. */
+  lucasLab: () =>
+    lines(
+      ['¡Hola! Soy Lucas. Yo también estudio con la Profesora Ceiba.', 'Hi! I’m Lucas. I study with Professor Ceiba too.'],
+      ['Tú eliges primero... ¡pero yo voy a elegir la mejor!', 'You choose first... but I’m going to choose the best one!'],
+    ),
 
   /** Sam explains the game in English, for players who have never played Pokémon. */
   async sam() {
@@ -832,6 +839,7 @@ const S: Record<string, (c: ScriptCtx) => Promise<void>> = {
 };
 
 async function pickStarter(sp: string) {
+  if (flag('starter')) return lines(['Es la última Palabola. La Profesora Ceiba la va a cuidar.', 'It’s the last Palabola. Professor Ceiba will look after it.']);
   if (!flag('metCeiba')) {
     return lines(['Mejor habla primero con la Profesora Ceiba.', 'Better talk to Professor Ceiba first.']);
   }
@@ -890,6 +898,25 @@ async function starterTraining(sp: string) {
     ['Ahora ve al norte, a Villa Limón, y visita a mi amiga Doña Lupe. ¡Creo que necesita ayuda!', 'Now go north to Lemon Village and visit my friend Doña Lupe. I think she needs help!'],
     ['En la hierba alta hay Palabritas salvajes. ¡Usa tus palabras para luchar!', 'Wild Palabritas live in the tall grass. Use your words to fight!'],
   );
+  await lucasElige();
+}
+
+/** Lucas takes the starter strong against yours (no battle yet: the first is on Ruta 5), then runs off. */
+async function lucasElige() {
+  const sp = SPECIES[lucasStarter()];
+  setSpeaker('lucas');
+  await lines([`¡Mi turno! Entonces yo elijo a ${sp.name}. ¡Le gana al tuyo!`, `My turn! Then I choose ${sp.name}. It beats yours!`]);
+  setSpeaker();
+  setFlag('lucasEligio');
+  sfx('caught');
+  refreshNpcs();
+  await info(`¡Lucas recibió a ${sp.name}!`, { en: `Lucas received ${sp.name}!` });
+  setSpeaker('lucas');
+  await lines(['¡Vamos a entrenar mucho! ¡Algún día te voy a ganar, {name}!', 'We’re going to train a lot! Someday I’ll beat you!']);
+  setSpeaker();
+  await walkNpc('lucas_lab', ['right', 'right', 'down', 'down', 'down', 'down', 'down', 'down', 'left', 'down'], { speed: 1.5 });
+  setFlag('lucasSeFue');
+  refreshNpcs();
 }
 
 export function registerScripts() {

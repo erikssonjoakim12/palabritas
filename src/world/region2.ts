@@ -3,7 +3,7 @@ import { sfx } from '../engine/sfx';
 import { frames } from '../engine/loop';
 import { G, flag, setFlag, today } from '../game/state';
 import { addItem, takeItem, itemCount } from '../game/bag';
-import { giveMon } from '../game/mon';
+import { giveMon, lucasStarter } from '../game/mon';
 import { record } from '../game/learning';
 import { itemBySpanish, adHocItem } from '../data/content';
 import { info, say, setSpeaker } from '../ui/textbox';
@@ -300,9 +300,6 @@ async function fiesta() {
 
 // ---------- Ruta 5 and the canyon ----------
 
-/** The starter that's strong against yours: the one Lucas took. */
-const RIVAL_STARTER: Record<string, string> = { salchichita: 'gotita', gotita: 'aguacatito', aguacatito: 'salchichita' };
-export const lucasStarter = () => RIVAL_STARTER[G.save.starterPicked ?? ''] ?? 'gotita';
 
 /** The foot of the clifftop trail: Lucas catches up with you (rival battle #1). */
 async function lucasRuta5() {
@@ -313,8 +310,8 @@ async function lucasRuta5() {
   await walkNpc('lucas', Array(10).fill('right'));
   await lines(
     ['¡{name}! ¡Por fin te alcancé!', '{name}! I finally caught up with you!'],
-    ['Cuando te fuiste, la Profesora Ceiba me dio una Palabrita a mí también. ¡Mira!', 'When you left, Professor Ceiba gave me a Palabrita too. Look!'],
-    ['Elegí la más fuerte contra la tuya. ¡Vamos a ver quién aprendió más palabras!', 'I chose the strongest one against yours. Let’s see who learned more words!'],
+    ['¿Te acuerdas de mi Palabrita? ¡La entrené todos los días!', 'Remember my Palabrita? I’ve trained it every day!'],
+    ['¡Vamos a ver quién aprendió más palabras!', 'Let’s see who learned more words!'],
   );
   const lucas = { ...TRAINERS.lucas1, team: [[lucasStarter(), 15], ['pajarito', 12]] as [string, number][] };
   const res = await trainerBattle(lucas, { look: 'lucas', outro: ['¡Ay! Estudiaste mucho, ¿verdad?', 'Ugh! You studied a lot, didn’t you?'] });

@@ -187,6 +187,7 @@ function migrate(s: SaveData) {
     if (s.heal.map === 'estacion') s.heal = { map: 'centro_chispa', x: 4, y: 3 };
     s.flags.sinEstacion = true;
   }
+  if (s.flags.starter && !s.flags.lucasSeFue) Object.assign(s.flags, { lucasEligio: true, lucasSeFue: true });
   s.money ??= 0;
   s.starterPicked ??= ['salchichita', 'gotita', 'aguacatito'].find((sp) => s.caught.includes(sp));
   // The Ruta 2 potion became a general item ball.
