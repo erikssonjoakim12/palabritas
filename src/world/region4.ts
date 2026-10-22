@@ -551,6 +551,30 @@ export const REGION4: Record<string, ScriptFn> = {
     ['¡Muy bien! Puedes bajar.', 'Very good! You can go down.'],
     ['Desde abajo no se puede subir: el escalón es muy alto.', 'You can’t climb up from below: the step is too high.'],
   ),
+  nadador_tomas: fight(
+    'nadador_tomas',
+    ['¡Nado en el lago todas las mañanas! ¿Y tú, cómo llegaste hasta aquí?', 'I swim in the lake every morning! And you, how did you get out here?'],
+    ['¡Glu, glu! Tragué agua.', 'Glug, glug! I swallowed water.'],
+    ['Las islas pequeñas se llaman isletas. ¡En el lago hay muchísimas!', 'The little islands are called islets. There are loads of them in the lake!'],
+  ),
+  nadadora_elena: fight(
+    'nadadora_elena',
+    ['El agua está fresquita. ¡Perfecta para una batalla!', 'The water is nice and cool. Perfect for a battle!'],
+    ['¡Qué rápid{o/a} eres!', 'You’re so fast!'],
+    ['Dicen que en la isla del volcán vive una Palabrita muy antigua.', 'They say a very ancient Palabrita lives on the volcano island.'],
+  ),
+  nadador_rodolfo: fight(
+    'nadador_rodolfo',
+    ['¡Voy a cruzar el lago entero! Pero primero, una batalla.', 'I’m going to swim across the whole lake! But first, a battle.'],
+    ['Necesito descansar en una isleta.', 'I need to rest on an islet.'],
+    ['El río lleva a un pueblo en la selva. ¡Allá hace mucho calor!', 'The river leads to a town in the jungle. It’s really hot there!'],
+  ),
+  nadadora_lucia: fight(
+    'nadadora_lucia',
+    ['Practico para una carrera. ¿Me ayudas con una batalla?', 'I’m training for a race. Will you help me with a battle?'],
+    ['¡Ay, me cansé!', 'Oh, I’m tired!'],
+    ['Con cuatro medallas, las Palabritas grandes del agua te pueden llevar.', 'With four medals, big water Palabritas can carry you.'],
+  ),
   pescador_lago: talk(['¿Ves las islas? Sin bote no se puede llegar. ¡Algún día voy a ir!', 'See the islands? You can’t get there without a boat. Someday I’ll go!']),
   fotografo_max: fight(
     'fotografo_max',

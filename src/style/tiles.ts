@@ -228,6 +228,7 @@ export const ART: Record<string, TileArt> = {
     rows: tile8(['00000000', '02000200', '21202120', '21121120', '02111200', '10222010', '01000100', '00000000']),
   },
   tree: { pal: OUTDOOR.grass, extra: TREES.green, rows: greenTreeRows },
+  jungleTree: { pal: OUTDOOR.grass, extra: TREES.jungle, rows: greenTreeRows },
   dryTree: { pal: OUTDOOR.grass, extra: TREES.dry, rows: dryTreeRows },
   pine: { pal: OUTDOOR.grass, rows: pineRows },
   palm: { pal: OUTDOOR.grass, extra: TREES.palm, rows: palmRows },
@@ -437,6 +438,29 @@ export const ART: Record<string, TileArt> = {
       '................',
     ],
   },
+  /** The temple's stone: two courses of blocks, joints offset. */
+  templeStone: {
+    pal: OUTDOOR.temple,
+    rows: [
+      '0000000200000002', '1111111211111112', '1111111211121112', '1121111211111112',
+      '1111111211111212', '1111111211111112', '1111121211111112', '2222222222222222',
+      '0002000000020000', '1112111111121111', '1112112111121111', '1112111111121121',
+      '1112111111121111', '1212111111121111', '1112111111121111', '2222222222222222',
+    ],
+  },
+  /** The pyramid's steps. */
+  templeStairs: { pal: OUTDOOR.temple, rows: Array.from({ length: 16 }, (_, y) => ['1111111111111111', '0000000000000000', '0000000000000000', '2222222222222222'][y % 4]) },
+  /** A dark doorway in the stone, under a carved lintel (drawn over templeStone). */
+  templeDoor: {
+    pal: OUTDOOR.temple,
+    rows: [
+      '................', '................', '...3333333333...', '...3222222223...', '...3212212123...', '...3333333333...',
+      '....33333333....', '....33333333....', '....33333333....', '....33333333....', '....33333333....',
+      '....33333333....', '....33333333....', '....33333333....', '....33333333....', '....33333333....',
+    ],
+  },
+  /** Flagstones (the temple's floors). */
+  templeFloor: { pal: OUTDOOR.temple, rows: tile8(['00000001', '00000001', '00000001', '00000001', '00000001', '00000001', '00000001', '11111111']) },
   /** A tall columnar cactus with two arms (drawn over the ground). */
   cactus: {
     pal: OUTDOOR.cactus,

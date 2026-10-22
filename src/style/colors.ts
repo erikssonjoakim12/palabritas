@@ -53,6 +53,8 @@ export const OUTDOOR = {
   steam: ['#ffffff', '#d0d0d8', '#504848', INK] as Pal,
   /** Sugarcane: the light leaves, the stalks, the shade. */
   cane: ['#d0f098', '#6ab048', '#2e6a28', INK] as Pal,
+  /** The old temple's stone (Villa Jaguar's pyramid), gray with a green cast. */
+  temple: ['#d8d8c0', '#a0a088', '#686c58', INK] as Pal,
   /** Cobblestones in Ciudad Chispa's plaza. */
   cobble: ['#e8e4d8', '#d0c8b8', '#b0a898', INK] as Pal,
 };
@@ -63,7 +65,12 @@ export const TREES = {
   green: { a: '#a8d868', b: '#68a030', c: '#3a6820', ...TRUNK },
   dry: { a: '#f0d890', b: '#c8a050', c: '#886828', ...TRUNK },
   palm: { a: '#b0e070', b: '#58a030', c: '#306818', k: '#d0a868', K: '#987040', n: '#7a5028' },
+  /** Rainforest: deeper, bluer greens. */
+  jungle: { a: '#78c060', b: '#348838', c: '#1c5028', ...TRUNK },
 };
+
+/** Under the jungle's canopy (style canopy): every tile is multiplied by this, so it's visibly darker. */
+export const CANOPY = '#8ca890';
 
 /** The town map (START → MAPA): one pixel per tile, in the world's own colors. */
 export const TOWN_MAP = {
@@ -91,6 +98,8 @@ export const TOWN_MAP = {
 export const CAVE_STYLES: Record<string, { wall: Pal; floor: Pal }> = {
   clay: { wall: ['#d08860', '#a05838', '#683020', INK], floor: ['#e8c0a0', '#d0a080', '#a07050', INK] },
   basalt: { wall: ['#888088', '#585058', '#302830', INK], floor: ['#b0a8a0', '#908880', '#605850', INK] },
+  /** Inside the Templo del Jaguar: carved blocks and flagstones. */
+  temple: { wall: ['#d8d8c0', '#a0a088', '#686c58', INK], floor: ['#c8c8b0', '#a8a890', '#7c8068', INK] },
 };
 
 export const CAVE = {

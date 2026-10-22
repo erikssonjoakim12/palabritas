@@ -70,13 +70,16 @@ const report = await t.game(() => {
     for (const n of m.npcs ?? []) {
       if (!inside(m, n.x, n.y)) { say(`${n.id} is outside the map`); continue; }
       // People need open ground; objects may sit on tables and counters (the starter balls).
-      if (n.look && TILES[tile(m, n.x, n.y)]?.solid) say(`${n.id} stands on a wall (${n.x},${n.y})`);
+      // Swimmers (the swim body) are in the water and look across it.
+      const swims = LOOKS[n.look]?.body === 'swim';
+      const free = (x, y) => open(m, x, y) || (swims && TILES[tile(m, x, y)]?.kind === 'water');
+      if (n.look && !free(n.x, n.y)) say(`${n.id} stands on a wall (${n.x},${n.y})`);
       if (n.look && !LOOKS[n.look]) say(`${n.id} has an unknown look '${n.look}'`);
       if (n.object && !OBJECTS_ART[n.object]) say(`${n.id} is an unknown object '${n.object}'`);
       if (!SCRIPTS[n.script]) say(`${n.id} has no script '${n.script}'`);
       if (n.sight) {
         const [dx, dy] = D[n.dir ?? 'down'];
-        for (let i = 1; i <= n.sight; i++) if (!open(m, n.x + dx * i, n.y + dy * i)) say(`${n.id} looks into a wall within its sight (${n.sight})`);
+        for (let i = 1; i <= n.sight; i++) if (!free(n.x + dx * i, n.y + dy * i)) say(`${n.id} looks into a wall within its sight (${n.sight})`);
       }
       const tr = TRAINERS[n.id];
       if (tr) for (const [sp] of tr.team) !SPECIES[sp] && say(`trainer ${n.id} has unknown species ${sp}`);

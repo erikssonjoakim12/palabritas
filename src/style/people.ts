@@ -453,6 +453,16 @@ export const HEADS: Record<string, Facing> = {
 type Body = { down: { stand: string[]; walk: string[] }; side: { stand: string[]; walk: string[] } };
 
 export const BODIES: Record<string, Body> = {
+  swim: {
+    down: {
+      stand: ['...3311111133...', '..322222222223..', '..2.22....22.2..', '................', '................', '................'],
+      walk: ['...3311111133...', '..322222222223..', '...2.22..22.2...', '................', '................'],
+    },
+    side: {
+      stand: ['.....3311133....', '....32222222....', '...2.22..22.2...', '................', '................', '................'],
+      walk: ['.....3311133....', '....32222222....', '....2.22.22.2...', '................', '................'],
+    },
+  },
   pants: {
     down: {
       stand: ['...3322222233...', '..312222222213..', '..311222222113..', '...3333333333...', '...3223..3223...', '....333..333....'],
@@ -521,6 +531,9 @@ export const LOOKS: Record<string, Look> = {
   mateo: { head: 'cap', body: 'pants', color: 'green' },
   sofia: { head: 'long', body: 'dress', color: 'pink' },
   fisher: { head: 'cap', body: 'pants', color: 'brown' },
+  /** In the water: head and shoulders (the swim body). */
+  nadador: { head: 'crew', body: 'swim', color: 'blue' },
+  nadadora: { head: 'long', body: 'swim', color: 'teal' },
   tourist: { head: 'cap', body: 'pants', color: 'purple' },
   hiker: { head: 'crew', body: 'pants', color: 'gray' },
   beto: { head: 'crew', body: 'pants', color: 'green' },

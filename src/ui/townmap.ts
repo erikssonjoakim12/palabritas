@@ -30,6 +30,7 @@ function tileColor(ch: string, m: MapDef): string {
   if ('~8246'.includes(ch)) return TOWN_MAP.water;
   if (ch === 's') return TOWN_MAP.sand;
   if ('TtIJY'.includes(ch)) return TOWN_MAP.trees;
+  if ('[](' .includes(ch)) return TOWN_MAP.rock;
   if (ch === '^' || ch === 'O') return m.style?.rock === 'basalt' ? TOWN_MAP.basalt : TOWN_MAP.rock;
   if ('iXE'.includes(ch)) return TOWN_MAP.ash;
   if (ch === 'j') return TOWN_MAP.lava;

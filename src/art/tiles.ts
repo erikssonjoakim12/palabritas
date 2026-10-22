@@ -1,6 +1,6 @@
 import { makeCanvas, type Img } from './pixel';
 import { ART, ROCK_EDGES, type TileArt } from '../style/tiles';
-import { ROOFS, OUTDOOR, CAVE_STYLES, type Pal, ACCENT } from '../style/colors';
+import { ROOFS, OUTDOOR, CAVE_STYLES, CANOPY, type Pal, ACCENT } from '../style/colors';
 import type { Dir } from '../engine/input';
 
 /*
@@ -13,14 +13,16 @@ import type { Dir } from '../engine/input';
 
 /** How a map's shared tiles look. All optional; the defaults are the original look. */
 export interface MapStyle {
-  /** 'T': green/dry mix (default) | mostly pines | mostly dry trees. */
-  trees?: 'lowland' | 'pine' | 'dry';
+  /** 'T': green/dry mix (default) | mostly pines | mostly dry trees | rainforest. */
+  trees?: 'lowland' | 'pine' | 'dry' | 'jungle';
   /** Walls (h, w, d...): cream (default) | warm ochre adobe. */
   walls?: 'plain' | 'adobe';
   /** '^' and 'O': tan rock (default) | black volcanic rock. */
   rock?: 'rock' | 'basalt';
-  /** '%', ';', 'e' in caves: brown (default) | red clay | black basalt. */
-  cave?: 'cave' | 'clay' | 'basalt';
+  /** '%', ';', 'e' in caves: brown (default) | red clay | black basalt | the temple's carved stone. */
+  cave?: 'cave' | 'clay' | 'basalt' | 'temple';
+  /** A dense canopy overhead (the jungle): every tile darker. */
+  canopy?: boolean;
 }
 
 /** What drawing a whole map needs (a MapDef has all of this). */
@@ -122,6 +124,9 @@ export const TILES: Record<string, TileDef> = {
   z: open({ kind: 'tallgrass' }),
   i: open(),
   j: solid({ look: { es: '¡Lava! Está muy caliente. ¡No te acerques!', en: 'Lava! It’s very hot. Don’t get close!' } }),
+  '[': solid({ look: { es: 'Piedras talladas, muy antiguas. Tienen musgo.', en: 'Carved stones, very old. They’re covered in moss.' } }),
+  ']': solid({ look: { es: 'Una escalera de piedra, muy empinada.', en: 'A stone stairway, very steep.' } }),
+  '(': open({ kind: 'door' }),
   E: solid({ look: { es: 'Una roca negra con muchos huequitos. ¡Viene del volcán!', en: 'A black rock full of little holes. It comes from the volcano!' } }),
   X: solid({ look: { es: 'Sale vapor caliente de la tierra. ¡Huele a azufre!', en: 'Hot steam comes out of the ground. It smells like sulfur!' } }),
   '|': open({ kind: 'tallgrass' }),
@@ -197,6 +202,8 @@ const rockArt = (env: TileEnv, art: TileArt = ART.rock) => withPal(art, env.styl
 /** Ledges in the map's ground colors: green on routes, gray on the volcano's ash. */
 const ledgeArt = (env: TileEnv, art: TileArt) => withPal(art, env.ground === 'ash' ? OUTDOOR.ash : undefined);
 const caveArt = (env: TileEnv, part: 'wall' | 'floor', art: TileArt) => withPal(art, CAVE_STYLES[env.style?.cave ?? '']?.[part]);
+/** Cave floors are pebbles; the temple's are flagstones. */
+const caveFloorArt = (env: TileEnv) => (env.style?.cave === 'temple' ? ART.templeFloor : ART.caveFloor);
 
 function underImage(env: TileEnv, under: 'ground' | 'floor' | 'auto'): Img {
   if (under === 'ground') return paintArt(groundArt(env, '.'));
@@ -329,6 +336,7 @@ function treeAt(env: TileEnv): string {
   const trees = env.style?.trees ?? 'lowland';
   if (trees === 'pine') return odd ? 'T' : 'I';
   if (trees === 'dry') return odd ? 'T' : 't';
+  if (trees === 'jungle') return 'T';
   return odd ? 't' : 'T';
 }
 
@@ -337,13 +345,27 @@ export function tileImage(ch: string, env: TileEnv): Img {
   if (ch === 'T') ch = treeAt(env);
   const nb = neighbors(env);
   const st = env.style;
-  const key = [ch, env.ground, env.roof, env.floor, env.outdoor, env.y === 0, nb.n, nb.s, nb.w, nb.e, st?.walls, st?.rock, st?.cave].join('|');
+  const key = [ch, env.ground, env.roof, env.floor, env.outdoor, env.y === 0, nb.n, nb.s, nb.w, nb.e, st?.walls, st?.rock, st?.cave, st?.trees === 'jungle', st?.canopy].join('|');
   let img = cache.get(key);
   if (!img) {
     img = render(ch, env);
+    if (st?.canopy) img = shaded(img);
     cache.set(key, img);
   }
   return img;
+}
+
+/** Under a dense canopy: the tile multiplied toward deep green (its transparency kept). */
+function shaded(img: Img): Img {
+  const c = makeCanvas(16, 16);
+  const g = c.getContext('2d')!;
+  g.drawImage(img, 0, 0);
+  g.globalCompositeOperation = 'multiply';
+  g.fillStyle = CANOPY;
+  g.fillRect(0, 0, 16, 16);
+  g.globalCompositeOperation = 'destination-in';
+  g.drawImage(img, 0, 0);
+  return c;
 }
 
 function render(ch: string, env: TileEnv): Img {
@@ -380,7 +402,13 @@ function render(ch: string, env: TileEnv): Img {
     case '*':
       return paintArt(ART.flowers);
     case 'T':
-      return paintArt(ART.tree);
+      return paintArt(env.style?.trees === 'jungle' ? ART.jungleTree : ART.tree);
+    case '[':
+      return paintArt(ART.templeStone);
+    case ']':
+      return paintArt(ART.templeStairs);
+    case '(':
+      return stack(paintArt(ART.templeStone), paintArt(ART.templeDoor));
     case 't':
       return paintArt(ART.dryTree);
     case 'I':
@@ -401,13 +429,14 @@ function render(ch: string, env: TileEnv): Img {
     case ':':
       return paintArt(ART.dirt);
     case '%':
-      return rockImage(caveArt(env, 'wall', ART.caveWall), env, CAVE_WALL_CHARS, paintArt(caveArt(env, 'floor', ART.caveFloor)));
+      if (env.style?.cave === 'temple') return paintArt(caveArt(env, 'wall', ART.templeStone));
+      return rockImage(caveArt(env, 'wall', ART.caveWall), env, CAVE_WALL_CHARS, paintArt(caveArt(env, 'floor', caveFloorArt(env))));
     case ';':
-      return paintArt(caveArt(env, 'floor', ART.caveFloor));
+      return paintArt(caveArt(env, 'floor', caveFloorArt(env)));
     case 'e':
-      return stack(paintArt(caveArt(env, 'floor', ART.caveFloor)), paintArt(caveArt(env, 'floor', ART.caveExitOverlay)));
+      return stack(paintArt(caveArt(env, 'floor', caveFloorArt(env))), paintArt(caveArt(env, 'floor', ART.caveExitOverlay)));
     case 'Z':
-      return stack(paintArt(caveArt(env, 'floor', ART.caveFloor)), paintArt(ART.ladder));
+      return stack(paintArt(caveArt(env, 'floor', caveFloorArt(env))), paintArt(ART.ladder));
     case 'D':
       return stack(rockImage(rockArt(env), env, MOUNTAIN_CHARS, underImage(env, 'ground')), paintArt(rockArt(env, TUNNEL_MOUTH)));
     case 'H':
@@ -428,9 +457,9 @@ function render(ch: string, env: TileEnv): Img {
       return stack(underImage(env, 'floor'), paintArt(ART.stall, g));
     }
     case 'K':
-      return stack(paintArt(caveArt(env, 'floor', ART.caveFloor)), paintArt(ART.rails));
+      return stack(paintArt(caveArt(env, 'floor', caveFloorArt(env))), paintArt(ART.rails));
     case 'W':
-      return stack(paintArt(caveArt(env, 'floor', ART.caveFloor)), paintArt(ART.minePost));
+      return stack(paintArt(caveArt(env, 'floor', caveFloorArt(env))), paintArt(ART.minePost));
     case '8':
     case '2':
     case '4':

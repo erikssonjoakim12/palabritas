@@ -1,18 +1,19 @@
 # Surf, Fly and Villa Jaguar (gym 5): plan
 
-Nothing here is built yet except Villa Jaguar's placeholder map. Planned with the user, 2026-10-22.
+Surf and Fly aren't built yet. Villa Jaguar, its jungle and temple ([region5-jungle.md](region5-jungle.md)) and the
+lake's swimmers are placed, waiting for Surf. Planned with the user, 2026-10-22.
 
 ## Decisions (the user)
 
 - **Surf** opens after the 4th medal (Medalla Chispa). There's no move to teach: Palabritas that really swim can
   carry you, and the game tells you so. Only the big swimmers: **Mordisquito, Mordiscón, Paslamona** (the grown sea
   turtle; not Paslamita, the hatchling).
-- **Fly** opens after the 5th medal, with big birds only. Candidates: **Zopilotón** («from above, it knows every
-  street»), **Maletícano** (the pelican that has flown everywhere), **Palomón** («the biggest dove in the sky»).
-  Guardabarranco? (the user decides)
+- **Fly** opens after the 5th medal, with big birds only: **Zopilotón**, **Maletícano**, **Palomón**,
+  **Guardabarranco** and **Chocoyote**.
 - **Villa Jaguar**: the rainforest town (gym 5, Planta/Veneno), north of the Río Guardabarranco, below Ruta 3's
   plateau. No road leads there: you come by the river. A placeholder is in the world (world/maps/region4.ts).
-- **A dungeon**: a temple in Villa Jaguar, or one on an island in the Lago de las Islas. Not decided yet (ideas below).
+- **The dungeon**: El Templo del Jaguar ([region5-jungle.md](region5-jungle.md)). The lake's volcano island is kept
+  for a legendary Palabrita at level 50, after the 8th gym. Swimmers (trainers) are in the lake now.
 
 ## How Surf works
 
@@ -52,7 +53,7 @@ island in Lake Nicaragua, really is full of old stone statues; Ometepe, the volc
    collect their sayings.
 3. **The volcano island's petroglyph cave**: Petroglifón's home (Roca/Psíquico), with carvings to read.
 
-**Suggestion:** 1 as region 5's main dungeon (the story), 3 as a side trip once you can swim.
+**Chosen (the user):** 1, the temple. The volcano island waits for the legendary (after gym 8).
 
 ## Order
 
