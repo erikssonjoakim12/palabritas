@@ -38,6 +38,11 @@ export function worldLayout(): Record<string, Spot> {
       spots[conn.to] = neighborSpot(m, spots[id], dir, MAPS[conn.to], conn.offset);
       queue.push(conn.to);
     }
+    for (const o of Object.values(MAPS)) {
+      if (o.at?.map !== id || spots[o.id]) continue;
+      spots[o.id] = { x: spots[id].x + o.at.x, y: spots[id].y + o.at.y };
+      queue.push(o.id);
+    }
   }
   layout = spots;
   return spots;

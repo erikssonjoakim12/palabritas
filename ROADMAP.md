@@ -52,8 +52,8 @@ rainforest animals live along rivers). Animals, visual hooks and color direction
 Nicaraguan flavor for later: **voseo** («vos sos», «¿qué querés?») is everyday Spanish there, plus
 local words (*chunche*, *tuani*, *¡ideay!*, *va pues*). Great B1/B2 content: regional variety.
 
-New world mechanics still to come: **SURF** (ride a Palabrita over water, a field-move system like Gold/Silver's
-HMs) and **torches** (gym 4).
+New world mechanics still to come: **Surf** after the 4th medal (big swimmers carry you; no move to teach) and
+**Fly** after the 5th (big birds), leading to Villa Jaguar, the rainforest town (gym 5): [plans/surf-fly.md](plans/surf-fly.md).
 
 ## 4. Gyms and the level curve
 

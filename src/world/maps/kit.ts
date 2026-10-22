@@ -113,6 +113,11 @@ export interface MapDef {
   /** Roof color for 'r' buildings (key in ROOFS, style/colors.ts). */
   roof?: string;
   connections?: Partial<Record<Dir, Conn>>;
+  /**
+   * Placed at (x, y) inside another map's holes instead of by a connection: a place no road leads to (Villa Jaguar,
+   * reached by water).
+   */
+  at?: { map: string; x: number; y: number };
   /** Step on (x, y) to go to (tx, ty) on another map, facing `dir` (default: up, into a building). */
   doors?: { x: number; y: number; to: string; tx: number; ty: number; dir?: Dir }[];
   /** Interiors: where you end up when walking out over the mat. */
