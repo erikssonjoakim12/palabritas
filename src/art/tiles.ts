@@ -122,6 +122,7 @@ export const TILES: Record<string, TileDef> = {
   z: open({ kind: 'tallgrass' }),
   i: open(),
   j: solid({ look: { es: '¡Lava! Está muy caliente. ¡No te acerques!', en: 'Lava! It’s very hot. Don’t get close!' } }),
+  E: solid({ look: { es: 'Una roca negra con muchos huequitos. ¡Viene del volcán!', en: 'A black rock full of little holes. It comes from the volcano!' } }),
   X: solid({ look: { es: 'Sale vapor caliente de la tierra. ¡Huele a azufre!', en: 'Hot steam comes out of the ground. It smells like sulfur!' } }),
   '|': open({ kind: 'tallgrass' }),
   l: open(),
@@ -260,7 +261,7 @@ const TUNNEL_MOUTH: TileArt = {
 /** What a lone plant (palm, cactus) stands on: the ground beside it (sand on a beach, the track in a meadow). */
 function groundUnder(env: TileEnv): Img {
   const nb = neighbors(env);
-  const beside = [nb.s, nb.w, nb.e, nb.n].find((c) => !!c && '.:s='.includes(c));
+  const beside = [nb.s, nb.w, nb.e, nb.n].find((c) => !!c && '.:s=i'.includes(c));
   return beside ? tileImage(beside, env) : underImage(env, 'ground');
 }
 
@@ -372,6 +373,8 @@ function render(ch: string, env: TileEnv): Img {
       return stack(underImage(env, 'ground'), paintArt(neighbors(env).n === 'N' ? ART.tower : ART.bellTower));
     case 'y':
       return stack(groundUnder(env), paintArt(ART.cactus));
+    case 'E':
+      return stack(groundUnder(env), paintArt(ART.boulder));
     case 'A':
       return stack(underImage(env, 'ground'), paintArt(neighbors(env).n === 'A' ? ART.lighthouse : ART.lighthouseTop));
     case '*':

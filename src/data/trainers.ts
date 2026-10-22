@@ -107,6 +107,10 @@ export const TRAINERS: Record<string, TrainerDef> = {
   fotografo_max: { id: 'fotografo_max', name: 'Fotógrafo Max', defenseMode: 'choose', team: [['zopilotito', 24], ['chocoyito', 24], ['liebron', 25]] },
   // Region 4's bosses. Lucas #3: region4.ts builds his team from his starter's second form. Brasita's family only
   // appears on bosses (the user): Don Tizón's ace is Brasaurio.
+  // Ruta 10, down the volcano's west side (reached from the crater).
+  vulcanologo_oscar: { id: 'vulcanologo_oscar', name: 'Vulcanólogo Óscar', defenseMode: 'listen', team: [['chispita', 26], ['taranton', 27]] },
+  excursionista_lidia: { id: 'excursionista_lidia', name: 'Excursionista Lidia', defenseMode: 'type', rematch: true, team: [['hormigon', 27], ['chocoyote', 27]] },
+  guardaparque_ivan: { id: 'guardaparque_ivan', name: 'Guardaparque Iván', defenseMode: 'listen', team: [['zopilotito', 27], ['liebron', 28]] },
   sigilo: { id: 'sigilo', name: 'Don Sigilo', defenseMode: 'type', team: [['murcielon', 27], ['taranton', 28], ['petroglifon', 29]] },
   lucas3: { id: 'lucas3', name: 'Lucas', defenseMode: 'type', team: [['nubarron', 28], ['hojarasco', 25], ['palomon', 25], ['cangrejon', 26]] },
   tizon: { id: 'tizon', name: 'Líder Don Tizón', defenseMode: 'type', team: [['chocoyote', 27], ['coheton', 28], ['brasaurio', 32]] },

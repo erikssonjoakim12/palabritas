@@ -1,5 +1,6 @@
 # Phase 4 — Region 4: volcanoes and dry forest (Playa Carey → Ciudad Chispa, gym 4)
-n> **Since built:** the rangers' station is gone (plans/world-map.md, part 2): Elsa stands outside on the slopes and
+
+> **Since built:** the rangers' station is gone (plans/world-map.md, part 2): Elsa stands outside on the slopes and
 > Lucas #3 battles you at the foot of the trail, after Ciudad Chispa's Palacentro.
 
 **Goal:** you can play from the Medalla Ola to the **Medalla Chispa**. ✓ **Built** (2026-10-19), in 4 stages.

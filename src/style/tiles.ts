@@ -415,6 +415,28 @@ export const ART: Record<string, TileArt> = {
       '..333333333333..',
     ],
   },
+  /** A black volcanic boulder, porous (drawn over the ground): the volcano's rocks, seen far from it too. */
+  boulder: {
+    pal: OUTDOOR.basalt,
+    rows: [
+      '................',
+      '................',
+      '.....333333.....',
+      '...3300111133...',
+      '..300111121113..',
+      '..301111111123..',
+      '.30111211112223.',
+      '.31111111112123.',
+      '.31121111122223.',
+      '.31111121222223.',
+      '.31111111222223.',
+      '..312212222223..',
+      '..332222222233..',
+      '....33333333....',
+      '................',
+      '................',
+    ],
+  },
   /** A tall columnar cactus with two arms (drawn over the ground). */
   cactus: {
     pal: OUTDOOR.cactus,

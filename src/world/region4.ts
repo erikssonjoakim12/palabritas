@@ -533,6 +533,24 @@ export const REGION4: Record<string, ScriptFn> = {
     ['¡Me bajó la temperatura!', 'My temperature dropped!'],
     ['Si el humo cambia de color, hay que avisar a todo el pueblo.', 'If the smoke changes color, the whole town has to be warned.'],
   ),
+  vulcanologo_oscar: fight(
+    'vulcanologo_oscar',
+    ['Estudio las rocas negras. ¡Todas vienen del volcán!', 'I study the black rocks. They all come from the volcano!'],
+    ['¡Eres más dur{o/a} que una roca!', 'You’re tougher than a rock!'],
+    ['Hace cien años, la lava bajó por aquí. Por eso todo es negro.', 'A hundred years ago, the lava came down here. That’s why everything is black.'],
+  ),
+  excursionista_lidia: fight(
+    'excursionista_lidia',
+    ['Bajo del volcán por el camino viejo. ¿Una batalla antes de seguir?', 'I’m coming down the volcano by the old trail. A battle before we go on?'],
+    ['¡Uf! Mejor sigo bajando.', 'Phew! I’d better keep going down.'],
+    ['Este camino baja hasta la Ruta 6. ¡Es un atajo a Villa Ocote!', 'This trail goes down to Route 6. It’s a shortcut to Villa Ocote!'],
+  ),
+  guardaparque_ivan: fight(
+    'guardaparque_ivan',
+    ['Cuido el camino del volcán. ¡A ver si estás list{o/a}!', 'I look after the volcano trail. Let’s see if you’re ready!'],
+    ['¡Muy bien! Puedes bajar.', 'Very good! You can go down.'],
+    ['Desde abajo no se puede subir: el escalón es muy alto.', 'You can’t climb up from below: the step is too high.'],
+  ),
   fotografo_max: fight(
     'fotografo_max',
     ['¡Sonríe! Bueno, primero una batalla, después la foto.', 'Smile! Well, a battle first, then the photo.'],

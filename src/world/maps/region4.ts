@@ -315,6 +315,62 @@ export const REGION4_MAPS: Record<string, MapDef> = {
       { id: 'guia_chispa', x: 8, y: 12, look: 'polvorero', dir: 'left', script: 'guia_chispa' },
     ],
   },
+  // Ruta 10: down the volcano's west side to Ruta 6 (plans/world-map.md). You come out of the crater's west gate,
+  // down the ash gully and along the ridge, and a step too high to climb back makes it one-way: from Ruta 6 you
+  // can only look up at it. A field of cooled lava lies off the gully.
+  ruta10: {
+    id: 'ruta10',
+    name: 'Ruta 10',
+    outdoor: true,
+    floor: '.',
+    ground: 'grass',
+    style: { trees: 'dry', rock: 'basalt' },
+    rows: [
+      'tttttttttttttttttttttttttt^^^^^^^^^^^^^^^',
+      'tttttttttttttttttttttttttt^^^^^^^^^^^^^^^',
+      'ttttttttt.....zzzzzzzzzz..iiiiiii^^^^^^^^',
+      'ttttttttt.....zzzzzzzzzz..iEiiiii^^^^^^^^',
+      'ttttttttt.................iiiiiii^^^^^^^^',
+      'tttttttttvvvvvtttttttttttt^^^^^ii^^^^^^^^',
+      't....E........tttttttttttt^^^^^ii^^^^^^^^',
+      't..,,,,,,.....tttttttttttt^^^^^ii^^^^^^^^',
+      't..,,,,,,.....ttiiiiiiiiizzzzi^ii^^^^^^^^',
+      't.S,,,,,,..E..ttiiiEiiiiizzzzi^ii^^^^^^^^',
+      '=====.........ttiiiiiiiiiiiiii^ii^^^^^^^^',
+      '=====.........ttiiiiiiiEiiiiiiiii^^^^^^^^',
+      'ttttttttttttttttiiEiiiiiiiiiEiiii^^^^^^^^',
+      'ttttttttttttttttiiiiiiiiiiiiii^ii^^^^^^^^',
+      'ttttttttttttttttzzzziiiiiiEiii^ii^^^^^^^^',
+      'ttttttttttttttttzzzziiEiiiiiii^ii^^^^^^^^',
+      'ttttttttttttttttzzzziiiiiiiiii^ii^^^^^^^^',
+      'tttttttttttttttttttttttttt^^^^^ii^iiXi^^^',
+      'tttttttttttttttttttttttttt^^^^^ii^iiii^^^',
+      'tttttttttttttttttttttttttt^^^^^iiiiiiiiii',
+      'tttttttttttttttttttttttttt^^^^^iiiiiiiiii',
+      'tttttttttttttttttttttttttt^^^^^^^^^^^^^^^',
+      'tttttttttttttttttttttttttt^^^^^^^^^^^^^^^',
+      'tttttttttttttttttttttttttt^^^^^^^^^^^^^^^',
+    ],
+    connections: { left: { to: 'ruta6', offset: 44 }, right: { to: 'crater', offset: -16 } },
+    signs: [{ x: 2, y: 9, es: 'RUTA 10. Al este: el Volcán Chocoyo. No se puede subir por aquí.', en: 'ROUTE 10. East: Volcán Chocoyo. You can’t climb up this way.' }],
+    encounters: {
+      rate: 0.12,
+      table: [
+        { sp: 'zopilotito', min: 25, max: 27, w: 30 },
+        { sp: 'chispita', min: 25, max: 27, w: 25 },
+        { sp: 'hormigon', min: 26, max: 28, w: 15 },
+        { sp: 'liebron', min: 26, max: 28, w: 15 },
+        { sp: 'chocoyito', min: 25, max: 27, w: 10 },
+        { sp: 'brasita', min: 24, max: 26, w: 5 },
+      ],
+    },
+    npcs: [
+      { id: 'vulcanologo_oscar', x: 31, y: 9, look: 'vulcanologo', dir: 'right', script: 'vulcanologo_oscar', sight: 1 },
+      { id: 'excursionista_lidia', x: 20, y: 4, look: 'hiker', dir: 'up', script: 'excursionista_lidia', sight: 2 },
+      { id: 'guardaparque_ivan', x: 11, y: 2, look: 'guardaparque', dir: 'down', script: 'guardaparque_ivan', sight: 2 },
+      itemBall('superpocion_r10', 17, 9, 'superpocion'),
+    ],
+  },
 
   // Home: from Ciudad Chispa east to Pueblo Amanecer's plateau, where you jump down the ledge into town.
   ruta9: {
@@ -490,7 +546,7 @@ export const REGION4_MAPS: Record<string, MapDef> = {
       { id: 'chocoyito_bebe', x: 5, y: 10, object: 'chocoyitoBebe', script: 'chocoyitoBebe', show: () => flag('chocoyitoBusca') && !flag('chocoyitoEncontrado') },
     ],
   },
-  // The crater: a walkway of ash around the lava lake. Parakeets nest on the east side; Equipo Silencio camps on
+  // The crater: a walkway of ash around the lava lake. Parakeets nest on the east side, and a gate in the west wall leads down Ruta 10; Equipo Silencio camps on
   // the north rim with the stolen fireworks (stage 3). You come up through the lava tube; in the world it sits on top
   // of the slopes, under the volcano's north side.
   crater: {
@@ -505,8 +561,8 @@ export const REGION4_MAPS: Record<string, MapDef> = {
       '^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^',
       '^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^',
       '^^^iiiiiiiiiiiiiiiiiiiiiiiiii^^^',
-      '^^^iiiiiiiiiiiiiiiiiiiiiiiiii^^^',
-      '^^^iiiiiiiiiiiiiiiiiiiiiiiiii^^^',
+      'iiiiiiiiiiiiiiiiiiiiiiiiiiiii^^^',
+      'iiiiiiiiiiiiiiiiiiiiiiiiiiiii^^^',
       '^^^iijjjjjjjjjjjjjjjjjjjjjjii^^^',
       '^^^iijjjjjjjjjjjjjjjjjjjjjjii^^^',
       '^^^iijjjjjjjjjjjjjjjjjjjjjjii^^^',
@@ -529,7 +585,7 @@ export const REGION4_MAPS: Record<string, MapDef> = {
       '^^^^^i^^^^^^^^^^^^^^^^^^^^^^^^^^',
       '^^^^^D^^^^^^^^^^^^^^^^^^^^^^^^^^',
     ],
-    connections: { down: { to: 'laderas', offset: -1, scenery: true }, up: { to: 'volcan_norte', offset: 0, scenery: true } },
+    connections: { down: { to: 'laderas', offset: -1, scenery: true }, up: { to: 'volcan_norte', offset: 0, scenery: true }, left: { to: 'ruta10', offset: 16 } },
     doors: [{ x: 5, y: 25, to: 'tubo', tx: 36, ty: 2, dir: 'down' }],
     encounters: { rate: 0.15, table: [{ sp: 'chocoyito', min: 22, max: 24, w: 75 }, { sp: 'chispita', min: 22, max: 24, w: 25 }] },
     npcs: [

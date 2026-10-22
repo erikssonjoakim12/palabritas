@@ -704,6 +704,7 @@ export const MAP_MUSIC: Record<string, string> = {
   ruta8: 'fuego',
   laderas: 'fuego',
   crater: 'fuego',
+  ruta10: 'fuego',
   chispa: 'chispa',
   chispa_noche: 'chispa',
 };
