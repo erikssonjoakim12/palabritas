@@ -71,7 +71,7 @@ export const REGION4_MAPS: Record<string, MapDef> = {
         { sp: 'tinajon', min: 18, max: 20, w: 2 },
       ],
     },
-    fishing: { table: [{ sp: 'mojarrita', min: 14, max: 19, w: 60 }, { sp: 'mordisquito', min: 17, max: 20, w: 40 }] },
+    fishing: { table: [{ sp: 'tilapita', min: 14, max: 19, w: 85 }, { sp: 'espadon', min: 20, max: 21, w: 15 }] },
     npcs: [
       { id: 'campesino', x: 9, y: 11, look: 'campesino', dir: 'down', script: 'campesino', sight: 2 },
       { id: 'vaquera_r8', x: 24, y: 14, look: 'vaquera', dir: 'up', script: 'vaquera_r8', sight: 2 },
@@ -718,7 +718,7 @@ export const REGION4_MAPS: Record<string, MapDef> = {
     ],
     connections: { right: { to: 'ruta2', offset: -5 }, down: { to: 'ruta9', offset: 0 }, left: { to: 'rio', offset: 34, scenery: true } },
     signs: [{ x: 37, y: 83, es: 'LAGO DE LAS ISLAS. El río baja del Cañón del Guardabarranco.', en: 'LAKE OF THE ISLANDS. The river comes down from the Guardabarranco Canyon.' }],
-    fishing: { table: [{ sp: 'mojarrita', min: 14, max: 18, w: 70 }, { sp: 'mordisquito', min: 16, max: 20, w: 30 }] },
+    fishing: { table: [{ sp: 'mojarrita', min: 14, max: 19, w: 70 }, { sp: 'mordisquito', min: 20, max: 22, w: 30 }] },
     npcs: [
       { id: 'pescador_lago', x: 40, y: 22, look: 'fisher', dir: 'left', script: 'pescador_lago' },
       // Out in the water: you'll meet them once you can swim.

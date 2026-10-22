@@ -321,15 +321,29 @@ export const SPECIES: Record<string, Species> = {
     id: 'mojarrita',
     name: 'Mojarrita',
     types: ['Agua'],
-    // A three-stage line (the user): Mojarrita → Mordisquito (20) → Mordiscón (38), all on the sea theme. La pesca
-    // waits for a new basic fish.
+    // A three-stage line (the user): Mojarrita → Mordisquito (20) → Mordiscón (38), all on the sea theme, and only in
+    // the lake. Everywhere else you fish Tilapitas.
     theme: 'mar',
     base: { hp: 38, atk: 34, def: 40, spd: 58 },
     moves: [m('Aleta', 'Agua', 'choose'), m('Mordisco', 'Siniestro', 'type'), m('Remolino', 'Agua', 'listen'), m('Tiburonazo', 'Agua', 'speak')],
     catchRate: 0.7,
     dex: {
-      es: 'El pez más común del río. Salta tan alto que a veces cae en el bote del pescador.',
-      en: 'The most common fish in the river. It jumps so high it sometimes lands in the fisherman’s boat.',
+      es: 'Vive en el gran lago. Es pequeña, ¡pero ya muerde como un tiburón!',
+      en: 'It lives in the great lake. It’s small, but it already bites like a shark!',
+    },
+  },
+  tilapita: {
+    id: 'tilapita',
+    name: 'Tilapita',
+    types: ['Agua'],
+    // The fish of rivers, lagoons and the sea (the user): it becomes a swordfish.
+    theme: 'pesca',
+    base: { hp: 42, atk: 40, def: 38, spd: 56 },
+    moves: [m('Salpicar', 'Agua', 'choose'), m('Coletazo', 'Normal', 'type'), m('Burbujitas', 'Agua', 'listen'), m('Estocada', 'Acero', 'speak')],
+    catchRate: 0.7,
+    dex: {
+      es: 'Vive en ríos, lagunas y hasta en el mar. ¡Es el primer pez que pesca todo el mundo!',
+      en: 'It lives in rivers, lagoons and even the sea. It’s the first fish everyone catches!',
     },
   },
   pelicanito: {
@@ -728,8 +742,18 @@ evolution('mojarrita', 20, {
   base: { hp: 46, atk: 60, def: 42, spd: 58 },
   catchRate: 0.4,
   dex: {
-    es: 'Una Mojarrita que bajó al mar y le salieron dientes. Si se le cae uno, le crece otro.',
-    en: 'A Mojarrita that swam down to the sea and grew teeth. If it loses one, a new one grows.',
+    es: 'Ya es el terror de los peces del lago. Si se le cae un diente, le crece otro.',
+    en: 'It’s already the terror of the lake’s fish. If it loses a tooth, a new one grows.',
+  },
+});
+evolution('tilapita', 20, {
+  id: 'espadon',
+  name: 'Espadón',
+  types: ['Agua', 'Acero'],
+  base: { hp: 66, atk: 88, def: 62, spd: 96 },
+  dex: {
+    es: 'Su nariz es una espada. Nada tan rápido que corta las olas.',
+    en: 'Its nose is a sword. It swims so fast it cuts through the waves.',
   },
 });
 evolution('mordisquito', 38, {
@@ -855,7 +879,7 @@ export const DEX_ORDER = [
   'hojadillo', 'hojarasco', 'ecolin', 'murcielon', 'ochopatas', 'taranton', 'cuernito', 'herculeo',
   'ardillita', 'ardillon', 'colibri', 'zumbador', 'espinita', 'puercoespin', 'piedrita', 'petroglifon', 'ollita', 'tinajon',
   'caparazonte', 'gliptodon', 'guardabarranco',
-  'cangrejito', 'cangrejon', 'coquito', 'cocotero', 'pelicanito', 'maleticano', 'mojarrita', 'mordisquito', 'mordiscon',
+  'cangrejito', 'cangrejon', 'coquito', 'cocotero', 'pelicanito', 'maleticano', 'mojarrita', 'mordisquito', 'mordiscon', 'tilapita', 'espadon',
   'paslamita', 'paslamona',
   'brasita', 'brasaurio', 'volcasaurio', 'hormiguita', 'hormigon', 'zopilotito', 'zopiloton', 'chocoyito', 'chocoyote',
   'chispita', 'coheton', 'lamparita', 'perezosito', 'venadito', 'torovenado',

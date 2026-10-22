@@ -141,8 +141,8 @@ export interface EncounterEntry {
   w: number;
 }
 
-/** What bites in lakes and rivers (Mojarrita arrives with the rod, in phase 3). */
-export const FRESHWATER: EncounterEntry[] = [{ sp: 'mojarrita', min: 8, max: 14, w: 100 }];
+/** What bites in rivers and ponds (with the rod, from Playa Carey). The shark line only lives in the lake. */
+export const FRESHWATER: EncounterEntry[] = [{ sp: 'tilapita', min: 8, max: 14, w: 100 }];
 
 export const HOUSE = ['##L##V##', '________', '_kk_____', '_kk_____', '________', '______B_', '____m___'];
 // Palacentro: posters (u), nurse behind the counter (C) next to the healing machine,

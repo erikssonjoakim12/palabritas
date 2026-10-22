@@ -589,7 +589,7 @@ export const REGION2: Record<string, ScriptFn> = {
     trainerFight('julio', {
       intro: ['¡Shh! Los peces se asustan. Bueno, ¡luchemos rápido!', 'Shh! The fish get scared. Well, let’s battle fast!'],
       defeated: ['Se me escapó... ¡como un pez!', 'It got away... like a fish!'],
-      after: ['Abajo del puente hay mojarras. Con una caña, ¡pescas muchas!', 'Under the bridge there are mojarras. With a rod you catch lots!'],
+      after: ['Abajo del puente hay tilapias. Con una caña, ¡pescas muchas!', 'Under the bridge there are tilapias. With a rod you catch lots!'],
     }),
   rosa: () =>
     trainerFight('rosa', {

@@ -7,7 +7,7 @@ lake's swimmers are placed, waiting for Surf. Planned with the user, 2026-10-22.
 
 - **Surf** opens after the 4th medal (Medalla Chispa). There's no move to teach: Palabritas that really swim can
   carry you, and the game tells you so. Only the big swimmers: **Mordisquito, Mordiscón, Paslamona** (the grown sea
-  turtle; not Paslamita, the hatchling).
+  turtle; not Paslamita, the hatchling) and **Espadón** (the swordfish).
 - **Fly** opens after the 5th medal, with big birds only: **Zopilotón**, **Maletícano**, **Palomón**,
   **Guardabarranco** and **Chocoyote**.
 - **Villa Jaguar**: the rainforest town (gym 5, Planta/Veneno), north of the Río Guardabarranco, below Ruta 3's

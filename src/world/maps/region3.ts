@@ -98,7 +98,7 @@ export const REGION3_MAPS: Record<string, MapDef> = {
         { sp: 'ollita', min: 17, max: 19, w: 10 },
       ],
     },
-    fishing: { table: [{ sp: 'mojarrita', min: 14, max: 18, w: 100 }] },
+    fishing: { table: [{ sp: 'tilapita', min: 14, max: 18, w: 100 }] },
     npcs: [
       { id: 'ramon', x: 24, y: 12, look: 'lenador', dir: 'up', script: 'ramon', sight: 2 },
       { id: 'laura', x: 31, y: 19, look: 'campista', dir: 'left', script: 'laura', sight: 2 },
@@ -179,7 +179,7 @@ export const REGION3_MAPS: Record<string, MapDef> = {
         { sp: 'hojadillo', min: 17, max: 19, w: 10 },
       ],
     },
-    fishing: { table: [{ sp: 'mojarrita', min: 12, max: 18, w: 40 }, { sp: 'mordisquito', min: 16, max: 22, w: 30 }, { sp: 'cangrejito', min: 14, max: 20, w: 30 }] },
+    fishing: { table: [{ sp: 'tilapita', min: 12, max: 18, w: 55 }, { sp: 'cangrejito', min: 14, max: 20, w: 35 }, { sp: 'espadon', min: 20, max: 22, w: 10 }] },
     npcs: [
       { id: 'surfista1', x: 13, y: 10, look: 'surfista', dir: 'right', script: 'surfista1', sight: 1 },
       { id: 'banista1', x: 16, y: 17, look: 'banista', dir: 'left', script: 'banista1', sight: 2 },
@@ -243,7 +243,7 @@ export const REGION3_MAPS: Record<string, MapDef> = {
       { x: 22, y: 12, es: 'EL PELÍCANO FELIZ. ¡La mejor sopa de pescado de la costa!', en: 'THE HAPPY PELICAN. The best fish soup on the coast!' },
       { x: 16, y: 1, es: 'Al norte: Ruta 7 y Villa Ocote. Al sur: la Playa de las Tortugas.', en: 'North: Route 7 and Villa Ocote. South: Turtle Beach.' },
     ],
-    fishing: { table: [{ sp: 'mojarrita', min: 12, max: 18, w: 40 }, { sp: 'mordisquito', min: 16, max: 22, w: 30 }, { sp: 'cangrejito', min: 14, max: 20, w: 30 }] },
+    fishing: { table: [{ sp: 'tilapita', min: 12, max: 18, w: 55 }, { sp: 'cangrejito', min: 14, max: 20, w: 35 }, { sp: 'espadon', min: 20, max: 22, w: 10 }] },
     gates: [
       {
         id: 'guarda_este',
@@ -401,7 +401,7 @@ export const REGION3_MAPS: Record<string, MapDef> = {
         { sp: 'pelicanito', min: 18, max: 21, w: 25 },
       ],
     },
-    fishing: { table: [{ sp: 'mojarrita', min: 12, max: 18, w: 40 }, { sp: 'mordisquito', min: 16, max: 22, w: 30 }, { sp: 'cangrejito', min: 14, max: 20, w: 30 }] },
+    fishing: { table: [{ sp: 'tilapita', min: 12, max: 18, w: 55 }, { sp: 'cangrejito', min: 14, max: 20, w: 35 }, { sp: 'espadon', min: 20, max: 22, w: 10 }] },
     // Lucas (rival #2) comes up from the beach the first time you arrive.
     triggers: [
       { x: 22, y: 2, script: 'lucasPlaya' },

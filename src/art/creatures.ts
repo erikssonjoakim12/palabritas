@@ -3,7 +3,6 @@ import { PALABRITA_ART } from '../style/palabritas';
 
 // Palabrita sprites: hand-made pixel art (style/palabritas.ts), or for the ones that don't have
 // it yet, 48x48 drawings from simple shapes with a hard pixel outline (below).
-
 type Draw = (p: Pix) => void;
 
 /** Placeholders for new Palabritas until the user's art arrives (every Palabrita has art right now). */
