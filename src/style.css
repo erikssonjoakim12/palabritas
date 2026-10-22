@@ -283,6 +283,9 @@ html, body {
 }
 .list-row.sel::before { content: '▶'; position: absolute; left: 0; }
 .list-row canvas { image-rendering: pixelated; width: 2.4em; height: 2.4em; flex: none; }
+/* The chosen Palabrita's icon bobs one icon pixel (2.4em / 16), like Gold/Silver; the others stay still. */
+.list-row.sel.mon-row canvas { animation: bob 0.5s steps(1) infinite; }
+@keyframes bob { 50% { transform: translateY(-0.15em); } }
 .list-row .grow { flex: 1; min-width: 0; }
 .list-row .small { font-size: 0.75em; color: #5a5a78; }
 .detail h3 { margin: 0 0 0.5em; font-size: 1.1em; font-weight: normal; }

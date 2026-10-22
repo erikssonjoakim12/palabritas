@@ -42,17 +42,18 @@ export async function startMenu(): Promise<string | undefined> {
 }
 
 async function PalabritasMenu() {
-  while (true) {
-    const mon = await pickMon('view');
-    if (!mon) return;
-    // Palabritas train by fighting; this menu is for looking at their powers and words.
-    const i = await menu(['DETALLES', 'PRIMERO', 'SALIR'], { cancel: true, pos: { right: 0, bottom: 0 } });
-    if (i === 0) await showDetails(mon);
-    else if (i === 1) {
+  // Palabritas train by fighting; this menu is for looking at their powers and words. The team stays on screen
+  // under it; after PRIMERO it's shown again in the new order.
+  while (
+    await pickMon('view', undefined, async (mon) => {
+      const i = await menu(['DETALLES', 'PRIMERO', 'SALIR'], { cancel: true, pos: { right: 0, bottom: 0 } });
+      if (i === 0) await showDetails(mon);
+      if (i !== 1) return false;
       G.save.party = [mon, ...G.save.party.filter((m) => m !== mon)];
       await info(`${monName(mon)} luchará primero.`, { en: `${monName(mon)} will fight first.` });
-    }
-  }
+      return true;
+    })
+  );
 }
 
 async function dictionary() {

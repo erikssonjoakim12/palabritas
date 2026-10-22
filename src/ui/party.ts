@@ -37,8 +37,14 @@ export function hpClass(hp: number, max: number) {
   return r > 0.5 ? '' : r > 0.2 ? 'mid' : 'low';
 }
 
-/** A scrollable list in a full-screen box. Resolves the chosen index, or -1 on B. */
-export function listMenu(rows: HTMLElement[], opts: { cancel?: boolean; header?: HTMLElement; initial?: number } = {}): Promise<number> {
+/**
+ * A scrollable list in a full-screen box. Resolves the chosen index, or -1 on B. With `stay`, choosing runs it while
+ * the list stays open underneath (a menu over the team); the list closes only when it returns true.
+ */
+export function listMenu(
+  rows: HTMLElement[],
+  opts: { cancel?: boolean; header?: HTMLElement; initial?: number; stay?: (i: number) => Promise<boolean> } = {},
+): Promise<number> {
   const box = el('div', 'box fullpanel');
   if (opts.header) box.appendChild(opts.header);
   rows.forEach((r) => {
@@ -53,24 +59,34 @@ export function listMenu(rows: HTMLElement[], opts: { cancel?: boolean; header?:
   };
   render();
   return new Promise((resolve) => {
-    const done = (i: number) => {
-      pop();
-      box.remove();
+    let busy = false;
+    const done = async (i: number) => {
+      if (busy) return;
       sfx('select');
+      if (i >= 0 && opts.stay) {
+        busy = true;
+        pop();
+        const close = await opts.stay(i);
+        busy = false;
+        if (!close) return void (pop = input.push(keys));
+      } else pop();
+      box.remove();
       resolve(i);
     };
-    const pop = input.push((b) => {
+    const keys = (b: string) => {
       if (b === 'up' && sel > 0) (sel--, sfx('blip'), render());
       else if (b === 'down' && sel < rows.length - 1) (sel++, sfx('blip'), render());
       else if (b === 'A' && rows.length) done(sel);
       else if (b === 'B' && opts.cancel !== false) done(-1);
-    });
-    rows.forEach((r, i) => r.addEventListener('click', () => done(i)));
+    };
+    let pop = input.push(keys);
+    rows.forEach((r, i) => r.addEventListener('click', () => ((sel = i), render(), done(i))));
   });
 }
 
 function partyRow(mon: Mon, active?: Mon) {
-  const row = el('div');
+  // mon-row: the chosen one's icon bobs (style.css), like Gold/Silver's party screen.
+  const row = el('div', 'mon-row');
   const s = stats(mon);
   row.appendChild(iconCanvas(mon.sp));
   const info = el('div', 'grow');
@@ -94,11 +110,15 @@ export async function pickFrom(mons: Mon[], title: string): Promise<Mon | null> 
   return i < 0 ? null : mons[i];
 }
 
-/** Pick a Palabrita. In 'switch'/'forced' mode only Palabritas that can fight are valid. */
-export async function pickMon(mode: 'switch' | 'forced' | 'view', active?: Mon): Promise<Mon | null> {
+/**
+ * Pick a Palabrita. In 'switch'/'forced' mode only Palabritas that can fight are valid. With `stay`, the team stays on
+ * screen while it runs (the START menu's DETALLES / PRIMERO / SALIR); it returns true to close the team.
+ */
+export async function pickMon(mode: 'switch' | 'forced' | 'view', active?: Mon, stay?: (mon: Mon) => Promise<boolean>): Promise<Mon | null> {
   while (true) {
     const header = el('div', 'menu-title', mode === 'view' ? 'TUS PALABRITAS' : '¿Quién luchará?');
-    const i = await listMenu(G.save.party.map((m) => partyRow(m, active)), { cancel: mode !== 'forced', header });
+    const party = G.save.party;
+    const i = await listMenu(party.map((m) => partyRow(m, active)), { cancel: mode !== 'forced', header, stay: stay && ((n) => stay(party[n])) });
     if (i < 0) return null;
     const mon = G.save.party[i];
     if (mode !== 'view' && mon.hp <= 0) {
