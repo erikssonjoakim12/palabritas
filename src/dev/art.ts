@@ -11,6 +11,9 @@ import { worldLayout } from '../world/layout';
 import { LOOKS } from '../style/people';
 import { PALETTE } from '../style/colors';
 import { SPECIES, DEX_ORDER } from '../data/species';
+import { TYPE_COLORS } from '../data/types';
+import { THEMES } from '../data/content';
+import { typeIcon } from '../art/typeIcon';
 import type { Img } from '../art/pixel';
 
 const root = document.getElementById('art')!;
@@ -37,23 +40,43 @@ function big(img: Img, scale: number) {
   return c;
 }
 
-function card(grid: HTMLElement, label: string, images: Img[], scale: number) {
+function card(grid: HTMLElement, label: string, images: Img[], scale: number, more: HTMLElement[] = []) {
   const el = document.createElement('div');
   el.className = 'card';
   const row = document.createElement('div');
   row.className = 'row';
   for (const img of images) row.appendChild(big(img, scale));
-  el.append(row, label);
+  el.append(row, label, ...more);
   grid.appendChild(el);
 }
 
+/** A Palabrita's types (with their battle symbols) and its theme, to check they fit. */
+function speciesInfo(id: string): HTMLElement[] {
+  const sp = SPECIES[id];
+  if (!sp) return [];
+  const types = document.createElement('div');
+  types.className = 'types';
+  for (const t of sp.types) {
+    const chip = document.createElement('span');
+    chip.className = 'type';
+    chip.style.borderColor = TYPE_COLORS[t];
+    chip.append(typeIcon(t), t);
+    types.append(chip);
+  }
+  const theme = document.createElement('div');
+  theme.className = 'theme';
+  const th = THEMES[sp.theme];
+  theme.textContent = th ? `Tema: ${th.name} (${th.en})` : `Tema: ${sp.theme}`;
+  return [types, theme];
+}
 
-const mons = section('Palabritas', 'Front (the opponent sees this) and back (yours in battle). Palabritas with hand-made art (style/palabritas.ts) have a real back view; the others use their mirrored front.');
+
+const mons = section('Palabritas', 'Front (the opponent sees this) and back (yours in battle), with their types and theme. Palabritas with hand-made art (style/palabritas.ts) have a real back view; the others use their mirrored front.');
 // In dex order (with the dex's numbers), then art that isn't in the game yet.
 const dexNo = (id: string) => (DEX_ORDER.includes(id) ? DEX_ORDER.indexOf(id) : DEX_ORDER.length);
 for (const id of [...CREATURE_IDS].sort((a, b) => dexNo(a) - dexNo(b))) {
   const label = SPECIES[id] ? `${String(dexNo(id) + 1).padStart(3, '0')} ${SPECIES[id].name}` : `${id[0].toUpperCase()}${id.slice(1)} (art only)`;
-  card(mons, label, [creatureArt(id).front, creatureArt(id).back], 3);
+  card(mons, label, [creatureArt(id).front, creatureArt(id).back], 3, speciesInfo(id));
 }
 
 const people = section('Battle portraits', 'Shown at the start and end of trainer battles. Built from each person\'s look, like the overworld sprites.');
