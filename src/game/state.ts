@@ -97,7 +97,7 @@ export function newSave(): SaveData {
     dir: 'down',
     party: [],
     box: [],
-    flags: { amanecerWide: true, ruta5East: true },
+    flags: { amanecerWide: true, ruta5East: true, rutasCortas: true },
     gender: 'boy',
     money: 0,
     bag: {},
@@ -170,6 +170,13 @@ function migrate(s: SaveData) {
   if (!s.flags.ruta5East) {
     if (s.map === 'ruta5' && s.y >= 13 && s.x >= 20 && s.x <= 26) Object.assign(s, { x: 90, y: 4, dir: 'up' });
     s.flags.ruta5East = true;
+  }
+  // Rutas 3 and 8 got shorter (plans/world-map.md): anyone saved below Ruta 3's cave plateau stands at its
+  // Brisa end, and anyone on Ruta 8 at its Carey end.
+  if (!s.flags.rutasCortas) {
+    if (s.map === 'ruta3' && s.y >= 13) Object.assign(s, { x: 62, y: 28, dir: 'left' });
+    if (s.map === 'ruta8') Object.assign(s, { x: 1, y: 10, dir: 'right' });
+    s.flags.rutasCortas = true;
   }
   s.money ??= 0;
   s.starterPicked ??= ['salchichita', 'gotita', 'aguacatito'].find((sp) => s.caught.includes(sp));

@@ -15,7 +15,7 @@ const talk = async (map, x, y, dir, opts = yes) => {
 };
 
 // Ruta 8 into Ciudad Chispa: the theft.
-await t.fromSave({ map: 'ruta8', x: 42, y: 18, dir: 'right', party, flags: { medalOla: true } });
+await t.fromSave({ map: 'ruta8', x: 42, y: 10, dir: 'right', party, flags: { medalOla: true } });
 await t.walk('right', 4);
 let r = await t.play();
 t.check('the fireworks are stolen as you arrive, and the volcano trail opens', (await flags()).cohetesRobados && r.said.some((x) => x.includes('Ladrones')), r.said.slice(0, 3));

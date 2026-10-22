@@ -228,7 +228,7 @@ export const REGION3_MAPS: Record<string, MapDef> = {
       '~~~~~~~sssssss==....==TTTTTTTTTT',
       '~~~~~~~TTTTTTTTTTTTT==TTTTTTTTTT',
     ],
-    connections: { up: { to: 'ruta7', offset: 0 }, down: { to: 'tortugas', offset: 2 }, right: { to: 'ruta8', offset: 2 } },
+    connections: { up: { to: 'ruta7', offset: 0 }, down: { to: 'tortugas', offset: 2 }, right: { to: 'ruta8', offset: 0 } },
     doors: [
       { x: 11, y: 5, to: 'centro_carey', tx: 4, ty: 7 },
       { x: 19, y: 5, to: 'tienda_carey', tx: 4, ty: 6 },

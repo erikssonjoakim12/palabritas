@@ -134,6 +134,26 @@ const report = await t.game(() => {
     if (arrivals.length) for (const e of exits) if (!anyIn.has(e.join())) say(`the way out at ${e} can't be reached from any way in`);
     out[m.id] = problems;
   }
+
+  // The world: each map is placed once (from Pueblo Amanecer), so a loop of connections that doesn't close puts
+  // a neighbor somewhere else than its connection says. And no two maps may overlap.
+  const L = g.worldLayout();
+  const world = [];
+  for (const [id, p] of Object.entries(L)) {
+    const m = MAPS[id];
+    const [w, h] = size(m);
+    for (const [dir, conn] of Object.entries(m.connections ?? {})) {
+      const q = L[conn.to];
+      const [w2, h2] = size(MAPS[conn.to]);
+      const want = { up: [p.x - conn.offset, p.y - h2], down: [p.x - conn.offset, p.y + h], left: [p.x - w2, p.y - conn.offset], right: [p.x + w, p.y - conn.offset] }[dir];
+      if (q && (q.x !== want[0] || q.y !== want[1])) world.push(`${id} → ${conn.to} (${dir}): the loop doesn't close, it's at ${q.x},${q.y} instead of ${want}`);
+    }
+    for (const [id2, q] of Object.entries(L)) {
+      const [w2, h2] = size(MAPS[id2]);
+      if (id < id2 && p.x < q.x + w2 && q.x < p.x + w && p.y < q.y + h2 && q.y < p.y + h) world.push(`${id} and ${id2} overlap`);
+    }
+  }
+  out['(the world)'] = world;
   return out;
 });
 
