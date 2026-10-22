@@ -26,12 +26,12 @@ s = await save();
 t.check('Mom takes the hammock, and the sloth asleep in it battles you', s.flags.hamacaEntregada && s.bag.superpocion === 3 && s.flags.perezosito, s.flags);
 
 // The baby parakeet: Elsa's directions, the lava tube, the nest, the reward.
-await t.fromSave({ map: 'estacion', x: 5, y: 4, dir: 'up', party, flags: { cohetesRobados: true, lucas3: true } });
+await t.fromSave({ map: 'laderas', x: 18, y: 15, dir: 'up', party, flags: { cohetesRobados: true, lucas3: true } });
 await t.press('z');
 await t.play({ choices: ['En el tubo'], choose: () => 'No' });
 await talk('tubo', 5, 11, 'up');
 await talk('crater', 29, 12, 'right');
-await talk('estacion', 5, 4, 'up', { choose: () => 'No' });
+await talk('laderas', 18, 15, 'up');
 s = await save();
 t.check('the chick goes back to its nest, and Elsa gives Repels', s.flags.chocoyitoDone && s.bag.repelente === 5, s.bag);
 

@@ -97,7 +97,7 @@ export function newSave(): SaveData {
     dir: 'down',
     party: [],
     box: [],
-    flags: { amanecerWide: true, ruta5East: true, rutasCortas: true },
+    flags: { amanecerWide: true, ruta5East: true, rutasCortas: true, sinEstacion: true },
     gender: 'boy',
     money: 0,
     bag: {},
@@ -177,6 +177,15 @@ function migrate(s: SaveData) {
     if (s.map === 'ruta3' && s.y >= 13) Object.assign(s, { x: 62, y: 28, dir: 'left' });
     if (s.map === 'ruta8') Object.assign(s, { x: 1, y: 10, dir: 'right' });
     s.flags.rutasCortas = true;
+  }
+  // The rangers' station on the volcano is gone (Elsa stands outside): stand where its door was, and rest at
+  // Ciudad Chispa's Palacentro instead. The slopes lost rows too, so anyone below the station's terrace
+  // stands at the foot of the trail.
+  if (!s.flags.sinEstacion) {
+    if (s.map === 'estacion') Object.assign(s, { map: 'laderas', x: 18, y: 15, dir: 'down' });
+    else if (s.map === 'laderas' && s.y >= 13) Object.assign(s, { x: 20, y: 25, dir: 'up' });
+    if (s.heal.map === 'estacion') s.heal = { map: 'centro_chispa', x: 4, y: 3 };
+    s.flags.sinEstacion = true;
   }
   s.money ??= 0;
   s.starterPicked ??= ['salchichita', 'gotita', 'aguacatito'].find((sp) => s.caught.includes(sp));

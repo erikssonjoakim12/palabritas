@@ -1,5 +1,5 @@
 // Region 4's story in checkpoints: walking into Ciudad Chispa the fireworks are stolen (the trail opens); the
-// rangers' station (rest, then Lucas #3); Don Sigilo in the crater gives the rockets back and the festival night
+// foot of the volcano trail (Lucas #3); Don Sigilo in the crater gives the rockets back and the festival night
 // follows; the workshop's torches (a wrong order resets them, the poem's order opens the door) and Don Tizón's
 // Medalla Chispa; coming home down the plateau's ledge.
 import { start } from './lib.mjs';
@@ -20,14 +20,11 @@ await t.walk('right', 4);
 let r = await t.play();
 t.check('the fireworks are stolen as you arrive, and the volcano trail opens', (await flags()).cohetesRobados && r.said.some((x) => x.includes('Ladrones')), r.said.slice(0, 3));
 
-// The rangers' station: Lucas says to rest first; Elsa's bed heals, then Lucas battles.
-await t.fromSave({ map: 'estacion', x: 4, y: 6, dir: 'up', party, flags: { cohetesRobados: true }, starterPicked: 'aguacatito' });
+// The foot of the volcano trail: Lucas battles you with his evolved starter.
+await t.fromSave({ map: 'laderas', x: 20, y: 27, dir: 'up', party, flags: { cohetesRobados: true }, starterPicked: 'aguacatito' });
 await t.walk('up', 1);
-await t.play();
-r = await talk('estacion', 5, 4, 'up', { choose: (opts) => (opts.includes('Sí') ? 'Sí' : undefined), choices: ['En el tubo'] });
-const s = await t.save();
-t.check('resting at the station heals you there', s.flags.descansoVolcan && s.heal.map === 'estacion', s.heal);
-t.check('then Lucas battles you with his evolved starter', s.flags.lucas3 && r.said.some((x) => x.includes('Hamburguesón')), r.said.filter((x) => x.includes('envía')));
+r = await t.play();
+t.check('Lucas battles you at the foot of the trail, with his evolved starter', (await flags()).lucas3 && r.said.some((x) => x.includes('Hamburguesón')), r.said.filter((x) => x.includes('envía')));
 
 // The crater: Don Sigilo spots you; the rockets come back, and the festival night follows.
 await t.fromSave({ map: 'crater', x: 13, y: 4, dir: 'right', party, flags: { cohetesRobados: true, lucas3: true } });

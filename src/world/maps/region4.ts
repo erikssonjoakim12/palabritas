@@ -392,12 +392,10 @@ export const REGION4_MAPS: Record<string, MapDef> = {
       '^^^iiiiiiiii^^^^^^^^^^^^ii^^^^',
       '^^^iiiiiiiii^^^^^^^^^^^iii^^^^',
       '^^^iiiiiiiii^^^^^^^^^^^^ii^^^^',
-      '^^^iiiiiiiiiiiiiirrrriiiiii^^^',
-      '^^^iii,,,,,,,iiiirrrriiiiXi^^^',
-      '^^^iii,,,X,,,iiiihwwhiiiiii^^^',
-      '^^^iii,,,,,,,iiiihwdhiiiiii^^^',
       '^^^iiiiiiiiiiiiiiiiiiiiiiii^^^',
-      '^^^^ii^^^^^^^^^^^^^^^^^^^^^^^^',
+      '^^^iii,,,,,,,iiiiiiiiiiiiXi^^^',
+      '^^^iii,,,X,,,iiiiiiiiiiiiii^^^',
+      '^^^iiiiiiiiiiiiiiiiiiiiiiii^^^',
       '^^^^ii^^^^^^^^^^^^^^^^^^^^^^^^',
       '^^^^iii^^^^^^^^^^^^^^^^^^^^^^^',
       '^^^^ii^^^^^^^^^^^^^^^^^^^^^^^^',
@@ -409,14 +407,9 @@ export const REGION4_MAPS: Record<string, MapDef> = {
       '^^^iiiiiiiiiiiiiiiiiiiiiiii^^^',
       '^^^^^^^^^^^^^^^^^^^^::^^^^^^^^',
       '^^^^^^^^^^^^^^^^^^^^::^^^^^^^^',
-      '^^^^^^^^^^^^^^^^^^^^::^^^^^^^^',
-      '^^^^^^^^^^^^^^^^^^^^::^^^^^^^^',
-      '^^^^^^^^^^^^^^^^^^^^::^^^^^^^^',
-      '^^^^^^^^^^^^^^^^^^^^::^^^^^^^^',
     ],
-    connections: { down: { to: 'chispa', offset: 4 } },
+    connections: { down: { to: 'chispa', offset: 4 }, up: { to: 'crater', offset: 1, scenery: true } },
     doors: [
-      { x: 19, y: 16, to: 'estacion', tx: 4, ty: 6 },
       { x: 14, y: 2, to: 'tubo', tx: 3, ty: 22 },
     ],
     encounters: {
@@ -429,25 +422,21 @@ export const REGION4_MAPS: Record<string, MapDef> = {
       ],
     },
     npcs: [
-      { id: 'guardaparque1', x: 6, y: 20, look: 'guardaparque', dir: 'left', script: 'guardaparque1', sight: 2 },
+      { id: 'guardaparque1', x: 6, y: 18, look: 'guardaparque', dir: 'left', script: 'guardaparque1', sight: 2 },
       { id: 'vulcanologa1', x: 23, y: 11, look: 'vulcanologo', dir: 'right', script: 'vulcanologa1', sight: 2 },
       { id: 'guardaparque2', x: 12, y: 4, look: 'guardaparque', dir: 'right', script: 'guardaparque2', sight: 2 },
       { id: 'excursionista_noel', x: 5, y: 11, look: 'hiker', dir: 'right', script: 'excursionista_noel', sight: 3 },
-      { id: 'vulcanologa_sara', x: 23, y: 25, look: 'vulcanologo', dir: 'left', script: 'vulcanologa_sara', sight: 3 },
+      { id: 'vulcanologa_sara', x: 23, y: 23, look: 'vulcanologo', dir: 'left', script: 'vulcanologa_sara', sight: 3 },
+      // Elsa, the park ranger, where the rangers' station used to be; Lucas waits at the foot of the trail.
+      { id: 'elsa', x: 18, y: 14, look: 'guardaparque', dir: 'down', script: 'elsa' },
+      { id: 'lucas_volcan', x: 20, y: 24, look: 'lucas', dir: 'down', script: 'lucasVolcan', show: () => !flag('lucas3') },
       { id: 'fotografo_max', x: 20, y: 7, look: 'tourist', dir: 'down', script: 'fotografo_max', sight: 1 },
     ],
-  },
-  // Elsa lets you rest (it heals); Lucas waits here and battles you on your way out (rival #3, the user's choice).
-  estacion: casa(
-    'estacion',
-    'Estación de guardaparques',
-    { to: 'laderas', x: 19, y: 17 },
-    [
-      { id: 'elsa', x: 5, y: 3, look: 'guardaparque', dir: 'down', script: 'elsa' },
-      { id: 'lucas_estacion', x: 3, y: 5, look: 'lucas', dir: 'right', script: 'lucas_estacion', show: () => !flag('lucas3') },
+    triggers: [
+      { x: 20, y: 26, script: 'lucasVolcan' },
+      { x: 21, y: 26, script: 'lucasVolcan' },
     ],
-    { triggers: [{ x: 4, y: 5, script: 'lucasEstacion' }] },
-  ),
+  },
   tubo: {
     id: 'tubo',
     name: 'Tubo de Lava',
@@ -502,7 +491,8 @@ export const REGION4_MAPS: Record<string, MapDef> = {
     ],
   },
   // The crater: a walkway of ash around the lava lake. Parakeets nest on the east side; Equipo Silencio camps on
-  // the north rim with the stolen fireworks (stage 3). Door-linked, so it isn't in the world layout.
+  // the north rim with the stolen fireworks (stage 3). You come up through the lava tube; in the world it sits on top
+  // of the slopes, under the volcano's north side.
   crater: {
     id: 'crater',
     name: 'Cráter del Chocoyo',
@@ -539,6 +529,7 @@ export const REGION4_MAPS: Record<string, MapDef> = {
       '^^^^^i^^^^^^^^^^^^^^^^^^^^^^^^^^',
       '^^^^^D^^^^^^^^^^^^^^^^^^^^^^^^^^',
     ],
+    connections: { down: { to: 'laderas', offset: -1, scenery: true }, up: { to: 'volcan_norte', offset: 0, scenery: true } },
     doors: [{ x: 5, y: 25, to: 'tubo', tx: 36, ty: 2, dir: 'down' }],
     encounters: { rate: 0.15, table: [{ sp: 'chocoyito', min: 22, max: 24, w: 75 }, { sp: 'chispita', min: 22, max: 24, w: 25 }] },
     npcs: [
@@ -551,6 +542,47 @@ export const REGION4_MAPS: Record<string, MapDef> = {
       { id: 'cohetes2', x: 18, y: 2, object: 'cajaCohetes', script: 'cohetes', show: () => !flag('cohetesRecuperados') },
       { id: 'nido_chocoyos', x: 30, y: 12, object: 'nido', script: 'nidoChocoyos' },
     ],
+  },
+  // The volcano's north side, under Ruta 3: only scenery (nobody climbs it). A lava stream runs down from the
+  // crater's rim between ash terraces and steam vents.
+  volcan_norte: {
+    id: 'volcan_norte',
+    name: 'Volcán Chocoyo',
+    outdoor: true,
+    floor: 'i',
+    ground: 'ash',
+    border: '^',
+    style: { rock: 'basalt' },
+    rows: [
+      '^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^',
+      '^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^',
+      '^^^^^iiii^^^^^^^^^^^^^^^^iiii^^^',
+      '^^^iiiiiii^^^^^^^^^^^^^iiiiiii^^',
+      '^^^iiiXiii^^^^^^^^^^^^^iiiiXii^^',
+      '^^^^iiiii^^^^^^^^^^^^^^^iiiii^^^',
+      '^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^',
+      '^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^',
+      '^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^',
+      '^^^^^^^^iiiii^^jj^^^iiiiiii^^^^^',
+      '^^^^^^^iiiiiii^jj^^iiiiiiiii^^^^',
+      '^^^^^^^iiXiiii^jj^^iiiiiXiii^^^^',
+      '^^^^^^^^iiiii^^jj^^^iiiiiii^^^^^',
+      '^^^^^^^^^^^^^^^jj^^^^^^^^^^^^^^^',
+      '^^^^^^^^^^^^^^jj^^^^^^^^^^^^^^^^',
+      '^^^^^^^^^^^^^^jj^^^^^^^^^^^^^^^^',
+      '^^^^iiiiiii^^^jj^^^^^^iiiiii^^^^',
+      '^^^iiiiiiiii^^jj^^^^^iiiiiiii^^^',
+      '^^^iiiiXiiii^^jjj^^^^iiiXiiii^^^',
+      '^^^^iiiiiii^^^^jj^^^^^iiiiii^^^^',
+      '^^^^^^^^^^^^^^^jj^^^^^^^^^^^^^^^',
+      '^^^^^^^^^^^^^^^jj^^^^^^^^^^^^^^^',
+      '^^^^^^^^^^^^^^^jj^^^^^^^^^^^^^^^',
+      '^^^^^^^^^^^^^^^jj^^^^^^^^^^^^^^^',
+      '^^^^^^^^^^^^^^^jj^^^^^^^^^^^^^^^',
+      '^^^^^^^^^^^^^^^jj^^^^^^^^^^^^^^^',
+      '^^^^^^^^^^^^^^^jj^^^^^^^^^^^^^^^',
+    ],
+    connections: { down: { to: 'crater', offset: 0, scenery: true } },
   },
 };
 

@@ -24,7 +24,7 @@ import { teacher } from './school';
   Region 4: the volcanoes and dry forest (plans/phase4-region4.md). Ruta 8 east from Playa Carey, Ciudad Chispa
   (getting ready for its festival), the Volcán Chocoyo, and Ruta 9 home to Pueblo Amanecer.
   The story: the fireworks are stolen when you arrive; you get them back from Don Sigilo in the crater (Lucas
-  battles you at the rangers' station on the way), the festival night follows, then Don Tizón's torch puzzle and
+  battles you at the foot of the trail), the festival night follows, then Don Tizón's torch puzzle and
   battle. Side quests: a hammock for Mom (bargaining), the lost parakeet chick, the haunted house's lamp, the
   Torovenado costume, and the legend of the Carreta Nagua.
 */
@@ -67,7 +67,7 @@ async function invitacion() {
   await lines(['Bueno, aquí te espero. ¡Avísame cuando estés list{o/a}!', 'OK, I’ll wait for you here. Let me know when you’re ready!']);
 }
 
-/** The rangers' station: rest on the bed. */
+/** Elsa, the volcano's park ranger: the lost parakeet chick. */
 async function elsa() {
   if (!flag('elsaHablada')) {
     await lines(['Soy Elsa, guardaparque del volcán. ¡Qué valiente eres, subiendo con tanto humo!', 'I’m Elsa, the volcano’s park ranger. You’re so brave, climbing with all this smoke!']);
@@ -79,31 +79,20 @@ async function elsa() {
     setFlag('chocoyitoPremio');
     await gift('repelente', 5, 'cinco Repelentes', 'five Repels');
   }
-  if (!(await ask('¿Estás cansad{o/a}? ¿Quieres descansar en la cama?', { en: 'Are you tired? Do you want to rest on the bed?' }))) return lines(['¡Ten cuidado allá arriba!', 'Be careful up there!']);
-  await heal();
-  G.save.heal = { map: 'estacion', x: 4, y: 5 };
-  setFlag('descansoVolcan');
-  await lines(['¡Listo! Tus Palabritas están como nuevas.', 'Done! Your Palabritas are as good as new.']);
-  if (!flag('lucas3')) await lucasBattle();
+  await lines(['¡Ten cuidado allá arriba!', 'Be careful up there!']);
 }
 
-/** Lucas, rival #3, at the station: he lets you rest first (the user's choice), then battles you. */
-async function lucasEstacion() {
+/**
+ * Lucas, rival #3, at the foot of the volcano trail: you come straight from Ciudad Chispa's Palacentro, rested
+ * (the user's choice: never right after a row of battles).
+ */
+async function lucasVolcan() {
   if (flag('lucas3')) return;
-  if (!flag('lucasEstacion')) {
-    setFlag('lucasEstacion');
-    return as(
-      'lucas',
-      ['¡{name}! ¿Tú también vienes por los Silenciosos?', '{name}! Are you after the Silenciosos too?'],
-      ['Descansa primero en la cama: ¡quiero una batalla justa!', 'Rest on the bed first: I want a fair fight!'],
-    );
-  }
-  await as('lucas', ['¡Espera! Antes de seguir, ¡una batalla!', 'Wait! Before you go on, a battle!']);
-  await lucasBattle();
-}
-
-async function lucasBattle() {
-  await as('lucas', ['¡Ahora sí! ¡Esta vez sí te gano!', 'Now we’re talking! This time I’ll beat you for sure!']);
+  await as(
+    'lucas',
+    ['¡{name}! ¿Tú también vienes por los Silenciosos?', '{name}! Are you after the Silenciosos too?'],
+    ['¡Espera! Antes de subir, ¡una batalla! ¡Esta vez sí te gano!', 'Wait! Before we climb, a battle! This time I’ll beat you for sure!'],
+  );
   const starter = lucasStarter();
   const team: [string, number][] = [[SPECIES[starter].evolves?.to ?? starter, 28], ['hojarasco', 25], ['palomon', 25], ['cangrejon', 26]];
   const res = await trainerBattle({ ...TRAINERS.lucas3, team }, { look: 'lucas', outro: ['Otra vez... Bueno. Eres muy buen{o/a}, de verdad.', 'Again... OK. You’re really good, honestly.'] });
@@ -488,8 +477,7 @@ export const REGION4: Record<string, ScriptFn> = {
   ladron: talk(['¡Shhh!', 'Shhh!']),
   tizon_taller: invitacion,
   elsa,
-  lucasEstacion,
-  lucas_estacion: lucasEstacion,
+  lucasVolcan,
   sigilo,
   cohetes: talk(['Son las cajas de cohetes de Ciudad Chispa. ¡Están llenas!', 'They’re Ciudad Chispa’s crates of rockets. They’re full!']),
   tizon_fiesta: talk(['¡Qué fiesta tan bonita! Y todo gracias a ti, {name}.', 'What a beautiful festival! And all thanks to you, {name}.']),
