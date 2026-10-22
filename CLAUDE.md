@@ -59,6 +59,7 @@ Spanish) · [BIOMES.md](BIOMES.md) (animals per region).
 | Battles | `src/battle/battle.ts` |
 | Music | `src/audio/music.ts` (the player), `src/data/music.ts` (the songs, which plays where), `src/audio/bgm.ts` (the game's music: maps, battles, jingles, quieter for Spanish) |
 | Dialog, menus, challenges | `src/ui/textbox.ts` (`say`, `info`), `src/ui/menu.ts` (`menu`, `ask`), `src/ui/challenge.ts` |
+| Start menu, town map | `src/ui/startmenu.ts`, `src/ui/townmap.ts` (START → MAPA: the outdoor world, one pixel per tile) |
 | Tile logic (solid, kinds, auto-edges) / tile art | `src/art/tiles.ts` / `src/style/tiles.ts` |
 | People and objects | `src/style/people.ts` (heads, bodies, `LOOKS`, `OBJECTS_ART`), `src/art/portraits.ts` (battle portraits) |
 | Palabrita art | `src/style/palabritas.ts` (the user's art), `src/art/creatures.ts` (placeholder drawings) |
@@ -73,7 +74,9 @@ is a string of tiles (legend at the top of `kit.ts`).
   connect back with the opposite direction and `-offset`. Put walkable tiles on both sides of the seam.
   `border` sets the tile drawn around the map (default: trees). The game draws every map within a few tiles
   of the current one in the world, connected or not. A `scenery: true` connection only places a map in
-  the world (a mountain beside a route), and nobody walks across it.
+  the world (a mountain beside a route), and nobody walks across it. The maps form one loop: shortening a map
+  on it moves everything past it, so another map on the loop must make up the rows (`npm test -- maps` checks
+  the loop closes and nothing overlaps).
 - **Interiors** have `outdoor: false`, an exit mat `m` on the bottom row and `exit: { to, x, y }`. Reuse
   `HOUSE`, `CENTRO` and `centro(id, exit, extraNpcs)`.
 - **Doors:** `doors: [{ x, y, to, tx, ty, dir? }]`. You arrive at (tx, ty) facing `dir` (default up).

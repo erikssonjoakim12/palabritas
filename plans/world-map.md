@@ -1,4 +1,8 @@
-# The world map: tighter, joined up, no empty middle
+# The world map: tighter, joined up, no empty middle ✓
+
+**Built** (2026-10-22), parts 1–5. Two slits are left on purpose: 2 tiles between the lake and Ruta 1, and 4×8
+below the lake's corner (closing them means shifting Ruta 1, which many tests and saves use). In the game, map
+edges draw trees there, so nobody sees them.
 
 The user's wishes (October 2026): shorter Rutas 3 and 8; the volcano foreshadowed on Ruta 3 and Ruta 6; the
 crater in the world; a one-way shortcut from the volcano to Ruta 6; nothing blank in the middle; a simple town

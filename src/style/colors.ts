@@ -65,6 +65,26 @@ export const TREES = {
   palm: { a: '#b0e070', b: '#58a030', c: '#306818', k: '#d0a868', K: '#987040', n: '#7a5028' },
 };
 
+/** The town map (START → MAPA): one pixel per tile, in the world's own colors. */
+export const TOWN_MAP = {
+  /** Beyond the known world. */
+  beyond: '#283850',
+  grass: OUTDOOR.grass[1],
+  trees: OUTDOOR.grass[2],
+  path: OUTDOOR.town[0],
+  sand: OUTDOOR.sand[1],
+  water: OUTDOOR.water[2],
+  rock: OUTDOOR.rock[2],
+  basalt: OUTDOOR.basalt[2],
+  ash: OUTDOOR.ash[1],
+  lava: OUTDOOR.lava[1],
+  /** Houses and other buildings. */
+  building: '#c05048',
+  /** You (blinking), and the outline around the place picked. */
+  you: '#f8f8f8',
+  cursor: '#f8d048',
+};
+
 // ---------- Caves ----------
 
 /** Cave looks by map style (style cave: 'clay' | 'basalt'); the default is CAVE's wall and floor. */

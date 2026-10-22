@@ -14,13 +14,14 @@ import { openBag } from './bag';
 import { money } from '../game/bag';
 import { dueCount } from '../game/review';
 import { musicSettingChanged } from '../audio/bgm';
+import { townMap } from './townmap';
 
 /** The START menu. Resolves a script to run after it closes (an item used from the bag), if any. */
 export async function startMenu(): Promise<string | undefined> {
   sfx('select');
   let sel = 0;
   while (true) {
-    const opts = ['PALABRITAS', 'MOCHILA', 'DICCIONARIO', 'TARJETA', 'GUARDAR', 'AJUSTES', 'SALIR'];
+    const opts = ['PALABRITAS', 'MOCHILA', 'DICCIONARIO', 'MAPA', 'TARJETA', 'GUARDAR', 'AJUSTES', 'SALIR'];
     // Words due for review (the schools' REPASO), so you know when it's time.
     const due = dueCount();
     const i = await menu(opts, { cancel: true, pos: { right: 0, top: 0 }, initial: sel, disabled: [!G.save.party.length], title: due ? `Repaso: ${due}` : undefined });
@@ -31,10 +32,11 @@ export async function startMenu(): Promise<string | undefined> {
       if (script) return script;
     }
     else if (i === 2) await dictionary();
-    else if (i === 3) await trainerCard();
-    else if (i === 4) {
+    else if (i === 3) await townMap();
+    else if (i === 4) await trainerCard();
+    else if (i === 5) {
       await info(saveGame() ? 'Partida guardada.' : 'No se pudo guardar.', { en: 'Game saved.' });
-    } else if (i === 5) await settings();
+    } else if (i === 6) await settings();
     else return;
   }
 }
