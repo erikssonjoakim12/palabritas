@@ -50,7 +50,7 @@ function card(grid: HTMLElement, label: string, images: Img[], scale: number, mo
   grid.appendChild(el);
 }
 
-/** A Palabrita's types (with their battle symbols) and its theme, to check they fit. */
+/** A Palabrita's types (with their battle symbols), its theme and its Palabridex entry, to check they fit. */
 function speciesInfo(id: string): HTMLElement[] {
   const sp = SPECIES[id];
   if (!sp) return [];
@@ -67,11 +67,17 @@ function speciesInfo(id: string): HTMLElement[] {
   theme.className = 'theme';
   const th = THEMES[sp.theme];
   theme.textContent = th ? `Tema: ${th.name} (${th.en})` : `Tema: ${sp.theme}`;
-  return [types, theme];
+  const dex = document.createElement('div');
+  dex.className = 'dex';
+  const en = document.createElement('div');
+  en.className = 'en';
+  en.textContent = sp.dex.en;
+  dex.append(sp.dex.es, en);
+  return [types, theme, dex];
 }
 
 
-const mons = section('Palabritas', 'Front (the opponent sees this) and back (yours in battle), with their types and theme. Palabritas with hand-made art (style/palabritas.ts) have a real back view; the others use their mirrored front.');
+const mons = section('Palabritas', 'Front (the opponent sees this) and back (yours in battle), with their types, theme and Palabridex entry. Palabritas with hand-made art (style/palabritas.ts) have a real back view; the others use their mirrored front.');
 // In dex order (with the dex's numbers), then art that isn't in the game yet.
 const dexNo = (id: string) => (DEX_ORDER.includes(id) ? DEX_ORDER.indexOf(id) : DEX_ORDER.length);
 for (const id of [...CREATURE_IDS].sort((a, b) => dexNo(a) - dexNo(b))) {
