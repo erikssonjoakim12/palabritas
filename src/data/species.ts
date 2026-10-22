@@ -186,7 +186,7 @@ export const SPECIES: Record<string, Species> = {
   cojincito: {
     id: 'cojincito',
     name: 'Cojincito',
-    types: ['Normal', 'Fantasma'],
+    types: ['Fantasma'],
     theme: 'casa',
     // Sillón was its own Palabrita before Cojincito came: its words stay the same.
     seed: 'sillon',
@@ -557,7 +557,7 @@ evolution('aguacatono', 36, {
 evolution('piedrita', 18, {
   id: 'petroglifon',
   name: 'Petroglifón',
-  types: ['Roca', 'Tierra'],
+  types: ['Roca', 'Psíquico'],
   base: { hp: 70, atk: 78, def: 96, spd: 36 },
   dex: {
     es: 'Las espirales de su cuerpo brillan de noche. Cuenta historias muy antiguas.',
@@ -662,7 +662,7 @@ evolution('conejito', 18, {
 evolution('cojincito', 18, {
   id: 'sillon',
   name: 'Sillón',
-  types: ['Normal', 'Fantasma'],
+  types: ['Fantasma'],
   base: { hp: 60, atk: 52, def: 68, spd: 22 },
   catchRate: 0.25,
   dex: {
@@ -673,7 +673,7 @@ evolution('cojincito', 18, {
 evolution('hojadillo', 24, {
   id: 'hojarasco',
   name: 'Hojarasco',
-  types: ['Planta', 'Tierra'],
+  types: ['Planta'],
   base: { hp: 72, atk: 72, def: 90, spd: 50 },
   dex: {
     es: 'Su caparazón es un montón de hojas secas. En primavera le salen flores.',
@@ -715,7 +715,7 @@ evolution('cuernito', 26, {
 evolution('cangrejito', 22, {
   id: 'cangrejon',
   name: 'Cangrejón',
-  types: ['Agua', 'Lucha'],
+  types: ['Agua'],
   base: { hp: 66, atk: 92, def: 80, spd: 40 },
   dex: {
     es: 'Sus pinzas son guantes de boxeo. Practica en la playa todos los días.',
@@ -725,7 +725,7 @@ evolution('cangrejito', 22, {
 evolution('coquito', 26, {
   id: 'cocotero',
   name: 'Cocotero',
-  types: ['Planta', 'Agua'],
+  types: ['Planta'],
   base: { hp: 80, atk: 70, def: 76, spd: 48 },
   dex: {
     es: 'Da sombra a toda la playa. Los turistas descansan debajo de él.',

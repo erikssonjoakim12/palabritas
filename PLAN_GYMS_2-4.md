@@ -145,8 +145,8 @@ are used until your art arrives.
 | **Capullito** (new) | Bicho | colores | → Mariposita at 10 | Ruta 2 | a sleepy cocoon wrapped in leaves, colorful wing tips peeking out |
 | Pajarito → **Palomón** | | | Pajarito now evolves at **14** | | (both already exist) |
 | **Liebrón** (new) | Normal | números | from Conejito at 18 | Ruta 6 | a lean, fast hare with big feet and a number pattern on its fur |
-| **Cojincito** (new) | Normal/Fantasma | casa | → Sillón at 18 | the haunted house | a floating cushion with a tassel and sleepy eyes |
-| **Hojarasco** (new) | Planta/Tierra | naturaleza | from Hojadillo at 24 | Ruta 8 | a big armadillo whose shell is a pile of dry leaves, with a flowering bush on its back |
+| **Cojincito** (new) | Fantasma | casa | → Sillón at 18 | the haunted house | a floating cushion with a tassel and sleepy eyes |
+| **Hojarasco** (new) | Planta | naturaleza | from Hojadillo at 24 | Ruta 8 | a big armadillo whose shell is a pile of dry leaves, with a flowering bush on its back |
 | **Murcielón** (new) | Volador/Siniestro | tiempo | from Ecolín at 22 | the volcano's lava tube | a big bat with ears like satellite dishes and a wide mouth |
 | **Tarantón** (new) | Bicho/Veneno | números | from Ochopatas at 24 | the lava tube | a huge hairy tarantula with striped legs and eight eyes in a row |
 | **Hercúleo** (new) | Bicho/Lucha | colores | from Cuernito at 26 | sugarcane fields (rare) | a Hercules beetle with a long double horn and a rainbow-shiny shell |
@@ -155,7 +155,7 @@ are used until your art arrives.
 | Palabrita | Types | Theme | Evolution | Where | Look |
 |---|---|---|---|---|---|
 | **Piedrita** | Roca | el cuerpo | → Petroglifón at 18 | the mine | a round gray pebble with a petroglyph face and stick-figure arms carved on it |
-| **Petroglifón** | Roca/Tierra | el cuerpo | | Petra; evolve it | a tall standing stone covered in glowing carved spirals and stick figures, with stone arms |
+| **Petroglifón** | Roca/Psíquico | el cuerpo | | Petra; evolve it | a tall standing stone covered in glowing carved spirals and stick figures, with stone arms |
 | **Ollita** | Tierra | la cocina | → Tinajón at 21 | the mine, around town | a small clay cooking pot with painted patterns, steam puffing from its lid |
 | **Tinajón** | Tierra/Agua | la cocina | | Ruta 8 (rare) | a big round clay water jar (*tinaja*), water sloshing inside, a cork for a hat |
 | **Ardillita** | Normal | los deportes | → Ardillón at 20 | Ruta 5, the pine woods | a squirrel with a huge two-tone bushy tail, doing a cartwheel |
@@ -172,9 +172,9 @@ are used until your art arrives.
 | Palabrita | Types | Theme | Evolution | Where | Look |
 |---|---|---|---|---|---|
 | **Cangrejito** | Agua | la playa | → Cangrejón at 22 | Ruta 7, the turtle beach, fishing | a small red crab with one big claw and eyes on stalks |
-| **Cangrejón** | Agua/Lucha | la playa | | Marina | a huge crab with boxing-glove claws |
+| **Cangrejón** | Agua | la playa | | Marina | a huge crab with boxing-glove claws |
 | **Coquito** | Planta | las frutas | → Cocotero at 26 | Ruta 7, the turtle beach | a green coconut with a cute face and a little palm-leaf tuft on top |
-| **Cocotero** | Planta/Agua | las frutas | | Ruta 8 (rare) | a coconut-palm creature: a coconut head on a curved trunk, swaying frond arms |
+| **Cocotero** | Planta | las frutas | | Ruta 8 (rare) | a coconut-palm creature: a coconut head on a curved trunk, swaying frond arms |
 | **Mordisquito** (your art) | Agua | el mar | → Mordiscón at 25 | fishing in the sea | (art exists) |
 | **Mordiscón** | Agua/Siniestro | el mar | | Marina | a big bull shark with a wide grin full of teeth and a scar |
 | **Mojarrita** | Agua | la pesca | | fishing everywhere | a small round striped fish (*mojarra*) with big surprised eyes |
