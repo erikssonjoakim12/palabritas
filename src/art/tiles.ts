@@ -507,23 +507,29 @@ function render(ch: string, env: TileEnv): Img {
 
 const nb = neighbors;
 
-/** A map's tile at (x, y). Outside the map: its border (trees outdoors, nothing indoors). */
+/**
+ * Outdoors, a space is a hole: not part of this map. Maps are rectangles, but a route can leave out its dead
+ * corners, and another map in the world shows through there (the river beside Ruta 3).
+ */
+export const isHole = (m: MapLook, x: number, y: number) => m.outdoor && m.rows[y]?.[x] === ' ';
+
+/** A map's tile at (x, y). Outside the map or in a hole: its border (trees outdoors, nothing indoors). */
 export function tileOf(m: MapLook, x: number, y: number): string {
-  if (x >= 0 && y >= 0 && y < m.rows.length && x < m.rows[0].length) return m.rows[y][x];
+  if (x >= 0 && y >= 0 && y < m.rows.length && x < m.rows[0].length && !isHole(m, x, y)) return m.rows[y][x];
   return m.border ?? (m.outdoor ? 'T' : ' ');
 }
 
 /** The tile environment for (x, y) on a map. */
 export const envAt = (m: MapLook, x: number, y: number): TileEnv => ({ rows: m.rows, outdoor: m.outdoor, floor: m.floor, ground: m.ground, roof: m.roof, border: m.border, style: m.style, x, y });
 
-/** A whole map as one image (the art page; the game draws only the tiles on screen). */
+/** A whole map as one image (the art page; the game draws only the tiles on screen). Holes stay see-through. */
 export function renderMap(m: MapLook): Img {
   const T = 16;
   const c = makeCanvas(m.rows[0].length * T, m.rows.length * T);
   const g = c.getContext('2d')!;
   m.rows.forEach((row, y) =>
     [...row].forEach((ch, x) => {
-      g.drawImage(tileImage(ch, envAt(m, x, y)), x * T, y * T);
+      if (!isHole(m, x, y)) g.drawImage(tileImage(ch, envAt(m, x, y)), x * T, y * T);
     }),
   );
   return c;

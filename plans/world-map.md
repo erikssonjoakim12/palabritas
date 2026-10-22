@@ -4,6 +4,12 @@
 below the lake's corner (closing them means shifting Ruta 1, which many tests and saves use). In the game, map
 edges draw trees there, so nobody sees them.
 
+**Second round** (the user, same day): maps can have holes (a space outdoors: another map shows through), so
+Ruta 3's dead south-west rock and Ruta 10's top rows are holes now. The Río Guardabarranco runs from Ruta 5's pool
+through them, along Ruta 10's clearing and past the volcano into the lake (scenery until Surf). The lake has two
+small beaches, from Ruta 2 (a fisher) and from Ruta 9 (a sign), and fishing. The crater is round. Bosque Seco,
+the filler mountain and the volcano's north side are gone: the space west of the volcano is left open for later.
+
 The user's wishes (October 2026): shorter Rutas 3 and 8; the volcano foreshadowed on Ruta 3 and Ruta 6; the
 crater in the world; a one-way shortcut from the volcano to Ruta 6; nothing blank in the middle; a simple town
 map. New cities (a lake town, the rainforest) wait for an expanded map: the middle only gets scenery now.

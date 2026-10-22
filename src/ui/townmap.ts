@@ -5,6 +5,7 @@ import { MAPS, type MapDef } from '../world/maps';
 import { worldLayout } from '../world/layout';
 import { currentMap, player } from '../world/world';
 import { TOWN_MAP } from '../style/colors';
+import { isHole } from '../art/tiles';
 
 /*
   The town map (START → MAPA), kept simple: the outdoor world drawn small, one pixel per tile in the world's own
@@ -54,6 +55,7 @@ function drawWorld() {
   for (const p of places) {
     const m = MAPS[p.id];
     m.rows.forEach((row, y) => [...row].forEach((ch, x) => {
+      if (isHole(m, x, y)) return;
       g.fillStyle = tileColor(ch, m);
       g.fillRect(p.x - x0 + x, p.y - y0 + y, 1, 1);
     }));
@@ -132,7 +134,7 @@ export function townMap(): Promise<void> {
       e.stopPropagation();
       const r = view.getBoundingClientRect();
       const [x, y] = [((e.clientX - r.left) / r.width) * view.width, ((e.clientY - r.top) / r.height) * view.height];
-      const i = places.findIndex((p) => x >= p.x && x < p.x + p.w && y >= p.y && y < p.y + p.h);
+      const i = places.findIndex((p) => x >= p.x && x < p.x + p.w && y >= p.y && y < p.y + p.h && !isHole(MAPS[p.id], Math.floor(x - p.x), Math.floor(y - p.y)));
       if (i >= 0) (sel = i), sfx('blip'), draw();
     });
     box.addEventListener('click', close);

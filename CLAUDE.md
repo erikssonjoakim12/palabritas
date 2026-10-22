@@ -77,6 +77,9 @@ is a string of tiles (legend at the top of `kit.ts`).
   the world (a mountain beside a route), and nobody walks across it. The maps form one loop: shortening a map
   on it moves everything past it, so another map on the loop must make up the rows (`npm test -- maps` checks
   the loop closes and nothing overlaps).
+- **Holes:** maps are rectangles, but outdoors a space (`' '`) is a hole: not part of the map, solid, and
+  whatever map lies there in the world shows through (Ruta 3's south-west corner is the river). Two maps may
+  overlap only where one of them has holes.
 - **Interiors** have `outdoor: false`, an exit mat `m` on the bottom row and `exit: { to, x, y }`. Reuse
   `HOUSE`, `CENTRO` and `centro(id, exit, extraNpcs)`.
 - **Doors:** `doors: [{ x, y, to, tx, ty, dir? }]`. You arrive at (tx, ty) facing `dir` (default up).

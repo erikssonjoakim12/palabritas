@@ -12,8 +12,8 @@ Learning details: [LEARNING_PLAN.md](LEARNING_PLAN.md).
 - **World:** the whole loop, Pueblo Amanecer to Ciudad Chispa and home: Rutas 1–9, the Cueva del Eco, Villa
   Ocote and its mine, the Cañón del Guardabarranco, Playa Carey and the turtle beach, Ciudad Chispa and the
   Volcán Chocoyo, and Ruta 10 (a one-way shortcut from the crater to Ruta 6). Rival Lucas (three times) and
-  Equipo Silencio up to Don Sigilo. The middle of the world is scenery for now (Monte del Eco, Bosque Seco, the
-  Lago de las Islas), and START → MAPA shows it all ([plans/world-map.md](plans/world-map.md)).
+  Equipo Silencio up to Don Sigilo. The middle of the world: the Río Guardabarranco from Ruta 5 down to the Lago de
+  las Islas (scenery until Surf; two small beaches from Ruta 2 and Ruta 9), and START → MAPA shows it all ([plans/world-map.md](plans/world-map.md)).
 - **Day and night** by the phone's clock (golden at 18, night from 19, morning by 7), with lit windows, plus
   story night scenes.
 - **Paused:** the bus (fast travel), until there are big roads.

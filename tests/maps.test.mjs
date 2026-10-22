@@ -136,7 +136,8 @@ const report = await t.game(() => {
   }
 
   // The world: each map is placed once (from Pueblo Amanecer), so a loop of connections that doesn't close puts
-  // a neighbor somewhere else than its connection says. And no two maps may overlap.
+  // a neighbor somewhere else than its connection says. And no two maps may overlap (except where one has a hole:
+  // a space outdoors, art/tiles.ts isHole).
   const L = g.worldLayout();
   const world = [];
   for (const [id, p] of Object.entries(L)) {
@@ -150,7 +151,12 @@ const report = await t.game(() => {
     }
     for (const [id2, q] of Object.entries(L)) {
       const [w2, h2] = size(MAPS[id2]);
-      if (id < id2 && p.x < q.x + w2 && q.x < p.x + w && p.y < q.y + h2 && q.y < p.y + h) world.push(`${id} and ${id2} overlap`);
+      if (id >= id2 || !(p.x < q.x + w2 && q.x < p.x + w && p.y < q.y + h2 && q.y < p.y + h)) continue;
+      const n = MAPS[id2];
+      let both = 0;
+      for (let y = Math.max(p.y, q.y); y < Math.min(p.y + h, q.y + h2); y++)
+        for (let x = Math.max(p.x, q.x); x < Math.min(p.x + w, q.x + w2); x++) if (m.rows[y - p.y][x - p.x] !== ' ' && n.rows[y - q.y][x - q.x] !== ' ') both++;
+      if (both) world.push(`${id} and ${id2} overlap (${both} tiles)`);
     }
   }
   out['(the world)'] = world;

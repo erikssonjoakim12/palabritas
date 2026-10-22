@@ -551,6 +551,7 @@ export const REGION4: Record<string, ScriptFn> = {
     ['¡Muy bien! Puedes bajar.', 'Very good! You can go down.'],
     ['Desde abajo no se puede subir: el escalón es muy alto.', 'You can’t climb up from below: the step is too high.'],
   ),
+  pescador_lago: talk(['¿Ves las islas? Sin bote no se puede llegar. ¡Algún día voy a ir!', 'See the islands? You can’t get there without a boat. Someday I’ll go!']),
   fotografo_max: fight(
     'fotografo_max',
     ['¡Sonríe! Bueno, primero una batalla, después la foto.', 'Smile! Well, a battle first, then the photo.'],
