@@ -1,7 +1,7 @@
 import { overlay, el } from '../engine/screen';
 import { input } from '../engine/input';
 import { sfx } from '../engine/sfx';
-import { creatureArt } from '../art/creatures';
+import { creatureArt, creatureIcon, ICON } from '../art/creatures';
 import { G, type Mon } from '../game/state';
 import { stats, monName } from '../game/mon';
 import { lealtad, levelProgress, isLearned, peekProg, isFading, OBEY_THRESHOLD } from '../game/learning';
@@ -10,6 +10,14 @@ import { SPECIES, MODE_INFO, learnLevel } from '../data/species';
 import { THEMES } from '../data/content';
 import { TYPE_COLORS } from '../data/types';
 import { speak } from '../lang/speech';
+
+/** A Palabrita's 16x16 icon, for lists (scaled up with hard pixels by the CSS). */
+export function iconCanvas(sp: string) {
+  const c = document.createElement('canvas');
+  c.width = c.height = ICON;
+  c.getContext('2d')!.drawImage(creatureIcon(sp), 0, 0);
+  return c;
+}
 
 export function spriteCanvas(sp: string, size = 48) {
   const c = document.createElement('canvas');
@@ -64,7 +72,7 @@ export function listMenu(rows: HTMLElement[], opts: { cancel?: boolean; header?:
 function partyRow(mon: Mon, active?: Mon) {
   const row = el('div');
   const s = stats(mon);
-  row.appendChild(spriteCanvas(mon.sp));
+  row.appendChild(iconCanvas(mon.sp));
   const info = el('div', 'grow');
   info.appendChild(el('div', '', `${monName(mon)}${mon === active ? ' ★' : ''}`));
   const loy = Math.round(lealtad(mon) * 100);

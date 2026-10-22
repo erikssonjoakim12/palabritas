@@ -9,7 +9,7 @@ import { allItems } from '../game/curriculum';
 import { speak } from '../lang/speech';
 import { menu } from './menu';
 import { info, say } from './textbox';
-import { pickMon, showDetails, listMenu, spriteCanvas, detailBox, wordRow, openDetail } from './party';
+import { pickMon, showDetails, listMenu, iconCanvas, detailBox, wordRow, openDetail } from './party';
 import { openBag } from './bag';
 import { money } from '../game/bag';
 import { dueCount } from '../game/review';
@@ -61,7 +61,7 @@ async function dictionary() {
     const row = el('div');
     const seen = G.save.seen.includes(id);
     const caught = G.save.caught.includes(id);
-    if (seen) row.appendChild(spriteCanvas(id));
+    if (seen) row.appendChild(iconCanvas(id));
     else row.appendChild(el('div', '', '?')).style.width = '2.4em';
     const label = el('div', 'grow', `${String(n + 1).padStart(3, '0')} ${seen ? SPECIES[id].name : '???'}`);
     row.appendChild(label);

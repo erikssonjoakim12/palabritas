@@ -1,6 +1,6 @@
 // The art review page (art.html, `npm run art`): every sprite the game draws, side by side,
 // plus the app icons to download. Published next to the game as art.html.
-import { creatureArt, CREATURE_IDS } from '../art/creatures';
+import { creatureArt, creatureIcon, CREATURE_IDS } from '../art/creatures';
 import { portrait } from '../art/portraits';
 import { personFrames, buildObjects, OBJECTS } from '../art/chars';
 import { renderMap } from '../art/tiles';
@@ -77,12 +77,12 @@ function speciesInfo(id: string): HTMLElement[] {
 }
 
 
-const mons = section('Palabritas', 'Front (the opponent sees this) and back (yours in battle), with their types, theme and Palabridex entry. Palabritas with hand-made art (style/palabritas.ts) have a real back view; the others use their mirrored front.');
+const mons = section('Palabritas', 'Front (the opponent sees this) and back (yours in battle), with their types, theme and Palabridex entry, and the 16x16 icon for lists (made from the front art). Palabritas with hand-made art (style/palabritas.ts) have a real back view; the others use their mirrored front.');
 // In dex order (with the dex's numbers), then art that isn't in the game yet.
 const dexNo = (id: string) => (DEX_ORDER.includes(id) ? DEX_ORDER.indexOf(id) : DEX_ORDER.length);
 for (const id of [...CREATURE_IDS].sort((a, b) => dexNo(a) - dexNo(b))) {
   const label = SPECIES[id] ? `${String(dexNo(id) + 1).padStart(3, '0')} ${SPECIES[id].name}` : `${id[0].toUpperCase()}${id.slice(1)} (art only)`;
-  card(mons, label, [creatureArt(id).front, creatureArt(id).back], 3, speciesInfo(id));
+  card(mons, label, [creatureArt(id).front, creatureArt(id).back, creatureIcon(id)], 3, speciesInfo(id));
 }
 
 const people = section('Battle portraits', 'Shown at the start and end of trainer battles. Built from each person\'s look, like the overworld sprites.');
