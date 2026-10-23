@@ -28,28 +28,21 @@ await t.play();
 const back = await t.page.waitForFunction(() => window.__game.bgm.musicState().duck === 1, { timeout: 8000 }).then(() => true, () => false);
 t.check('after the battle the music comes back up', back, await music());
 
-// After a win or a catch, the battle song never comes back (only the jingle, then quiet until you're outside).
+// After a wild win or a catch, ¡Ganaste! loops until you leave the battle; a catch's jingle plays over it, then it's
+// back (never the battle song, never quiet). Outside, the route's song.
 const after = await t.game(() => {
   const b = window.__game.bgm;
   b.setBattleMusic('salvaje');
-  b.endBattleSong();
-  b.playOverlay('ganaste');
-  b.clearOverlay(); // the jingle ends
-  const quiet = b.musicState().playing;
-  b.setBattleMusic(null); // back outside
-  return [quiet, b.musicState().playing];
+  b.endBattleSong('ganaste');
+  b.playOverlay('atrapado');
+  b.clearOverlay(); // the catch jingle ends
+  return b.musicState().playing;
 });
-t.check('after a win, no battle music until you leave the battle', after[0] === null && after[1] === 'ruta', after);
-// The wild win tune loops until you leave the battle.
-await t.game(() => {
-  const b = window.__game.bgm;
-  b.setBattleMusic('salvaje');
-  b.endBattleSong();
-  b.playOverlay('ganaste', false);
-});
-await sleep(8000); // longer than the jingle
-t.check('the wild win tune loops until you leave', (await music()).playing === 'ganaste', await music());
+t.check('after a catch’s jingle, the win tune comes back', after === 'ganaste', after);
+await sleep(15000); // longer than one time through
+t.check('the win tune loops until you leave', (await music()).playing === 'ganaste', await music());
 await t.game(() => window.__game.bgm.setBattleMusic(null));
+t.check('outside, the route’s song again', (await music()).playing === 'ruta', await music());
 
 // A listening challenge (the haunted lamp whispers): silence.
 await t.fromSave({ map: 'cuarto_embrujado', x: 3, y: 2, dir: 'up', party: [['mordiscon', 30]] });

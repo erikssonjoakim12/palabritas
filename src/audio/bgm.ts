@@ -21,8 +21,6 @@ const player = new MusicPlayer(audioContext);
 
 let mapSong: string | null = null;
 let battleSong: string | null = null;
-/** The battle is won (or caught): its song is over, so when a jingle ends it's quiet until you're back outside. */
-let battleOver = false;
 /** A jingle (plays once, then gone) or an overlay that loops until cleared (victory, evolution). */
 let overlay: { id: string; once: boolean } | null = null;
 
@@ -33,13 +31,13 @@ const enabled = () => level() > 0;
 /** Play whatever should play now (or nothing). */
 function refresh() {
   player.setVolume(FULL * (level() / 100));
-  const want = !enabled() ? null : (overlay?.id ?? (battleOver ? null : (battleSong ?? mapSong)));
+  const want = !enabled() ? null : (overlay?.id ?? battleSong ?? mapSong);
   if (want === player.playing) return;
   if (!want) return player.stop();
   const song = BY_ID.get(want);
   if (!song) return player.stop();
-  // An overlay asked to loop plays even a jingle on repeat (the wild win, until you leave the battle).
-  const loop = overlay?.id === want && !overlay.once;
+  // Only a jingle played once ends; anything else loops, even a tune written as a jingle.
+  const loop = !(overlay?.id === want && overlay.once);
   player.play(loop && song.once ? { ...song, once: false } : song, () => {
     // A jingle ended: back to the layer below.
     if (overlay?.id === want) overlay = null;
@@ -56,14 +54,16 @@ export function setMapMusic(id: string | null) {
 /** A battle's song, over the map's (null when the battle is over). A loop overlay (victory) ends with it. */
 export function setBattleMusic(id: string | null) {
   battleSong = id;
-  battleOver = false;
   if (!id && overlay && !overlay.once) overlay = null;
   refresh();
 }
 
-/** The battle is won or caught: no more battle song (the victory or catch jingle plays over the quiet). */
-export function endBattleSong() {
-  battleOver = true;
+/**
+ * The battle is won or caught: its song becomes the win tune (Victoria after a trainer, ¡Ganaste! after a wild one),
+ * looping until you leave; a catch's jingle or an evolution's tune plays over it, and it comes back after.
+ */
+export function endBattleSong(win: string) {
+  battleSong = win;
   refresh();
 }
 
