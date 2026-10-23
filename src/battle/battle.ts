@@ -19,7 +19,7 @@ import { takeItem, itemCount, prizeMoney, money } from '../game/bag';
 import { ITEM_DEFS } from '../data/items';
 import { menu } from '../ui/menu';
 import { typeIcon } from '../art/typeIcon';
-import { setBattleMusic, battleMusicFor, playOverlay, clearOverlay } from '../audio/bgm';
+import { setBattleMusic, battleMusicFor, playOverlay, clearOverlay, endBattleSong } from '../audio/bgm';
 
 /** An element with a small picture in front of its text. */
 const withIcon = (icon: Node, e: HTMLElement) => (e.prepend(icon), e);
@@ -697,6 +697,8 @@ async function runBattle(cfg: Config): Promise<BattleResult> {
   }
 
   async function finish(r: BattleResult) {
+    // The battle song stops for good: after the jingle (and any evolution's tune), quiet until you're outside.
+    if (r === 'win' || r === 'caught') endBattleSong();
     if (r === 'win') playOverlay(trainer ? 'victoria' : 'ganaste', !trainer);
     if (r === 'caught') playOverlay('atrapado');
     if (r === 'win' && trainer) {

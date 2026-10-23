@@ -28,6 +28,19 @@ await t.play();
 const back = await t.page.waitForFunction(() => window.__game.bgm.musicState().duck === 1, { timeout: 8000 }).then(() => true, () => false);
 t.check('after the battle the music comes back up', back, await music());
 
+// After a win or a catch, the battle song never comes back (only the jingle, then quiet until you're outside).
+const after = await t.game(() => {
+  const b = window.__game.bgm;
+  b.setBattleMusic('salvaje');
+  b.endBattleSong();
+  b.playOverlay('ganaste');
+  b.clearOverlay(); // the jingle ends
+  const quiet = b.musicState().playing;
+  b.setBattleMusic(null); // back outside
+  return [quiet, b.musicState().playing];
+});
+t.check('after a win, no battle music until you leave the battle', after[0] === null && after[1] === 'ruta', after);
+
 // A listening challenge (the haunted lamp whispers): silence.
 await t.fromSave({ map: 'cuarto_embrujado', x: 3, y: 2, dir: 'up', party: [['mordiscon', 30]] });
 await t.press('z');

@@ -21,6 +21,8 @@ const player = new MusicPlayer(audioContext);
 
 let mapSong: string | null = null;
 let battleSong: string | null = null;
+/** The battle is won (or caught): its song is over, so when a jingle ends it's quiet until you're back outside. */
+let battleOver = false;
 /** A jingle (plays once, then gone) or an overlay that loops until cleared (victory, evolution). */
 let overlay: { id: string; once: boolean } | null = null;
 
@@ -31,7 +33,7 @@ const enabled = () => level() > 0;
 /** Play whatever should play now (or nothing). */
 function refresh() {
   player.setVolume(FULL * (level() / 100));
-  const want = !enabled() ? null : (overlay?.id ?? battleSong ?? mapSong);
+  const want = !enabled() ? null : (overlay?.id ?? (battleOver ? null : (battleSong ?? mapSong)));
   if (want === player.playing) return;
   if (!want) return player.stop();
   const song = BY_ID.get(want);
@@ -52,7 +54,14 @@ export function setMapMusic(id: string | null) {
 /** A battle's song, over the map's (null when the battle is over). A loop overlay (victory) ends with it. */
 export function setBattleMusic(id: string | null) {
   battleSong = id;
+  battleOver = false;
   if (!id && overlay && !overlay.once) overlay = null;
+  refresh();
+}
+
+/** The battle is won or caught: no more battle song (the victory or catch jingle plays over the quiet). */
+export function endBattleSong() {
+  battleOver = true;
   refresh();
 }
 
