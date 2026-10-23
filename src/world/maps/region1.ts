@@ -49,7 +49,7 @@ export const REGION1_MAPS: Record<string, MapDef> = {
       { x: 16, y: 8, es: 'PUEBLO AMANECER: Donde empieza la aventura.', en: 'DAWN TOWN: Where the adventure begins.' },
     ],
     npcs: [
-      { id: 'vecinito', x: 17, y: 2, look: 'boy', dir: 'left', script: 'vecinito', turns: true },
+      { id: 'vecinito', x: 17, y: 2, look: 'boy', dir: 'left', script: 'vecinito', wanders: true },
       { id: 'pescador', x: 22, y: 14, look: 'fisher', dir: 'down', script: 'pescador' },
       { id: 'sam', x: 13, y: 8, look: 'tourist', dir: 'down', script: 'sam', turns: true, sight: 3 },
       // On the plateau: the route you could see from town at the very start (reached from Ruta 9).
@@ -213,7 +213,7 @@ export const REGION1_MAPS: Record<string, MapDef> = {
     ],
     npcs: [
       { id: 'carmen', x: 13, y: 10, look: 'lady', dir: 'down', script: 'carmen', turns: true },
-      { id: 'diego', x: 17, y: 16, look: 'boy', dir: 'left', script: 'diego', turns: true },
+      { id: 'diego', x: 17, y: 16, look: 'boy', dir: 'left', script: 'diego', wanders: true },
       { id: 'michi', x: 7, y: 2, object: 'michi', script: 'michi', show: () => flag('michiLocated') && !flag('michiFound') },
     ],
   },
@@ -381,7 +381,7 @@ export const REGION1_MAPS: Record<string, MapDef> = {
       { x: 13, y: 7, es: 'GIMNASIO DE CIUDAD BRISA. Líder: Paloma, ¡la reina del cielo!', en: 'BREEZE CITY GYM. Leader: Paloma, queen of the sky!' },
       { x: 4, y: 14, es: 'CIUDAD BRISA: Donde el viento canta.', en: 'BREEZE CITY: Where the wind sings.' },
     ],
-    npcs: [{ id: 'marta', x: 17, y: 4, look: 'lady', dir: 'down', script: 'marta', turns: true }],
+    npcs: [{ id: 'marta', x: 17, y: 4, look: 'lady', dir: 'down', script: 'marta', wanders: true }],
   },
 
   tienda_brisa: tienda('tienda_brisa', { to: 'brisa', x: 5, y: 7 }),

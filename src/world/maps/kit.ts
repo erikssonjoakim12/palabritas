@@ -45,6 +45,8 @@ export interface NpcDef {
   sight?: number;
   /** Looks around now and then. */
   turns?: boolean;
+  /** Walks about now and then, at most WANDER tiles from where they stand (townspeople; never trainers). */
+  wanders?: boolean;
   /** Item balls: what's inside (key in ITEM_DEFS). */
   item?: string;
   /** On a muted map: what they act out (the EN line; the Spanish is «…»). */

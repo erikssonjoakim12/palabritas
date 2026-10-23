@@ -277,7 +277,7 @@ export const REGION3_MAPS: Record<string, MapDef> = {
       { id: 'panga1', x: 3, y: 15, object: 'panga', script: 'panga' },
       { id: 'panga2', x: 4, y: 9, object: 'panga', script: 'panga' },
       { id: 'surfista_pueblo', x: 7, y: 19, look: 'surfista', dir: 'right', script: 'surfista_pueblo' },
-      { id: 'nina_carey', x: 18, y: 9, look: 'girl', dir: 'down', script: 'nina_carey', turns: true },
+      { id: 'nina_carey', x: 18, y: 9, look: 'girl', dir: 'down', script: 'nina_carey', wanders: true },
       // The bottle's treasure (Ruta 7): south of the pier, next to the palm.
       { id: 'tesoro_carey', x: 7, y: 16, object: 'brillo', script: 'tesoro', show: () => flag('botellaLeida') && !flag('item:tesoro_carey') },
     ],

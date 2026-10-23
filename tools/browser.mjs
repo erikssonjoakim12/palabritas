@@ -28,6 +28,8 @@ export async function newPage(browser) {
   const page = await browser.newPage();
   await page.evaluateOnNewDocument(() => {
     if (window.speechSynthesis) window.speechSynthesis.speak = () => {};
+    // People who wander stay put, so tests find them where the map says (world.ts wander).
+    window.__still = true;
   });
   return page;
 }

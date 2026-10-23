@@ -191,7 +191,7 @@ export const REGION4_MAPS: Record<string, MapDef> = {
       { id: 'mascarero', x: 20, y: 21, look: 'man', dir: 'up', script: 'mascarero' },
       { id: 'fritanguera', x: 24, y: 21, look: 'granny', dir: 'up', script: 'fritanguera' },
       { id: 'senora_azul', x: 16, y: 16, look: 'cashier', dir: 'down', script: 'senora_azul', turns: true },
-      { id: 'nino_plaza', x: 12, y: 11, look: 'boy', dir: 'down', script: 'nino_plaza', turns: true },
+      { id: 'nino_plaza', x: 12, y: 11, look: 'boy', dir: 'down', script: 'nino_plaza', wanders: true },
     ],
   },
   centro_chispa: centro('centro_chispa', { to: 'chispa', x: 5, y: 7 }),

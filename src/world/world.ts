@@ -436,10 +436,34 @@ export function placeNpc(id: string, x: number, y: number, dir: Dir) {
   Object.assign(n, { x, y, dir, visible: true, off: undefined });
 }
 
+/** How far from home a wandering person goes. */
+const WANDER = 2;
+
+/** A wandering person takes a step: a random way that's open ground, near home (not a door, a mat or a trigger). */
+function wander(n: NpcRT) {
+  if ((globalThis as { __still?: boolean }).__still) return; // tests (tools/browser.mjs)
+  const dirs = (['up', 'down', 'left', 'right'] as Dir[]).sort(() => Math.random() - 0.5);
+  for (const d of dirs) {
+    const [nx, ny] = [n.x + DX[d], n.y + DY[d]];
+    if (Math.abs(nx - n.def.x) > WANDER || Math.abs(ny - n.def.y) > WANDER) continue;
+    const t = TILES[tileAt(nx, ny)];
+    if (!inBounds(nx, ny) || t.solid || t.kind || npcAt(nx, ny) || (player.x === nx && player.y === ny)) continue;
+    if (map.triggers?.some((tr) => tr.x === nx && tr.y === ny)) continue;
+    walkNpc(n.def.id, [d]);
+    return;
+  }
+}
+
 function updateNpcs() {
   for (const n of npcs) {
     if (n.bubble > 0) n.bubble--;
-    if (!n.def.turns || G.lock > 0) continue;
+    if (G.lock > 0 || n.off || !n.visible) continue;
+    if (n.def.wanders && --n.turnTimer <= 0) {
+      n.turnTimer = 90 + Math.floor(Math.random() * 200);
+      wander(n);
+      continue;
+    }
+    if (!n.def.turns) continue;
     if (--n.turnTimer <= 0) {
       n.turnTimer = 120 + Math.floor(Math.random() * 240);
       n.dir = (['up', 'down', 'left', 'right'] as Dir[])[Math.floor(Math.random() * 4)];
