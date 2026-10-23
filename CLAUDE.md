@@ -165,7 +165,10 @@ await t.end();                                             // ✓/✗ per check,
   `tests/out/`, which isn't committed), `t.game(fn)` (runs in the page; `window.__game` is the game).
 - In the page, use `window.__game` for game modules. A fresh `import('/src/...')` can be a second copy after
   hot reloads (only `fromSave` uses imports, before the game starts).
-- Add or extend a test with every feature, and run `npm test` before committing.
+- Add or extend a test with every feature (only what's really needed: the user doesn't want tests that just cost time).
+- Before committing, run the tests for the area you changed (`npm test -- maps quests2`). Run them all (`npm test`,
+  ~10-15 min) only for changes to the engine, saves, menus or start-up, which every test goes through, and before a
+  playtest. Don't edit code while a run is going: the dev server reloads mid-test.
 
 ## Tools (`tools/`, all silent)
 

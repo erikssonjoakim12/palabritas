@@ -1,14 +1,15 @@
 import { el, setTextScale } from '../engine/screen';
 import { sfx } from '../engine/sfx';
-import { G, saveGame } from '../game/state';
+import { G, saveGame, useSave } from '../game/state';
+import { exportSave, pickFile, readSave } from '../game/backup';
 import { monName } from '../game/mon';
 import { totalLearned, isLearned } from '../game/learning';
 import { SPECIES, DEX_ORDER } from '../data/species';
 import { THEMES } from '../data/content';
 import { allItems } from '../game/curriculum';
 import { speak } from '../lang/speech';
-import { menu } from './menu';
-import { info, say } from './textbox';
+import { menu, ask } from './menu';
+import { info, say, closeText } from './textbox';
 import { pickMon, showDetails, listMenu, iconCanvas, detailBox, wordRow, openDetail } from './party';
 import { openBag } from './bag';
 import { money } from '../game/bag';
@@ -120,13 +121,33 @@ async function trainerCard() {
   await say(lines.join('\n'), { voice: false });
 }
 
+/** Import a save file: pick it, check it, ask, then keep it. True if a save was loaded (the title screen uses it too). */
+export async function importGame(): Promise<boolean> {
+  const text = await pickFile();
+  if (text === null) return false;
+  const save = readSave(text);
+  if (!save) {
+    await info('Ese archivo no es una partida de Palabritas.', { en: 'That file isn’t a Palabritas save.' });
+    return false;
+  }
+  const sure = await ask(`¿Cargar la partida de ${save.name}? Reemplaza la partida de este dispositivo.`, {
+    voice: false,
+    en: `Load ${save.name}’s game? It replaces the game on this device.`,
+  });
+  closeText();
+  if (!sure) return false;
+  useSave(save);
+  saveGame();
+  return true;
+}
+
 async function settings() {
   const sizes: Record<number, string> = { 5: 'Pequeño', 6: 'Mediano', 7: 'Grande' };
   let sel = 0;
   while (true) {
     const st = G.save.settings;
     const i = await menu(
-      [`Texto: ${sizes[st.textScale]}`, `Voz en diálogos: ${st.dialogVoice ? 'Sí' : 'No'}`, `Voz lenta: ${st.slowVoice ? 'Sí' : 'No'}`, `Música: ${st.musicLevel ? `${st.musicLevel}%` : 'No'}`, 'Volver'],
+      [`Texto: ${sizes[st.textScale]}`, `Voz en diálogos: ${st.dialogVoice ? 'Sí' : 'No'}`, `Voz lenta: ${st.slowVoice ? 'Sí' : 'No'}`, `Música: ${st.musicLevel ? `${st.musicLevel}%` : 'No'}`, 'Exportar partida', 'Importar partida', 'Volver'],
       { cancel: true, pos: { right: 0, top: 0 }, initial: sel, title: 'AJUSTES' },
     );
     sel = Math.max(0, i);
@@ -139,6 +160,15 @@ async function settings() {
       // No, 20, 40, 60, 80, 100%, then off again.
       st.musicLevel = st.musicLevel >= 100 ? 0 : st.musicLevel + 20;
       musicSettingChanged();
+    } else if (i === 4) {
+      saveGame();
+      if (await exportSave()) await info('Partida exportada. Con ese archivo puedes seguir en otro dispositivo.', { en: 'Game exported. With that file you can continue on another device.' });
+    } else if (i === 5) {
+      // The game restarts from the title, to load the new save from the start.
+      if (await importGame()) {
+        await info('Partida cargada. El juego vuelve a empezar.', { en: 'Game loaded. The game restarts.' });
+        location.reload();
+      }
     } else {
       saveGame();
       return;

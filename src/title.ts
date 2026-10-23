@@ -9,6 +9,7 @@ import { say, closeText } from './ui/textbox';
 import { menu, ask } from './ui/menu';
 import { promptText } from './ui/challenge';
 import { loadMap, worldScene, fadeIn, setFade } from './world/world';
+import { importGame } from './ui/startmenu';
 
 let t = 0;
 const titleScene = {
@@ -75,12 +76,18 @@ export async function runTitle() {
   sfx('select');
   tap.remove();
 
-  let start: 'new' | 'continue' = 'new';
-  if (hasSave()) {
-    const i = await menu(['CONTINUAR', 'NUEVA PARTIDA'], { pos: { left: 22, right: 22, bottom: 12 } });
-    start = i === 0 ? 'continue' : 'new';
-  } else {
-    await menu(['NUEVA PARTIDA'], { pos: { left: 22, right: 22, bottom: 12 } });
+  let start: 'new' | 'continue' | 'import' = 'new';
+  // Importing a save file brings a game from another device (or a backup).
+  const choices = hasSave() ? ['CONTINUAR', 'NUEVA PARTIDA', 'IMPORTAR'] : ['NUEVA PARTIDA', 'IMPORTAR'];
+  const choice = choices[await menu(choices, { pos: { left: 22, right: 22, bottom: 12 } })];
+  start = choice === 'CONTINUAR' ? 'continue' : choice === 'IMPORTAR' ? 'import' : 'new';
+  if (start === 'import') {
+    title.remove();
+    sub.remove();
+    if (!(await importGame())) return runTitle();
+    applySettings();
+    enterWorld();
+    return;
   }
   title.remove();
   sub.remove();

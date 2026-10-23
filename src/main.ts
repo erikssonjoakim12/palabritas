@@ -95,12 +95,13 @@ if (import.meta.env.DEV) {
     import('./data/items'),
     import('./audio/bgm'),
     import('./world/layout'),
-  ]).then(([state, world, battle, mon, maps, textbox, species, content, curriculum, learning, tiles, creatures, people, trainers, items, bgm, layout]) => {
+    import('./game/backup'),
+  ]).then(([state, world, battle, mon, maps, textbox, species, content, curriculum, learning, tiles, creatures, people, trainers, items, bgm, layout, backup]) => {
     (window as any).__game = {
       ...state, ...world, ...battle, ...mon, ...maps,
       fill: textbox.fill, SPECIES: species.SPECIES, TILES: tiles.TILES, creatureArt: creatures.creatureArt, CREATURE_IDS: creatures.CREATURE_IDS, LOOKS: people.LOOKS,
       OBJECTS_ART: people.OBJECTS_ART, TRAINERS: trainers.TRAINERS, ITEM_DEFS: items.ITEM_DEFS, SHOPS: items.SHOPS,
-      content, curriculum, learning, bgm, worldLayout: layout.worldLayout,
+      content, curriculum, learning, bgm, backup, worldLayout: layout.worldLayout,
     };
   });
 }

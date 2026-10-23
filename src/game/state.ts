@@ -133,13 +133,17 @@ export function loadGame(): boolean {
   try {
     const raw = localStorage.getItem(KEY);
     if (!raw) return false;
-    const data = JSON.parse(raw) as SaveData;
-    G.save = { ...newSave(), ...data, settings: { ...newSave().settings, ...data.settings } };
-    migrate(G.save);
+    useSave(JSON.parse(raw) as SaveData);
     return true;
   } catch {
     return false;
   }
+}
+
+/** Play from this save (from storage, or a file from another device), brought up to date. */
+export function useSave(data: SaveData) {
+  G.save = { ...newSave(), ...data, settings: { ...newSave().settings, ...data.settings } };
+  migrate(G.save);
 }
 
 /** Palabritas that were renamed between versions: old id -> new id. */
