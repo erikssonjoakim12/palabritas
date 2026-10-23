@@ -60,8 +60,11 @@ export interface TileEnv extends MapLook {
   frame?: number;
 }
 
-/** Tiles with a second frame, swapped by the world now and then: water ripples, lava churns, flowers sway, waterfalls fall. */
-export const ANIMATED = new Set(['~', 'j', '*', '!']);
+/**
+ * Tiles with a second frame, swapped by the world now and then: water ripples (and its foam rolls in at beaches),
+ * lava churns, flowers sway, waterfalls fall, steam puffs up, currents flow their way.
+ */
+export const ANIMATED = new Set(['~', 'j', '*', '!', 'X', '8', '2', '4', '6']);
 
 /** A tile's rows moved by (dx, dy) pixels, wrapping around (the patterns repeat, so it's seamless). */
 const shift = (rows: string[], dx: number, dy: number) =>
@@ -292,15 +295,27 @@ function waterImage(env: TileEnv): Img {
   const nb = neighbors(env);
   const sandy = (c: string) => c === 's' || (c === '.' && env.ground === 'sand');
   const water = framed(ART.water, env, 2, 0);
-  if (![nb.n, nb.s, nb.w, nb.e].some(sandy)) return paintArt(water);
+  const falls = nb.n === '!';
+  if (![nb.n, nb.s, nb.w, nb.e].some(sandy) && !falls) return paintArt(water);
   const g = grid(water.rows);
   const foam = (x: number, y: number) => (g[y][x] = (x + y) % 3 ? 'f' : '0');
+  // At a beach the foam rolls in and out: one row deeper on frame 1.
+  const d = env.frame ? 1 : 0;
   for (let i = 0; i < 16; i++) {
-    if (sandy(nb.n)) (foam(i, 0), i % 2 || foam(i, 1));
-    if (sandy(nb.s)) (foam(i, 15), i % 2 || foam(i, 14));
-    if (sandy(nb.w)) (foam(0, i), i % 2 || foam(1, i));
-    if (sandy(nb.e)) (foam(15, i), i % 2 || foam(14, i));
+    for (let k = 0; k <= d; k++) {
+      if (sandy(nb.n)) foam(i, k);
+      if (sandy(nb.s)) foam(i, 15 - k);
+      if (sandy(nb.w)) foam(k, i);
+      if (sandy(nb.e)) foam(15 - k, i);
+    }
+    if (i % 2) continue;
+    if (sandy(nb.n)) foam(i, d + 1);
+    if (sandy(nb.s)) foam(i, 14 - d);
+    if (sandy(nb.w)) foam(d + 1, i);
+    if (sandy(nb.e)) foam(14 - d, i);
   }
+  // Under a waterfall: spray where it hits the water, jumping between frames.
+  if (falls) for (const [x, y] of env.frame ? [[1, 1], [4, 0], [6, 2], [9, 1], [12, 0], [14, 2], [3, 4], [11, 4]] : [[2, 0], [5, 2], [7, 0], [10, 2], [13, 1], [0, 3], [8, 4], [15, 4]]) g[y][x] = 'f';
   return paintArt({ ...ART.water, extra: { f: ACCENT.foam } }, g);
 }
 
@@ -403,8 +418,12 @@ function render(ch: string, env: TileEnv): Img {
       return paintArt(framed(ART.lava, env, 1, 1));
     case '!':
       return paintArt(framed(ART.waterfall, env, 0, 4));
-    case 'X':
-      return stack(paintArt(ART.ash), paintArt(ART.steamVent));
+    case 'X': {
+      // Frame 1: the cloud (rows 0-9) rises 2 pixels; the crack below stays.
+      const rows = ART.steamVent.rows;
+      const steam = env.frame ? rows.map((r, y) => (y < 10 ? (rows[y + 2] && y + 2 < 10 ? rows[y + 2] : '................') : r)) : rows;
+      return stack(paintArt(ART.ash), paintArt({ ...ART.steamVent, rows: steam }));
+    }
     case '|':
       return paintArt(ART.sugarcane);
     case 'l':
@@ -482,7 +501,8 @@ function render(ch: string, env: TileEnv): Img {
     case '2':
     case '4':
     case '6':
-      return stack(paintArt(ART.water), paintArt(ART.currentArrow, turn(grid(ART.currentArrow.rows), { 8: 0, 6: 1, 2: 2, 4: 3 }[ch]!)));
+      // The arrow (drawn pointing up, then turned) moves forward 2 pixels on frame 1: you see which way it flows.
+      return stack(paintArt(framed(ART.water, env, 2, 0)), paintArt(ART.currentArrow, turn(grid(framed(ART.currentArrow, env, 0, -2).rows), { 8: 0, 6: 1, 2: 2, 4: 3 }[ch]!)));
     case '~':
       return waterImage(env);
     case 'f':
