@@ -1,4 +1,4 @@
-// Moving a save between devices: export it as a file, import a file through AJUSTES (it asks first, then the game
+// Moving a save between devices: GUARDAR saves here or exports a file; import a file through AJUSTES (it asks first, then the game
 // restarts with it), and a file that isn't a Palabritas save is turned away.
 import { start, sleep } from './lib.mjs';
 import { writeFileSync, mkdirSync } from 'node:fs';
@@ -10,6 +10,16 @@ const text = await t.game(() => window.__game.backup.exportText());
 t.check('the export holds the save', JSON.parse(text).save.name === 'Ana');
 t.check('another file is turned away', (await t.game(() => [window.__game.backup.readSave('{"name":"x"}'), window.__game.backup.readSave('hola')])).every((s) => s === null));
 
+// GUARDAR: save here (or export a file).
+await t.press('Enter');
+await sleep(300);
+await t.pick('GUARDAR');
+await sleep(300);
+await t.pick('Guardar aquí');
+t.check('GUARDAR → Guardar aquí saves in this browser', (await t.nextText()).includes('Partida guardada'));
+await t.press('z');
+await sleep(300);
+
 // A save from "another device": the same game, under another name.
 mkdirSync(resolve('tests/out/backup'), { recursive: true });
 const file = resolve('tests/out/backup/beto.json');
@@ -17,8 +27,7 @@ const other = JSON.parse(text);
 other.save.name = 'Beto';
 writeFileSync(file, JSON.stringify(other));
 
-await t.press('Enter');
-await sleep(300);
+// The START menu is still open after saving.
 await t.pick('AJUSTES');
 await sleep(300);
 const [chooser] = await Promise.all([t.page.waitForFileChooser(), t.pick('Importar partida')]);

@@ -2,7 +2,8 @@ import { G, today, type SaveData } from './state';
 
 /*
   Moving a save between phones and browsers, and keeping a backup: the save as a small file. Exporting shares it
-  (Android's share menu: Google Drive, WhatsApp, email...) or downloads it; importing picks a file and checks it's
+  (Android's share menu: Google Drive, WhatsApp, email...) or downloads it. It's a .txt file: Chrome on Android only
+  shares some kinds of files (not .json), so a .txt gets the share menu; importing picks a file and checks it's
   a Palabritas save. Loading it runs the same updates as any save (state.ts migrate), so old files keep working.
 */
 
@@ -28,8 +29,8 @@ export function readSave(text: string): SaveData | null {
 
 /** Share the save file (where the phone can) or download it. False if you cancelled sharing. */
 export async function exportSave(): Promise<boolean> {
-  const name = `palabritas-${G.save.name.normalize('NFD').replace(/[^\w-]/g, '') || 'partida'}-${today()}.json`;
-  const file = new File([exportText()], name, { type: 'application/json' });
+  const name = `palabritas-${G.save.name.normalize('NFD').replace(/[^\w-]/g, '') || 'partida'}-${today()}.txt`;
+  const file = new File([exportText()], name, { type: 'text/plain' });
   if (navigator.canShare?.({ files: [file] })) {
     try {
       await navigator.share({ files: [file], title: 'Palabritas' });
@@ -48,7 +49,7 @@ export async function exportSave(): Promise<boolean> {
 /** Pick a file and read it: its text, or null if you cancelled. */
 export function pickFile(): Promise<string | null> {
   return new Promise((resolve) => {
-    const input = Object.assign(document.createElement('input'), { type: 'file', accept: '.json,application/json' });
+    const input = Object.assign(document.createElement('input'), { type: 'file', accept: '.txt,.json,text/plain,application/json' });
     input.addEventListener('change', () => {
       const file = input.files?.[0];
       if (!file) return resolve(null);

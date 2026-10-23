@@ -36,7 +36,7 @@ export async function startMenu(): Promise<string | undefined> {
     else if (i === 3) await townMap();
     else if (i === 4) await trainerCard();
     else if (i === 5) {
-      await info(saveGame() ? 'Partida guardada.' : 'No se pudo guardar.', { en: 'Game saved.' });
+      await guardar();
     } else if (i === 6) await settings();
     else return;
   }
@@ -121,6 +121,15 @@ async function trainerCard() {
   await say(lines.join('\n'), { voice: false });
 }
 
+/** GUARDAR: in this browser, or as a file to keep or take to another device (Drive, WhatsApp...). */
+async function guardar() {
+  const i = await menu(['Guardar aquí', 'Exportar archivo', 'Volver'], { cancel: true, pos: { right: 0, top: 0 }, title: 'GUARDAR' });
+  if (i === 0) await info(saveGame() ? 'Partida guardada.' : 'No se pudo guardar.', { en: 'Game saved.' });
+  if (i !== 1) return;
+  saveGame();
+  if (await exportSave()) await info('Partida exportada. Con ese archivo puedes seguir en otro dispositivo.', { en: 'Game exported. With that file you can continue on another device.' });
+}
+
 /** Import a save file: pick it, check it, ask, then keep it. True if a save was loaded (the title screen uses it too). */
 export async function importGame(): Promise<boolean> {
   const text = await pickFile();
@@ -147,7 +156,7 @@ async function settings() {
   while (true) {
     const st = G.save.settings;
     const i = await menu(
-      [`Texto: ${sizes[st.textScale]}`, `Voz en diálogos: ${st.dialogVoice ? 'Sí' : 'No'}`, `Voz lenta: ${st.slowVoice ? 'Sí' : 'No'}`, `Música: ${st.musicLevel ? `${st.musicLevel}%` : 'No'}`, 'Exportar partida', 'Importar partida', 'Volver'],
+      [`Texto: ${sizes[st.textScale]}`, `Voz en diálogos: ${st.dialogVoice ? 'Sí' : 'No'}`, `Voz lenta: ${st.slowVoice ? 'Sí' : 'No'}`, `Música: ${st.musicLevel ? `${st.musicLevel}%` : 'No'}`, 'Importar partida', 'Volver'],
       { cancel: true, pos: { right: 0, top: 0 }, initial: sel, title: 'AJUSTES' },
     );
     sel = Math.max(0, i);
@@ -161,9 +170,6 @@ async function settings() {
       st.musicLevel = st.musicLevel >= 100 ? 0 : st.musicLevel + 20;
       musicSettingChanged();
     } else if (i === 4) {
-      saveGame();
-      if (await exportSave()) await info('Partida exportada. Con ese archivo puedes seguir en otro dispositivo.', { en: 'Game exported. With that file you can continue on another device.' });
-    } else if (i === 5) {
       // The game restarts from the title, to load the new save from the start.
       if (await importGame()) {
         await info('Partida cargada. El juego vuelve a empezar.', { en: 'Game loaded. The game restarts.' });
