@@ -9,7 +9,7 @@ import { MAPS, type MapDef, type NpcDef, type Conn, type EncounterEntry } from '
 import { worldLayout } from './layout';
 import { G, flag, saveGame, playerLook, clockHour } from '../game/state';
 import { rematchReady } from '../game/rematch';
-import { NIGHT, NIGHT_CLEAR } from '../style/colors';
+import { NIGHT, NIGHT_CLEAR, FIREFLY } from '../style/colors';
 import { lightAt, drawLights, skyAt, type Light } from '../art/lights';
 import { drawFireworks } from '../art/fireworks';
 import { setMapMusic, musicFor } from '../audio/bgm';
@@ -677,6 +677,28 @@ function drawTiles(g: CanvasRenderingContext2D, camX: number, camY: number) {
   }
 }
 
+/**
+ * Fireflies after dark where wild Chispitas live (it's a firefly): a few glowing dots over the open ground, each
+ * drifting in a small circle and blinking on and off. The same spots every night (they come from the tile).
+ */
+function drawFireflies(g: CanvasRenderingContext2D, camX: number, camY: number) {
+  if (skyAt(clockHour()).light < 0.6 || !map.encounters?.table.some((e) => e.sp === 'chispita')) return;
+  const t = performance.now() / 1000;
+  for (let ty = Math.floor(camY / T); ty <= Math.floor((camY + H) / T); ty++)
+    for (let tx = Math.floor(camX / T); tx <= Math.floor((camX + W) / T); tx++) {
+      const h = (Math.imul(tx, 73856093) ^ Math.imul(ty, 19349663)) >>> 0;
+      if (h % 6 !== 0 || !inBounds(tx, ty) || TILES[tileAt(tx, ty)].solid) continue;
+      const phase = (h >>> 8) % 628 / 100;
+      if (Math.sin(t * 1.3 + phase) < 0.2) continue; // blinking
+      const x = Math.round(tx * T - camX + 8 + Math.cos(t * 0.7 + phase) * 5);
+      const y = Math.round(ty * T - camY + 6 + Math.sin(t * 0.9 + phase) * 4);
+      g.fillStyle = FIREFLY.halo;
+      g.fillRect(x - 1, y - 1, 4, 4);
+      g.fillStyle = FIREFLY.glow;
+      g.fillRect(x, y, 2, 2);
+    }
+}
+
 /** The grass you stepped into shakes: its blades drawn a pixel left, then right, over the tile. */
 function drawRustle(g: CanvasRenderingContext2D, camX: number, camY: number) {
   if (!rustle) return;
@@ -762,7 +784,10 @@ export function renderWorld(g: CanvasRenderingContext2D) {
     drawNight(g, 72, 68 - hop);
     drawLights(g, lights, -camX, -camY);
     if (map.fireworks) drawFireworks(g);
-  } else if (map.outdoor) drawDayTime(g, camX, camY);
+  } else if (map.outdoor) {
+    drawDayTime(g, camX, camY);
+    drawFireflies(g, camX, camY);
+  }
   if (fade > 0) {
     g.fillStyle = `rgba(0,0,0,${fade})`;
     g.fillRect(0, 0, W, H);

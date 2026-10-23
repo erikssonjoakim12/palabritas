@@ -38,6 +38,10 @@ interface Fighter {
   sink: number;
   hidden: boolean;
   lunge: number;
+  /** A Palabrita (not a trainer): it breathes (bobs a pixel) and hops when it comes out. */
+  alive: boolean;
+  /** Pixels up, while hopping out. */
+  hop: number;
 }
 
 interface Ball {
@@ -78,21 +82,27 @@ const battleScene = {
     g.beginPath();
     g.ellipse(32, 92, 24, 5, 0, 0, Math.PI * 2);
     g.fill();
-    drawFighter(g, enemyF);
-    drawFighter(g, meF);
+    drawFighter(g, enemyF, 0);
+    drawFighter(g, meF, 1);
     if (ball) g.drawImage(OBJECTS.palabola, Math.round(ball.x + ball.shake), Math.round(ball.y));
     if (lineups.enemy) drawLineup(g, lineups.enemy, 8, 14, false);
     if (lineups.me) drawLineup(g, lineups.me, 96, 80, true);
   },
 };
 
-function drawFighter(g: CanvasRenderingContext2D, f: Fighter | null) {
+/** How long a breath takes (ms): a Palabrita bobs up a pixel for half of it. */
+const BREATH = 1000;
+
+function drawFighter(g: CanvasRenderingContext2D, f: Fighter | null, phase: number) {
   if (!f || f.hidden || f.sink >= f.img.height) return;
   if (f.blink > 0 && Math.floor(f.blink / 4) % 2 === 0) return;
   const { width: w, height: fullH } = f.img;
   const h = fullH - f.sink; // fainting: it sinks into the ground
   const x = f.x + Math.floor((SLOT - w) / 2) + f.lunge;
-  const y = f.y + SLOT - fullH + f.sink;
+  // Breathing (yours and the opponent's out of step), not while it's hit, lunging or fainting.
+  const still = !f.alive || f.sink || f.lunge || f.blink || f.hop;
+  const breath = still ? 0 : Math.floor(performance.now() / (BREATH / 2) + phase) % 2;
+  const y = f.y + SLOT - fullH + f.sink - f.hop - breath;
   g.drawImage(f.img, 0, 0, w, h, Math.round(x), Math.round(y), w, h);
 }
 
@@ -107,10 +117,10 @@ function drawLineup(g: CanvasRenderingContext2D, team: Mon[], x: number, y: numb
   g.fillRect(tickLeft ? x - 3 : x + 6 * 9, y + 4, 1, 6);
 }
 
-const fighter = (img: Img, x: number, y: number): Fighter => ({ img, x, y, blink: 0, sink: 0, hidden: false, lunge: 0 });
+const fighter = (img: Img, x: number, y: number, alive = false): Fighter => ({ img, x, y, blink: 0, sink: 0, hidden: false, lunge: 0, alive, hop: 0 });
 /** The opponent's side shows Palabritas from the front, yours from the back. Both start off-screen. */
-const enemyFighter = (mon: Mon) => fighter(creatureArt(mon.sp).front, -SLOT, ENEMY_POS.y);
-const myFighter = (mon: Mon) => fighter(creatureArt(mon.sp).back, W, ME_POS.y);
+const enemyFighter = (mon: Mon) => fighter(creatureArt(mon.sp).front, -SLOT, ENEMY_POS.y, true);
+const myFighter = (mon: Mon) => fighter(creatureArt(mon.sp).back, W, ME_POS.y, true);
 
 async function lunge(f: Fighter, dir: number) {
   for (let i = 0; i <= 10; i++) {
@@ -141,6 +151,14 @@ async function slide(f: Fighter, toX: number) {
   for (let i = 1; i <= 24; i++) {
     f.x = fromX + ((toX - fromX) * i) / 24;
     await nextFrame();
+  }
+  // A Palabrita arriving hops once (not one sliding away).
+  if (f.alive && toX !== W && toX !== -SLOT) {
+    for (let i = 1; i <= 14; i++) {
+      f.hop = Math.round(Math.sin((Math.PI * i) / 14) * 4);
+      await nextFrame();
+    }
+    f.hop = 0;
   }
 }
 

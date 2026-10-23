@@ -121,6 +121,9 @@ export const DAY_CYCLE: { h: number; tint: string; light: number }[] = [
   { h: 19, tint: '#7080c8', light: 1 },
 ];
 
+/** Fireflies at night where wild Chispitas live: the glow, and the halo around it. */
+export const FIREFLY = { glow: '#f8f070', halo: 'rgba(248, 240, 112, 0.35)' };
+
 /** Festival fireworks (art/fireworks.ts). */
 export const FIREWORK_COLORS = ['#f85858', '#f8d048', '#58c8f8', '#78e068', '#e878f0', '#f8f8f8'];
 
