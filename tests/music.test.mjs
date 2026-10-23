@@ -40,6 +40,16 @@ const after = await t.game(() => {
   return [quiet, b.musicState().playing];
 });
 t.check('after a win, no battle music until you leave the battle', after[0] === null && after[1] === 'ruta', after);
+// The wild win tune loops until you leave the battle.
+await t.game(() => {
+  const b = window.__game.bgm;
+  b.setBattleMusic('salvaje');
+  b.endBattleSong();
+  b.playOverlay('ganaste', false);
+});
+await sleep(8000); // longer than the jingle
+t.check('the wild win tune loops until you leave', (await music()).playing === 'ganaste', await music());
+await t.game(() => window.__game.bgm.setBattleMusic(null));
 
 // A listening challenge (the haunted lamp whispers): silence.
 await t.fromSave({ map: 'cuarto_embrujado', x: 3, y: 2, dir: 'up', party: [['mordiscon', 30]] });

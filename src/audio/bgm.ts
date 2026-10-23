@@ -38,7 +38,9 @@ function refresh() {
   if (!want) return player.stop();
   const song = BY_ID.get(want);
   if (!song) return player.stop();
-  player.play(song, () => {
+  // An overlay asked to loop plays even a jingle on repeat (the wild win, until you leave the battle).
+  const loop = overlay?.id === want && !overlay.once;
+  player.play(loop && song.once ? { ...song, once: false } : song, () => {
     // A jingle ended: back to the layer below.
     if (overlay?.id === want) overlay = null;
     refresh();

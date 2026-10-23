@@ -699,7 +699,8 @@ async function runBattle(cfg: Config): Promise<BattleResult> {
   async function finish(r: BattleResult) {
     // The battle song stops for good: after the jingle (and any evolution's tune), quiet until you're outside.
     if (r === 'win' || r === 'caught') endBattleSong();
-    if (r === 'win') playOverlay(trainer ? 'victoria' : 'ganaste', !trainer);
+    // The win tune loops until you leave the battle (the user's choice, for wild wins too).
+    if (r === 'win') playOverlay(trainer ? 'victoria' : 'ganaste', false);
     if (r === 'caught') playOverlay('atrapado');
     if (r === 'win' && trainer) {
       // The trainer comes back out to admit defeat.
