@@ -279,8 +279,13 @@ export async function scriptedStep(d: Dir) {
 
 // ---------- Movement ----------
 
+/** The tall grass you just stepped into: it shakes for a moment, like Gold/Silver. */
+let rustle: { x: number; y: number; at: number } | null = null;
+const RUSTLE_MS = 320;
+
 /** Start moving to (nx, ny), `dist` pixels away (a normal step is one tile; hopping a ledge is two). */
 function startMove(nx: number, ny: number, dist = T) {
+  if (TILES[tileAt(nx, ny)].kind === 'tallgrass') rustle = { x: nx, y: ny, at: performance.now() };
   player.x = nx;
   player.y = ny;
   player.dist = dist;
@@ -648,6 +653,23 @@ function drawTiles(g: CanvasRenderingContext2D, camX: number, camY: number) {
   }
 }
 
+/** The grass you stepped into shakes: its blades drawn a pixel left, then right, over the tile. */
+function drawRustle(g: CanvasRenderingContext2D, camX: number, camY: number) {
+  if (!rustle) return;
+  const t = performance.now() - rustle.at;
+  if (t > RUSTLE_MS) return void (rustle = null);
+  const ch = tileAt(rustle.x, rustle.y);
+  if (TILES[ch].kind !== 'tallgrass') return;
+  const [x, y] = [rustle.x * T - camX, rustle.y * T - camY];
+  g.save();
+  g.beginPath();
+  g.rect(x, y, T, T);
+  g.clip();
+  // The map's own tile (so it's shaded under the jungle's canopy too).
+  g.drawImage(tileImage(ch, envAt(map, rustle.x, rustle.y)), x + (Math.floor(t / 80) % 2 ? 1 : -1), y);
+  g.restore();
+}
+
 /** Snap to the screen's real pixels: smooth motion (finer than game pixels) that stays crisp. */
 const snap = (v: number) => Math.round(v * scaleFactor) / scaleFactor;
 
@@ -663,6 +685,7 @@ export function renderWorld(g: CanvasRenderingContext2D) {
   const camX = snap(px - 64);
   const camY = snap(py - 64);
   drawTiles(g, camX, camY);
+  drawRustle(g, camX, camY);
 
   const sprites: { y: number; draw: () => void }[] = [];
   for (const n of npcs.concat(edgeNpcs)) {
