@@ -10,6 +10,7 @@ import { menu, ask } from './ui/menu';
 import { promptText } from './ui/challenge';
 import { loadMap, worldScene, fadeIn, setFade } from './world/world';
 import { importGame } from './ui/startmenu';
+import { showHelpButton } from './ui/faq';
 
 let t = 0;
 const titleScene = {
@@ -70,6 +71,7 @@ export async function runTitle() {
   const sub = el('div', 'subtitle', 'Aprende español con Palabritas');
   const tap = el('div', 'blink-text', 'TOCA PARA EMPEZAR');
   overlay.append(title, sub, tap);
+  showHelpButton(true);
   await waitTap();
   unlockAudio();
   initSpeech();
@@ -84,6 +86,7 @@ export async function runTitle() {
   if (start === 'import') {
     title.remove();
     sub.remove();
+    showHelpButton(false);
     if (!(await importGame())) return runTitle();
     applySettings();
     enterWorld();
@@ -91,6 +94,7 @@ export async function runTitle() {
   }
   title.remove();
   sub.remove();
+  showHelpButton(false);
 
   if (start === 'new' && hasSave()) {
     const sure = await ask('¿Borrar la partida guardada y empezar de nuevo?', {

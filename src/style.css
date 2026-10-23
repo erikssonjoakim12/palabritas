@@ -375,6 +375,9 @@ html, body {
 .round:active, .round.down { transform: translateY(3px); box-shadow: 0 2px 0 #5a1030; }
 
 #mid-buttons { align-self: end; display: flex; gap: 14px; margin-top: 6px; }
+/* The FAQ's ? button: bottom left, by the controls (the title screen shows it). */
+#help { grid-area: mid; justify-self: start; align-self: end; padding: 11px 14px; }
+#help[hidden] { display: none; }
 .pill {
   font-family: inherit;
   font-size: 10px;
@@ -492,6 +495,7 @@ mark.diff { background: #ffd23a; color: var(--ink); border-radius: 3px; padding:
   #dpad { grid-area: dpad; justify-self: center; }
   #ab { grid-area: ab; justify-self: center; }
   #mid-buttons { grid-area: start; margin: 0 0 32px; align-self: end; }
+  #help { grid-area: start; justify-self: start; margin: 0 0 32px; }
   #challenge { grid-area: challenge; }
 
   body.challenge-open #app {
@@ -507,6 +511,26 @@ mark.diff { background: #ffd23a; color: var(--ink); border-radius: 3px; padding:
     padding: 4px 4px 12px;
   }
 }
+
+/* ---------- The FAQ (the ? button): over the whole page, in a readable font ---------- */
+.faq { position: fixed; inset: 0; z-index: 50; overflow-y: auto; background: rgba(16, 12, 32, 0.75); padding: 16px; }
+.faq-box {
+  position: relative;
+  max-width: 520px;
+  margin: 0 auto;
+  background: #f8f8f0;
+  color: #202028;
+  border-radius: 10px;
+  padding: 18px 18px 8px;
+  font-family: system-ui, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+}
+.faq-box h2 { margin: 0; font-size: 18px; }
+.faq-sub { color: #707080; font-size: 12px; margin-bottom: 8px; }
+.faq-box h3 { margin: 14px 0 2px; font-size: 14px; }
+.faq-box p { margin: 0 0 6px; }
+.faq-close { position: absolute; top: 10px; right: 10px; border: none; background: none; font-size: 20px; color: #505060; padding: 4px 8px; }
 
 /* Short message at the top of the page (e.g. when fullscreen isn't allowed). */
 .toast {
