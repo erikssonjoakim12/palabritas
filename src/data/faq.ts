@@ -9,7 +9,7 @@ export const FAQ: { q: string; a: string }[] = [
   },
   {
     q: 'Can I install it like an app?',
-    a: 'In Chrome, open the menu (⋮) → Add to Home screen. It then opens full screen, like an app.',
+    a: 'Android (Chrome): open the menu (⋮) → Add to Home screen. iPhone (Safari): tap Share → Add to Home Screen. It then opens full screen, like an app. On iPhone, do this: Safari may delete a website’s data (your save!) after 7 days without a visit, but not an app’s.',
   },
   {
     q: 'How do I save, or move my game to another phone?',
@@ -41,7 +41,7 @@ export const FAQ: { q: string; a: string }[] = [
   },
   {
     q: 'Can I change the text size, the voice or the music?',
-    a: 'Yes: START → AJUSTES.',
+    a: 'Yes: START → AJUSTES. No sound at all on an iPhone? Check the silent switch on its side.',
   },
   {
     q: 'Why is it dark?',
