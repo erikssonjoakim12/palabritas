@@ -8,6 +8,14 @@ export const FAQ: { q: string; a: string }[] = [
     a: 'A Pokémon-style adventure where you learn Latin American Spanish. Your Palabritas grow by learning words: every attack, defense and catch is a little Spanish challenge.',
   },
   {
+    q: 'Can I install it like an app?',
+    a: 'In Chrome, open the menu (⋮) → Add to Home screen. It then opens full screen, like an app.',
+  },
+  {
+    q: 'How do I save, or move my game to another phone?',
+    a: 'START → GUARDAR → Guardar aquí saves in this browser. Exportar archivo makes a file you can keep in Google Drive or send yourself; on the other device, choose IMPORTAR on the title screen (or AJUSTES → Importar partida). Export now and then as a backup: clearing the browser’s data deletes the save.',
+  },
+  {
     q: 'How do I play?',
     a: 'Move with the cross. A talks and chooses, B goes back, START opens the menu. In challenges you tap or type your answer.',
   },
@@ -32,19 +40,11 @@ export const FAQ: { q: string; a: string }[] = [
     a: 'Tap EN in the text box to see it in English.',
   },
   {
-    q: 'How do I save, or move my game to another phone?',
-    a: 'START → GUARDAR → Guardar aquí saves in this browser. Exportar archivo makes a file you can keep in Google Drive or send yourself; on the other device, choose IMPORTAR on the title screen (or AJUSTES → Importar partida). Export now and then as a backup: clearing the browser’s data deletes the save.',
-  },
-  {
     q: 'Can I change the text size, the voice or the music?',
     a: 'Yes: START → AJUSTES.',
   },
   {
     q: 'Why is it dark?',
     a: 'Day and night follow your phone’s clock.',
-  },
-  {
-    q: 'Can I install it like an app?',
-    a: 'In Chrome, open the menu (⋮) → Add to Home screen. It then opens full screen, like an app.',
   },
 ];
