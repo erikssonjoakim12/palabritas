@@ -675,6 +675,28 @@ export const OBJECTS_ART: Record<string, { pal: Pal; rows: string[] }> = {
       '................',
     ],
   },
+  /** Mr. Ramos's armchair while Cojincito (the cushion) lives on it. */
+  armchairCojin: {
+    pal: OBJECT_PALS.armchairCojin,
+    rows: [
+      '................',
+      '...3333333333...',
+      '..322222222223..',
+      '..322122221223..',
+      '..322222222223..',
+      '..322222222223..',
+      '3333233333323333',
+      '3223300000033223',
+      '3223300100033223',
+      '3223300000033223',
+      '3222233333322223',
+      '3222222222222223',
+      '3333333333333333',
+      '.32..........23.',
+      '.33..........33.',
+      '................',
+    ],
+  },
   /** Don Chepe’s ox-cart: a plank box over a big wooden wheel. */
   carreta: {
     pal: OBJECT_PALS.carreta,

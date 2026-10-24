@@ -32,6 +32,7 @@ export const OBJECTS: Record<string, Img> = {};
 
 export function buildObjects() {
   for (const [id, art] of Object.entries(OBJECTS_ART)) {
-    OBJECTS[id] = fromRows(art.rows, { '1': art.pal[1], '2': art.pal[2], '3': art.pal[3] }, id);
+    // Color 0 too, where a palette has one (the armchair's cushion); the others leave it empty.
+    OBJECTS[id] = fromRows(art.rows, { '0': art.pal[0], '1': art.pal[1], '2': art.pal[2], '3': art.pal[3] }, id);
   }
 }

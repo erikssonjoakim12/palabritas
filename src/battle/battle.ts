@@ -374,6 +374,8 @@ async function runBattle(cfg: Config): Promise<BattleResult> {
     hud?.update();
   };
 
+  /** Each Palabrita's last move this battle: the cursor starts there (just press A to use it again). */
+  const lastMove = new Map<Mon, string>();
   const chooseMove = async (): Promise<Move | null> => {
     const moves = knownMoves(me);
     // Like Gold/Silver's move menu: a box above it shows the selected move's type and power.
@@ -384,6 +386,8 @@ async function runBattle(cfg: Config): Promise<BattleResult> {
       {
         icons: moves.map((m) => typeIcon(m.type)),
         cancel: true,
+        wrap: true,
+        initial: Math.max(0, moves.findIndex((m) => m.name === lastMove.get(me))),
         pos: { left: 0, right: 0, bottom: 0 },
         onMove: (k) => {
           const m = moves[k];
@@ -400,6 +404,7 @@ async function runBattle(cfg: Config): Promise<BattleResult> {
       },
     );
     detail.remove();
+    if (i >= 0) lastMove.set(me, moves[i].name);
     return i < 0 ? null : moves[i];
   };
 
@@ -527,6 +532,7 @@ async function runBattle(cfg: Config): Promise<BattleResult> {
   /** Returns a result if the battle ended. */
   const afterEnemyHit = async (): Promise<BattleResult | null> => {
     if (enemy.hp > 0) return null;
+    await frames(60); // a moment at 0 PS before it falls (the user: it fell too fast)
     sfx('faint');
     await sinkAnim(enemyF!);
     await info(`¡${enemyLabel()} se debilitó!`);
@@ -549,6 +555,7 @@ async function runBattle(cfg: Config): Promise<BattleResult> {
 
   const afterMyHit = async (): Promise<BattleResult | null> => {
     if (me.hp > 0) return null;
+    await frames(60); // the same moment at 0 PS for yours
     sfx('faint');
     await sinkAnim(meF!);
     await info(`¡${myName()} se debilitó!`);

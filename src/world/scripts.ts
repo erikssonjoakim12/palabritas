@@ -489,12 +489,13 @@ const S: Record<string, (c: ScriptCtx) => Promise<void>> = {
   },
 
   async ramos() {
-    if (flag('sillonDone')) return lines(['¡Por fin puedo dormir tranquilo! Gracias.', 'At last I can sleep in peace! Thanks.']);
+    if (flag('sillonDone')) return lines(['¡Por fin puedo sentarme en mi sillón tranquilo! Gracias.', 'At last I can sit in my armchair in peace! Thanks.']);
     await lines(['Mi sillón hace ruidos raros por la noche... ¡Creo que está vivo!', 'My armchair makes strange noises at night... I think it’s alive!']);
     if (flag('palabolas')) await lines(['Si es una Palabrita, ¡atrápala! Yo prefiero una silla normal.', 'If it’s a Palabrita, catch it! I’d rather have a normal chair.']);
   },
 
   async sillon() {
+    if (flag('sillonDone')) return lines(['Un sillón muy cómodo. Ya no hace ruidos.', 'A very comfy armchair. It doesn’t make noises anymore.']);
     if (!flag('palabolas')) {
       return lines(['Es un sillón muy cómodo... ¿Se movió un poco?', 'It’s a very comfy armchair... Did it just move a little?']);
     }

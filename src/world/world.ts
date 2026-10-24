@@ -176,8 +176,10 @@ const inBounds = (x: number, y: number) => inMap(map, x, y);
 
 export const tileAt = (x: number, y: number) => tileOf(map, x, y);
 
+/** Who is at (x, y): a person before an object on the same tile (Mr. Ramos in his armchair). */
 function npcAt(x: number, y: number) {
-  return npcs.find((n) => n.visible && n.x === x && n.y === y);
+  const here = npcs.filter((n) => n.visible && n.x === x && n.y === y);
+  return here.find((n) => !n.def.object) ?? here[0];
 }
 
 function walkable(x: number, y: number) {
@@ -740,7 +742,7 @@ export function renderWorld(g: CanvasRenderingContext2D) {
     const sy = n.y * T - camY + (n.off?.y ?? 0);
     if (sx < -T || sy < -T || sx > W || sy > H + T) continue;
     sprites.push({
-      y: n.y * T,
+      y: n.y * T + (n.def.object ? 0 : 0.5),
       draw: () => {
         if (n.def.object) g.drawImage(OBJECTS[n.def.object], sx, sy);
         else g.drawImage(framesFor(n.def.look ?? 'man')[n.dir][n.off?.frame ?? 0], sx, sy - 4);

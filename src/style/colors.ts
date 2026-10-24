@@ -206,6 +206,8 @@ export const OBJECT_PALS: Record<string, Pal> = {
   palabola: ['', '#f0f0e8', '#38a8a0', SPRITE_INK],
   michi: ['', '#f0f0e8', '#e09848', SPRITE_INK],
   armchair: ['', '#f0b0b8', '#d05058', SPRITE_INK],
+  /** The armchair with Cojincito on it: a cream cushion (0) on the seat. */
+  armchairCojin: ['#f8f0d8', '#f0b0b8', '#d05058', SPRITE_INK],
   maquina: ['', '#e8e8e0', '#a0a0a8', SPRITE_INK],
   carreta: ['', '#d8a868', '#906048', SPRITE_INK],
   palanca: ['', '#c8c8d0', '#d04048', SPRITE_INK],

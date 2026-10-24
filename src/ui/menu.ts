@@ -9,6 +9,8 @@ export interface MenuOpts {
   /** Absolute position in game pixels. Defaults to the right side above the text box. */
   pos?: { left?: number; right?: number; top?: number; bottom?: number; width?: number };
   columns?: 1 | 2;
+  /** Up from the top goes to the bottom, and down from the bottom to the top (the move menu). */
+  wrap?: boolean;
   initial?: number;
   title?: string;
   disabled?: boolean[];
@@ -53,7 +55,8 @@ export function menu(options: string[], opts: MenuOpts = {}): Promise<number> {
       resolve(i);
     };
     const move = (d: number) => {
-      const n = sel + d;
+      let n = sel + d;
+      if (opts.wrap && cols === 1) n = (n + options.length) % options.length;
       if (n >= 0 && n < options.length) {
         sel = n;
         sfx('blip');

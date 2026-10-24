@@ -27,6 +27,9 @@ html, body {
   -webkit-user-select: none;
 }
 
+/* No double-tap zoom anywhere (iPhones ignore user-scalable=no; engine/viewport.ts stops pinches). */
+html { touch-action: manipulation; }
+
 #app {
   height: 100dvh;
   display: flex;
@@ -514,7 +517,7 @@ mark.diff { background: #ffd23a; color: var(--ink); border-radius: 3px; padding:
 }
 
 /* ---------- The FAQ (the ? button): over the whole page, in a readable font ---------- */
-.faq { position: fixed; inset: 0; z-index: 50; overflow-y: auto; background: rgba(16, 12, 32, 0.75); padding: 16px; }
+.faq { touch-action: pan-y; position: fixed; inset: 0; z-index: 50; overflow-y: auto; background: rgba(16, 12, 32, 0.75); padding: 16px; }
 .faq-box {
   position: relative;
   max-width: 520px;

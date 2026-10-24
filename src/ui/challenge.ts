@@ -50,10 +50,24 @@ function hidePanel() {
   document.body.classList.remove('challenge-open');
 }
 
+/**
+ * A tap counts only if it also started on this button. The A button reacts as soon as it's touched, and a challenge's
+ * answers can appear right under your finger: lifting it mustn't choose one (Android sends that "ghost" click).
+ */
+function onTap(b: HTMLElement, fn: () => void) {
+  let armed = false;
+  b.addEventListener('pointerdown', () => (armed = true));
+  b.addEventListener('click', (e) => {
+    if (e.detail > 0 && !armed) return; // keyboard and test clicks have no pointer (detail 0)
+    armed = false;
+    fn();
+  });
+}
+
 function button(text: string, cls = 'btn', onClick?: () => void) {
   const b = el('button', cls, text);
   b.type = 'button';
-  if (onClick) b.addEventListener('click', onClick);
+  if (onClick) onTap(b, onClick);
   return b;
 }
 
@@ -208,7 +222,7 @@ export function challenge(spec: ChallengeSpec): Promise<ChallengeResult> {
       if (mode === 'speak') {
         const heard = el('div', 'heard', canListen() ? 'Toca el micrófono y habla' : 'Este navegador no tiene micrófono');
         const mic = button('🎤', 'mic');
-        mic.addEventListener('click', async () => {
+        onTap(mic, async () => {
           if (mic.classList.contains('listening')) return;
           mic.classList.add('listening');
           heard.textContent = 'Escuchando…';

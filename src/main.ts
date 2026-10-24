@@ -3,6 +3,7 @@ import './style.css';
 import { layout } from './engine/screen';
 import { initInput } from './engine/input';
 import { startLoop } from './engine/loop';
+import { initViewport } from './engine/viewport';
 import { buildObjects } from './art/chars';
 import { registerScripts } from './world/scripts';
 import { runTitle } from './title';
@@ -65,6 +66,7 @@ if (document.fullscreenEnabled || root.webkitRequestFullscreen) {
 }
 
 initInput();
+initViewport();
 buildObjects();
 registerScripts();
 startLoop();

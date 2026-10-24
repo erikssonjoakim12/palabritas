@@ -248,8 +248,11 @@ export const REGION1_MAPS: Record<string, MapDef> = {
     rows: ['##L##V##', '________', '________', '_kk_____', '_kk_____', '______B_', '____m___'],
     exit: { to: 'limon', x: 17, y: 14 },
     npcs: [
-      { id: 'ramos', x: 5, y: 3, look: 'man', dir: 'left', script: 'ramos' },
-      { id: 'sillon', x: 1, y: 1, object: 'armchair', script: 'sillon', show: () => !flag('sillonDone') },
+      // The cushion on the armchair is Cojincito. Once it's gone, the armchair stays and Mr. Ramos sits in it.
+      { id: 'ramos', x: 5, y: 3, look: 'man', dir: 'left', script: 'ramos', show: () => !flag('sillonDone') },
+      { id: 'sillon', x: 1, y: 1, object: 'armchairCojin', script: 'sillon', show: () => !flag('sillonDone') },
+      { id: 'sillon_vacio', x: 1, y: 1, object: 'armchair', script: 'sillon', show: () => flag('sillonDone') },
+      { id: 'ramos_sentado', x: 1, y: 1, look: 'man', dir: 'down', script: 'ramos', show: () => flag('sillonDone') },
     ],
   },
 
