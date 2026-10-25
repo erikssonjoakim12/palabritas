@@ -15,6 +15,13 @@ export const MODE_INFO: Record<Mode, { icon: string; es: string; en: string; pow
   speak: { icon: '🎤', es: 'Hablar', en: 'Say it in Spanish', power: 65, learnAt: 10 },
 };
 
+/**
+ * The starters (strong) learn their moves later than most (the user: weaker Palabritas learn more moves earlier,
+ * stronger ones later): the 3rd at 10, and the 4th only once they've evolved at 16 (Gotita's Electric storm comes
+ * with Nubarrón). Evolved forms keep these.
+ */
+export const STARTER_MOVES = { third: 10, fourth: 16 };
+
 export interface Move {
   name: string;
   type: Type;
@@ -54,7 +61,7 @@ export const SPECIES: Record<string, Species> = {
     theme: 'perro',
     starter: true,
     base: { hp: 45, atk: 54, def: 43, spd: 62 },
-    moves: [m('Ladrido', 'Normal', 'choose'), m('Mordisco', 'Siniestro', 'type'), m('Olfato', 'Normal', 'listen'), m('Mostaza Ardiente', 'Fuego', 'speak')],
+    moves: [m('Ladrido', 'Normal', 'choose'), m('Mordisco', 'Siniestro', 'type'), m('Olfato', 'Normal', 'listen', STARTER_MOVES.third), m('Mostaza Ardiente', 'Fuego', 'speak', STARTER_MOVES.fourth)],
     catchRate: 0.4,
     dex: {
       es: 'Mitad perro salchicha, mitad perro caliente. Siempre huele a pan recién hecho.',
@@ -68,7 +75,7 @@ export const SPECIES: Record<string, Species> = {
     theme: 'tiempo',
     starter: true,
     base: { hp: 46, atk: 48, def: 62, spd: 45 },
-    moves: [m('Salpicón', 'Normal', 'choose'), m('Remolino', 'Agua', 'type'), m('Llovizna', 'Agua', 'listen'), m('Tormenta', 'Eléctrico', 'speak')],
+    moves: [m('Salpicón', 'Normal', 'choose'), m('Remolino', 'Agua', 'type'), m('Llovizna', 'Agua', 'listen', STARTER_MOVES.third), m('Tormenta', 'Eléctrico', 'speak', STARTER_MOVES.fourth)],
     catchRate: 0.4,
     dex: {
       es: 'Nace de la primera gota de lluvia. Cuando está triste, llueve.',
@@ -82,7 +89,7 @@ export const SPECIES: Record<string, Species> = {
     theme: 'comida',
     starter: true,
     base: { hp: 48, atk: 50, def: 52, spd: 44 },
-    moves: [m('Placaje', 'Normal', 'choose'), m('Guacamolazo', 'Planta', 'type'), m('Hoja Afilada', 'Planta', 'listen'), m('Semilla Dura', 'Roca', 'speak')],
+    moves: [m('Placaje', 'Normal', 'choose'), m('Guacamolazo', 'Planta', 'type'), m('Hoja Afilada', 'Planta', 'listen', STARTER_MOVES.third), m('Semilla Dura', 'Roca', 'speak', STARTER_MOVES.fourth)],
     catchRate: 0.4,
     dex: {
       es: 'Vive en los mercados. Su hueso es muy duro y lo usa para atacar.',

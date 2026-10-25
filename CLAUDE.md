@@ -107,6 +107,8 @@ No script needed.
 **A Palabrita:**
 1. Add it to `SPECIES` (src/data/species.ts): types, `theme`, base stats, 4 moves (choose/type/listen/speak),
    catchRate, dex in Spanish and English.
+   Move levels (the user's guide): weaker Palabritas learn more moves earlier, stronger ones later. The default is
+   listen at 6 and speak at 10; the starters learn theirs at 10 and 16 (`STARTER_MOVES`: the 4th only once evolved).
 2. Evolved forms use `evolution(from, level, {...})`: they keep the family's theme, moves and words.
 3. Art: a placeholder drawing in `DRAW` (src/art/creatures.ts) until the user's art arrives.
 4. Add it to `DEX_ORDER` (src/data/species.ts), next to its family.
