@@ -101,15 +101,38 @@ function textInput(onEnter: () => void) {
   return inp;
 }
 
-/** A text field with an OK button. Calls onSubmit with the trimmed text (ignores empty). */
+/** Letters Spanish needs that keyboards hide (on a phone, under a long press). */
+const SPANISH_LETTERS = ['á', 'é', 'í', 'ó', 'ú', 'ñ', 'ü', '¿', '¡'];
+
+/** A row of buttons that type them into `inp` where the cursor is, keeping the phone's keyboard open. */
+function letterButtons(inp: HTMLInputElement) {
+  const row = el('div', 'accents');
+  for (const ch of SPANISH_LETTERS) {
+    const b = button(ch, 'btn');
+    b.addEventListener('pointerdown', (e) => {
+      e.preventDefault(); // the input keeps the focus, so the keyboard stays
+      const s = inp.selectionStart ?? inp.value.length;
+      const t = inp.selectionEnd ?? s;
+      inp.value = inp.value.slice(0, s) + ch + inp.value.slice(t);
+      inp.setSelectionRange(s + 1, s + 1);
+      inp.focus();
+    });
+    row.appendChild(b);
+  }
+  return row;
+}
+
+/** A text field with an OK button, and the Spanish letters under it. Calls onSubmit with the trimmed text (ignores empty). */
 function inputRow(onSubmit: (value: string) => void) {
   const submit = () => {
     const v = inp.value.trim();
     if (v) onSubmit(v);
   };
   const inp = textInput(submit);
-  const row = el('div', 'ch-row');
-  row.append(inp, button('OK', 'btn primary', submit));
+  const line = el('div', 'ch-row');
+  line.append(inp, button('OK', 'btn primary', submit));
+  const row = el('div');
+  row.append(line, letterButtons(inp));
   setTimeout(() => inp.focus(), 50);
   return { row, inp };
 }

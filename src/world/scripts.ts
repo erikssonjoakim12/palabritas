@@ -514,40 +514,47 @@ const S: Record<string, (c: ScriptCtx) => Promise<void>> = {
     if (currentMap().muted?.()) await lines(LUCKY_YOU);
     await say('¡Bienvenid{o/a} a la tienda! ¿Qué deseas comprar?', { en: 'Welcome to the shop! What would you like to buy?', noWait: true });
     const shop = SHOPS[currentMap().id] ?? SHOPS.tienda_brisa;
-    while (true) {
-      const i = await menu([...shop.map((id) => `${ITEM_DEFS[id].name}  ${money(ITEM_DEFS[id].price)}`), 'Nada'], {
-        cancel: true,
-        title: `Tienes ${money()}`,
-      });
-      if (i < 0 || i >= shop.length) break;
-      const id = shop[i];
-      const def = ITEM_DEFS[id];
-      const most = Math.min(5, Math.floor(G.save.money / def.price));
-      if (!most) {
-        await lines(['Lo siento, no tienes suficiente dinero.', 'Sorry, you don’t have enough money.']);
-        continue;
+    // Your money in the top right while you shop (like Gold/Silver), updated after every purchase.
+    const purse = el('div', 'box purse');
+    const showMoney = () => (purse.textContent = `DINERO ${money()}`);
+    showMoney();
+    overlay.appendChild(purse);
+    try {
+      while (true) {
+        const i = await menu([...shop.map((id) => `${ITEM_DEFS[id].name}  ${money(ITEM_DEFS[id].price)}`), 'Nada'], { cancel: true });
+        if (i < 0 || i >= shop.length) break;
+        const id = shop[i];
+        const def = ITEM_DEFS[id];
+        const most = Math.min(5, Math.floor(G.save.money / def.price));
+        if (!most) {
+          await lines(['Lo siento, no tienes suficiente dinero.', 'Sorry, you don’t have enough money.']);
+          continue;
+        }
+        const q = await menu(Array.from({ length: most }, (_, k) => `×${k + 1}  ${money(def.price * (k + 1))}`), { cancel: true, title: def.feminine ? '¿Cuántas?' : '¿Cuántos?' });
+        if (q < 0) continue;
+        const n = q + 1;
+        const enOrder = `I’d like ${n} ${n === 1 ? def.enName : def.enPlural}, please`;
+        const r = await challenge({
+          item: adHocItem([`Quiero ${amountOf(id, n)}, por favor`], enOrder),
+          mode: talkMode(),
+          title: '🛒 Tienda',
+          label: `Pídelo en español: «${enOrder}»`,
+          allowHelp: true,
+          validate: (answer) => gradeOrder(answer, id, n),
+        });
+        if (r.grade === 'wrong') {
+          await lines(['¿Perdón? No te entendí bien. ¿Qué deseas?', 'Sorry? I didn’t quite understand. What would you like?']);
+          continue;
+        }
+        G.save.money -= def.price * n;
+        showMoney();
+        addItem(id, n);
+        sfx('caught');
+        await lines([`¡Aquí tienes: ${amountOf(id, n)}! Son ${money(def.price * n)}.`, `Here you go! That’s ${money(def.price * n)}.`]);
+        await say('¿Algo más?', { en: 'Anything else?', noWait: true });
       }
-      const q = await menu(Array.from({ length: most }, (_, k) => `×${k + 1}  ${money(def.price * (k + 1))}`), { cancel: true, title: def.feminine ? '¿Cuántas?' : '¿Cuántos?' });
-      if (q < 0) continue;
-      const n = q + 1;
-      const enOrder = `I’d like ${n} ${n === 1 ? def.enName : def.enPlural}, please`;
-      const r = await challenge({
-        item: adHocItem([`Quiero ${amountOf(id, n)}, por favor`], enOrder),
-        mode: talkMode(),
-        title: '🛒 Tienda',
-        label: `Pídelo en español: «${enOrder}»`,
-        allowHelp: true,
-        validate: (answer) => gradeOrder(answer, id, n),
-      });
-      if (r.grade === 'wrong') {
-        await lines(['¿Perdón? No te entendí bien. ¿Qué deseas?', 'Sorry? I didn’t quite understand. What would you like?']);
-        continue;
-      }
-      G.save.money -= def.price * n;
-      addItem(id, n);
-      sfx('caught');
-      await lines([`¡Aquí tienes: ${amountOf(id, n)}! Son ${money(def.price * n)}.`, `Here you go! That’s ${money(def.price * n)}.`]);
-      await say('¿Algo más?', { en: 'Anything else?', noWait: true });
+    } finally {
+      purse.remove();
     }
     await lines(['¡Gracias por tu compra! Vuelve pronto.', 'Thanks for shopping! Come back soon.']);
   },

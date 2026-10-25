@@ -40,6 +40,17 @@ for (let tries = 0; tries < 5 && !caught; tries++) {
 }
 t.check('caught a Conejito with a Palabola', caught);
 
+// A wild Palabrita you've caught shows a little Palabola in its box (one you haven't, doesn't).
+await t.wild('conejito', 2);
+await t.play({ until: (u) => u.menu.length > 0 });
+const ball = await t.game(() => !document.querySelector('.hud .caught')?.hidden);
+await t.play();
+await t.wild('pajarito', 2);
+await t.play({ until: (u) => u.menu.length > 0 });
+const noBall = await t.game(() => !!document.querySelector('.hud .caught')?.hidden);
+await t.play();
+t.check('a caught Palabrita shows a Palabola in its box', ball && noBall, [ball, noBall]);
+
 // START → PALABRITAS → details
 await t.press('Enter');
 await sleep(300);

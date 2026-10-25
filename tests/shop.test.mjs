@@ -1,8 +1,14 @@
 // The shop: order in Spanish (a wrong amount isn't sold), then use a potion from the bag.
-import { start } from './lib.mjs';
+import { start, sleep } from './lib.mjs';
 
 const t = await start('shop');
 await t.fromSave({ map: 'tienda_brisa', x: 2, y: 2, dir: 'left', money: 1000, party: [['gotita', 8, { hp: 5 }]], flags: { palabolas: true } });
+await t.press('z');
+await sleep(400);
+const purse = await t.game(() => document.querySelector('.purse')?.textContent ?? '');
+t.check('your money shows while you shop', purse.includes('1000') || purse.includes('1.000') || purse.includes('1,000'), purse);
+await t.press('x');
+await t.play();
 const menus = ['Palabola', '×2', 'Palabola', '×1', 'Poción', '×1', 'Nada'];
 await t.press('z'); // the cashier
 const r = await t.play({

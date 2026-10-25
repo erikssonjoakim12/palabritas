@@ -21,7 +21,9 @@ function liftAboveKeyboard() {
   // In fullscreen, Android's autofill bar (passwords, cards...) sits on the keyboard but isn't counted in its height:
   // keep clear of it too.
   const gap = document.fullscreenElement ? AUTOFILL_BAR + 12 : 12;
-  const below = field.getBoundingClientRect().bottom + gap - (vv.offsetTop + vv.height);
+  const letters = document.querySelector('.accents'); // the Spanish letters under the answer box
+  const bottom = Math.max(field.getBoundingClientRect().bottom, letters?.getBoundingClientRect().bottom ?? 0);
+  const below = bottom + gap - (vv.offsetTop + vv.height);
   if (below > 0) app.style.transform = `translateY(${-below}px)`;
 }
 

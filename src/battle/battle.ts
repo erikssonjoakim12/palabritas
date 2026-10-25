@@ -183,7 +183,7 @@ interface Hud {
  * Gold/Silver battle boxes: name, then ":N7" (N for nivel = level), then a "PS:" bar
  * (puntos de salud = HP), inside a bracket line. Yours also shows PS numbers and loyalty.
  */
-function buildHud(getEnemy: () => Mon, getMe: () => Mon): Hud {
+function buildHud(getEnemy: () => Mon, getMe: () => Mon, wild: boolean): Hud {
   const root = el('div');
   const mk = (cls: string, showNum: boolean) => {
     const box = el('div', `hud ${cls}`);
@@ -205,6 +205,12 @@ function buildHud(getEnemy: () => Mon, getMe: () => Mon): Hud {
   };
   const e = mk('enemy', false);
   const p = mk('player', true);
+  // A wild Palabrita you've already caught: a tiny Palabola by its level (Gold/Silver show it too).
+  const caught = document.createElement('canvas');
+  caught.className = 'caught';
+  caught.width = caught.height = 7;
+  caught.getContext('2d')!.drawImage(OBJECTS.palabolaMini, 0, 0);
+  e.lv.appendChild(caught);
   overlay.appendChild(root);
   const set = (h: ReturnType<typeof mk>, mon: Mon) => {
     const s = stats(mon);
@@ -221,6 +227,8 @@ function buildHud(getEnemy: () => Mon, getMe: () => Mon): Hud {
     root,
     update() {
       set(e, getEnemy());
+      caught.hidden = !(wild && G.save.caught.includes(getEnemy().sp));
+      e.lv.appendChild(caught); // set() replaced the level's text
       const me = getMe();
       set(p, me);
       const l = lealtad(me);
@@ -652,7 +660,7 @@ async function runBattle(cfg: Config): Promise<BattleResult> {
     } else {
       await info(`¡Un ${monName(enemy)} salvaje apareció!`);
     }
-    hud = buildHud(() => enemy, () => me);
+    hud = buildHud(() => enemy, () => me, !trainer);
     hud.update();
     hud.show('player', false);
     await slide(meF, -SLOT);

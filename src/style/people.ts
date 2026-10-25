@@ -589,6 +589,11 @@ export const LOOKS: Record<string, Look> = {
 
 export const OBJECTS_ART: Record<string, { pal: Pal; rows: string[] }> = {
   /** Palabola: teal top, dark band with a white button, white bottom. */
+  /** A tiny Palabola: in a wild battle, next to a Palabrita you've already caught (like Gold/Silver). */
+  palabolaMini: {
+    pal: OBJECT_PALS.palabola,
+    rows: ['..333..', '.32223.', '3222223', '3333333', '3111113', '.31113.', '..333..'],
+  },
   palabola: {
     pal: OBJECT_PALS.palabola,
     rows: [
