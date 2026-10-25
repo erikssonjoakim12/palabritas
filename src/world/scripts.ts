@@ -620,6 +620,20 @@ const S: Record<string, (c: ScriptCtx) => Promise<void>> = {
 
   // ----- Ruta 2 -----
 
+  rosita: () =>
+    trainerFight('rosita', {
+      intro: ['¡Hola! Me llamo Rosita. ¿Quieres jugar?', 'Hi! My name is Rosita. Do you want to play?'],
+      defeated: ['¡Ay, perdí!', 'Oh, I lost!'],
+      after: ['Mi Gusanito come hojas todo el día.', 'My Gusanito eats leaves all day.'],
+    }),
+
+  javi: () =>
+    trainerFight('javi', {
+      intro: ['¡Mira mis Palabritas! ¡Son muy fuertes!', 'Look at my Palabritas! They’re very strong!'],
+      defeated: ['¡No es justo!', 'That’s not fair!'],
+      after: ['Voy a entrenar más. ¡Mañana te gano!', 'I’m going to train more. Tomorrow I’ll beat you!'],
+    }),
+
   mateo: () =>
     trainerFight('mateo', {
       intro: ['¡Oye! ¿Por qué me miras? ¡Vamos a luchar!', 'Hey! Why are you looking at me? Let’s battle!'],

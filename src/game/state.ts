@@ -97,7 +97,7 @@ export function newSave(): SaveData {
     dir: 'down',
     party: [],
     box: [],
-    flags: { amanecerWide: true, ruta5East: true, rutasCortas: true, sinEstacion: true, canonCascada: true },
+    flags: { amanecerWide: true, ruta5East: true, rutasCortas: true, sinEstacion: true, canonCascada: true, ruta2Nueva: true },
     gender: 'boy',
     money: 0,
     bag: {},
@@ -195,6 +195,11 @@ function migrate(s: SaveData) {
   if (!s.flags.canonCascada) {
     if (s.map === 'canon') s.y += 6;
     s.flags.canonCascada = true;
+  }
+  // Ruta 2 was redrawn (the user's sketch): anyone saved on it starts again at the Limón end.
+  if (!s.flags.ruta2Nueva) {
+    if (s.map === 'ruta2') Object.assign(s, { x: 10, y: 39, dir: 'up' });
+    s.flags.ruta2Nueva = true;
   }
   if (s.flags.starter && !s.flags.lucasSeFue) Object.assign(s.flags, { lucasEligio: true, lucasSeFue: true });
   s.money ??= 0;

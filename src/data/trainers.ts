@@ -15,6 +15,9 @@ export interface TrainerDef {
 
 export const TRAINERS: Record<string, TrainerDef> = {
   sofia: { id: 'sofia', name: 'Niña Sofía', defenseMode: 'choose', team: [['conejito', 3]], rematch: true },
+  // Ruta 2's two first, very easy trainers (the user).
+  rosita: { id: 'rosita', name: 'Niña Rosita', defenseMode: 'choose', team: [['gusanito', 3]] },
+  javi: { id: 'javi', name: 'Niño Javi', defenseMode: 'choose', team: [['pajarito', 3], ['conejito', 3]] },
   mateo: { id: 'mateo', name: 'Joven Mateo', defenseMode: 'choose', team: [['gusanito', 3], ['pajarito', 3]] },
   tomas: { id: 'tomas', name: 'Excursionista Tomás', defenseMode: 'choose', team: [['conejito', 4], ['pajarito', 4]] },
   valeria: { id: 'valeria', name: 'Pintora Valeria', defenseMode: 'choose', team: [['gusanito', 5], ['capullito', 5]], rematch: true },
