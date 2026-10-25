@@ -5,6 +5,8 @@
 
 const app = document.getElementById('app') as HTMLElement;
 const vv = window.visualViewport;
+/** Android's autofill bar over the keyboard, in CSS pixels (about 48, plus some room). */
+const AUTOFILL_BAR = 60;
 
 const typing = () => {
   const f = document.activeElement;
@@ -16,7 +18,10 @@ function liftAboveKeyboard() {
   app.style.transform = '';
   const field = typing();
   if (!vv || !field) return;
-  const below = field.getBoundingClientRect().bottom + 12 - (vv.offsetTop + vv.height);
+  // In fullscreen, Android's autofill bar (passwords, cards...) sits on the keyboard but isn't counted in its height:
+  // keep clear of it too.
+  const gap = document.fullscreenElement ? AUTOFILL_BAR + 12 : 12;
+  const below = field.getBoundingClientRect().bottom + gap - (vv.offsetTop + vv.height);
   if (below > 0) app.style.transform = `translateY(${-below}px)`;
 }
 
