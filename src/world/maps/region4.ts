@@ -310,8 +310,9 @@ export const REGION4_MAPS: Record<string, MapDef> = {
       ...TORCHES.flatMap(torch),
       { id: 'puerta_taller1', x: 5, y: 4, object: 'puertaTaller', script: 'puertaTaller', show: () => !flag('puertaTallerAbierta') },
       { id: 'puerta_taller2', x: 6, y: 4, object: 'puertaTaller', script: 'puertaTaller', show: () => !flag('puertaTallerAbierta') },
-      { id: 'polvorera', x: 0, y: 6, look: 'polvorero', dir: 'right', script: 'polvorera', sight: 11 },
-      { id: 'malabarista', x: 11, y: 10, look: 'ciclista', dir: 'left', script: 'malabarista', sight: 11 },
+      // Close enough to the middle way to see you there (4 tiles: never further than you can see them).
+      { id: 'polvorera', x: 2, y: 6, look: 'polvorero', dir: 'right', script: 'polvorera', sight: 4 },
+      { id: 'malabarista', x: 9, y: 10, look: 'ciclista', dir: 'left', script: 'malabarista', sight: 4 },
       { id: 'fritanguero', x: 1, y: 2, look: 'man', dir: 'right', script: 'fritanguero', sight: 4 },
       { id: 'tizon', x: 5, y: 1, look: 'tizon', dir: 'down', script: 'tizon' },
       { id: 'guia_chispa', x: 8, y: 12, look: 'polvorero', dir: 'left', script: 'guia_chispa' },

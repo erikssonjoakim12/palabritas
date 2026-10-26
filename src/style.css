@@ -293,6 +293,11 @@ html { touch-action: manipulation; }
 @keyframes bob { 50% { transform: translateY(-0.15em); } }
 .list-row .grow { flex: 1; min-width: 0; }
 .list-row .small { font-size: 0.75em; color: #5a5a78; }
+/* Team rows: a fixed size (not the text setting), so all six Palabritas fit on the screen, like Gold/Silver. */
+.list-row.mon-row { font-size: calc(var(--px) * 6); padding-top: calc(var(--px) * 1.5); padding-bottom: calc(var(--px) * 1.5); }
+.mon-top { display: flex; justify-content: space-between; gap: 0.5em; white-space: nowrap; }
+.mon-hp { display: flex; align-items: center; gap: 0.5em; }
+.mon-hp .hpbar { flex: 1; margin-top: 0; }
 .detail h3 { margin: 0 0 0.5em; font-size: 1.1em; font-weight: normal; }
 .detail .row { margin: 0.4em 0; }
 .detail .muted { color: #5a5a78; font-size: 0.85em; }

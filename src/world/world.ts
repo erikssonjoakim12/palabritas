@@ -789,7 +789,7 @@ export function renderWorld(g: CanvasRenderingContext2D) {
   } else if (map.outdoor) {
     drawDayTime(g, camX, camY);
     drawFireflies(g, camX, camY);
-  }
+  } else if (map.floor === ';') drawDayTime(g, camX, camY); // caves (and the temple) darken at night too
   if (fade > 0) {
     g.fillStyle = `rgba(0,0,0,${fade})`;
     g.fillRect(0, 0, W, H);

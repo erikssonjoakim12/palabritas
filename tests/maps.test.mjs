@@ -77,6 +77,8 @@ const report = await t.game(() => {
       if (n.look && !LOOKS[n.look]) say(`${n.id} has an unknown look '${n.look}'`);
       if (n.object && !OBJECTS_ART[n.object]) say(`${n.id} is an unknown object '${n.object}'`);
       if (!SCRIPTS[n.script]) say(`${n.id} has no script '${n.script}'`);
+      // You see 4 tiles around you on screen: no trainer may spot you from further than that.
+      if (n.sight > 4) say(`${n.id} sees ${n.sight} tiles: more than the 4 you can see around you`);
       if (n.sight) {
         const [dx, dy] = D[n.dir ?? 'down'];
         for (let i = 1; i <= n.sight; i++) if (!free(n.x + dx * i, n.y + dy * i)) say(`${n.id} looks into a wall within its sight (${n.sight})`);

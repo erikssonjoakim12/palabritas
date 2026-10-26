@@ -506,7 +506,8 @@ export const REGION1_MAPS: Record<string, MapDef> = {
       { id: 'kevin', x: 38, y: 18, look: 'tourist', dir: 'left', script: 'kevin', sight: 3 },
       { id: 'camila', x: 35, y: 14, look: 'sofia', dir: 'right', script: 'camila', sight: 1 },
       { id: 'ernesto', x: 21, y: 8, look: 'hiker', dir: 'down', script: 'ernesto', sight: 4 },
-      { id: 'marcos', x: 16, y: 3, look: 'andres', dir: 'down', script: 'marcos', sight: 5 },
+      // One tile closer to the way past him, so he sees you (4) only when you see him too.
+      { id: 'marcos', x: 16, y: 4, look: 'andres', dir: 'down', script: 'marcos', sight: 4 },
     ],
   },
 

@@ -251,8 +251,8 @@ export const REGION2_MAPS: Record<string, MapDef> = {
     exit: { to: 'ocote', x: 25, y: 9 },
     npcs: [
       { id: 'petra', x: 5, y: 1, look: 'petra', dir: 'down', script: 'petra' },
-      { id: 'tito', x: 1, y: 9, look: 'alfarero', dir: 'right', script: 'tito', sight: 8 },
-      { id: 'rosario', x: 8, y: 5, look: 'minera', dir: 'left', script: 'rosario', sight: 8 },
+      { id: 'tito', x: 1, y: 9, look: 'alfarero', dir: 'right', script: 'tito', sight: 4 },
+      { id: 'rosario', x: 8, y: 5, look: 'minera', dir: 'left', script: 'rosario', sight: 4 },
       { id: 'guia_ocote', x: 7, y: 13, look: 'man', dir: 'left', script: 'guia_ocote' },
       { id: 'piedra1', x: 2, y: 11, object: 'puertaPiedra', script: 'adivinanza', show: () => !flag('adivinanza:piedra1') },
       { id: 'piedra2', x: 6, y: 7, object: 'puertaPiedra', script: 'adivinanza', show: () => !flag('adivinanza:piedra2') },

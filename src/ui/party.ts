@@ -91,22 +91,24 @@ export function listMenu(
   });
 }
 
+/**
+ * A Palabrita in a list, like Gold/Silver's party screen: its icon, its name and level, its health. Compact, so
+ * all six fit at once (loyalty and its words are on its page, DETALLES). mon-row: the chosen one's icon bobs.
+ */
 function partyRow(mon: Mon, active?: Mon) {
-  // mon-row: the chosen one's icon bobs (style.css), like Gold/Silver's party screen.
   const row = el('div', 'mon-row');
   const s = stats(mon);
   row.appendChild(iconCanvas(mon.sp));
   const info = el('div', 'grow');
-  info.appendChild(el('div', '', `${monName(mon)}${mon === active ? ' ★' : ''}`));
-  const loy = Math.round(lealtad(mon) * 100);
-  info.appendChild(el('div', 'small', `Nv${mon.level}  PS ${mon.hp}/${s.maxHp}  ♥${loy}%`));
+  const top = el('div', 'mon-top');
+  top.append(el('span', '', `${monName(mon)}${mon === active ? ' ★' : ''}`), el('span', '', `Nv${mon.level}`));
+  const hp = el('div', 'mon-hp');
   const bar = el('div', `hpbar ${hpClass(mon.hp, s.maxHp)}`);
   const fill = el('div');
   fill.style.width = `${(100 * mon.hp) / s.maxHp}%`;
   bar.appendChild(fill);
-  info.appendChild(bar);
-  const lp = levelProgress(mon);
-  info.appendChild(el('div', 'small', lp.maxed ? 'Nivel máx.' : `Nuevas ${lp.learned}/${lp.total}${lp.reviewTotal ? ` · Repaso ${lp.reviewDone}/${lp.reviewTotal}` : ''}`));
+  hp.append(bar, el('span', 'small', `${mon.hp}/${s.maxHp}`));
+  info.append(top, hp);
   row.appendChild(info);
   return row;
 }
