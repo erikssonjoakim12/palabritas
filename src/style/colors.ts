@@ -121,6 +121,9 @@ export const DAY_CYCLE: { h: number; tint: string; light: number }[] = [
   { h: 19, tint: '#7080c8', light: 1 },
 ];
 
+/** The evolution scene: the outline the Palabrita flashes in while it changes. */
+export const EVOLUTION_OUTLINE = '#383848';
+
 /** Fireflies at night where wild Chispitas live: the glow, and the halo around it. */
 export const FIREFLY = { glow: '#f8f070', halo: 'rgba(248, 240, 112, 0.35)' };
 

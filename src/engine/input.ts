@@ -67,6 +67,24 @@ class Input {
 
 export const input = new Input();
 
+/**
+ * While button `b` is held, call `step` again and again (after a short wait, so a single tap still does one step).
+ * `every` 0: every frame (smooth scrolling); otherwise every so many milliseconds (moving through a list).
+ */
+export function repeatWhileHeld(b: Btn, step: () => void, every = 0, wait = 280) {
+  const start = performance.now();
+  let last = start + wait;
+  const tick = (now: number) => {
+    if (!input.isHeld(b)) return;
+    if (now - start >= wait && now - last >= every) {
+      last = now;
+      step();
+    }
+    requestAnimationFrame(tick);
+  };
+  requestAnimationFrame(tick);
+}
+
 const KEYS: Record<string, Btn> = {
   ArrowUp: 'up', ArrowDown: 'down', ArrowLeft: 'left', ArrowRight: 'right',
   w: 'up', s: 'down', a: 'left', d: 'right',

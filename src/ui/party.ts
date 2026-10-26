@@ -1,5 +1,5 @@
 import { overlay, el } from '../engine/screen';
-import { input } from '../engine/input';
+import { input, repeatWhileHeld } from '../engine/input';
 import { sfx } from '../engine/sfx';
 import { creatureArt, creatureIcon, ICON } from '../art/creatures';
 import { G, type Mon } from '../game/state';
@@ -73,9 +73,16 @@ export function listMenu(
       box.remove();
       resolve(i);
     };
+    const step = (d: number) => {
+      if (busy || sel + d < 0 || sel + d >= rows.length) return;
+      sel += d;
+      sfx('blip');
+      render();
+    };
     const keys = (b: string) => {
-      if (b === 'up' && sel > 0) (sel--, sfx('blip'), render());
-      else if (b === 'down' && sel < rows.length - 1) (sel++, sfx('blip'), render());
+      // Held, it keeps moving through a long list (the Palabridex).
+      if (b === 'up') (step(-1), repeatWhileHeld('up', () => step(-1), 90));
+      else if (b === 'down') (step(1), repeatWhileHeld('down', () => step(1), 90));
       else if (b === 'A' && rows.length) done(sel);
       else if (b === 'B' && opts.cancel !== false) done(-1);
     };
@@ -164,8 +171,9 @@ export function openDetail(box: HTMLElement): Promise<void> {
     };
     const pop = input.push((b) => {
       if (b === 'A' || b === 'B') close();
-      if (b === 'down') box.scrollTop += 40;
-      if (b === 'up') box.scrollTop -= 40;
+      // A tap scrolls a step; held, it keeps scrolling (a Palabrita's word list gets long).
+      if (b === 'down') (box.scrollTop += 40, repeatWhileHeld('down', () => (box.scrollTop += 6)));
+      if (b === 'up') (box.scrollTop -= 40, repeatWhileHeld('up', () => (box.scrollTop -= 6)));
     });
     box.addEventListener('click', close);
   });

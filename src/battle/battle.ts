@@ -3,6 +3,8 @@ import { setScene, getScene, nextFrame, frames } from '../engine/loop';
 import { sfx } from '../engine/sfx';
 import { creatureArt } from '../art/creatures';
 import { OBJECTS } from '../art/chars';
+import { makeCanvas } from '../art/pixel';
+import { EVOLUTION_OUTLINE } from '../style/colors';
 import { portrait } from '../art/portraits';
 import type { Img } from '../art/pixel';
 import { LINEUP_BALL, BALL_COLORS, FAINTED_COLORS, EMPTY_COLORS, drawPattern } from '../art/balls';
@@ -64,6 +66,8 @@ let enemyF: Fighter | null = null;
 let meF: Fighter | null = null;
 let ball: Ball | null = null;
 let flashOn = false;
+/** The evolution scene: the whole screen is the evolving Palabrita (the battle waits behind it). */
+let evo: { img: Img } | null = null;
 /** Gen 2 style row of Palabolas (one per Palabrita) shown when a trainer battle starts. */
 let lineups: { enemy?: Mon[]; me?: Mon[] } = {};
 
@@ -74,6 +78,11 @@ const battleScene = {
   render(g: CanvasRenderingContext2D) {
     g.fillStyle = flashOn ? '#000' : '#f8f8f8';
     g.fillRect(0, 0, W, H);
+    if (evo) {
+      // Centered over the text box, like Gold/Silver's evolution screen.
+      g.drawImage(evo.img, Math.round((W - evo.img.width) / 2), Math.round(48 - evo.img.height / 2));
+      return;
+    }
     if (flashOn) return;
     g.fillStyle = '#d8d8c4';
     g.beginPath();
@@ -241,6 +250,17 @@ function buildHud(getEnemy: () => Mon, getMe: () => Mon, wild: boolean): Hud {
   };
 }
 
+/** A sprite as a solid outline (the evolution scene flashes between the two forms' outlines). */
+function silhouette(img: Img): Img {
+  const c = makeCanvas(img.width, img.height);
+  const g = c.getContext('2d')!;
+  g.drawImage(img, 0, 0);
+  g.globalCompositeOperation = 'source-in';
+  g.fillStyle = EVOLUTION_OUTLINE;
+  g.fillRect(0, 0, img.width, img.height);
+  return c;
+}
+
 // ---------- Damage ----------
 
 function calcDamage(att: Mon, def: Mon, move: Move, power: number, mult: number) {
@@ -352,26 +372,40 @@ async function runBattle(cfg: Config): Promise<BattleResult> {
     for (const mon of evolutionsDue()) await evolveNow(mon);
   };
 
-  /** Evolution right in the battle: the sprite flickers between the two forms, then changes. */
+  /**
+   * Evolution, like Gold/Silver: the battle steps aside and the whole screen is the evolving Palabrita. It flashes
+   * between its old and new outline, faster and faster, then shows its new form; then back to the battle.
+   */
   const evolveNow = async (mon: Mon) => {
     const from = monName(mon);
+    const to = SPECIES[mon.sp].evolves!.to;
+    const [oldImg, newImg] = [creatureArt(mon.sp).front, creatureArt(to).front];
+    if (hud) hud.root.style.visibility = 'hidden';
+    evo = { img: oldImg };
     playOverlay('evolucion', false);
     await info(`¿Qué? ¡${from} está evolucionando!`, { en: `What? ${from} is evolving!` });
-    const to = SPECIES[mon.sp].evolves!.to;
-    if (mon === me && meF) {
-      const [oldImg, newImg] = [creatureArt(mon.sp).back, creatureArt(to).back];
-      for (let i = 0; i < 12; i++) {
-        meF.img = i % 2 ? oldImg : newImg;
-        sfx('blip');
-        await frames(Math.max(4, 14 - i));
-      }
-      meF.img = newImg;
+    const [oldOut, newOut] = [silhouette(oldImg), silhouette(newImg)];
+    for (let i = 0; i < 20; i++) {
+      evo.img = i % 2 ? oldOut : newOut;
+      if (i % 2) sfx('blip');
+      await frames(Math.max(3, 18 - i));
     }
+    // The new form: a flash, then in color.
+    flashOn = true;
+    await frames(4);
+    flashOn = false;
+    evo.img = newImg;
     evolve(mon);
     clearOverlay();
     sfx('caught');
-    hud?.update();
     await info(`¡Felicidades! ¡${from} evolucionó a ${monName(mon)}!`, { en: `Congratulations! ${from} evolved into ${monName(mon)}!` });
+    // Back to the battle, where it left off.
+    evo = null;
+    if (mon === me && meF) meF.img = creatureArt(mon.sp).back;
+    if (hud) {
+      hud.root.style.visibility = '';
+      hud.update();
+    }
   };
 
   const sendOut = async (mon: Mon) => {
