@@ -97,7 +97,7 @@ export function newSave(): SaveData {
     dir: 'down',
     party: [],
     box: [],
-    flags: { amanecerWide: true, ruta5East: true, rutasCortas: true, sinEstacion: true, canonCascada: true, ruta2Nueva: true },
+    flags: { amanecerWide: true, ruta5East: true, rutasCortas: true, sinEstacion: true, canonCascada: true, ruta2Nueva: true, palancaJunto: true },
     gender: 'boy',
     money: 0,
     bag: {},
@@ -200,6 +200,11 @@ function migrate(s: SaveData) {
   if (!s.flags.ruta2Nueva) {
     if (s.map === 'ruta2') Object.assign(s, { x: 10, y: 39, dir: 'up' });
     s.flags.ruta2Nueva = true;
+  }
+  // The mine's lever room moved next to the gate (the user): anyone saved in the old one stands in the new one.
+  if (!s.flags.palancaJunto) {
+    if (s.map === 'mina1' && s.y <= 7 && s.x <= 13) Object.assign(s, { x: 18, y: 3, dir: 'down' });
+    s.flags.palancaJunto = true;
   }
   if (s.flags.starter && !s.flags.lucasSeFue) Object.assign(s.flags, { lucasEligio: true, lucasSeFue: true });
   s.money ??= 0;

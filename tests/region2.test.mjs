@@ -32,10 +32,15 @@ t.check('the muted cashier only mimes', r.said.every((x) => x === '…'), r.said
 t.check('…and you still order in Spanish and buy', r.answered === 1 && s2.bag.palabola === 1 && s2.money === 440, [r.answered, s2.bag, s2.money]);
 
 // 3. The lever in the mine opens the gate.
-await t.fromSave({ map: 'mina1', x: 12, y: 3, dir: 'up', party: strong });
+await t.fromSave({ map: 'mina1', x: 22, y: 3, dir: 'up', party: strong, flags: { 'beat:silencioso2': true } });
 await t.press('z');
 await t.play();
 t.check('the lever opens the mine gate', await flags('compuertaAbierta'));
+const levers = await t.game(() => window.__game.MAPS.mina1.npcs.filter((n) => n.id.startsWith('palanca') && n.show()).map((n) => n.id).join());
+t.check('the pulled lever looks pulled', levers === 'palancaAbajo', levers);
+// The lever's room moved next to the gate: a save from the old room (above the big room's west side) stands in it.
+await t.fromSave({ map: 'mina1', x: 8, y: 3, dir: 'up', party: strong, flags: { palancaJunto: false } });
+t.check('an old save in the old lever room stands in the new one', String(await t.pos()) === 'mina1,18,3', await t.pos());
 
 // 4. The Capataz spots you, battles, the Silenciador breaks, Petra comes and takes you back to town.
 await t.fromSave({ map: 'mina2', x: 22, y: 19, dir: 'up', party: strong, flags: { compuertaAbierta: true } });

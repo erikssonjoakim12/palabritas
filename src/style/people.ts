@@ -807,6 +807,28 @@ export const OBJECTS_ART: Record<string, { pal: Pal; rows: string[] }> = {
       '...333333333....',
     ],
   },
+  /** The lever once it's pulled: the handle tipped over to the other side. */
+  palancaAbajo: {
+    pal: OBJECT_PALS.palanca,
+    rows: [
+      '................',
+      '...33...........',
+      '..3223..........',
+      '..3223..........',
+      '...333..........',
+      '....313.........',
+      '.....313........',
+      '......313.......',
+      '.......313......',
+      '....3333333.....',
+      '...311111113....',
+      '...313333313....',
+      '...311111113....',
+      '...313333313....',
+      '...311111113....',
+      '...333333333....',
+    ],
+  },
   /** A wooden mine gate: it blocks the tunnel until the lever is pulled. */
   compuerta: {
     pal: OBJECT_PALS.compuerta,
