@@ -22,7 +22,7 @@ lake's swimmers are placed, waiting for Surf. Planned with the user, 2026-10-22.
 - On water: wild Palabritas on every step (each water map has its own table), and the music changes.
 - How you find out: when Don Tizón gives the 4th medal, «¡Con cuatro medallas, las Palabritas grandes del agua ya
   te pueden llevar!» / "With four medals, big water Palabritas can carry you now!". With a swimmer in the party, it
-  says which one; without one, someone tells you where to find one (Mordisquito by fishing on Ruta 8 or the lake,
+  says which one; without one, someone tells you where to find one (Mordisquito by fishing on Ruta 7 or the lake,
   Paslamita on the turtle beach).
 - Spanish: movement verbs (nadar, cruzar, remar, llegar) and the water words; the prompt itself is a small lesson.
 
@@ -30,7 +30,7 @@ lake's swimmers are placed, waiting for Surf. Planned with the user, 2026-10-22.
 1. A `swims` / `flies` flag on species (species.ts), and a helper for "who in the party can carry you".
 2. The player's state `surfing`: water passable, land ends it; a riding sprite.
 3. **Crossing through holes.** Today you only walk off a map's edge into a connected map. The river winds through
-   other maps' holes (Ruta 3, Ruta 10, Villa Jaguar), so stepping into a hole should move you into the map that
+   other maps' holes (Ruta 3, Ruta 9, Villa Jaguar), so stepping into a hole should move you into the map that
    owns that tile in the world (world/layout.ts knows). That also joins Villa Jaguar's harbour to the river.
 4. The river and the lake become maps you can swim: water tables, the islands to land on.
 5. A test: a swimmer and the medal lets you swim, no swimmer doesn't, land ends it, the river reaches Villa Jaguar.

@@ -11,13 +11,13 @@ trainers stand back from the lava; the festival can be replayed from the mask se
 and Elsa offers the rest (the bed) by talking to her.
 
 **The route:**
-1. East on Ruta 8, through hot dry forest, past a lagoon, a farm and sugarcane fields.
+1. East on Ruta 7, through hot dry forest, past a lagoon, a farm and sugarcane fields.
 2. Into Ciudad Chispa, a colonial town preparing its big festival. But Equipo Silencio has stolen every
    firework.
 3. Up the Volcán Chocoyo (the slopes, the lava tube, the crater) to beat Don Sigilo.
 4. Festival night.
 5. Don Tizón's fireworks workshop.
-6. Ruta 9 leads home: you jump down the ledge into Pueblo Amanecer.
+6. Ruta 8 leads home: you jump down the ledge into Pueblo Amanecer.
 7. Side quests: a hammock for Mom, the lost parakeet chick, the haunted house, the Torovenado costumes, and
    the legend of the Carreta Nagua.
 
@@ -31,7 +31,7 @@ and Elsa offers the rest (the bed) by talking to her.
 - **Lucas #3 (user):** at the volcano's ranger station, after you can rest, not right after the rangers' battles (§10).
 - **Day and night (user):** the clock only changes looks. The festival is still a story night scene. Lit torches
   and the festival get warm light like the windows (`art/lights.ts`).
-- **Rematches:** 1–2 trainers per route (the user's rule): Ruta 8 has 2, the volcano 1, Ruta 9 1.
+- **Rematches:** 1–2 trainers per route (the user's rule): Ruta 7 has 2, the volcano 1, Ruta 8 1.
 - **Palabritas (user):** Brasita (the user's art) is the first stage of a late, powerful family: Brasaurio at
   32, Volcasaurio at 50; Garrobito is dropped. Chispita is a firefly, Venadito (was Mascarita) a masked fawn,
   Perezosito (was Hamaquita) a sloth in the hammock. Lamparita stays.
@@ -68,7 +68,7 @@ Amanecer's plateau).
 | `N` bell tower | White with a bell in an arch. |
 | style `rock: 'basalt'` | `^` and `O` in black volcanic rock: the slopes and the crater. |
 | style `cave: 'basalt'` | The lava tube. |
-| style `trees: 'dry'` | Ruta 8 and Ciudad Chispa: mostly dry trees. |
+| style `trees: 'dry'` | Ruta 7 and Ciudad Chispa: mostly dry trees. |
 
 **Objects:**
 
@@ -110,10 +110,10 @@ Amanecer's plateau).
 
 Add `right: { to: 'ruta8', offset: 2 }` to Playa Carey (its east road is rows 10–11). Its east gate then opens
 with just `flag('medalOla')` (drop the `!!MAPS.ruta8` check). Checked again on 2026-10-19: Carey's east edge is
-at world x −120 and Pueblo Amanecer's west edge at 0, so Ruta 8 + Ciudad Chispa + Ruta 9 (44 + 36 + 40 = 120)
+at world x −120 and Pueblo Amanecer's west edge at 0, so Ruta 7 + Ciudad Chispa + Ruta 8 (44 + 36 + 40 = 120)
 still fit exactly, and nothing overlaps.
 
-**The loop closes:** Pueblo Amanecer's west plateau joins Ruta 9. The plateau's ledge means you can come
+**The loop closes:** Pueblo Amanecer's west plateau joins Ruta 8. The plateau's ledge means you can come
 home that way but not leave by it, as in Gold/Silver. From now on, every outdoor map is connected, so the
 art page's World view shows the whole country.
 
@@ -121,9 +121,9 @@ The lava tube (`tubo`), the crater (`crater`) and the interiors are door-linked.
 
 ---
 
-## 3. Ruta 8
+## 3. Ruta 7
 
-- `name: 'Ruta 8'`, `outdoor: true`, `ground: 'grass'`, `style: { trees: 'dry' }`.
+- `name: 'Ruta 7'`, `outdoor: true`, `ground: 'grass'`, `style: { trees: 'dry' }`.
 - **The lagoon:** fish from the pier.
 - **The farm:** fenced, with cows (objects `vaca1`, `vaca2`: «¡Muuu!»). The farmer is a trainer by the road.
 - **The sugarcane fields** (`|`): the training spot, reached only through the opening at (14–15, 18–19).
@@ -145,7 +145,7 @@ The lava tube (`tubo`), the crater (`crater`) and the interiors are door-linked.
 
 **Item:** `itemBall('revivir_r8', 40, 28, 'revivir')`.
 
-**Signs:** (2, 11) «RUTA 8. Al este: Ciudad Chispa y el volcán.» / "ROUTE 8. East: Ciudad Chispa and the
+**Signs:** (2, 11) «RUTA 7. Al este: Ciudad Chispa y el volcán.» / "ROUTE 7. East: Ciudad Chispa and the
 volcano." Put an `S` tile there (it's grass in the rows).
 
 **Trainers:**
@@ -208,7 +208,7 @@ A colonial town, inspired by Masaya, with the volcano on the horizon:
 
 **Basics:**
 - `name: 'Ciudad Chispa'`, `outdoor: true`, `ground: 'town'`, `roof: 'red'`, `style: { trees: 'dry' }`.
-- **Exits:** west to Ruta 8, east to Ruta 9, and north on the trail up the volcano (x 24–25).
+- **Exits:** west to Ruta 7, east to Ruta 8, and north on the trail up the volcano (x 24–25).
 
 **Doors:**
 
@@ -350,9 +350,9 @@ Remove the draft's `polvorero_triste`: the gate guard covers him.
 
 ---
 
-## 5. Ruta 9 and the way home
+## 5. Ruta 8 and the way home
 
-- `name: 'Ruta 9'`, `outdoor: true`, `ground: 'grass'` (default tree style).
+- `name: 'Ruta 8'`, `outdoor: true`, `ground: 'grass'` (default tree style).
 - **Encounters** (rate 0.12):
 
   | Palabrita | Levels | w |
@@ -620,8 +620,8 @@ has made camp on the north rim with the stolen fireworks.
 
 ## 8. Trainers
 
-Levels: route trainers 18–26, rising along the way (the user, 2026-10-19). Rematches: Rigo and Lidia on Ruta 8,
-Clara on the volcano, Bruno on Ruta 9. **Brasita's family only on bosses** (the user): Don Tizón (Brasaurio 32);
+Levels: route trainers 18–26, rising along the way (the user, 2026-10-19). Rematches: Rigo and Lidia on Ruta 7,
+Clara on the volcano, Bruno on Ruta 8. **Brasita's family only on bosses** (the user): Don Tizón (Brasaurio 32);
 wild Brasita stays rare.
 
 ```ts
@@ -844,7 +844,7 @@ From here on, Lucas is a friend more than a rival. That pays off later.
 
 ### 11.5 La leyenda de la Carreta Nagua (flags `leyenda`)
 
-1. **The old man on Ruta 9:**
+1. **The old man on Ruta 8:**
    - «¿Quieres oír una leyenda? Es un poco de miedo...» / "Want to hear a legend? It's a little scary..."
    - Then (each line spoken with 🔊, in the past tense):
      - «Hace muchos años, en las noches oscuras, la gente oía un ruido en la calle.» / "Many years ago, on
@@ -889,7 +889,7 @@ From here on, Lucas is a friend more than a rival. That pays off later.
 
 ## 13. The way home
 
-Ruta 9 → the plateau → the ledge into Pueblo Amanecer.
+Ruta 8 → the plateau → the ledge into Pueblo Amanecer.
 
 **The first time you hop down** (flag `vueltaACasa`), a short scene with the neighbor and Mom:
 - «¡{name}! ¡Volviste!» / "{name}! You came back!"
@@ -914,7 +914,7 @@ Keep them short (the user's rule: only what's strictly necessary), in checkpoint
 
 | Test | What it checks |
 |---|---|
-| `region4.test` | Carey's east gate → Ruta 8 → Ciudad Chispa (the theft cutscene; the trail opens) → the slopes (the bed heals; Lucas #3 at the station) → the tube → the crater (a rim grunt + Don Sigilo; the crates) → back in Chispa: the festival night (fireworks drawn, the parade moves) → the workshop: the wrong torch order resets, the right one opens the door, the 3 trainers, Don Tizón, `medalChispa` → Ruta 9 → hop down into Amanecer. |
+| `region4.test` | Carey's east gate → Ruta 7 → Ciudad Chispa (the theft cutscene; the trail opens) → the slopes (the bed heals; Lucas #3 at the station) → the tube → the crater (a rim grunt + Don Sigilo; the crates) → back in Chispa: the festival night (fireworks drawn, the parade moves) → the workshop: the wrong torch order resets, the right one opens the door, the 3 trainers, Don Tizón, `medalChispa` → Ruta 8 → hop down into Amanecer. |
 | `quests4.test` | The hammock: bargaining lowers the price, buying needs money, Mom takes it, and the snoring hammock gives a Perezosito battle. The chick. The haunted house: 3 rounds, then the Lamparita battle and $500. Torovenado: 5 pieces by name, then the parade gives Venadito. The legend: 3 questions and the bell. |
 | `maps.test`, `data.test` | stay green; the art page's World view now shows the whole loop. |
 

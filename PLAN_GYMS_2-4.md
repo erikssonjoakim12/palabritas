@@ -38,15 +38,15 @@ of the game.
 
 ```
                  (Cañón)                          Cueva
-   [Villa Ocote]──────Ruta 5────────────────(del Eco)────Ruta 3────[Ciudad Brisa]
+   [Villa Ocote]──────Ruta 4────────────────(del Eco)────Ruta 3────[Ciudad Brisa]
      │   (Mina de Barro, north)                                         │
-   Ruta 6  (pine slopes → dry forest, river)                          Ruta 2
+   Ruta 5  (pine slopes → dry forest, river)                          Ruta 2
      │                                                                  │
-   Ruta 7  (the coast)                                            [Villa Limón]
+   Ruta 6  (the coast)                                            [Villa Limón]
      │                                                                  │
    [Playa Carey]──(Playa de las Tortugas, south)                      Ruta 1
      │                                                                  │
-   Ruta 8  (lagoon, sugarcane)──(Volcán Chocoyo)──[Ciudad Chispa]──Ruta 9──ledge──[Pueblo Amanecer]
+   Ruta 7  (lagoon, sugarcane)──(Volcán Chocoyo)──[Ciudad Chispa]──Ruta 8──ledge──[Pueblo Amanecer]
 ```
 
 | Region | Gym | Story chapter | Side quests | New themes (one per new family) |
@@ -59,26 +59,26 @@ of the game.
 
 ## 2. Region 2 — the pine highlands ✓ built
 
-Ciudad Brisa → Ruta 3 → Cueva del Eco → Ruta 5 → **Villa Ocote**, inspired by Nicaragua's north (pines, canyons,
+Ciudad Brisa → Ruta 3 → Cueva del Eco → Ruta 4 → **Villa Ocote**, inspired by Nicaragua's north (pines, canyons,
 pottery, Ice Age fossils). The code is the truth (src/world/maps/region1.ts and region2.ts, src/world/region2.ts); in short:
 - **Story, the muted town:** nobody in Villa Ocote can speak. A message in the dirt sends you to the Mina de
   Barro, where you beat the Capataz Silencioso and break the Silenciador; the town talks again. Then the lost
   words (8 of them to give back) and the party at night.
 - **Side quests:** Beto's hat, the echo room and its fossil (Caparazonte, revived the next day), Don Chepe's
-  oxen, Gaby's bird (the guardabarranco in the Cañón del Guardabarranco). Lucas's first battle is on Ruta 5.
+  oxen, Gaby's bird (the guardabarranco in the Cañón del Guardabarranco). Lucas's first battle is at the clay mine's entrance.
 - **Gym 2, Petra (Roca/Tierra):** three riddle doors; Piedrita 17, Ollita 19, Petroglifón 21; Medalla Barro.
 - **Changed from the plan:** the bus is paused (no big roads yet); the Cerro del Eco was left out; levels were
   raised (the user plays a lot before each gym) and are being play-tested.
 
 ## 3. Region 3 — the Pacific coast ✓ built
 
-Villa Ocote → Ruta 6 → Ruta 7 → **Playa Carey** and the Playa de las Tortugas (src/world/region3.ts):
-- **Ruta 6** winds down about twice Ruta 3's walking length: pine switchbacks, a fenced meadow, the river and
-  bridge, dry forest. **Ruta 7** is the coast: sand, palms, tide pools, the bottle.
+Villa Ocote → Ruta 5 → Ruta 6 → **Playa Carey** and the Playa de las Tortugas (src/world/region3.ts):
+- **Ruta 5** winds down about twice Ruta 3's walking length: pine switchbacks, a fenced meadow, the river and
+  bridge, dry forest. **Ruta 6** is the coast: sand, palms, tide pools, the bottle.
 - **Story, la noche de la arribada:** the gym is closed; Tania the volunteer counts eggs with you (numbers to
   100), you beat 3 grunts and Callada, guide the hatchlings to the sea, and get **Paslamita**.
 - **Lucas's second battle** is at the top of the turtle beach, after the town and its Palacentro (the user
-  didn't want it right after Ruta 6's battles).
+  didn't want it right after Ruta 5's battles).
 - **Side quests:** waiting tables at El Pelícano Feliz (daily), Don Lalo's fishing rod, the message in a bottle.
 - **Gym 3, Marina (Agua):** ride the currents to her; Maletícano 23, Mordisquito 24, Cangrejón 25 (her strongest: the user); Medalla Ola.
 
@@ -87,7 +87,7 @@ Villa Ocote → Ruta 6 → Ruta 7 → **Playa Carey** and the Playa de las Tortu
 ## 4. Region 4 — the volcanoes: Playa Carey → Ciudad Chispa (gym 4)
 
 ### Places
-- **Ruta 8** (~120 steps). Inland through hot dry forest (dry trees, cacti), past a lagoon (water you'll SURF
+- **Ruta 7** (~120 steps). Inland through hot dry forest (dry trees, cacti), past a lagoon (water you'll SURF
   later) and huge **sugarcane fields**, a new kind of tall grass and the best place to train. A farm with cows.
   About 9 trainers.
 - **Volcán Chocoyo** (dungeon in 3 parts), inspired by Masaya, where parakeets really nest inside the active
@@ -100,7 +100,7 @@ Villa Ocote → Ruta 6 → Ruta 7 → **Playa Carey** and the Playa de las Tortu
 - **Ciudad Chispa** (town, ~36×28, the biggest so far). A colonial church and plaza, an artisan market
   (hammocks, masks, pottery), the fireworks workshop (the gym), a haunted colonial house, Palacentro, shop
   (Revivir, Repelente), school and bus stop.
-- **Ruta 9** (~60 steps). East to the plateau above Pueblo Amanecer. **Jump down the ledge home.** A hidden
+- **Ruta 8** (~60 steps). East to the plateau above Pueblo Amanecer. **Jump down the ledge home.** A hidden
   item waits on the plateau.
 
 ### Story: the stolen fireworks
@@ -115,11 +115,11 @@ Villa Ocote → Ruta 6 → Ruta 7 → **Playa Carey** and the Playa de las Tortu
 ### Side quests
 | Quest | What you do | Spanish practiced | Reward |
 |---|---|---|---|
-| **Una hamaca para mamá** | Buy a hammock at the market by bargaining: *«¿Cuánto cuesta?», «Es muy caro», «¿Me lo deja en quinientos?»*. The final price depends on what you say. Take it home to Mom (via Ruta 9). She hangs it in your room, and a wild **Perezosito** (a sloth) is asleep in it. | prices, numbers, polite requests | Perezosito, a package from Mom |
+| **Una hamaca para mamá** | Buy a hammock at the market by bargaining: *«¿Cuánto cuesta?», «Es muy caro», «¿Me lo deja en quinientos?»*. The final price depends on what you say. Take it home to Mom (via Ruta 8). She hangs it in your room, and a wild **Perezosito** (a sloth) is asleep in it. | prices, numbers, polite requests | Perezosito, a package from Mom |
 | **El chocoyito perdido** | A ranger's parakeet chick fell into the lava tube. Find it and bring it back up, following her instructions (*arriba, abajo, dentro, fuera*). | directions, prepositions | Repelentes, Chocoyitos to catch on the crater rim |
 | **La casa embrujada** | A colonial house where the lights flicker. A ghostly lamp whispers sentences, and you calm it by repeating what it said. Three rooms. Cojincitos and a rare Sillón live there. | listening (whole sentences) | **Lamparita**, money |
 | **Los trajes del Torovenado** | The parade lost its costume: *la máscara, el sombrero, la capa, las botas, la falda*. People describe who has each piece (*«La señora del vestido azul tiene el sombrero»*). | clothes, describing people | you dance in the parade; **Venadito** (level 20) |
-| **La leyenda de la Carreta Nagua** (small) | An old man on Ruta 9 tells the legend. Answer 3 questions about it. | listening to a story, the past tense | a key item; teases the Ghost-type Elite Four member |
+| **La leyenda de la Carreta Nagua** (small) | An old man on Ruta 8 tells the legend. Answer 3 questions about it. | listening to a story, the past tense | a key item; teases the Ghost-type Elite Four member |
 
 ### Gym 4: Taller de Pólvora — Don Tizón (Fuego)
 - **Puzzle: light the torches in the right order.** The poem on the wall says: *«Primero, el fuego rojo.
@@ -144,9 +144,9 @@ are used until your art arrives.
 | **Gusanito** (new) | Bicho | colores | → Capullito at 7 | Rutas 1–2 (replaces wild Mariposita there) | a chubby caterpillar with rainbow stripes and tiny pink feet |
 | **Capullito** (new) | Bicho | colores | → Mariposita at 10 | Ruta 2 | a sleepy cocoon wrapped in leaves, colorful wing tips peeking out |
 | Pajarito → **Palomón** | | | Pajarito now evolves at **14** | | (both already exist) |
-| **Liebrón** (new) | Normal | números | from Conejito at 18 | Ruta 6 | a lean, fast hare with big feet and a number pattern on its fur |
+| **Liebrón** (new) | Normal | números | from Conejito at 18 | Ruta 5 | a lean, fast hare with big feet and a number pattern on its fur |
 | **Cojincito** (new) | Fantasma | casa | → Sillón at 18 | the haunted house | a floating cushion with a tassel and sleepy eyes |
-| **Hojarasco** (new) | Planta | naturaleza | from Hojadillo at 24 | Ruta 8 | a big armadillo whose shell is a pile of dry leaves, with a flowering bush on its back |
+| **Hojarasco** (new) | Planta | naturaleza | from Hojadillo at 24 | Ruta 7 | a big armadillo whose shell is a pile of dry leaves, with a flowering bush on its back |
 | **Murcielón** (new) | Volador/Siniestro | tiempo | from Ecolín at 22 | the volcano's lava tube | a big bat with ears like satellite dishes and a wide mouth |
 | **Tarantón** (new) | Bicho/Veneno | números | from Ochopatas at 24 | the lava tube | a huge hairy tarantula with striped legs and eight eyes in a row |
 | **Hercúleo** (new) | Bicho/Lucha | colores | from Cuernito at 26 | sugarcane fields (rare) | a Hercules beetle with a long double horn and a rainbow-shiny shell |
@@ -157,12 +157,12 @@ are used until your art arrives.
 | **Piedrita** | Roca | el cuerpo | → Petroglifón at 18 | the mine | a round gray pebble with a petroglyph face and stick-figure arms carved on it |
 | **Petroglifón** | Roca/Psíquico | el cuerpo | | Petra; evolve it | a tall standing stone covered in glowing carved spirals and stick figures, with stone arms |
 | **Ollita** | Tierra | la cocina | → Tinajón at 21 | the mine, around town | a small clay cooking pot with painted patterns, steam puffing from its lid |
-| **Tinajón** | Tierra/Agua | la cocina | | Ruta 8 (rare) | a big round clay water jar (*tinaja*), water sloshing inside, a cork for a hat |
-| **Ardillita** | Normal | los deportes | → Ardillón at 20 | Ruta 5, the pine woods | a squirrel with a huge two-tone bushy tail, doing a cartwheel |
+| **Tinajón** | Tierra/Agua | la cocina | | Ruta 7 (rare) | a big round clay water jar (*tinaja*), water sloshing inside, a cork for a hat |
+| **Ardillita** | Normal | los deportes | → Ardillón at 20 | Ruta 4, the pine woods | a squirrel with a huge two-tone bushy tail, doing a cartwheel |
 | **Ardillón** | Normal/Lucha | los deportes | | evolve it | a big acrobatic squirrel with a sweatband and a tail like a cheerleader's pom-pom |
-| **Colibrí** | Volador | la música | → Zumbador at 22 | Ruta 5, flowers in the canyon | a tiny hummingbird with a shiny green throat, wings a blur, humming music notes |
+| **Colibrí** | Volador | la música | → Zumbador at 22 | Ruta 4, flowers in the canyon | a tiny hummingbird with a shiny green throat, wings a blur, humming music notes |
 | **Zumbador** | Volador/Eléctrico | la música | | evolve it | a bigger hummingbird with a needle beak and a glowing throat, leaving a trail of music notes |
-| **Espinita** | Normal | la salud | → Puercoespín at 22 | Ruta 5, the canyon | a baby porcupine with soft spines and a curly gripping tail |
+| **Espinita** | Normal | la salud | → Puercoespín at 22 | Ruta 4, the canyon | a baby porcupine with soft spines and a curly gripping tail |
 | **Puercoespín** | Normal/Acero | la salud | | evolve it | a round porcupine with a doctor's head mirror, its spines like syringes |
 | **Caparazonte** | Roca/Tierra | la historia | → Gliptodón at 30 | fossil (echo room, then the museum) | a small ancient armadillo with a domed bony shell, cracked like old stone |
 | **Gliptodón** | Roca/Tierra | la historia | | | a giant prehistoric armadillo with a huge dome shell and a spiked tail club |
@@ -171,14 +171,14 @@ are used until your art arrives.
 ### Region 3 — the coast
 | Palabrita | Types | Theme | Evolution | Where | Look |
 |---|---|---|---|---|---|
-| **Cangrejito** | Agua | la playa | → Cangrejón at 22 | Ruta 7, the turtle beach, fishing | a small red crab with one big claw and eyes on stalks |
+| **Cangrejito** | Agua | la playa | → Cangrejón at 22 | Ruta 6, the turtle beach, fishing | a small red crab with one big claw and eyes on stalks |
 | **Cangrejón** | Agua | la playa | | Marina | a huge crab with boxing-glove claws |
-| **Coquito** | Planta | las frutas | → Cocotero at 26 | Ruta 7, the turtle beach | a green coconut with a cute face and a little palm-leaf tuft on top |
-| **Cocotero** | Planta | las frutas | | Ruta 8 (rare) | a coconut-palm creature: a coconut head on a curved trunk, swaying frond arms |
+| **Coquito** | Planta | las frutas | → Cocotero at 26 | Ruta 6, the turtle beach | a green coconut with a cute face and a little palm-leaf tuft on top |
+| **Cocotero** | Planta | las frutas | | Ruta 7 (rare) | a coconut-palm creature: a coconut head on a curved trunk, swaying frond arms |
 | **Mordisquito** (your art) | Agua | el mar | → Mordiscón at 38 | fishing in the lake | (art exists) |
 | **Mordiscón** | Agua/Siniestro | el mar | | evolve a Mordisquito | a big bull shark with a wide grin full of teeth and a scar |
 | **Mojarrita** | Agua | el mar | → Mordisquito at 20 | fishing in the lake (Tilapita → Espadón at 20 everywhere else) | a small round striped fish (*mojarra*) with big surprised eyes |
-| **Pelicanito** | Agua/Volador | el viaje | → Maletícano at 22 | Ruta 7, the pier | a brown pelican chick whose pouch looks like a little backpack |
+| **Pelicanito** | Agua/Volador | el viaje | → Maletícano at 22 | Ruta 6, the pier | a brown pelican chick whose pouch looks like a little backpack |
 | **Maletícano** | Agua/Volador | el viaje | | Marina | a big pelican whose beak pouch is a travel suitcase covered in stickers |
 | **Paslamita** | Agua | la familia | → Paslamona at 28 | gift (*arribada*) | an olive ridley turtle hatchling with big eyes and a heart-shaped shell |
 | **Paslamona** | Agua/Tierra | la familia | | | a big mother sea turtle with a wide olive shell and strong flippers |
@@ -186,14 +186,14 @@ are used until your art arrives.
 ### Region 4 — volcanoes
 | Palabrita | Types | Theme | Evolution | Where | Look |
 |---|---|---|---|---|---|
-| **Hormiguita** | Bicho/Planta | el trabajo | → Hormigón at 22 | Ruta 8, the sugarcane fields | a red leafcutter ant carrying a leaf bigger than itself, wearing a tiny hard hat |
-| **Hormigón** | Bicho/Roca | el trabajo | | Ruta 8 (rare) | a big ant built from gray concrete blocks (*hormigón* = concrete!), carrying a stone slab |
-| **Brasita** (your art) | Fuego | los animales | → **Brasaurio** at 32 → **Volcasaurio** (Fuego/Dragón) at 50: late and very powerful | Ruta 8, the volcano, Ruta 9 (lower levels, rare); Brasaurio is Don Tizón's ace | (art exists) |
+| **Hormiguita** | Bicho/Planta | el trabajo | → Hormigón at 22 | Ruta 7, the sugarcane fields | a red leafcutter ant carrying a leaf bigger than itself, wearing a tiny hard hat |
+| **Hormigón** | Bicho/Roca | el trabajo | | Ruta 7 (rare) | a big ant built from gray concrete blocks (*hormigón* = concrete!), carrying a stone slab |
+| **Brasita** (your art) | Fuego | los animales | → **Brasaurio** at 32 → **Volcasaurio** (Fuego/Dragón) at 50: late and very powerful | Ruta 7, the volcano, Ruta 8 (lower levels, rare); Brasaurio is Don Tizón's ace | (art exists) |
 | **Chispita** | Fuego | la fiesta | → Cohetón at 26 | the volcano, Ciudad Chispa | a little firework spark: a star-shaped body with a fuse tail |
 | **Cohetón** | Fuego/Eléctrico | la fiesta | | Don Tizón | a firework rocket with a grinning face, colorful stripes and a sparkling tail |
 | **Chocoyito** | Normal/Volador | la conversación | → Chocoyote at 25 | the crater rim | a green parakeet (*chocoyo*) with an orange forehead and a chatty open beak |
 | **Chocoyote** | Fuego/Volador | la conversación | | Don Tizón | a big parakeet with flame-colored wing tips, living in a volcano crater |
-| **Zopilotito** | Volador/Siniestro | la ciudad | → Zopilotón at 28 | Ruta 8, the volcano slopes | a scruffy black vulture chick with a bald gray head, holding a tiny broom |
+| **Zopilotito** | Volador/Siniestro | la ciudad | → Zopilotón at 28 | Ruta 7, the volcano slopes | a scruffy black vulture chick with a bald gray head, holding a tiny broom |
 | **Zopilotón** | Volador/Siniestro | la ciudad | | evolve it (wild in later regions) | a big black vulture with broad wings and a street-sweeper's cap |
 | **Venadito** | Normal | la ropa | → Torovenado (Normal/Lucha) at 30 | gift (costume quest) | a fawn wearing a colorful festival mask with ribbons |
 | **Torovenado** | Fantasma/Lucha | la ropa | | | a dancing festival costume: bull horns, deer antlers, a mask and ribbons |
@@ -294,7 +294,7 @@ in black basalt.
 | Region | Tiles |
 |---|---|
 | 2 | pines (the kept pine tile, plus a cooler grass color), clay-tile roofs, adobe and pine-wood walls, ox-cart, plaza fountain, pottery stalls, canyon walls with a river, rope bridge, clay mine (rails, supports, the Silenciador), petroglyph stone doors, morning mist (optional) |
-| 3 | cacti and yellow dry grass (*zacate*) on Ruta 6, sand, shoreline (foam edges), open sea, pier planks, wooden bridge, boats, lighthouse, stilt houses, tide pools, current tiles, pool |
+| 3 | cacti and yellow dry grass (*zacate*) on Ruta 5, sand, shoreline (foam edges), open sea, pier planks, wooden bridge, boats, lighthouse, stilt houses, tide pools, current tiles, pool |
 | 4 | basalt rock, ash ground, lava, steam vents, crater rim, sugarcane tall grass, cobblestone plaza, colonial church, market stalls with hammocks and masks, haunted house, torches, festival lights, bus stop |
 
 **New trainer looks** (battle portraits come for free): cowboy (*sabanero*), surfer, lifeguard, swimmer,
@@ -323,18 +323,18 @@ and push.
    - the changes to existing families (§5) with placeholder art;
    - the A2 core for levels 21–35.
 2. ✓ **Region 2.**
-   - Tiles, then Ruta 5's extension and bridge, the canyon, Villa Ocote and its interiors, the mine.
+   - Tiles, then Ruta 4's extension and bridge, the canyon, Villa Ocote and its interiors, the mine.
    - Lucas #1 and Equipo Silencio's first chapter.
    - Gym 2 and its 4 side quests.
    - The region's Palabritas and their 7 themes, and lesson topics (the bus is paused).
    - **Playable to the Medalla Barro.**
 3. ✓ **Region 3.**
-   - Tiles, fishing, Rutas 6–7, Playa Carey, the turtle beach (day and night).
+   - Tiles, fishing, Rutas 5–6, Playa Carey, the turtle beach (day and night).
    - Lucas #2, the *arribada*, gym 3 and its quests.
    - The region's Palabritas and their 6 themes.
    - **Playable to the Medalla Ola.**
 4. **Region 4.**
-   - Tiles, Ruta 8, the volcano, Ciudad Chispa (plus festival night), Ruta 9 and the jump home.
+   - Tiles, Ruta 7, the volcano, Ciudad Chispa (plus festival night), Ruta 8 and the jump home.
    - Lucas #3, Don Sigilo, gym 4 and its quests.
    - The region's Palabritas and their 8 themes.
    - **Playable to the Medalla Chispa.**
