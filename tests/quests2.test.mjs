@@ -9,10 +9,16 @@ const flags = async () => (await t.save()).flags;
 
 // Lucas catches up with you as you step into the mine. You picked Gotita, so he has Aguacatito.
 await t.fromSave({ map: 'mina1', x: 5, y: 23, dir: 'up', party, starterPicked: 'gotita' });
+const lucasInTown = () => t.game(() => window.__game.MAPS.ocote.npcs.find((n) => n.id === 'lucas_ocote').show());
+t.check('Lucas isn’t in Villa Ocote before he catches up with you', !(await lucasInTown()));
 await t.walk('up', 1);
 let r = await t.play();
 t.check('Lucas catches up with you and battles', (await flags()).lucas1 && r.said.some((x) => x.includes('alcancé')), r.said.slice(0, 2));
 t.check('he took the starter strong against yours', r.said.some((x) => x.includes('Aguacatito')), r.said.filter((x) => x.includes('envía')));
+// Then he waits in the silent town, and he can talk (a visitor, like you).
+t.check('after the battle Lucas is in Villa Ocote', await lucasInTown());
+r = await t.talk('ocote', 16, 14, 'right');
+t.check('…and he talks, though the town is silent', r.said[0]?.includes('pueblo'), r.said);
 
 // Losing to him (one weak Palabrita): he won, and there's no second chance (do better next time).
 await t.fromSave({ map: 'mina1', x: 5, y: 23, dir: 'up', party: [['gotita', 5]], starterPicked: 'gotita' });

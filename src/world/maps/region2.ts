@@ -122,7 +122,9 @@ export const REGION2_MAPS: Record<string, MapDef> = {
       { id: 'vendedora', x: 24, y: 11, look: 'lady', dir: 'down', script: 'vendedora', mime: '(She holds up a clay pot and opens her mouth, but nothing comes out.)' },
       { id: 'chepe', x: 35, y: 17, look: 'man', dir: 'left', script: 'chepe', mime: '(He counts on his fingers: one, two... and looks around for something.)' },
       { id: 'carreta', x: 36, y: 17, object: 'carreta', script: 'carreta' },
-      { id: 'lucas_ocote', x: 17, y: 14, look: 'lucas', dir: 'right', script: 'lucas_ocote', show: () => !flag('silenciadorRoto'), mime: '(It’s Lucas! He stamps his foot. He looks furious that he can’t talk.)' },
+      // Lucas, back from the mine to heal (after battle #1, won or lost) until the town talks again. A visitor, like
+      // you, so he can talk.
+      { id: 'lucas_ocote', x: 17, y: 14, look: 'lucas', dir: 'right', script: 'lucas_ocote', show: () => flag('lucas1') && !flag('silenciadorRoto'), servesWhenMuted: true },
       { id: 'musico', x: 13, y: 16, look: 'musico', dir: 'right', script: 'musico', mime: '(He lifts his mallets over an invisible marimba... and puts them down again.)' },
       { id: 'futbolista', x: 17, y: 24, look: 'boy', dir: 'right', script: 'futbolista', turns: true, mime: '(He bounces on his toes and mimes kicking a ball.)', wanders: true },
       lostWord('tortilla', 3, 11),

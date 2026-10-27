@@ -51,7 +51,10 @@ export interface NpcDef {
   item?: string;
   /** On a muted map: what they act out (the EN line; the Spanish is «…»). */
   mime?: string;
-  /** On a muted map, runs its own script anyway (the nurse and the cashier: they mime, but still serve you). */
+  /**
+   * On a muted map, runs its own script anyway: the nurse and the cashier (they mime, but still serve you), and
+   * visitors who can talk, like you (Lucas).
+   */
   servesWhenMuted?: boolean;
 }
 

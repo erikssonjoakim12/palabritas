@@ -544,7 +544,10 @@ export const REGION2: Record<string, ScriptFn> = {
     );
   }),
   chepe: owner('bueyes', chepeBueyes),
-  lucas_ocote: talk(['...', '(Lucas can’t talk either.)']),
+  lucas_ocote: talk(
+    ['¡Uf, este pueblo da miedo! Nadie dice nada...', 'Phew, this town is creepy! Nobody says a word...'],
+    ['Dicen que la máquina está al fondo de la mina. ¡Rómpela, {name}! Yo voy cuando mis Palabritas estén mejor.', 'They say the machine is deep in the mine. Break it, {name}! I’ll come once my Palabritas are better.'],
+  ),
   musico: owner('marimba', async () => {
     await lines(['La marimba es el instrumento de Nicaragua.', 'The marimba is Nicaragua’s instrument.']);
     if (await ask('¿Te gusta la música?', { en: 'Do you like music?' })) await lines(['¡A mí también! La música alegra el pueblo.', 'Me too! Music makes the town happy.']);
