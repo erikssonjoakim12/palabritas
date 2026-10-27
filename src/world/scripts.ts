@@ -923,7 +923,7 @@ async function starterTraining(sp: string) {
   await lucasElige();
 }
 
-/** Lucas takes the starter strong against yours (no battle yet: the first is on Ruta 5), then runs off. */
+/** Lucas takes the starter strong against yours (no battle yet: the first is on Ruta 4), then runs off. */
 async function lucasElige() {
   const sp = SPECIES[lucasStarter()];
   setSpeaker('lucas');

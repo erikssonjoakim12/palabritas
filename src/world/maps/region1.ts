@@ -5,7 +5,7 @@ import { HOUSE, itemBall, tienda, lostWord, centro, type MapDef } from './kit';
 /** A starter's Palabola is on the lab's table until you take it, or Lucas takes his. */
 const ballOnTable = (sp: string) => G.save.starterPicked !== sp && !(flag('lucasEligio') && lucasStarter() === sp);
 
-// Region 1: Pueblo Amanecer to Ciudad Brisa (gym 1), then west: Ruta 3, the Cueva del Eco and Ruta 5.
+// Region 1: Pueblo Amanecer to Ciudad Brisa (gym 1), then west: Ruta 3, the Cueva del Eco and Ruta 4.
 export const REGION1_MAPS: Record<string, MapDef> = {
   amanecer: {
     id: 'amanecer',
@@ -52,13 +52,13 @@ export const REGION1_MAPS: Record<string, MapDef> = {
       { id: 'vecinito', x: 17, y: 2, look: 'boy', dir: 'left', script: 'vecinito', wanders: true },
       { id: 'pescador', x: 22, y: 14, look: 'fisher', dir: 'down', script: 'pescador' },
       { id: 'sam', x: 13, y: 8, look: 'tourist', dir: 'down', script: 'sam', turns: true, sight: 3 },
-      // On the plateau: the route you could see from town at the very start (reached from Ruta 9).
+      // On the plateau: the route you could see from town at the very start (reached from Ruta 8).
       itemBall('meseta_amanecer', 2, 4, 'superpocion'),
     ],
     triggers: [
       { x: 14, y: 1, script: 'needStarter' },
       { x: 15, y: 1, script: 'needStarter' },
-      // Home again, down the ledge from Ruta 9 (region4.ts vueltaACasa).
+      // Home again, down the ledge from Ruta 8 (region4.ts vueltaACasa).
       ...[6, 7, 8, 9].map((y) => ({ x: 8, y, script: 'vueltaACasa' })),
     ],
   },
@@ -514,8 +514,8 @@ export const REGION1_MAPS: Record<string, MapDef> = {
 
   centro_ruta3: centro('centro_ruta3', { to: 'ruta3', x: 11, y: 6 }),
 
-  // Ruta 4: the cave, about as long as Ruta 3: in at the bottom left, out at the top right
-  // (daylight) to Ruta 5. The side room off the entrance hall is for an item later.
+  // The Cueva del Eco (map id ruta4), about as long as Ruta 3: in at the bottom left, out at the top right
+  // (daylight) to Ruta 4. The side room off the entrance hall is for an item later.
   // Bats, beetles and spiders come later.
   ruta4: {
     id: 'ruta4',
@@ -600,7 +600,7 @@ export const REGION1_MAPS: Record<string, MapDef> = {
   // below the trail is the same rock as Ruta 3's. The canyon is north, up the path by the bridge.
   ruta5: {
     id: 'ruta5',
-    name: 'Ruta 5',
+    name: 'Ruta 4',
     outdoor: true,
     floor: '.',
     ground: 'grass',
@@ -662,6 +662,6 @@ export const REGION1_MAPS: Record<string, MapDef> = {
       lostWord('marimba', 3, 10),
       lostWord('bueyes', 53, 8),
     ],
-    signs: [{ x: 16, y: 13, es: 'RUTA 5. Al oeste: Villa Ocote. Al norte: el Cañón del Guardabarranco.', en: 'ROUTE 5. West: Villa Ocote. North: Guardabarranco Canyon.' }],
+    signs: [{ x: 16, y: 13, es: 'RUTA 4. Al oeste: Villa Ocote. Al norte: el Cañón del Guardabarranco.', en: 'ROUTE 4. West: Villa Ocote. North: Guardabarranco Canyon.' }],
   },
 };

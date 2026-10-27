@@ -1,4 +1,4 @@
-// Region 3 in checkpoints: Villa Ocote's south guard lets you down to Ruta 6 with the medal; Lucas at the beach;
+// Region 3 in checkpoints: Villa Ocote's south guard lets you down to Ruta 5 with the medal; Lucas at the beach;
 // la noche de la arribada (counting eggs, Callada, the hatchlings, Paslamita); the restaurant, Don Lalo's rod
 // and the bottle. The gym is in gym3.test.
 import { start } from './lib.mjs';
@@ -16,7 +16,7 @@ const talk = async (map, x, y, dir, opts) => {
 // Down from Villa Ocote with the Clay Medal.
 await t.fromSave({ map: 'ocote', x: 23, y: 28, dir: 'down', party, flags: { silenciadorRoto: true, medalBarro: true } });
 await t.walk('down', 4);
-t.check('with the Clay Medal, the south road leads to Ruta 6', (await t.pos())[0] === 'ruta6', await t.pos());
+t.check('with the Clay Medal, the south road leads to Ruta 5', (await t.pos())[0] === 'ruta6', await t.pos());
 
 // Lucas, rival #2, at the turtle beach (after the town): he has your starter's counter, evolved.
 await t.fromSave({ map: 'tortugas', x: 22, y: 1, dir: 'down', party, starterPicked: 'aguacatito', flags: { lucas1: true } });
@@ -57,7 +57,7 @@ await t.press('z');
 await t.play({ choose: (opts) => (opts.includes('Sí') ? 'Sí' : undefined) });
 t.check('Don Lalo’s fishing lesson gives the rod', (await t.save()).bag.cana === 1);
 
-// The bottle on Ruta 7 points to a treasure in Playa Carey.
+// The bottle on Ruta 6 points to a treasure in Playa Carey.
 await t.fromSave({ map: 'ruta7', x: 9, y: 20, dir: 'left', party });
 await t.press('z');
 await t.play({ choices: ['Al sur del muelle'] });

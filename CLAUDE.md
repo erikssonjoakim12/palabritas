@@ -68,6 +68,9 @@ Spanish) · [BIOMES.md](BIOMES.md) (animals per region).
 
 ## Recipes
 
+**Route numbers:** the routes after the Cueva del Eco were renumbered (the user): map ids `ruta5`…`ruta10` are shown
+as Ruta 4…9 (the cave is `ruta4`, shown as Cueva del Eco). Ids stay as they are, for saves.
+
 **A map** (in its region's file in src/world/maps/; a new region gets a new file, added in `index.ts`). Each row
 is a string of tiles (legend at the top of `kit.ts`).
 - **Outdoor** maps join seamlessly through `connections: { left: { to, offset } }`. The other map must

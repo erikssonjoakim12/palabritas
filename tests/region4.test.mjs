@@ -14,7 +14,7 @@ const talk = async (map, x, y, dir, opts = yes) => {
   return t.play(opts);
 };
 
-// Ruta 8 into Ciudad Chispa: the theft.
+// Ruta 7 into Ciudad Chispa: the theft.
 await t.fromSave({ map: 'ruta8', x: 42, y: 12, dir: 'right', party, flags: { medalOla: true } });
 await t.walk('right', 4);
 let r = await t.play();

@@ -1,13 +1,13 @@
 import { flag } from '../../game/state';
 import { itemBall, tienda, casa, escuela, night, centro, type MapDef, type NpcDef } from './kit';
 
-// Region 3: the Pacific coast: Rutas 6 and 7, Playa Carey and the turtle beach.
+// Region 3: the Pacific coast: Rutas 5 and 6, Playa Carey and the turtle beach.
 export const REGION3_MAPS: Record<string, MapDef> = {
   // From Villa Ocote down to the sea: switchbacks through the pines, a fenced cattle meadow (zacatal), the river
   // and its bridge, then dry forest to the sand. About twice Ruta 3's walk (the user asked for a long route).
   ruta6: {
     id: 'ruta6',
-    name: 'Ruta 6',
+    name: 'Ruta 5',
     outdoor: true,
     floor: '.',
     ground: 'grass',
@@ -84,7 +84,7 @@ export const REGION3_MAPS: Record<string, MapDef> = {
       'TTTTTTTTTTTTTTTTTTTT==TTTTTTTTTTTTTT',
     ],
     connections: { up: { to: 'ocote', offset: 6 }, down: { to: 'ruta7', offset: 2 }, right: { to: 'ruta10', offset: -33 } },
-    signs: [{ x: 15, y: 2, es: 'RUTA 6. Al sur: el mar.', en: 'ROUTE 6. South: the sea.' }],
+    signs: [{ x: 15, y: 2, es: 'RUTA 5. Al sur: el mar.', en: 'ROUTE 5. South: the sea.' }],
     encounters: {
       rate: 0.12,
       table: [
@@ -116,7 +116,7 @@ export const REGION3_MAPS: Record<string, MapDef> = {
   // The coast: the sea on the west, dunes and palms, two rocky points with a gap at the road.
   ruta7: {
     id: 'ruta7',
-    name: 'Ruta 7',
+    name: 'Ruta 6',
     outdoor: true,
     floor: '.',
     ground: 'sand',
@@ -192,7 +192,7 @@ export const REGION3_MAPS: Record<string, MapDef> = {
   },
 
   // A fishing village on a bay: the pier and the boats, the lighthouse on its rock point, the surf school (the
-  // gym), the restaurant El Pelícano Feliz and Don Lalo's house. The road east (Ruta 8) waits for the medal.
+  // gym), the restaurant El Pelícano Feliz and Don Lalo's house. The road east (Ruta 7) waits for the medal.
   carey: {
     id: 'carey',
     name: 'Playa Carey',
@@ -241,7 +241,7 @@ export const REGION3_MAPS: Record<string, MapDef> = {
     signs: [
       { x: 13, y: 9, es: 'PLAYA CAREY. Pescado fresco, olas y tortugas.', en: 'PLAYA CAREY. Fresh fish, waves and turtles.' },
       { x: 22, y: 12, es: 'EL PELÍCANO FELIZ. ¡La mejor sopa de pescado de la costa!', en: 'THE HAPPY PELICAN. The best fish soup on the coast!' },
-      { x: 16, y: 1, es: 'Al norte: Ruta 7 y Villa Ocote. Al sur: la Playa de las Tortugas.', en: 'North: Route 7 and Villa Ocote. South: Turtle Beach.' },
+      { x: 16, y: 1, es: 'Al norte: Ruta 6 y Villa Ocote. Al sur: la Playa de las Tortugas.', en: 'North: Route 6 and Villa Ocote. South: Turtle Beach.' },
     ],
     fishing: { table: [{ sp: 'tilapita', min: 12, max: 18, w: 55 }, { sp: 'cangrejito', min: 14, max: 20, w: 35 }, { sp: 'espadon', min: 20, max: 22, w: 10 }] },
     gates: [
@@ -278,7 +278,7 @@ export const REGION3_MAPS: Record<string, MapDef> = {
       { id: 'panga2', x: 4, y: 9, object: 'panga', script: 'panga' },
       { id: 'surfista_pueblo', x: 7, y: 19, look: 'surfista', dir: 'right', script: 'surfista_pueblo' },
       { id: 'nina_carey', x: 18, y: 9, look: 'girl', dir: 'down', script: 'nina_carey', wanders: true },
-      // The bottle's treasure (Ruta 7): south of the pier, next to the palm.
+      // The bottle's treasure (Ruta 6): south of the pier, next to the palm.
       { id: 'tesoro_carey', x: 7, y: 16, object: 'brillo', script: 'tesoro', show: () => flag('botellaLeida') && !flag('item:tesoro_carey') },
     ],
   },

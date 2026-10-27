@@ -9,8 +9,8 @@ const ocoteMuted = () => !flag('silenciadorRoto');
 export const REGION2_MAPS: Record<string, MapDef> = {
   // A potters' town in the pines, under the mountain with the clay mine. Bigger than the towns before: a plaza
   // with a fountain and pottery stalls, a museum, a school, a workshop and plenty of homes. Nobody can speak
-  // until the Silenciador in the mine breaks (muted). The east road comes from Ruta 5; the south road goes down
-  // to the sea (Ruta 6).
+  // until the Silenciador in the mine breaks (muted). The east road comes from Ruta 4; the south road goes down
+  // to the sea (Ruta 5).
   ocote: {
     id: 'ocote',
     name: 'Villa Ocote',
@@ -96,7 +96,7 @@ export const REGION2_MAPS: Record<string, MapDef> = {
       {
         id: 'guarda_sur',
         look: 'officer',
-        // Ruta 6 comes in phase 3: until it's there, the road south stays closed even with the medal.
+        // Ruta 5 comes in phase 3: until it's there, the road south stays closed even with the medal.
         opens: () => flag('medalBarro'),
         at: [22, 30, 'up'],
         aside: [21, 29],
@@ -385,7 +385,7 @@ export const REGION2_MAPS: Record<string, MapDef> = {
     ],
   },
 
-  // A deep river canyon north of Ruta 5, like Somoto's: paths on both banks, three bridges, a waterfall pool at the
+  // A deep river canyon north of Ruta 4, like Somoto's: paths on both banks, three bridges, a waterfall pool at the
   // top with a grove on each side. Optional; the rare Guardabarranco lives here.
   canon: {
     id: 'canon',

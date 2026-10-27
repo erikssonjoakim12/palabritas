@@ -1,8 +1,8 @@
 import { flag } from '../../game/state';
 import { itemBall, tienda, casa, escuela, night, centro, type MapDef, type NpcDef } from './kit';
 
-// Region 4: the volcanoes and dry forest. Ruta 8 east from Playa Carey, Ciudad Chispa (a colonial festival town,
-// like Masaya), up the Volcán Chocoyo (the slopes, the lava tube, the crater), and Ruta 9 home to Pueblo Amanecer.
+// Region 4: the volcanoes and dry forest. Ruta 7 east from Playa Carey, Ciudad Chispa (a colonial festival town,
+// like Masaya), up the Volcán Chocoyo (the slopes, the lava tube, the crater), and Ruta 8 home to Pueblo Amanecer.
 // Story and quests: world/region4.ts. Plan: plans/phase4-region4.md.
 
 /** The workshop's torches, in the order the poem gives (region4.ts antorcha), and where each stands. */
@@ -23,7 +23,7 @@ export const REGION4_MAPS: Record<string, MapDef> = {
   // through one opening).
   ruta8: {
     id: 'ruta8',
-    name: 'Ruta 8',
+    name: 'Ruta 7',
     outdoor: true,
     floor: '.',
     ground: 'grass',
@@ -57,7 +57,7 @@ export const REGION4_MAPS: Record<string, MapDef> = {
       'TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT',
     ],
     connections: { left: { to: 'carey', offset: -2 }, right: { to: 'chispa', offset: 0 } },
-    signs: [{ x: 2, y: 11, es: 'RUTA 8. Al este: Ciudad Chispa y el volcán.', en: 'ROUTE 8. East: Ciudad Chispa and the volcano.' }],
+    signs: [{ x: 2, y: 11, es: 'RUTA 7. Al este: Ciudad Chispa y el volcán.', en: 'ROUTE 7. East: Ciudad Chispa and the volcano.' }],
     encounters: {
       rate: 0.12,
       table: [
@@ -318,13 +318,13 @@ export const REGION4_MAPS: Record<string, MapDef> = {
       { id: 'guia_chispa', x: 8, y: 12, look: 'polvorero', dir: 'left', script: 'guia_chispa' },
     ],
   },
-  // Ruta 10: down the volcano's west side to Ruta 6 (plans/world-map.md). You come out of the crater's west gate,
-  // down the ash gully and along the ridge, and a step too high to climb back makes it one-way: from Ruta 6 you
+  // Ruta 9: down the volcano's west side to Ruta 5 (plans/world-map.md). You come out of the crater's west gate,
+  // down the ash gully and along the ridge, and a step too high to climb back makes it one-way: from Ruta 5 you
   // can only look up at it. A field of cooled lava lies off the gully, and a clearing in the trees above the ridge,
   // by the river (its top rows are a hole: the Río Guardabarranco's map shows there).
   ruta10: {
     id: 'ruta10',
-    name: 'Ruta 10',
+    name: 'Ruta 9',
     outdoor: true,
     floor: '.',
     ground: 'grass',
@@ -369,7 +369,7 @@ export const REGION4_MAPS: Record<string, MapDef> = {
       'tttttttttttttttttttttttttt^^^^^^^^^^^^^^^^',
     ],
     connections: { left: { to: 'ruta6', offset: 33 }, right: { to: 'crater', offset: -27 } },
-    signs: [{ x: 2, y: 20, es: 'RUTA 10. Al este: el Volcán Chocoyo. No se puede subir por aquí.', en: 'ROUTE 10. East: Volcán Chocoyo. You can’t climb up this way.' }],
+    signs: [{ x: 2, y: 20, es: 'RUTA 9. Al este: el Volcán Chocoyo. No se puede subir por aquí.', en: 'ROUTE 9. East: Volcán Chocoyo. You can’t climb up this way.' }],
     encounters: {
       rate: 0.12,
       table: [
@@ -393,7 +393,7 @@ export const REGION4_MAPS: Record<string, MapDef> = {
   // Home: from Ciudad Chispa east to Pueblo Amanecer's plateau, where you jump down the ledge into town.
   ruta9: {
     id: 'ruta9',
-    name: 'Ruta 9',
+    name: 'Ruta 8',
     outdoor: true,
     floor: '.',
     ground: 'grass',
@@ -564,7 +564,7 @@ export const REGION4_MAPS: Record<string, MapDef> = {
       { id: 'chocoyito_bebe', x: 5, y: 10, object: 'chocoyitoBebe', script: 'chocoyitoBebe', show: () => flag('chocoyitoBusca') && !flag('chocoyitoEncontrado') },
     ],
   },
-  // The crater: a round walkway of ash around the lava lake. Parakeets nest on the east side, and a gate in the west wall leads down Ruta 10; Equipo Silencio camps on
+  // The crater: a round walkway of ash around the lava lake. Parakeets nest on the east side, and a gate in the west wall leads down Ruta 9; Equipo Silencio camps on
   // the north rim with the stolen fireworks (stage 3). You come up through the lava tube; in the world it sits on top
   // of the slopes, under the volcano's north side.
   crater: {
@@ -617,7 +617,7 @@ export const REGION4_MAPS: Record<string, MapDef> = {
       { id: 'nido_chocoyos', x: 30, y: 12, object: 'nido', script: 'nidoChocoyos' },
     ],
   },
-  // The lake east of the volcano, between Ruta 3, Rutas 1-2 and Ruta 9. Two small beaches (from Ruta 2 and from Ruta 9);
+  // The lake east of the volcano, between Ruta 3, Rutas 1-2 and Ruta 8. Two small beaches (from Ruta 2 and from Ruta 8);
   // the rest waits for Surf. A volcano island (like Ometepe), the islets (like Las Isletas), two wooded islands, and
   // black rock on the volcano's shore, where the river comes in.
   lago: {
@@ -729,8 +729,8 @@ export const REGION4_MAPS: Record<string, MapDef> = {
       { id: 'nadadora_lucia', x: 10, y: 80, look: 'nadadora', dir: 'up', script: 'nadadora_lucia', sight: 3 },
     ],
   },
-  // The Río Guardabarranco, from Ruta 5's pool down through the pines and past the volcano into the lake: only
-  // scenery for now (Surf, later). Holes where Ruta 3's plateau, Villa Jaguar (and its jungle and temple) and Ruta 10 are.
+  // The Río Guardabarranco, from Ruta 4's pool down through the pines and past the volcano into the lake: only
+  // scenery for now (Surf, later). Holes where Ruta 3's plateau, Villa Jaguar (and its jungle and temple) and Ruta 9 are.
   rio: {
     id: 'rio',
     name: 'Río Guardabarranco',

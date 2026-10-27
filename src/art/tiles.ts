@@ -275,7 +275,7 @@ function rockImage(art: TileArt, env: TileEnv, rockChars: string, under: Img): I
 const MOUNTAIN_CHARS = '^OD';
 
 /**
- * A tunnel mouth you walk south into ('D', Ruta 5's way back into the cave): the cave mouth turned 180°
+ * A tunnel mouth you walk south into ('D', Ruta 4's way back into the cave): the cave mouth turned 180°
  * and half as tall, so its dark opening meets the ground north of it.
  */
 const TUNNEL_MOUTH: TileArt = {

@@ -169,14 +169,14 @@ function migrate(s: SaveData) {
     if (s.map === 'amanecer') s.x += 6;
     s.flags.amanecerWide = true;
   }
-  // Ruta 5's tunnel moved east (up and to the right of the cave's way in): anyone saved by the old one
+  // Ruta 4's tunnel moved east (up and to the right of the cave's way in): anyone saved by the old one
   // stands outside the new one.
   if (!s.flags.ruta5East) {
     if (s.map === 'ruta5' && s.y >= 13 && s.x >= 20 && s.x <= 26) Object.assign(s, { x: 90, y: 4, dir: 'up' });
     s.flags.ruta5East = true;
   }
-  // Rutas 3 and 8 got shorter (plans/world-map.md): anyone saved below Ruta 3's cave plateau stands at its
-  // Brisa end, and anyone on Ruta 8 at its Carey end.
+  // Rutas 3 and 7 (then called 8) got shorter (plans/world-map.md): anyone saved below Ruta 3's cave plateau stands at its
+  // Brisa end, and anyone on Ruta 7 at its Carey end.
   if (!s.flags.rutasCortas) {
     if (s.map === 'ruta3' && s.y >= 13) Object.assign(s, { x: 62, y: 28, dir: 'left' });
     if (s.map === 'ruta8') Object.assign(s, { x: 1, y: 12, dir: 'right' });

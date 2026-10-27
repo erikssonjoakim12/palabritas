@@ -20,7 +20,7 @@ import { lines, trainerFight, blackout, talkMode } from './scripts';
 import { drill, teacher } from './school';
 
 /*
-  Region 3: the Pacific coast (PLAN_GYMS_2-4.md §3). Down Ruta 6 to the sea, along Ruta 7 to Playa Carey,
+  Region 3: the Pacific coast (PLAN_GYMS_2-4.md §3). Down Ruta 5 to the sea, along Ruta 6 to Playa Carey,
   la noche de la arribada on the turtle beach (Equipo Silencio and Callada), and Marina's surf school.
 */
 
@@ -267,7 +267,7 @@ async function lalo() {
   await lines(['¡Y saluda a mi hermano de mi parte!', 'And say hi to my brother for me!']);
 }
 
-/** The message in a bottle on Ruta 7: read it, and find the treasure in Playa Carey. */
+/** The message in a bottle on Ruta 6: read it, and find the treasure in Playa Carey. */
 async function botella() {
   await info('Hay una botella en la arena. Adentro hay un papel...', { en: 'There’s a bottle in the sand. Inside there’s a paper...' });
   const note = 'El tesoro está en Playa Carey, en la playa, al sur del muelle, al lado de la palmera.';

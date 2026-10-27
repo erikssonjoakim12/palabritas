@@ -1,5 +1,5 @@
-// The long way west: the cave's far tunnel brings you out high on Ruta 5 (still walking up) and back,
-// and Pintora Lucía spots you on Ruta 5's road.
+// The long way west: the cave's far tunnel brings you out high on Ruta 4 (still walking up) and back,
+// and Pintora Lucía spots you on Ruta 4's road.
 import { start } from './lib.mjs';
 
 const t = await start('routes');
@@ -14,12 +14,12 @@ const go = async (map, x, y, dir, steps, label, want) => {
   t.check(label, at[0] === want, at);
 };
 
-await go('ruta4', 52, 2, 'up', 1, 'the far end of the cave leads to Ruta 5', 'ruta5');
+await go('ruta4', 52, 2, 'up', 1, 'the far end of the cave leads to Ruta 4', 'ruta5');
 const arrived = await t.game(() => [window.__game.G.save.x, window.__game.G.save.y, window.__game.player.dir]);
 t.check('you come out of the tunnel high on the mountain, still walking up', arrived.join() === '90,4,up', arrived);
 await go('ruta5', 90, 4, 'down', 1, 'and the tunnel leads back into the cave', 'ruta4');
 
-// Halfway along Ruta 5's road west, Pintora Lucía spots you from a gap in the pines.
+// Halfway along Ruta 4's road west, Pintora Lucía spots you from a gap in the pines.
 await t.fromSave({ map: 'ruta5', x: 40, y: 12, dir: 'left', party: [['gotita', 15]] });
 await t.walk('left', 6);
 const said = await t.nextText();

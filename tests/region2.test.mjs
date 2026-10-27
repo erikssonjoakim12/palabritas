@@ -1,4 +1,4 @@
-// Region 2's story, in checkpoints (each part starts from its own save): Ruta 5 → Villa Ocote and the message
+// Region 2's story, in checkpoints (each part starts from its own save): Ruta 4 → Villa Ocote and the message
 // on the ground → a muted town → the mine's lever → the Capataz: the Silenciador breaks, Petra comes, the town
 // talks again. The gym is in gym2.test.
 import { start } from './lib.mjs';
@@ -13,11 +13,11 @@ const talk = async (map, x, y, dir, opts) => {
   return t.play(opts);
 };
 
-// 1. Over the seam from Ruta 5 into town, and the message on the ground (pick the right place).
+// 1. Over the seam from Ruta 4 into town, and the message on the ground (pick the right place).
 await t.fromSave({ map: 'ruta5', x: 2, y: 11, dir: 'left', party: strong });
 await t.walk('left', 4);
 let r = await t.play({ choices: ['En la mina'] });
-t.check('Ruta 5 leads west into Villa Ocote', (await t.pos())[0] === 'ocote', await t.pos());
+t.check('Ruta 4 leads west into Villa Ocote', (await t.pos())[0] === 'ocote', await t.pos());
 t.check('the message on the ground sends you to the mine', (await flags('mensajeLeido')) && r.said.some((x) => x.includes('mina')), r.said);
 await t.shot('ocote');
 

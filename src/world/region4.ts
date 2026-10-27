@@ -20,8 +20,8 @@ import { lines, trainerFight, blackout, heal, talkMode } from './scripts';
 import { teacher } from './school';
 
 /*
-  Region 4: the volcanoes and dry forest (plans/phase4-region4.md). Ruta 8 east from Playa Carey, Ciudad Chispa
-  (getting ready for its festival), the Volcán Chocoyo, and Ruta 9 home to Pueblo Amanecer.
+  Region 4: the volcanoes and dry forest (plans/phase4-region4.md). Ruta 7 east from Playa Carey, Ciudad Chispa
+  (getting ready for its festival), the Volcán Chocoyo, and Ruta 8 home to Pueblo Amanecer.
   The story: the fireworks are stolen when you arrive; you get them back from Don Sigilo in the crater (Lucas
   battles you at the foot of the trail), the festival night follows, then Don Tizón's torch puzzle and
   battle. Side quests: a hammock for Mom (bargaining), the lost parakeet chick, the haunted house's lamp, the
@@ -212,7 +212,7 @@ async function tizon() {
 
 // ---------- Home ----------
 
-/** The first time you hop down the ledge into Pueblo Amanecer from Ruta 9: Mom is so proud. */
+/** The first time you hop down the ledge into Pueblo Amanecer from Ruta 8: Mom is so proud. */
 async function vueltaACasa() {
   if (flag('vueltaACasa') || !flag('cohetesRobados')) return;
   setFlag('vueltaACasa');
@@ -546,7 +546,7 @@ export const REGION4: Record<string, ScriptFn> = {
     'excursionista_lidia',
     ['Bajo del volcán por el camino viejo. ¿Una batalla antes de seguir?', 'I’m coming down the volcano by the old trail. A battle before we go on?'],
     ['¡Uf! Mejor sigo bajando.', 'Phew! I’d better keep going down.'],
-    ['Este camino baja hasta la Ruta 6. ¡Es un atajo a Villa Ocote!', 'This trail goes down to Route 6. It’s a shortcut to Villa Ocote!'],
+    ['Este camino baja hasta la Ruta 5. ¡Es un atajo a Villa Ocote!', 'This trail goes down to Route 5. It’s a shortcut to Villa Ocote!'],
   ),
   guardaparque_ivan: fight(
     'guardaparque_ivan',

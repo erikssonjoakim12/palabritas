@@ -1,5 +1,5 @@
 // Ciudad Chispa's Torovenado costume (the mask seller, the five pieces by name, then the parade gives Venadito)
-// and the legend of the Carreta Nagua on Ruta 9 (its questions give the bell).
+// and the legend of the Carreta Nagua on Ruta 8 (its questions give the bell).
 import { start } from './lib.mjs';
 
 const t = await start('torovenado');

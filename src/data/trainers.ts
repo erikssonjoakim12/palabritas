@@ -47,14 +47,14 @@ export const TRAINERS: Record<string, TrainerDef> = {
   tito: { id: 'tito', name: 'Alfarero Tito', defenseMode: 'type', team: [['ollita', 17], ['piedrita', 17]] },
   rosario: { id: 'rosario', name: 'Minera Rosario', defenseMode: 'type', team: [['piedrita', 17], ['ollita', 18]] },
   petra: { id: 'petra', name: 'Líder Petra', defenseMode: 'type', team: [['piedrita', 17], ['ollita', 19], ['petroglifon', 21]] },
-  // Ruta 5 and the canyon (you defend by listening in the highlands).
+  // Ruta 4 and the canyon (you defend by listening in the highlands).
   armando: { id: 'armando', name: 'Leñador Armando', defenseMode: 'listen', team: [['ardillita', 12], ['pajarito', 12]], rematch: true },
   elena: { id: 'elena', name: 'Campista Elena', defenseMode: 'listen', team: [['colibri', 12], ['espinita', 13]] },
   julio: { id: 'julio', name: 'Pescador Julio', defenseMode: 'listen', team: [['hojadillo', 13], ['colibri', 13]], rematch: true },
   rosa: { id: 'rosa', name: 'Campista Rosa', defenseMode: 'listen', team: [['espinita', 13], ['ardillita', 14]] },
   // Your rival. His first Palabrita is the starter strong against yours (game/mon.ts lucasStarter).
   lucas1: { id: 'lucas1', name: 'Lucas', defenseMode: 'type', team: [['gotita', 15], ['pajarito', 12]] },
-  // Region 3: Ruta 6, Ruta 7, the turtle beach and Marina's surf school (the A2 listening level: defend by listening).
+  // Region 3: Ruta 5, Ruta 6, the turtle beach and Marina's surf school (the A2 listening level: defend by listening).
   ramon: { id: 'ramon', name: 'Leñador Ramón', defenseMode: 'listen', team: [['ardillita', 17], ['colibri', 17]] },
   laura: { id: 'laura', name: 'Campista Laura', defenseMode: 'listen', team: [['espinita', 17], ['ardillita', 18]] },
   esteban: { id: 'esteban', name: 'Vaquero Esteban', defenseMode: 'listen', team: [['conejito', 17], ['hojadillo', 18]] },
@@ -80,7 +80,7 @@ export const TRAINERS: Record<string, TrainerDef> = {
   // Rival #2: his starter's second form (region3.ts lucasPlaya builds the team).
   lucas2: { id: 'lucas2', name: 'Lucas', defenseMode: 'type', team: [['nubarron', 22], ['hojadillo', 19], ['palomon', 20]] },
   lucia: { id: 'lucia', name: 'Pintora Lucía', defenseMode: 'listen', team: [['hojadillo', 13], ['mariposita', 13]], rematch: true },
-  // Region 4: Ruta 8, the volcano, Ruta 9 and the fireworks workshop (route trainers 18-26, the user).
+  // Region 4: Ruta 7, the volcano, Ruta 8 and the fireworks workshop (route trainers 18-26, the user).
   campesino: { id: 'campesino', name: 'Campesino Rigo', defenseMode: 'listen', rematch: true, team: [['liebron', 18], ['hormiguita', 18]] },
   vaquera_r8: { id: 'vaquera_r8', name: 'Vaquera Chela', defenseMode: 'listen', team: [['liebron', 19], ['zopilotito', 19]] },
   pescadora_r8: { id: 'pescadora_r8', name: 'Pescadora Iris', defenseMode: 'listen', team: [['tilapita', 18], ['tilapita', 19], ['espadon', 20]] },
@@ -110,7 +110,7 @@ export const TRAINERS: Record<string, TrainerDef> = {
   fotografo_max: { id: 'fotografo_max', name: 'Fotógrafo Max', defenseMode: 'choose', team: [['zopilotito', 24], ['chocoyito', 24], ['liebron', 25]] },
   // Region 4's bosses. Lucas #3: region4.ts builds his team from his starter's second form. Brasita's family only
   // appears on bosses (the user): Don Tizón's ace is Brasaurio.
-  // Ruta 10, down the volcano's west side (reached from the crater).
+  // Ruta 9, down the volcano's west side (reached from the crater).
   vulcanologo_oscar: { id: 'vulcanologo_oscar', name: 'Vulcanólogo Óscar', defenseMode: 'listen', team: [['chispita', 26], ['taranton', 27]] },
   excursionista_lidia: { id: 'excursionista_lidia', name: 'Excursionista Lidia', defenseMode: 'type', rematch: true, team: [['hormigon', 27], ['chocoyote', 27]] },
   guardaparque_ivan: { id: 'guardaparque_ivan', name: 'Guardaparque Iván', defenseMode: 'listen', team: [['zopilotito', 27], ['liebron', 28]] },

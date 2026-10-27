@@ -135,7 +135,7 @@ async function notaCapataz() {
 
 /*
   When the Silenciador broke, eight words got lost on the way home. Each one belongs to one person in Villa
-  Ocote, who can talk again except for that word. You find them (glowing speech bubbles in town, on Ruta 5 and
+  Ocote, who can talk again except for that word. You find them (glowing speech bubbles in town, on Ruta 4 and
   in the mine) and give each back by completing its owner's sentence in Spanish. All eight: a party.
   Flags: palabra:<id> (found), devuelta:<id> (given back), palabrasDone. The key item 'palabras' counts the
   words you carry.
@@ -298,11 +298,11 @@ async function fiesta() {
   await warp('ocote', 19, 16, 'down', false);
 }
 
-// ---------- Ruta 5 and the canyon ----------
+// ---------- Ruta 4 and the canyon ----------
 
 
 /**
- * Rival battle #1, as you step into the mine where Villa Ocote's silence comes from (the user: on Ruta 5, right
+ * Rival battle #1, as you step into the mine where Villa Ocote's silence comes from (the user: on Ruta 4, right
  * after the cave, he was too hard; here Ocote's Palacentro is on the way). Lucas comes in behind you and walks right
  * up to you.
  */
