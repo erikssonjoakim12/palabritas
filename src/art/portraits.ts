@@ -77,6 +77,12 @@ function hairFront(p: Pix, look: Look, hair: string, color: string) {
     case 'short':
       p.ellipse(24, 9, 10, 5.5, hair);
       break;
+    case 'spiky':
+      p.rect(14, 12, 3, 7, hair).rect(31, 12, 3, 7, hair);
+      p.ellipse(24, 9, 10.5, 6, hair);
+      for (const x of [15, 20, 25, 30, 34]) p.poly([[x - 4, 8], [x, x === 34 ? 3 : 0], [x + 3, 8]], hair); // the spikes
+      p.rect(14, 10, 20, 3, color); // the headband
+      break;
     case 'helmet':
     case 'helmetLong':
       if (look.head === 'helmet') p.rect(15, 11, 2, 5, hair).rect(31, 11, 2, 5, hair);

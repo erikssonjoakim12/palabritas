@@ -405,6 +405,45 @@ export const HEADS: Record<string, Facing> = {
       '....3111113.....',
     ],
   },
+  /** Spiky hair with a headband in his color: Lucas, the rival, so you know him at once. */
+  spiky: {
+    down: [
+      '..3....3...3....',
+      '..33..33..33.3..',
+      '...3333333333...',
+      '..333333333333..',
+      '..322222222223..',
+      '..331111111133..',
+      '.33111311311133.',
+      '.31111311311113.',
+      '..331111111133..',
+      '...3311111133...',
+    ],
+    up: [
+      '..3....3...3....',
+      '..33..33..33.3..',
+      '...3333333333...',
+      '..333333333333..',
+      '..322222222223..',
+      '..333333333333..',
+      '..133333333331..',
+      '..333333333333..',
+      '...3333333333...',
+      '....31111113....',
+    ],
+    side: [
+      '........3..3..3.',
+      '.....3.33.33.33.',
+      '....3333333333..',
+      '...33333333333..',
+      '...32222222223..',
+      '...31111333333..',
+      '...31311133333..',
+      '...31111113133..',
+      '...333111113....',
+      '....3111113.....',
+    ],
+  },
   /** Bobbed hair (older women). */
   short: {
     down: [
@@ -503,10 +542,10 @@ export interface Look {
 }
 
 /**
- * Male characters (a cap, a hard hat, an explorer's hat or the men's haircut) talk with a male voice. A hood
+ * Male characters (a cap, a hard hat, an explorer's hat, the men's haircut or Lucas's spikes) talk with a male voice. A hood
  * hides the hair, so for hooded looks the look itself says (silencioso, capataz; silenciosa is a woman).
  */
-const MALE_HEADS = ['cap', 'crew', 'helmet', 'safari'];
+const MALE_HEADS = ['cap', 'crew', 'helmet', 'safari', 'spiky'];
 const MALE_LOOKS = ['silencioso', 'capataz', 'vaquero'];
 export const isMaleLook = (lookId?: string) => !!lookId && (MALE_LOOKS.includes(lookId) || MALE_HEADS.includes(LOOKS[lookId]?.head));
 
@@ -555,7 +594,7 @@ export const LOOKS: Record<string, Look> = {
   ornitologa: { head: 'safari', body: 'pants', color: 'green' },
   alfarero: { head: 'crew', body: 'coat', color: 'brown' },
   minera: { head: 'helmetLong', body: 'pants', color: 'brown' },
-  lucas: { head: 'cap', body: 'pants', color: 'teal' },
+  lucas: { head: 'spiky', body: 'pants', color: 'teal' },
   abuelo: { head: 'crew', body: 'coat', color: 'gray' },
   musico: { head: 'crew', body: 'pants', color: 'yellow' },
   // Region 3: the coast.
