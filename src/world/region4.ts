@@ -95,8 +95,12 @@ async function lucasVolcan() {
   const starter = lucasStarter();
   const team: [string, number][] = [[SPECIES[starter].evolves?.to ?? starter, 28], ['hojarasco', 25], ['palomon', 25], ['cangrejon', 26]];
   const res = await trainerBattle({ ...TRAINERS.lucas3, team }, { look: 'lucas', outro: ['Otra vez... Bueno. Eres muy buen{o/a}, de verdad.', 'Again... OK. You’re really good, honestly.'] });
-  if (res === 'lose') return blackout();
-  setFlag('lucas3');
+  setFlag('lucas3'); // won or lost: no second chance
+  if (res === 'lose') {
+    await as('lucas', ['¡Por fin te gané! Ahora ve tú al cráter... ¡y ten cuidado!', 'I finally beat you! Now you go to the crater... and be careful!']);
+    refreshNpcs();
+    return blackout();
+  }
   await as('lucas', ['Ve tú al cráter. Yo bajo a avisar a los guardaparques. ¡Ten cuidado!', 'You go to the crater. I’ll go down and tell the rangers. Be careful!']);
   refreshNpcs();
 }

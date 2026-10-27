@@ -320,13 +320,13 @@ async function lucasMina() {
   );
   const lucas = { ...TRAINERS.lucas1, team: [[lucasStarter(), 15], ['pajarito', 12]] as [string, number][] };
   const res = await trainerBattle(lucas, { look: 'lucas', outro: ['¡Ay! Estudiaste mucho, ¿verdad?', 'Ugh! You studied a lot, didn’t you?'] });
+  setFlag('lucas1'); // won or lost: no second chance (the user), do better next time
   if (res === 'lose') {
-    // He'll be back next time you step into the mine.
+    await lines(['¡Te gané! ¡Entrena más y nos vemos!', 'I beat you! Train more, and see you around!']);
     setFlag('lucasAqui', false);
     refreshNpcs();
     return blackout();
   }
-  setFlag('lucas1');
   await lines(['Uf... Bueno, tú busca el silencio. Yo vuelvo al pueblo a curar a mis Palabritas.', 'Phew... OK, you go find the silence. I’m going back to town to heal my Palabritas.']);
   await walkNpc('lucas', ['down', 'down', 'down']);
   setFlag('lucasAqui', false);

@@ -19,6 +19,13 @@ let r = await t.play();
 t.check('Lucas catches up with you and battles', (await flags()).lucas1 && r.said.some((x) => x.includes('alcancé')), r.said.slice(0, 2));
 t.check('he took the starter strong against yours', r.said.some((x) => x.includes('Aguacatito')), r.said.filter((x) => x.includes('envía')));
 
+// Losing to him (one weak Palabrita): he won, and there's no second chance (do better next time).
+await t.fromSave({ map: 'mina1', x: 5, y: 23, dir: 'up', party: [['gotita', 5]], starterPicked: 'gotita' });
+await t.walk('up', 1);
+r = await t.play({ right: false });
+const lost = await flags();
+t.check('losing to Lucas: he gloats, and he’s gone', lost.lucas1 && !lost.lucasAqui && r.said.some((x) => x.includes('Te gané')), r.said.slice(-4));
+
 // Gaby: pick the guardabarranco from three descriptions, then show her one.
 await t.fromSave({ map: 'ruta5', x: 21, y: 8, dir: 'left', party });
 await t.press('z');

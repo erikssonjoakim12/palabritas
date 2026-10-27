@@ -51,12 +51,13 @@ async function lucasPlaya() {
   const starter = lucasStarter();
   const team: [string, number][] = [[SPECIES[starter].evolves?.to ?? starter, 22], ['hojadillo', 19], ['palomon', 20]];
   const res = await trainerBattle({ ...TRAINERS.lucas2, team }, { look: 'lucas', outro: ['¡No puede ser! ¿Cuántas palabras sabes?', 'It can’t be! How many words do you know?'] });
+  setFlag('lucas2'); // won or lost: no second chance
   if (res === 'lose') {
+    await lines(['¡Esta vez gané yo! Nos vemos en el volcán.', 'This time I won! See you at the volcano.']);
     setFlag('lucasPlaya', false);
     refreshNpcs();
     return blackout();
   }
-  setFlag('lucas2');
   await lines(['Voy a entrenar con las olas. ¡Nos vemos en el volcán!', 'I’m going to train with the waves. See you at the volcano!']);
   await walkNpc('lucas_playa', ['down', 'down', 'down', 'down', 'down', 'down']);
   setFlag('lucasPlaya', false);
