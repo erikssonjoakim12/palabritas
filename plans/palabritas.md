@@ -30,3 +30,6 @@ In `SPECIES` (src/data/species.ts), with the helpers `m(name, type, mode, level?
 | A jaguar Palabrita | the Templo del Jaguar's altar (region 5) | open: does it exist, caught or a gift? The user designs it ([region5-jungle.md](region5-jungle.md)) |
 | A legendary, level 50 | the volcano island in the Lago de las Islas, after the 8th gym | the user's idea; nothing designed yet |
 | The rainforest families | Villa Jaguar and the Selva (gym 5) | to plan with region 5; animal ideas in [BIOMES.md](../BIOMES.md) §2 |
+
+**Content waiting for a Palabrita:** «En el restaurante» (src/data/content/trainers.ts, ordering food) isn't used
+yet. The user wants to keep it: a future Palabrita may teach it.

@@ -18,7 +18,7 @@ const r = await t.play({
 });
 let s = await t.save();
 t.check('bought 2 Palabolas and a potion', s.bag.palabola === 2 && s.bag.pocion === 1, s.bag);
-t.check('paid 2 × $60 + $100', s.money === 780, s.money);
+t.check('paid 2 × C$60 + C$100', s.money === 780, s.money);
 t.check('ordered in Spanish 3 times', r.answered === 3, r.answered);
 
 // With one Palabrita the potion is used on it directly; with more, you pick who.
@@ -35,7 +35,7 @@ const more = ['Superpoción', '×1', 'Nada'];
 await t.press('z');
 await t.play({ choose: () => more.shift(), answers: ['me da una superpocion'] });
 s = await t.save();
-t.check('bought a Superpoción for $250', s.bag.superpocion === 1 && s.money === 750, { bag: s.bag, money: s.money });
+t.check('bought a Superpoción for C$250', s.bag.superpocion === 1 && s.money === 750, { bag: s.bag, money: s.money });
 
 await t.fromSave({ map: 'ruta1', x: 3, y: 4, dir: 'right', party: [['gotita', 8, { hp: 0 }], ['conejito', 6]], bag: { revivir: 1 } });
 const revive = ['MOCHILA', 'Revivir', 'B', 'SALIR'];

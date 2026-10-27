@@ -1,6 +1,6 @@
 // Region 4's side quests (the Torovenado and the legend are in torovenado.test): bargaining for Mom's hammock
 // (a rude answer doesn't lower the price), Mom takes it and the sloth in it battles you; the baby parakeet back
-// to its nest; the haunted lamp's whispers, then Lamparita and the owner's $500.
+// to its nest; the haunted lamp's whispers, then Lamparita and the owner's C$500.
 import { start } from './lib.mjs';
 
 const t = await start('quests4');
@@ -14,7 +14,7 @@ const talk = (map, x, y, dir, opts = { choose: yes }) => t.talk(map, x, y, dir, 
 await t.fromSave({ map: 'chispa', x: 13, y: 21, dir: 'left', party, money: 600, flags: { cohetesRobados: true } });
 let r = await talk('chispa', 13, 21, 'left', { choices: ['¡Es muy caro', '¿Me hace', '¡Qué hamaca', '¡Es muy caro', 'Me la llevo'] });
 let s = await save();
-t.check('bargaining politely gets the hammock for $500', s.bag.hamaca === 1 && s.money === 100, [s.money, s.bag.hamaca]);
+t.check('bargaining politely gets the hammock for C$500', s.bag.hamaca === 1 && s.money === 100, [s.money, s.bag.hamaca]);
 t.check('a rude answer doesn’t lower the price', r.said.some((x) => x.includes('maleducad')));
 await talk('casa', 1, 2, 'down');
 await talk('casa', 1, 5, 'up');
@@ -37,6 +37,6 @@ await t.press('z');
 r = await t.play();
 t.check('repeating the lamp’s whispers calms it (then Lamparita battles)', (await save()).flags.lamparaCalmada && r.answered >= 3, r.answered);
 await talk('casa_chispa2', 5, 3, 'up');
-t.check('the owner pays $500', (await save()).money === 500);
+t.check('the owner pays C$500', (await save()).money === 500);
 
 await t.end();

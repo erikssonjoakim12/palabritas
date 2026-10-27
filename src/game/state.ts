@@ -51,7 +51,7 @@ export interface SaveData {
   flags: Record<string, boolean>;
   /** You, as chosen at the start: changes your look and how people talk to you («listo/lista»). */
   gender: 'boy' | 'girl';
-  /** Pesos, earned by beating trainers. */
+  /** Córdobas (C$), earned by beating trainers. */
   money: number;
   /** Items by id (data/items.ts) → how many. */
   bag: Record<string, number>;

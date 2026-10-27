@@ -588,7 +588,7 @@ export const REGION1_MAPS: Record<string, MapDef> = {
       itemBall('pocion_cueva', 32, 35, 'pocion'),
       // The echo room behind the cracked wall (shout five times, §8.2), with the shell fossil.
       { id: 'pared_eco', x: 6, y: 9, object: 'paredRota', script: 'paredEco', show: () => !flag('ecoAbierto') },
-      itemBall('fosil_cueva', 6, 4, 'fosil'),
+      itemBall('fosil_cueva', 6, 4, 'fosil', 'fosil'),
       // Beto's hat, on an Ecolín's head in Rocío's side room (§8.1).
       { id: 'ecolin_sombrero', x: 16, y: 33, object: 'ecolinSombrero', script: 'ecolinSombrero', show: () => !flag('sombreroEncontrado') },
     ],

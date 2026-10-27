@@ -1,4 +1,4 @@
-/** Things you can carry in your MOCHILA (bag) and buy at the shop. Money is in pesos ($). */
+/** Things you can carry in your MOCHILA (bag) and buy at the shop. Money is in córdobas (C$). */
 export interface ItemDef {
   id: string;
   name: string;

@@ -1,5 +1,5 @@
 // The school (Villa Ocote's): REPASO asks the words due for review and pushes their next review out; with
-// nothing due it says you're caught up. A private class costs $200, asks up to 10 of a Palabrita's current
+// nothing due it says you're caught up. A private class costs C$200, asks up to 10 of a Palabrita's current
 // words and only once a day. The topic of the day asks 8.
 import { start } from './lib.mjs';
 
@@ -32,7 +32,7 @@ t.check('with nothing due, you’re caught up', r.said.some((x) => x.includes('a
 await t.fromSave({ ...school, money: 500 });
 r = await lesson('CLASE PARTICULAR');
 s = await t.save();
-t.check('a private class costs $200', s.money === 300, s.money);
+t.check('a private class costs C$200', s.money === 300, s.money);
 t.check('and asks up to 10 of the Palabrita’s words', r.answered > 0 && r.answered <= 20, r.answered);
 r = await lesson('CLASE PARTICULAR');
 t.check('only one a day', (await t.save()).money === 300 && r.said.some((x) => x.includes('mañana')), r.said);

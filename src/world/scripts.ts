@@ -169,7 +169,7 @@ const S: Record<string, ScriptFn> = {
         'The better your answer, the easier it is to catch. Doña Lupe in Villa Limón makes Palabolas.',
       ]],
       ['Money & items', [
-        'Beat trainers to win money (pesos). If all your Palabritas faint, you drop half of it!',
+        'Beat trainers to win money (córdobas, C$). If all your Palabritas faint, you drop half of it!',
         'Spend it at the shop in Ciudad Brisa on Palabolas and Potions. To buy, you ask the cashier in Spanish.',
         'Open START, MOCHILA to see your items and use Potions. In battle, MOCHILA is in the menu too.',
       ]],

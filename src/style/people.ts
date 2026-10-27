@@ -615,6 +615,28 @@ export const OBJECTS_ART: Record<string, { pal: Pal; rows: string[] }> = {
       '................',
     ],
   },
+  /** The shell fossil on the cave floor: a domed shell of little plates, like a giant armadillo's (Caparazonte). */
+  fosil: {
+    pal: OBJECT_PALS.fosil,
+    rows: [
+      '................',
+      '.....333333.....',
+      '...3300211133...',
+      '..322222222223..',
+      '.30121121121213.',
+      '.32222222222223.',
+      '.31211211211213.',
+      '.32222222222223.',
+      '3101110111011103',
+      '3333333333333333',
+      '................',
+      '................',
+      '................',
+      '................',
+      '................',
+      '................',
+    ],
+  },
   michi: {
     pal: OBJECT_PALS.michi,
     rows: [

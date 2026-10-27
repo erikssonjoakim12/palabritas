@@ -38,4 +38,5 @@ export function prizeMoney(team: Mon[]) {
   }, 0);
 }
 
-export const money = (n = G.save.money) => `$${n}`;
+/** Money is in córdobas, written C$ like in Nicaragua. */
+export const money = (n = G.save.money) => `C$${n}`;

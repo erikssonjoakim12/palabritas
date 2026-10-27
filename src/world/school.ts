@@ -17,7 +17,7 @@ import { lines, showCreature } from './flows';
   Studying outside battles: the reusable drill (the starter's first words, the school), and the school teacher.
   Every town with a gym has a school, so these come back in every region:
     REPASO: the words due for review (spaced repetition), most overdue first. Free; keeps loyalty up.
-    CLASE PARTICULAR: one Palabrita's current level (new words, then its review). $200, once a day per school.
+    CLASE PARTICULAR: one Palabrita's current level (new words, then its review). C$200, once a day per school.
     TEMA DEL DÍA: 8 questions on the town's grammar topic (two topics, one each day).
 */
 
@@ -119,7 +119,7 @@ async function tema(topics: [string, string]) {
 /** A school's teacher, with the town's two grammar topics. */
 export const teacher = (topics: [string, string]): ScriptFn => async () => {
   await say('¡Bienvenid{o/a} a la escuela! ¿Qué quieres estudiar hoy?', {
-    en: 'Welcome to school! What do you want to study today? REPASO = review the words that are due. CLASE PARTICULAR = a private class for one Palabrita ($200, once a day). TEMA DEL DÍA = today’s grammar topic.',
+    en: 'Welcome to school! What do you want to study today? REPASO = review the words that are due. CLASE PARTICULAR = a private class for one Palabrita (C$200, once a day). TEMA DEL DÍA = today’s grammar topic.',
     noWait: true,
   });
   const i = await menu(['REPASO', 'CLASE PARTICULAR', 'TEMA DEL DÍA', 'Nada'], { cancel: true });

@@ -150,8 +150,8 @@ export const HOUSE = ['##L##V##', '________', '_kk_____', '_kk_____', '________'
 // Palacentro: posters (u), nurse behind the counter (C) next to the healing machine,
 // a computer (Q) and waiting sofas (n).
 const CENTRO = ['##u####u##', 'PxxxxxxxxP', 'xxxCCCCxxx', 'xxxxxxxxQx', 'xxxxxxxxxx', 'nxxxxxxxxn', 'nxxxxxxxxn', 'xxxxmxxxxx'];
-/** An item ball on the ground, like Gold/Silver's: picked up once (scripts.ts, itemBall). */
-export const itemBall = (id: string, x: number, y: number, item: string): NpcDef => ({ id, x, y, object: 'palabola', item, script: 'itemBall', show: () => !flag(`item:${id}`) });
+/** Something to pick up, once (flag item:<id>): a Palabola on the ground, or its own look (`object`, e.g. the fossil). */
+export const itemBall = (id: string, x: number, y: number, item: string, object = 'palabola'): NpcDef => ({ id, x, y, object, item, script: 'itemBall', show: () => !flag(`item:${id}`) });
 const MAQUINA: NpcDef = { id: 'maquina', x: 5, y: 1, object: 'maquina', script: 'maquina' };
 const TIENDA = ['P########P', '++++++++++', '+C++++kk++', '+C++++kk++', '++++++++++', '++++kk++++', '++++++++++', '++++m+++++'];
 const CAJERA: NpcDef = { id: 'cajera', x: 0, y: 2, look: 'cashier', dir: 'right', script: 'cajera', speaksWhenMuted: true };

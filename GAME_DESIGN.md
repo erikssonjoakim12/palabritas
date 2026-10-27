@@ -71,7 +71,7 @@ The creatures are **Palabritas**, you catch them with **Palabolas**, and you hea
 
 ## Money and items
 
-- Beating a trainer pays **the total stats of their Palabritas** in pesos ($).
+- Beating a trainer pays **the total stats of their Palabritas** in córdobas (C$).
   Losing (all Palabritas fainted) drops **half your money**, like Gold/Silver. Wild battles pay nothing.
 - **Shops** sell Palabolas, Superbolas, Pociones and more. To buy, you **ask the cashier in Spanish**, typed or
   spoken: «Quiero dos Palabolas, por favor», «Me da una poción»... Any natural phrasing with the right item and

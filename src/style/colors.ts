@@ -207,6 +207,8 @@ export const CLOTHES: Record<string, string> = {
 
 export const OBJECT_PALS: Record<string, Pal> = {
   palabola: ['', '#f0f0e8', '#38a8a0', SPRITE_INK],
+  /** The shell fossil: a highlight (0), old bone (1), the seams between its plates (2). */
+  fosil: ['#f8f4e8', '#e0d8c8', '#8c7c68', SPRITE_INK],
   michi: ['', '#f0f0e8', '#e09848', SPRITE_INK],
   armchair: ['', '#f0b0b8', '#d05058', SPRITE_INK],
   /** The armchair with Cojincito on it: a cream cushion (0) on the seat. */

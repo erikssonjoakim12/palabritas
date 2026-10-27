@@ -220,7 +220,7 @@ async function hamaquera() {
   let step = 0;
   for (let turn = 0; ; turn++) {
     const price = PRICES[step];
-    await lines([`Cuesta ${price} córdobas.`, `It costs ${price} córdobas (${price} in the game).`]);
+    await lines([`Cuesta ${price} córdobas.`, `It costs ${price} córdobas.`]);
     const options = shuffled([GOOD[turn % GOOD.length], RUDE[turn % RUDE.length], BUY, LEAVE]);
     const said = options[await chooseText('¿Qué le dices?', 'What do you say? (Bargain politely to lower the price.)', options)];
     if (said === LEAVE) return lines(['¡Aquí estoy si cambias de idea!', 'I’m here if you change your mind!']);
