@@ -12,7 +12,7 @@ import { challenge, chooseText } from '../ui/challenge';
 import { trainerBattle, wildBattle } from '../battle/battle';
 import { TRAINERS } from '../data/trainers';
 import { speak } from '../lang/speech';
-import { warp, refreshNpcs, walkNpc, placeNpc, setFade, fadeOut, currentMap, type ScriptFn } from './world';
+import { warp, refreshNpcs, walkNpc, placeNpc, approachPlayer, setFade, fadeOut, currentMap, type ScriptFn } from './world';
 import { MAPS, gateOf, type Line } from './maps';
 import { lines, trainerFight, blackout, talkMode } from './scripts';
 import { teacher } from './school';
@@ -301,29 +301,34 @@ async function fiesta() {
 // ---------- Ruta 5 and the canyon ----------
 
 
-/** The foot of the clifftop trail: Lucas catches up with you (rival battle #1). */
-async function lucasRuta5() {
+/**
+ * Rival battle #1, as you step into the mine where Villa Ocote's silence comes from (the user: on Ruta 5, right
+ * after the cave, he was too hard; here Ocote's Palacentro is on the way). Lucas comes in behind you and walks right
+ * up to you.
+ */
+async function lucasMina() {
   if (flag('lucas1')) return;
   sfx('alert');
   setFlag('lucasAqui');
-  placeNpc('lucas', 35, 11, 'right');
-  await walkNpc('lucas', Array(10).fill('right'));
+  placeNpc('lucas', 5, 24, 'up');
+  await lines(['¡{name}! ¡Espera!', '{name}! Wait!']);
+  await approachPlayer('lucas');
   await lines(
-    ['¡{name}! ¡Por fin te alcancé!', '{name}! I finally caught up with you!'],
+    ['¡Por fin te alcancé! ¿Tú también vas a la mina? Dicen que el silencio del pueblo viene de aquí.', 'I finally caught up with you! Are you going into the mine too? They say the town’s silence comes from here.'],
     ['¿Te acuerdas de mi Palabrita? ¡La entrené todos los días!', 'Remember my Palabrita? I’ve trained it every day!'],
     ['¡Vamos a ver quién aprendió más palabras!', 'Let’s see who learned more words!'],
   );
   const lucas = { ...TRAINERS.lucas1, team: [[lucasStarter(), 15], ['pajarito', 12]] as [string, number][] };
   const res = await trainerBattle(lucas, { look: 'lucas', outro: ['¡Ay! Estudiaste mucho, ¿verdad?', 'Ugh! You studied a lot, didn’t you?'] });
   if (res === 'lose') {
-    // He'll be back next time you come down the trail.
+    // He'll be back next time you step into the mine.
     setFlag('lucasAqui', false);
     refreshNpcs();
     return blackout();
   }
   setFlag('lucas1');
-  await lines(['Bueno, voy a Villa Ocote. ¡Dicen que el gimnasio es de tipo Roca!', 'Well, I’m going to Villa Ocote. They say the gym is Rock-type!']);
-  await walkNpc('lucas', ['down', ...Array(8).fill('left')]);
+  await lines(['Uf... Bueno, tú busca el silencio. Yo vuelvo al pueblo a curar a mis Palabritas.', 'Phew... OK, you go find the silence. I’m going back to town to heal my Palabritas.']);
+  await walkNpc('lucas', ['down', 'down', 'down']);
   setFlag('lucasAqui', false);
   refreshNpcs();
 }
@@ -562,7 +567,7 @@ const talk = (...ls: Line[]): ScriptFn => () => lines(...ls);
 export const REGION2: Record<string, ScriptFn> = {
   mensajeOcote,
   notaCapataz,
-  lucasRuta5,
+  lucasMina,
   gaby,
   ecolinSombrero,
   betoSombrero,

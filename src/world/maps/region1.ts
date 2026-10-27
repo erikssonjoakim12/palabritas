@@ -651,10 +651,6 @@ export const REGION1_MAPS: Record<string, MapDef> = {
       ],
     },
     // The foot of the clifftop trail: Lucas catches up with you (rival battle #1).
-    triggers: [
-      { x: 46, y: 10, script: 'lucasRuta5' },
-      { x: 47, y: 10, script: 'lucasRuta5' },
-    ],
     doors: [{ x: 90, y: 5, to: 'ruta4', tx: 52, ty: 1, dir: 'down' }],
     // Halfway along the road, in a gap in the pines: she sees both lanes.
     npcs: [
@@ -662,7 +658,6 @@ export const REGION1_MAPS: Record<string, MapDef> = {
       { id: 'armando', x: 70, y: 2, look: 'lenador', dir: 'down', script: 'armando', sight: 2 },
       { id: 'elena', x: 14, y: 10, look: 'campista', dir: 'down', script: 'elena', sight: 2 },
       { id: 'gaby', x: 20, y: 8, look: 'ornitologa', dir: 'left', script: 'gaby', turns: true },
-      { id: 'lucas', x: 35, y: 11, look: 'lucas', dir: 'right', script: 'lucas', show: () => flag('lucasAqui') },
       // Two of Villa Ocote's lost words blew all the way out here.
       lostWord('marimba', 3, 10),
       lostWord('bueyes', 53, 8),

@@ -431,6 +431,39 @@ export async function walkNpc(id: string, path: Dir[], { speed = 1 } = {}) {
   }
 }
 
+/**
+ * Walk an NPC up to you, by the shortest way, to a tile right next to you, and turn to face you (a rival
+ * catching up). If nothing leads there, it stays where it is.
+ */
+export async function approachPlayer(id: string, opts: { speed?: number } = {}) {
+  const n = npcById(id);
+  if (!n) return console.warn(`approachPlayer: no NPC ${id}`);
+  const next = (x: number, y: number) => Object.entries({ up: [0, -1], down: [0, 1], left: [-1, 0], right: [1, 0] }) as [Dir, number[]][];
+  const besideYou = (x: number, y: number) => Math.abs(x - player.x) + Math.abs(y - player.y) === 1;
+  const from = new Map<string, [string, Dir] | null>([[`${n.x},${n.y}`, null]]);
+  const queue = [[n.x, n.y]];
+  let end: number[] | null = besideYou(n.x, n.y) ? [n.x, n.y] : null;
+  while (queue.length && !end) {
+    const [x, y] = queue.shift()!;
+    for (const [d, [dx, dy]] of next(x, y)) {
+      const [nx, ny] = [x + dx, y + dy];
+      const k = `${nx},${ny}`;
+      if (from.has(k) || !walkable(nx, ny) || (nx === player.x && ny === player.y)) continue;
+      from.set(k, [`${x},${y}`, d]);
+      if (besideYou(nx, ny)) {
+        end = [nx, ny];
+        break;
+      }
+      queue.push([nx, ny]);
+    }
+  }
+  if (!end) return;
+  const path: Dir[] = [];
+  for (let k = `${end[0]},${end[1]}`, step = from.get(k); step; k = step[0], step = from.get(k)) path.unshift(step[1]);
+  await walkNpc(id, path, opts);
+  n.dir = player.x < n.x ? 'left' : player.x > n.x ? 'right' : player.y < n.y ? 'up' : 'down';
+}
+
 /** Put an NPC at (x, y), visible (e.g. the rival arriving from off-screen before walking in). */
 export function placeNpc(id: string, x: number, y: number, dir: Dir) {
   const n = npcById(id);

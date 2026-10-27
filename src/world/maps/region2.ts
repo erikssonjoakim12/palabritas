@@ -301,6 +301,12 @@ export const REGION2_MAPS: Record<string, MapDef> = {
     ],
     exit: { to: 'ocote', x: 19, y: 4 },
     doors: [{ x: 31, y: 18, to: 'mina2', tx: 4, ty: 4, dir: 'down' }],
+    // Two steps in: Lucas catches up with you (rival battle #1).
+    triggers: [
+      { x: 4, y: 22, script: 'lucasMina' },
+      { x: 5, y: 22, script: 'lucasMina' },
+      { x: 6, y: 22, script: 'lucasMina' },
+    ],
     encounters: {
       rate: 0.08,
       everywhere: true,
@@ -312,6 +318,7 @@ export const REGION2_MAPS: Record<string, MapDef> = {
       ],
     },
     npcs: [
+      { id: 'lucas', x: 5, y: 24, look: 'lucas', dir: 'up', script: 'lucas', show: () => flag('lucasAqui') },
       { id: 'silencioso1', x: 4, y: 18, look: 'silencioso', dir: 'right', script: 'silencioso1', sight: 2 },
       { id: 'silencioso2', x: 10, y: 4, look: 'silenciosa', dir: 'left', script: 'silencioso2', sight: 2 },
       { id: 'palanca', x: 12, y: 2, object: 'palanca', script: 'palanca' },

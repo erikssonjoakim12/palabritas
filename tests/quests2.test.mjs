@@ -12,9 +12,9 @@ const talk = async (map, x, y, dir, opts) => {
   return t.play(opts);
 };
 
-// Lucas, at the foot of the clifftop trail. You picked Gotita, so he has Aguacatito.
-await t.fromSave({ map: 'ruta5', x: 47, y: 9, dir: 'down', party, starterPicked: 'gotita' });
-await t.walk('down', 1);
+// Lucas catches up with you as you step into the mine. You picked Gotita, so he has Aguacatito.
+await t.fromSave({ map: 'mina1', x: 5, y: 23, dir: 'up', party, starterPicked: 'gotita' });
+await t.walk('up', 1);
 let r = await t.play();
 t.check('Lucas catches up with you and battles', (await flags()).lucas1 && r.said.some((x) => x.includes('alcancé')), r.said.slice(0, 2));
 t.check('he took the starter strong against yours', r.said.some((x) => x.includes('Aguacatito')), r.said.filter((x) => x.includes('envía')));
