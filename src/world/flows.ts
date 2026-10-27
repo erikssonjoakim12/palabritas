@@ -10,13 +10,13 @@ import { giveMon, healParty, lucasStarter, formAt } from '../game/mon';
 import { record } from '../game/learning';
 import { SPECIES, type Mode } from '../data/species';
 import { TRAINERS } from '../data/trainers';
-import { say, info, setSpeaker } from '../ui/textbox';
+import { say, info, setSpeaker, type SayOpts } from '../ui/textbox';
 import { ask } from '../ui/menu';
 import { challenge, chooseText, type ChallengeSpec } from '../ui/challenge';
 import { spriteCanvas } from '../ui/party';
 import { trainerBattle } from '../battle/battle';
 import { speak, canListen } from '../lang/speech';
-import { warp, npcById, fadeOut, type ScriptFn } from './world';
+import { warp, npcById, fadeOut, currentMap, type ScriptFn } from './world';
 import type { Dir } from '../engine/input';
 import type { Line } from './maps';
 
@@ -39,6 +39,14 @@ export async function as(look: string, ...ls: Line[]) {
   } finally {
     setSpeaker(before);
   }
+}
+
+/**
+ * Someone's line, or on a muted map (Villa Ocote before the mine) «…» and what they act out instead (the EN
+ * line), like everyone else there.
+ */
+export function sayOrMime([es, en]: Line, mime: string, opts: SayOpts = {}) {
+  return currentMap().muted?.() ? say('…', { ...opts, en: mime }) : say(es, { ...opts, en });
 }
 
 /** Someone with a few lines, the same each time. */

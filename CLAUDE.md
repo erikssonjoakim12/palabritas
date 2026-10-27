@@ -151,6 +151,7 @@ male. **An object:** `OBJECTS_ART` (people.ts) + `OBJECT_PALS` (colors.ts).
   region's record (`REGION2`...).
 - The building blocks are in flows.ts; use them rather than writing the steps again:
   - talking: `lines()`, `as(look, ...)` (someone else speaks), `talk(...)` (the same lines each time),
+    `sayOrMime(line, mime)` (on a muted map: «…» and what they act out),
     `cutTo(line, map, x, y, dir)` («Esa noche...»);
   - Spanish: `practice(spec)` (a challenge that counts toward mastery), `practiceUntilRight(spec, retry)`,
     `question()` and `untilRight()` (multiple choice, optionally read aloud);

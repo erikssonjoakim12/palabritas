@@ -51,8 +51,8 @@ export interface NpcDef {
   item?: string;
   /** On a muted map: what they act out (the EN line; the Spanish is «…»). */
   mime?: string;
-  /** Talks even on a muted map (Equipo Silencio, the nurse, the cashier...). */
-  speaksWhenMuted?: boolean;
+  /** On a muted map, runs its own script anyway (the nurse and the cashier: they mime, but still serve you). */
+  servesWhenMuted?: boolean;
 }
 
 export interface Conn {
@@ -154,7 +154,7 @@ const CENTRO = ['##u####u##', 'PxxxxxxxxP', 'xxxCCCCxxx', 'xxxxxxxxQx', 'xxxxxxx
 export const itemBall = (id: string, x: number, y: number, item: string, object = 'palabola'): NpcDef => ({ id, x, y, object, item, script: 'itemBall', show: () => !flag(`item:${id}`) });
 const MAQUINA: NpcDef = { id: 'maquina', x: 5, y: 1, object: 'maquina', script: 'maquina' };
 const TIENDA = ['P########P', '++++++++++', '+C++++kk++', '+C++++kk++', '++++++++++', '++++kk++++', '++++++++++', '++++m+++++'];
-const CAJERA: NpcDef = { id: 'cajera', x: 0, y: 2, look: 'cashier', dir: 'right', script: 'cajera', speaksWhenMuted: true };
+const CAJERA: NpcDef = { id: 'cajera', x: 0, y: 2, look: 'cashier', dir: 'right', script: 'cajera', servesWhenMuted: true };
 /** A shop inside: the cashier behind the counter. What it sells is in SHOPS (data/items.ts), by map id. */
 export const tienda = (id: string, exit: MapDef['exit'], extra: Partial<MapDef> = {}): MapDef => ({
   id, name: 'Tienda', outdoor: false, floor: '+', rows: TIENDA, exit, npcs: [CAJERA], ...extra,
@@ -192,7 +192,7 @@ export const centro = (id: string, exit: MapDef['exit'], more: NpcDef[] = [], ex
   floor: 'x',
   rows: CENTRO,
   exit,
-  npcs: [{ id: 'enfermera', x: 4, y: 1, look: 'nurse', dir: 'down', script: 'enfermera', speaksWhenMuted: true }, MAQUINA, ...more],
+  npcs: [{ id: 'enfermera', x: 4, y: 1, look: 'nurse', dir: 'down', script: 'enfermera', servesWhenMuted: true }, MAQUINA, ...more],
   ...extra,
 });
 

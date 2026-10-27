@@ -19,6 +19,18 @@ await t.shot('ocote');
 r = await t.talk('ocote', 24, 12, 'up');
 t.check('a muted person says «…»', r.said[0] === '…', r.said);
 
+// The Palacentro and the shop are muted too: the nurse and the cashier only mime, but still serve you (the user).
+await t.fromSave({ map: 'centro_ocote', x: 4, y: 3, dir: 'up', money: 500, party: [['nubarron', 30, { hp: 5 }]] });
+r = await t.talk('centro_ocote', 4, 3, 'up', { choose: () => 'Sí' });
+let s2 = await t.save();
+t.check('the muted nurse only mimes', r.said.every((x) => x === '…'), r.said);
+t.check('…and still heals your Palabritas', s2.party[0].hp > 5 && s2.heal.map === 'centro_ocote', [s2.party[0].hp, s2.heal]);
+const menus = ['Palabola', '×1', 'Nada'];
+r = await t.talk('tienda_ocote', 2, 2, 'left', { choose: () => menus.shift() });
+s2 = await t.save();
+t.check('the muted cashier only mimes', r.said.every((x) => x === '…'), r.said);
+t.check('…and you still order in Spanish and buy', r.answered === 1 && s2.bag.palabola === 1 && s2.money === 440, [r.answered, s2.bag, s2.money]);
+
 // 3. The lever in the mine opens the gate.
 await t.fromSave({ map: 'mina1', x: 12, y: 3, dir: 'up', party: strong });
 await t.press('z');

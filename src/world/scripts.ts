@@ -18,8 +18,8 @@ import { pickFrom } from '../ui/party';
 import { startMenu } from '../ui/startmenu';
 import { wildBattle } from '../battle/battle';
 import { SCRIPTS, scriptedStep, currentMap, refreshNpcs, npcById, pickEncounter, facingTile, walkNpc, MUTED_MIME, type ScriptFn } from './world';
-import { gateOf, closedLines, FRESHWATER, type Line } from './maps';
-import { lines, as, talkMode, showCreature, heal, blackout, fight, gymLeader, gift, receiveMon, practice, untilRight } from './flows';
+import { gateOf, closedLines, FRESHWATER } from './maps';
+import { lines, as, sayOrMime, talkMode, showCreature, heal, blackout, fight, gymLeader, gift, receiveMon, practice, untilRight } from './flows';
 import { REGION2 } from './region2';
 import { REGION3 } from './region3';
 import { REGION4, hamacaParaMama } from './region4';
@@ -32,9 +32,6 @@ import { MINI_BALL, BALL_COLORS, FLASH_COLORS, drawPattern } from '../art/balls'
   Palacentro, the shop, the box, gates, items on the ground), and the registry of every region's scripts.
   The building blocks they're made of are in flows.ts.
 */
-
-/** The nurse and the cashier in a muted town (they talk; they're too busy to have noticed). */
-const LUCKY_YOU: Line = ['¿Tú puedes hablar? ¡Qué suerte! Aquí todos perdieron la voz.', 'You can talk? Lucky you! Everyone here lost their voice.'];
 
 /**
  * Gold/Silver's healing: the Palabolas go into the machine one by one, flash, and the
@@ -418,8 +415,7 @@ const S: Record<string, ScriptFn> = {
 
   /** The shop: pick something, then ask for it in Spanish (written or spoken). */
   async cajera() {
-    if (currentMap().muted?.()) await lines(LUCKY_YOU);
-    await say('¡Bienvenid{o/a} a la tienda! ¿Qué deseas comprar?', { en: 'Welcome to the shop! What would you like to buy?', noWait: true });
+    await sayOrMime(['¡Bienvenid{o/a} a la tienda! ¿Qué deseas comprar?', 'Welcome to the shop! What would you like to buy?'], '(The cashier can’t speak. She smiles and points at the shelves.)', { noWait: true });
     const shop = SHOPS[currentMap().id] ?? SHOPS.tienda_brisa;
     // Your money in the top right while you shop (like Gold/Silver), updated after every purchase.
     const purse = el('div', 'box purse');
@@ -434,7 +430,7 @@ const S: Record<string, ScriptFn> = {
         const def = ITEM_DEFS[id];
         const most = Math.min(5, Math.floor(G.save.money / def.price));
         if (!most) {
-          await lines(['Lo siento, no tienes suficiente dinero.', 'Sorry, you don’t have enough money.']);
+          await sayOrMime(['Lo siento, no tienes suficiente dinero.', 'Sorry, you don’t have enough money.'], '(She shakes her head and points at your purse: not enough money.)');
           continue;
         }
         const q = await menu(Array.from({ length: most }, (_, k) => `×${k + 1}  ${money(def.price * (k + 1))}`), { cancel: true, title: def.feminine ? '¿Cuántas?' : '¿Cuántos?' });
@@ -450,20 +446,20 @@ const S: Record<string, ScriptFn> = {
           validate: (answer) => gradeOrder(answer, id, n),
         });
         if (r.grade === 'wrong') {
-          await lines(['¿Perdón? No te entendí bien. ¿Qué deseas?', 'Sorry? I didn’t quite understand. What would you like?']);
+          await sayOrMime(['¿Perdón? No te entendí bien. ¿Qué deseas?', 'Sorry? I didn’t quite understand. What would you like?'], '(She tilts her head: she didn’t understand. Try again!)');
           continue;
         }
         G.save.money -= def.price * n;
         showMoney();
         addItem(id, n);
         sfx('caught');
-        await lines([`¡Aquí tienes: ${amountOf(id, n)}! Son ${money(def.price * n)}.`, `Here you go! That’s ${money(def.price * n)}.`]);
-        await say('¿Algo más?', { en: 'Anything else?', noWait: true });
+        await sayOrMime([`¡Aquí tienes: ${amountOf(id, n)}! Son ${money(def.price * n)}.`, `Here you go! That’s ${money(def.price * n)}.`], `(She hands it over and writes the price on a paper: ${money(def.price * n)}.)`);
+        await sayOrMime(['¿Algo más?', 'Anything else?'], '(She raises her eyebrows: anything else?)', { noWait: true });
       }
     } finally {
       purse.remove();
     }
-    await lines(['¡Gracias por tu compra! Vuelve pronto.', 'Thanks for shopping! Come back soon.']);
+    await sayOrMime(['¡Gracias por tu compra! Vuelve pronto.', 'Thanks for shopping! Come back soon.'], '(She waves goodbye.)');
   },
 
   /** The Palacentro computer: the Caja de Palabritas (storage box). */
@@ -507,17 +503,20 @@ const S: Record<string, ScriptFn> = {
   },
 
   async enfermera() {
-    if (currentMap().muted?.()) await lines(LUCKY_YOU);
-    await lines(['¡Hola! Bienvenidos al Palacentro.', 'Hi! Welcome to the Palacentro.']);
-    if (await ask('¿Quieres que cure a tus Palabritas?', { en: 'Would you like me to heal your Palabritas?' })) {
-      await lines(['Un momento, por favor...', 'One moment, please...']);
+    const muted = currentMap().muted?.();
+    await sayOrMime(['¡Hola! Bienvenidos al Palacentro.', 'Hi! Welcome to the Palacentro.'], '(The nurse can’t speak. She smiles and bows.)');
+    const healIt = muted
+      ? await ask('…', { en: '(She points at your Palabolas, then at the healing machine. Heal your Palabritas?)' })
+      : await ask('¿Quieres que cure a tus Palabritas?', { en: 'Would you like me to heal your Palabritas?' });
+    if (healIt) {
+      await sayOrMime(['Un momento, por favor...', 'One moment, please...'], '(She takes your Palabolas.)');
       await healingMachine();
       G.save.heal = { map: currentMap().id, x: 4, y: 3 };
-      await lines(['¡Listo! Tus Palabritas están sanas. ¡Vuelve pronto!', 'Done! Your Palabritas are healthy. Come back soon!']);
+      await sayOrMime(['¡Listo! Tus Palabritas están sanas. ¡Vuelve pronto!', 'Done! Your Palabritas are healthy. Come back soon!'], '(She gives them back with a big smile and a thumbs up.)');
       const due = dueCount();
-      if (due >= 15) await lines([`Por cierto: tienes ${due} palabras para repasar. ¡En la escuela te ayudan!`, `By the way: you have ${due} words to review. The school can help!`]);
+      if (due >= 15 && !muted) await lines([`Por cierto: tienes ${due} palabras para repasar. ¡En la escuela te ayudan!`, `By the way: you have ${due} words to review. The school can help!`]);
     } else {
-      await lines(['¡Vuelve pronto!', 'Come back soon!']);
+      await sayOrMime(['¡Vuelve pronto!', 'Come back soon!'], '(She waves.)');
     }
   },
 

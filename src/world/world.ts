@@ -395,7 +395,7 @@ function interact() {
   const muted = !!map.muted?.();
   if (n) {
     if (n.def.look) n.dir = OPP[player.dir];
-    if (muted && n.def.look && !n.def.speaksWhenMuted) runScript(() => say('…', { en: n.def.mime ?? MUTED_MIME }), { npc: n });
+    if (muted && n.def.look && !n.def.servesWhenMuted) runScript(() => say('…', { en: n.def.mime ?? MUTED_MIME }), { npc: n });
     else runScript(SCRIPTS[n.def.script], { npc: n });
     return;
   }
