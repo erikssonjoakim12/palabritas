@@ -241,8 +241,46 @@ export const OBJECT_PALS: Record<string, Pal> = {
   perezosito: ['', '#c8a880', '#d84848', SPRITE_INK],
 };
 
-/** Palabola colors in the healing machine (normal, flash). */
-export const HEAL_BALL = ['#38a8a0', '#f0f0e8'];
+/** Palabolas drawn as little patterns (art/balls.ts): teal top and white bottom, gray once fainted, the healing machine's flash, an empty slot. */
+export const BALL = { top: '#38a8a0', bottom: '#f0f0e8', faintedTop: '#8c8c8c', faintedBottom: '#c8c8c0', flash: '#f8f8b0', empty: '#c8c8c0' };
+
+/** The «!» over someone's head (a trainer who spots you, or wants a rematch): k frame, w paper, r the mark. */
+export const MARK = { k: '#202028', w: '#ffffff', r: '#d83838' };
+
+/** Black: outside the maps, fades, the flash as a battle starts; and a hopping sprite's shadow. */
+export const BLACK = '#000000';
+export const SHADOW = 'rgba(0, 0, 0, 0.25)';
+
+// ---------- Battles and screens ----------
+
+/** The battle screen's background, and the ground under each Palabrita. */
+export const BATTLE = { bg: '#f8f8f8', ground: '#d8d8c4' };
+
+/** The title screen: the sky, the haze on the horizon, the grass and its edge. */
+export const TITLE = { sky: '#5ab0f0', haze: '#88c8f8', grass: '#7ec860', edge: '#5aa04a' };
+
+/** Battle portraits (art/portraits.ts): ink, white, dark and gray hair, the mouth; the lab coat; a caver's headlamp. */
+export const PORTRAIT = {
+  ink: '#1a1a26',
+  white: '#ffffff',
+  hair: '#2a2430',
+  grayHair: '#a8a8b4',
+  mouth: '#c05048',
+  coatShade: '#d8d8e0',
+  coatShirt: '#4858a8',
+  coatSeam: '#b8b8c8',
+  lamp: '#f0f0d0',
+  lampGlow: '#f8f8a0',
+};
+
+/** Each type's color (the chips on a Palabrita's page, the type icons), and the chip's text. */
+export const TYPE_COLORS = {
+  Normal: '#a8a878', Fuego: '#f08030', Agua: '#6890f0', Eléctrico: '#f8d030', Planta: '#78c850',
+  Hielo: '#98d8d8', Lucha: '#c03028', Veneno: '#a040a0', Tierra: '#e0c068', Volador: '#a890f0',
+  Psíquico: '#f85888', Bicho: '#a8b820', Roca: '#b8a038', Fantasma: '#705898', Dragón: '#7038f8',
+  Siniestro: '#705848', Acero: '#b8b8d0',
+};
+export const TYPE_TEXT = '#ffffff';
 
 /**
  * The master palette for new art (Palabritas, trainers): color families, each dark → light,

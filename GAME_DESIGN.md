@@ -16,7 +16,7 @@ There is no XP from battles. A creature's **level is how much of its theme you h
 - Each level has its own items. When every new item of the current level is **mastered** (plus a short
   review of older ones), the creature levels up.
 - Items get harder: single words → short phrases → full sentences (present tense, *ir a*, the past...).
-  Levels go to 100 later.
+  Every Palabrita has its Spanish up to level 50 today; levels go to 100 later.
 
 ### The level curve
 
@@ -59,7 +59,8 @@ The creatures are **Palabritas**, you catch them with **Palabolas**, and you hea
 - Answer quality changes damage: perfect (accents too) on a non-tap move is a **critical hit ×1.5** half the
   time, close ×0.75, with 💡 help ×0.5, wrong = miss. Move power: tap 35, write 45, listen 55, speak 65.
 - **Learning moves:** like Gen 2, a Palabrita starts with 2 moves (👆 tap, ⌨️ write). By default it learns 🎧 listen
-  at level 6 and 🎤 speak at level 10, so the player gets used to each mechanic first. Each Palabrita can differ.
+  at level 6 and 🎤 speak at level 10, so the player gets used to each mechanic first. Weaker Palabritas learn
+  theirs earlier, stronger ones later; the starters learn their third move at 10 and their fourth at 16, once evolved.
 - **Level-ups and evolutions happen last in a turn** (the "anime moment"), and only if your attack landed and
   your Palabrita is still standing. Training happens only in battles.
 - Gen 2 type chart, same-type bonus, speed order.
@@ -82,7 +83,8 @@ The creatures are **Palabritas**, you catch them with **Palabolas**, and you hea
 ## The world
 
 A Nicaragua-inspired country: farms and villages, pine highlands, the Pacific coast, volcanoes, and later
-rainforest, lakes and cloud forest ([BIOMES.md](BIOMES.md)). Every quest is a Spanish task: asking villagers
+rainforest, lakes and cloud forest ([BIOMES.md](BIOMES.md)). Surf (after the 4th medal) and Fly (after the 5th)
+are planned ([plans/surf-fly.md](plans/surf-fly.md)). Every quest is a Spanish task: asking villagers
 about a lost cat, giving lost words back to a muted town, counting turtle eggs, taking restaurant orders.
 Rival **Lucas** and the villains **Equipo Silencio** (who steal words) run through the story.
 Day and night follow the phone's clock.
@@ -95,4 +97,3 @@ Day and night follow the phone's clock.
 - Pre-recorded natural voices instead of the browser's text-to-speech.
 - Phone calls from NPCs (listening practice).
 - The bus (fast travel, ordering a ticket with *ir a*), once there are big roads.
-- SURF across water (a field move, like Gold/Silver's HMs).

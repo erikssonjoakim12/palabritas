@@ -58,5 +58,5 @@ island in Lake Nicaragua, really is full of old stone statues; Ometepe, the volc
 ## Order
 
 1. Surf: the engine work above; the river and the lake swimmable; Villa Jaguar reachable.
-2. Region 5's plan (Villa Jaguar, gym 5, the dungeon), in detail like plans/phase4-region4.md.
+2. Region 5's plan (Villa Jaguar, gym 5, the dungeon), in detail: every map drawn and checked, every trainer, quest step and line (plans/README.md).
 3. Fly, after gym 5.

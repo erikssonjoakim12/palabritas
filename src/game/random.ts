@@ -7,20 +7,24 @@ export function hash(s: string): number {
   return h >>> 0;
 }
 
-/** The same "random" order every time for the same seed. */
-export function seededShuffle<T>(arr: T[], seed: string): T[] {
-  let a = hash(seed);
-  const rand = () => {
-    // mulberry32
-    a = (a + 0x6d2b79f5) | 0;
-    let t = Math.imul(a ^ (a >>> 15), 1 | a);
-    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-  };
+/** A shuffled copy (Fisher-Yates: every order equally likely). */
+export function shuffled<T>(arr: T[], rand = Math.random): T[] {
   const out = [...arr];
   for (let i = out.length - 1; i > 0; i--) {
     const j = Math.floor(rand() * (i + 1));
     [out[i], out[j]] = [out[j], out[i]];
   }
   return out;
+}
+
+/** The same "random" order every time for the same seed. */
+export function seededShuffle<T>(arr: T[], seed: string): T[] {
+  let a = hash(seed);
+  // mulberry32
+  return shuffled(arr, () => {
+    a = (a + 0x6d2b79f5) | 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  });
 }

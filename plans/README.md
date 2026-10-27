@@ -1,34 +1,19 @@
-# Build plans: gyms 2–4
+# Plans
 
-The overview, with the why and the decisions, is [PLAN_GYMS_2-4.md](../PLAN_GYMS_2-4.md). These files are the
-detailed specs to build from. **One phase per session:** start a session with "Build phase N from
-plans/", and it reads:
+What's next, in detail. The big picture is [ROADMAP.md](../ROADMAP.md); the rules and recipes for building are in
+[CLAUDE.md](../CLAUDE.md). Plans for finished work are removed once it's built: the code is the truth, and git
+history keeps the old plans.
 
-1. [CLAUDE.md](../CLAUDE.md): rules, where things are, recipes, tests.
-2. [PLAN_GYMS_2-4.md](../PLAN_GYMS_2-4.md): the big picture (skim).
-3. The phase file below, plus the shared files it points to.
+| File | What |
+|---|---|
+| [surf-fly.md](surf-fly.md) | Surf (after the 4th medal) and Fly (after the 5th): the user's decisions and the engine work |
+| [region5-jungle.md](region5-jungle.md) | Villa Jaguar, the Selva and the Templo del Jaguar: what's placed, the experience to build, open questions |
+| [palabritas.md](palabritas.md) | how a Palabrita's data is made, and the Palabritas planned so far |
 
-| Phase | File | Ends with |
-|---|---|---|
-| 1–3 | built ✓ (their specs were removed: the code is the truth, and git history has them) | the groundwork, the pine highlands (Medalla Barro), the Pacific coast (Medalla Ola) |
-| 4 | built ✓ ([phase4-region4.md](phase4-region4.md), kept for its decisions) | volcanoes and dry forest: playable to the Medalla Chispa |
-| 5 | [phase5-polish.md](phase5-polish.md) | a full playthrough test, the pace check, docs, the art brief |
-
-**Shared:**
-- [palabritas.md](palabritas.md): region 4's Palabritas, ready to paste.
-- [content.md](content.md): region 4's themes and school topics.
-
-**What the specs promise:**
-- Every map in them was **drawn and checked** before it was written down: every way in and out is reachable
-  (ledges count as one-way), trainers marked "in the way" can't be walked past, seams line up with
-  neighboring maps, and the gym 3 currents were simulated.
-- Paste the rows as they are. If a map has to change, run `npm test -- maps` after.
-- Dialogue is given in Spanish and English. Keep the Spanish; small wording fixes are fine.
-- Spanish content follows content.md's rules; `npm test -- data` checks it.
-- When something in a spec is unclear or wrong, decide sensibly, and note it in the commit message.
-  Decisions the user should hear about go in the final message of the session.
-
-**Every phase:**
-- Commit after each numbered section with `npm test` green.
-- Push at the end.
-- Mark the phase ✓ in ROADMAP.md.
+**Writing a plan** (as for gyms 2–4, which worked well):
+- Draw and check every map before writing it down: every way in and out reachable (ledges are one-way),
+  trainers "in the way" can't be walked past, seams line up with the neighbors.
+- Give dialogue in Spanish and English; keep the Spanish when building, small wording fixes are fine.
+- Build one part per session, each ending playable with its tests green, and mark it ✓ in ROADMAP.md.
+- When something in a plan is unclear or wrong, decide sensibly and say so in the commit message; decisions the
+  user should hear about go in the session's final message.

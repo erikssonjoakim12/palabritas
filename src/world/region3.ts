@@ -1,39 +1,28 @@
-import { fanfare } from '../audio/bgm';
 import { sfx } from '../engine/sfx';
 import { frames } from '../engine/loop';
 import { G, flag, setFlag, today } from '../game/state';
+import { shuffled } from '../game/random';
 import { addItem, money } from '../game/bag';
-import { lucasStarter, giveMon } from '../game/mon';
-import { record } from '../game/learning';
-import { itemBySpanish, adHocItem } from '../data/content';
-import { SPECIES } from '../data/species';
-import { info, setSpeaker } from '../ui/textbox';
+import { itemBySpanish, adHocItem, wordItem } from '../data/content';
+import { info } from '../ui/textbox';
 import { ask } from '../ui/menu';
 import { challenge, chooseText } from '../ui/challenge';
 import { trainerBattle } from '../battle/battle';
 import { TRAINERS } from '../data/trainers';
 import { speak } from '../lang/speech';
 import { gradeDish } from '../lang/order';
-import { warp, refreshNpcs, walkNpc, placeNpc, fadeOut, type ScriptFn } from './world';
+import { refreshNpcs, walkNpc, placeNpc, type ScriptFn } from './world';
 import type { Line } from './maps';
-import { lines, trainerFight, blackout, talkMode } from './scripts';
+import { lines, as, talk, cutTo, talkMode, blackout, fight, rivalBattle, gymLeader, gift, receiveMon, practiceUntilRight, untilRight } from './flows';
 import { drill, teacher } from './school';
 
 /*
-  Region 3: the Pacific coast (PLAN_GYMS_2-4.md §3). Down Ruta 5 to the sea, along Ruta 6 to Playa Carey,
+  Region 3: the Pacific coast. Down Ruta 5 to the sea, along Ruta 6 to Playa Carey,
   la noche de la arribada on the turtle beach (Equipo Silencio and Callada), and Marina's surf school.
 */
 
-const shuffled = <T>(xs: T[]) => [...xs].sort(() => Math.random() - 0.5);
-/** Someone with a few lines, the same each time. */
-const talk = (...ls: Line[]): ScriptFn => () => lines(...ls);
 /** Lines that change once the arribada is over. */
 const beforeAfter = (before: Line[], after: Line[]): ScriptFn => () => lines(...(flag('arribadaDone') ? after : before));
-const gift = async (id: string, n: number, es: string, en: string) => {
-  addItem(id, n);
-  sfx('caught');
-  await info(`¡{name} recibió ${es}!`, { en: `{name} received ${en}!` });
-};
 
 // ---------- The rival: Lucas, battle #2 (the turtle beach, after Playa Carey and its Palacentro) ----------
 
@@ -48,20 +37,14 @@ async function lucasPlaya() {
     ['¿Ya tienes la Medalla Barro? ¡Yo también!', 'You have the Clay Medal already? Me too!'],
     ['Mi Palabrita evolucionó. ¡Mira qué fuerte está!', 'My Palabrita evolved. Look how strong it is!'],
   );
-  const starter = lucasStarter();
-  const team: [string, number][] = [[SPECIES[starter].evolves?.to ?? starter, 22], ['hojadillo', 19], ['palomon', 20]];
-  const res = await trainerBattle({ ...TRAINERS.lucas2, team }, { look: 'lucas', outro: ['¡No puede ser! ¿Cuántas palabras sabes?', 'It can’t be! How many words do you know?'] });
-  setFlag('lucas2'); // won or lost: no second chance
-  if (res === 'lose') {
-    await lines(['¡Esta vez gané yo! Nos vemos en el volcán.', 'This time I won! See you at the volcano.']);
-    setFlag('lucasPlaya', false);
-    refreshNpcs();
-    return blackout();
+  const won = await rivalBattle('lucas2', ['¡No puede ser! ¿Cuántas palabras sabes?', 'It can’t be! How many words do you know?'], ['¡Esta vez gané yo! Nos vemos en el volcán.', 'This time I won! See you at the volcano.']);
+  if (won) {
+    await lines(['Voy a entrenar con las olas. ¡Nos vemos en el volcán!', 'I’m going to train with the waves. See you at the volcano!']);
+    await walkNpc('lucas_playa', Array(6).fill('down'));
   }
-  await lines(['Voy a entrenar con las olas. ¡Nos vemos en el volcán!', 'I’m going to train with the waves. See you at the volcano!']);
-  await walkNpc('lucas_playa', ['down', 'down', 'down', 'down', 'down', 'down']);
   setFlag('lucasPlaya', false);
   refreshNpcs();
+  if (!won) await blackout();
 }
 
 // ---------- La noche de la arribada ----------
@@ -79,9 +62,7 @@ async function voluntaria() {
     setFlag('arribadaHablada');
   }
   if (!(await ask('¿Quieres esperar aquí hasta la noche?', { en: 'Do you want to wait here until night?' }))) return lines(['Está bien. ¡Vuelve antes de que oscurezca!', 'All right. Come back before it gets dark!']);
-  await fadeOut(24);
-  await info('Esa noche...', { en: 'That night...' });
-  await warp('tortugas_noche', G.save.x, G.save.y, G.save.dir, false);
+  await cutTo(['Esa noche...', 'That night...'], 'tortugas_noche', G.save.x, G.save.y, G.save.dir);
 }
 
 /** The numbers Tania counts aloud: you write them. */
@@ -95,13 +76,8 @@ async function voluntariaNoche() {
   }
   await lines(['¡Ayúdame a contar los huevos! Yo los cuento y tú escribes el número.', 'Help me count the eggs! I count them and you write the number.']);
   for (const [es, digits] of EGGS) {
-    const item = itemBySpanish(es) ?? adHocItem([es, digits], digits);
-    while (true) {
-      const r = await challenge({ item, mode: 'listen', title: '🥚 Los huevos', label: 'Tania cuenta. ¿Cuántos huevos hay? Escribe el número.' });
-      record(item, r.mode, r.grade, r.helped);
-      if (r.grade !== 'wrong') break;
-      await lines(['Mmm, no. ¡Escucha otra vez!', 'Hmm, no. Listen again!']);
-    }
+    const item = wordItem(es, digits, digits);
+    await practiceUntilRight({ item, mode: 'listen', title: '🥚 Los huevos', label: 'Tania cuenta. ¿Cuántos huevos hay? Escribe el número.' }, () => lines(['Mmm, no. ¡Escucha otra vez!', 'Hmm, no. Listen again!']));
   }
   setFlag('huevosContados');
   refreshNpcs();
@@ -136,18 +112,14 @@ async function callada() {
 const HATCHLINGS = ['tortuguita1', 'tortuguita2', 'tortuguita3', 'tortuguita4'];
 
 async function hatchlings() {
-  setSpeaker('marina');
-  await lines(['¡Están naciendo! Tenemos que ayudarlas a llegar al mar. ¡Guíalas!', 'They’re hatching! We have to help them reach the sea. Guide them!']);
-  setSpeaker();
+  await as('marina', ['¡Están naciendo! Tenemos que ayudarlas a llegar al mar. ¡Guíalas!', 'They’re hatching! We have to help them reach the sea. Guide them!']);
   setFlag('naciendo');
   refreshNpcs();
   await frames(20);
   const cheer = adHocItem(['¡Al mar!', '¡Por aquí!', '¡Vamos, tortuguitas!', '¡Vamos!'], 'To the sea! / This way! / Come on, little turtles!');
-  while (true) {
-    const r = await challenge({ item: cheer, mode: talkMode(), title: '🐢 ¡Ánimo!', label: '¡Diles algo para animarlas! · Say something to cheer them on!', allowHelp: true });
-    if (r.grade !== 'wrong') break;
-    await lines(['¡Más fuerte! ¡Que te oigan!', 'Louder! Let them hear you!']);
-  }
+  await practiceUntilRight({ item: cheer, mode: talkMode(), title: '🐢 ¡Ánimo!', label: '¡Diles algo para animarlas! · Say something to cheer them on!', allowHelp: true }, () =>
+    lines(['¡Más fuerte! ¡Que te oigan!', 'Louder! Let them hear you!']),
+  );
   for (const id of HATCHLINGS) {
     await walkNpc(id, ['down', 'down'], { speed: 1.5 });
     sfx('blip');
@@ -155,20 +127,11 @@ async function hatchlings() {
     refreshNpcs();
   }
   setFlag('tortuguitasAlMar');
-  setSpeaker('voluntaria');
-  await lines(['¡Lo lograste! Toma, esta tortuguita no quiere separarse de ti.', 'You did it! Here, this little turtle doesn’t want to leave you.']);
-  setSpeaker();
-  const where = giveMon('paslamita', 18);
-  sfx('caught');
-  await info('¡{name} recibió a Paslamita!', { en: '{name} received Paslamita!' });
-  if (where === 'box') await info('Tu equipo está lleno: Paslamita fue a la Caja de Palabritas.', { en: 'Your team is full: Paslamita went to the storage box.' });
-  setSpeaker('marina');
-  await lines(['Gracias por cuidar a las tortugas. Mañana te espero en la escuela de surf. ¡Prepárate!', 'Thanks for looking after the turtles. Tomorrow I’ll wait for you at the surf school. Get ready!']);
-  setSpeaker();
-  await fadeOut(24);
-  await info('A la mañana siguiente...', { en: 'The next morning...' });
+  await as('voluntaria', ['¡Lo lograste! Toma, esta tortuguita no quiere separarse de ti.', 'You did it! Here, this little turtle doesn’t want to leave you.']);
+  await receiveMon('paslamita', 18);
+  await as('marina', ['Gracias por cuidar a las tortugas. Mañana te espero en la escuela de surf. ¡Prepárate!', 'Thanks for looking after the turtles. Tomorrow I’ll wait for you at the surf school. Get ready!']);
   setFlag('arribadaDone');
-  await warp('carey', 14, 21, 'up', false);
+  await cutTo(['A la mañana siguiente...', 'The next morning...'], 'carey', 14, 21, 'up');
 }
 
 // ---------- Side quests ----------
@@ -260,10 +223,8 @@ async function lalo() {
   const finished = await drill(words, { title: (d, t) => `Pesca ${d + 1}/${t}` });
   if (!finished) return lines(['Bueno, seguimos otro día.', 'OK, we’ll continue another day.']);
   await lines(['¡Muy bien! Toma esta caña. Prueba en el muelle o en cualquier río.', 'Very good! Take this rod. Try it on the pier or in any river.']);
-  addItem('cana');
   setFlag('cana');
-  sfx('caught');
-  await info('¡{name} recibió la Caña de pescar!', { en: '{name} received the Fishing rod!' });
+  await gift('cana', 1, 'la Caña de pescar', 'the Fishing rod');
   await lines(['¡Y saluda a mi hermano de mi parte!', 'And say hi to my brother for me!']);
 }
 
@@ -271,16 +232,14 @@ async function lalo() {
 async function botella() {
   await info('Hay una botella en la arena. Adentro hay un papel...', { en: 'There’s a bottle in the sand. Inside there’s a paper...' });
   const note = 'El tesoro está en Playa Carey, en la playa, al sur del muelle, al lado de la palmera.';
-  speak(note);
-  const right = 'Al sur del muelle, al lado de la palmera';
-  const options = shuffled([right, 'En el faro', 'En el restaurante']);
-  while (true) {
-    const i = await chooseText(`«${note}» ¿Dónde está el tesoro?`, 'Read the note: where is the treasure?', options, note);
-    if (options[i] === right) break;
-    sfx('wrong');
-    await lines(['Mmm, no. Lee el papel otra vez.', 'Hmm, no. Read the paper again.']);
-  }
-  sfx('right');
+  await untilRight(
+    `«${note}» ¿Dónde está el tesoro?`,
+    'Read the note: where is the treasure?',
+    'Al sur del muelle, al lado de la palmera',
+    ['En el faro', 'En el restaurante'],
+    ['Mmm, no. Lee el papel otra vez.', 'Hmm, no. Read the paper again.'],
+    note,
+  );
   setFlag('botellaLeida');
   refreshNpcs();
   await lines(['¡Hay un tesoro en Playa Carey!', 'There’s a treasure in Playa Carey!']);
@@ -297,26 +256,21 @@ async function tesoro() {
 
 // ---------- Gym 3: Marina's surf school ----------
 
-async function marina() {
-  if (flag('medalOla')) return lines(['¡Qué buena batalla! El mar siempre te va a recordar.', 'What a great battle! The sea will always remember you.']);
-  await lines(
-    ['¡Llegaste! Anoche fuiste muy valiente con las tortugas.', 'You made it! Last night you were very brave with the turtles.'],
-    ['Pero en el agua, ¡yo soy la reina! Vas a ver: te voy a ganar.', 'But in the water, I’m the queen! You’ll see: I’m going to beat you.'],
-  );
-  if (!(await ask('¿Estás list{o/a}?', { en: 'Are you ready?' }))) return lines(['¡Las olas te esperan!', 'The waves are waiting for you!']);
-  const res = await trainerBattle(TRAINERS.marina, { look: 'marina', outro: ['¡Me revolcó la ola! Bueno... la ola eras tú.', 'The wave knocked me over! Well... the wave was you.'] });
-  if (res === 'lose') return blackout();
-  setFlag('beat:marina');
-  setFlag('medalOla');
-  G.save.medals.push('Ola');
-  fanfare('medalla', 'badge');
-  await info('¡{name} recibió la Medalla Ola!', { en: '{name} received the Wave Medal!' });
-  await lines(['Con esta medalla puedes ir al este, hacia el volcán. Dicen que en Ciudad Chispa preparan una gran fiesta.', 'With this medal you can go east, toward the volcano. They say Ciudad Chispa is preparing a big festival.']);
-}
+const marina = () =>
+  gymLeader('marina', {
+    medal: ['Ola', 'Wave'],
+    intro: [
+      ['¡Llegaste! Anoche fuiste muy valiente con las tortugas.', 'You made it! Last night you were very brave with the turtles.'],
+      ['Pero en el agua, ¡yo soy la reina! Vas a ver: te voy a ganar.', 'But in the water, I’m the queen! You’ll see: I’m going to beat you.'],
+    ],
+    ready: ['¿Estás list{o/a}?', 'Are you ready?'],
+    notReady: ['¡Las olas te esperan!', 'The waves are waiting for you!'],
+    outro: ['¡Me revolcó la ola! Bueno... la ola eras tú.', 'The wave knocked me over! Well... the wave was you.'],
+    after: [['Con esta medalla puedes ir al este, hacia el volcán. Dicen que en Ciudad Chispa preparan una gran fiesta.', 'With this medal you can go east, toward the volcano. They say Ciudad Chispa is preparing a big festival.']],
+    beaten: [['¡Qué buena batalla! El mar siempre te va a recordar.', 'What a great battle! The sea will always remember you.']],
+  });
 
 // ---------- Trainers ----------
-
-const fight = (id: string, intro: Line, defeated: Line, after: Line): ScriptFn => () => trainerFight(id, { intro, defeated, after });
 
 export const REGION3: Record<string, ScriptFn> = {
   lucasPlaya,

@@ -11,7 +11,7 @@ import { challenge, type ChallengeResult } from '../ui/challenge';
 import { pickMon } from '../ui/party';
 import { announceLevelUps } from '../battle/battle';
 import { currentMap, type ScriptFn } from './world';
-import { lines, showCreature } from './scripts';
+import { lines, showCreature } from './flows';
 
 /*
   Studying outside battles: the reusable drill (the starter's first words, the school), and the school teacher.

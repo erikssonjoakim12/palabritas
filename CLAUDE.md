@@ -8,9 +8,10 @@ https://erikssonjoakim12.github.io/palabritas/ (GitHub Pages deploys on every pu
 The user is a Spanish beginner (Duolingo) who loves Gold/Silver. They play and give feedback; they
 decide the big things and trust you with the rest.
 
-**Read first:** [ROADMAP.md](ROADMAP.md) (where the game is going) · [PLAN_GYMS_2-4.md](PLAN_GYMS_2-4.md)
-and [plans/](plans/) (what to build next, in detail) · [LEARNING_PLAN.md](LEARNING_PLAN.md) (how levels map to
-Spanish) · [BIOMES.md](BIOMES.md) (animals per region).
+**Read first:** [ROADMAP.md](ROADMAP.md) (where the game is going, and how a region is built) ·
+[plans/](plans/README.md) (what to build next, in detail) · [LEARNING_PLAN.md](LEARNING_PLAN.md) (how levels map
+to Spanish) · [BIOMES.md](BIOMES.md) (animals per region) · [GAME_DESIGN.md](GAME_DESIGN.md) (how it plays).
+Plans for finished work are removed once built: the code is the truth.
 
 ## Commands
 
@@ -54,7 +55,8 @@ Spanish) · [BIOMES.md](BIOMES.md) (animals per region).
 | Palabritas, moves, types | `src/data/species.ts`, `src/data/types.ts` |
 | Trainers, items | `src/data/trainers.ts`, `src/data/items.ts`, `src/game/bag.ts` |
 | Maps (every town, route, interior) | `src/world/maps/`: one file per region (`region1.ts`...), `kit.ts` (tile legend, types, shared rooms), `index.ts` |
-| Scripts (every NPC, quest, trainer talk) | `src/world/scripts.ts` (`SCRIPTS`) |
+| Scripts (every NPC, quest, trainer talk) | `src/world/region2.ts`...`region4.ts` (one file per region), `src/world/scripts.ts` (region 1, the Palacentro, shop and box, and the registry) |
+| Script building blocks (talking, trainers, gym leaders, Lucas, gifts, questions) | `src/world/flows.ts` |
 | Overworld engine: walking, ledges, doors, gates, encounters, drawing | `src/world/world.ts`, `src/world/layout.ts` |
 | Battles | `src/battle/battle.ts` |
 | Music | `src/audio/music.ts` (the player), `src/data/music.ts` (the songs, which plays where), `src/audio/bgm.ts` (the game's music: maps, battles, jingles, quieter for Spanish) |
@@ -94,7 +96,7 @@ is a string of tiles (legend at the top of `kit.ts`).
 1. Add `TRAINERS[id]` (name with its kind, e.g. 'Exploradora Daniela'; `defenseMode`; team).
 2. Add an NPC: `{ id, x, y, look, dir, script: id, sight }`. Sight is how many tiles ahead it sees you, so
    put it where the path can't avoid its line of sight.
-3. Add a script: `id: () => trainerFight(id, { intro, defeated, after })`. Each line is `[es, en]`.
+3. Add a script: `id: fight(id, intro, defeated, after)`. Each line is `[es, en]`.
 
 A beaten trainer sets `beat:<id>`.
 
@@ -145,9 +147,17 @@ rows for down/up/side, a case in `src/art/portraits.ts` (`hairFront`/`hairBack`)
 male. **An object:** `OBJECTS_ART` (people.ts) + `OBJECT_PALS` (colors.ts).
 
 **A script or quest:**
-- Add a function in `S` (src/world/scripts.ts): `async name(c) { ... }`.
-- Use `lines()`, `say()`, `info()`, `ask()`, `menu()`, `challenge()`, `chooseText()`, `warp()`,
-  `scriptedStep()`, `setFlag()`, `addItem()`.
+- Add a function in its region's file (src/world/region2.ts...; region 1 in scripts.ts) and list it in the
+  region's record (`REGION2`...).
+- The building blocks are in flows.ts; use them rather than writing the steps again:
+  - talking: `lines()`, `as(look, ...)` (someone else speaks), `talk(...)` (the same lines each time),
+    `cutTo(line, map, x, y, dir)` («Esa noche...»);
+  - Spanish: `practice(spec)` (a challenge that counts toward mastery), `practiceUntilRight(spec, retry)`,
+    `question()` and `untilRight()` (multiple choice, optionally read aloud);
+  - rewards: `gift(id, n, es, en)`, `pay(n)`, `receiveMon(sp, level)`;
+  - battles: `fight()`, `gymLeader(id, {...})`, `rivalBattle(id, outro, gloat)` (Lucas), `blackout()`.
+- Plus `say()`, `info()`, `ask()`, `menu()`, `chooseText()`, `warp()`, `scriptedStep()`, `setFlag()`,
+  `addItem()`. Content items: `wordItem(es, en)` (the real item when there is one).
 - Name flags after what happened (`michiFound`, `medalBrisa`) and keep them in one script where possible.
 - Quest challenges should use real items from the core or themes where possible, so answering counts toward
   mastery.
@@ -165,7 +175,8 @@ t.check('Raúl battles', r.said.some((x) => x.includes('Raúl')));
 await t.end();                                             // ✓/✗ per check, exit code
 ```
 
-- `t.play({ choose, right, answers, choices, until })` drives anything. Other helpers: `t.wild(sp, level)`,
+- `t.play({ choose, right, answers, choices, until })` drives anything; `t.talk(map, x, y, dir, opts)` stands
+  somewhere, presses A and plays it out. Other helpers: `t.wild(sp, level)`,
   `t.warp()`, `t.nextText()`, `t.ui()`, `t.save()`, `t.pos()`, `t.shot(name)` (screenshots go to
   `tests/out/`, which isn't committed), `t.game(fn)` (runs in the page; `window.__game` is the game).
 - In the page, use `window.__game` for game modules. A fresh `import('/src/...')` can be a second copy after
@@ -180,5 +191,5 @@ await t.end();                                             // ✓/✗ per check,
 | | |
 |---|---|
 | Screenshots | `artclip.mjs` (one art-page section), `artpage.mjs`, `maps.mjs` (the game at given spots), `battleshot.mjs`, `widths.mjs`, `landscape.mjs`, `zoom.mjs`, `view.mjs`, `crop.mjs` |
-| Art conversion | `unscale.mjs`, `exact.mjs`, `depixel.mjs`, `fit.cjs`, `measure.mjs`, `palette.mjs`, `icons.mjs` |
+| Art conversion (PNGs read and written through `browser.mjs`'s `readPng`/`writePng`) | `unscale.mjs`, `exact.mjs`, `depixel.mjs`, `fit.cjs`, `measure.mjs`, `palette.mjs`, `icons.mjs` |
 | Pace and performance | `sim.mjs` (answers needed per level, with the real learning code), `perf.mjs`, `evenness.mjs`, `sprites.mjs` |

@@ -7,11 +7,6 @@ const t = await start('region3');
 // Level 35: since Nubarrón became Agua/Eléctrico, Callada's Petroglifón (Tierra) hits it twice as hard.
 const party = [['nubarron', 35], ['aguacatono', 35]];
 const flags = async () => (await t.save()).flags;
-const talk = async (map, x, y, dir, opts) => {
-  await t.warp(map, x, y, dir);
-  await t.press('z');
-  return t.play(opts);
-};
 
 // Down from Villa Ocote with the Clay Medal.
 await t.fromSave({ map: 'ocote', x: 23, y: 28, dir: 'down', party, flags: { silenciadorRoto: true, medalBarro: true } });
@@ -47,8 +42,8 @@ t.check('morning in Playa Carey: the surf school opens', s.flags.arribadaDone &&
 await t.fromSave({ map: 'restaurante', x: 9, y: 2, dir: 'up', party, money: 0 });
 await t.press('z');
 await t.play({ choose: (opts) => (opts.includes('Sí') ? 'Sí' : undefined) });
-await talk('restaurante', 0, 5, 'right', { choices: ['¡Muy bien'] }); // the guest at table 1
-r = await talk('restaurante', 3, 3, 'up', { answers: ['Quisiera una sopa de pescado, por favor'] });
+await t.talk('restaurante', 0, 5, 'right', { choices: ['¡Muy bien'] }); // the guest at table 1
+r = await t.talk('restaurante', 3, 3, 'up', { answers: ['Quisiera una sopa de pescado, por favor'] });
 t.check('telling the cook the order pays', (await t.save()).money === 200, r.said);
 
 // Don Lalo's lesson gives the fishing rod.
@@ -61,6 +56,6 @@ t.check('Don Lalo’s fishing lesson gives the rod', (await t.save()).bag.cana =
 await t.fromSave({ map: 'ruta7', x: 9, y: 20, dir: 'left', party });
 await t.press('z');
 await t.play({ choices: ['Al sur del muelle'] });
-await talk('carey', 7, 15, 'down');
+await t.talk('carey', 7, 15, 'down');
 t.check('the bottle’s treasure: a Revivir and two Superbolas', (await t.save()).bag.revivir === 1, (await t.save()).bag);
 await t.end();

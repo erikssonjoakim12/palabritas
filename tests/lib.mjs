@@ -159,6 +159,13 @@ export async function start(name, { phone = true } = {}) {
       await sleep(250);
     },
 
+    /** Stand on a map at (x, y) facing someone, press A, and play out what happens (see play). */
+    async talk(map, x, y, dir, opts) {
+      await t.warp(map, x, y, dir);
+      await t.press('z');
+      return t.play(opts);
+    },
+
     /** Pick a menu option by (part of) its text. */
     pick: (label) =>
       game((l) => {

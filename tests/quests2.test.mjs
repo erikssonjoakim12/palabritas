@@ -6,11 +6,6 @@ const t = await start('quests2');
 const party = [['nubarron', 30], ['aguacatono', 30]];
 const town = { silenciadorRoto: true, petraVolvio: true };
 const flags = async () => (await t.save()).flags;
-const talk = async (map, x, y, dir, opts) => {
-  await t.warp(map, x, y, dir);
-  await t.press('z');
-  return t.play(opts);
-};
 
 // Lucas catches up with you as you step into the mine. You picked Gotita, so he has Aguacatito.
 await t.fromSave({ map: 'mina1', x: 5, y: 23, dir: 'up', party, starterPicked: 'gotita' });
@@ -32,7 +27,7 @@ await t.press('z');
 await t.play({ choices: ['Un pájaro con la cola larga'] });
 t.check('Gaby’s question: the bird with the racket tail', (await flags()).gabyPregunta);
 await t.game(() => window.__game.G.save.box.push(window.__game.newMon('guardabarranco', 14)));
-r = await talk('ruta5', 21, 8, 'left');
+r = await t.talk('ruta5', 21, 8, 'left');
 let s = await t.save();
 t.check('showing her a Guardabarranco (even from the box) earns Superbolas', s.flags.gabyDone && s.bag.superbola === 3, s.bag);
 
@@ -42,7 +37,7 @@ await t.press('z');
 await t.play();
 s = await t.save();
 t.check('the hatted Ecolín drops the hat', s.flags.sombreroEncontrado && s.bag.sombrero === 1, s.bag);
-r = await talk('limon', 13, 3, 'up', { answers: ['verde'] });
+r = await t.talk('limon', 13, 3, 'up', { answers: ['verde'] });
 s = await t.save();
 t.check('Beto gets his green hat back', s.flags.sombreroDevuelto && !s.bag.sombrero && s.bag.palabola === 5, s.bag);
 
@@ -51,7 +46,7 @@ await t.fromSave({ map: 'ruta4', x: 6, y: 10, dir: 'up', party });
 await t.press('z');
 r = await t.play();
 t.check('five echoes break the cracked wall', (await flags()).ecoAbierto, r.answered);
-await talk('ruta4', 6, 5, 'up'); // the cave has wild Palabritas everywhere: no walking in a test
+await t.talk('ruta4', 6, 5, 'up'); // the cave has wild Palabritas everywhere: no walking in a test
 t.check('the shell fossil is behind it', (await t.save()).bag.fosil === 1);
 
 // The museum keeps the fossil overnight: Caparazonte the next day.
@@ -74,11 +69,11 @@ await t.fromSave({ map: 'ocote', x: 34, y: 17, dir: 'right', party, flags: chepe
 await t.press('z');
 await t.play({ choices: ['Cerca de la cascada'] });
 t.check('Don Chepe tells you where his oxen went', (await flags()).bueyes);
-await talk('ocote', 32, 19, 'up');
-await talk('canon', 19, 9, 'up');
+await t.talk('ocote', 32, 19, 'up');
+await t.talk('canon', 19, 9, 'up');
 s = await t.save();
 t.check('both oxen follow you', s.flags.buey1 && s.flags.buey2, s.flags);
-await talk('ocote', 34, 17, 'right');
+await t.talk('ocote', 34, 17, 'right');
 s = await t.save();
 t.check('Don Chepe pays you back', s.flags.bueyesDone && s.money === 300 && s.bag.superpocion === 2, [s.money, s.bag]);
 await t.end();

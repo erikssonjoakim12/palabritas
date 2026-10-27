@@ -3,14 +3,14 @@ import { itemBall, tienda, casa, escuela, night, centro, type MapDef, type NpcDe
 
 // Region 4: the volcanoes and dry forest. Ruta 7 east from Playa Carey, Ciudad Chispa (a colonial festival town,
 // like Masaya), up the Volcán Chocoyo (the slopes, the lava tube, the crater), and Ruta 8 home to Pueblo Amanecer.
-// Story and quests: world/region4.ts. Plan: plans/phase4-region4.md.
+// Story and quests: world/region4.ts.
 
 /** The workshop's torches, in the order the poem gives (region4.ts antorcha), and where each stands. */
 export const TORCHES = [
-  { color: 'Roja', es: 'roja', x: 3 },
-  { color: 'Azul', es: 'azul', x: 10 },
-  { color: 'Verde', es: 'verde', x: 1 },
-  { color: 'Amarilla', es: 'amarilla', x: 8 },
+  { color: 'Roja', es: 'roja', en: 'red', x: 3 },
+  { color: 'Azul', es: 'azul', en: 'blue', x: 10 },
+  { color: 'Verde', es: 'verde', en: 'green', x: 1 },
+  { color: 'Amarilla', es: 'amarilla', en: 'yellow', x: 8 },
 ];
 /** A torch: its unlit stand, and the same spot burning once it's lit. */
 const torch = (t: (typeof TORCHES)[number]): NpcDef[] => [
@@ -318,7 +318,7 @@ export const REGION4_MAPS: Record<string, MapDef> = {
       { id: 'guia_chispa', x: 8, y: 12, look: 'polvorero', dir: 'left', script: 'guia_chispa' },
     ],
   },
-  // Ruta 9: down the volcano's west side to Ruta 5 (plans/world-map.md). You come out of the crater's west gate,
+  // Ruta 9: down the volcano's west side to Ruta 5. You come out of the crater's west gate,
   // down the ash gully and along the ridge, and a step too high to climb back makes it one-way: from Ruta 5 you
   // can only look up at it. A field of cooled lava lies off the gully, and a clearing in the trees above the ridge,
   // by the river (its top rows are a hole: the Río Guardabarranco's map shows there).

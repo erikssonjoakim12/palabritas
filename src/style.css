@@ -11,6 +11,16 @@
   --accent: #5ab0f0;
   --px: 2px; /* css px per game pixel, set by JS */
   --fs: 12px; /* dialog text size, set by JS */
+  /* A thin dark outline around white letters (the title screen's subtitle and «press start»). */
+  --outline:
+    calc(var(--px) * -0.6) calc(var(--px) * -0.6) 0 #2a2048,
+    calc(var(--px) * 0) calc(var(--px) * -0.6) 0 #2a2048,
+    calc(var(--px) * 0.6) calc(var(--px) * -0.6) 0 #2a2048,
+    calc(var(--px) * -0.6) calc(var(--px) * 0) 0 #2a2048,
+    calc(var(--px) * 0.6) calc(var(--px) * 0) 0 #2a2048,
+    calc(var(--px) * -0.6) calc(var(--px) * 0.6) 0 #2a2048,
+    calc(var(--px) * 0) calc(var(--px) * 0.6) 0 #2a2048,
+    calc(var(--px) * 0.6) calc(var(--px) * 0.6) 0 #2a2048;
   font-family: 'Press Start 2P', monospace;
 }
 
@@ -233,15 +243,7 @@ html { touch-action: manipulation; }
   text-align: center;
   font-size: calc(var(--px) * 5);
   color: #fff;
-  text-shadow:
-    calc(var(--px) * -0.6) calc(var(--px) * -0.6) 0 #2a2048,
-    calc(var(--px) * 0) calc(var(--px) * -0.6) 0 #2a2048,
-    calc(var(--px) * 0.6) calc(var(--px) * -0.6) 0 #2a2048,
-    calc(var(--px) * -0.6) calc(var(--px) * 0) 0 #2a2048,
-    calc(var(--px) * 0.6) calc(var(--px) * 0) 0 #2a2048,
-    calc(var(--px) * -0.6) calc(var(--px) * 0.6) 0 #2a2048,
-    calc(var(--px) * 0) calc(var(--px) * 0.6) 0 #2a2048,
-    calc(var(--px) * 0.6) calc(var(--px) * 0.6) 0 #2a2048;
+  text-shadow: var(--outline);
 }
 .blink-text {
   position: absolute;
@@ -250,15 +252,7 @@ html { touch-action: manipulation; }
   text-align: center;
   font-size: calc(var(--px) * 6);
   color: #fff;
-  text-shadow:
-    calc(var(--px) * -0.6) calc(var(--px) * -0.6) 0 #2a2048,
-    calc(var(--px) * 0) calc(var(--px) * -0.6) 0 #2a2048,
-    calc(var(--px) * 0.6) calc(var(--px) * -0.6) 0 #2a2048,
-    calc(var(--px) * -0.6) calc(var(--px) * 0) 0 #2a2048,
-    calc(var(--px) * 0.6) calc(var(--px) * 0) 0 #2a2048,
-    calc(var(--px) * -0.6) calc(var(--px) * 0.6) 0 #2a2048,
-    calc(var(--px) * 0) calc(var(--px) * 0.6) 0 #2a2048,
-    calc(var(--px) * 0.6) calc(var(--px) * 0.6) 0 #2a2048;
+  text-shadow: var(--outline);
   animation: blink 1s steps(2) infinite;
 }
 .banner {

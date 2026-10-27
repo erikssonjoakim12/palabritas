@@ -1,5 +1,5 @@
 import { Pix, type Img } from './pixel';
-import { CLOTHES, SKIN } from '../style/colors';
+import { CLOTHES, SKIN, PORTRAIT } from '../style/colors';
 import { LOOKS, type Look } from '../style/people';
 
 /*
@@ -9,11 +9,7 @@ import { LOOKS, type Look } from '../style/people';
   The player also has a back view, looking up and to the right at the opponent.
 */
 
-const K = '#1a1a26';
-const W = '#ffffff';
-const HAIR = '#2a2430';
-const GRAY_HAIR = '#a8a8b4';
-const MOUTH = '#c05048';
+const { ink: K, white: W, hair: HAIR, grayHair: GRAY_HAIR, mouth: MOUTH } = PORTRAIT;
 
 /** A darker shade of a #rrggbb color. */
 function shade(hex: string, f = 0.72) {
@@ -29,9 +25,9 @@ function body(p: Pix, look: Look, color: string) {
   if (look.body === 'coat' && look.color !== 'black') {
     // An open lab coat over a dark shirt.
     p.poly([[9, 47], [12, 34], [18, 29], [30, 29], [36, 34], [39, 47]], W);
-    p.poly([[30, 29], [36, 34], [39, 47], [33, 47]], '#d8d8e0');
-    p.poly([[20, 29], [28, 29], [27, 47], [21, 47]], '#4858a8');
-    p.line(20, 30, 21, 46, '#b8b8c8').line(28, 30, 27, 46, '#b8b8c8');
+    p.poly([[30, 29], [36, 34], [39, 47], [33, 47]], PORTRAIT.coatShade);
+    p.poly([[20, 29], [28, 29], [27, 47], [21, 47]], PORTRAIT.coatShirt);
+    p.line(20, 30, 21, 46, PORTRAIT.coatSeam).line(28, 30, 27, 46, PORTRAIT.coatSeam);
   } else {
     p.poly([[9, 47], [12, 34], [18, 29], [30, 29], [36, 34], [39, 47]], color);
     p.poly([[30, 29], [36, 34], [39, 47], [33, 47]], dark);
@@ -87,7 +83,7 @@ function hairFront(p: Pix, look: Look, hair: string, color: string) {
       else p.rect(14, 11, 3, 13, hair).rect(31, 11, 3, 13, hair);
       p.ellipse(24, 8, 11.5, 7, color);
       p.rect(12, 12, 24, 2, shade(color)); // the brim
-      p.rect(21, 3, 6, 5, '#f0f0d0').rect(22, 4, 4, 3, '#f8f8a0'); // the headlamp
+      p.rect(21, 3, 6, 5, PORTRAIT.lamp).rect(22, 4, 4, 3, PORTRAIT.lampGlow); // the headlamp
       break;
     case 'hood':
     case 'hoodLong':

@@ -4,7 +4,7 @@ import { sfx } from '../engine/sfx';
 import { creatureArt } from '../art/creatures';
 import { OBJECTS } from '../art/chars';
 import { makeCanvas } from '../art/pixel';
-import { EVOLUTION_OUTLINE } from '../style/colors';
+import { EVOLUTION_OUTLINE, BLACK, BATTLE } from '../style/colors';
 import { portrait } from '../art/portraits';
 import type { Img } from '../art/pixel';
 import { LINEUP_BALL, BALL_COLORS, FAINTED_COLORS, EMPTY_COLORS, drawPattern } from '../art/balls';
@@ -76,7 +76,7 @@ const battleScene = {
     for (const f of [enemyF, meF]) if (f && f.blink > 0) f.blink--;
   },
   render(g: CanvasRenderingContext2D) {
-    g.fillStyle = flashOn ? '#000' : '#f8f8f8';
+    g.fillStyle = flashOn ? BLACK : BATTLE.bg;
     g.fillRect(0, 0, W, H);
     if (evo) {
       // Centered over the text box, like Gold/Silver's evolution screen.
@@ -84,7 +84,7 @@ const battleScene = {
       return;
     }
     if (flashOn) return;
-    g.fillStyle = '#d8d8c4';
+    g.fillStyle = BATTLE.ground;
     g.beginPath();
     g.ellipse(128, 52, 24, 5, 0, 0, Math.PI * 2);
     g.fill();

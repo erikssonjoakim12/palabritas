@@ -55,9 +55,14 @@ Answers per level, measured with the real code (a starter):
 
 ## Themes
 
-A theme belongs to a Palabrita family (not its type), and every new family gets its own: 20 so far (perro,
-tiempo, comida, naturaleza, números, colores, casa, then cuerpo, cocina, deportes, música, salud, historia,
-Latinoamérica, playa, frutas, mar, pesca, viaje, familia). Region 4 adds 8 more ([plans/content.md](plans/content.md)).
+A theme belongs to a Palabrita family (not its type), and every new family gets its own as a rule: 28 so far
+(perro, tiempo, comida, naturaleza, números, colores, casa; cuerpo, cocina, deportes, música, salud, historia,
+Latinoamérica; playa, frutas, mar, pesca, viaje, familia; fiesta, conversación, ciudad, ropa, rutina, emociones,
+animales, trabajo). Grammar topics come on top (src/data/content/trainers.ts): two per school (Villa Ocote:
+preguntas, gustar; Playa Carey: direcciones, ir a; Ciudad Chispa: de compras, el pasado), el presente with Rita
+in Ciudad Brisa, and el restaurante (written for the restaurant, not used yet).
+How to write one: CLAUDE.md, "A theme". Never use the same Spanish with a different meaning in two lists ("la
+receta" can't be both recipe and prescription): the same Spanish is one shared item.
 
 ## Material still to write
 

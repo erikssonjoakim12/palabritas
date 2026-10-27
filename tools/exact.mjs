@@ -3,38 +3,25 @@
 // Smoothed images have hundreds of in-between shades, so colors are grouped into K colors
 // (k-means), one palette shared by both views. Silent.
 // Usage: [K=24] node tools/exact.mjs id front.png back.png
-import { launch, newPage } from './browser.mjs';
-import { readFileSync } from 'node:fs';
+import { launch, newPage, readPng } from './browser.mjs';
 const [, , id, ...files] = process.argv;
 const K = +(process.env.K || 24);
-const urls = files.map((f) => 'data:image/png;base64,' + readFileSync(f).toString('base64'));
 const browser = await launch();
 const page = await newPage(browser);
-const views = await page.evaluate(async (urls) => {
-  const out = [];
-  for (const url of urls) {
-    const img = new Image();
-    img.src = url;
-    await img.decode();
-    const c = document.createElement('canvas');
-    c.width = img.width;
-    c.height = img.height;
-    const g = c.getContext('2d');
-    g.drawImage(img, 0, 0);
-    const d = g.getImageData(0, 0, c.width, c.height).data;
-    const grid = [];
-    for (let y = 0; y < c.height; y++) {
-      const row = [];
-      for (let x = 0; x < c.width; x++) {
-        const i = (y * c.width + x) * 4;
-        row.push(d[i + 3] < 128 ? null : [d[i], d[i + 1], d[i + 2]]);
-      }
-      grid.push(row);
+const views = [];
+for (const f of files) {
+  const { width, height, data: d } = await readPng(page, f);
+  const grid = [];
+  for (let y = 0; y < height; y++) {
+    const row = [];
+    for (let x = 0; x < width; x++) {
+      const i = (y * width + x) * 4;
+      row.push(d[i + 3] < 128 ? null : [d[i], d[i + 1], d[i + 2]]);
     }
-    out.push({ w: c.width, h: c.height, grid });
+    grid.push(row);
   }
-  return out;
-}, urls);
+  views.push({ w: width, h: height, grid });
+}
 await browser.close();
 
 const px = views.flatMap((v) => v.grid.flat().filter(Boolean));

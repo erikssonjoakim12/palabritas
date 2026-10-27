@@ -2,7 +2,8 @@
 
 The world is inspired by Nicaragua. Each biome is a **regional encounter pool**, not a rigid category: they
 overlap (volcanoes sit in dry forest, rainforest animals live along rivers), which makes the world feel natural.
-The animals are inspiration for future Palabritas; their designs come later (see the art workflow in art-src/).
+The animals are inspiration for future Palabritas (what is actually planned: plans/palabritas.md); the user designs
+them, and their art comes in through the recipe in CLAUDE.md ("The user's art").
 
 ## 1. Hot, dry forest
 Pacific lowlands · hot summers, long dry season, seasonal rain · León, Chinandega, Rivas

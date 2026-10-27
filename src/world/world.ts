@@ -4,12 +4,13 @@ import { sfx } from '../engine/sfx';
 import { nextFrame, frames, frameAlpha, whenIdle, clearIdle } from '../engine/loop';
 import { TILES, tallGrassImage, tileImage, tileOf, envAt, isHole, ANIMATED } from '../art/tiles';
 import { personFrames, OBJECTS, type Frames } from '../art/chars';
-import type { Img } from '../art/pixel';
+import { fromRows, type Img } from '../art/pixel';
 import { MAPS, type MapDef, type NpcDef, type Conn, type EncounterEntry } from './maps';
 import { worldLayout } from './layout';
 import { G, flag, saveGame, playerLook, clockHour } from '../game/state';
 import { rematchReady } from '../game/rematch';
-import { NIGHT, NIGHT_CLEAR, FIREFLY } from '../style/colors';
+import { shuffled, pickRandom } from '../game/random';
+import { NIGHT, NIGHT_CLEAR, FIREFLY, MARK, BLACK, SHADOW } from '../style/colors';
 import { lightAt, drawLights, skyAt, type Light } from '../art/lights';
 import { drawFireworks } from '../art/fireworks';
 import { setMapMusic, musicFor } from '../audio/bgm';
@@ -34,13 +35,15 @@ export interface ScriptCtx {
   npc?: NpcRT;
   data?: Record<string, unknown>;
 }
-export type ScriptFn = (c: ScriptCtx) => Promise<void>;
+/** A script; whatever it resolves to is ignored (so it can end with `return lines(...)`, or a gym leader's result). */
+export type ScriptFn = (c: ScriptCtx) => Promise<unknown>;
 
 /** Filled in by scripts.ts. */
 export const SCRIPTS: Record<string, ScriptFn> = {};
 
 export const DX: Record<Dir, number> = { up: 0, down: 0, left: -1, right: 1 };
 export const DY: Record<Dir, number> = { up: -1, down: 1, left: 0, right: 0 };
+const DIRS = Object.keys(DX) as Dir[];
 export const OPP: Record<Dir, Dir> = { up: 'down', down: 'up', left: 'right', right: 'left' };
 
 /**
@@ -438,15 +441,14 @@ export async function walkNpc(id: string, path: Dir[], { speed = 1 } = {}) {
 export async function approachPlayer(id: string, opts: { speed?: number } = {}) {
   const n = npcById(id);
   if (!n) return console.warn(`approachPlayer: no NPC ${id}`);
-  const next = (x: number, y: number) => Object.entries({ up: [0, -1], down: [0, 1], left: [-1, 0], right: [1, 0] }) as [Dir, number[]][];
   const besideYou = (x: number, y: number) => Math.abs(x - player.x) + Math.abs(y - player.y) === 1;
   const from = new Map<string, [string, Dir] | null>([[`${n.x},${n.y}`, null]]);
   const queue = [[n.x, n.y]];
   let end: number[] | null = besideYou(n.x, n.y) ? [n.x, n.y] : null;
   while (queue.length && !end) {
     const [x, y] = queue.shift()!;
-    for (const [d, [dx, dy]] of next(x, y)) {
-      const [nx, ny] = [x + dx, y + dy];
+    for (const d of DIRS) {
+      const [nx, ny] = [x + DX[d], y + DY[d]];
       const k = `${nx},${ny}`;
       if (from.has(k) || !walkable(nx, ny) || (nx === player.x && ny === player.y)) continue;
       from.set(k, [`${x},${y}`, d]);
@@ -477,8 +479,7 @@ const WANDER = 2;
 /** A wandering person takes a step: a random way that's open ground, near home (not a door, a mat or a trigger). */
 function wander(n: NpcRT) {
   if ((globalThis as { __still?: boolean }).__still) return; // tests (tools/browser.mjs)
-  const dirs = (['up', 'down', 'left', 'right'] as Dir[]).sort(() => Math.random() - 0.5);
-  for (const d of dirs) {
+  for (const d of shuffled(DIRS)) {
     const [nx, ny] = [n.x + DX[d], n.y + DY[d]];
     if (Math.abs(nx - n.def.x) > WANDER || Math.abs(ny - n.def.y) > WANDER) continue;
     const t = TILES[tileAt(nx, ny)];
@@ -501,7 +502,7 @@ function updateNpcs() {
     if (!n.def.turns) continue;
     if (--n.turnTimer <= 0) {
       n.turnTimer = 120 + Math.floor(Math.random() * 240);
-      n.dir = (['up', 'down', 'left', 'right'] as Dir[])[Math.floor(Math.random() * 4)];
+      n.dir = pickRandom(DIRS);
     }
   }
 }
@@ -563,16 +564,9 @@ export function updateWorld() {
 
 // ---------- Rendering ----------
 
-/** A small «!» over a trainer who's ready for a rematch: quieter than the alert bubble. */
-function drawRematchMark(g: CanvasRenderingContext2D, x: number, y: number) {
-  g.fillStyle = '#202028';
-  g.fillRect(x + 6, y - 9, 5, 8);
-  g.fillStyle = '#ffffff';
-  g.fillRect(x + 7, y - 8, 3, 6);
-  g.fillStyle = '#d83838';
-  g.fillRect(x + 8, y - 7, 1, 3);
-  g.fillRect(x + 8, y - 3, 1, 1);
-}
+/** The «!» when a trainer spots you, and a small, quieter one over a trainer who's ready for a rematch. */
+const ALERT = fromRows(['kkkkkkkkk', 'kwwwwwwwk', 'kwwrrrwwk', 'kwwrrrwwk', 'kwwrrrwwk', 'kwwrrrwwk', 'kwwwwwwwk', 'kwwrrrwwk', 'kwwrrrwwk', 'kwwwwwwwk', 'kkkkkkkkk'], MARK);
+const REMATCH = fromRows(['kkkkk', 'kwwwk', 'kwrwk', 'kwrwk', 'kwrwk', 'kwwwk', 'kwrwk', 'kkkkk'], MARK);
 
 /** Night: everything dark blue except a soft circle of light around you. */
 function drawNight(g: CanvasRenderingContext2D, cx: number, cy: number) {
@@ -593,16 +587,6 @@ function drawDayTime(g: CanvasRenderingContext2D, camX: number, camY: number) {
   g.fillRect(0, 0, W, H);
   g.restore();
   drawLights(g, lights, -camX, -camY, sky.light);
-}
-
-function drawBubble(g: CanvasRenderingContext2D, x: number, y: number) {
-  g.fillStyle = '#202028';
-  g.fillRect(x + 4, y - 12, 9, 11);
-  g.fillStyle = '#ffffff';
-  g.fillRect(x + 5, y - 11, 7, 9);
-  g.fillStyle = '#d83838';
-  g.fillRect(x + 7, y - 10, 3, 4);
-  g.fillRect(x + 7, y - 5, 3, 2);
 }
 
 /**
@@ -695,7 +679,7 @@ function prepareNeighbors() {
 
 /** Like the Game Boy, only the tiles on screen are drawn, every frame. */
 function drawTiles(g: CanvasRenderingContext2D, camX: number, camY: number) {
-  g.fillStyle = '#000';
+  g.fillStyle = BLACK;
   g.fillRect(0, 0, W, H);
   const gridH = grid.length / gridW;
   // Animated tiles show their second frame half the time (like the Game Boy's water).
@@ -780,8 +764,8 @@ export function renderWorld(g: CanvasRenderingContext2D) {
         if (n.def.object) g.drawImage(OBJECTS[n.def.object], sx, sy);
         else g.drawImage(framesFor(n.def.look ?? 'man')[n.dir][n.off?.frame ?? 0], sx, sy - 4);
         n.overlay?.(g, sx, sy);
-        if (n.bubble > 0) drawBubble(g, sx, sy - 4);
-        else if (rematchReady(n.def.id)) drawRematchMark(g, sx, sy - 4);
+        if (n.bubble > 0) g.drawImage(ALERT, sx + 4, sy - 16);
+        else if (rematchReady(n.def.id)) g.drawImage(REMATCH, sx + 6, sy - 13);
       },
     });
   }
@@ -792,7 +776,7 @@ export function renderWorld(g: CanvasRenderingContext2D) {
       y: py,
       draw: () => {
         if (hop) {
-          g.fillStyle = 'rgba(0,0,0,0.25)';
+          g.fillStyle = SHADOW;
           g.fillRect(67, 74, 10, 2);
         }
         g.drawImage(img, 64, 60 - hop);
@@ -824,8 +808,10 @@ export function renderWorld(g: CanvasRenderingContext2D) {
     drawFireflies(g, camX, camY);
   } else if (map.floor === ';') drawDayTime(g, camX, camY); // caves (and the temple) darken at night too
   if (fade > 0) {
-    g.fillStyle = `rgba(0,0,0,${fade})`;
+    g.globalAlpha = fade;
+    g.fillStyle = BLACK;
     g.fillRect(0, 0, W, H);
+    g.globalAlpha = 1;
   }
 }
 

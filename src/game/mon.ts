@@ -99,6 +99,12 @@ export const evolutionsDue = () => G.save.party.filter((m) => {
   return e && m.level >= e.level;
 });
 
+/** A species at a level: evolved as far as that level allows (for trainers' teams). */
+export function formAt(sp: string, level: number) {
+  for (let e = SPECIES[sp].evolves; e && level >= e.level; e = SPECIES[sp].evolves) sp = e.to;
+  return sp;
+}
+
 /** Evolve: new species, and the extra PS of the new form (damage taken stays). */
 export function evolve(mon: Mon) {
   const to = SPECIES[mon.sp].evolves!.to;

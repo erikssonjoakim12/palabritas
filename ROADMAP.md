@@ -1,37 +1,52 @@
 # Palabritas — roadmap
 
 Where the game is going: mechanics, world, gyms, and what you learn along the way.
-Status: **gyms 1–4 are playable** (✓ marks what's built). Next: polish ([plans/phase5-polish.md](plans/phase5-polish.md)).
-Learning details: [LEARNING_PLAN.md](LEARNING_PLAN.md).
+Status: **gyms 1–4 are playable** (✓ marks what's built). Region 5 is placed as placeholders and paused while the
+user finishes the art and a group playtests up to gym 4. Learning details: [LEARNING_PLAN.md](LEARNING_PLAN.md).
+Plans for what's next: [plans/](plans/README.md).
 
 ## 1. Built so far ✓
 
 - **Mechanics:** 50/50 critical hits on perfect answers; male and female voices; boy or girl (the Spanish
-  adapts: «¿Estás lista?»); evolutions mid-battle; storage box, items, gifts, fishing, rematches (a small «!»),
-  schools with lessons and REPASO; gate guards, ledges, caves with ladders, currents.
+  adapts: «¿Estás lista?»); evolutions mid-battle, with their own scene; storage box, items, gifts, fishing,
+  rematches (a small «!»), schools with lessons and REPASO; gate guards, ledges, caves with ladders, currents;
+  save files to move a game between devices.
 - **World:** the whole loop, Pueblo Amanecer to Ciudad Chispa and home: Rutas 1–9, the Cueva del Eco, Villa
   Ocote and its mine, the Cañón del Guardabarranco, Playa Carey and the turtle beach, Ciudad Chispa and the
-  Volcán Chocoyo, and Ruta 9 (a one-way shortcut from the crater to Ruta 5). Rival Lucas (three times) and
-  Equipo Silencio up to Don Sigilo. The middle of the world: the Río Guardabarranco from Ruta 4 down to the Lago de
-  las Islas (scenery until Surf; two small beaches from Ruta 2 and Ruta 8), and START → MAPA shows it all ([plans/world-map.md](plans/world-map.md)).
-- **Day and night** by the phone's clock (golden at 18, night from 19, morning by 7), with lit windows, plus
-  story night scenes.
+  Volcán Chocoyo, and Ruta 9 (a one-way shortcut from the crater to Ruta 5). The middle of the world: the Río
+  Guardabarranco from Ruta 4 down to the Lago de las Islas (scenery until Surf; two small beaches from Ruta 2 and
+  Ruta 8). START → MAPA shows it all.
+- **Region 5, placeholders:** Villa Jaguar, the dark Selva del Jaguar and the Templo del Jaguar (four floors),
+  waiting for Surf ([plans/region5-jungle.md](plans/region5-jungle.md)); swimmers in the lake.
+- **Day and night** by the phone's clock (golden at 18, night from 19, morning by 7), with lit windows, fireflies
+  and darker caves, plus story night scenes.
 - **Paused:** the bus (fast travel), until there are big roads.
 
-## 2. Evolutions (starters first) ✓
+**The story so far.** The villains, **Equipo Silencio**, think words only cause trouble: they lock Palabritas'
+words away so people forget how to talk (grunts are *Silenciosos*, the admin is **Callada**, the boss **Don
+Sigilo**). Your rival **Lucas** took the starter strong against yours and battles you three times (won or lost,
+each happens once). The route forms a loop: from Ciudad Brisa west into the pine highlands, south to the sea, east
+past the volcano, and down the ledge into Pueblo Amanecer.
 
-Like Gold/Silver: at a set level, at the end of a turn (mid-battle, the "anime moment"), with the evolution animation.
+| Region | Gym | Story chapter | Side quests |
+|---|---|---|---|
+| 1 · Farms and villages | **Ciudad Brisa**: Paloma, Volador, Medalla Brisa | Lupe's lost cat | the armchair that moves |
+| 2 · Pine highlands | **Villa Ocote**: Petra, Roca/Tierra, Medalla Barro | the muted town and the clay mine | the lost words · Beto's hat · the echo room and a fossil · the lost oxen · the national bird |
+| 3 · Pacific coast | **Playa Carey**: Marina, Agua, Medalla Ola | the night of the turtles (*la arribada*) | the seafood restaurant · the fishing rod · the message in a bottle |
+| 4 · Volcanoes | **Ciudad Chispa**: Don Tizón, Fuego, Medalla Chispa | the stolen fireworks and the volcano | a hammock for Mom · the lost parakeet chick · the haunted house · the Torovenado costume · the legend of the Carreta Nagua |
+
+## 2. Evolutions ✓
+
+Like Gold/Silver: at a set level, at the end of a turn (mid-battle, the "anime moment"), with the evolution scene.
 The theme and learned words stay; base stats go up; new name and art.
 
-| Starter | Evolves at | Into (name ideas) | Type |
+| Starter | Nv 16 | Nv 36 | Type |
 |---|---|---|---|
-| Salchichita (dachshund hot dog) | Nv 16 | **Hamburguesón** (a burger dog) | Fuego |
-| Gotita (raindrop) | Nv 16 | **Nubarrón** (a rain cloud; "nubarrón" = big storm cloud) | Agua |
-| Aguacatito (avocado) | Nv 16 | **Aguacatoño** (a sapling: *aguacate* + *retoño*, "sprout") | Planta |
+| Salchichita (dachshund hot dog) | **Hamburguesón** (a burger dog) | **Nacatamastín** (a mastiff wrapped like a *nacatamal*) | Fuego |
+| Gotita (raindrop) | **Nubarrón** (a rain cloud) | **Huracán** (a stormy tornado) | Agua |
+| Aguacatito (avocado) | **Aguacatoño** (*aguacate* + *retoño*, "sprout") | **Aguacatero** (the avocado tree) | Planta |
 
-Level 16 = after the first gym (12), before the second (~19). The final forms come at **Nv 36**, with the
-user's art: Hamburguesón → **Nacatamastín** (a mastiff wrapped like a *nacatamal*), Nubarrón → **Huracán**
-(a stormy tornado), Aguacatoño → **Aguacatero** (the full avocado tree; *aguacatero* = avocado tree).
+Level 16 = after the first gym (12), before the second (~19).
 
 ## 3. The world: a Nicaragua-inspired country
 
@@ -40,7 +55,7 @@ rainforest animals live along rivers). Animals, visual hooks and color direction
 
 | Biome | Where in the game | Colors |
 |---|---|---|
-| Farms, villages, forest edges | Pueblo Amanecer, Villa Limón, Rutas 1-2 (now) | familiar, simple |
+| Farms, villages, forest edges | Pueblo Amanecer, Villa Limón, Rutas 1-2 | familiar, simple |
 | Pine highlands (the north) | Ruta 3 to gym 2 (Villa Ocote) | pine green, clay red, misty blue-gray |
 | Hot, dry forest | the trees of Rutas 1-2; Rutas 5 and 7 and around the volcano | tan, ochre, rust-red |
 | Volcanoes and lava | around gym 4 | charcoal, ember orange, sulfur yellow |
@@ -66,7 +81,7 @@ Route trainers sit between the previous leader and the next one.
 | 2 ✓ | Villa Ocote, a pine-highland town past the cave | Roca / Tierra | 3 | 21 | 12-18 |
 | 3 ✓ | Playa Carey, a fishing village on the Pacific | Agua | 3 | 25 | 17-21 |
 | 4 ✓ | Ciudad Chispa, the volcano town | Fuego | 3 | 32 | 18-26 |
-| 5 | rainforest town | Planta / Veneno | 3-4 | 37 | 28-34 |
+| 5 | Villa Jaguar, the rainforest town | Planta / Veneno | 3-4 | 37 | 28-34 |
 | 6 | the lake archipelago, stormy | Eléctrico | 4 | 43 | 34-40 |
 | 7 | cloud-forest highlands | Psíquico (emotions) | 4 | 50 | 40-47 |
 | 8 | the old capital | Dragón | 5 | 58 | 47-55 |
@@ -91,24 +106,39 @@ How people actually learn a language, in short:
 - **Comprehension, then production**: understanding comes first (tap, listen), then writing and speaking.
 - **Spaced repetition** and **using words in context** make them stick (loyalty and reviews).
 
-Mapped onto the game (each gym leader's battle uses that region's grammar):
+Mapped onto the game (each region's quests and gym leader use that region's grammar):
 
 | Stage | Levels | Gyms | CEFR | Grammar and topics |
 |---|---|---|---|---|
 | Words | 2-20 | 1-2 | A1 | core words, set phrases, present of common verbs, gustar, questions |
-| First sentences | 21-30 | 3-4 | A2 | present tense in full, «ir a», shopping, directions, routines |
+| First sentences | 21-30 | 3-4 | A2 | present tense in full, «ir a», shopping, directions, routines, a first past tense |
 | Telling stories | 31-40 | 5 | A2 | preterite (what happened), imperfect (how it was) |
 | Conversation | 41-50 | 6-7 | B1 | perfect, future, conditional, pronouns, feelings and wishes (Psychic gym: «Espero que...») |
 | Opinions | 51-60 | 8, E4 | B1-B2 | subjunctive (doubts, advice), connectors, arguing a point |
 | Fluency | 61-70 | E4 master | B2 | if-clauses, idioms, **voseo and Nicaraguan Spanish** |
 | Mastery | 71-100 | post-game | C1 | nuance, formal vs. informal, long listening and speaking |
 
-Each new kind of Palabrita brings a theme (sloths → the rainforest; turtles → lakes and boats...);
-themes grow from the creatures, as you said.
+Each new kind of Palabrita brings a theme (sloths → routines; turtles → the sea...): themes grow from the
+creatures.
 
-## 6. Order of work
+## 6. How a region is built (learned from gyms 2–4)
 
-1. ✓ **Region 4 and gym 4** (the volcanoes, Ciudad Chispa, Lucas #3, Don Sigilo).
-2. **Polish** (a full playthrough test, the pace check): [plans/phase5-polish.md](plans/phase5-polish.md).
-3. Then gyms 5–8 (§4), with the B1 Spanish (§5), planned the same way as gyms 2–4
-   ([PLAN_GYMS_2-4.md](PLAN_GYMS_2-4.md)).
+- **The experience budget.** From level 21 every new item needs two good answers, so levels get slower: one
+  Palabrita from level 12 to 31 needs ~430 answers, a team of 4 ~1,400. A wild battle gives 4–5 answers, a
+  trainer's Palabrita 3–4.
+- One normal walk through a region (trainers, quests, the wild battles you run into) gives about **75%** of what
+  you need. The rest comes from varied, optional things, never forced grinding: a training spot per region (the
+  canyon, the *zacatal* meadow, the sugarcane fields), daily rematches, lessons, the restaurant.
+- Measure with `node tools/sim.mjs` after building a region, and tune the levels.
+- Every quest is a Spanish task, using real items from the core and themes, so its answers count toward mastery.
+- A region gets: a story chapter, a gym with a puzzle, 3–5 side quests, Lucas once, its own Palabritas (one theme
+  per new family) and a school with the region's grammar.
+
+## 7. Order of work
+
+1. **The group playtest** up to gym 4, and its feedback.
+2. **Leftover polish:** a full playthrough test (`tests/journey.test.mjs`: one save per medal, each leg's key
+   moments, proving the story order holds together) and a pace check of gyms 2–4 with `tools/sim.mjs` (§6).
+3. **Region 5:** Surf, then Villa Jaguar, the jungle, the temple and gym 5 (Planta/Veneno, the past tense), then
+   Fly ([plans/surf-fly.md](plans/surf-fly.md), [plans/region5-jungle.md](plans/region5-jungle.md)).
+4. Then gyms 6–8 (§4), with the B1 Spanish (§5), planned the same way.

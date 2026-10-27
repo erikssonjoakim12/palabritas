@@ -38,7 +38,7 @@ export const presente: ThemeSource = {
   },
 };
 
-// School topics (one pair per school; plans/content.md §3). Villa Ocote: questions, and liking things.
+// School topics (one pair per school). Villa Ocote: questions, and liking things.
 export const preguntas: ThemeSource = {
   id: 'preguntas',
   name: 'Las preguntas',

@@ -5,12 +5,6 @@ import { start } from './lib.mjs';
 const t = await start('gym2');
 const strong = [['nubarron', 30], ['aguacatono', 30]];
 const flags = (s) => t.save().then((x) => x.flags[s]);
-/** Face somewhere and press A; play it out. */
-const talk = async (map, x, y, dir, opts) => {
-  await t.warp(map, x, y, dir);
-  await t.press('z');
-  return t.play(opts);
-};
 
 let r;
 
@@ -23,15 +17,15 @@ t.check('the first riddle opens its door', await flags('adivinanza:piedra1'));
 await t.walk('up', 3);
 r = await t.play();
 t.check('Alfarero Tito battles you', await flags('beat:tito'), r.said.slice(0, 2));
-r = await talk('gym_ocote', 6, 8, 'up', { choices: ['la olla'] });
+r = await t.talk('gym_ocote', 6, 8, 'up', { choices: ['la olla'] });
 t.check('the second riddle opens its door', await flags('adivinanza:piedra2'));
 await t.walk('up', 3);
 await t.play();
 t.check('Minera Rosario battles you', await flags('beat:rosario'));
-await talk('gym_ocote', 4, 4, 'up', { choices: ['el reloj'] });
+await t.talk('gym_ocote', 4, 4, 'up', { choices: ['el reloj'] });
 t.check('the third riddle opens its door', await flags('adivinanza:piedra3'));
 await t.game(() => window.__game.healParty()); // as you would at the Palacentro before the leader
-r = await talk('gym_ocote', 5, 2, 'up');
+r = await t.talk('gym_ocote', 5, 2, 'up');
 const s5 = await t.save();
 t.check('Petra gives you the Medalla Barro', s5.flags.medalBarro && s5.medals.includes('Barro'), [s5.medals, r.said.slice(0, 3), r.said.slice(-3)]);
 await t.shot('gym');

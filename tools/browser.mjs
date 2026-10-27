@@ -3,7 +3,7 @@
 //   BROWSER=<path>         use another Edge/Chrome
 //   PALABRITAS_URL=<url>   a dev server other than http://localhost:5181
 import puppeteer from 'puppeteer-core';
-import { existsSync } from 'node:fs';
+import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 
 export const BASE = process.env.PALABRITAS_URL ?? 'http://localhost:5181';
 
@@ -32,4 +32,33 @@ export async function newPage(browser) {
     window.__still = true;
   });
   return page;
+}
+
+/** A PNG's pixels, decoded by the browser: { width, height, data } with data as RGBA bytes, row by row. */
+export async function readPng(page, file) {
+  const url = 'data:image/png;base64,' + readFileSync(file).toString('base64');
+  const { width, height, b64 } = await page.evaluate(async (url) => {
+    const img = new Image();
+    img.src = url;
+    await img.decode();
+    const c = Object.assign(document.createElement('canvas'), { width: img.width, height: img.height });
+    const g = c.getContext('2d');
+    g.drawImage(img, 0, 0);
+    const d = g.getImageData(0, 0, c.width, c.height).data;
+    let s = '';
+    for (let i = 0; i < d.length; i += 0x8000) s += String.fromCharCode(...d.subarray(i, i + 0x8000));
+    return { width: c.width, height: c.height, b64: btoa(s) };
+  }, url);
+  return { width, height, data: new Uint8Array(Buffer.from(b64, 'base64')) };
+}
+
+/** Save RGBA pixels ({ width, height, data }) as a PNG, encoded by the browser. */
+export async function writePng(page, file, { width, height, data }) {
+  const b64 = await page.evaluate((width, height, b64) => {
+    const bytes = Uint8ClampedArray.from(atob(b64), (ch) => ch.charCodeAt(0));
+    const c = Object.assign(document.createElement('canvas'), { width, height });
+    c.getContext('2d').putImageData(new ImageData(bytes, width, height), 0, 0);
+    return c.toDataURL('image/png').split(',')[1];
+  }, width, height, Buffer.from(data).toString('base64'));
+  writeFileSync(file, Buffer.from(b64, 'base64'));
 }

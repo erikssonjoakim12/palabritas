@@ -9,6 +9,7 @@ import { itemsUpTo } from '../game/curriculum';
 import { SPECIES, MODE_INFO, learnLevel } from '../data/species';
 import { THEMES } from '../data/content';
 import { TYPE_COLORS } from '../data/types';
+import { TYPE_TEXT } from '../style/colors';
 import { speak } from '../lang/speech';
 
 /** A Palabrita's 16x16 icon, for lists (scaled up with hard pixels by the CSS). */
@@ -191,7 +192,7 @@ export function showDetails(mon: Mon): Promise<void> {
   for (const t of sp.types) {
     const chip = el('span', '', ` ${t} `);
     chip.style.background = TYPE_COLORS[t];
-    chip.style.color = '#fff';
+    chip.style.color = TYPE_TEXT;
     chip.style.marginRight = '0.4em';
     chip.style.borderRadius = '4px';
     types.appendChild(chip);

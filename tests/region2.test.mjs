@@ -6,12 +6,6 @@ import { start } from './lib.mjs';
 const t = await start('region2');
 const strong = [['nubarron', 30], ['aguacatono', 30]];
 const flags = (s) => t.save().then((x) => x.flags[s]);
-/** Face somewhere and press A; play it out. */
-const talk = async (map, x, y, dir, opts) => {
-  await t.warp(map, x, y, dir);
-  await t.press('z');
-  return t.play(opts);
-};
 
 // 1. Over the seam from Ruta 4 into town, and the message on the ground (pick the right place).
 await t.fromSave({ map: 'ruta5', x: 2, y: 11, dir: 'left', party: strong });
@@ -22,7 +16,7 @@ t.check('the message on the ground sends you to the mine', (await flags('mensaje
 await t.shot('ocote');
 
 // 2. Everyone is muted: the potter only mimes.
-r = await talk('ocote', 24, 12, 'up');
+r = await t.talk('ocote', 24, 12, 'up');
 t.check('a muted person says «…»', r.said[0] === '…', r.said);
 
 // 3. The lever in the mine opens the gate.
@@ -39,7 +33,7 @@ const s4 = await t.save();
 t.check('the Capataz battles you', r.said.some((x) => x.includes('Silenciador')), r.said.slice(0, 3));
 t.check('the Silenciador breaks and Petra comes back', s4.flags.silenciadorRoto && s4.flags.petraVolvio, s4.flags);
 t.check('you’re back in Villa Ocote', s4.map === 'ocote', [s4.map, s4.x, s4.y]);
-r = await talk('ocote', 15, 24, 'up');
+r = await t.talk('ocote', 15, 24, 'up');
 t.check('the town talks again', r.said.some((x) => x.includes('mensaje')), r.said);
 
 await t.end();

@@ -194,3 +194,6 @@ export function poolUpTo(themeId: string, level: number): Item[] {
 export function adHocItem(es: string[], en: string): Item {
   return { id: `adhoc:${es[0]}`, theme: 'adhoc', tier: 0, es: es[0], accept: es.map(digitsToWords), en };
 }
+
+/** The content item for this Spanish when there is one (answering counts toward mastery), else a one-off. */
+export const wordItem = (es: string, en: string, ...also: string[]) => itemBySpanish(es) ?? adHocItem([es, ...also], en);

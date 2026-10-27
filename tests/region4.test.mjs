@@ -8,11 +8,7 @@ const t = await start('region4');
 const party = [['huracan', 40], ['nacatamastin', 40], ['aguacatero', 40]];
 const flags = async () => (await t.save()).flags;
 const yes = { choose: (opts) => (opts.includes('Sí') ? 'Sí' : undefined) };
-const talk = async (map, x, y, dir, opts = yes) => {
-  await t.warp(map, x, y, dir);
-  await t.press('z');
-  return t.play(opts);
-};
+const talk = (map, x, y, dir, opts = yes) => t.talk(map, x, y, dir, opts);
 
 // Ruta 7 into Ciudad Chispa: the theft.
 await t.fromSave({ map: 'ruta8', x: 42, y: 12, dir: 'right', party, flags: { medalOla: true } });

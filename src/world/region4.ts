@@ -1,39 +1,29 @@
-import { fanfare } from '../audio/bgm';
 import { sfx } from '../engine/sfx';
 import { frames } from '../engine/loop';
 import { G, flag, setFlag } from '../game/state';
+import { shuffled } from '../game/random';
 import { addItem, takeItem, itemCount, money } from '../game/bag';
-import { giveMon, lucasStarter } from '../game/mon';
-import { itemBySpanish, adHocItem } from '../data/content';
-import { challenge, chooseText } from '../ui/challenge';
-import { wildBattle } from '../battle/battle';
-import { SPECIES } from '../data/species';
+import { wordItem } from '../data/content';
+import { chooseText } from '../ui/challenge';
+import { trainerBattle, wildBattle } from '../battle/battle';
 import { TRAINERS } from '../data/trainers';
-import { trainerBattle } from '../battle/battle';
 import { info, setSpeaker } from '../ui/textbox';
 import { ask } from '../ui/menu';
 import { launchFirework } from '../art/fireworks';
-import { warp, refreshNpcs, walkNpc, fadeOut, type ScriptFn, type ScriptCtx } from './world';
+import { refreshNpcs, walkNpc, type ScriptFn, type ScriptCtx } from './world';
 import type { Line } from './maps';
 import { TORCHES } from './maps/region4';
-import { lines, trainerFight, blackout, heal, talkMode } from './scripts';
+import { lines, as, talk, cutTo, talkMode, heal, blackout, fight, rivalBattle, gymLeader, gift, pay, receiveMon, practice, practiceUntilRight, question, untilRight } from './flows';
 import { teacher } from './school';
 
 /*
-  Region 4: the volcanoes and dry forest (plans/phase4-region4.md). Ruta 7 east from Playa Carey, Ciudad Chispa
+  Region 4: the volcanoes and dry forest. Ruta 7 east from Playa Carey, Ciudad Chispa
   (getting ready for its festival), the Volcán Chocoyo, and Ruta 8 home to Pueblo Amanecer.
   The story: the fireworks are stolen when you arrive; you get them back from Don Sigilo in the crater (Lucas
   battles you at the foot of the trail), the festival night follows, then Don Tizón's torch puzzle and
   battle. Side quests: a hammock for Mom (bargaining), the lost parakeet chick, the haunted house's lamp, the
   Torovenado costume, and the legend of the Carreta Nagua.
 */
-
-/** Lines said by someone other than the person you talked to (Don Tizón in a cutscene...). */
-async function as(look: string, ...ls: Line[]) {
-  setSpeaker(look);
-  await lines(...ls);
-  setSpeaker();
-}
 
 // ---------- The story: the stolen fireworks ----------
 
@@ -92,17 +82,10 @@ async function lucasVolcan() {
     ['¡{name}! ¿Tú también vienes por los Silenciosos?', '{name}! Are you after the Silenciosos too?'],
     ['¡Espera! Antes de subir, ¡una batalla! ¡Esta vez sí te gano!', 'Wait! Before we climb, a battle! This time I’ll beat you for sure!'],
   );
-  const starter = lucasStarter();
-  const team: [string, number][] = [[SPECIES[starter].evolves?.to ?? starter, 28], ['hojarasco', 25], ['palomon', 25], ['cangrejon', 26]];
-  const res = await trainerBattle({ ...TRAINERS.lucas3, team }, { look: 'lucas', outro: ['Otra vez... Bueno. Eres muy buen{o/a}, de verdad.', 'Again... OK. You’re really good, honestly.'] });
-  setFlag('lucas3'); // won or lost: no second chance
-  if (res === 'lose') {
-    await as('lucas', ['¡Por fin te gané! Ahora ve tú al cráter... ¡y ten cuidado!', 'I finally beat you! Now you go to the crater... and be careful!']);
-    refreshNpcs();
-    return blackout();
-  }
-  await as('lucas', ['Ve tú al cráter. Yo bajo a avisar a los guardaparques. ¡Ten cuidado!', 'You go to the crater. I’ll go down and tell the rangers. Be careful!']);
+  const won = await rivalBattle('lucas3', ['Otra vez... Bueno. Eres muy buen{o/a}, de verdad.', 'Again... OK. You’re really good, honestly.'], ['¡Por fin te gané! Ahora ve tú al cráter... ¡y ten cuidado!', 'I finally beat you! Now you go to the crater... and be careful!']);
   refreshNpcs();
+  if (!won) return blackout();
+  await as('lucas', ['Ve tú al cráter. Yo bajo a avisar a los guardaparques. ¡Ten cuidado!', 'You go to the crater. I’ll go down and tell the rangers. Be careful!']);
 }
 
 /** Don Sigilo, Equipo Silencio's boss, on the crater's north rim with the stolen fireworks. */
@@ -123,9 +106,7 @@ async function sigilo() {
   await info('¡Recuperaste los cohetes!', { en: 'You got the rockets back!' });
   setFlag('cohetesRecuperados');
   refreshNpcs();
-  await fadeOut(24);
-  await info('Bajas del volcán con los cohetes...', { en: 'You come down the volcano with the rockets...' });
-  await warp('chispa', 27, 13, 'right', false);
+  await cutTo(['Bajas del volcán con los cohetes...', 'You come down the volcano with the rockets...'], 'chispa', 27, 13, 'right');
   await as('tizon', ['¡Los cohetes! ¡Eres increíble!', 'The rockets! You’re incredible!']);
   setSpeaker('tizon');
   await invitacion();
@@ -134,9 +115,7 @@ async function sigilo() {
 
 /** The festival night: fireworks, the parade around the fountain, and Don Tizón's rocket. */
 async function festival() {
-  await fadeOut(24);
-  await info('Esa noche...', { en: 'That night...' });
-  await warp('chispa_noche', 17, 17, 'up', false);
+  await cutTo(['Esa noche...', 'That night...'], 'chispa_noche', 17, 17, 'up');
   await frames(30);
   await info('¡Empieza el desfile!', { en: 'The parade begins!' });
   // The dancers go once around the fountain, all at the same time, each from its own corner.
@@ -155,10 +134,8 @@ async function festival() {
 /** Ending the night: the next morning, the workshop opens. */
 async function endFestival() {
   if (!(await ask('¿Ya te vas a dormir?', { en: 'Are you going to bed already?' }))) return lines(['¡Disfruta la fiesta!', 'Enjoy the festival!']);
-  await fadeOut(24);
-  await info('A la mañana siguiente...', { en: 'The next morning...' });
   setFlag('fiestaDone');
-  await warp('chispa', 29, 14, 'up', false);
+  await cutTo(['A la mañana siguiente...', 'The next morning...'], 'chispa', 29, 14, 'up');
 }
 
 // ---------- The gym: Taller de Pólvora ----------
@@ -167,7 +144,7 @@ async function endFestival() {
 async function antorcha(c: ScriptCtx) {
   const t = TORCHES.find((x) => `antorcha${x.color}` === c.npc?.def.id);
   if (!t) return;
-  if (!(await ask(`¿Enciendes la antorcha ${t.es}?`, { en: `Light the ${t.color === 'Roja' ? 'red' : t.color === 'Azul' ? 'blue' : t.color === 'Verde' ? 'green' : 'yellow'} torch?` }))) return;
+  if (!(await ask(`¿Enciendes la antorcha ${t.es}?`, { en: `Light the ${t.en} torch?` }))) return;
   const next = TORCHES.find((x) => !flag(`antorcha:${x.color}`));
   if (next !== t) {
     for (const x of TORCHES) setFlag(`antorcha:${x.color}`, false);
@@ -187,25 +164,24 @@ async function antorcha(c: ScriptCtx) {
   }
 }
 
-/** Don Tizón, gym 4: the Medalla Chispa. */
+/** Don Tizón, gym 4: the Medalla Chispa, and the end of this part of the game. */
 async function tizon() {
-  if (flag('medalChispa')) return lines(['¡Qué batalla! Cada vez que veo un cohete, me acuerdo de ti.', 'What a battle! Every time I see a rocket, I think of you.']);
-  await lines(
-    ['¡{name}! Ayer salvaste la fiesta. Pero hoy... ¡hoy es una batalla de verdad!', '{name}! Yesterday you saved the festival. But today... today is a real battle!'],
-    ['Ayer hice mil cohetes. Bueno, ¡novecientos noventa y nueve! Uno lo guardé para esta batalla.', 'Yesterday I made a thousand rockets. Well, nine hundred ninety-nine! I saved one for this battle.'],
-  );
-  if (!(await ask('¿Estás list{o/a}?', { en: 'Are you ready?' }))) return lines(['¡La mecha está encendida! Te espero.', 'The fuse is lit! I’ll wait for you.']);
-  const res = await trainerBattle(TRAINERS.tizon, { look: 'tizon', outro: ['¡Se me apagó la mecha! Fue la mejor batalla de mi vida.', 'My fuse went out! It was the best battle of my life.'] });
-  if (res === 'lose') return blackout();
-  setFlag('beat:tizon');
-  setFlag('medalChispa');
-  G.save.medals.push('Chispa');
-  fanfare('medalla', 'badge');
-  await info('¡{name} recibió la Medalla Chispa!', { en: '{name} received the Spark Medal!' });
-  await lines(
-    ['¡Cuatro medallas! Eso es la mitad del camino.', 'Four medals! That’s halfway.'],
-    ['Al este está tu pueblo, Pueblo Amanecer. ¿Por qué no visitas a tu mamá? ¡Seguro que te extraña!', 'East is your town, Pueblo Amanecer. Why don’t you visit your mom? I’m sure she misses you!'],
-  );
+  const won = await gymLeader('tizon', {
+    medal: ['Chispa', 'Spark'],
+    intro: [
+      ['¡{name}! Ayer salvaste la fiesta. Pero hoy... ¡hoy es una batalla de verdad!', '{name}! Yesterday you saved the festival. But today... today is a real battle!'],
+      ['Ayer hice mil cohetes. Bueno, ¡novecientos noventa y nueve! Uno lo guardé para esta batalla.', 'Yesterday I made a thousand rockets. Well, nine hundred ninety-nine! I saved one for this battle.'],
+    ],
+    ready: ['¿Estás list{o/a}?', 'Are you ready?'],
+    notReady: ['¡La mecha está encendida! Te espero.', 'The fuse is lit! I’ll wait for you.'],
+    outro: ['¡Se me apagó la mecha! Fue la mejor batalla de mi vida.', 'My fuse went out! It was the best battle of my life.'],
+    after: [
+      ['¡Cuatro medallas! Eso es la mitad del camino.', 'Four medals! That’s halfway.'],
+      ['Al este está tu pueblo, Pueblo Amanecer. ¿Por qué no visitas a tu mamá? ¡Seguro que te extraña!', 'East is your town, Pueblo Amanecer. Why don’t you visit your mom? I’m sure she misses you!'],
+    ],
+    beaten: [['¡Qué batalla! Cada vez que veo un cohete, me acuerdo de ti.', 'What a battle! Every time I see a rocket, I think of you.']],
+  });
+  if (!won) return;
   await info('¡Felicidades! Terminaste la cuarta parte de Palabritas.', { en: 'Congratulations! You finished the fourth part of Palabritas.' });
   await info('Sigue entrenando a tus Palabritas y atrapando nuevas. ¡Pronto habrá más aventuras!', { en: 'Keep training your Palabritas and catching new ones. More adventures are coming soon!' });
 }
@@ -229,20 +205,6 @@ async function vueltaACasa() {
 }
 
 // ---------- Side quests ----------
-
-const shuffled = <T>(xs: T[]) => [...xs].sort(() => Math.random() - 0.5);
-/** A multiple-choice question: true when the right answer (the first option) is picked. */
-async function question(label: string, en: string, right: string, wrong: string[]) {
-  const options = shuffled([right, ...wrong]);
-  return options[await chooseText(label, en, options)] === right;
-}
-const gift = async (id: string, n: number, es: string, en: string) => {
-  addItem(id, n);
-  sfx('caught');
-  await info(`¡{name} recibió ${es}!`, { en: `{name} received ${en}!` });
-};
-/** A real content item when there is one (answering counts toward mastery), else a one-off. */
-const item = (es: string, en: string) => itemBySpanish(es) ?? adHocItem([es], en);
 
 // ----- Una hamaca para mamá: bargaining in Spanish, then Mom, then the sloth asleep in it -----
 
@@ -286,12 +248,11 @@ async function hamaquera() {
 
 /** Mom gets the hammock (talking to her, or coming home over the plateau). */
 export async function hamacaParaMama() {
-  setSpeaker('mom');
-  await lines(
+  await as(
+    'mom',
     ['¿Una hamaca? ¿De Ciudad Chispa? ¡Qué bonita! La voy a colgar en tu cuarto.', 'A hammock? From Ciudad Chispa? How pretty! I’ll hang it in your room.'],
     ['Toma, para tu viaje.', 'Here, for your trip.'],
   );
-  setSpeaker();
   takeItem('hamaca');
   setFlag('hamacaEntregada');
   await gift('superpocion', 3, 'tres Superpociones', 'three Super Potions');
@@ -315,9 +276,10 @@ async function chocoyitoBusca() {
     ['¡Ay! Un chocoyito bebé se cayó del nido. Creo que está dentro del tubo de lava.', 'Oh! A baby parakeet fell out of its nest. I think it’s inside the lava tube.'],
     ['Entras, vas a la izquierda y sigues hacia arriba. Está en un rincón oscuro.', 'You go in, go left and keep going up. It’s in a dark corner.'],
   );
-  while (!(await question('¿Dónde está el chocoyito?', 'Where is the baby parakeet?', 'En el tubo de lava, a la izquierda', ['En la laguna', 'En el taller']))) {
-    await lines(['No, no. Escucha otra vez: en el tubo de lava, a la izquierda.', 'No, no. Listen again: in the lava tube, on the left.']);
-  }
+  await untilRight('¿Dónde está el chocoyito?', 'Where is the baby parakeet?', 'En el tubo de lava, a la izquierda', ['En la laguna', 'En el taller'], [
+    'No, no. Escucha otra vez: en el tubo de lava, a la izquierda.',
+    'No, no. Listen again: in the lava tube, on the left.',
+  ]);
   setFlag('chocoyitoBusca');
   refreshNpcs();
   await lines(['¡Eso! Su nido está en el cráter, del lado este.', 'That’s it! Its nest is in the crater, on the east side.']);
@@ -352,10 +314,8 @@ const LAMP = [
 async function duenoEmbrujada() {
   if (flag('lamparaCalmada') && !flag('embrujadaPagada')) {
     await lines(['¡Gracias! Ya puedo dormir en mi casa.', 'Thanks! Now I can sleep in my house.']);
-    G.save.money += 500;
     setFlag('embrujadaPagada');
-    sfx('caught');
-    return info(`¡{name} recibió ${money(500)}!`, { en: `{name} received ${money(500)}!` });
+    return pay(500);
   }
   if (flag('embrujadaPagada')) return lines(['Mi casa está tranquila otra vez. ¡Gracias!', 'My house is quiet again. Thanks!']);
   await lines(
@@ -369,11 +329,9 @@ async function duenoEmbrujada() {
 async function lampara() {
   await info('La lámpara te habla en voz muy baja...', { en: 'The lamp speaks to you very quietly...' });
   for (const [es, en] of LAMP) {
-    while (true) {
-      const r = await challenge({ item: item(es, en), mode: 'listen', title: '🏮 La lámpara', label: 'La lámpara susurra. Escribe lo que dice. · The lamp whispers. Write what it says.' });
-      if (r.grade !== 'wrong') break;
-      await info('La lámpara suspira...', { en: 'The lamp sighs...' });
-    }
+    await practiceUntilRight({ item: wordItem(es, en), mode: 'listen', title: '🏮 La lámpara', label: 'La lámpara susurra. Escribe lo que dice. · The lamp whispers. Write what it says.' }, () =>
+      info('La lámpara suspira...', { en: 'The lamp sighs...' }),
+    );
     await info('La lámpara brilla un poco más...', { en: 'The lamp glows a little brighter...' });
   }
   await info('¡La lámpara ya no está triste! Ahora brilla de color rojo... ¿está enojada? ¡No, quiere jugar!', {
@@ -407,7 +365,7 @@ const piecesFound = () => PIECES.filter((p) => flag(`traje:${p.id}`)).length;
 const holder = (piece: Piece): ScriptFn => async () => {
   if (!flag('torovenado') || flag(`traje:${piece.id}`)) return lines(piece.who);
   await lines(['¡Hola! ¿Qué buscas?', 'Hi! What are you looking for?']);
-  const r = await challenge({ item: item(piece.es, piece.en), mode: talkMode(), title: '🎭 El Torovenado', label: '¿Qué pieza del traje buscas? · Which costume piece are you looking for?' });
+  const r = await practice({ item: wordItem(piece.es, piece.en), mode: talkMode(), title: '🎭 El Torovenado', label: '¿Qué pieza del traje buscas? · Which costume piece are you looking for?' });
   if (r.grade === 'wrong') return lines(['Mmm, no tengo eso.', 'Hmm, I don’t have that.']);
   setFlag(`traje:${piece.id}`);
   addItem('traje');
@@ -442,11 +400,8 @@ async function torovenadoDance() {
   await info('¡{name} baila en el desfile con el traje del Torovenado!', { en: '{name} dances in the parade in the Torovenado costume!' });
   sfx('levelup');
   await as('man', ['¡Qué bien bailaste! Este venadito no se quiere separar de ti. ¡Llévatelo!', 'You danced so well! This little fawn doesn’t want to leave you. Take it with you!']);
-  const where = giveMon('venadito', 20);
   setFlag('venaditoRecibido');
-  sfx('caught');
-  await info('¡{name} recibió a Venadito!', { en: '{name} received Venadito!' });
-  if (where === 'box') await info('Tu equipo está lleno: Venadito fue a la Caja de Palabritas.', { en: 'Your team is full: Venadito went to the storage box.' });
+  await receiveMon('venadito', 20);
 }
 
 // ----- La leyenda de la Carreta Nagua: a story in the past tense, then three questions -----
@@ -469,9 +424,6 @@ async function abueloLeyenda() {
   setFlag('leyenda');
   await gift('campanita', 1, 'una Campanita', 'a Little bell');
 }
-
-const talk = (...ls: Line[]): ScriptFn => () => lines(...ls);
-const fight = (id: string, intro: Line, defeated: Line, after: Line): ScriptFn => () => trainerFight(id, { intro, defeated, after });
 
 export const REGION4: Record<string, ScriptFn> = {
   // ---------- The story ----------

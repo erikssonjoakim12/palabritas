@@ -8,11 +8,7 @@ const t = await start('quests4');
 const party = [['mordiscon', 45], ['nacatamastin', 40]];
 const save = () => t.save();
 const yes = (opts) => (opts.includes('Sí') ? 'Sí' : undefined);
-const talk = async (map, x, y, dir, opts = { choose: yes }) => {
-  await t.warp(map, x, y, dir);
-  await t.press('z');
-  return t.play(opts);
-};
+const talk = (map, x, y, dir, opts = { choose: yes }) => t.talk(map, x, y, dir, opts);
 
 // The hammock: 900 → 750 → 600, a rude answer, → 500, buy.
 await t.fromSave({ map: 'chispa', x: 13, y: 21, dir: 'left', party, money: 600, flags: { cohetesRobados: true } });

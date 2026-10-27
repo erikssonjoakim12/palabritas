@@ -1,3 +1,4 @@
+import { TYPE_COLORS as COLORS_BY_TYPE } from '../style/colors';
 // The 17 types from Gen 2, with their Spanish names, and the Gen 2 type chart.
 
 export type Type =
@@ -29,9 +30,4 @@ export function effectiveness(attack: Type, defender: Type[]): number {
   return defender.reduce((m, d) => m * (CHART[attack]?.[d] ?? 1), 1);
 }
 
-export const TYPE_COLORS: Record<Type, string> = {
-  Normal: '#a8a878', Fuego: '#f08030', Agua: '#6890f0', Eléctrico: '#f8d030', Planta: '#78c850',
-  Hielo: '#98d8d8', Lucha: '#c03028', Veneno: '#a040a0', Tierra: '#e0c068', Volador: '#a890f0',
-  Psíquico: '#f85888', Bicho: '#a8b820', Roca: '#b8a038', Fantasma: '#705898', Dragón: '#7038f8',
-  Siniestro: '#705848', Acero: '#b8b8d0',
-};
+export const TYPE_COLORS: Record<Type, string> = COLORS_BY_TYPE;

@@ -3,6 +3,7 @@ import { setScene, nextFrame } from './engine/loop';
 import { input } from './engine/input';
 import { sfx, unlockAudio } from './engine/sfx';
 import { creatureArt } from './art/creatures';
+import { TITLE } from './style/colors';
 import { G, hasSave, loadGame, newSave, deleteSave, saveGame } from './game/state';
 import { initSpeech } from './lang/speech';
 import { say, closeText } from './ui/textbox';
@@ -18,13 +19,13 @@ const titleScene = {
     t++;
   },
   render(g: CanvasRenderingContext2D) {
-    g.fillStyle = '#5ab0f0';
+    g.fillStyle = TITLE.sky;
     g.fillRect(0, 0, W, H);
-    g.fillStyle = '#88c8f8';
+    g.fillStyle = TITLE.haze;
     g.fillRect(0, 60, W, 30);
-    g.fillStyle = '#7ec860';
+    g.fillStyle = TITLE.grass;
     g.fillRect(0, 98, W, H - 98);
-    g.fillStyle = '#5aa04a';
+    g.fillStyle = TITLE.edge;
     g.fillRect(0, 98, W, 3);
     // Each starter hops now and then, one after the other (a 20-frame hop every 3 seconds).
     const bob = (i: number) => {

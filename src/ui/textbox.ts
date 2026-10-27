@@ -8,7 +8,12 @@ import { isMaleLook } from '../style/people';
 let box: HTMLDivElement | null = null;
 /** Who is talking (a look id): male characters get a male voice. Set while talking to someone. */
 let speaker: string | undefined;
-export const setSpeaker = (lookId?: string) => (speaker = lookId);
+/** Whose voice the dialog uses (male or female). Returns the one before, to put back. */
+export function setSpeaker(lookId?: string) {
+  const before = speaker;
+  speaker = lookId;
+  return before;
+}
 
 export interface SayOpts {
   /** English translation, shown with the EN button. */

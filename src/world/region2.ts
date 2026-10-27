@@ -1,20 +1,17 @@
-import { fanfare } from '../audio/bgm';
 import { sfx } from '../engine/sfx';
 import { frames } from '../engine/loop';
 import { G, flag, setFlag, today } from '../game/state';
 import { addItem, takeItem, itemCount } from '../game/bag';
-import { giveMon, lucasStarter } from '../game/mon';
-import { record } from '../game/learning';
-import { itemBySpanish, adHocItem } from '../data/content';
-import { info, say, setSpeaker } from '../ui/textbox';
+import { wordItem } from '../data/content';
+import { info, say } from '../ui/textbox';
 import { ask } from '../ui/menu';
-import { challenge, chooseText } from '../ui/challenge';
+import { chooseText } from '../ui/challenge';
 import { trainerBattle, wildBattle } from '../battle/battle';
 import { TRAINERS } from '../data/trainers';
 import { speak } from '../lang/speech';
 import { warp, refreshNpcs, walkNpc, placeNpc, approachPlayer, setFade, fadeOut, currentMap, type ScriptFn } from './world';
-import { MAPS, gateOf, type Line } from './maps';
-import { lines, trainerFight, blackout, talkMode } from './scripts';
+import { gateOf, type Line } from './maps';
+import { lines, as, talk, talkMode, blackout, fight, rivalBattle, gymLeader, gift, pay, receiveMon, practice, practiceUntilRight, untilRight } from './flows';
 import { teacher } from './school';
 
 /*
@@ -23,20 +20,6 @@ import { teacher } from './school';
   Capataz runs the Silenciador there; when it breaks, the town talks again and Petra opens her gym.
   While the town is muted (MapDef.muted), people only mime: the engine shows «…» instead of these scripts.
 */
-
-/** Shuffle a copy (for answer choices). */
-const shuffled = <T>(xs: T[]) => [...xs].sort(() => Math.random() - 0.5);
-
-/** A reading or listening choice: ask until the right option is picked. */
-async function untilRight(label: string, en: string, right: string, wrong: string[], retry: Line, replay?: string) {
-  const options = shuffled([right, ...wrong]);
-  while (true) {
-    const i = await chooseText(label, en, options, replay);
-    if (options[i] === right) return sfx('right');
-    sfx('wrong');
-    await lines(retry);
-  }
-}
 
 // ---------- The story ----------
 
@@ -154,17 +137,6 @@ interface LostWord {
   reward: () => Promise<void>;
 }
 
-const give = async (id: string, n: number, es: string, en: string) => {
-  addItem(id, n);
-  sfx('caught');
-  await info(`¡{name} recibió ${es}!`, { en: `{name} received ${en}!` });
-};
-const pay = async (n: number) => {
-  G.save.money += n;
-  sfx('caught');
-  await info(`¡{name} recibió ${n}!`, { en: `{name} received ${n}!` });
-};
-
 export const LOST_WORDS: Record<string, LostWord> = {
   olla: {
     word: 'la olla', en: 'the pot', look: 'lady',
@@ -172,7 +144,7 @@ export const LOST_WORDS: Record<string, LostWord> = {
     hint: 'something made of clay, for cooking',
     thanks: ['¡Mi olla! «Esta olla es de barro.» ¡Ya lo puedo decir! Toma, un regalo.', 'My pot! "This pot is made of clay." I can say it now! Here, a gift.'],
     party: ['¡Esta olla es para la sopa de la fiesta!', 'This pot is for the party soup!'],
-    reward: () => give('superpocion', 1, 'una Superpoción', 'a Super Potion'),
+    reward: () => gift('superpocion', 1, 'una Superpoción', 'a Super Potion'),
   },
   tortilla: {
     word: 'la tortilla', en: 'the tortilla', look: 'lady',
@@ -180,7 +152,7 @@ export const LOST_WORDS: Record<string, LostWord> = {
     hint: 'something round and flat, made of corn',
     thanks: ['¡Una tortilla de maíz! Ya puedo decirlo. Toma, para el camino.', 'A corn tortilla! I can say it now. Here, for the road.'],
     party: ['¡Prueben la tortilla! Está calientita.', 'Try the tortilla! It’s nice and warm.'],
-    reward: () => give('pocion', 2, 'dos Pociones', 'two Potions'),
+    reward: () => gift('pocion', 2, 'dos Pociones', 'two Potions'),
   },
   bueyes: {
     word: 'los bueyes', en: 'the oxen', look: 'man',
@@ -204,7 +176,7 @@ export const LOST_WORDS: Record<string, LostWord> = {
     hint: 'a wooden instrument you play with mallets',
     thanks: ['¡La marimba! ¡La música volvió! Toma, para que nada te moleste en el camino.', 'The marimba! The music is back! Here, so nothing bothers you on the road.'],
     party: ['¡Y ahora... la marimba!', 'And now... the marimba!'],
-    reward: () => give('repelente', 1, 'un Repelente', 'a Repel'),
+    reward: () => gift('repelente', 1, 'un Repelente', 'a Repel'),
   },
   medicina: {
     word: 'la medicina', en: 'the medicine', look: 'granny',
@@ -212,7 +184,7 @@ export const LOST_WORDS: Record<string, LostWord> = {
     hint: 'what you take when you’re sick',
     thanks: ['¡La medicina! Toma, para tus Palabritas. ¡La salud es lo primero!', 'The medicine! Here, for your Palabritas. Health comes first!'],
     party: ['Si alguien baila demasiado, ¡aquí tengo medicina!', 'If anyone dances too much, I have medicine here!'],
-    reward: () => give('superpocion', 2, 'dos Superpociones', 'two Super Potions'),
+    reward: () => gift('superpocion', 2, 'dos Superpociones', 'two Super Potions'),
   },
   pelota: {
     word: 'la pelota', en: 'the ball', look: 'boy',
@@ -220,7 +192,7 @@ export const LOST_WORDS: Record<string, LostWord> = {
     hint: 'something round you kick',
     thanks: ['¡La pelota! ¡Golazo! Toma, te las regalo.', 'The ball! What a goal! Here, they’re yours.'],
     party: ['¡Después de la fiesta, todos a jugar con la pelota!', 'After the party, everyone come play with the ball!'],
-    reward: () => give('palabola', 3, 'tres Palabolas', 'three Palabolas'),
+    reward: () => gift('palabola', 3, 'tres Palabolas', 'three Palabolas'),
   },
   pregunta: {
     word: 'la pregunta', en: 'the question', look: 'man',
@@ -266,9 +238,7 @@ const owner = (id: string, usual: ScriptFn): ScriptFn => async (c) => {
     return lines(['¡Ay, no me sale la palabra!', 'Oh, the word won’t come out!']);
   }
   await lines(['¿Tienes mi palabra? ¡Ayúdame a decirlo!', 'Do you have my word? Help me say it!']);
-  const item = itemBySpanish(w.word) ?? adHocItem([w.word], w.en);
-  const r = await challenge({ item, mode: 'type', title: '💬 Palabra perdida', label: `Completa: «${gapEs}»`, allowHelp: true });
-  record(item, r.mode, r.grade, r.helped);
+  const r = await practice({ item: wordItem(w.word, w.en), mode: 'type', title: '💬 Palabra perdida', label: `Completa: «${gapEs}»`, allowHelp: true });
   if (r.grade === 'wrong') return lines(['Mmm, no... esa no es mi palabra.', 'Hmm, no... that’s not my word.']);
   setFlag(`devuelta:${id}`);
   takeItem('palabras');
@@ -285,15 +255,12 @@ async function fiesta() {
   await warp('ocote_noche', 19, 16, 'up', false);
   await info('Esa noche, todo Villa Ocote se reúne alrededor de la fuente...', { en: 'That night, all of Villa Ocote gathers around the fountain...' });
   for (const id of LOST_IDS) {
-    setSpeaker(LOST_WORDS[id].look);
     if (id === 'marimba') sfx('levelup');
-    await say(LOST_WORDS[id].party[0], { en: LOST_WORDS[id].party[1] });
+    await as(LOST_WORDS[id].look, LOST_WORDS[id].party);
   }
-  setSpeaker('petra');
-  await lines(['Gracias a ti, Villa Ocote tiene todas sus palabras.', 'Thanks to you, Villa Ocote has all its words.']);
-  setSpeaker();
-  await give('superbola', 5, 'cinco Superbolas', 'five Super Balls');
-  await give('revivir', 2, 'dos Revivir', 'two Revives');
+  await as('petra', ['Gracias a ti, Villa Ocote tiene todas sus palabras.', 'Thanks to you, Villa Ocote has all its words.']);
+  await gift('superbola', 5, 'cinco Superbolas', 'five Super Balls');
+  await gift('revivir', 2, 'dos Revivir', 'two Revives');
   setFlag('palabrasDone');
   await warp('ocote', 19, 16, 'down', false);
 }
@@ -318,19 +285,14 @@ async function lucasMina() {
     ['¿Te acuerdas de mi Palabrita? ¡La entrené todos los días!', 'Remember my Palabrita? I’ve trained it every day!'],
     ['¡Vamos a ver quién aprendió más palabras!', 'Let’s see who learned more words!'],
   );
-  const lucas = { ...TRAINERS.lucas1, team: [[lucasStarter(), 15], ['pajarito', 12]] as [string, number][] };
-  const res = await trainerBattle(lucas, { look: 'lucas', outro: ['¡Ay! Estudiaste mucho, ¿verdad?', 'Ugh! You studied a lot, didn’t you?'] });
-  setFlag('lucas1'); // won or lost: no second chance (the user), do better next time
-  if (res === 'lose') {
-    await lines(['¡Te gané! ¡Entrena más y nos vemos!', 'I beat you! Train more, and see you around!']);
-    setFlag('lucasAqui', false);
-    refreshNpcs();
-    return blackout();
+  const won = await rivalBattle('lucas1', ['¡Ay! Estudiaste mucho, ¿verdad?', 'Ugh! You studied a lot, didn’t you?'], ['¡Te gané! ¡Entrena más y nos vemos!', 'I beat you! Train more, and see you around!']);
+  if (won) {
+    await lines(['Uf... Bueno, tú busca el silencio. Yo vuelvo al pueblo a curar a mis Palabritas.', 'Phew... OK, you go find the silence. I’m going back to town to heal my Palabritas.']);
+    await walkNpc('lucas', ['down', 'down', 'down']);
   }
-  await lines(['Uf... Bueno, tú busca el silencio. Yo vuelvo al pueblo a curar a mis Palabritas.', 'Phew... OK, you go find the silence. I’m going back to town to heal my Palabritas.']);
-  await walkNpc('lucas', ['down', 'down', 'down']);
   setFlag('lucasAqui', false);
   refreshNpcs();
+  if (!won) await blackout();
 }
 
 /** Gaby the birdwatcher: describe the guardabarranco, then show her one. */
@@ -340,10 +302,8 @@ async function gaby() {
   if (flag('gabyPregunta')) {
     if (!hasBird) return lines(['Dicen que vive en el cañón. Si atrapas uno, ¡enséñamelo!', 'They say it lives in the canyon. If you catch one, show me!']);
     await lines(['¡Un guardabarranco! ¡Es precioso! Gracias por enseñármelo.', 'A guardabarranco! It’s beautiful! Thank you for showing me.']);
-    addItem('superbola', 3);
-    sfx('caught');
-    await info('¡{name} recibió tres Superbolas!', { en: '{name} received three Super Balls!' });
-    return setFlag('gabyDone');
+    setFlag('gabyDone');
+    return gift('superbola', 3, 'tres Superbolas', 'three Super Balls');
   }
   await lines(
     ['Busco el guardabarranco, el ave nacional de Nicaragua.', 'I’m looking for the guardabarranco, Nicaragua’s national bird.'],
@@ -380,16 +340,12 @@ async function betoSombrero() {
   if (flag('sombreroDevuelto')) return lines(['¡Con mi sombrero, el sol ya no me molesta!', 'With my hat, the sun doesn’t bother me anymore!']);
   if (!itemCount('sombrero')) return lines(...(gateOf(currentMap(), 'beto')!.open as Line[]));
   await lines(['¿Ese es mi sombrero? A ver... ¿de qué color es?', 'Is that my hat? Let’s see... what color is it?']);
-  const item = itemBySpanish('verde') ?? adHocItem(['verde', 'Es verde'], 'green');
-  const r = await challenge({ item, mode: talkMode(), title: '🎩 El sombrero', label: '¿De qué color es el sombrero? · What color is the hat?' });
-  record(item, r.mode, r.grade, r.helped);
+  const r = await practice({ item: wordItem('verde', 'green', 'Es verde'), mode: talkMode(), title: '🎩 El sombrero', label: '¿De qué color es el sombrero? · What color is the hat?' });
   if (r.grade === 'wrong') return lines(['Mmm, no... el mío es de otro color.', 'Hmm, no... mine is a different color.']);
   takeItem('sombrero');
   setFlag('sombreroDevuelto');
   await lines(['¡Sí, es mi sombrero verde! ¡Muchas gracias!', 'Yes, it’s my green hat! Thank you so much!']);
-  addItem('palabola', 5);
-  sfx('caught');
-  await info('¡{name} recibió cinco Palabolas!', { en: '{name} received five Palabolas!' });
+  await gift('palabola', 5, 'cinco Palabolas', 'five Palabolas');
 }
 
 /** The echo room's cracked wall: shout, and write what the echo says back. Five rounds break it. */
@@ -399,13 +355,7 @@ async function paredEco() {
   if (!(await ask('¿Quieres gritar algo?', { en: 'Do you want to shout something?' }))) return;
   await info('¡Escucha el eco y escribe lo que dice!', { en: 'Listen to the echo and write what it says!' });
   for (const [es, en] of ECHO) {
-    const item = itemBySpanish(es) ?? adHocItem([es], en);
-    while (true) {
-      const r = await challenge({ item, mode: 'listen', title: '🔊 El eco' });
-      record(item, r.mode, r.grade, r.helped);
-      if (r.grade !== 'wrong') break;
-      await lines(['El eco se apagó... ¡Otra vez!', 'The echo faded... Again!']);
-    }
+    await practiceUntilRight({ item: wordItem(es, en), mode: 'listen', title: '🔊 El eco' }, () => lines(['El eco se apagó... ¡Otra vez!', 'The echo faded... Again!']));
   }
   for (let i = 0; i < 3; i++) {
     sfx('bump');
@@ -422,11 +372,8 @@ async function curadora() {
   if (flag('fosilEntregado')) {
     if (G.save.fossilDay === today()) return lines(['Todavía está durmiendo. ¡Vuelve mañana!', 'It’s still sleeping. Come back tomorrow!']);
     await lines(['¡Despertó! Se llama Caparazonte. Vivió hace diez mil años... ¡y ahora es tuyo!', 'It woke up! It’s called Caparazonte. It lived ten thousand years ago... and now it’s yours!']);
-    const where = giveMon('caparazonte', 15);
-    sfx('caught');
-    await info('¡{name} recibió a Caparazonte!', { en: '{name} received Caparazonte!' });
-    if (where === 'box') await info('Tu equipo está lleno: Caparazonte fue a la Caja de Palabritas.', { en: 'Your team is full: Caparazonte went to the storage box.' });
-    return setFlag('caparazonte');
+    setFlag('caparazonte');
+    return receiveMon('caparazonte', 15);
   }
   if (itemCount('fosil')) {
     await lines(['¡Un fósil de caparazón! Con mi máquina puedo despertarlo... pero tarda un día.', 'A shell fossil! With my machine I can wake it up... but it takes a day.']);
@@ -449,14 +396,11 @@ async function chepeBueyes() {
   if (flag('bueyes')) {
     if (!flag('buey1') || !flag('buey2')) return say(where, { en: 'One went to the north of the canyon, near the waterfall. The other is here in town, behind the school.' });
     await lines(['¡Lucero! ¡Canelo! ¡Mis bueyes! ¡Gracias, gracias!', 'Lucero! Canelo! My oxen! Thank you, thank you!']);
-    addItem('superpocion', 2);
-    G.save.money += 300;
-    sfx('caught');
-    await info('¡{name} recibió dos Superpociones y $300!', { en: '{name} received two Super Potions and $300!' });
-    return setFlag('bueyesDone');
+    setFlag('bueyesDone');
+    await gift('superpocion', 2, 'dos Superpociones', 'two Super Potions');
+    return pay(300);
   }
   await lines(['¡Ay, mis bueyes! Con el ruido de la mina, se escaparon.', 'Oh, my oxen! With the noise from the mine, they ran off.']);
-  speak(where);
   await untilRight(
     '¿Dónde está el primer buey?',
     '🎧 Listen to Don Chepe: where is the first ox?',
@@ -514,55 +458,32 @@ const adivinanza: ScriptFn = async (c) => {
   const id = c.npc!.def.id;
   const r = RIDDLES[id];
   await info('La puerta tiene un dibujo y unas palabras...', { en: 'The door has a drawing and some words...' });
-  const options = shuffled([r.answer, ...r.wrong]);
-  let hinted = false;
-  while (true) {
-    speak(r.q[0]);
-    const i = await chooseText(r.q[0], `A riddle: ${r.q[1]}`, options, r.q[0]);
-    if (options[i] === r.answer) break;
-    sfx('wrong');
-    await lines(hinted ? ['Mmm, no. Lee otra vez.', 'Hmm, no. Read it again.'] : r.hint);
-    hinted = true;
-  }
-  sfx('right');
+  // The hint first, then «read it again».
+  await untilRight(r.q[0], `A riddle: ${r.q[1]}`, r.answer, r.wrong, (misses) => (misses ? ['Mmm, no. Lee otra vez.', 'Hmm, no. Read it again.'] : r.hint), r.q[0]);
   await info(`«${r.answer[0].toUpperCase()}${r.answer.slice(1)}». ¡La puerta se abre!`, { en: 'The door opens!' });
   sfx('bump');
   setFlag(`adivinanza:${id}`);
   refreshNpcs();
 };
 
-async function petra() {
-  if (flag('medalBarro')) {
-    return lines(
+const petra = () =>
+  gymLeader('petra', {
+    medal: ['Barro', 'Clay'],
+    intro: [
+      ['¡Llegaste! ¿Te gusta el barro? ¡A mí me encanta! Con barro hago ollas, jarras... y Palabritas fuertes.', 'You made it! Do you like clay? I love it! With clay I make pots, jugs... and strong Palabritas.'],
+      ['¿Sabes por qué me gusta tanto? Porque el barro es paciente, como aprender un idioma.', 'Do you know why I like it so much? Because clay is patient, like learning a language.'],
+    ],
+    ready: ['¿Estás list{o/a}?', 'Are you ready?'],
+    notReady: ['Vuelve cuando quieras. El barro siempre espera.', 'Come back whenever you want. Clay always waits.'],
+    outro: ['¡Se me rompió todo! Bueno... así se aprende.', 'Everything broke! Well... that’s how you learn.'],
+    after: [['Con esta medalla puedes bajar al sur, hasta el mar.', 'With this medal you can go south, down to the sea.']],
+    beaten: [
       ['El barro es paciente, como aprender un idioma. ¡Sigue practicando!', 'Clay is patient, like learning a language. Keep practicing!'],
       ['El camino al sur baja hasta el mar. ¡Allá te espera otra aventura!', 'The road south goes down to the sea. Another adventure is waiting for you there!'],
-    );
-  }
-  await lines(
-    ['¡Llegaste! ¿Te gusta el barro? ¡A mí me encanta! Con barro hago ollas, jarras... y Palabritas fuertes.', 'You made it! Do you like clay? I love it! With clay I make pots, jugs... and strong Palabritas.'],
-    ['¿Sabes por qué me gusta tanto? Porque el barro es paciente, como aprender un idioma.', 'Do you know why I like it so much? Because clay is patient, like learning a language.'],
-  );
-  if (!(await ask('¿Estás list{o/a}?', { en: 'Are you ready?' }))) return lines(['Vuelve cuando quieras. El barro siempre espera.', 'Come back whenever you want. Clay always waits.']);
-  const res = await trainerBattle(TRAINERS.petra, { look: 'petra', outro: ['¡Se me rompió todo! Bueno... así se aprende.', 'Everything broke! Well... that’s how you learn.'] });
-  if (res === 'lose') return blackout();
-  setFlag('beat:petra');
-  setFlag('medalBarro');
-  G.save.medals.push('Barro');
-  fanfare('medalla', 'badge');
-  await info('¡{name} recibió la Medalla Barro!', { en: '{name} received the Clay Medal!' });
-  await lines(['Con esta medalla puedes bajar al sur, hasta el mar.', 'With this medal you can go south, down to the sea.']);
-  if (!MAPS.ruta6) {
-    await info('¡Felicidades! Terminaste la segunda parte de Palabritas.', { en: 'Congratulations! You finished the second part of Palabritas.' });
-    await info('Sigue entrenando a tus Palabritas y atrapando nuevas. ¡Pronto habrá más aventuras!', {
-      en: 'Keep training your Palabritas and catching new ones. More adventures are coming soon!',
-    });
-  }
-}
+    ],
+  });
 
 // ---------- People ----------
-
-/** Someone with a few lines, the same each time. */
-const talk = (...ls: Line[]): ScriptFn => () => lines(...ls);
 
 export const REGION2: Record<string, ScriptFn> = {
   mensajeOcote,
@@ -575,30 +496,10 @@ export const REGION2: Record<string, ScriptFn> = {
   curadora,
   buey,
   lucas: talk(['¡Te voy a ganar la próxima vez!', 'I’m going to beat you next time!']),
-  armando: () =>
-    trainerFight('armando', {
-      intro: ['¡Cuidado! Estoy cortando leña. Bueno... ¿luchamos?', 'Careful! I’m chopping firewood. Well... shall we battle?'],
-      defeated: ['¡Uf! Más fuerte que un pino.', 'Phew! Stronger than a pine.'],
-      after: ['Los pinos de aquí huelen a ocote. ¡Me encanta ese olor!', 'The pines here smell of ocote. I love that smell!'],
-    }),
-  elena: () =>
-    trainerFight('elena', {
-      intro: ['¡Hola! Acampo aquí todos los veranos. ¿Una batalla?', 'Hi! I camp here every summer. A battle?'],
-      defeated: ['¡Ay, se me apagó la fogata!', 'Oh, my campfire went out!'],
-      after: ['De noche se ven muchas estrellas en la montaña.', 'At night you can see lots of stars in the mountains.'],
-    }),
-  julio: () =>
-    trainerFight('julio', {
-      intro: ['¡Shh! Los peces se asustan. Bueno, ¡luchemos rápido!', 'Shh! The fish get scared. Well, let’s battle fast!'],
-      defeated: ['Se me escapó... ¡como un pez!', 'It got away... like a fish!'],
-      after: ['Abajo del puente hay tilapias. Con una caña, ¡pescas muchas!', 'Under the bridge there are tilapias. With a rod you catch lots!'],
-    }),
-  rosa: () =>
-    trainerFight('rosa', {
-      intro: ['¿Viste el guardabarranco? ¡Yo tampoco! ¿Luchamos mientras esperamos?', 'Did you see the guardabarranco? Me neither! Shall we battle while we wait?'],
-      defeated: ['¡Qué buen{o/a} eres!', 'You’re so good!'],
-      after: ['Dicen que vive al final del cañón, cerca de la cascada.', 'They say it lives at the end of the canyon, near the waterfall.'],
-    }),
+  armando: fight('armando', ['¡Cuidado! Estoy cortando leña. Bueno... ¿luchamos?', 'Careful! I’m chopping firewood. Well... shall we battle?'], ['¡Uf! Más fuerte que un pino.', 'Phew! Stronger than a pine.'], ['Los pinos de aquí huelen a ocote. ¡Me encanta ese olor!', 'The pines here smell of ocote. I love that smell!']),
+  elena: fight('elena', ['¡Hola! Acampo aquí todos los veranos. ¿Una batalla?', 'Hi! I camp here every summer. A battle?'], ['¡Ay, se me apagó la fogata!', 'Oh, my campfire went out!'], ['De noche se ven muchas estrellas en la montaña.', 'At night you can see lots of stars in the mountains.']),
+  julio: fight('julio', ['¡Shh! Los peces se asustan. Bueno, ¡luchemos rápido!', 'Shh! The fish get scared. Well, let’s battle fast!'], ['Se me escapó... ¡como un pez!', 'It got away... like a fish!'], ['Abajo del puente hay tilapias. Con una caña, ¡pescas muchas!', 'Under the bridge there are tilapias. With a rod you catch lots!']),
+  rosa: fight('rosa', ['¿Viste el guardabarranco? ¡Yo tampoco! ¿Luchamos mientras esperamos?', 'Did you see the guardabarranco? Me neither! Shall we battle while we wait?'], ['¡Qué buen{o/a} eres!', 'You’re so good!'], ['Dicen que vive al final del cañón, cerca de la cascada.', 'They say it lives at the end of the canyon, near the waterfall.']),
   palabraPerdida,
   verPalabras,
   palanca,
@@ -609,44 +510,14 @@ export const REGION2: Record<string, ScriptFn> = {
   compuerta: talk(['La compuerta está cerrada. Tal vez hay una palanca...', 'The gate is closed. Maybe there’s a lever...']),
   carreta: talk(['La carreta de Don Chepe. ¡Las ruedas son enormes!', 'Don Chepe’s ox-cart. The wheels are huge!']),
 
-  silencioso1: () =>
-    trainerFight('silencioso1', {
-      intro: ['¡Shhh! ¡Silencio! Aquí no se habla.', 'Shhh! Silence! No talking here.'],
-      defeated: ['¡Shhh! No le digas a nadie que perdí.', 'Shhh! Don’t tell anyone I lost.'],
-      after: ['El Capataz está abajo, con la máquina. ¡Shhh!', 'The Foreman is down below, with the machine. Shhh!'],
-    }),
-  silencioso2: () =>
-    trainerFight('silencioso2', {
-      intro: ['¿Buscas la palanca? ¡No la vas a encontrar!', 'Looking for the lever? You won’t find it!'],
-      defeated: ['Bueno... la palanca está ahí atrás.', 'Well... the lever is right back there.'],
-      after: ['Las palabras solo causan problemas. ¿No crees?', 'Words only cause trouble. Don’t you think?'],
-    }),
-  silencioso3: () =>
-    trainerFight('silencioso3', {
-      intro: ['Cuando el Silenciador termine, ¡nadie va a hablar!', 'When the Silenciador is done, nobody will speak!'],
-      defeated: ['¿Cómo hablas tan bien?', 'How do you speak so well?'],
-      after: ['El jefe, Don Sigilo, dice que el silencio es oro.', 'The boss, Don Sigilo, says silence is golden.'],
-    }),
-  silencioso4: () =>
-    trainerFight('silencioso4', {
-      intro: ['¡No pasas! ¡Shhh!', 'You won’t pass! Shhh!'],
-      defeated: ['¡Ay! Hablé demasiado.', 'Oh! I talked too much.'],
-      after: ['El Capataz es muy fuerte. ¡Ten cuidado!', 'The Foreman is very strong. Be careful!'],
-    }),
+  silencioso1: fight('silencioso1', ['¡Shhh! ¡Silencio! Aquí no se habla.', 'Shhh! Silence! No talking here.'], ['¡Shhh! No le digas a nadie que perdí.', 'Shhh! Don’t tell anyone I lost.'], ['El Capataz está abajo, con la máquina. ¡Shhh!', 'The Foreman is down below, with the machine. Shhh!']),
+  silencioso2: fight('silencioso2', ['¿Buscas la palanca? ¡No la vas a encontrar!', 'Looking for the lever? You won’t find it!'], ['Bueno... la palanca está ahí atrás.', 'Well... the lever is right back there.'], ['Las palabras solo causan problemas. ¿No crees?', 'Words only cause trouble. Don’t you think?']),
+  silencioso3: fight('silencioso3', ['Cuando el Silenciador termine, ¡nadie va a hablar!', 'When the Silenciador is done, nobody will speak!'], ['¿Cómo hablas tan bien?', 'How do you speak so well?'], ['El jefe, Don Sigilo, dice que el silencio es oro.', 'The boss, Don Sigilo, says silence is golden.']),
+  silencioso4: fight('silencioso4', ['¡No pasas! ¡Shhh!', 'You won’t pass! Shhh!'], ['¡Ay! Hablé demasiado.', 'Oh! I talked too much.'], ['El Capataz es muy fuerte. ¡Ten cuidado!', 'The Foreman is very strong. Be careful!']),
   petra_mina: talk(['¡Gracias otra vez! Te espero en el gimnasio.', 'Thanks again! I’ll be waiting at the gym.']),
 
-  tito: () =>
-    trainerFight('tito', {
-      intro: ['Hago ollas con barro de la mina. ¿Y tú qué haces?', 'I make pots with clay from the mine. And what do you do?'],
-      defeated: ['¡Se me rompió una olla!', 'One of my pots broke!'],
-      after: ['Petra me enseñó todo. Es la mejor alfarera de Nicaragua.', 'Petra taught me everything. She’s the best potter in Nicaragua.'],
-    }),
-  rosario: () =>
-    trainerFight('rosario', {
-      intro: ['Trabajo en la mina. ¡Soy más dura que una piedra!', 'I work in the mine. I’m tougher than a rock!'],
-      defeated: ['Bueno... no tan dura.', 'Well... not that tough.'],
-      after: ['La última puerta tiene la adivinanza más difícil.', 'The last door has the hardest riddle.'],
-    }),
+  tito: fight('tito', ['Hago ollas con barro de la mina. ¿Y tú qué haces?', 'I make pots with clay from the mine. And what do you do?'], ['¡Se me rompió una olla!', 'One of my pots broke!'], ['Petra me enseñó todo. Es la mejor alfarera de Nicaragua.', 'Petra taught me everything. She’s the best potter in Nicaragua.']),
+  rosario: fight('rosario', ['Trabajo en la mina. ¡Soy más dura que una piedra!', 'I work in the mine. I’m tougher than a rock!'], ['Bueno... no tan dura.', 'Well... not that tough.'], ['La última puerta tiene la adivinanza más difícil.', 'The last door has the hardest riddle.']),
   guia_ocote: talk(
     ['¡Hola! Petra usa Palabritas de tipo Roca y Tierra.', 'Hi! Petra uses Rock and Ground types.'],
     ['El agua y las plantas son muy eficaces contra ellas.', 'Water and plants are super effective against them.'],

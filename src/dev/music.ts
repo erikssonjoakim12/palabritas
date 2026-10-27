@@ -2,21 +2,16 @@
 // volume. Nothing plays until you tap a song.
 import { MusicPlayer, arrange, type Voice } from '../audio/music';
 import { SONGS } from '../data/music';
+import { el } from '../engine/dom';
 
 const root = document.getElementById('music')!;
-const el = <K extends keyof HTMLElementTagNameMap>(tag: K, text = '', cls = '') => {
-  const e = document.createElement(tag);
-  if (text) e.textContent = text;
-  if (cls) e.className = cls;
-  return e;
-};
 const player = new MusicPlayer();
 
 // Volume and the voices (mute one to hear the others).
-const controls = el('div', '', 'controls');
+const controls = el('div', 'controls');
 const volume = Object.assign(el('input'), { type: 'range', min: '0', max: '1', step: '0.05', value: '0.7' });
 volume.addEventListener('input', () => player.setVolume(Number(volume.value)));
-const volLabel = el('label', 'Volume ');
+const volLabel = el('label', '', 'Volume ');
 volLabel.append(volume);
 controls.append(volLabel);
 const VOICES: [Voice, string][] = [['melody', 'melody'], ['harmony', 'harmony'], ['bass', 'bass'], ['drums', 'drums']];
@@ -45,24 +40,24 @@ const refresh = () => {
   }
 };
 for (const [kind, title] of KINDS) {
-  root.append(el('h2', title));
-  const grid = el('div', '', 'songs');
+  root.append(el('h2', '', title));
+  const grid = el('div', 'songs');
   for (const song of SONGS.filter((s) => s.kind === kind)) {
     // Arranging checks every bar fits (a mistake shows up as an error on the page and in data.test).
     const { intro, steps } = arrange(song);
     const seconds = Math.round(((steps - intro) * 60) / song.bpm / song.stepsPerBeat);
-    const card = el('div', '', 'song');
-    const button = el('button', '▶ Play');
+    const card = el('div', 'song');
+    const button = el('button', '', '▶ Play');
     button.addEventListener('click', () => {
       if (player.playing === song.id) player.stop();
       else player.play(song, refresh);
       refresh();
     });
     card.append(
-      el('h3', song.name),
-      el('div', song.en, 'en'),
-      el('p', song.note),
-      el('div', `${song.chords.length} bars${song.intro ? ` + a ${song.intro.melody.length}-bar intro` : ''} · ${song.bpm} bpm · ${song.barSteps === 12 ? '6/8' : '4/4'} · ${song.once ? `plays once (${seconds} s)` : `loops every ${seconds} s`}`, 'facts'),
+      el('h3', '', song.name),
+      el('div', 'en', song.en),
+      el('p', '', song.note),
+      el('div', 'facts', `${song.chords.length} bars${song.intro ? ` + a ${song.intro.melody.length}-bar intro` : ''} · ${song.bpm} bpm · ${song.barSteps === 12 ? '6/8' : '4/4'} · ${song.once ? `plays once (${seconds} s)` : `loops every ${seconds} s`}`),
       button,
     );
     grid.append(card);

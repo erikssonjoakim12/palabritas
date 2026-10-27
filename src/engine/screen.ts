@@ -1,3 +1,5 @@
+export { el } from './dom';
+
 export const W = 160;
 export const H = 144;
 
@@ -53,14 +55,3 @@ export function beginFrame() {
 
 /** Position helper for overlay elements, in game pixels. */
 export const gp = (n: number) => `calc(var(--px) * ${n})`;
-
-export function el<K extends keyof HTMLElementTagNameMap>(
-  tag: K,
-  className = '',
-  text = '',
-): HTMLElementTagNameMap[K] {
-  const e = document.createElement(tag);
-  if (className) e.className = className;
-  if (text) e.textContent = text;
-  return e;
-}
