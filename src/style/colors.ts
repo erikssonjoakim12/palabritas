@@ -158,6 +158,8 @@ export const ACCENT = {
   sleeperDark: '#684020',
   lamp: '#f8e070',
   foam: '#f8f8ff',
+  fire: '#f07830',
+  fireGlow: '#f8d848',
 };
 
 /** Roof colors: [highlight, light, dark, outline]. Each town picks one (see world/maps/). */
@@ -181,7 +183,11 @@ export const INDOOR = {
   green: ['#d8c898', '#88b048', '#507028', INK] as Pal,
   blue: ['#f0e8e0', '#a0a8f0', '#6870d8', INK] as Pal,
   books: ['#d05058', '#6870d8', '#70a038', INK] as Pal,
+  /** The wood stove's clay and bricks. */
+  clay: ['#f0c8a0', '#d08858', '#985030', INK] as Pal,
 };
+/** The hammock's stripes (Masaya hammocks): red, yellow, green, blue. */
+export const HAMMOCK = { r: '#d05058', y: '#f0c040', g: '#58a048', b: '#5870d0' };
 
 // ---------- Overworld people & objects ----------
 // Like on the GBC, sprites have 3 colors plus transparent: skin, one clothing color, ink.
@@ -209,6 +215,12 @@ export const OBJECT_PALS: Record<string, Pal> = {
   palabola: ['', '#f0f0e8', '#38a8a0', SPRITE_INK],
   /** The shell fossil: a highlight (0), old bone (1), the seams between its plates (2). */
   fosil: ['#f8f4e8', '#e0d8c8', '#8c7c68', SPRITE_INK],
+  // The museum (Villa Ocote): carved stone, old pottery (cream, terracotta, dark red), dried mud, a map.
+  petroglifo: ['#e8e4d8', '#b8b0a0', '#787060', SPRITE_INK],
+  ceramica: ['#f0e0c0', '#d07848', '#8a4028', SPRITE_INK],
+  huellas: ['#c8b8a0', '#988870', '#5c5040', SPRITE_INK],
+  /** A star (0) on Nicaragua, the sea, the land. */
+  mapa: ['#f8e050', '#a8c8e8', '#78a858', SPRITE_INK],
   michi: ['', '#f0f0e8', '#e09848', SPRITE_INK],
   armchair: ['', '#f0b0b8', '#d05058', SPRITE_INK],
   /** The armchair with Cojincito on it: a cream cushion (0) on the seat. */

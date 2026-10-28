@@ -52,5 +52,8 @@ t.check('the Silenciador breaks and Petra comes back', s4.flags.silenciadorRoto 
 t.check('you’re back in Villa Ocote', s4.map === 'ocote', [s4.map, s4.x, s4.y]);
 r = await t.talk('ocote', 15, 24, 'up');
 t.check('the town talks again', r.said.some((x) => x.includes('mensaje')), r.said);
+// The museum's pieces stand on its tables; looking at one reads its plaque.
+r = await t.talk('museo_ocote', 1, 2, 'up');
+t.check('the glyptodon’s plaque', r.said[0]?.includes('gliptodonte'), r.said);
 
 await t.end();

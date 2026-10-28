@@ -1,5 +1,5 @@
 import { flag } from '../../game/state';
-import { itemBall, tienda, casa, escuela, night, centro, type MapDef, type NpcDef } from './kit';
+import { itemBall, tienda, casa, HOUSES, escuela, night, centro, type MapDef, type NpcDef } from './kit';
 
 // Region 4: the volcanoes and dry forest. Ruta 7 east from Playa Carey, Ciudad Chispa (a colonial festival town,
 // like Masaya), up the Volcán Chocoyo (the slopes, the lava tube, the crater), and Ruta 8 home to Pueblo Amanecer.
@@ -205,8 +205,8 @@ export const REGION4_MAPS: Record<string, MapDef> = {
       { id: 'alumno_chispa', x: 7, y: 6, look: 'boy', dir: 'up', script: 'alumno_chispa' },
     ],
   ),
-  casa_tizon: casa('casa_tizon', 'Casa', { to: 'chispa', x: 29, y: 19 }, [{ id: 'hija_tizon', x: 5, y: 3, look: 'girl', dir: 'down', script: 'hija_tizon', turns: true }]),
-  casa_chispa2: casa('casa_chispa2', 'Casa', { to: 'chispa', x: 29, y: 27 }, [{ id: 'dueno_embrujada', x: 5, y: 2, look: 'abuelo', dir: 'down', script: 'dueno_embrujada' }]),
+  casa_tizon: casa('casa_tizon', 'Casa', { to: 'chispa', x: 29, y: 19 }, [{ id: 'hija_tizon', x: 5, y: 3, look: 'girl', dir: 'down', script: 'hija_tizon', turns: true }], { rows: HOUSES.estudio }),
+  casa_chispa2: casa('casa_chispa2', 'Casa', { to: 'chispa', x: 29, y: 27 }, [{ id: 'dueno_embrujada', x: 5, y: 2, look: 'abuelo', dir: 'down', script: 'dueno_embrujada' }], { rows: HOUSES.cocina }),
   // The church: pews, the altar, and the sexton (a piece of the Torovenado costume).
   iglesia: {
     id: 'iglesia',

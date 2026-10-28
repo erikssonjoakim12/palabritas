@@ -1,5 +1,5 @@
 import { flag } from '../../game/state';
-import { itemBall, tienda, casa, escuela, night, centro, type MapDef, type NpcDef } from './kit';
+import { itemBall, tienda, casa, HOUSES, escuela, night, centro, type MapDef, type NpcDef } from './kit';
 
 // Region 3: the Pacific coast: Rutas 5 and 6, Playa Carey and the turtle beach.
 export const REGION3_MAPS: Record<string, MapDef> = {
@@ -285,8 +285,8 @@ export const REGION3_MAPS: Record<string, MapDef> = {
 
   centro_carey: centro('centro_carey', { to: 'carey', x: 11, y: 6 }),
   tienda_carey: tienda('tienda_carey', { to: 'carey', x: 19, y: 6 }),
-  casa_lalo: casa('casa_lalo', 'Casa de Don Lalo', { to: 'carey', x: 23, y: 8 }, [{ id: 'lalo', x: 2, y: 1, look: 'lalo', dir: 'down', script: 'lalo' }]),
-  casa_carey2: casa('casa_carey2', 'Casa de la Abuela Chepita', { to: 'carey', x: 24, y: 22 }, [{ id: 'abuela_carey', x: 5, y: 2, look: 'granny', dir: 'down', script: 'abuela_carey' }]),
+  casa_lalo: casa('casa_lalo', 'Casa de Don Lalo', { to: 'carey', x: 23, y: 8 }, [{ id: 'lalo', x: 2, y: 1, look: 'lalo', dir: 'down', script: 'lalo' }], { rows: HOUSES.cocina }),
+  casa_carey2: casa('casa_carey2', 'Casa de la Abuela Chepita', { to: 'carey', x: 24, y: 22 }, [{ id: 'abuela_carey', x: 5, y: 2, look: 'granny', dir: 'down', script: 'abuela_carey' }], { rows: HOUSES.hamaca }),
   escuela_carey: escuela(
     'escuela_carey',
     { to: 'carey', x: 11, y: 23 },
@@ -415,7 +415,7 @@ export const REGION3_MAPS: Record<string, MapDef> = {
 
   cabana_tortugas: casa('cabana_tortugas', 'Cabaña de los Voluntarios', { to: 'tortugas', x: 16, y: 7 }, [
     { id: 'voluntario2', x: 5, y: 2, look: 'man', dir: 'down', script: 'voluntario2' },
-  ]),
+  ], { rows: HOUSES.familia }),
 };
 
 // La noche de la arribada (region3.ts): the turtle beach at night. Tania counts the eggs with you; then three

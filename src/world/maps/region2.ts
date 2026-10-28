@@ -1,10 +1,19 @@
 import { flag } from '../../game/state';
-import { itemBall, tienda, casa, exhibit, escuela, night, lostWord, centro, type MapDef } from './kit';
+import { itemBall, tienda, casa, exhibit, HOUSES, escuela, night, lostWord, centro, type MapDef } from './kit';
 
 // Region 2: Villa Ocote, the clay mine, Petra's gym and the Cañón del Guardabarranco.
 
 /** Villa Ocote can't speak until the Silenciador in the mine breaks. */
 const ocoteMuted = () => !flag('silenciadorRoto');
+
+/** The museum's exhibits, on its tables (the user: a museum should look like one). */
+const MUSEO = [
+  exhibit(1, 1, ['gliptoA', 'gliptoB'], 'Un gliptodonte: un armadillo gigante de hace diez mil años. ¡Es el abuelo de Caparazonte!', 'A glyptodon: a giant armadillo from ten thousand years ago. It’s Caparazonte’s ancestor!'),
+  exhibit(5, 1, ['petroglifo'], 'Una piedra con petroglifos: personas, soles y espirales.', 'A stone with petroglyphs: people, suns and spirals.'),
+  exhibit(8, 1, ['vasija', 'cuenco'], 'Cerámica antigua, pintada de rojo y negro. ¡Los alfareros de hoy usan el mismo barro!', 'Ancient pottery, painted red and black. Today’s potters use the same clay!'),
+  exhibit(1, 3, ['huellasA', 'huellasB'], 'Las Huellas de Acahualinca: pisadas de hace más de dos mil años, en el barro junto a un lago.', 'The Footprints of Acahualinca: footsteps from more than two thousand years ago, in the mud by a lake.'),
+  exhibit(9, 3, ['mapaA', 'mapaB'], 'Un mapa de toda América. ¡Nicaragua está justo en el medio!', 'A map of all the Americas. Nicaragua is right in the middle!'),
+];
 
 export const REGION2_MAPS: Record<string, MapDef> = {
   // A potters' town in the pines, under the mountain with the clay mine. Bigger than the towns before: a plaza
@@ -150,16 +159,16 @@ export const REGION2_MAPS: Record<string, MapDef> = {
   casa_ocote2: casa('casa_ocote2', 'Casa de los Alfareros', { to: 'ocote', x: 33, y: 9 }, [
     { id: 'alfarera_mama', x: 5, y: 2, look: 'lady', dir: 'down', script: 'alfarera_mama' },
     { id: 'alfarero_nino', x: 3, y: 4, look: 'boy', dir: 'up', script: 'alfarero_nino' },
-  ], { muted: ocoteMuted }),
+  ], { rows: HOUSES.cocina, muted: ocoteMuted }),
   casa_mia: casa('casa_mia', 'Casa de Mía', { to: 'ocote', x: 14, y: 23 }, [
     { id: 'mia_mama', x: 5, y: 2, look: 'lady', dir: 'down', script: 'mia_mama' },
-  ], { muted: ocoteMuted }),
+  ], { rows: HOUSES.hamaca, muted: ocoteMuted }),
   casa_nando: casa('casa_nando', 'Casa de Nando', { to: 'ocote', x: 19, y: 23 }, [
     { id: 'nando_papa', x: 5, y: 3, look: 'man', dir: 'left', script: 'nando_papa' },
-  ], { muted: ocoteMuted }),
+  ], { rows: HOUSES.familia, muted: ocoteMuted }),
   casa_chepe: casa('casa_chepe', 'Casa de Don Chepe', { to: 'ocote', x: 35, y: 23 }, [
     { id: 'chepe_esposa', x: 5, y: 2, look: 'lady', dir: 'down', script: 'chepe_esposa' },
-  ], { muted: ocoteMuted }),
+  ], { rows: HOUSES.estudio, muted: ocoteMuted }),
   casa_tona: casa('casa_tona', 'Casa de Doña Toña', { to: 'ocote', x: 13, y: 29 }, [
     { id: 'cocinera', x: 2, y: 2, look: 'lady', dir: 'down', script: 'cocinera', mime: '(She pats some dough between her hands and sighs.)' },
   ], { rows: [
@@ -194,7 +203,7 @@ export const REGION2_MAPS: Record<string, MapDef> = {
     floor: '+',
     rows: [
       '############',
-      '+kk+kk++kk++',
+      '+kk++k++kk++',
       '++++++++++++',
       '+kk++++++kk+',
       '++++++++++++',
@@ -204,14 +213,8 @@ export const REGION2_MAPS: Record<string, MapDef> = {
     ],
     exit: { to: 'ocote', x: 6, y: 23 },
     muted: ocoteMuted,
-    signs: [
-      ...exhibit(1, 1, 'Un fósil de gliptodonte: un armadillo gigante de hace diez mil años.', 'A glyptodon fossil: a giant armadillo from ten thousand years ago.'),
-      ...exhibit(4, 1, 'Una piedra con petroglifos: personas, soles y espirales.', 'A stone with petroglyphs: people, suns and spirals.'),
-      ...exhibit(8, 1, 'Cerámica antigua de la región. ¡Los alfareros de hoy usan el mismo barro!', 'Ancient pottery from this region. Today’s potters use the same clay!'),
-      ...exhibit(1, 3, 'Huellas muy antiguas, encontradas cerca de un lago.', 'Very old footprints, found near a lake.'),
-      ...exhibit(9, 3, 'Un mapa de toda América, con un guardabarranco pintado.', 'A map of all the Americas, with a guardabarranco painted on it.'),
-    ],
-    npcs: [{ id: 'curadora', x: 6, y: 2, look: 'prof', dir: 'down', script: 'curadora' }],
+    signs: MUSEO.flatMap((e) => e.signs),
+    npcs: [{ id: 'curadora', x: 6, y: 2, look: 'prof', dir: 'down', script: 'curadora' }, ...MUSEO.flatMap((e) => e.npcs)],
   },
 
   escuela_ocote: escuela(

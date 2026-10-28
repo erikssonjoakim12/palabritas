@@ -86,7 +86,8 @@ is a string of tiles (legend at the top of `kit.ts`).
   whatever map lies there in the world shows through (Ruta 3's south-west corner is the river). Two maps may
   overlap only where one of them has holes.
 - **Interiors** have `outdoor: false`, an exit mat `m` on the bottom row and `exit: { to, x, y }`. Reuse
-  `HOUSE`, `CENTRO` and `centro(id, exit, extraNpcs)`.
+  `casa(id, name, exit, npcs, { rows: HOUSES.cocina })` (give neighbors different `HOUSES` layouts), `tienda()` and
+  `centro(id, exit, extraNpcs)`.
 - **Doors:** `doors: [{ x, y, to, tx, ty, dir? }]`. You arrive at (tx, ty) facing `dir` (default up).
 - **Caves:** `encounters.everywhere: true` makes every step count as tall grass.
 - **Check your work:** `npm test -- maps` checks every map (connections both ways, doors, NPCs, gates, and
@@ -144,7 +145,8 @@ Edges that join up with their neighbors (roofs, rock) are computed in art/tiles.
 
 **A person's look:** `LOOKS` in src/style/people.ts, as a head + body + clothing color. A new head needs
 rows for down/up/side, a case in `src/art/portraits.ts` (`hairFront`/`hairBack`), and `isMaleLook` if it's
-male. **An object:** `OBJECTS_ART` (people.ts) + `OBJECT_PALS` (colors.ts).
+male. **An object:** `OBJECTS_ART` (people.ts) + `OBJECT_PALS` (colors.ts). An object without a `script` is
+decoration: facing it reads the sign on its spot (museum pieces: `exhibit()` in maps/kit.ts).
 
 **A script or quest:**
 - Add a function in its region's file (src/world/region2.ts...; region 1 in scripts.ts) and list it in the

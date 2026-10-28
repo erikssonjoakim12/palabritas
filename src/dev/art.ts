@@ -104,15 +104,15 @@ const TILE_NAMES: Record<string, string> = {
   '~': 'water', f: 'fence', S: 'sign', r: 'roof (town color)', b: 'roof', o: 'roof (Palacentro)', p: 'roof (gym)',
   h: 'wall', w: 'window', d: 'door', c: 'Palacentro sign', G: 'gym sign', a: 'bakery sign', _: 'wood floor',
   '+': 'tile floor', x: 'Palacentro floor', '#': 'inside wall', k: 'table', B: 'bed', L: 'shelf', P: 'plant',
-  V: 'TV', C: 'counter', Q: 'computer', n: 'sofa', u: 'poster', m: 'exit mat', R: 'rug',
+  V: 'TV', C: 'counter', Q: 'computer', n: 'sofa', u: 'poster', m: 'exit mat', R: 'rug', $: 'wood stove', '&': 'rocking chair', '<': 'hammock (2 wide)', '@': 'wardrobe',
   '^': 'mountain', ':': 'rocky ground', O: 'cave entrance', '%': 'cave wall', ';': 'cave floor', e: 'cave exit', D: 'tunnel (walk south into it)', H: 'bridge / pier', F: 'fountain (2×2)', U: 'market stall / pottery shelf', K: 'mine rails', W: 'mine support', Z: 'ladder (to the floor above or below)', s: 'sand', y: 'cactus', z: 'dry tall grass (zacate)', A: 'lighthouse', i: 'volcanic ash', j: 'lava', X: 'steam vent', E: 'black volcanic boulder', '[': 'temple stone', ']': 'temple stairs', '(': 'temple doorway', '!': 'waterfall', '|': 'sugarcane (tall grass)', l: 'cobblestones', q: 'church roof', N: 'bell tower', '8': 'current up', '2': 'current down', '4': 'current left', '6': 'current right',
 };
-const INDOOR = '_+x#kBLPVCQnumR';
+const INDOOR = '_+x#kBLPVCQnumR$&<@';
 
 const tiles = section('Map tiles', 'Every tile on its own (16x16). In maps, roofs, walls and tables join up with their neighbors. Art: style/tiles.ts.');
 for (const [ch, name] of Object.entries(TILE_NAMES)) {
   const indoor = INDOOR.includes(ch);
-  const look = (ground: 'town' | 'grass') => renderMap({ rows: [ch], outdoor: !indoor, floor: indoor ? '_' : '.', ground, roof: 'red' });
+  const look = (ground: 'town' | 'grass') => renderMap({ rows: [ch === '<' ? '<<' : ch], outdoor: !indoor, floor: indoor ? '_' : '.', ground, roof: 'red' });
   const images = ch === '.' ? [look('town'), look('grass')] : [look('town')];
   card(tiles, `'${ch}' ${ch === '.' ? 'ground (town · route)' : name}`, images, 4);
 }

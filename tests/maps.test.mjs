@@ -76,7 +76,8 @@ const report = await t.game(() => {
       if (n.look && !free(n.x, n.y)) say(`${n.id} stands on a wall (${n.x},${n.y})`);
       if (n.look && !LOOKS[n.look]) say(`${n.id} has an unknown look '${n.look}'`);
       if (n.object && !OBJECTS_ART[n.object]) say(`${n.id} is an unknown object '${n.object}'`);
-      if (!SCRIPTS[n.script]) say(`${n.id} has no script '${n.script}'`);
+      // Objects without a script are decoration (museum pieces); people always have one.
+      if ((n.look || n.script) && !SCRIPTS[n.script]) say(`${n.id} has no script '${n.script}'`);
       // You see 4 tiles around you on screen: no trainer may spot you from further than that.
       if (n.sight > 4) say(`${n.id} sees ${n.sight} tiles: more than the 4 you can see around you`);
       if (n.sight) {

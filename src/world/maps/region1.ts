@@ -1,6 +1,6 @@
 import { G, flag } from '../../game/state';
 import { lucasStarter } from '../../game/mon';
-import { HOUSE, itemBall, tienda, lostWord, centro, type MapDef } from './kit';
+import { HOUSES, itemBall, tienda, lostWord, centro, type MapDef } from './kit';
 
 /** A starter's Palabola is on the lab's table until you take it, or Lucas takes his. */
 const ballOnTable = (sp: string) => G.save.starterPicked !== sp && !(flag('lucasEligio') && lucasStarter() === sp);
@@ -100,7 +100,7 @@ export const REGION1_MAPS: Record<string, MapDef> = {
     name: 'Casa de Ana',
     outdoor: false,
     floor: '_',
-    rows: HOUSE,
+    rows: HOUSES.cocina,
     exit: { to: 'amanecer', x: 19, y: 14 },
     npcs: [{ id: 'ana', x: 4, y: 2, look: 'girl', dir: 'down', script: 'ana' }],
   },
@@ -235,7 +235,7 @@ export const REGION1_MAPS: Record<string, MapDef> = {
     name: 'Casa de Doña Lupe',
     outdoor: false,
     floor: '_',
-    rows: HOUSE,
+    rows: HOUSES.hamaca,
     exit: { to: 'limon', x: 5, y: 14 },
     npcs: [{ id: 'lupe', x: 4, y: 2, look: 'granny', dir: 'down', script: 'lupe' }],
   },
@@ -401,7 +401,7 @@ export const REGION1_MAPS: Record<string, MapDef> = {
     name: 'Casa de Abuela Rita',
     outdoor: false,
     floor: '_',
-    rows: HOUSE,
+    rows: HOUSES.estudio,
     exit: { to: 'brisa', x: 17, y: 13 },
     npcs: [{ id: 'rita', x: 4, y: 2, look: 'granny', dir: 'down', script: 'rita' }],
   },

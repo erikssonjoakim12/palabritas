@@ -362,7 +362,8 @@ export const facingTile = () => tileAt(player.x + DX[player.dir], player.y + DY[
 
 function checkTrainers(): boolean {
   for (const n of npcs) {
-    if (!n.visible || !n.def.sight || flag(`beat:${n.def.id}`)) continue;
+    const script = n.def.script;
+    if (!n.visible || !n.def.sight || !script || flag(`beat:${n.def.id}`)) continue;
     for (let i = 1; i <= n.def.sight; i++) {
       const tx = n.x + DX[n.dir] * i;
       const ty = n.y + DY[n.dir] * i;
@@ -372,7 +373,7 @@ function checkTrainers(): boolean {
           sfx('alert');
           await frames(45);
           player.dir = OPP[n.dir];
-          await SCRIPTS[n.def.script](c);
+          await SCRIPTS[script](c);
         }, { npc: n });
         return true;
       }
@@ -391,7 +392,8 @@ function interact() {
   let n = npcAt(fx, fy);
   if (!n && TILES[tileAt(fx, fy)].kind === 'counter') n = npcAt(fx + DX[player.dir], fy + DY[player.dir]);
   const muted = !!map.muted?.();
-  if (n) {
+  // Decoration (an object without a script) is read like the sign on its spot, below.
+  if (n?.def.script) {
     if (n.def.look) n.dir = OPP[player.dir];
     if (muted && n.def.look && !n.def.servesWhenMuted) runScript(() => say('…', { en: n.def.mime ?? MUTED_MIME }), { npc: n });
     else runScript(SCRIPTS[n.def.script], { npc: n });

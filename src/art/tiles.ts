@@ -155,6 +155,10 @@ export const TILES: Record<string, TileDef> = {
   N: solid({ look: { es: 'El campanario de la iglesia. ¡Las campanas suenan los domingos!', en: 'The church bell tower. The bells ring on Sundays!' } }),
   A: solid({ look: { es: 'El faro. De noche, su luz guía a los barcos.', en: 'The lighthouse. At night, its light guides the boats.' } }),
   W: solid(),
+  $: solid({ look: { es: 'Un fogón de leña. ¡Huele a tortillas!', en: 'A wood stove. It smells like tortillas!' } }),
+  '&': solid({ look: { es: 'Una mecedora. Aquí se descansa por la tarde.', en: 'A rocking chair. People rest here in the afternoon.' } }),
+  '<': solid({ look: { es: 'Una hamaca de colores. ¡Dan ganas de dormir una siesta!', en: 'A colorful hammock. It makes you want to take a nap!' } }),
+  '@': solid({ look: { es: 'Un ropero lleno de ropa.', en: 'A wardrobe full of clothes.' } }),
   R: open(),
   ' ': solid(),
 };
@@ -549,6 +553,17 @@ function render(ch: string, env: TileEnv): Img {
       return stack(underImage(env, 'auto'), paintArt(ART.plant));
     case 'V':
       return stack(underImage(env, 'auto'), paintArt(ART.tv));
+    case '$':
+      return stack(underImage(env, 'auto'), paintArt(ART.fogon));
+    case '@':
+      return stack(underImage(env, 'auto'), paintArt(ART.ropero));
+    case '&':
+      return stack(underImage(env, 'floor'), paintArt(ART.mecedora));
+    case '<': {
+      // Two tiles wide: the right tile (a hammock tile to its west) draws the right half.
+      const x0 = neighbors(env).w === '<' ? 16 : 0;
+      return stack(underImage(env, 'floor'), paintArt({ ...ART.hamaca, rows: ART.hamaca.rows.map((r) => r.slice(x0, x0 + 16)) }));
+    }
     case 'C': {
       const g = grid(ART.counter.rows);
       if (nb(env).w !== 'C') g.forEach((r, y) => y < 14 && (r[0] = '3'));

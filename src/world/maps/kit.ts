@@ -15,6 +15,7 @@ import type { MapStyle } from '../../art/tiles';
   h  wall          w  window                        d  door        a  bakery sign   M  shop sign
   _  wood floor    +  tile floor                    #  inside wall
   k  table         B  bed       L  shelf            P  plant       V  TV
+  $  wood stove     &  rocking chair    <  hammock (2 wide)    @  wardrobe
   C  counter (talk across it)   m  exit mat         R  rug
   J  palm tree (beaches, later)
   ^  mountain      :  rocky ground                  O  cave entrance
@@ -39,7 +40,8 @@ export interface NpcDef {
   look?: string;
   object?: string;
   dir?: Dir;
-  script: string;
+  /** What happens when you talk to it. An object without one is decoration: you read the sign on its spot, if any. */
+  script?: string;
   show?: () => boolean;
   /** Trainers: how many tiles ahead they can see you. */
   sight?: number;
@@ -149,7 +151,17 @@ export interface EncounterEntry {
 /** What bites in rivers and ponds (with the rod, from Playa Carey). The shark line only lives in the lake. */
 export const FRESHWATER: EncounterEntry[] = [{ sp: 'tilapita', min: 8, max: 14, w: 100 }];
 
-export const HOUSE = ['##L##V##', '________', '_kk_____', '_kk_____', '________', '______B_', '____m___'];
+/**
+ * Homes inside, 8×7 with the mat at the bottom: a few layouts, so neighbors' houses differ. Every one leaves
+ * (4, 2), (5, 2) and (5, 3) free for whoever lives there.
+ */
+export const HOUSES = {
+  clasica: ['##L##V##', '________', '_kk_____', '_kk_____', '________', '______B_', '____m___'],
+  cocina: ['#$U##L##', '________', '______&_', '_kk_____', '_kk_____', 'P_____B_', '____m___'],
+  hamaca: ['##@##V##', '_<<_____', '________', '______&_', '_kk_____', '_kk___B_', '____m___'],
+  familia: ['##L##@##', '________', '_B____B_', '________', '__kk____', 'P_kk__&_', '____m___'],
+  estudio: ['#LL#@##P', '________', '______P_', '_&______', '______kk', 'P_____kk', '____m___'],
+};
 // Palacentro: posters (u), nurse behind the counter (C) next to the healing machine,
 // a computer (Q) and waiting sofas (n).
 const CENTRO = ['##u####u##', 'PxxxxxxxxP', 'xxxCCCCxxx', 'xxxxxxxxQx', 'xxxxxxxxxx', 'nxxxxxxxxn', 'nxxxxxxxxn', 'xxxxmxxxxx'];
@@ -162,12 +174,17 @@ const CAJERA: NpcDef = { id: 'cajera', x: 0, y: 2, look: 'cashier', dir: 'right'
 export const tienda = (id: string, exit: MapDef['exit'], extra: Partial<MapDef> = {}): MapDef => ({
   id, name: 'Tienda', outdoor: false, floor: '+', rows: TIENDA, exit, npcs: [CAJERA], ...extra,
 });
-/** A home: the HOUSE rows (or others) and whoever lives there. */
+/** A home: whoever lives there, in one of the HOUSES layouts (passed as extra.rows; the classic one by default) or its own. */
 export const casa = (id: string, name: string, exit: MapDef['exit'], npcs: NpcDef[], extra: Partial<MapDef> = {}): MapDef => ({
-  id, name, outdoor: false, floor: '_', rows: HOUSE, exit, npcs, ...extra,
+  id, name, outdoor: false, floor: '_', rows: HOUSES.clasica, exit, npcs, ...extra,
 });
-/** A museum exhibit on a two-tile table: the same text from both tiles. */
-export const exhibit = (x: number, y: number, es: string, en: string) => [{ x, y, es, en }, { x: x + 1, y, es, en }];
+/**
+ * A museum exhibit on a table: its pieces (objects, one per tile from x), and its plaque, read from each of them.
+ */
+export const exhibit = (x: number, y: number, pieces: string[], es: string, en: string) => ({
+  npcs: pieces.map((object, i): NpcDef => ({ id: `${object}_${x + i}_${y}`, x: x + i, y, object })),
+  signs: pieces.map((_, i) => ({ x: x + i, y, es, en })),
+});
 const ESCUELA = ['##L##L##L#', '__________', '__________', '_kk_kk_kk_', '__________', '_kk_kk_kk_', '__________', '____m_____'];
 /** A school: the teacher at the front (lessons: world/school.ts) and two students. */
 export const escuela = (id: string, exit: MapDef['exit'], teacher: NpcDef, students: NpcDef[], extra: Partial<MapDef> = {}): MapDef => ({
