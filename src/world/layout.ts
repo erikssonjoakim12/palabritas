@@ -1,4 +1,5 @@
 import { MAPS, type MapDef } from './maps';
+import { isHole, lookAcrossEdges } from '../art/tiles';
 
 /*
   Like Gold/Silver, every town and route is its own map, joined to its neighbors by
@@ -47,3 +48,17 @@ export function worldLayout(): Record<string, Spot> {
   layout = spots;
   return spots;
 }
+
+/** The tile at (x, y) of map `id` (beyond its edge, or in a hole) as another outdoor map in the world has it. */
+function tileAcross(id: string, x: number, y: number): string | undefined {
+  const L = worldLayout();
+  const p = L[id];
+  if (!p) return undefined;
+  for (const [oid, q] of Object.entries(L)) {
+    const o = MAPS[oid];
+    const [ox, oy] = [p.x + x - q.x, p.y + y - q.y];
+    if (oid !== id && oy >= 0 && oy < o.rows.length && ox >= 0 && ox < o.rows[0].length && !isHole(o, ox, oy)) return o.rows[oy][ox];
+  }
+  return undefined;
+}
+lookAcrossEdges(tileAcross);

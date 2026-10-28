@@ -2,7 +2,7 @@ import { W, H, overlay, el, scaleFactor, ctx } from '../engine/screen';
 import { input, type Dir } from '../engine/input';
 import { sfx } from '../engine/sfx';
 import { nextFrame, frames, frameAlpha, whenIdle, clearIdle } from '../engine/loop';
-import { TILES, tallGrassImage, tileImage, tileOf, envAt, isHole, ANIMATED } from '../art/tiles';
+import { TILES, tallGrassImage, tileImage, tileOf, envAt, owns, ANIMATED } from '../art/tiles';
 import { personFrames, OBJECTS, type Frames } from '../art/chars';
 import { fromRows, type Img } from '../art/pixel';
 import { MAPS, type MapDef, type NpcDef, type Conn, type EncounterEntry } from './maps';
@@ -173,8 +173,6 @@ function showBanner(name: string) {
 // ---------- Queries ----------
 
 const inMap = (m: MapDef, x: number, y: number) => x >= 0 && y >= 0 && y < m.rows.length && x < m.rows[0].length;
-/** Part of the map itself (not outside it, not in one of its holes). */
-const ownTile = (m: MapDef, x: number, y: number) => inMap(m, x, y) && !isHole(m, x, y);
 const inBounds = (x: number, y: number) => inMap(map, x, y);
 
 export const tileAt = (x: number, y: number) => tileOf(map, x, y);
@@ -621,7 +619,7 @@ function gridOf(home: MapDef): Grid {
   const grid: Img[] = new Array(w * h);
   const fill = (i: number) => {
     const [tx, ty] = [(i % w) - GRID, Math.floor(i / w) - GRID];
-    const n = ownTile(home, tx, ty) ? undefined : near.find(({ m, dx, dy }) => ownTile(m, tx - dx, ty - dy));
+    const n = owns(home, tx, ty) ? undefined : near.find(({ m, dx, dy }) => owns(m, tx - dx, ty - dy));
     const [m, x, y] = n ? [n.m, tx - n.dx, ty - n.dy] : [home, tx, ty];
     const ch = tileOf(m, x, y);
     grid[i] = tileImage(ch, envAt(m, x, y));

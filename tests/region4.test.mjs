@@ -31,6 +31,10 @@ t.check('and the festival night starts (fireworks)', (await t.pos())[0] === 'chi
 await talk('chispa_noche', 21, 17, 'right');
 t.check('the next morning the workshop opens', (await flags()).fiestaDone && (await t.pos())[0] === 'chispa', await t.pos());
 
+// Fallen rock closes the crater's west walkway: a save where it lies stands just south of it.
+await t.fromSave({ map: 'crater', x: 3, y: 10, dir: 'up', party, flags: { craterDerrumbe: false } });
+t.check('an old save inside the rockfall stands south of it', String(await t.pos()) === 'crater,3,13', await t.pos());
+
 // The workshop: the torches, then Don Tizón.
 const gymFlags = { cohetesRecuperados: true, fiestaDone: true, 'beat:polvorera': true, 'beat:malabarista': true, 'beat:fritanguero': true };
 await t.fromSave({ map: 'gym_chispa', x: 5, y: 8, dir: 'up', party, flags: gymFlags });

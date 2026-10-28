@@ -27,6 +27,8 @@ export interface MapStyle {
 
 /** What drawing a whole map needs (a MapDef has all of this). */
 export interface MapLook {
+  /** Outdoor maps placed in the world: their edges join up with the neighbors' (see lookAcrossEdges). */
+  id?: string;
   rows: string[];
   outdoor: boolean;
   floor: string;
@@ -203,7 +205,7 @@ const WALL_CHARS = 'hwdcGaM';
 const roofKey = (ch: string) => (ch === 'b' ? 'r' : ch);
 
 function neighbors(env: TileEnv) {
-  const at = (dx: number, dy: number) => tileOf(env, env.x + dx, env.y + dy);
+  const at = (dx: number, dy: number) => drawnTileOf(env, env.x + dx, env.y + dy);
   return { n: at(0, -1), s: at(0, 1), w: at(-1, 0), e: at(1, 0) };
 }
 
@@ -580,14 +582,30 @@ const nb = neighbors;
  */
 export const isHole = (m: MapLook, x: number, y: number) => m.outdoor && m.rows[y]?.[x] === ' ';
 
+/** Whether (x, y) is part of the map: inside it, and not a hole. */
+export const owns = (m: MapLook, x: number, y: number) => x >= 0 && y >= 0 && y < m.rows.length && x < m.rows[0].length && !isHole(m, x, y);
+
 /** A map's tile at (x, y). Outside the map or in a hole: its border (trees outdoors, nothing indoors). */
 export function tileOf(m: MapLook, x: number, y: number): string {
-  if (x >= 0 && y >= 0 && y < m.rows.length && x < m.rows[0].length && !isHole(m, x, y)) return m.rows[y][x];
-  return m.border ?? (m.outdoor ? 'T' : ' ');
+  return owns(m, x, y) ? m.rows[y][x] : m.border ?? (m.outdoor ? 'T' : ' ');
+}
+
+/**
+ * Beyond a map's edge (or in its hole), the tile of the map next to it in the world, if any. Set by
+ * world/layout.ts, which knows where every map is.
+ */
+let acrossEdge: (id: string, x: number, y: number) => string | undefined = () => undefined;
+export const lookAcrossEdges = (f: typeof acrossEdge) => (acrossEdge = f);
+/**
+ * A neighbor tile as drawing sees it: across a seam, the neighboring map's tile, so rock, roofs and beaches join
+ * up there and the seam doesn't show. (Walking uses tileOf: beyond the edge is the border.)
+ */
+function drawnTileOf(m: MapLook, x: number, y: number): string {
+  return (!owns(m, x, y) && m.id && acrossEdge(m.id, x, y)) || tileOf(m, x, y);
 }
 
 /** The tile environment for (x, y) on a map. */
-export const envAt = (m: MapLook, x: number, y: number): TileEnv => ({ rows: m.rows, outdoor: m.outdoor, floor: m.floor, ground: m.ground, roof: m.roof, border: m.border, style: m.style, x, y });
+export const envAt = (m: MapLook, x: number, y: number): TileEnv => ({ id: m.id, rows: m.rows, outdoor: m.outdoor, floor: m.floor, ground: m.ground, roof: m.roof, border: m.border, style: m.style, x, y });
 
 /** A whole map as one image (the art page; the game draws only the tiles on screen). Holes stay see-through. */
 export function renderMap(m: MapLook): Img {

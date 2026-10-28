@@ -82,6 +82,10 @@ const report = await t.game(() => {
       if (n.sight) {
         const [dx, dy] = D[n.dir ?? 'down'];
         for (let i = 1; i <= n.sight; i++) if (!free(n.x + dx * i, n.y + dy * i)) say(`${n.id} looks into a wall within its sight (${n.sight})`);
+        // Trainers stand on open ground, not in a gap in a wall of trees, where a tree should be (the user).
+        let trees = 0;
+        for (let y = n.y - 1; y <= n.y + 1; y++) for (let x = n.x - 1; x <= n.x + 1; x++) if ('TtIJY'.includes(tile(m, x, y))) trees++;
+        if (m.outdoor && trees >= 5) say(`${n.id} stands in a gap in the trees (${n.x},${n.y}): ${trees} trees around`);
       }
       const tr = TRAINERS[n.id];
       if (tr) for (const [sp] of tr.team) !SPECIES[sp] && say(`trainer ${n.id} has unknown species ${sp}`);

@@ -267,7 +267,7 @@ export const REGION1_MAPS: Record<string, MapDef> = {
       'TTTTTTTTTT==TTTTTTTTTTTT',
       'TT,,,,,T..==...,,,,...TT',
       'TT,,,,,T..=====,,,,==.TT',
-      'TT.....TTTTTT.TTTT..=.TT',
+      'TT.....TTTTTTTTTTT..=.TT',
       'TT....*TTTTTTTTTTT..=.TT',
       'TT..............TT,,,,TT',
       'TT.........,,,,.TT,,,,TT',
@@ -291,12 +291,12 @@ export const REGION1_MAPS: Record<string, MapDef> = {
       'TT,,.........,,,TT,,,,TT',
       'TT,,TTTT~~~~~,,,TT,,,,TT',
       'TT..TTTT~~~~~,,,TT,,,,TT',
-      'TT=,,,=.~~~~~,,,T..=..TT',
+      'TT=,,,=.~~~~~,,,TT.=..TT',
       'TT=,,,=.~~~~~,,,TT,,,,TT',
       'TT=.TT,,~~~~~...TT,,,,TT',
       'TT=.TT,,~~~~~...TT,,,,TT',
-      'TT=..T=,.....TTTTT,,,,TT',
-      'TT,,TT=,.....T.TTT.=..TT',
+      'TT=.TT=,.....TTTTT,,,,TT',
+      'TT,,TT=,.....TTTTT.=..TT',
       'TT,,TT==,,,,,=======..TT',
       'TT,,TT..,,,,,.........TT',
       'TT=.TTTTTTTTTTTTT.....TT',
@@ -310,13 +310,13 @@ export const REGION1_MAPS: Record<string, MapDef> = {
     signs: [{ x: 9, y: 37, es: 'RUTA 2. Norte: Ciudad Brisa. ¡Cuidado con la hierba alta!', en: 'ROUTE 2. North: Breeze City. Watch out for the tall grass!' }],
     npcs: [
       // The user's layout: a winding way between tree walls. Six trainers, easiest first from Villa Limón, each where
-      // the way can't go around them; an item at each of the two dead ends.
+      // the way can't go around them (on open ground, never in a gap in the trees); an item at each of the two dead ends.
       { id: 'rosita', x: 5, y: 37, look: 'girl', dir: 'down', script: 'rosita', sight: 2 },
-      { id: 'javi', x: 4, y: 32, look: 'boy', dir: 'left', script: 'javi', sight: 2 },
-      { id: 'mateo', x: 14, y: 33, look: 'mateo', dir: 'down', script: 'mateo', sight: 2 },
-      { id: 'tomas', x: 17, y: 28, look: 'hiker', dir: 'right', script: 'tomas', sight: 4 },
+      { id: 'javi', x: 3, y: 32, look: 'boy', dir: 'left', script: 'javi', sight: 1 },
+      { id: 'mateo', x: 14, y: 35, look: 'mateo', dir: 'up', script: 'mateo', sight: 1 },
+      { id: 'tomas', x: 18, y: 28, look: 'hiker', dir: 'right', script: 'tomas', sight: 3 },
       { id: 'valeria', x: 12, y: 23, look: 'painter', dir: 'up', script: 'valeria', sight: 4 },
-      { id: 'andres', x: 13, y: 4, look: 'andres', dir: 'up', script: 'andres', sight: 2 },
+      { id: 'andres', x: 13, y: 2, look: 'andres', dir: 'down', script: 'andres', sight: 1 },
       { id: 'lola', x: 12, y: 10, look: 'girl', dir: 'down', script: 'lola', turns: true },
       itemBall('palabola_ruta2', 14, 31, 'palabola'),
       itemBall('pocion_ruta2', 3, 3, 'pocion'),
@@ -610,7 +610,7 @@ export const REGION1_MAPS: Record<string, MapDef> = {
     rows: [
       'TTTTTT^~~^TTTTTTTT==TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT',
       'TTTTTT^~~^TTTTTTTT==TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT',
-      'TTTTTT^~~^TTTTTTTT==T........T.TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT.TTTTTTTTTTTTTTTTTTTTTTTTT',
+      'TTTTTT^~~^TTTTTTTT==T........T.TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT',
       'TTTTTT^~~^TTTTTTTT==.,,,,,,,,.TTTTTTTTTTTTTTTT==============================================TTTT',
       'TTTTTT^~~^TTTTTTTT==.,,,,,,,,..TTTTTTTTTTTTTTT==============================================TTTT',
       'TTTTTT^~~^TTTTTTTT==.,,,,,,,,..TTTTTTTTTTTTTTT==.,,,,,,,,,,T^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^D^^^^^',
@@ -618,7 +618,7 @@ export const REGION1_MAPS: Record<string, MapDef> = {
       'TTTTTT^~~^TTTTTTTT==.,,,,,,,,..TTTTTTTTTTTTTTT==.,,,,,,,,,,T^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^',
       'TTTTTT^~~^TTTTTTTT==...........TTTTTTTTTTTTTTT==.,,,,,,,,,,T^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^',
       'T.T...^~~^TTTTTTTT==..T....T...TTTTTTTTTTTTTTT==.,,,,,,,,,,T^^^^^^^^^^^^^^^^^^^^^^^^^^^^T^^^^^^^',
-      'T.....^~~^TTTT.TTT==...........TTT.TTTTTTTTTTT==...........T^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^',
+      'T.....^~~^TTTTTTTT==...........TTTTTTTTTTTTTTT==...........T^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^',
       '======HHHH======================================^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^',
       '======HHHH==================*===================^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^',
       'T.....^~~^TTTT..S.......,,,,,,.TTTTTTTTTTTTTTTTT^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^T^^^^^^^',
@@ -652,11 +652,11 @@ export const REGION1_MAPS: Record<string, MapDef> = {
     },
     // The foot of the clifftop trail: Lucas catches up with you (rival battle #1).
     doors: [{ x: 90, y: 5, to: 'ruta4', tx: 52, ty: 1, dir: 'down' }],
-    // Halfway along the road, in a gap in the pines: she sees both lanes.
+    // On the road (one lane each), looking across the other: nobody walks past them unseen.
     npcs: [
-      { id: 'lucia', x: 34, y: 10, look: 'painter', dir: 'down', script: 'lucia', sight: 2 },
-      { id: 'armando', x: 70, y: 2, look: 'lenador', dir: 'down', script: 'armando', sight: 2 },
-      { id: 'elena', x: 14, y: 10, look: 'campista', dir: 'down', script: 'elena', sight: 2 },
+      { id: 'lucia', x: 34, y: 12, look: 'painter', dir: 'up', script: 'lucia', sight: 1 },
+      { id: 'armando', x: 70, y: 3, look: 'lenador', dir: 'down', script: 'armando', sight: 1 },
+      { id: 'elena', x: 14, y: 11, look: 'campista', dir: 'down', script: 'elena', sight: 1 },
       { id: 'gaby', x: 20, y: 8, look: 'ornitologa', dir: 'left', script: 'gaby', turns: true },
       // Two of Villa Ocote's lost words blew all the way out here.
       lostWord('marimba', 3, 10),

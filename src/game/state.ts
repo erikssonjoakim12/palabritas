@@ -97,7 +97,7 @@ export function newSave(): SaveData {
     dir: 'down',
     party: [],
     box: [],
-    flags: { amanecerWide: true, ruta5East: true, rutasCortas: true, sinEstacion: true, canonCascada: true, ruta2Nueva: true, palancaJunto: true },
+    flags: { amanecerWide: true, ruta5East: true, rutasCortas: true, sinEstacion: true, canonCascada: true, ruta2Nueva: true, palancaJunto: true, craterDerrumbe: true },
     gender: 'boy',
     money: 0,
     bag: {},
@@ -205,6 +205,11 @@ function migrate(s: SaveData) {
   if (!s.flags.palancaJunto) {
     if (s.map === 'mina1' && s.y <= 7 && s.x <= 13) Object.assign(s, { x: 18, y: 3, dir: 'down' });
     s.flags.palancaJunto = true;
+  }
+  // Fallen rock closes the crater's west walkway (the user): anyone saved where it lies stands just south of it.
+  if (!s.flags.craterDerrumbe) {
+    if (s.map === 'crater' && s.x <= 5 && s.y >= 8 && s.y <= 12) Object.assign(s, { x: 3, y: 13, dir: 'down' });
+    s.flags.craterDerrumbe = true;
   }
   if (s.flags.starter && !s.flags.lucasSeFue) Object.assign(s.flags, { lucasEligio: true, lucasSeFue: true });
   s.money ??= 0;
