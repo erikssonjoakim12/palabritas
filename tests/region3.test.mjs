@@ -9,7 +9,7 @@ const party = [['nubarron', 35], ['aguacatono', 35]];
 const flags = async () => (await t.save()).flags;
 
 // Down from Villa Ocote with the Clay Medal.
-await t.fromSave({ map: 'ocote', x: 23, y: 28, dir: 'down', party, flags: { silenciadorRoto: true, medalBarro: true } });
+await t.fromSave({ map: 'ocote', x: 23, y: 25, dir: 'down', party, flags: { silenciadorRoto: true, medalBarro: true } });
 await t.walk('down', 4);
 t.check('with the Clay Medal, the south road leads to Ruta 5', (await t.pos())[0] === 'ruta6', await t.pos());
 

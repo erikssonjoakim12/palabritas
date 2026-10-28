@@ -252,7 +252,7 @@ const owner = (id: string, usual: ScriptFn): ScriptFn => async (c) => {
 async function fiesta() {
   await lines(['¡Todos hablan otra vez! ¡Esta noche hay fiesta en la plaza!', 'Everyone’s talking again! Tonight there’s a party in the plaza!']);
   await fadeOut(16);
-  await warp('ocote_noche', 19, 16, 'up', false);
+  await warp('ocote_noche', 19, 15, 'up', false);
   await info('Esa noche, todo Villa Ocote se reúne alrededor de la fuente...', { en: 'That night, all of Villa Ocote gathers around the fountain...' });
   for (const id of LOST_IDS) {
     if (id === 'marimba') sfx('levelup');
@@ -262,7 +262,7 @@ async function fiesta() {
   await gift('superbola', 5, 'cinco Superbolas', 'five Super Balls');
   await gift('revivir', 2, 'dos Revivir', 'two Revives');
   setFlag('palabrasDone');
-  await warp('ocote', 19, 16, 'down', false);
+  await warp('ocote', 19, 15, 'down', false);
 }
 
 // ---------- Ruta 4 and the canyon ----------

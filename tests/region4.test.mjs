@@ -11,7 +11,7 @@ const yes = { choose: (opts) => (opts.includes('Sí') ? 'Sí' : undefined) };
 const talk = (map, x, y, dir, opts = yes) => t.talk(map, x, y, dir, opts);
 
 // Ruta 7 into Ciudad Chispa: the theft.
-await t.fromSave({ map: 'ruta8', x: 42, y: 12, dir: 'right', party, flags: { medalOla: true } });
+await t.fromSave({ map: 'ruta8', x: 42, y: 56, dir: 'right', party, flags: { medalOla: true } });
 await t.walk('right', 4);
 let r = await t.play();
 t.check('the fireworks are stolen as you arrive, and the volcano trail opens', (await flags()).cohetesRobados && r.said.some((x) => x.includes('Ladrones')), r.said.slice(0, 3));

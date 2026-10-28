@@ -16,7 +16,7 @@ t.check('the message on the ground sends you to the mine', (await flags('mensaje
 await t.shot('ocote');
 
 // 2. Everyone is muted: the potter only mimes.
-r = await t.talk('ocote', 24, 12, 'up');
+r = await t.talk('ocote', 24, 11, 'up');
 t.check('a muted person says «…»', r.said[0] === '…', r.said);
 
 // The Palacentro and the shop are muted too: the nurse and the cashier only mime, but still serve you (the user).
@@ -50,7 +50,7 @@ const s4 = await t.save();
 t.check('the Capataz battles you', r.said.some((x) => x.includes('Silenciador')), r.said.slice(0, 3));
 t.check('the Silenciador breaks and Petra comes back', s4.flags.silenciadorRoto && s4.flags.petraVolvio, s4.flags);
 t.check('you’re back in Villa Ocote', s4.map === 'ocote', [s4.map, s4.x, s4.y]);
-r = await t.talk('ocote', 15, 24, 'up');
+r = await t.talk('ocote', 15, 21, 'up');
 t.check('the town talks again', r.said.some((x) => x.includes('mensaje')), r.said);
 // The museum's pieces stand on its tables; looking at one reads its plaque.
 r = await t.talk('museo_ocote', 1, 2, 'up');

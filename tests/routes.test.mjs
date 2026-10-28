@@ -1,5 +1,5 @@
 // The long way west: the cave's far tunnel brings you out high on Ruta 4 (still walking up) and back,
-// and Pintora Lucía spots you on Ruta 4's road.
+// and Pintora Lucía spots you on Ruta 4's road. Ruta 9's trail up the river to Ruta 5, and the west side's saves.
 import { start } from './lib.mjs';
 
 const t = await start('routes');
@@ -24,4 +24,16 @@ await t.fromSave({ map: 'ruta5', x: 40, y: 11, dir: 'left', party: [['gotita', 1
 await t.walk('left', 6);
 const said = await t.nextText();
 t.check('Pintora Lucía stops you on the long road', said.includes('pintando'), said);
+
+// Below Ruta 9's one-way step, the trail runs north along the river to Ruta 5's side (the west side got shorter).
+await t.fromSave({ map: 'ruta10', x: 2, y: 25, dir: 'up', party: [['gotita', 15]] });
+await noWild();
+await t.walk('up', 24);
+await t.walk('left', 3);
+await t.waitIdle();
+t.check('up Ruta 9’s riverside trail and west into Ruta 5', (await t.pos())[0] === 'ruta6', await t.pos());
+
+// A save from before Villa Ocote got shorter stands where it was (the houses south of the plaza moved up 3).
+await t.fromSave({ map: 'ocote', x: 10, y: 24, dir: 'down', party: [['gotita', 15]], flags: { oesteCorto: false } });
+t.check('an old save in Villa Ocote stands in the same spot', String(await t.pos()) === 'ocote,10,21', await t.pos());
 await t.end();

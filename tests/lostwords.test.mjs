@@ -16,12 +16,12 @@ let s = await save();
 t.check('a lost word can be picked up', s.flags['palabra:olla'] && s.bag.palabras === 1, r.said);
 
 // The potter without her word, then with it (wrong, then right).
-await t.fromSave({ map: 'ocote', x: 24, y: 12, dir: 'up', party, flags: town });
+await t.fromSave({ map: 'ocote', x: 24, y: 11, dir: 'up', party, flags: town });
 await t.press('z');
 r = await t.play();
 t.check('without the word, she stumbles over it', r.said[0].includes('…') && r.said.some((x) => x.includes('no me sale')), r.said);
 
-const withWord = { map: 'ocote', x: 24, y: 12, dir: 'up', party, flags: { ...town, 'palabra:olla': true }, bag: { palabras: 1 } };
+const withWord = { map: 'ocote', x: 24, y: 11, dir: 'up', party, flags: { ...town, 'palabra:olla': true }, bag: { palabras: 1 } };
 await t.fromSave(withWord);
 await t.press('z');
 await t.play({ right: false });

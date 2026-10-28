@@ -17,7 +17,7 @@ t.check('Lucas catches up with you and battles', (await flags()).lucas1 && r.sai
 t.check('he took the starter strong against yours', r.said.some((x) => x.includes('Aguacatito')), r.said.filter((x) => x.includes('envía')));
 // Then he waits in the silent town, and he can talk (a visitor, like you).
 t.check('after the battle Lucas is in Villa Ocote', await lucasInTown());
-r = await t.talk('ocote', 16, 14, 'right');
+r = await t.talk('ocote', 16, 13, 'right');
 t.check('…and he talks, though the town is silent', r.said[0]?.includes('pueblo'), r.said);
 
 // Losing to him (one weak Palabrita): he won, and there's no second chance (do better next time).
@@ -71,15 +71,15 @@ t.check('the next day Caparazonte is yours', s.party.some((m) => m.sp === 'capar
 
 // Don Chepe's oxen: listen for where the first one went, bring both back.
 const chepe = { ...town, 'palabra:bueyes': true, 'devuelta:bueyes': true };
-await t.fromSave({ map: 'ocote', x: 34, y: 17, dir: 'right', party, flags: chepe, money: 0 });
+await t.fromSave({ map: 'ocote', x: 34, y: 15, dir: 'right', party, flags: chepe, money: 0 });
 await t.press('z');
 await t.play({ choices: ['Cerca de la cascada'] });
 t.check('Don Chepe tells you where his oxen went', (await flags()).bueyes);
-await t.talk('ocote', 32, 19, 'up');
+await t.talk('ocote', 32, 16, 'up');
 await t.talk('canon', 19, 9, 'up');
 s = await t.save();
 t.check('both oxen follow you', s.flags.buey1 && s.flags.buey2, s.flags);
-await t.talk('ocote', 34, 17, 'right');
+await t.talk('ocote', 34, 15, 'right');
 s = await t.save();
 t.check('Don Chepe pays you back', s.flags.bueyesDone && s.money === 300 && s.bag.superpocion === 2, [s.money, s.bag]);
 await t.end();

@@ -639,7 +639,7 @@ export const REGION1_MAPS: Record<string, MapDef> = {
       'TTTTTTT~~TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^',
     ],
     style: { trees: 'pine' },
-    connections: { down: { to: 'ruta3', offset: -56, scenery: true }, left: { to: 'ocote', offset: 2 }, up: { to: 'canon', offset: -4 } },
+    connections: { down: { to: 'ruta3', offset: -56, scenery: true }, left: { to: 'ocote', offset: 1 }, up: { to: 'canon', offset: -4 } },
     encounters: {
       rate: 0.12,
       table: [

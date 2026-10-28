@@ -31,7 +31,7 @@ t.check('Petra gives you the Medalla Barro', s5.flags.medalBarro && s5.medals.in
 await t.shot('gym');
 
 // The road south: closed without the medal (with it you go down to Ruta 5: region3.test).
-await t.fromSave({ map: 'ocote', x: 23, y: 28, dir: 'down', party: strong, flags: { silenciadorRoto: true } });
+await t.fromSave({ map: 'ocote', x: 23, y: 25, dir: 'down', party: strong, flags: { silenciadorRoto: true } });
 const said = await t.walk('down', 3);
 r = await t.play();
 t.check('the south guard stops you without the medal', (await t.pos())[2] < 30 && [said, ...r.said].join(' ').includes('Medalla Barro'), [said, r.said]);

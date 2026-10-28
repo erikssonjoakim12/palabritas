@@ -97,7 +97,7 @@ export function newSave(): SaveData {
     dir: 'down',
     party: [],
     box: [],
-    flags: { amanecerWide: true, ruta5East: true, rutasCortas: true, sinEstacion: true, canonCascada: true, ruta2Nueva: true, palancaJunto: true, craterDerrumbe: true },
+    flags: { amanecerWide: true, ruta5East: true, rutasCortas: true, sinEstacion: true, canonCascada: true, ruta2Nueva: true, palancaJunto: true, craterDerrumbe: true, oesteCorto: true },
     gender: 'boy',
     money: 0,
     bag: {},
@@ -210,6 +210,20 @@ function migrate(s: SaveData) {
   if (!s.flags.craterDerrumbe) {
     if (s.map === 'crater' && s.x <= 5 && s.y >= 8 && s.y <= 12) Object.assign(s, { x: 3, y: 13, dir: 'down' });
     s.flags.craterDerrumbe = true;
+  }
+  // The west side, shorter (the user): Villa Ocote lost 3 rows, Ruta 5 half its length, Ruta 9 grew 8 rows on top,
+  // Ruta 7 became a diagonal. Anyone saved there stands where they were, or close to it.
+  if (!s.flags.oesteCorto) {
+    const { x, y } = s;
+    if (s.map === 'ocote') s.y = y <= 10 ? y : y <= 16 ? y - 1 : y <= 18 ? 15 : y - 3;
+    else if (s.map === 'ruta6') {
+      if (y <= 21) Object.assign(s, { x: 16, y: 2, dir: 'down' });
+      else if (y <= 39) s.y = Math.min(y, 37) - 16;
+      else if (y <= 44) s.y = y - 18;
+      else Object.assign(s, { x: 20, y: 31, dir: 'down' });
+    } else if (s.map === 'ruta10') Object.assign(s, { x: y === 21 || y === 22 ? Math.max(x, 1) : x, y: y + 8 });
+    else if (s.map === 'ruta8') Object.assign(s, x < 22 ? { x: 2, y: 20 } : { x: 38, y: 56 }, { dir: 'right' });
+    s.flags.oesteCorto = true;
   }
   if (s.flags.starter && !s.flags.lucasSeFue) Object.assign(s.flags, { lucasEligio: true, lucasSeFue: true });
   s.money ??= 0;

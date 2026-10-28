@@ -40,15 +40,12 @@ export const REGION2_MAPS: Record<string, MapDef> = {
       'TT.hwcwh.hwMh.hwwh.==..hwGwwh..hwwwh..TT',
       'TT.hwdwh.hwdh.hwdh.==..hhdhhh..hwdwh..TT',
       'TT....*............==......*..........TT',
-      'TT..T..............==..............T..TT',
       'TT..........==========UU=UU===........TT',
       'TT..........==================......S.TT',
       'TT..........============================',
       'TT..........=======FF===================',
       'TT..........=======FF=========........TT',
       'TT..........==================........TT',
-      'TT..........==================........TT',
-      'TT..*......g..........==....g........*TT',
       'TT.bbbbbbb..rrrr.rrrr.==..rrrrrr.rrrrrTT',
       'TT.bbbbbbb..rrrr.rrrr.==..rrrrrr.rrrrrTT',
       'TT.hwwwwwh..hwwh.hwwh.==..hwwwwh.hwwwhTT',
@@ -63,7 +60,7 @@ export const REGION2_MAPS: Record<string, MapDef> = {
       'TTTTTTTTTTTTTTTTTTTTTT==TTTTTTTTTTTTTTTT',
       'TTTTTTTTTTTTTTTTTTTTTT==TTTTTTTTTTTTTTTT',
     ],
-    connections: { right: { to: 'ruta5', offset: -2 }, down: { to: 'ruta6', offset: -6 } },
+    connections: { right: { to: 'ruta5', offset: -1 }, down: { to: 'ruta6', offset: -6 } },
     doors: [
       { x: 19, y: 3, to: 'mina1', tx: 5, ty: 24 },
       { x: 5, y: 8, to: 'centro_ocote', tx: 4, ty: 7 },
@@ -71,23 +68,23 @@ export const REGION2_MAPS: Record<string, MapDef> = {
       { x: 16, y: 8, to: 'casa_lucha', tx: 4, ty: 6 },
       { x: 25, y: 8, to: 'gym_ocote', tx: 4, ty: 14 },
       { x: 33, y: 8, to: 'casa_ocote2', tx: 4, ty: 6 },
-      { x: 6, y: 22, to: 'museo_ocote', tx: 5, ty: 6 },
-      { x: 14, y: 22, to: 'casa_mia', tx: 4, ty: 6 },
-      { x: 19, y: 22, to: 'casa_nando', tx: 4, ty: 6 },
-      { x: 28, y: 22, to: 'escuela_ocote', tx: 4, ty: 6 },
-      { x: 35, y: 22, to: 'casa_chepe', tx: 4, ty: 6 },
-      { x: 6, y: 28, to: 'taller_ocote', tx: 4, ty: 5 },
-      { x: 13, y: 28, to: 'casa_tona', tx: 4, ty: 6 },
-      { x: 28, y: 28, to: 'casa_abuelos', tx: 4, ty: 6 },
+      { x: 6, y: 19, to: 'museo_ocote', tx: 5, ty: 6 },
+      { x: 14, y: 19, to: 'casa_mia', tx: 4, ty: 6 },
+      { x: 19, y: 19, to: 'casa_nando', tx: 4, ty: 6 },
+      { x: 28, y: 19, to: 'escuela_ocote', tx: 4, ty: 6 },
+      { x: 35, y: 19, to: 'casa_chepe', tx: 4, ty: 6 },
+      { x: 6, y: 25, to: 'taller_ocote', tx: 4, ty: 5 },
+      { x: 13, y: 25, to: 'casa_tona', tx: 4, ty: 6 },
+      { x: 28, y: 25, to: 'casa_abuelos', tx: 4, ty: 6 },
     ],
     signs: [
-      { x: 36, y: 12, es: 'VILLA OCOTE. El pueblo del barro.', en: 'VILLA OCOTE. The town of clay.' },
-      { x: 8, y: 23, es: 'MUSEO DE VILLA OCOTE. Fósiles y piedras pintadas.', en: 'VILLA OCOTE MUSEUM. Fossils and painted stones.' },
-      { x: 31, y: 23, es: 'ESCUELA. ¡Clases para entrenadores!', en: 'SCHOOL. Lessons for trainers!' },
+      { x: 36, y: 11, es: 'VILLA OCOTE. El pueblo del barro.', en: 'VILLA OCOTE. The town of clay.' },
+      { x: 8, y: 20, es: 'MUSEO DE VILLA OCOTE. Fósiles y piedras pintadas.', en: 'VILLA OCOTE MUSEUM. Fossils and painted stones.' },
+      { x: 31, y: 20, es: 'ESCUELA. ¡Clases para entrenadores!', en: 'SCHOOL. Lessons for trainers!' },
     ],
     triggers: [
+      { x: 37, y: 12, script: 'mensajeOcote' },
       { x: 37, y: 13, script: 'mensajeOcote' },
-      { x: 37, y: 14, script: 'mensajeOcote' },
     ],
     gates: [
       {
@@ -107,9 +104,9 @@ export const REGION2_MAPS: Record<string, MapDef> = {
         look: 'officer',
         // Ruta 5 comes in phase 3: until it's there, the road south stays closed even with the medal.
         opens: () => flag('medalBarro'),
-        at: [22, 30, 'up'],
-        aside: [21, 29],
-        road: [[23, 30]],
+        at: [22, 27, 'up'],
+        aside: [21, 26],
+        road: [[23, 27]],
         back: 'up',
         mime: '(He shakes his head and points back toward town.)',
         closed: () =>
@@ -126,20 +123,20 @@ export const REGION2_MAPS: Record<string, MapDef> = {
       },
     ],
     npcs: [
-      { id: 'mia', x: 15, y: 23, look: 'girl', dir: 'down', script: 'mia', mime: '(She points at the ground by the east road, where she wrote a message.)', wanders: true },
-      { id: 'abuelo_ocote', x: 21, y: 16, look: 'abuelo', dir: 'left', script: 'abuelo_ocote', turns: true, mime: '(He points at the mine, then at his mouth, and shakes his head sadly.)' },
-      { id: 'vendedora', x: 24, y: 11, look: 'lady', dir: 'down', script: 'vendedora', mime: '(She holds up a clay pot and opens her mouth, but nothing comes out.)' },
-      { id: 'chepe', x: 35, y: 17, look: 'man', dir: 'left', script: 'chepe', mime: '(He counts on his fingers: one, two... and looks around for something.)' },
-      { id: 'carreta', x: 36, y: 17, object: 'carreta', script: 'carreta' },
+      { id: 'mia', x: 15, y: 20, look: 'girl', dir: 'down', script: 'mia', mime: '(She points at the ground by the east road, where she wrote a message.)', wanders: true },
+      { id: 'abuelo_ocote', x: 21, y: 15, look: 'abuelo', dir: 'left', script: 'abuelo_ocote', turns: true, mime: '(He points at the mine, then at his mouth, and shakes his head sadly.)' },
+      { id: 'vendedora', x: 24, y: 10, look: 'lady', dir: 'down', script: 'vendedora', mime: '(She holds up a clay pot and opens her mouth, but nothing comes out.)' },
+      { id: 'chepe', x: 35, y: 15, look: 'man', dir: 'left', script: 'chepe', mime: '(He counts on his fingers: one, two... and looks around for something.)' },
+      { id: 'carreta', x: 36, y: 15, object: 'carreta', script: 'carreta' },
       // Lucas, back from the mine to heal (after battle #1, won or lost) until the town talks again. A visitor, like
       // you, so he can talk.
-      { id: 'lucas_ocote', x: 17, y: 14, look: 'lucas', dir: 'right', script: 'lucas_ocote', show: () => flag('lucas1') && !flag('silenciadorRoto'), servesWhenMuted: true },
-      { id: 'musico', x: 13, y: 16, look: 'musico', dir: 'right', script: 'musico', mime: '(He lifts his mallets over an invisible marimba... and puts them down again.)' },
-      { id: 'futbolista', x: 17, y: 24, look: 'boy', dir: 'right', script: 'futbolista', turns: true, mime: '(He bounces on his toes and mimes kicking a ball.)', wanders: true },
-      lostWord('tortilla', 3, 11),
-      lostWord('medicina', 29, 18),
+      { id: 'lucas_ocote', x: 17, y: 13, look: 'lucas', dir: 'right', script: 'lucas_ocote', show: () => flag('lucas1') && !flag('silenciadorRoto'), servesWhenMuted: true },
+      { id: 'musico', x: 13, y: 15, look: 'musico', dir: 'right', script: 'musico', mime: '(He lifts his mallets over an invisible marimba... and puts them down again.)' },
+      { id: 'futbolista', x: 17, y: 21, look: 'boy', dir: 'right', script: 'futbolista', turns: true, mime: '(He bounces on his toes and mimes kicking a ball.)', wanders: true },
+      lostWord('tortilla', 3, 10),
+      lostWord('medicina', 29, 15),
       lostWord('pelota', 22, 4),
-      { id: 'buey2', x: 32, y: 18, object: 'buey', script: 'buey', show: () => flag('bueyes') && !flag('buey2') },
+      { id: 'buey2', x: 32, y: 15, object: 'buey', script: 'buey', show: () => flag('bueyes') && !flag('buey2') },
     ],
   },
 
@@ -160,16 +157,16 @@ export const REGION2_MAPS: Record<string, MapDef> = {
     { id: 'alfarera_mama', x: 5, y: 2, look: 'lady', dir: 'down', script: 'alfarera_mama' },
     { id: 'alfarero_nino', x: 3, y: 4, look: 'boy', dir: 'up', script: 'alfarero_nino' },
   ], { rows: HOUSES.cocina, muted: ocoteMuted }),
-  casa_mia: casa('casa_mia', 'Casa de Mía', { to: 'ocote', x: 14, y: 23 }, [
+  casa_mia: casa('casa_mia', 'Casa de Mía', { to: 'ocote', x: 14, y: 20 }, [
     { id: 'mia_mama', x: 5, y: 2, look: 'lady', dir: 'down', script: 'mia_mama' },
   ], { rows: HOUSES.hamaca, muted: ocoteMuted }),
-  casa_nando: casa('casa_nando', 'Casa de Nando', { to: 'ocote', x: 19, y: 23 }, [
+  casa_nando: casa('casa_nando', 'Casa de Nando', { to: 'ocote', x: 19, y: 20 }, [
     { id: 'nando_papa', x: 5, y: 3, look: 'man', dir: 'left', script: 'nando_papa' },
   ], { rows: HOUSES.familia, muted: ocoteMuted }),
-  casa_chepe: casa('casa_chepe', 'Casa de Don Chepe', { to: 'ocote', x: 35, y: 23 }, [
+  casa_chepe: casa('casa_chepe', 'Casa de Don Chepe', { to: 'ocote', x: 35, y: 20 }, [
     { id: 'chepe_esposa', x: 5, y: 2, look: 'lady', dir: 'down', script: 'chepe_esposa' },
   ], { rows: HOUSES.estudio, muted: ocoteMuted }),
-  casa_tona: casa('casa_tona', 'Casa de Doña Toña', { to: 'ocote', x: 13, y: 29 }, [
+  casa_tona: casa('casa_tona', 'Casa de Doña Toña', { to: 'ocote', x: 13, y: 26 }, [
     { id: 'cocinera', x: 2, y: 2, look: 'lady', dir: 'down', script: 'cocinera', mime: '(She pats some dough between her hands and sighs.)' },
   ], { rows: [
       '##L##V##',
@@ -180,11 +177,11 @@ export const REGION2_MAPS: Record<string, MapDef> = {
       '______B_',
       '____m___',
   ], muted: ocoteMuted }),
-  casa_abuelos: casa('casa_abuelos', 'Casa de los Abuelos', { to: 'ocote', x: 28, y: 29 }, [
+  casa_abuelos: casa('casa_abuelos', 'Casa de los Abuelos', { to: 'ocote', x: 28, y: 26 }, [
     { id: 'abuela_ocote', x: 5, y: 2, look: 'granny', dir: 'down', script: 'abuela_ocote' },
     { id: 'abuelo_dormido', x: 6, y: 4, look: 'abuelo', dir: 'down', script: 'abuelo_dormido' },
   ], { muted: ocoteMuted }),
-  taller_ocote: casa('taller_ocote', 'Taller de Alfarería', { to: 'ocote', x: 6, y: 29 }, [
+  taller_ocote: casa('taller_ocote', 'Taller de Alfarería', { to: 'ocote', x: 6, y: 26 }, [
     { id: 'ramiro', x: 5, y: 2, look: 'alfarero', dir: 'down', script: 'ramiro' },
   ], { rows: [
       '##########',
@@ -211,7 +208,7 @@ export const REGION2_MAPS: Record<string, MapDef> = {
       '++++++++++++',
       '+++++mm+++++',
     ],
-    exit: { to: 'ocote', x: 6, y: 23 },
+    exit: { to: 'ocote', x: 6, y: 20 },
     muted: ocoteMuted,
     signs: MUSEO.flatMap((e) => e.signs),
     npcs: [{ id: 'curadora', x: 6, y: 2, look: 'prof', dir: 'down', script: 'curadora' }, ...MUSEO.flatMap((e) => e.npcs)],
@@ -219,7 +216,7 @@ export const REGION2_MAPS: Record<string, MapDef> = {
 
   escuela_ocote: escuela(
     'escuela_ocote',
-    { to: 'ocote', x: 28, y: 23 },
+    { to: 'ocote', x: 28, y: 20 },
     { id: 'maestro_ocote', x: 4, y: 1, look: 'man', dir: 'down', script: 'maestro_ocote' },
     [
       { id: 'alumno1', x: 2, y: 4, look: 'boy', dir: 'up', script: 'alumno1' },
@@ -464,14 +461,14 @@ export const REGION2_MAPS: Record<string, MapDef> = {
 // The lost words' party (region2.ts fiesta): Villa Ocote at night, everyone around the fountain.
 REGION2_MAPS.ocote_noche = night(REGION2_MAPS.ocote, 'ocote_noche', {
   npcs: [
-    { id: 'petra_fiesta', x: 19, y: 12, look: 'petra', dir: 'down', script: 'petra_mina' },
-    { id: 'vendedora_fiesta', x: 17, y: 13, look: 'lady', dir: 'right', script: 'vendedora' },
-    { id: 'cocinera_fiesta', x: 22, y: 13, look: 'lady', dir: 'left', script: 'cocinera' },
-    { id: 'musico_fiesta', x: 17, y: 14, look: 'musico', dir: 'right', script: 'musico' },
-    { id: 'curandera_fiesta', x: 22, y: 14, look: 'granny', dir: 'left', script: 'curandera' },
-    { id: 'abuelo_fiesta', x: 17, y: 15, look: 'abuelo', dir: 'right', script: 'abuelo_ocote' },
-    { id: 'chepe_fiesta', x: 22, y: 15, look: 'man', dir: 'left', script: 'chepe' },
-    { id: 'futbolista_fiesta', x: 18, y: 17, look: 'boy', dir: 'up', script: 'futbolista' },
-    { id: 'maestro_fiesta', x: 21, y: 17, look: 'man', dir: 'up', script: 'maestro_ocote' },
+    { id: 'petra_fiesta', x: 19, y: 11, look: 'petra', dir: 'down', script: 'petra_mina' },
+    { id: 'vendedora_fiesta', x: 17, y: 12, look: 'lady', dir: 'right', script: 'vendedora' },
+    { id: 'cocinera_fiesta', x: 22, y: 12, look: 'lady', dir: 'left', script: 'cocinera' },
+    { id: 'musico_fiesta', x: 17, y: 13, look: 'musico', dir: 'right', script: 'musico' },
+    { id: 'curandera_fiesta', x: 22, y: 13, look: 'granny', dir: 'left', script: 'curandera' },
+    { id: 'abuelo_fiesta', x: 17, y: 14, look: 'abuelo', dir: 'right', script: 'abuelo_ocote' },
+    { id: 'chepe_fiesta', x: 22, y: 14, look: 'man', dir: 'left', script: 'chepe' },
+    { id: 'futbolista_fiesta', x: 18, y: 15, look: 'boy', dir: 'up', script: 'futbolista' },
+    { id: 'maestro_fiesta', x: 21, y: 15, look: 'man', dir: 'up', script: 'maestro_ocote' },
   ],
 });

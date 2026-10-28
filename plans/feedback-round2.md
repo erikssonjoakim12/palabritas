@@ -4,28 +4,11 @@ Built in parts, one session each, every part ending playable with its tests gree
 game (map ids in brackets: ids stay as they are, for saves). The user approved the whole plan, including the
 rivers joined with rapids (part 3). Still to decide together: which Palabritas can cut (part 4).
 
-Parts 1 (trainers out of the trees, invisible seams, the crater's rockfall) and 2 (the museum's pieces, five
-house layouts) are built (2026-10-28).
-
-## Part 3 — The west side, shorter
-
-The biggest map job: the maps form loops, so shortening one moves others (the maps test checks they still close).
-
-1. **Villa Ocote:** the top and bottom rows of houses a few tiles closer, keeping a big plaza in the middle. The
-   night version (`ocote_noche`, for the party) changes with it.
-2. **Ruta 5** (`ruta6`, 70 rows) about **half as long**: keep the dry desert (the user's favorite) and the river,
-   drop most of the first forest and the plain walking. Its trainers and items move into what's left.
-3. **Ruta 6, Playa Carey and the turtle beach move up** with it. **Ruta 7** (`ruta8`) takes up the difference: a
-   diagonal from Playa Carey (top left) down to Ciudad Chispa (bottom right), with the same parts (the lagoon, the
-   farm, the sugarcane fields) in a new shape. Outdoor holes let a map be diagonal.
-4. **Ruta 9** (`ruta10`) and the forest north of the crater lose rows where the loop needs it: Ruta 9 meets Ruta 5's
-   side, so it follows Ruta 5 up.
-5. **The rivers joined.** Today Ruta 5's river starts at the map's edge (it has no source). The Río Guardabarranco
-   starts at the waterfall in the Cañón, runs through Ruta 4's pool and down past the temple to Ruta 9. Approved:
-   it splits in Ruta 9's lowlands, one arm east into the Lago de las Islas (as now) and one west through Ruta 5 to
-   the Pacific. Where the west arm leaves, **rapids** you can't swim against, so Surf from Ruta 5's bridge isn't a
-   shortcut to Villa Jaguar.
-6. Saves on changed maps move to a safe spot (`migrate()`), and the region tests follow the new positions.
+Parts 1 (trainers out of the trees, invisible seams, the crater's rockfall), 2 (the museum's pieces, five house
+layouts) and 3 (the west side shorter) are built (2026-10-28). Part 3 as built: Villa Ocote 3 rows shorter; Ruta 5
+36 rows instead of 70; the Guardabarranco forks north of Ruta 9, its west arm leaving through rapids (westward
+currents) to become Ruta 5's river; Ruta 9 grew a riverside trail up to Ruta 5's side (the one-way step stays);
+Ruta 6, Playa Carey and the turtle beach moved up 34 rows; Ruta 7 steps down diagonally from Carey to Chispa.
 
 ## Part 4 — Cut, and the trees that guide you
 
@@ -35,8 +18,8 @@ do it. Which ones: to decide together (ideas: the leafcutter ants Hormiguita and
 back when you leave the map, like Gold/Silver), and «¿Quieres cortar el árbol con Hormigón?».
 
 The trees can go in now (they're just trees until Cut exists):
-1. **Ruta 9 → the water:** a cuttable tree on the way down to the river, land on both sides, so later you can
-   reach it from the water too. It keeps players on the lake route (Surf) to Villa Jaguar.
+1. **Ruta 9 → the water:** Ruta 9's riverside trail is one row of pines from the river's bank (in the river map):
+   a cuttable tree in that row, land on both sides, so later you can reach it from the water too. It keeps players on the lake route (Surf) to Villa Jaguar.
 2. **The river from the Villa Ocote side:** no walking along it. Its banks become **mangroves** (a new tile:
    tangled roots in the water), with a few swimmers (trainers) on the water.
 3. **North of the Templo del Jaguar:** a cut path that comes out on Ruta 4, a way home after gym 5.
@@ -76,5 +59,5 @@ Each family brings a theme (one file in src/data/content/).
 
 ## Order
 
-Part 3 next (it changes many maps at once). Parts 4–6 come with region 5: Surf
+Parts 4–6 come with region 5: Surf
 (plans/surf-fly.md), the Selva and the temple (region5-jungle.md), gym 5, then Cut.
