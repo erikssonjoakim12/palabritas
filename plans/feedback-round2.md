@@ -44,7 +44,7 @@ clearing by the river closed off, so the thin tree is the only way to the water 
 Built (2026-10-29): see region5-jungle.md. The gateways are the temple's carved stone; the ceiba roots, vines and a
 jaguar head over the doorway would make them special (new art, later).
 
-## Part 6 — Rainforest Palabritas
+## Part 6 — Rainforest Palabritas ✓ (the viper and the frogs, 2026-10-29: see palabritas.md)
 
 Planned in plans/palabritas.md with the user (who designs them), for the Selva and gym 5 (Planta/Veneno). A snake
 fits well. Ideas from the rainforest (BIOMES.md §2), with Nicaraguan names where there's one:

@@ -1,5 +1,5 @@
 import { Pix, mirror, fromRows, trim, makeCanvas, type Img } from './pixel';
-import { SPRITE_INK, JAGUAR as J } from '../style/colors';
+import { SPRITE_INK, JAGUAR as J, VIPER as V, TREEFROG as F, DARTFROG as D } from '../style/colors';
 import { PALABRITA_ART } from '../style/palabritas';
 
 // Palabrita sprites: hand-made pixel art (style/palabritas.ts), or for the ones that don't have
@@ -8,6 +8,70 @@ type Draw = (p: Pix) => void;
 
 /** Placeholders for new Palabritas until the user's art arrives. */
 const DRAW: Record<string, Draw> = {
+  /** The eyelash viper: a green coil, a raised head with spiky "eyelashes" over the eyes. */
+  pestanita(p) {
+    p.ellipse(24, 40, 15, 6, V.dark).ellipse(24, 39, 14, 5, V.green);
+    p.ellipse(26, 33, 11, 4.5, V.dark).ellipse(26, 32, 10, 4, V.green);
+    p.rect(19, 20, 6, 12, V.green).rect(23, 22, 2, 10, V.dark);
+    p.ellipse(21, 19, 7, 5, V.green);
+    for (const x of [16, 18, 23, 25]) p.poly([[x, 15], [x + 1, 11], [x + 2, 15]], V.lash);
+    p.ellipse(18, 18, 1.6, 1.6, V.lash).ellipse(24, 18, 1.6, 1.6, V.lash);
+    p.rect(18, 17, 1, 2, SPRITE_INK).rect(24, 17, 1, 2, SPRITE_INK);
+    p.line(21, 23, 21, 26, V.tongue).set(20, 27, V.tongue).set(22, 27, V.tongue);
+    for (const [x, y] of [[14, 40], [22, 41], [30, 40], [20, 33], [30, 32]]) p.ellipse(x, y, 1.5, 1, V.dark);
+    p.outline(SPRITE_INK);
+  },
+  /** Oropelón: the golden morph, a bigger coil, the head held high. */
+  oropelon(p) {
+    p.ellipse(24, 41, 18, 6, V.goldDark).ellipse(24, 40, 17, 5, V.gold);
+    p.ellipse(25, 33, 14, 5, V.goldDark).ellipse(25, 32, 13, 4.5, V.gold);
+    p.ellipse(27, 25, 9, 4, V.goldDark).ellipse(27, 24, 8, 3.5, V.gold);
+    p.rect(17, 12, 7, 12, V.gold).rect(22, 14, 2, 10, V.goldDark);
+    p.ellipse(19, 11, 8, 5.5, V.gold);
+    for (const x of [13, 15, 21, 23]) p.poly([[x, 7], [x + 1, 2], [x + 2, 7]], V.lash);
+    p.ellipse(15, 10, 1.8, 1.8, V.lash).ellipse(23, 10, 1.8, 1.8, V.lash);
+    p.rect(15, 9, 1, 2, SPRITE_INK).rect(23, 9, 1, 2, SPRITE_INK);
+    p.line(19, 15, 19, 18, V.tongue).set(18, 19, V.tongue).set(20, 19, V.tongue);
+    for (const [x, y] of [[12, 41], [22, 42], [33, 40], [18, 33], [32, 32], [27, 25]]) p.ellipse(x, y, 1.6, 1, V.goldDark);
+    p.outline(SPRITE_INK);
+  },
+  /** The red-eyed tree frog: green, huge red eyes, blue flanks, orange toes. */
+  ranojito(p) {
+    p.ellipse(13, 42, 5, 3, F.foot).ellipse(35, 42, 5, 3, F.foot);
+    p.ellipse(24, 36, 13, 9, F.green);
+    p.ellipse(13, 37, 3, 5, F.flank).ellipse(35, 37, 3, 5, F.flank);
+    p.ellipse(24, 39, 8, 5, F.belly);
+    p.ellipse(17, 25, 6, 6, F.green).ellipse(31, 25, 6, 6, F.green);
+    p.ellipse(17, 24, 4.5, 4.5, F.eye).ellipse(31, 24, 4.5, 4.5, F.eye);
+    p.rect(16, 22, 2, 5, SPRITE_INK).rect(30, 22, 2, 5, SPRITE_INK);
+    p.line(19, 33, 29, 33, F.dark);
+    p.ellipse(18, 45, 2.5, 2, F.foot).ellipse(30, 45, 2.5, 2, F.foot);
+    p.outline(SPRITE_INK);
+  },
+  /** Ranojón: bigger, a throat sac puffed out to sing for the rain. */
+  ranojon(p) {
+    p.ellipse(10, 43, 6, 3.5, F.foot).ellipse(38, 43, 6, 3.5, F.foot);
+    p.ellipse(24, 34, 17, 11, F.green);
+    p.ellipse(9, 35, 4, 7, F.flank).ellipse(39, 35, 4, 7, F.flank);
+    p.ellipse(24, 38, 10, 7, F.belly);
+    p.ellipse(24, 31, 6, 4, F.belly); // the throat sac
+    p.ellipse(15, 20, 7, 7, F.green).ellipse(33, 20, 7, 7, F.green);
+    p.ellipse(15, 19, 5.5, 5.5, F.eye).ellipse(33, 19, 5.5, 5.5, F.eye);
+    p.rect(14, 16, 2, 7, SPRITE_INK).rect(32, 16, 2, 7, SPRITE_INK);
+    p.ellipse(17, 46, 3, 2, F.foot).ellipse(31, 46, 3, 2, F.foot);
+    p.outline(SPRITE_INK);
+  },
+  /** The poison dart frog: tiny, electric blue with black spots. */
+  dardito(p) {
+    p.ellipse(16, 42, 4, 2.5, D.dark).ellipse(32, 42, 4, 2.5, D.dark);
+    p.ellipse(24, 37, 11, 8, D.blue);
+    p.ellipse(24, 28, 9, 6, D.blue);
+    p.ellipse(21, 34, 3, 2, D.light);
+    for (const [x, y] of [[19, 38], [28, 36], [24, 41], [30, 40], [18, 32]]) p.ellipse(x, y, 1.8, 1.5, SPRITE_INK);
+    p.ellipse(19, 26, 2.5, 2.5, SPRITE_INK).ellipse(29, 26, 2.5, 2.5, SPRITE_INK);
+    p.set(18, 25, D.light).set(28, 25, D.light);
+    p.outline(SPRITE_INK);
+  },
   /** The black jaguar cub: a big head, big green eyes, faint spots, sitting. */
   rugidito(p) {
     p.poly([[33, 42], [40, 36], [43, 28], [41, 27], [38, 34], [31, 39]], J.fur); // the tail, curling up

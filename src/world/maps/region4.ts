@@ -18,15 +18,16 @@ const torch = (t: (typeof TORCHES)[number]): NpcDef[] => [
   { id: `antorcha${t.color}On`, x: t.x, y: 5, object: `antorcha${t.color}On`, script: 'antorchaEncendida', show: () => flag(`antorcha:${t.color}`) },
 ];
 
-/** Wild Palabritas in the Templo del Jaguar, every floor (placeholders until the rainforest's own exist). */
+/** Wild Palabritas in the Templo del Jaguar, every floor: cave dwellers, and vipers that come in from the jungle. */
 const TEMPLO_WILD: MapDef['encounters'] = {
   rate: 0.08,
   everywhere: true,
   table: [
-    { sp: 'ecolin', min: 29, max: 31, w: 35 },
-    { sp: 'ochopatas', min: 29, max: 31, w: 30 },
-    { sp: 'taranton', min: 31, max: 32, w: 20 },
+    { sp: 'ecolin', min: 29, max: 31, w: 30 },
+    { sp: 'ochopatas', min: 29, max: 31, w: 25 },
+    { sp: 'taranton', min: 31, max: 32, w: 15 },
     { sp: 'murcielon', min: 31, max: 32, w: 15 },
+    { sp: 'pestanita', min: 30, max: 32, w: 15 },
   ],
 };
 
@@ -923,32 +924,36 @@ export const REGION4_MAPS: Record<string, MapDef> = {
       'TTTTTTTTTTTTT.TTTTTTTTTTTTTT,TT',
       'TTTTTTTTTTTTT.TTTTTTTTTTTTTT,TT',
       'TTTTTTTTTTTTT.,.,,,,.,...,TT.TT',
-      'TTTTTTTTTTTTTTTTTTTT...TT,TT,TT',
-      'TTTTTTTTTTTTTTTTTTTTTTTTT,TT,TT',
-      'TTTTTTTTTTTTTTTTTTTTTTTTT,TT.TT',
-      'TTTTTTTTTTTTTTTTTTTTTTTTT.TT,TT',
-      'TTTTTTTTTTTTTTTTTTTTTTTTT.TT.TT',
-      'TTTTTTTTTTTTTTTTTTTTTTTTT,TT.TT',
-      'TTTTTTTTTTTTTTTTTTTTTTTTT,TTTTT',
-      'TTTTTTTTTTTTTTTTTTTTTTTTT,TTTTT',
+      'TTTTTTTTTTTTTT,TTTTT...TT,TT,TT',
+      'TTTTTTTTTTTTTT.TTTTTTTTTT,TT,TT',
+      'TTTTTTTTTTTTTT,TT,.,,.,,.,TT.TT',
+      'TTTTTTTTT,,.,,,TT,TTT,TTT.TT,TT',
+      'TTTTTTTTTTTTTT.TT,TTT,TTT.TT.TT',
+      'TTTTTTTTTTTTTT,TT.TTT.TTT,TT.TT',
+      'TTTTTTTTTTTTTT,TTTTTT,TTT,TTTTT',
+      'TTTTTTTT.,,.,,.TTTTTTTTTT,TTTTT',
       'TTTTTTTTTTTTTTTTTTTTTTTTT.,..TT',
       'TTTTTTTTTTTTTTTTTTTTTTTTTTTT,TT',
       'TTTTTTTTTTTTTTTTTTTTTTTTTTT[)[T',
     ],
     // Its own place (not in the world): in from the gateway at the jungle's edge (bottom right), out by the one by
-    // the temple (top left). Smaller and balanced (the user): a winding way through, items a short detour off it.
+    // the temple (top left). Smaller and balanced (the user): a winding way through, items a short detour off it,
+    // and dead ends branching off before and after the first trainer.
     doors: [
       { x: 28, y: 21, to: 'lindero', tx: 18, ty: 13, dir: 'down' },
       { x: 1, y: 0, to: 'templo', tx: 5, ty: 14 },
     ],
     encounters: {
       rate: 0.12,
-      // Placeholders until the rainforest's own Palabritas exist (plans/region5-jungle.md).
+      // The jungle's own (the viper, the frogs) and rainforest Palabritas from elsewhere.
       table: [
-        { sp: 'mariposita', min: 28, max: 30, w: 30 },
-        { sp: 'hojarasco', min: 28, max: 30, w: 25 },
-        { sp: 'ochopatas', min: 28, max: 30, w: 25 },
-        { sp: 'taranton', min: 30, max: 31, w: 20 },
+        { sp: 'pestanita', min: 28, max: 30, w: 22 },
+        { sp: 'ranojito', min: 28, max: 30, w: 22 },
+        { sp: 'dardito', min: 29, max: 31, w: 10 },
+        { sp: 'perezosito', min: 28, max: 30, w: 14 },
+        { sp: 'mariposita', min: 28, max: 30, w: 12 },
+        { sp: 'colibri', min: 28, max: 30, w: 10 },
+        { sp: 'taranton', min: 30, max: 31, w: 10 },
       ],
     },
     npcs: [

@@ -475,6 +475,48 @@ export const SPECIES: Record<string, Species> = {
       en: 'It sleeps in a hammock most of the day. It wakes up late, has breakfast... and goes back to sleep!',
     },
   },
+  /** The eyelash viper (the Selva del Jaguar): green, with spiky "eyelash" scales. Its words: the body. */
+  pestanita: {
+    id: 'pestanita',
+    name: 'Pestañita',
+    types: ['Veneno', 'Planta'],
+    theme: 'cuerpo',
+    base: { hp: 45, atk: 62, def: 42, spd: 70 },
+    moves: [m('Colmillo', 'Veneno', 'choose'), m('Enredadera', 'Planta', 'type'), m('Siseo', 'Veneno', 'listen'), m('Veneno Verde', 'Veneno', 'speak')],
+    catchRate: 0.4,
+    dex: {
+      es: 'Tiene escamas como pestañas sobre los ojos. Se esconde entre las hojas y nadie la ve.',
+      en: 'It has scales like eyelashes over its eyes. It hides among the leaves and nobody sees it.',
+    },
+  },
+  /** The red-eyed tree frog (the Selva): it sings before the rain. Its words: the weather. */
+  ranojito: {
+    id: 'ranojito',
+    name: 'Ranojito',
+    types: ['Agua', 'Planta'],
+    theme: 'tiempo',
+    base: { hp: 48, atk: 50, def: 48, spd: 72 },
+    moves: [m('Burbuja', 'Agua', 'choose'), m('Salto de Hoja', 'Planta', 'type'), m('Croar', 'Agua', 'listen'), m('Canto de Lluvia', 'Agua', 'speak')],
+    catchRate: 0.45,
+    dex: {
+      es: 'Duerme de día con los ojos cerrados. Si lo despiertas, abre sus ojos rojos... ¡y te asusta!',
+      en: 'It sleeps by day with its eyes closed. If you wake it, it opens its red eyes... and gives you a fright!',
+    },
+  },
+  /** The poison dart frog (the Selva): tiny and bright. Its words: colors. */
+  dardito: {
+    id: 'dardito',
+    name: 'Dardito',
+    types: ['Veneno'],
+    theme: 'colores',
+    base: { hp: 50, atk: 72, def: 50, spd: 88 },
+    moves: [m('Piel Tóxica', 'Veneno', 'choose'), m('Color Brillante', 'Normal', 'type'), m('Aviso', 'Normal', 'listen'), m('Dardo Venenoso', 'Veneno', 'speak')],
+    catchRate: 0.3,
+    dex: {
+      es: 'Sus colores brillantes dicen: «¡No me toques!». Es pequeñito, pero muy venenoso.',
+      en: 'Its bright colors say: "Don’t touch me!" It’s tiny, but very poisonous.',
+    },
+  },
   /**
    * The black jaguar's cub (region 5): its mother, Rugidón, guarded the Templo del Jaguar until Equipo Silencio took
    * her voice; you raise the cub (plans/region5-jungle.md). Its own theme comes with region 5's Palabritas.
@@ -831,6 +873,26 @@ evolution('brasaurio', 50, {
     en: 'They say it sleeps inside the volcano. When it wakes up, the whole mountain shakes.',
   },
 });
+evolution('pestanita', 32, {
+  id: 'oropelon',
+  name: 'Oropelón',
+  types: ['Veneno', 'Planta'],
+  base: { hp: 70, atk: 94, def: 66, spd: 96 },
+  dex: {
+    es: 'Su piel es amarilla como el oro. En Nicaragua le dicen «oropel». ¡Mírala de lejos!',
+    en: 'Its skin is golden yellow. In Nicaragua they call it «oropel». Admire it from far away!',
+  },
+});
+evolution('ranojito', 33, {
+  id: 'ranojon',
+  name: 'Ranojón',
+  types: ['Agua', 'Planta'],
+  base: { hp: 76, atk: 80, def: 72, spd: 96 },
+  dex: {
+    es: 'Cuando va a llover, canta toda la noche. ¡La gente de la selva sabe que viene la lluvia!',
+    en: 'When rain is coming, it sings all night. Jungle folk know the rain is on its way!',
+  },
+});
 evolution('rugidito', 40, {
   id: 'rugidon',
   name: 'Rugidón',
@@ -916,5 +978,5 @@ export const DEX_ORDER = [
   'cangrejito', 'cangrejon', 'coquito', 'cocotero', 'pelicanito', 'maleticano', 'mojarrita', 'mordisquito', 'mordiscon', 'tilapita', 'espadon',
   'paslamita', 'paslamona',
   'brasita', 'brasaurio', 'volcasaurio', 'hormiguita', 'hormigon', 'zopilotito', 'zopiloton', 'chocoyito', 'chocoyote',
-  'chispita', 'coheton', 'lamparita', 'perezosito', 'venadito', 'torovenado', 'rugidito', 'rugidon',
+  'chispita', 'coheton', 'lamparita', 'perezosito', 'venadito', 'torovenado', 'pestanita', 'oropelon', 'ranojito', 'ranojon', 'dardito', 'rugidito', 'rugidon',
 ];
