@@ -33,6 +33,10 @@ await t.walk('left', 3);
 await t.waitIdle();
 t.check('up Ruta 9’s riverside trail and west into Ruta 5', (await t.pos())[0] === 'ruta6', await t.pos());
 
+// The thin tree north of Ruta 4's road blocks the way to gym 6, until you can cut it.
+const r = await t.talk('ruta5', 80, 3, 'up');
+t.check('the thin tree on Ruta 4 looks like it could be cut', r.said[0]?.includes('cortar'), r.said);
+
 // A save from before Villa Ocote got shorter stands where it was (the houses south of the plaza moved up 3).
 await t.fromSave({ map: 'ocote', x: 10, y: 24, dir: 'down', party: [['gotita', 15]], flags: { oesteCorto: false } });
 t.check('an old save in Villa Ocote stands in the same spot', String(await t.pos()) === 'ocote,10,21', await t.pos());

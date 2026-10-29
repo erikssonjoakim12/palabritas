@@ -11,6 +11,7 @@ import type { MapStyle } from '../../art/tiles';
   .  grass         ,  tall grass (wild Palabritas)   =  path        *  flowers
   T  tree (mostly green, some dry)   t  dry tree   I  pine (colder places, later)
                    Y  lemon tree                    ~  water       f  fence      S  sign
+  /  thin tree that blocks a path (cut it once you can)
   r b o p  roofs (red, blue, orange = Centro, purple = Gym)
   h  wall          w  window                        d  door        a  bakery sign   M  shop sign
   _  wood floor    +  tile floor                    #  inside wall

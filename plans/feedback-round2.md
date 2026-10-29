@@ -2,7 +2,7 @@
 
 Built in parts, one session each, every part ending playable with its tests green. Map names are as shown in the
 game (map ids in brackets: ids stay as they are, for saves). The user approved the whole plan, including the
-rivers joined with rapids (part 3). Still to decide together: which Palabritas can cut (part 4).
+rivers joined with rapids (part 3).
 
 Parts 1 (trainers out of the trees, invisible seams, the crater's rockfall), 2 (the museum's pieces, five house
 layouts) and 3 (the west side shorter) are built (2026-10-28). Part 3 as built: Villa Ocote 3 rows shorter; Ruta 5
@@ -13,21 +13,28 @@ Ruta 6, Playa Carey and the turtle beach moved up 34 rows; Ruta 7 steps down dia
 ## Part 4 — Cut, and the trees that guide you
 
 **Cut** opens after the 5th medal (Villa Jaguar's gym), like Surf: no move to teach; Palabritas that can really cut
-do it. Which ones: to decide together (ideas: the leafcutter ants Hormiguita and Hormigón, whose move is already
-«Cortar Hoja»; Cangrejón's claws; Espadón's sword). Engine: a small cuttable tree (solid until cut; cut trees come
-back when you leave the map, like Gold/Silver), and «¿Quieres cortar el árbol con Hormigón?».
+do it. **Which ones (the user, 2026-10-29):** Hojadillo and Hojarasco; Cangrejito and Cangrejón; Hormiguita and
+Hormigón; Perezosito; Espadón; the whole Brasita line (Brasita, Brasaurio, Volcasaurio); Liebrón.
 
-The trees can go in now (they're just trees until Cut exists):
-1. **Ruta 9 → the water:** Ruta 9's riverside trail is one row of pines from the river's bank (in the river map):
-   a cuttable tree in that row, land on both sides, so later you can reach it from the water too. It keeps players on the lake route (Surf) to Villa Jaguar.
-2. **The river from the Villa Ocote side:** no walking along it. Its banks become **mangroves** (a new tile:
-   tangled roots in the water), with a few swimmers (trainers) on the water.
-3. **North of the Templo del Jaguar:** a cut path that comes out on Ruta 4, a way home after gym 5.
-4. **North of Ruta 4:** a cuttable tree leading to a new area, toward gym 6.
+**Engine (to build):** facing a thin tree ('/', art/tiles.ts) with the medal and a cutter in the party: «¿Quieres
+cortar el arbolito con Hormigón?»; cut trees come back when you leave the map, like Gold/Silver. Part of the same work
+as Surf's: walking off a map's edge where there's no connection should take you into the map that's there in the
+world (the temple's path north crosses from Ruta 4 into the temple's map that way).
+
+**The thin trees are placed (2026-10-29):** '/' tiles, thin and twiggy so they look cuttable (the user's idea). Facing
+one: «Un arbolito delgado bloquea el camino. Parece que se puede cortar.»
+1. **North of Ruta 4** (ruta5 80,2), above the road, seen on your first walk west from the cave: a trail behind it
+   goes north to the map's edge, toward gym 6 (the new area isn't built).
+2. **South of Ruta 4 to the temple** (ruta5 23,17, by the grass south of the road): a trail through the pines down to
+   the temple's clearing, a way home after gym 5.
+3. **Ruta 9 → the water** (ruta10 5,4): a nook off the riverside trail, land on both sides, the bank beyond. It keeps
+   players on the lake route (Surf) to Villa Jaguar.
+
+Still to do here: **the river from the Villa Ocote side:** no walking along it. Its banks become **mangroves** (a new
+tile: tangled roots in the water), with a few swimmers (trainers) on the water.
 
 **Knowing where to go next** (the user's worry), all of these together:
-- The tree north of Ruta 4 is visible from the very first walk on Ruta 4: «Un arbolito bloquea el camino. Parece
-  que se puede cortar.» You remember it.
+- The tree north of Ruta 4 is visible from the very first walk on Ruta 4. You remember it.
 - The gym 5 leader says it outright when giving the medal: with Cut you can open the path north of Ruta 4.
 - The path north of the temple leads straight there, so after gym 5 the natural way out ends at that tree.
 - START → MAPA shows the world, which helps too. No marker for the next goal (the user: not needed).

@@ -92,6 +92,7 @@ export const TILES: Record<string, TileDef> = {
   J: solid(),
   '>': solid({ ledge: 'right' }),
   v: solid({ ledge: 'down' }),
+  '/': solid({ look: { es: 'Un arbolito delgado bloquea el camino. Parece que se puede cortar.', en: 'A thin little tree blocks the path. It looks like it could be cut.' } }),
   Y: solid({ look: { es: '¡Un limonero! Huele muy bien.', en: 'A lemon tree! It smells very nice.' } }),
   '~': solid({ kind: 'water' }),
   f: solid(),
@@ -465,6 +466,8 @@ function render(ch: string, env: TileEnv): Img {
       return paintArt(ledgeArt(env, ART.ledgeDown));
     case 'Y':
       return paintArt(ART.lemonTree);
+    case '/':
+      return paintArt(ART.arbolito);
     case '^':
       return rockImage(rockArt(env), env, MOUNTAIN_CHARS, underImage(env, 'ground'));
     case 'O':

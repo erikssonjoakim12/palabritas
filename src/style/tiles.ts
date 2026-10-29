@@ -232,6 +232,32 @@ export const ART: Record<string, TileArt> = {
   dryTree: { pal: OUTDOOR.grass, extra: TREES.dry, rows: dryTreeRows },
   pine: { pal: OUTDOOR.grass, rows: pineRows },
   palm: { pal: OUTDOOR.grass, extra: TREES.palm, rows: palmRows },
+  /**
+   * A thin, twiggy sapling that blocks a path: it looks like it could be cut (Cut, after the 5th medal), unlike the
+   * full round trees.
+   */
+  arbolito: {
+    pal: OUTDOOR.grass,
+    extra: TREES.green,
+    rows: onGrass([
+      '........a.......',
+      '......ab..ab....',
+      '..ab..bc..bcab..',
+      '..bc...K.K..bc..',
+      '....K..K.K.K....',
+      '.....K.KK.K.....',
+      '.ab...KKKK...ab.',
+      '.bc....kK....bc.',
+      '...K...kK...K...',
+      '....K..kK..K....',
+      '.....K.kKKK.....',
+      '......KkK.......',
+      '.......kK.......',
+      '......3kK3......',
+      '.....33kK33.....',
+      '....22222222....',
+    ]),
+  },
   lemonTree: {
     pal: OUTDOOR.grass,
     extra: { ...TREES.green, y: ACCENT.lemon },
