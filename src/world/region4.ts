@@ -113,6 +113,75 @@ async function sigilo() {
   setSpeaker();
 }
 
+// ---------- Region 5: the Templo del Jaguar (plans/region5-jungle.md) ----------
+
+/** Federico at the temple's clearing: the legend, Equipo Silencio, the cub. */
+function federicoTemplo() {
+  if (flag('rugiditoRecibido'))
+    return lines(
+      ['La leyenda dice: «Cuando su hijo ruja, la selva despertará». ¡Cuida mucho a Rugidito!', 'The legend says: "When her child roars, the jungle will wake." Take good care of Rugidito!'],
+      ['Cuando aprenda a rugir, vuelve al altar. Quiero ver qué pasa...', 'When it learns to roar, come back to the altar. I want to see what happens...'],
+    );
+  return lines(
+    ['¡{name}! Soy Federico, ¿te acuerdas? Nos vimos en la Cueva del Eco.', '{name}! I’m Federico, remember? We met in the Echo Cave.'],
+    ['Las paredes de este templo cuentan una leyenda: hace mil años, una jaguar negra cuidó la selva.', 'This temple’s walls tell a legend: a thousand years ago, a black jaguar looked after the jungle.'],
+    ['Cada mañana rugió, y la selva despertó. Dicen que todavía vive arriba, en el altar.', 'Every morning she roared, and the jungle woke up. They say she still lives up there, at the altar.'],
+    ['Pero hace unos días entró Equipo Silencio con una máquina. Desde entonces, la selva está callada.', 'But a few days ago Equipo Silencio went in with a machine. Since then, the jungle has been quiet.'],
+    ['Y este cachorro llora aquí, solo. Creo que es el hijo de la jaguar...', 'And this cub cries here, all alone. I think it’s the jaguar’s child...'],
+  );
+}
+
+/** The cub by the temple's doorway, before you raise it: it tries to roar. */
+async function cachorroJaguar() {
+  await info('(Un cachorro de jaguar negro. Abre la boca para rugir...)', { en: '(A black jaguar cub. It opens its mouth to roar...)' });
+  await info('«¡Miau!»', { en: '"Mew!"' });
+  await info('(Solo le sale un maullido. Mira hacia el templo, muy triste.)', { en: '(Only a mew comes out. It looks at the temple, very sad.)' });
+}
+
+/**
+ * The top of the temple. Comandante Mutis and her new Silenciador have taken the jaguar's voice. You beat Mutis;
+ * the machine sparks and the confused jaguar leaps at you (a guardian battle: no catching, no running). Calm again
+ * but voiceless, she lies down and turns to stone, as in the legend. Her cub comes up the stairs and goes with you.
+ */
+async function altarJaguar() {
+  if (flag('jaguarPiedra')) return;
+  if (!flag('beat:mutis')) {
+    await as('mutis',
+      ['¡Shhh! Llegas tarde, {name}. Soy la Comandante Mutis, de Equipo Silencio.', 'Shhh! You’re too late, {name}. I’m Commander Mutis, of Equipo Silencio.'],
+      ['¿Ves esta máquina? Es un Silenciador nuevo. Ya le quitó la voz a la jaguar.', 'See this machine? It’s a new Silenciador. It has already taken the jaguar’s voice.'],
+      ['Sin su rugido, la selva no despierta. ¡Pronto, todo el país va a dormir en silencio!', 'Without her roar, the jungle doesn’t wake. Soon the whole country will sleep in silence!'],
+    );
+    const res = await trainerBattle(TRAINERS.mutis, { look: 'mutis', outro: ['¡Shhh! ¿Cómo es posible?', 'Shhh! How is that possible?'] });
+    if (res === 'lose') return blackout();
+    setFlag('beat:mutis');
+    await as('mutis', ['No importa. La jaguar ya no tiene voz... y ahora está furiosa. ¡Suerte, {name}!', 'It doesn’t matter. The jaguar has no voice anymore... and now she’s furious. Good luck, {name}!']);
+    sfx('door');
+    setFlag('mutisSeFue');
+    refreshNpcs();
+    await info('(Mutis baja corriendo por la escalera.)', { en: '(Mutis runs off down the stairs.)' });
+  }
+  sfx('alert');
+  await info('¡El Silenciador hace un ruido horrible y echa chispas!', { en: 'The Silenciador makes a horrible noise and throws sparks!' });
+  await info('¡La jaguar salta del altar! Está muy confundida.', { en: 'The jaguar leaps from the altar! She’s very confused.' });
+  if ((await wildBattle('rugidon', 38, { guardian: true })) === 'lose') return blackout();
+  await info('El Silenciador se rompe en mil pedazos.', { en: 'The Silenciador breaks into a thousand pieces.' });
+  await info('La jaguar se calma. Abre la boca para rugir... pero no sale nada.', { en: 'The jaguar calms down. She opens her mouth to roar... but nothing comes out.' });
+  await info('Se acuesta junto al altar, muy cansada. Poco a poco... se vuelve de piedra, como en la leyenda.', { en: 'She lies down by the altar, very tired. Little by little... she turns to stone, as in the legend.' });
+  setFlag('jaguarPiedra');
+  refreshNpcs();
+  await frames(40);
+  await info('Se oyen pasitos en la escalera...', { en: 'Little footsteps on the stairs...' });
+  await info('¡Es el cachorro! Se acurruca junto a la estatua de su mamá.', { en: 'It’s the cub! It curls up next to its mother’s statue.' });
+  await info('«¡Miau!»', { en: '"Mew!"' });
+  await info('Después te mira a ti. Parece que quiere ir contigo.', { en: 'Then it looks at you. It seems to want to come with you.' });
+  setFlag('rugiditoRecibido');
+  await receiveMon('rugidito', 25);
+  await info('En el altar hay palabras talladas: «Cuando su hijo ruja, la selva despertará».', { en: 'Words are carved on the altar: "When her child roars, the jungle will wake."' });
+}
+
+/** The mother's statue on the altar. One day, her grown child's roar may wake her (plans/region5-jungle.md). */
+const estatuaJaguar = talk(['(La estatua de la jaguar negra. Parece que espera algo.)', '(The black jaguar’s statue. It seems to be waiting for something.)']);
+
 /** The festival night: fireworks, the parade around the fountain, and Don Tizón's rocket. */
 async function festival() {
   await cutTo(['Esa noche...', 'That night...'], 'chispa_noche', 17, 17, 'up');
@@ -434,6 +503,10 @@ export const REGION4: Record<string, ScriptFn> = {
   elsa,
   lucasVolcan,
   sigilo,
+  federicoTemplo,
+  cachorroJaguar,
+  altarJaguar,
+  estatuaJaguar,
   cohetes: talk(['Son las cajas de cohetes de Ciudad Chispa. ¡Están llenas!', 'They’re Ciudad Chispa’s crates of rockets. They’re full!']),
   tizon_fiesta: talk(['¡Qué fiesta tan bonita! Y todo gracias a ti, {name}.', 'What a beautiful festival! And all thanks to you, {name}.']),
   aprendiz_fiesta: endFestival,
@@ -584,6 +657,13 @@ export const REGION4: Record<string, ScriptFn> = {
     ['¡Shhh! No le digas a la comandante que perdí.', 'Shhh! Don’t tell the commander I lost.'],
     ['Cuando el jaguar se calle, toda la selva se va a dormir. ¡Silencio para siempre!', 'When the jaguar falls silent, the whole jungle will go to sleep. Silence forever!'],
   ),
+  silenciosa12: fight('silenciosa12', ['¡Shhh! Este templo ahora es de Equipo Silencio.', 'Shhh! This temple belongs to Equipo Silencio now.'], ['¡Shhh! Qué vergüenza.', 'Shhh! How embarrassing.'], ['La comandante está arriba, con la jaguar.', 'The commander is upstairs, with the jaguar.']),
+  buscatesoros_leo: fight('buscatesoros_leo', ['¡Busco el tesoro del jaguar! ¡No me lo vas a quitar!', 'I’m looking for the jaguar’s treasure! You won’t take it from me!'], ['¡Ay, mis tesoros!', 'Oh, my treasures!'], ['Aquí no hay oro. Solo piedras con dibujos... ¡qué aburrido!', 'There’s no gold here. Just stones with drawings... how boring!']),
+  silencioso13: fight('silencioso13', ['¿Oíste algo? Yo no. ¡Aquí ya nadie hace ruido!', 'Did you hear something? I didn’t. Nobody makes noise here anymore!'], ['¡Shhh! Perdí en silencio.', 'Shhh! I lost quietly.'], ['El nuevo Silenciador es mucho más fuerte que el de la mina.', 'The new Silenciador is much stronger than the one in the mine.']),
+  arqueologo_tito: fight('arqueologo_tito', ['Estas paredes cuentan una historia en pasado: «El jaguar rugió, y la selva despertó».', 'These walls tell a story in the past: "The jaguar roared, and the jungle woke."'], ['¡Qué batalla! Parece de leyenda.', 'What a battle! Like something from a legend.'], ['Fui a la universidad para leer estas piedras. ¡Y todavía no las entiendo todas!', 'I went to university to read these stones. And I still don’t understand them all!']),
+  silenciosa14: fight('silenciosa14', ['¡No vas a llegar al altar! ¡Shhh!', 'You won’t reach the altar! Shhh!'], ['¡Shhh! ¡No grites!', 'Shhh! Don’t shout!'], ['Mutis dice que el silencio es paz. Pero... la selva se ve tan triste.', 'Mutis says silence is peace. But... the jungle looks so sad.']),
+  silencioso15: fight('silencioso15', ['¡Shhh! Desde aquí arriba vigilo todo el templo.', 'Shhh! From up here I watch the whole temple.'], ['¡No vi venir eso!', 'I didn’t see that coming!'], ['Escuché un maullido abajo. ¿Hay un gato en el templo?', 'I heard a mew downstairs. Is there a cat in the temple?']),
+  buscatesoros_vero: fight('buscatesoros_vero', ['Este cuarto escondido es mío. ¡Lo encontré primero!', 'This hidden room is mine. I found it first!'], ['¡Bueno, bueno! Te lo presto.', 'Okay, okay! You can borrow it.'], ['En la pared dice: «La jaguar cuidó a su hijo». Qué bonito, ¿no?', 'The wall says: "The jaguar cared for her child." Lovely, isn’t it?']),
   pescador_lago: talk(['¿Ves las islas? Sin bote no se puede llegar. ¡Algún día voy a ir!', 'See the islands? You can’t get there without a boat. Someday I’ll go!']),
   fotografo_max: fight(
     'fotografo_max',

@@ -30,8 +30,8 @@ one: «Un arbolito delgado bloquea el camino. Parece que se puede cortar.»
 3. **Ruta 9 → the water** (ruta10 5,4): a nook off the riverside trail, land on both sides, the bank beyond. It keeps
    players on the lake route (Surf) to Villa Jaguar.
 
-Still to do here: **the river from the Villa Ocote side:** no walking along it. Its banks become **mangroves** (a new
-tile: tangled roots in the water), with a few swimmers (trainers) on the water.
+**The river** ✓ (2026-10-29): mangroves on both banks down to Villa Jaguar, five swimmers on it, and Ruta 9's
+clearing by the river closed off, so the thin tree is the only way to the water there.
 
 **Knowing where to go next** (the user's worry), all of these together:
 - The tree north of Ruta 4 is visible from the very first walk on Ruta 4. You remember it.
@@ -39,18 +39,10 @@ tile: tangled roots in the water), with a few swimmers (trainers) on the water.
 - The path north of the temple leads straight there, so after gym 5 the natural way out ends at that tree.
 - START → MAPA shows the world, which helps too. No marker for the next goal (the user: not needed).
 
-## Part 5 — Selva del Jaguar as a dungeon
+## Part 5 — Selva del Jaguar as a dungeon ✓
 
-The Selva leaves the world map and becomes its own place, with an entrance and an exit, so it can be as big as it
-needs, and its darker shade no longer shows from the river.
-
-- **The gate (my choice):** an old stone gateway swallowed by a ceiba tree's roots: two carved pillars with a
-  jaguar head over the doorway, vines hanging down, darkness inside. The same carved stone as the temple, so it
-  foreshadows it. It stands at Villa Jaguar's west edge; walking into the dark doorway takes you in (like a cave
-  mouth). The exit is a matching gateway onto the temple's clearing.
-- **Inside:** a maze of paths one tile wide, tall grass everywhere, dense jungle walls, a few dead ends with items,
-  and jungle trainers (an explorer, a biologist, a photographer...).
-- Villa Jaguar and the temple's clearing keep their places in the world.
+Built (2026-10-29): see region5-jungle.md. The gateways are the temple's carved stone; the ceiba roots, vines and a
+jaguar head over the doorway would make them special (new art, later).
 
 ## Part 6 — Rainforest Palabritas
 
@@ -61,7 +53,7 @@ fits well. Ideas from the rainforest (BIOMES.md §2), with Nicaraguan names wher
 - the **lapa roja** (scarlet macaw);
 - the **red-eyed tree frog**, and the **poison dart frog** (Veneno);
 - the **danto** (tapir), big and gentle;
-- the **jaguar**: the temple's (still an open question in region5-jungle.md).
+- the **jaguar**: done, Rugidito and Rugidón (region5-jungle.md), placeholder drawings for the user's art.
 Each family brings a theme (one file in src/data/content/).
 
 ## Order

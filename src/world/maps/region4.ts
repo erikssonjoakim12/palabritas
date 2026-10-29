@@ -18,6 +18,18 @@ const torch = (t: (typeof TORCHES)[number]): NpcDef[] => [
   { id: `antorcha${t.color}On`, x: t.x, y: 5, object: `antorcha${t.color}On`, script: 'antorchaEncendida', show: () => flag(`antorcha:${t.color}`) },
 ];
 
+/** Wild Palabritas in the Templo del Jaguar, every floor (placeholders until the rainforest's own exist). */
+const TEMPLO_WILD: MapDef['encounters'] = {
+  rate: 0.08,
+  everywhere: true,
+  table: [
+    { sp: 'ecolin', min: 29, max: 31, w: 35 },
+    { sp: 'ochopatas', min: 29, max: 31, w: 30 },
+    { sp: 'taranton', min: 31, max: 32, w: 20 },
+    { sp: 'murcielon', min: 31, max: 32, w: 15 },
+  ],
+};
+
 export const REGION4_MAPS: Record<string, MapDef> = {
   // Hot dry forest, from Playa Carey (top left) down to Ciudad Chispa (bottom right) in steps (the user: a diagonal):
   // a lagoon with a pier, a fenced farm, the sugarcane fields (the training spot, reached only through one
@@ -1003,6 +1015,10 @@ export const REGION4_MAPS: Record<string, MapDef> = {
       { x: 12, y: 10, to: 'templo1', tx: 13, ty: 16 },
     ],
     signs: [{ x: 14, y: 12, es: 'TEMPLO DEL JAGUAR. Muy antiguo. Nadie sabe quién lo construyó.', en: 'JAGUAR TEMPLE. Very old. Nobody knows who built it.' }],
+    npcs: [
+      { id: 'federico_templo', x: 13, y: 11, look: 'arqueologo', dir: 'left', script: 'federicoTemplo' },
+      { id: 'rugidito_cachorro', x: 10, y: 11, object: 'rugiditoCachorro', script: 'cachorroJaguar', show: () => !flag('rugiditoRecibido') },
+    ],
   },
   // Inside the pyramid: every floor smaller than the one below (a placeholder; puzzles in plans/region5-jungle.md).
   templo1: {
@@ -1035,17 +1051,11 @@ export const REGION4_MAPS: Record<string, MapDef> = {
     ],
     exit: { to: 'templo', x: 11, y: 11 },
     doors: [{ x: 1, y: 1, to: 'templo2', tx: 1, ty: 12 }],
-    encounters: {
-      rate: 0.08,
-      everywhere: true,
-      // Placeholders until the rainforest's own Palabritas exist (plans/region5-jungle.md).
-      table: [
-        { sp: 'ecolin', min: 29, max: 31, w: 35 },
-        { sp: 'ochopatas', min: 29, max: 31, w: 30 },
-        { sp: 'taranton', min: 31, max: 32, w: 20 },
-        { sp: 'murcielon', min: 31, max: 32, w: 15 },
-      ],
-    },
+    npcs: [
+      { id: 'silenciosa12', x: 12, y: 11, look: 'silenciosa', dir: 'down', script: 'silenciosa12', sight: 1 },
+      { id: 'buscatesoros_leo', x: 5, y: 7, look: 'hiker', dir: 'down', script: 'buscatesoros_leo', sight: 1 },
+    ],
+    encounters: TEMPLO_WILD,
   },
   templo2: {
     id: 'templo2',
@@ -1073,19 +1083,13 @@ export const REGION4_MAPS: Record<string, MapDef> = {
     ],
     doors: [
       { x: 1, y: 12, to: 'templo1', tx: 1, ty: 1 },
-      { x: 19, y: 1, to: 'templo3', tx: 14, ty: 10 },
+      { x: 19, y: 1, to: 'templo3', tx: 18, ty: 11 },
     ],
-    encounters: {
-      rate: 0.08,
-      everywhere: true,
-      // Placeholders until the rainforest's own Palabritas exist (plans/region5-jungle.md).
-      table: [
-        { sp: 'ecolin', min: 29, max: 31, w: 35 },
-        { sp: 'ochopatas', min: 29, max: 31, w: 30 },
-        { sp: 'taranton', min: 31, max: 32, w: 20 },
-        { sp: 'murcielon', min: 31, max: 32, w: 15 },
-      ],
-    },
+    npcs: [
+      { id: 'silencioso13', x: 10, y: 11, look: 'silencioso', dir: 'down', script: 'silencioso13', sight: 1 },
+      { id: 'arqueologo_tito', x: 10, y: 5, look: 'arqueologo', dir: 'right', script: 'arqueologo_tito', sight: 1 },
+    ],
+    encounters: TEMPLO_WILD,
   },
   templo3: {
     id: 'templo3',
@@ -1096,34 +1100,34 @@ export const REGION4_MAPS: Record<string, MapDef> = {
     border: '%',
     style: { cave: 'temple' },
     rows: [
-      '%%%%%%%%%%%%%%%%',
-      '%Z;;;;%%;;;;;;;%',
-      '%;;%%;%%;%%%%%;%',
-      '%;;%%;;;;%;;;%;%',
-      '%%;%%%%%%%;%;%;%',
-      '%;;;;;;;;;;%;;;%',
-      '%;%%%%%%%%%%%%%%',
-      '%;;;;;;;;;;;;;;%',
-      '%%%%%%%%%%%%%;%%',
-      '%;;;;;;;;;;;;;;%',
-      '%;;;;;;;;;;;;;Z%',
-      '%%%%%%%%%%%%%%%%',
+      '%%%%%%%%%%%%%%%%%%%%',
+      '%Z;;;;%%%%%%%%%%%%%%',
+      '%;;;;;%%%;;;;;;;;;;%',
+      '%;;;;;%%%;;;;;;;;;;%',
+      '%%;;%%%%%;;;%%%;;;;%',
+      '%%;;%%%%%;;;%%%;;;;%',
+      '%;;;;;;;;;;;%%%%;;%%',
+      '%;;;;;;;;;;;%%%%;;%%',
+      '%;;%%%%%%;;;;;;;;;;%',
+      '%;;%%%%%%;;;;;;;;;;%',
+      '%;;;;;;%%%%%%%%;;;;%',
+      '%;;;;;;%%%%%%%%;;;Z%',
+      '%;;;;;;%%%%%%%%;;;;%',
+      '%%%%%%%%%%%%%%%%%%%%',
     ],
     doors: [
-      { x: 14, y: 10, to: 'templo2', tx: 19, ty: 1 },
+      { x: 18, y: 11, to: 'templo2', tx: 19, ty: 1 },
       { x: 1, y: 1, to: 'templo4', tx: 10, ty: 7 },
     ],
-    encounters: {
-      rate: 0.08,
-      everywhere: true,
-      // Placeholders until the rainforest's own Palabritas exist (plans/region5-jungle.md).
-      table: [
-        { sp: 'ecolin', min: 29, max: 31, w: 35 },
-        { sp: 'ochopatas', min: 29, max: 31, w: 30 },
-        { sp: 'taranton', min: 31, max: 32, w: 20 },
-        { sp: 'murcielon', min: 31, max: 32, w: 15 },
-      ],
-    },
+    npcs: [
+      // The only way west to the stairs goes past her.
+      { id: 'silenciosa14', x: 6, y: 6, look: 'silenciosa', dir: 'down', script: 'silenciosa14', sight: 1 },
+      { id: 'silencioso15', x: 13, y: 2, look: 'silencioso', dir: 'down', script: 'silencioso15', sight: 1 },
+      { id: 'buscatesoros_vero', x: 5, y: 11, look: 'exploradora', dir: 'left', script: 'buscatesoros_vero', sight: 3 },
+      itemBall('superbola_templo', 18, 2, 'superbola'),
+      itemBall('revivir_templo', 1, 10, 'revivir'),
+    ],
+    encounters: TEMPLO_WILD,
   },
   templo4: {
     id: 'templo4',
@@ -1145,18 +1149,18 @@ export const REGION4_MAPS: Record<string, MapDef> = {
       '%%%%%%%%%%%%',
     ],
     doors: [{ x: 10, y: 7, to: 'templo3', tx: 1, ty: 1 }],
-    npcs: [itemBall('superpocion_templo', 5, 3, 'superpocion')],
-    encounters: {
-      rate: 0.08,
-      everywhere: true,
-      // Placeholders until the rainforest's own Palabritas exist (plans/region5-jungle.md).
-      table: [
-        { sp: 'ecolin', min: 29, max: 31, w: 35 },
-        { sp: 'ochopatas', min: 29, max: 31, w: 30 },
-        { sp: 'taranton', min: 31, max: 32, w: 20 },
-        { sp: 'murcielon', min: 31, max: 32, w: 15 },
-      ],
-    },
+    // The top: Rugidón before the altar, Comandante Mutis and her new Silenciador. Coming in, you're stopped on row 6.
+    triggers: Array.from({ length: 10 }, (_, i) => ({ x: i + 1, y: 6, script: 'altarJaguar' })),
+    npcs: [
+      { id: 'mutis', x: 8, y: 4, look: 'mutis', dir: 'down', script: 'altarJaguar', show: () => !flag('mutisSeFue') },
+      { id: 'silenciador_templo', x: 8, y: 3, object: 'silenciador', script: 'altarJaguar', show: () => !flag('jaguarPiedra') },
+      { id: 'rugidon_a', x: 5, y: 3, object: 'rugidonA', script: 'altarJaguar', show: () => !flag('jaguarPiedra') },
+      { id: 'rugidon_b', x: 6, y: 3, object: 'rugidonB', script: 'altarJaguar', show: () => !flag('jaguarPiedra') },
+      { id: 'estatua_a', x: 5, y: 3, object: 'rugidonPiedraA', script: 'estatuaJaguar', show: () => flag('jaguarPiedra') },
+      { id: 'estatua_b', x: 6, y: 3, object: 'rugidonPiedraB', script: 'estatuaJaguar', show: () => flag('jaguarPiedra') },
+      itemBall('superpocion_templo', 1, 5, 'superpocion'),
+    ],
+    encounters: TEMPLO_WILD,
   },
 };
 

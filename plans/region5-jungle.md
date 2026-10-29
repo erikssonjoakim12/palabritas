@@ -1,49 +1,48 @@
 # Region 5: the jungle and the Templo del Jaguar
 
-The user wants a proper jungle and temple experience before gym 5's gameplay is built. You arrive at Villa Jaguar by
-the river (Surf, plans/surf-fly.md). From there a short, dense jungle path leads to the stepped pyramid, and
-inside you climb it floor by floor.
+You arrive at Villa Jaguar by the river (Surf, plans/surf-fly.md): mangroves line the Río Guardabarranco from the
+canyon to the town's harbour, so you can't land anywhere before it. From the town a stone gateway leads into the
+Selva del Jaguar, a labyrinth, and out onto the temple's clearing; inside the pyramid you climb four floors to the
+altar.
 
-## Built so far (placeholders, 2026-10-22)
-
-All in world/maps/region4.ts, reachable once Surf exists:
+## Built (2026-10-29, the user's decisions)
 
 | Map | What |
 |---|---|
-| `jaguar` Villa Jaguar | the town: Palacentro, gym, shop, houses, a harbour on the river. West: the jungle. |
-| `selva` Selva del Jaguar | a short path through dense jungle, visibly darker (style `canopy`: every tile shaded), tall grass. |
-| `templo` Templo del Jaguar | a sunlit clearing with the stepped pyramid; its doorway leads in. |
-| `templo1`–`templo4` | inside: four floors, each smaller as you climb, joined by ladders; the top chamber has an altar. |
+| `rio` | the river: mangroves on both banks down to Villa Jaguar, five swimmers (Rosa below Ruta 4's bridge, Chema, Ivania, Pancho, Karla). |
+| `jaguar` Villa Jaguar | the town: Palacentro, gym, shop, houses, a harbour on the river; a stone gateway (the temple's stone) into the jungle. |
+| `selva` Selva del Jaguar | its own place (not in the world): a labyrinth, two-tree-thick jungle walls, tall grass, no loops, three items at dead ends. Four trainers, each in a little clearing beside the way through (Exploradora Inés, Bióloga Maite, Fotógrafo René, a Silencioso on lookout). `lindero` is plain jungle in its old spot in the world. |
+| `templo` | the clearing with the stepped pyramid: Federico (from the Cueva del Eco) and the crying cub by the doorway. |
+| `templo1`–`templo4` | four floors, 8 trainers: 2 + 2 + 3 (the third floor has rooms and wide halls now) + Comandante Mutis at the top. |
 
-Engine pieces: jungle trees (style `trees: 'jungle'`), the canopy shade, temple stone/stairs/doorway tiles
-(`[` `]` `(`), cave style `temple` (carved blocks, flagstones). Wild Palabritas are placeholders (bugs, spiders,
-bats) until the rainforest's own exist.
+**Rugidito and Rugidón** (placeholder drawings until the user's art): a black jaguar, Siniestro; the grown form
+Siniestro/Planta, the jungle's guardian, at level 40. They borrow the `naturaleza` words until region 5's
+Palabritas get their themes (the jaguar's could be the legend, in the past tense).
 
-## The experience (to build)
+## The story (built)
 
-1. **Arriving.** Villa Jaguar's harbour, by the river. The town is hot and loud with birds and monkeys; people talk
-   about the temple nobody may enter («Dicen que el jaguar duerme allá arriba»).
-2. **The jungle path.** Short and dense: tall grass on every side, two trainers (an explorer, a biologist), howler
-   monkeys you hear before you see. Its own music.
-3. **The clearing.** The pyramid in the sun. Arqueólogo Federico (from Villa Ocote's museum) is back, studying the
-   carvings: he explains the legend and asks for help reading them.
-4. **Inside: the legend of the jaguar, told in the past tense.** Gym 5's Spanish is the preterite («¿Qué pasó?»).
-   Every floor tells part of the legend on its carved walls (one sentence each, tap to hear it). A stone door closes
-   each floor and opens when you tell what happened next: choose, then write, the right sentence in the past tense.
-   - Floor 1, *the beginning*: «Hace mil años, el jaguar cuidó la selva.» A hall of carvings; the first door.
-   - Floor 2, *the storm*: a maze. Pressure plates you step on in the order of a word the carvings spell.
-   - Floor 3, *the silence*: dark (you see only near you), statues to turn so they face the light.
-   - Floor 4, *the roar*: the Jaguar's chamber and the altar.
-5. **A story hook.** Equipo Silencio wants the jaguar's roar silenced forever (the legend says it woke the jungle).
-   Two Silenciosos inside; at the top, the altar and something rare: a jaguar Palabrita? (the user designs it).
-6. **Then gym 5** in Villa Jaguar (Planta/Veneno), planned after this.
+1. **Villa Jaguar.** The jungle has gone quiet: no howler monkeys, no birds at dawn. (Townspeople's lines: to write.)
+2. **The labyrinth.** The trainers mention the silence, and people in black with a machine going to the temple; the
+   Silencioso on lookout works for **Comandante Mutis**.
+3. **The clearing.** Federico tells the legend (a black jaguar looked after the jungle; every morning she roared and
+   the jungle woke) and that Equipo Silencio went in with a machine. A black cub cries by the doorway: it tries to
+   roar, and only a «¡Miau!» comes out.
+4. **The temple.** Silenciosos everywhere, two treasure hunters, an archaeologist reading the walls (past tense).
+5. **The altar.** Mutis has a new Silenciador: it has taken the jaguar's voice («Sin su rugido, la selva no
+   despierta»). You beat her; she runs. The machine sparks, and the confused jaguar, Rugidón, leaps at you: a
+   **guardian battle** (level 38; no catching, no running). Calm again but voiceless, she lies down by the altar and
+   **turns to stone**, as in the legend. Her cub comes up the stairs, curls up by the statue, then goes with you:
+   **Rugidito, level 25**, to raise. The altar's carving: «Cuando su hijo ruja, la selva despertará».
 
-## Open questions for the user
+## Next
 
-- The jaguar Palabrita: does it exist, and is it caught at the altar or a gift?
-- Is Equipo Silencio in the temple, or is it the jungle's own mystery?
-- Trainers: how many in the jungle and the temple (about 2 + 4?).
-- Floor ideas: keep, change or swap any of the four above.
+- **The hook:** once Rugidito becomes Rugidón (level 40) and you bring it to the statue, it roars, and its mother
+  wakes (her voice back, the jungle loud again). A reward, and a reason to raise it.
+- **Townspeople** in Villa Jaguar about the silence; Federico's lines after the altar are in.
+- **Floor puzzles** in the past tense (the stone doors that open when you tell what happened next; pressure plates,
+  darkness, statues): the floors' layouts are ready for them.
+- **Gym 5** in Villa Jaguar (Planta/Veneno), after the temple.
+- **The rainforest's own Palabritas** (feedback-round2.md part 6) replace the placeholder wild ones and teams.
 
 ## Also planned
 

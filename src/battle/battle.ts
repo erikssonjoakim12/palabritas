@@ -290,6 +290,8 @@ interface Config {
   outro?: [es: string, en: string];
   /** The share of the normal prize money (rematches pay half). */
   prize?: number;
+  /** A wild guardian (the temple's Rugidón): it can't be caught and you can't run from it. */
+  guardian?: boolean;
 }
 
 type Action = { type: 'fight'; move: Move } | { type: 'switch'; mon: Mon } | { type: 'ball'; id: string } | { type: 'item' } | { type: 'run' };
@@ -309,8 +311,8 @@ export async function announceLevelUps(ups: LevelUp[], each?: () => void) {
   }
 }
 
-export function wildBattle(sp: string, level: number) {
-  return runBattle({ kind: 'wild', team: [newMon(sp, level)] });
+export function wildBattle(sp: string, level: number, opts: { guardian?: boolean } = {}) {
+  return runBattle({ kind: 'wild', team: [newMon(sp, level)], ...opts });
 }
 
 /**
@@ -457,7 +459,7 @@ async function runBattle(cfg: Config): Promise<BattleResult> {
         columns: 2,
         title: `¿Qué hará ${myName()}?`,
         pos: { left: 0, right: 0, bottom: 0 },
-        disabled: [false, G.save.party.length < 2, false, !!trainer],
+        disabled: [false, G.save.party.length < 2, false, !!trainer || !!cfg.guardian],
       });
       if (i === 0) {
         const mv = await chooseMove();
@@ -471,8 +473,9 @@ async function runBattle(cfg: Config): Promise<BattleResult> {
         const def = id ? ITEM_DEFS[id] : null;
         if (!id || !def) continue;
         if (def.ball) {
-          if (!trainer) return { type: 'ball', id };
-          await info('¡No puedes atrapar la Palabrita de otro entrenador!', { en: 'You can’t catch another trainer’s Palabrita!' });
+          if (!trainer && !cfg.guardian) return { type: 'ball', id };
+          if (trainer) await info('¡No puedes atrapar la Palabrita de otro entrenador!', { en: 'You can’t catch another trainer’s Palabrita!' });
+          else await info('¡No se deja atrapar! Es la guardiana del templo.', { en: 'It won’t be caught! It’s the temple’s guardian.' });
         } else if (def.heal || def.revive) {
           if (await useOnMon(id)) {
             hud?.update();

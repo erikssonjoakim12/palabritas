@@ -221,6 +221,9 @@ export const OBJECT_PALS: Record<string, Pal> = {
   huellas: ['#c8b8a0', '#988870', '#5c5040', SPRITE_INK],
   /** A star (0) on Nicaragua, the sea, the land. */
   mapa: ['#f8e050', '#a8c8e8', '#78a858', SPRITE_INK],
+  // The Templo del Jaguar: the black jaguars (green eyes, fur, rosettes) and the stone the mother becomes.
+  jaguar: ['#90e868', '#3c3a4c', '#5a5670', SPRITE_INK],
+  jaguarPiedra: ['#c8c8b0', '#888874', '#585c4c', SPRITE_INK],
   michi: ['', '#f0f0e8', '#e09848', SPRITE_INK],
   armchair: ['', '#f0b0b8', '#d05058', SPRITE_INK],
   /** The armchair with Cojincito on it: a cream cushion (0) on the seat. */
