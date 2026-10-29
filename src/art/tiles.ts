@@ -64,9 +64,9 @@ export interface TileEnv extends MapLook {
 
 /**
  * Tiles with a second frame, swapped by the world now and then: water ripples (and its foam rolls in at beaches),
- * lava churns, flowers sway, waterfalls fall, steam puffs up, currents flow their way.
+ * lava churns, flowers sway, waterfalls fall, steam puffs up, currents flow their way, mangroves' water ripples.
  */
-export const ANIMATED = new Set(['~', 'j', '*', '!', 'X', '8', '2', '4', '6']);
+export const ANIMATED = new Set(['~', '{', 'j', '*', '!', 'X', '8', '2', '4', '6']);
 
 /** A tile's rows moved by (dx, dy) pixels, wrapping around (the patterns repeat, so it's seamless). */
 const shift = (rows: string[], dx: number, dy: number) =>
@@ -92,6 +92,7 @@ export const TILES: Record<string, TileDef> = {
   J: solid(),
   '>': solid({ ledge: 'right' }),
   v: solid({ ledge: 'down' }),
+  '{': solid({ look: { es: 'Un manglar: sus raíces están en el agua. No se puede pasar.', en: 'A mangrove: its roots stand in the water. You can’t get through.' } }),
   '/': solid({ look: { es: 'Un arbolito delgado bloquea el camino. Parece que se puede cortar.', en: 'A thin little tree blocks the path. It looks like it could be cut.' } }),
   Y: solid({ look: { es: '¡Un limonero! Huele muy bien.', en: 'A lemon tree! It smells very nice.' } }),
   '~': solid({ kind: 'water' }),
@@ -468,6 +469,8 @@ function render(ch: string, env: TileEnv): Img {
       return paintArt(ART.lemonTree);
     case '/':
       return paintArt(ART.arbolito);
+    case '{':
+      return stack(waterImage(env), paintArt(ART.mangle));
     case '^':
       return rockImage(rockArt(env), env, MOUNTAIN_CHARS, underImage(env, 'ground'));
     case 'O':

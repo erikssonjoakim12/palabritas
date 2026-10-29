@@ -530,6 +530,36 @@ export const REGION4: Record<string, ScriptFn> = {
     ['¡Ay, me cansé!', 'Oh, I’m tired!'],
     ['Con cuatro medallas, las Palabritas grandes del agua te pueden llevar.', 'With four medals, big water Palabritas can carry you.'],
   ),
+  nadadora_rosa: fight(
+    'nadadora_rosa',
+    ['¡El río baja desde el cañón! ¿Nadamos juntos? Primero, una batalla.', 'The river comes down from the canyon! Shall we swim together? A battle first.'],
+    ['¡Me llevó la corriente!', 'The current carried me away!'],
+    ['No se puede salir del río: hay manglares por todos lados. Sigue hasta Villa Jaguar.', 'You can’t get out of the river: there are mangroves everywhere. Keep going to Villa Jaguar.'],
+  ),
+  nadador_chema: fight(
+    'nadador_chema',
+    ['¡Cuidado con los manglares! Sus raíces están en el agua.', 'Careful with the mangroves! Their roots are in the water.'],
+    ['¡Uf, qué fuerte!', 'Phew, so strong!'],
+    ['Muchos peces viven entre las raíces de los manglares.', 'Lots of fish live among the mangrove roots.'],
+  ),
+  nadadora_ivania: fight(
+    'nadadora_ivania',
+    ['Aquí el río se divide. ¡No nades hacia los rápidos!', 'Here the river splits. Don’t swim toward the rapids!'],
+    ['¡Perdí!', 'I lost!'],
+    ['Los rápidos van al oeste, hasta el mar.', 'The rapids go west, all the way to the sea.'],
+  ),
+  nadador_pancho: fight(
+    'nadador_pancho',
+    ['¿Oyes eso? Son monos congo. ¡La selva está cerca!', 'Hear that? Howler monkeys. The jungle is close!'],
+    ['¡Me ganaste!', 'You beat me!'],
+    ['Dicen que en el templo de la selva duerme un jaguar enorme.', 'They say a huge jaguar sleeps in the jungle temple.'],
+  ),
+  nadadora_karla: fight(
+    'nadadora_karla',
+    ['Ya casi llegas a Villa Jaguar. ¡Pero primero, conmigo!', 'You’re almost at Villa Jaguar. But first, me!'],
+    ['¡Qué batalla!', 'What a battle!'],
+    ['El muelle de Villa Jaguar está ahí adelante.', 'Villa Jaguar’s pier is just ahead.'],
+  ),
   pescador_lago: talk(['¿Ves las islas? Sin bote no se puede llegar. ¡Algún día voy a ir!', 'See the islands? You can’t get there without a boat. Someday I’ll go!']),
   fotografo_max: fight(
     'fotografo_max',

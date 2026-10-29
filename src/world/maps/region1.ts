@@ -657,6 +657,8 @@ export const REGION1_MAPS: Record<string, MapDef> = {
       { id: 'lucia', x: 34, y: 12, look: 'painter', dir: 'up', script: 'lucia', sight: 1 },
       { id: 'armando', x: 70, y: 3, look: 'lenador', dir: 'down', script: 'armando', sight: 1 },
       { id: 'elena', x: 14, y: 11, look: 'campista', dir: 'down', script: 'elena', sight: 1 },
+      // In the river below the bridge, once you can swim.
+      { id: 'nadadora_rosa', x: 8, y: 18, look: 'nadadora', dir: 'left', script: 'nadadora_rosa', sight: 1 },
       { id: 'gaby', x: 20, y: 8, look: 'ornitologa', dir: 'left', script: 'gaby', turns: true },
       // Two of Villa Ocote's lost words blew all the way out here.
       lostWord('marimba', 3, 10),

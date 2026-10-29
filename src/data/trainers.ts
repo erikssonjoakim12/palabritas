@@ -119,6 +119,12 @@ export const TRAINERS: Record<string, TrainerDef> = {
   nadadora_elena: { id: 'nadadora_elena', name: 'Nadadora Elena', defenseMode: 'type', rematch: true, team: [['paslamita', 31], ['cangrejon', 31]] },
   nadador_rodolfo: { id: 'nadador_rodolfo', name: 'Nadador Rodolfo', defenseMode: 'listen', team: [['pelicanito', 31], ['mordisquito', 32]] },
   nadadora_lucia: { id: 'nadadora_lucia', name: 'Nadadora Lucía', defenseMode: 'speak', team: [['mojarrita', 31], ['cangrejito', 31], ['mordisquito', 33]] },
+  // The Río Guardabarranco, down to Villa Jaguar (once you can swim).
+  nadadora_rosa: { id: 'nadadora_rosa', name: 'Nadadora Rosa', defenseMode: 'listen', team: [['tilapita', 30], ['mojarrita', 30]] },
+  nadador_chema: { id: 'nadador_chema', name: 'Nadador Chema', defenseMode: 'type', team: [['mordisquito', 31], ['tilapita', 31]] },
+  nadadora_ivania: { id: 'nadadora_ivania', name: 'Nadadora Ivania', defenseMode: 'speak', rematch: true, team: [['pelicanito', 31], ['mojarrita', 32]] },
+  nadador_pancho: { id: 'nadador_pancho', name: 'Nadador Pancho', defenseMode: 'listen', team: [['cangrejon', 32], ['mordisquito', 32]] },
+  nadadora_karla: { id: 'nadadora_karla', name: 'Nadadora Karla', defenseMode: 'type', team: [['mojarrita', 32], ['pelicanito', 32], ['mordisquito', 33]] },
   sigilo: { id: 'sigilo', name: 'Don Sigilo', defenseMode: 'type', team: [['murcielon', 27], ['taranton', 28], ['petroglifon', 29]] },
   lucas3: { id: 'lucas3', name: 'Lucas', defenseMode: 'type', team: [['nubarron', 28], ['hojarasco', 25], ['palomon', 25], ['cangrejon', 26]] },
   tizon: { id: 'tizon', name: 'Líder Don Tizón', defenseMode: 'type', team: [['chocoyote', 27], ['coheton', 28], ['brasaurio', 32]] },
