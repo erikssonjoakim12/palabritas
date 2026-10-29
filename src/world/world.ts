@@ -2,11 +2,11 @@ import { W, H, overlay, el, scaleFactor, ctx } from '../engine/screen';
 import { input, type Dir } from '../engine/input';
 import { sfx } from '../engine/sfx';
 import { nextFrame, frames, frameAlpha, whenIdle, clearIdle } from '../engine/loop';
-import { TILES, tallGrassImage, tileImage, tileOf, envAt, owns, ANIMATED } from '../art/tiles';
+import { TILES, tallGrassImage, tileImage, tileOf, envAt, owns, isHole, ANIMATED } from '../art/tiles';
 import { personFrames, OBJECTS, type Frames } from '../art/chars';
 import { fromRows, type Img } from '../art/pixel';
 import { MAPS, type MapDef, type NpcDef, type Conn, type EncounterEntry } from './maps';
-import { worldLayout } from './layout';
+import { worldLayout, mapAcross } from './layout';
 import { G, flag, saveGame, playerLook, clockHour } from '../game/state';
 import { rematchReady } from '../game/rematch';
 import { shuffled, pickRandom } from '../game/random';
@@ -14,7 +14,6 @@ import { NIGHT, NIGHT_CLEAR, FIREFLY, MARK, BLACK, SHADOW } from '../style/color
 import { lightAt, drawLights, skyAt, type Light } from '../art/lights';
 import { drawFireworks } from '../art/fireworks';
 import { setMapMusic, musicFor } from '../audio/bgm';
-import { itemCount } from '../game/bag';
 import { closeText, say, setSpeaker } from '../ui/textbox';
 
 export interface NpcRT {
@@ -111,6 +110,9 @@ function framesFor(look: string): Frames {
 }
 
 export const currentMap = () => map;
+
+/** How you look on the map: walking, or swimming (Surf). */
+const walkerLook = () => playerLook() + (G.save.surfing ? 'Surf' : '');
 export const npcById = (id: string) => npcs.find((n) => n.def.id === id);
 
 // ---------- Map loading ----------
@@ -128,6 +130,7 @@ function validate(m: MapDef) {
 
 export function loadMap(id: string, x: number, y: number, dir: Dir) {
   const prevName = map?.name;
+  if (map && map.id !== id) growBack(map);
   map = MAPS[id];
   validate(map);
   const npc = (def: NpcDef, dx = 0, dy = 0): NpcRT => ({
@@ -147,7 +150,8 @@ export function loadMap(id: string, x: number, y: number, dir: Dir) {
   // Maps change between versions: never leave a loaded save standing inside a wall.
   [x, y] = nearestFree(x, y);
   Object.assign(player, { x, y, dir, moving: false, prog: 0 });
-  const frames = framesFor(playerLook());
+  if (G.save.surfing && !isWater(tileAt(x, y))) G.save.surfing = false;
+  const frames = framesFor(walkerLook());
   if (player.frames !== frames) {
     player.frames = frames;
     whenIdle(() => warmUp(Object.values(frames).flat())); // your walking frames, before the first step
@@ -175,7 +179,36 @@ function showBanner(name: string) {
 const inMap = (m: MapDef, x: number, y: number) => x >= 0 && y >= 0 && y < m.rows.length && x < m.rows[0].length;
 const inBounds = (x: number, y: number) => inMap(map, x, y);
 
-export const tileAt = (x: number, y: number) => tileOf(map, x, y);
+export const tileAt = (x: number, y: number) => (cut.has(`${x},${y}`) ? '.' : tileOf(map, x, y));
+
+// ---------- Surf and Cut (plans/surf-fly.md) ----------
+
+/** Water you can swim on: the water itself and its currents (rapids carry you). */
+const isWater = (ch: string) => TILES[ch].kind === 'water' || !!TILES[ch].current;
+/** Can you go onto this tile right now: open ground, or water while you swim (stepping onto land ends it). */
+const passable = (ch: string) => !TILES[ch].solid || (!!G.save.surfing && isWater(ch));
+
+/** Start swimming: onto the water you're facing, on your Palabrita. */
+export async function startSurf() {
+  G.save.surfing = true;
+  player.frames = framesFor(walkerLook());
+  await scriptedStep(player.dir);
+}
+
+/** Thin trees cut on this map, as 'x,y': they grow back when you leave it, like Gold/Silver. */
+let cut = new Set<string>();
+export function cutTree(x: number, y: number) {
+  cut.add(`${x},${y}`);
+  grid[(y + GRID) * gridW + x + GRID] = tileImage('.', envAt(map, x, y));
+}
+function growBack(m: MapDef) {
+  const g = grids.get(m.id);
+  for (const k of cut) {
+    const [x, y] = k.split(',').map(Number);
+    g?.fill((y + GRID) * g.w + x + GRID);
+  }
+  cut = new Set();
+}
 
 /** Who is at (x, y): a person before an object on the same tile (Mr. Ramos in his armchair). */
 function npcAt(x: number, y: number) {
@@ -183,15 +216,20 @@ function npcAt(x: number, y: number) {
   return here.find((n) => !n.def.object) ?? here[0];
 }
 
+/** Free for someone on foot (people walking about, a rival coming up to you). */
 function walkable(x: number, y: number) {
   return inBounds(x, y) && !TILES[tileAt(x, y)].solid && !npcAt(x, y);
+}
+/** Free for you: on foot, or swimming. */
+function canEnter(x: number, y: number) {
+  return inBounds(x, y) && passable(tileAt(x, y)) && !npcAt(x, y);
 }
 
 function nearestFree(x: number, y: number): [number, number] {
   for (let r = 0; r < 12; r++) {
     for (let dy = -r; dy <= r; dy++) {
       for (let dx = -r; dx <= r; dx++) {
-        if (Math.max(Math.abs(dx), Math.abs(dy)) === r && walkable(x + dx, y + dy)) return [x + dx, y + dy];
+        if (Math.max(Math.abs(dx), Math.abs(dy)) === r && canEnter(x + dx, y + dy)) return [x + dx, y + dy];
       }
     }
   }
@@ -253,17 +291,33 @@ export async function warp(to: string, x: number, y: number, dir: Dir, sound = t
   await transition(to, x, y, dir, 8);
 }
 
-/** Walk off the edge of an outdoor map into the connected one. */
 /**
  * Walk off the edge of an outdoor map straight into the connected one, without a fade:
  * the neighbor is already drawn at the edge, so the step just continues on the new map.
+ * Past the part of the edge the connection covers, whatever map is there in the world (crossInto).
  */
-function crossConnection(d: Dir, conn: Conn) {
+function crossConnection(d: Dir, conn: Conn, nx: number, ny: number) {
   const target = MAPS[conn.to];
   const x = d === 'left' ? target.rows[0].length - 1 : d === 'right' ? 0 : player.x + conn.offset;
   const y = d === 'up' ? target.rows.length - 1 : d === 'down' ? 0 : player.y + conn.offset;
-  if (TILES[tileOf(target, x, y)].solid) return bump();
-  loadMap(conn.to, x, y, d);
+  if (!inMap(target, x, y)) return crossInto(nx, ny, d);
+  if (!passable(tileOf(target, x, y))) return bump();
+  enter(conn.to, x, y, d);
+}
+
+/**
+ * Off an edge with no connection there, or into a hole: into the map that has that tile in the world, if you can
+ * go there (the river runs through other maps' holes; the temple's trail comes out on Ruta 4).
+ */
+function crossInto(nx: number, ny: number, d: Dir) {
+  const there = mapAcross(map.id, nx, ny);
+  if (!there || !passable(MAPS[there.id].rows[there.y][there.x])) return bump();
+  enter(there.id, there.x, there.y, d);
+}
+
+/** The step goes on in another map. */
+function enter(id: string, x: number, y: number, d: Dir) {
+  loadMap(id, x, y, d);
   startMove(player.x, player.y);
   whenIdle(saveGame); // not in the middle of the step
 }
@@ -273,7 +327,7 @@ export async function scriptedStep(d: Dir) {
   player.dir = d;
   const nx = player.x + DX[d];
   const ny = player.y + DY[d];
-  if (!walkable(nx, ny)) return;
+  if (!canEnter(nx, ny)) return;
   player.scripted = true;
   startMove(nx, ny);
   while (player.moving) await nextFrame();
@@ -289,6 +343,11 @@ const RUSTLE_MS = 320;
 /** Start moving to (nx, ny), `dist` pixels away (a normal step is one tile; hopping a ledge is two). */
 function startMove(nx: number, ny: number, dist = T) {
   if (TILES[tileAt(nx, ny)].kind === 'tallgrass') rustle = { x: nx, y: ny, at: performance.now() };
+  // Swimming onto land: you're on foot again.
+  if (G.save.surfing && !isWater(tileAt(nx, ny))) {
+    G.save.surfing = false;
+    player.frames = framesFor(walkerLook());
+  }
   player.x = nx;
   player.y = ny;
   player.dist = dist;
@@ -313,19 +372,20 @@ function tryMove(d: Dir) {
       return;
     }
     const conn = map.connections?.[d];
-    if (conn && !conn.scenery) crossConnection(d, conn);
-    else bump();
+    if (conn && !conn.scenery) crossConnection(d, conn, nx, ny);
+    else crossInto(nx, ny, d);
     return;
   }
+  if (isHole(map, nx, ny)) return crossInto(nx, ny, d);
   const ledge = TILES[tileAt(nx, ny)].ledge;
   if (ledge) {
     // Hop down over it from the high side, landing on the tile beyond; it's a wall otherwise.
     const [lx, ly] = [nx + DX[d], ny + DY[d]];
-    if (ledge !== d || !walkable(lx, ly)) return bump();
+    if (ledge !== d || !canEnter(lx, ly)) return bump();
     sfx('jump');
     return startMove(lx, ly, 2 * T);
   }
-  if (!walkable(nx, ny)) return bump();
+  if (!canEnter(nx, ny)) return bump();
   startMove(nx, ny);
 }
 
@@ -346,8 +406,10 @@ function onStep() {
     if (!--G.save.repel) runScript(() => say('El Repelente se acabó.', { en: 'The Repel wore off.' }));
     return;
   }
-  const wildHere = map.encounters && (map.encounters.everywhere || TILES[tileAt(x, y)].kind === 'tallgrass');
-  if (wildHere && Math.random() < map.encounters!.rate) runScript(SCRIPTS.__wild, { data: pickEncounter(map.encounters!.table) });
+  // Swimming: the map's water Palabritas on every step; on foot: in tall grass (or everywhere, in caves).
+  const wild = G.save.surfing ? map.surf : map.encounters;
+  const wildHere = wild && (G.save.surfing || map.encounters?.everywhere || TILES[tileAt(x, y)].kind === 'tallgrass');
+  if (wildHere && Math.random() < wild.rate) runScript(SCRIPTS.__wild, { data: pickEncounter(wild.table) });
 }
 
 /** A random wild Palabrita from a table (by weight), with its level. */
@@ -358,7 +420,9 @@ export function pickEncounter(table: EncounterEntry[]): { sp: string; level: num
 }
 
 /** The tile you're facing. */
-export const facingTile = () => tileAt(player.x + DX[player.dir], player.y + DY[player.dir]);
+export const facingTile = () => tileAt(...facingSpot());
+/** The spot you're facing. */
+export const facingSpot = (): [number, number] => [player.x + DX[player.dir], player.y + DY[player.dir]];
 
 function checkTrainers(): boolean {
   for (const n of npcs) {
@@ -377,7 +441,8 @@ function checkTrainers(): boolean {
         }, { npc: n });
         return true;
       }
-      if (!inBounds(tx, ty) || TILES[tileAt(tx, ty)].solid || npcAt(tx, ty)) break;
+      // Trainers see across water (swimmers do), not through walls.
+      if (!inBounds(tx, ty) || !(passable(tileAt(tx, ty)) || isWater(tileAt(tx, ty))) || npcAt(tx, ty)) break;
     }
   }
   return false;
@@ -404,8 +469,8 @@ function interact() {
     runScript(() => (muted ? say('…', { en: '(The letters have faded away.)' }) : say(sign.es, { en: sign.en })));
     return;
   }
-  const { look, script, kind } = TILES[tileAt(fx, fy)];
-  if (kind === 'water' && itemCount('cana')) runScript(SCRIPTS.fish);
+  const { look, script } = TILES[tileAt(fx, fy)];
+  if (isWater(tileAt(fx, fy))) runScript(SCRIPTS.agua);
   else if (script) runScript(SCRIPTS[script]);
   else if (look) runScript(() => say(look.es, { en: look.en }));
 }
@@ -523,7 +588,7 @@ export function updateWorld() {
       Object.assign(G.save, { x: player.x, y: player.y, dir: player.dir });
       // A water current carries you on until you land somewhere (or it would push you into something).
       const current = TILES[tileAt(player.x, player.y)].current;
-      if (current && walkable(player.x + DX[current], player.y + DY[current])) {
+      if (current && canEnter(player.x + DX[current], player.y + DY[current])) {
         player.slide = current;
         startMove(player.x + DX[current], player.y + DY[current]);
         return;

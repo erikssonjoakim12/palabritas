@@ -7,7 +7,7 @@ import { drill } from './school';
 import { addItem, itemCount, money } from '../game/bag';
 import { ITEM_DEFS, SHOPS, amountOf } from '../data/items';
 import { gradeOrder } from '../lang/order';
-import { healParty, stats, monName, PARTY_MAX, lucasStarter } from '../game/mon';
+import { healParty, stats, monName, PARTY_MAX, lucasStarter, fieldHelper } from '../game/mon';
 import { pickFromTheme, isLearned, isUnseen } from '../game/learning';
 import { itemsBetween } from '../game/curriculum';
 import { SPECIES, STARTER_LEVEL } from '../data/species';
@@ -17,7 +17,7 @@ import { ask, menu } from '../ui/menu';
 import { pickFrom } from '../ui/party';
 import { startMenu } from '../ui/startmenu';
 import { wildBattle } from '../battle/battle';
-import { SCRIPTS, scriptedStep, currentMap, refreshNpcs, npcById, pickEncounter, facingTile, walkNpc, MUTED_MIME, type ScriptFn } from './world';
+import { SCRIPTS, scriptedStep, currentMap, refreshNpcs, npcById, pickEncounter, facingTile, facingSpot, walkNpc, startSurf, cutTree, MUTED_MIME, type ScriptFn } from './world';
 import { gateOf, closedLines, FRESHWATER } from './maps';
 import { lines, as, sayOrMime, talkMode, showCreature, heal, blackout, fight, gymLeader, gift, receiveMon, practice, untilRight } from './flows';
 import { REGION2 } from './region2';
@@ -79,6 +79,31 @@ const S: Record<string, ScriptFn> = {
   async startMenu(c) {
     const next = await startMenu();
     if (next) await SCRIPTS[next](c);
+  },
+
+  /** Facing water: swim on a big water Palabrita (Surf, from the 4th medal), or else fish with the rod. */
+  async agua(c) {
+    const swimmer = !G.save.surfing && fieldHelper('surf');
+    if (swimmer) {
+      const name = monName(swimmer);
+      if (await ask(`El agua está tranquila. ¿Quieres nadar con ${name}?`, { en: `The water is calm. Do you want to swim with ${name}?` })) {
+        await info(`¡{name} se sube a ${name}!`, { en: `{name} climbs onto ${name}!` });
+        return startSurf();
+      }
+    }
+    if (itemCount('cana')) return SCRIPTS.fish(c);
+  },
+
+  /** A thin tree: cut it with a Palabrita that can (Cut, from the 5th medal); otherwise it's in the way. */
+  async cortar() {
+    const cutter = fieldHelper('cut');
+    const { es, en } = TILES['/'].look!;
+    if (!cutter) return say(es, { en });
+    const name = monName(cutter);
+    if (!(await ask(`Este arbolito se puede cortar. ¿Quieres cortarlo con ${name}?`, { en: `This little tree can be cut. Do you want to cut it with ${name}?` }))) return;
+    sfx('hit');
+    cutTree(...facingSpot());
+    await info(`¡${name} cortó el arbolito!`, { en: `${name} cut the little tree!` });
   },
 
   /** Fishing with the rod, facing water: sometimes something bites. */

@@ -556,6 +556,9 @@ HEADS.hoodLong = HEADS.hood;
 export const LOOKS: Record<string, Look> = {
   player: { head: 'cap', body: 'pants', color: 'red' },
   playerGirl: { head: 'long', body: 'pants', color: 'red' },
+  /** You, swimming (Surf). */
+  playerSurf: { head: 'cap', body: 'swim', color: 'red' },
+  playerGirlSurf: { head: 'long', body: 'swim', color: 'red' },
   mom: { head: 'long', body: 'dress', color: 'pink' },
   prof: { head: 'bun', body: 'coat', color: 'white' },
   boy: { head: 'cap', body: 'pants', color: 'blue' },

@@ -1,5 +1,5 @@
 import { flag } from '../../game/state';
-import { itemBall, tienda, casa, HOUSES, escuela, night, centro, type MapDef, type NpcDef } from './kit';
+import { itemBall, tienda, casa, HOUSES, escuela, night, centro, RIVER_SURF, LAKE_SURF, type MapDef, type NpcDef } from './kit';
 
 // Region 4: the volcanoes and dry forest. Ruta 7 east from Playa Carey, Ciudad Chispa (a colonial festival town,
 // like Masaya), up the Volcán Chocoyo (the slopes, the lava tube, the crater), and Ruta 8 home to Pueblo Amanecer.
@@ -681,6 +681,7 @@ export const REGION4_MAPS: Record<string, MapDef> = {
   // black rock on the volcano's shore, where the river comes in.
   lago: {
     id: 'lago',
+    surf: LAKE_SURF,
     name: 'Lago de las Islas',
     outdoor: true,
     floor: '.',
@@ -793,6 +794,7 @@ export const REGION4_MAPS: Record<string, MapDef> = {
   // on the way. Holes where Ruta 3's plateau, Villa Jaguar (and its jungle and temple) and Ruta 9 are.
   rio: {
     id: 'rio',
+    surf: RIVER_SURF,
     name: 'Río Guardabarranco',
     outdoor: true,
     floor: '.',
@@ -874,6 +876,7 @@ export const REGION4_MAPS: Record<string, MapDef> = {
   // jungle path to the Templo del Jaguar (plans/region5-jungle.md).
   jaguar: {
     id: 'jaguar',
+    surf: RIVER_SURF,
     name: 'Villa Jaguar',
     outdoor: true,
     floor: '.',

@@ -14,10 +14,12 @@ Plans for what's next: [plans/](plans/README.md).
 - **World:** the whole loop, Pueblo Amanecer to Ciudad Chispa and home: Rutas 1–9, the Cueva del Eco, Villa
   Ocote and its mine, the Cañón del Guardabarranco, Playa Carey and the turtle beach, Ciudad Chispa and the
   Volcán Chocoyo, and Ruta 9 (a one-way shortcut from the crater to Ruta 5). The middle of the world: the Río
-  Guardabarranco from Ruta 4 down to the Lago de las Islas (scenery until Surf; two small beaches from Ruta 2 and
-  Ruta 8). START → MAPA shows it all.
-- **Region 5, placeholders:** Villa Jaguar, the dark Selva del Jaguar and the Templo del Jaguar (four floors),
-  waiting for Surf ([plans/region5-jungle.md](plans/region5-jungle.md)); swimmers in the lake.
+  Guardabarranco from Ruta 4 down to the Lago de las Islas, lined with mangroves (swim it with Surf; two small
+  beaches from Ruta 2 and Ruta 8). START → MAPA shows it all.
+- **Surf and Cut ✓** (4 and 5 medals; Palabritas that can really do it, nothing to teach): [plans/surf-fly.md](plans/surf-fly.md).
+- **Region 5, mostly built:** Villa Jaguar by the river, the Selva del Jaguar (a labyrinth), the Templo del Jaguar
+  (four floors, Equipo Silencio, the black jaguar's story, Rugidito), the jungle's own Palabritas; swimmers on the
+  river and the lake ([plans/region5-jungle.md](plans/region5-jungle.md)). Gym 5 still to build.
 - **Day and night** by the phone's clock (golden at 18, night from 19, morning by 7), with lit windows, fireflies
   and darker caves, plus story night scenes.
 - **Paused:** the bus (fast travel), until there are big roads.
@@ -67,8 +69,8 @@ rainforest animals live along rivers). Animals, visual hooks and color direction
 Nicaraguan flavor for later: **voseo** («vos sos», «¿qué querés?») is everyday Spanish there, plus
 local words (*chunche*, *tuani*, *¡ideay!*, *va pues*). Great B1/B2 content: regional variety.
 
-New world mechanics still to come: **Surf** after the 4th medal (big swimmers carry you; no move to teach) and
-**Fly** after the 5th (big birds), leading to Villa Jaguar, the rainforest town (gym 5): [plans/surf-fly.md](plans/surf-fly.md).
+World mechanics: **Surf** after the 4th medal and **Cut** after the 5th are built; **Fly** after the 5th (big
+birds) is next: [plans/surf-fly.md](plans/surf-fly.md).
 
 ## 4. Gyms and the level curve
 
@@ -139,6 +141,6 @@ creatures.
 1. **The group playtest** up to gym 4, and its feedback.
 2. **Leftover polish:** a full playthrough test (`tests/journey.test.mjs`: one save per medal, each leg's key
    moments, proving the story order holds together) and a pace check of gyms 2–4 with `tools/sim.mjs` (§6).
-3. **Region 5:** Surf, then Villa Jaguar, the jungle, the temple and gym 5 (Planta/Veneno, the past tense), then
-   Fly ([plans/surf-fly.md](plans/surf-fly.md), [plans/region5-jungle.md](plans/region5-jungle.md)).
+3. **Region 5:** Villa Jaguar's people, the temple's past-tense puzzles, gym 5 (Planta/Veneno, the past tense),
+   then Fly ([plans/surf-fly.md](plans/surf-fly.md), [plans/region5-jungle.md](plans/region5-jungle.md)).
 4. Then gyms 6–8 (§4), with the B1 Spanish (§5), planned the same way.

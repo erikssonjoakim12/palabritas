@@ -1,5 +1,5 @@
 import { flag } from '../../game/state';
-import { itemBall, tienda, casa, HOUSES, escuela, night, centro, type MapDef, type NpcDef } from './kit';
+import { itemBall, tienda, casa, HOUSES, escuela, night, centro, RIVER_SURF, SEA_SURF, type MapDef, type NpcDef } from './kit';
 
 // Region 3: the Pacific coast: Rutas 5 and 6, Playa Carey and the turtle beach.
 export const REGION3_MAPS: Record<string, MapDef> = {
@@ -8,6 +8,7 @@ export const REGION3_MAPS: Record<string, MapDef> = {
   // road east comes down from Ruta 9, and the sand. Halved (the user: the pine forest was long and dull).
   ruta6: {
     id: 'ruta6',
+    surf: RIVER_SURF,
     name: 'Ruta 5',
     outdoor: true,
     floor: '.',
@@ -86,6 +87,7 @@ export const REGION3_MAPS: Record<string, MapDef> = {
   // up to Ruta 9.
   ruta7: {
     id: 'ruta7',
+    surf: SEA_SURF,
     name: 'Ruta 6',
     outdoor: true,
     floor: '.',
@@ -165,6 +167,7 @@ export const REGION3_MAPS: Record<string, MapDef> = {
   // gym), the restaurant El Pelícano Feliz and Don Lalo's house. The road east (Ruta 7) waits for the medal.
   carey: {
     id: 'carey',
+    surf: SEA_SURF,
     name: 'Playa Carey',
     outdoor: true,
     floor: '.',
@@ -332,6 +335,7 @@ export const REGION3_MAPS: Record<string, MapDef> = {
   // The turtle reserve: dunes, palms, the volunteers' hut and the nesting beach. Its night is tortugas_noche.
   tortugas: {
     id: 'tortugas',
+    surf: SEA_SURF,
     name: 'Playa de las Tortugas',
     outdoor: true,
     floor: '.',

@@ -969,6 +969,20 @@ export const STARTER_LEVEL = 5;
 export const learnLevel = (m: Move) => m.level ?? MODE_INFO[m.mode].learnAt;
 
 /** The Palabritas' numbers (the dex in the START menu, and the art page): families together, starters first. */
+/** Moves used on the map, not in battle (like Gold/Silver's HMs): no move to teach; Palabritas that can really do it. */
+export type FieldMove = 'surf' | 'cut';
+/**
+ * Who can (the user) and how many medals it takes: Surf after the 4th, Cut after the 5th (plans/surf-fly.md).
+ * Only the big swimmers carry you (not Paslamita, the hatchling).
+ */
+export const FIELD_MOVES: Record<FieldMove, { medals: number; species: string[] }> = {
+  surf: { medals: 4, species: ['mordisquito', 'mordiscon', 'paslamona', 'espadon'] },
+  cut: {
+    medals: 5,
+    species: ['hojadillo', 'hojarasco', 'cangrejito', 'cangrejon', 'hormiguita', 'hormigon', 'perezosito', 'espadon', 'brasita', 'brasaurio', 'volcasaurio', 'liebron'],
+  },
+};
+
 export const DEX_ORDER = [
   'salchichita', 'hamburgueson', 'nacatamastin', 'gotita', 'nubarron', 'huracan', 'aguacatito', 'aguacatono', 'aguacatero',
   'pajarito', 'palomon', 'conejito', 'liebron', 'gusanito', 'capullito', 'mariposita', 'cojincito', 'sillon',

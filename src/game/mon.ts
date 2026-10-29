@@ -1,5 +1,5 @@
 import { G, uid, type Mon } from './state';
-import { SPECIES, learnLevel, type Move } from '../data/species';
+import { SPECIES, learnLevel, FIELD_MOVES, type Move, type FieldMove } from '../data/species';
 import { canLevelUp } from './learning';
 
 /** The starter that's strong against yours: the one Lucas takes in the lab. */
@@ -29,6 +29,13 @@ export function newMon(sp: string, level: number): Mon {
 }
 
 export const monName = (mon: Mon) => SPECIES[mon.sp].name;
+
+/** The first Palabrita in your team that can use a field move (Surf, Cut), once you have the medals for it. */
+export function fieldHelper(move: FieldMove): Mon | undefined {
+  const f = FIELD_MOVES[move];
+  if (G.save.medals.length < f.medals) return undefined;
+  return G.save.party.find((m) => m.hp > 0 && f.species.includes(m.sp));
+}
 
 /** The moves a Palabrita knows at its level. */
 export function knownMoves(mon: Mon): Move[] {

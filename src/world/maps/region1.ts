@@ -1,6 +1,6 @@
 import { G, flag } from '../../game/state';
 import { lucasStarter } from '../../game/mon';
-import { HOUSES, itemBall, tienda, lostWord, centro, type MapDef } from './kit';
+import { HOUSES, itemBall, tienda, lostWord, centro, RIVER_SURF, type MapDef } from './kit';
 
 /** A starter's Palabola is on the lab's table until you take it, or Lucas takes his. */
 const ballOnTable = (sp: string) => G.save.starterPicked !== sp && !(flag('lucasEligio') && lucasStarter() === sp);
@@ -600,6 +600,7 @@ export const REGION1_MAPS: Record<string, MapDef> = {
   // below the trail is the same rock as Ruta 3's. The canyon is north, up the path by the bridge.
   ruta5: {
     id: 'ruta5',
+    surf: RIVER_SURF,
     name: 'Ruta 4',
     outdoor: true,
     floor: '.',

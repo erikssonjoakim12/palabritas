@@ -251,6 +251,8 @@ async function tizon() {
     beaten: [['¡Qué batalla! Cada vez que veo un cohete, me acuerdo de ti.', 'What a battle! Every time I see a rocket, I think of you.']],
   });
   if (!won) return;
+  // Surf opens with the 4th medal (plans/surf-fly.md).
+  await as('tizon', ['Con cuatro medallas, las Palabritas grandes del agua ya te pueden llevar. ¡Prueba en el río o en el lago!', 'With four medals, big water Palabritas can carry you now. Try the river or the lake!']);
   await info('¡Felicidades! Terminaste la cuarta parte de Palabritas.', { en: 'Congratulations! You finished the fourth part of Palabritas.' });
   await info('Sigue entrenando a tus Palabritas y atrapando nuevas. ¡Pronto habrá más aventuras!', { en: 'Keep training your Palabritas and catching new ones. More adventures are coming soon!' });
 }

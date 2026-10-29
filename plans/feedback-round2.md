@@ -16,10 +16,8 @@ Ruta 6, Playa Carey and the turtle beach moved up 34 rows; Ruta 7 steps down dia
 do it. **Which ones (the user, 2026-10-29):** Hojadillo and Hojarasco; Cangrejito and Cangrejón; Hormiguita and
 Hormigón; Perezosito; Espadón; the whole Brasita line (Brasita, Brasaurio, Volcasaurio); Liebrón.
 
-**Engine (to build):** facing a thin tree ('/', art/tiles.ts) with the medal and a cutter in the party: «¿Quieres
-cortar el arbolito con Hormigón?»; cut trees come back when you leave the map, like Gold/Silver. Part of the same work
-as Surf's: walking off a map's edge where there's no connection should take you into the map that's there in the
-world (the temple's path north crosses from Ruta 4 into the temple's map that way).
+**Engine ✓** (2026-10-29, plans/surf-fly.md): Cut with the 5th medal and a cutter; the temple's trail crosses into
+Ruta 4 by the new "into whatever map is there" rule.
 
 **The thin trees are placed (2026-10-29):** '/' tiles, thin and twiggy so they look cuttable (the user's idea). Facing
 one: «Un arbolito delgado bloquea el camino. Parece que se puede cortar.»

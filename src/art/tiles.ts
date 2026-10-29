@@ -93,7 +93,7 @@ export const TILES: Record<string, TileDef> = {
   '>': solid({ ledge: 'right' }),
   v: solid({ ledge: 'down' }),
   '{': solid({ look: { es: 'Un manglar: sus raíces están en el agua. No se puede pasar.', en: 'A mangrove: its roots stand in the water. You can’t get through.' } }),
-  '/': solid({ look: { es: 'Un arbolito delgado bloquea el camino. Parece que se puede cortar.', en: 'A thin little tree blocks the path. It looks like it could be cut.' } }),
+  '/': solid({ script: 'cortar', look: { es: 'Un arbolito delgado bloquea el camino. Parece que se puede cortar.', en: 'A thin little tree blocks the path. It looks like it could be cut.' } }),
   Y: solid({ look: { es: '¡Un limonero! Huele muy bien.', en: 'A lemon tree! It smells very nice.' } }),
   '~': solid({ kind: 'water' }),
   f: solid(),

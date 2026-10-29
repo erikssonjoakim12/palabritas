@@ -105,6 +105,10 @@ A beaten trainer sets `beat:<id>`.
 guard's spot, where they wait once the road is open, the road tiles, where you're sent back, and their lines.
 No script needed.
 
+**Field moves** (Surf, Cut): who can and how many medals in `FIELD_MOVES` (src/data/species.ts); a water map's
+wild Palabritas while swimming in `surf`. Walking or swimming off an edge with no connection (or into a hole) goes
+into whatever map is there in the world.
+
 **An item on the ground:** `itemBall(id, x, y, itemId)` in the map's NPCs. It's picked up once (flag
 `item:<id>`).
 

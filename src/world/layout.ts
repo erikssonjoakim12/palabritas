@@ -49,16 +49,19 @@ export function worldLayout(): Record<string, Spot> {
   return spots;
 }
 
-/** The tile at (x, y) of map `id` (beyond its edge, or in a hole) as another outdoor map in the world has it. */
-function tileAcross(id: string, x: number, y: number): string | undefined {
+/** Which other outdoor map in the world has (x, y) of map `id` (beyond its edge, or in a hole), and where in it. */
+export function mapAcross(id: string, x: number, y: number): { id: string; x: number; y: number } | undefined {
   const L = worldLayout();
   const p = L[id];
   if (!p) return undefined;
   for (const [oid, q] of Object.entries(L)) {
     const o = MAPS[oid];
     const [ox, oy] = [p.x + x - q.x, p.y + y - q.y];
-    if (oid !== id && oy >= 0 && oy < o.rows.length && ox >= 0 && ox < o.rows[0].length && !isHole(o, ox, oy)) return o.rows[oy][ox];
+    if (oid !== id && oy >= 0 && oy < o.rows.length && ox >= 0 && ox < o.rows[0].length && !isHole(o, ox, oy)) return { id: oid, x: ox, y: oy };
   }
   return undefined;
 }
-lookAcrossEdges(tileAcross);
+lookAcrossEdges((id, x, y) => {
+  const there = mapAcross(id, x, y);
+  return there && MAPS[there.id].rows[there.y][there.x];
+});
