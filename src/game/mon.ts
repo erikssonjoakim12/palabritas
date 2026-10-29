@@ -30,12 +30,13 @@ export function newMon(sp: string, level: number): Mon {
 
 export const monName = (mon: Mon) => SPECIES[mon.sp].name;
 
-/** The first Palabrita in your team that can use a field move (Surf, Cut), once you have the medals for it. */
-export function fieldHelper(move: FieldMove): Mon | undefined {
+/** Whether this Palabrita can use a field move (Surf, Cut) now: it's one that can, awake, and you have the medals. */
+export function canUseField(mon: Mon, move: FieldMove) {
   const f = FIELD_MOVES[move];
-  if (G.save.medals.length < f.medals) return undefined;
-  return G.save.party.find((m) => m.hp > 0 && f.species.includes(m.sp));
+  return G.save.medals.length >= f.medals && mon.hp > 0 && f.species.includes(mon.sp);
 }
+/** The first Palabrita in your team that can use a field move now. */
+export const fieldHelper = (move: FieldMove) => G.save.party.find((m) => canUseField(m, move));
 
 /** The moves a Palabrita knows at its level. */
 export function knownMoves(mon: Mon): Move[] {

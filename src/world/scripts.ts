@@ -17,7 +17,8 @@ import { ask, menu } from '../ui/menu';
 import { pickFrom } from '../ui/party';
 import { startMenu } from '../ui/startmenu';
 import { wildBattle } from '../battle/battle';
-import { SCRIPTS, scriptedStep, currentMap, refreshNpcs, npcById, pickEncounter, facingTile, facingSpot, walkNpc, startSurf, cutTree, MUTED_MIME, type ScriptFn } from './world';
+import { SCRIPTS, scriptedStep, currentMap, refreshNpcs, npcById, pickEncounter, facingTile, facingSpot, walkNpc, startSurf, cutTree, isWater, MUTED_MIME, type ScriptFn } from './world';
+import type { Mon } from '../game/state';
 import { gateOf, closedLines, FRESHWATER } from './maps';
 import { lines, as, sayOrMime, talkMode, showCreature, heal, blackout, fight, gymLeader, gift, receiveMon, practice, untilRight } from './flows';
 import { REGION2 } from './region2';
@@ -32,6 +33,12 @@ import { MINI_BALL, BALL_COLORS, FLASH_COLORS, drawPattern } from '../art/balls'
   Palacentro, the shop, the box, gates, items on the ground), and the registry of every region's scripts.
   The building blocks they're made of are in flows.ts.
 */
+
+/** Climb onto a water Palabrita and swim off (Surf). */
+async function surf(mon: Mon) {
+  await info(`¡{name} se sube a ${monName(mon)}!`, { en: `{name} climbs onto ${monName(mon)}!` });
+  await startSurf();
+}
 
 /**
  * Gold/Silver's healing: the Palabolas go into the machine one by one, flash, and the
@@ -78,7 +85,7 @@ async function askAboutMichi(): Promise<boolean> {
 const S: Record<string, ScriptFn> = {
   async startMenu(c) {
     const next = await startMenu();
-    if (next) await SCRIPTS[next](c);
+    if (next) await SCRIPTS[next.script]({ ...c, data: next.data });
   },
 
   /** Facing water: swim on a big water Palabrita (Surf, from the 4th medal), or else fish with the rod. */
@@ -86,23 +93,30 @@ const S: Record<string, ScriptFn> = {
     const swimmer = !G.save.surfing && fieldHelper('surf');
     if (swimmer) {
       const name = monName(swimmer);
-      if (await ask(`El agua está tranquila. ¿Quieres nadar con ${name}?`, { en: `The water is calm. Do you want to swim with ${name}?` })) {
-        await info(`¡{name} se sube a ${name}!`, { en: `{name} climbs onto ${name}!` });
-        return startSurf();
-      }
+      if (await ask(`El agua está tranquila. ¿Quieres nadar con ${name}?`, { en: `The water is calm. Do you want to swim with ${name}?` })) return surf(swimmer);
     }
     if (itemCount('cana')) return SCRIPTS.fish(c);
   },
 
-  /** A thin tree: cut it with a Palabrita that can (Cut, from the 5th medal); otherwise it's in the way. */
-  async cortar() {
-    const cutter = fieldHelper('cut');
+  /** NADAR from the team menu, with that Palabrita. */
+  async nadar(c) {
+    if (G.save.surfing) return info('¡Ya estás nadando!', { en: 'You’re already swimming!' });
+    if (!isWater(facingTile())) return info('Aquí no hay agua para nadar.', { en: 'There’s no water here to swim in.' });
+    return surf(c.data!.mon as Mon);
+  },
+
+  /** A thin tree (A facing it), or CORTAR from the team menu: cut it with a Palabrita that can (from the 5th medal). */
+  async cortar(c) {
+    const chosen = c.data?.mon as Mon | undefined;
+    if (facingTile() !== '/') return info('Aquí no hay nada que cortar.', { en: 'There’s nothing to cut here.' });
+    const cutter = chosen ?? fieldHelper('cut');
     const { es, en } = TILES['/'].look!;
     if (!cutter) return say(es, { en });
     const name = monName(cutter);
-    if (!(await ask(`Este arbolito se puede cortar. ¿Quieres cortarlo con ${name}?`, { en: `This little tree can be cut. Do you want to cut it with ${name}?` }))) return;
+    if (!chosen && !(await ask(`Este arbolito se puede cortar. ¿Quieres cortarlo con ${name}?`, { en: `This little tree can be cut. Do you want to cut it with ${name}?` }))) return;
     sfx('hit');
     cutTree(...facingSpot());
+    await frames(30); // the slash and the leaves
     await info(`¡${name} cortó el arbolito!`, { en: `${name} cut the little tree!` });
   },
 

@@ -159,6 +159,10 @@ export const ACCENT = {
   lamp: '#f8e070',
   foam: '#f8f8ff',
   fire: '#f07830',
+  /** Cut: the slash, and the leaves flying off the thin tree. */
+  slash: '#ffffff',
+  leaf: '#68a030',
+  leafLight: '#a8d868',
   fireGlow: '#f8d848',
 };
 
@@ -221,6 +225,8 @@ export const OBJECT_PALS: Record<string, Pal> = {
   huellas: ['#c8b8a0', '#988870', '#5c5040', SPRITE_INK],
   /** A star (0) on Nicaragua, the sea, the land. */
   mapa: ['#f8e050', '#a8c8e8', '#78a858', SPRITE_INK],
+  /** The water Palabrita you ride (Surf), until the user's art: its belly, light back, back, outline. */
+  montura: ['#e8f0f8', '#88b8f0', '#3c64c0', SPRITE_INK],
   // The Templo del Jaguar: the black jaguars (green eyes, fur, rosettes) and the stone the mother becomes.
   jaguar: ['#90e868', '#3c3a4c', '#5a5670', SPRITE_INK],
   jaguarPiedra: ['#c8c8b0', '#888874', '#585c4c', SPRITE_INK],

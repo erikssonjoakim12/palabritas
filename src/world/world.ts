@@ -4,13 +4,13 @@ import { sfx } from '../engine/sfx';
 import { nextFrame, frames, frameAlpha, whenIdle, clearIdle } from '../engine/loop';
 import { TILES, tallGrassImage, tileImage, tileOf, envAt, owns, isHole, ANIMATED } from '../art/tiles';
 import { personFrames, OBJECTS, type Frames } from '../art/chars';
-import { fromRows, type Img } from '../art/pixel';
+import { fromRows, mirror, type Img } from '../art/pixel';
 import { MAPS, type MapDef, type NpcDef, type Conn, type EncounterEntry } from './maps';
 import { worldLayout, mapAcross } from './layout';
 import { G, flag, saveGame, playerLook, clockHour } from '../game/state';
 import { rematchReady } from '../game/rematch';
 import { shuffled, pickRandom } from '../game/random';
-import { NIGHT, NIGHT_CLEAR, FIREFLY, MARK, BLACK, SHADOW } from '../style/colors';
+import { NIGHT, NIGHT_CLEAR, FIREFLY, MARK, BLACK, SHADOW, ACCENT } from '../style/colors';
 import { lightAt, drawLights, skyAt, type Light } from '../art/lights';
 import { drawFireworks } from '../art/fireworks';
 import { setMapMusic, musicFor } from '../audio/bgm';
@@ -99,6 +99,8 @@ export const player = {
   speed: 0,
   /** Length of the current move in pixels (two tiles when hopping a ledge). */
   dist: 16,
+  /** A hop with this step (onto your water Palabrita), drawn like hopping a ledge. */
+  hopping: false,
   /** Being carried by a water current this way (you keep facing where you were going). */
   slide: null as Dir | null,
   frames: null as Frames | null,
@@ -184,20 +186,29 @@ export const tileAt = (x: number, y: number) => (cut.has(`${x},${y}`) ? '.' : ti
 // ---------- Surf and Cut (plans/surf-fly.md) ----------
 
 /** Water you can swim on: the water itself and its currents (rapids carry you). */
-const isWater = (ch: string) => TILES[ch].kind === 'water' || !!TILES[ch].current;
+export const isWater = (ch: string) => TILES[ch].kind === 'water' || !!TILES[ch].current;
 /** Can you go onto this tile right now: open ground, or water while you swim (stepping onto land ends it). */
 const passable = (ch: string) => !TILES[ch].solid || (!!G.save.surfing && isWater(ch));
 
-/** Start swimming: onto the water you're facing, on your Palabrita. */
+/** Start swimming: a hop onto the water you're facing, onto your Palabrita. */
 export async function startSurf() {
   G.save.surfing = true;
   player.frames = framesFor(walkerLook());
+  player.hopping = true;
+  sfx('jump');
   await scriptedStep(player.dir);
+  player.hopping = false;
 }
+
+/** The water Palabrita under you while you swim, by the way you face (a generic one until the user's art). */
+let mountImgs: Record<Dir, Img> | null = null;
+const mountImg = (d: Dir) =>
+  (mountImgs ??= { down: OBJECTS.montaAbajo, up: OBJECTS.montaArriba, left: OBJECTS.montaLado, right: mirror(OBJECTS.montaLado) })[d];
 
 /** Thin trees cut on this map, as 'x,y': they grow back when you leave it, like Gold/Silver. */
 let cut = new Set<string>();
 export function cutTree(x: number, y: number) {
+  cutFx = { x, y, at: performance.now() };
   cut.add(`${x},${y}`);
   grid[(y + GRID) * gridW + x + GRID] = tileImage('.', envAt(map, x, y));
 }
@@ -784,6 +795,26 @@ function drawFireflies(g: CanvasRenderingContext2D, camX: number, camY: number) 
 }
 
 /** The grass you stepped into shakes: its blades drawn a pixel left, then right, over the tile. */
+/** A thin tree being cut: a white slash across it, then its leaves flying off and falling. */
+let cutFx: { x: number; y: number; at: number } | null = null;
+const CUT_MS = 500;
+function drawCut(g: CanvasRenderingContext2D, camX: number, camY: number) {
+  if (!cutFx) return;
+  const t = performance.now() - cutFx.at;
+  if (t > CUT_MS) return void (cutFx = null);
+  const [x, y] = [cutFx.x * T - camX, cutFx.y * T - camY];
+  if (t < 120) {
+    g.fillStyle = ACCENT.slash;
+    for (let i = 0; i < 14; i++) g.fillRect(x + 1 + i, y + 14 - i, 2, 1);
+    return;
+  }
+  const k = (t - 120) / (CUT_MS - 120);
+  for (const [i, [dx, dy]] of [[-1, -1], [1, -1], [-1, 0.4], [1, 0.4], [0.2, -1.2]].entries()) {
+    g.fillStyle = i % 2 ? ACCENT.leaf : ACCENT.leafLight;
+    g.fillRect(Math.round(x + 7 + dx * 10 * k), Math.round(y + 6 + dy * 8 * k + 14 * k * k), 2, 2);
+  }
+}
+
 function drawRustle(g: CanvasRenderingContext2D, camX: number, camY: number) {
   if (!rustle) return;
   const t = performance.now() - rustle.at;
@@ -808,7 +839,7 @@ export function renderWorld(g: CanvasRenderingContext2D) {
   const prog = player.moving ? Math.min(player.dist, player.prog + player.speed * frameAlpha()) : 0;
   const off = player.moving ? player.dist - prog : 0;
   /** Hopping a ledge: the player rises and falls, over a shadow. */
-  const hop = player.moving && player.dist > T ? Math.round(Math.sin((Math.PI * prog) / player.dist) * 8) : 0;
+  const hop = player.moving && (player.dist > T || player.hopping) ? Math.round(Math.sin((Math.PI * prog) / player.dist) * 8) : 0;
   const moveDir = player.slide ?? player.dir;
   const px = player.x * T - DX[moveDir] * off;
   const py = player.y * T - DY[moveDir] * off;
@@ -816,6 +847,7 @@ export function renderWorld(g: CanvasRenderingContext2D) {
   const camY = snap(py - 64);
   drawTiles(g, camX, camY);
   drawRustle(g, camX, camY);
+  drawCut(g, camX, camY);
 
   const sprites: { y: number; draw: () => void }[] = [];
   for (const n of npcs.concat(edgeNpcs)) {
@@ -844,7 +876,9 @@ export function renderWorld(g: CanvasRenderingContext2D) {
           g.fillStyle = SHADOW;
           g.fillRect(67, 74, 10, 2);
         }
-        g.drawImage(img, 64, 60 - hop);
+        // Swimming, you sit on your water Palabrita: it under you, you a little higher.
+        if (G.save.surfing) g.drawImage(mountImg(player.dir), 64, 63 - hop);
+        g.drawImage(img, 64, (G.save.surfing ? 57 : 60) - hop);
       },
     });
   }

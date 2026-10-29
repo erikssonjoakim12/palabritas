@@ -2,7 +2,8 @@ import { el, setTextScale } from '../engine/screen';
 import { sfx } from '../engine/sfx';
 import { G, saveGame, useSave } from '../game/state';
 import { exportSave, pickFile, readSave } from '../game/backup';
-import { monName } from '../game/mon';
+import { monName, canUseField } from '../game/mon';
+import type { Mon } from '../game/state';
 import { totalLearned, isLearned } from '../game/learning';
 import { SPECIES, DEX_ORDER } from '../data/species';
 import { THEMES } from '../data/content';
@@ -17,8 +18,14 @@ import { dueCount } from '../game/review';
 import { musicSettingChanged } from '../audio/bgm';
 import { townMap } from './townmap';
 
-/** The START menu. Resolves a script to run after it closes (an item used from the bag), if any. */
-export async function startMenu(): Promise<string | undefined> {
+/** What to do once the START menu closes: an item used from the bag, a field move from the team (NADAR, CORTAR). */
+export interface AfterMenu {
+  script: string;
+  data?: Record<string, unknown>;
+}
+
+/** The START menu. Resolves what to run after it closes, if anything. */
+export async function startMenu(): Promise<AfterMenu | undefined> {
   sfx('select');
   let sel = 0;
   while (true) {
@@ -27,10 +34,12 @@ export async function startMenu(): Promise<string | undefined> {
     const due = dueCount();
     const i = await menu(opts, { cancel: true, pos: { right: 0, top: 0 }, initial: sel, disabled: [!G.save.party.length], title: due ? `Repaso: ${due}` : undefined });
     sel = Math.max(0, i);
-    if (i === 0) await PalabritasMenu();
-    else if (i === 1) {
+    if (i === 0) {
+      const field = await PalabritasMenu();
+      if (field) return field;
+    } else if (i === 1) {
       const script = await openBag();
-      if (script) return script;
+      if (script) return { script };
     }
     else if (i === 2) await dictionary();
     else if (i === 3) await townMap();
@@ -42,19 +51,33 @@ export async function startMenu(): Promise<string | undefined> {
   }
 }
 
-async function PalabritasMenu() {
+/** Field moves in the team menu, under the Palabritas that can use them now (like Gold/Silver). */
+const FIELD_OPTIONS = [
+  { move: 'surf', label: 'NADAR', script: 'nadar' },
+  { move: 'cut', label: 'CORTAR', script: 'cortar' },
+] as const;
+
+async function PalabritasMenu(): Promise<AfterMenu | undefined> {
   // Palabritas train by fighting; this menu is for looking at their powers and words. The team stays on screen
-  // under it; after PRIMERO it's shown again in the new order.
+  // under it; after PRIMERO it's shown again in the new order. A field move closes the menus and is used.
+  let field: AfterMenu | undefined;
   while (
-    await pickMon('view', undefined, async (mon) => {
-      const i = await menu(['DETALLES', 'PRIMERO', 'SALIR'], { cancel: true, pos: { right: 0, bottom: 0 } });
+    !field &&
+    (await pickMon('view', undefined, async (mon: Mon) => {
+      const moves = FIELD_OPTIONS.filter((f) => canUseField(mon, f.move));
+      const i = await menu(['DETALLES', 'PRIMERO', ...moves.map((f) => f.label), 'SALIR'], { cancel: true, pos: { right: 0, bottom: 0 } });
       if (i === 0) await showDetails(mon);
+      if (i >= 2 && i < 2 + moves.length) {
+        field = { script: moves[i - 2].script, data: { mon } };
+        return true;
+      }
       if (i !== 1) return false;
       G.save.party = [mon, ...G.save.party.filter((m) => m !== mon)];
       await info(`${monName(mon)} luchará primero.`, { en: `${monName(mon)} will fight first.` });
       return true;
-    })
+    }))
   );
+  return field;
 }
 
 async function dictionary() {
