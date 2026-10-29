@@ -30,7 +30,7 @@ Palabritas get their themes (the jaguar's could be the legend, in the past tense
 4. **The temple.** Silenciosos everywhere, two treasure hunters, an archaeologist reading the walls (past tense).
 5. **The altar.** Mutis has a new Silenciador: it has taken the jaguar's voice («Sin su rugido, la selva no
    despierta»). You beat her; she runs. The machine sparks, and the confused jaguar, Rugidón, leaps at you: a
-   **guardian battle** (level 38; no catching, no running). Calm again but voiceless, she lies down by the altar and
+   **guardian battle** (level 40, where Rugidito becomes her; no catching, no running). Calm again but voiceless, she lies down by the altar and
    **turns to stone**, as in the legend. Her cub comes up the stairs, curls up by the statue, then goes with you:
    **Rugidito, level 25**, to raise. The altar's carving: «Cuando su hijo ruja, la selva despertará».
 

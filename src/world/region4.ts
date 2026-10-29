@@ -163,7 +163,7 @@ async function altarJaguar() {
   sfx('alert');
   await info('¡El Silenciador hace un ruido horrible y echa chispas!', { en: 'The Silenciador makes a horrible noise and throws sparks!' });
   await info('¡La jaguar salta del altar! Está muy confundida.', { en: 'The jaguar leaps from the altar! She’s very confused.' });
-  if ((await wildBattle('rugidon', 38, { guardian: true })) === 'lose') return blackout();
+  if ((await wildBattle('rugidon', 40, { guardian: true })) === 'lose') return blackout();
   await info('El Silenciador se rompe en mil pedazos.', { en: 'The Silenciador breaks into a thousand pieces.' });
   await info('La jaguar se calma. Abre la boca para rugir... pero no sale nada.', { en: 'The jaguar calms down. She opens her mouth to roar... but nothing comes out.' });
   await info('Se acuesta junto al altar, muy cansada. Poco a poco... se vuelve de piedra, como en la leyenda.', { en: 'She lies down by the altar, very tired. Little by little... she turns to stone, as in the legend.' });

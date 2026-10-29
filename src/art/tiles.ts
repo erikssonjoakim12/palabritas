@@ -148,6 +148,7 @@ export const TILES: Record<string, TileDef> = {
   '[': solid({ look: { es: 'Piedras talladas, muy antiguas. Tienen musgo.', en: 'Carved stones, very old. They’re covered in moss.' } }),
   ']': solid({ look: { es: 'Una escalera de piedra, muy empinada.', en: 'A stone stairway, very steep.' } }),
   '(': open({ kind: 'door' }),
+  ')': open({ kind: 'door' }),
   '!': solid({ look: { es: 'Una cascada enorme. Tal vez algún día puedas subirla...', en: 'A huge waterfall. Maybe one day you can climb it...' } }),
   E: solid({ look: { es: 'Una roca negra con muchos huequitos. ¡Viene del volcán!', en: 'A black rock full of little holes. It comes from the volcano!' } }),
   X: solid({ look: { es: 'Sale vapor caliente de la tierra. ¡Huele a azufre!', en: 'Hot steam comes out of the ground. It smells like sulfur!' } }),
@@ -452,6 +453,9 @@ function render(ch: string, env: TileEnv): Img {
       return paintArt(ART.templeStone);
     case ']':
       return paintArt(ART.templeStairs);
+    case ')':
+      // A doorway you walk down into (a gateway seen from behind): the temple doorway, upside down.
+      return stack(paintArt(ART.templeStone), paintArt({ ...ART.templeDoor, rows: [...ART.templeDoor.rows].reverse() }));
     case '(':
       return stack(paintArt(ART.templeStone), paintArt(ART.templeDoor));
     case 't':
