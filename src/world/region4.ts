@@ -560,6 +560,30 @@ export const REGION4: Record<string, ScriptFn> = {
     ['¡Qué batalla!', 'What a battle!'],
     ['El muelle de Villa Jaguar está ahí adelante.', 'Villa Jaguar’s pier is just ahead.'],
   ),
+  exploradora_ines: fight(
+    'exploradora_ines',
+    ['¡Llevo tres días perdida en esta selva! ¿Tú sabes salir?', 'I’ve been lost in this jungle for three days! Do you know the way out?'],
+    ['¡Ay! Y ahora, ¿por dónde?', 'Oh! And now, which way?'],
+    ['Un truco: camina siempre con la mano en los árboles de la izquierda.', 'A trick: always walk with your hand on the trees to your left.'],
+  ),
+  biologa_maite: fight(
+    'biologa_maite',
+    ['Estudio las mariposas de la selva. ¡Hay más de mil tipos!', 'I study the jungle’s butterflies. There are over a thousand kinds!'],
+    ['¡Se me escaparon todas!', 'They all got away!'],
+    ['Desde hace días la selva está muy callada. Ni los monos congo gritan.', 'For days the jungle has been very quiet. Not even the howler monkeys shout.'],
+  ),
+  fotografo_rene: fight(
+    'fotografo_rene',
+    ['¡Quiero una foto del jaguar negro! ¿Lo viste?', 'I want a photo of the black jaguar! Have you seen it?'],
+    ['¡Uy, salió borrosa!', 'Oops, it came out blurry!'],
+    ['Vi a unas personas de negro con una máquina rara. Iban al templo.', 'I saw some people in black with a strange machine. They were going to the temple.'],
+  ),
+  silencioso11: fight(
+    'silencioso11',
+    ['¡Shhh! Nadie pasa al templo. Son órdenes de la Comandante Mutis.', 'Shhh! Nobody goes to the temple. Commander Mutis’s orders.'],
+    ['¡Shhh! No le digas a la comandante que perdí.', 'Shhh! Don’t tell the commander I lost.'],
+    ['Cuando el jaguar se calle, toda la selva se va a dormir. ¡Silencio para siempre!', 'When the jaguar falls silent, the whole jungle will go to sleep. Silence forever!'],
+  ),
   pescador_lago: talk(['¿Ves las islas? Sin bote no se puede llegar. ¡Algún día voy a ir!', 'See the islands? You can’t get there without a boat. Someday I’ll go!']),
   fotografo_max: fight(
     'fotografo_max',

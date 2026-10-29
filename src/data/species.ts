@@ -475,6 +475,23 @@ export const SPECIES: Record<string, Species> = {
       en: 'It sleeps in a hammock most of the day. It wakes up late, has breakfast... and goes back to sleep!',
     },
   },
+  /**
+   * The black jaguar's cub (region 5): its mother, Rugidón, guarded the Templo del Jaguar until Equipo Silencio took
+   * her voice; you raise the cub (plans/region5-jungle.md). Its own theme comes with region 5's Palabritas.
+   */
+  rugidito: {
+    id: 'rugidito',
+    name: 'Rugidito',
+    types: ['Siniestro'],
+    theme: 'naturaleza',
+    base: { hp: 55, atk: 62, def: 45, spd: 72 },
+    moves: [m('Zarpazo', 'Siniestro', 'choose'), m('Acecho', 'Siniestro', 'type'), m('Susurro de Hojas', 'Planta', 'listen'), m('Rugido', 'Siniestro', 'speak')],
+    catchRate: 0.05,
+    dex: {
+      es: 'Todavía no sabe rugir: solo maúlla. Pero cada día lo intenta, ¡y un día la selva lo va a oír!',
+      en: 'It can’t roar yet, only mew. But it tries every day, and one day the jungle will hear it!',
+    },
+  },
   /** The haunted house's lamp. */
   lamparita: {
     id: 'lamparita',
@@ -814,6 +831,16 @@ evolution('brasaurio', 50, {
     en: 'They say it sleeps inside the volcano. When it wakes up, the whole mountain shakes.',
   },
 });
+evolution('rugidito', 40, {
+  id: 'rugidon',
+  name: 'Rugidón',
+  types: ['Siniestro', 'Planta'],
+  base: { hp: 90, atk: 112, def: 80, spd: 118 },
+  dex: {
+    es: 'El guardián de la selva. Dicen que su rugido despierta a todos los árboles al amanecer.',
+    en: 'The jungle’s guardian. They say its roar wakes every tree at dawn.',
+  },
+});
 evolution('hormiguita', 22, {
   id: 'hormigon',
   name: 'Hormigón',
@@ -889,5 +916,5 @@ export const DEX_ORDER = [
   'cangrejito', 'cangrejon', 'coquito', 'cocotero', 'pelicanito', 'maleticano', 'mojarrita', 'mordisquito', 'mordiscon', 'tilapita', 'espadon',
   'paslamita', 'paslamona',
   'brasita', 'brasaurio', 'volcasaurio', 'hormiguita', 'hormigon', 'zopilotito', 'zopiloton', 'chocoyito', 'chocoyote',
-  'chispita', 'coheton', 'lamparita', 'perezosito', 'venadito', 'torovenado',
+  'chispita', 'coheton', 'lamparita', 'perezosito', 'venadito', 'torovenado', 'rugidito', 'rugidon',
 ];

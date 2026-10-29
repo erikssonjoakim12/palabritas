@@ -255,6 +255,12 @@ export const OBJECT_PALS: Record<string, Pal> = {
   perezosito: ['', '#c8a880', '#d84848', SPRITE_INK],
 };
 
+/**
+ * Placeholder Palabrita drawings (art/creatures.ts DRAW), until the user's art: the black jaguar (Rugidito,
+ * Rugidón): fur, its shade, the faint rosettes, the muzzle, green eyes, the leaf markings.
+ */
+export const JAGUAR = { fur: '#3c3a4c', shade: '#28263a', rosette: '#5a5670', muzzle: '#6a6478', nose: '#a07888', eye: '#90e868', leaf: '#58a848', leafDark: '#2e6a30' };
+
 /** Palabolas drawn as little patterns (art/balls.ts): teal top and white bottom, gray once fainted, the healing machine's flash, an empty slot. */
 export const BALL = { top: '#38a8a0', bottom: '#f0f0e8', faintedTop: '#8c8c8c', faintedBottom: '#c8c8c0', flash: '#f8f8b0', empty: '#c8c8c0' };
 

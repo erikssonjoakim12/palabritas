@@ -125,6 +125,11 @@ export const TRAINERS: Record<string, TrainerDef> = {
   nadadora_ivania: { id: 'nadadora_ivania', name: 'Nadadora Ivania', defenseMode: 'speak', rematch: true, team: [['pelicanito', 31], ['mojarrita', 32]] },
   nadador_pancho: { id: 'nadador_pancho', name: 'Nadador Pancho', defenseMode: 'listen', team: [['cangrejon', 32], ['mordisquito', 32]] },
   nadadora_karla: { id: 'nadadora_karla', name: 'Nadadora Karla', defenseMode: 'type', team: [['mojarrita', 32], ['pelicanito', 32], ['mordisquito', 33]] },
+  // The Selva del Jaguar's labyrinth (region 5). Placeholder teams until the rainforest's own Palabritas exist.
+  exploradora_ines: { id: 'exploradora_ines', name: 'Exploradora Inés', defenseMode: 'listen', team: [['hojarasco', 32], ['taranton', 32]] },
+  biologa_maite: { id: 'biologa_maite', name: 'Bióloga Maite', defenseMode: 'type', rematch: true, team: [['mariposita', 32], ['zumbador', 33]] },
+  fotografo_rene: { id: 'fotografo_rene', name: 'Fotógrafo René', defenseMode: 'choose', team: [['colibri', 33], ['ochopatas', 33]] },
+  silencioso11: { id: 'silencioso11', name: 'Silencioso', defenseMode: 'listen', team: [['murcielon', 33], ['taranton', 34]] },
   sigilo: { id: 'sigilo', name: 'Don Sigilo', defenseMode: 'type', team: [['murcielon', 27], ['taranton', 28], ['petroglifon', 29]] },
   lucas3: { id: 'lucas3', name: 'Lucas', defenseMode: 'type', team: [['nubarron', 28], ['hojarasco', 25], ['palomon', 25], ['cangrejon', 26]] },
   tizon: { id: 'tizon', name: 'Líder Don Tizón', defenseMode: 'type', team: [['chocoyote', 27], ['coheton', 28], ['brasaurio', 32]] },

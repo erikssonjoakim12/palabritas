@@ -97,7 +97,7 @@ export function newSave(): SaveData {
     dir: 'down',
     party: [],
     box: [],
-    flags: { amanecerWide: true, ruta5East: true, rutasCortas: true, sinEstacion: true, canonCascada: true, ruta2Nueva: true, palancaJunto: true, craterDerrumbe: true, oesteCorto: true },
+    flags: { amanecerWide: true, ruta5East: true, rutasCortas: true, sinEstacion: true, canonCascada: true, ruta2Nueva: true, palancaJunto: true, craterDerrumbe: true, oesteCorto: true, selvaLaberinto: true },
     gender: 'boy',
     money: 0,
     bag: {},
@@ -224,6 +224,11 @@ function migrate(s: SaveData) {
     } else if (s.map === 'ruta10') Object.assign(s, { x: y === 21 || y === 22 ? Math.max(x, 1) : x, y: y + 8 });
     else if (s.map === 'ruta8') Object.assign(s, x < 22 ? { x: 2, y: 20 } : { x: 38, y: 56 }, { dir: 'right' });
     s.flags.oesteCorto = true;
+  }
+  // The Selva del Jaguar became a labyrinth (the user): anyone saved in it starts again at its gateway.
+  if (!s.flags.selvaLaberinto) {
+    if (s.map === 'selva') Object.assign(s, { x: 40, y: 29, dir: 'up' });
+    s.flags.selvaLaberinto = true;
   }
   if (s.flags.starter && !s.flags.lucasSeFue) Object.assign(s.flags, { lucasEligio: true, lucasSeFue: true });
   s.money ??= 0;
