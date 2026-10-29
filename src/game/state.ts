@@ -227,7 +227,7 @@ function migrate(s: SaveData) {
   }
   // The Selva del Jaguar became a labyrinth (the user): anyone saved in it starts again at its gateway.
   if (!s.flags.selvaLaberinto) {
-    if (s.map === 'selva') Object.assign(s, { x: 40, y: 29, dir: 'up' });
+    if (s.map === 'selva') Object.assign(s, { x: 28, y: 20, dir: 'up' });
     s.flags.selvaLaberinto = true;
   }
   if (s.flags.starter && !s.flags.lucasSeFue) Object.assign(s.flags, { lucasEligio: true, lucasSeFue: true });
