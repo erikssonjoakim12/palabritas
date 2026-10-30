@@ -83,7 +83,7 @@ The creatures are **Palabritas**, you catch them with **Palabolas**, and you hea
 ## The world
 
 A Nicaragua-inspired country: farms and villages, pine highlands, the Pacific coast, volcanoes, and later
-rainforest, lakes and cloud forest ([BIOMES.md](BIOMES.md)). Surf (after the 4th medal) and Fly (after the 5th)
+rainforest, lakes and cloud forest ([BIOMES.md](BIOMES.md)). Surf (after the 4th medal) and Fly (after the 6th)
 are planned ([plans/surf-fly.md](plans/surf-fly.md)). Every quest is a Spanish task: asking villagers
 about a lost cat, giving lost words back to a muted town, counting turtle eggs, taking restaurant orders.
 Rival **Lucas** and the villains **Equipo Silencio** (who steal words) run through the story.

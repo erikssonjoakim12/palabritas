@@ -41,7 +41,7 @@ Palabritas get their themes (the jaguar's could be the legend, in the past tense
 - **Townspeople** in Villa Jaguar about the silence; Federico's lines after the altar are in.
 - **Floor puzzles** in the past tense (the stone doors that open when you tell what happened next; pressure plates,
   darkness, statues): the floors' layouts are ready for them.
-- **Gym 5** in Villa Jaguar (Planta/Veneno), after the temple.
+- **Gym 5** in Villa Jaguar (Planta/Veneno), after the temple: [gym5.md](gym5.md).
 - **The rainforest's own Palabritas** (feedback-round2.md part 6) replace the placeholder wild ones and teams.
 
 ## Also planned

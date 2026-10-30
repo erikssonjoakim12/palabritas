@@ -69,8 +69,8 @@ rainforest animals live along rivers). Animals, visual hooks and color direction
 Nicaraguan flavor for later: **voseo** («vos sos», «¿qué querés?») is everyday Spanish there, plus
 local words (*chunche*, *tuani*, *¡ideay!*, *va pues*). Great B1/B2 content: regional variety.
 
-World mechanics: **Surf** after the 4th medal and **Cut** after the 5th are built; **Fly** after the 5th (big
-birds) is next: [plans/surf-fly.md](plans/surf-fly.md).
+World mechanics: **Surf** after the 4th medal and **Cut** after the 5th are built; **Fly** (big birds) comes
+with the 6th (the user, 2026-10-30): [plans/surf-fly.md](plans/surf-fly.md).
 
 ## 4. Gyms and the level curve
 
@@ -83,7 +83,7 @@ Route trainers sit between the previous leader and the next one.
 | 2 ✓ | Villa Ocote, a pine-highland town past the cave | Roca / Tierra | 3 | 21 | 12-18 |
 | 3 ✓ | Playa Carey, a fishing village on the Pacific | Agua | 3 | 25 | 17-21 |
 | 4 ✓ | Ciudad Chispa, the volcano town | Fuego | 3 | 32 | 18-26 |
-| 5 | Villa Jaguar, the rainforest town | Planta / Veneno | 3-4 | 37 | 28-34 |
+| 5 | Villa Jaguar, the rainforest town | Planta / Veneno | 4 | 39 | 28-35 |
 | 6 | the lake archipelago, stormy | Eléctrico | 4 | 43 | 34-40 |
 | 7 | cloud-forest highlands | Psíquico (emotions) | 4 | 50 | 40-47 |
 | 8 | the old capital | Dragón | 5 | 58 | 47-55 |
@@ -141,6 +141,6 @@ creatures.
 1. **The group playtest** up to gym 4, and its feedback.
 2. **Leftover polish:** a full playthrough test (`tests/journey.test.mjs`: one save per medal, each leg's key
    moments, proving the story order holds together) and a pace check of gyms 2–4 with `tools/sim.mjs` (§6).
-3. **Region 5:** Villa Jaguar's people, the temple's past-tense puzzles, gym 5 (Planta/Veneno, the past tense),
-   then Fly ([plans/surf-fly.md](plans/surf-fly.md), [plans/region5-jungle.md](plans/region5-jungle.md)).
+3. **Region 5:** Villa Jaguar's people, the temple's past-tense puzzles, gym 5 (Planta/Veneno, the past tense:
+   [plans/gym5.md](plans/gym5.md); [plans/region5-jungle.md](plans/region5-jungle.md)). Fly comes with gym 6.
 4. Then gyms 6–8 (§4), with the B1 Spanish (§5), planned the same way.
