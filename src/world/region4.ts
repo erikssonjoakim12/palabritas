@@ -115,6 +115,19 @@ async function sigilo() {
 
 // ---------- Region 5: the Templo del Jaguar (plans/region5-jungle.md) ----------
 
+/** Villa Jaguar's people: the silent jungle until the jaguar is saved, then her and her cub. */
+const untilJaguar = (before: Line[], after: Line[]): ScriptFn => () => lines(...(flag('jaguarPiedra') ? after : before));
+
+/** Gallo pinto in the kitchen: Chepe's mom feeds you (and your Palabritas). */
+async function mamaChepe() {
+  await lines(
+    ['Hoy cociné gallo pinto, como todos los días. ¡Siéntate a comer!', 'Today I cooked gallo pinto, like every day. Sit down and eat!'],
+    ['Mi hijo Chepe trabaja con Ortiga, en el jardín. Dice que las ortigas pican mucho.', 'My son Chepe works with Ortiga, in the garden. He says the nettles sting a lot.'],
+  );
+  await heal();
+  await info('{name} comió gallo pinto. ¡Tus Palabritas también comieron y se recuperaron!', { en: '{name} ate gallo pinto. Your Palabritas ate too and recovered!' });
+}
+
 /** Federico at the temple's clearing: the legend, Equipo Silencio, the cub. */
 function federicoTemplo() {
   if (flag('rugiditoRecibido'))
@@ -275,7 +288,7 @@ async function ortiga() {
     intro: [
       ...(flag('ortigaPicada') ? [['¡Te picaron mis ortigas! No te preocupes: a mí también me picaron cuando era niña.', 'My nettles stung you! Don’t worry: they stung me too when I was a girl.'] as Line] : []),
       ['Me llamo Ortiga. Como la planta: soy suave... ¡pero si me tocas, pico!', 'My name is Ortiga. Like the plant: I’m soft... but if you touch me, I sting!'],
-      ['Ayer fui a la selva. Encontré a Federico y me contó todo: Mutis, la máquina, la jaguar... Gracias, {name}.', 'Yesterday I went to the jungle. I found Federico and he told me everything: Mutis, the machine, the jaguar... Thank you, {name}.'],
+      ['Ayer, en el templo, te vi subir. Federico me contó lo demás: Mutis, la máquina, la jaguar... Gracias, {name}.', 'Yesterday, at the temple, I saw you go up. Federico told me the rest: Mutis, the machine, the jaguar... Thank you, {name}.'],
     ],
     ready: ['¿Estás list{o/a}?', 'Are you ready?'],
     notReady: ['Las plantas tienen paciencia. Yo también.', 'Plants are patient. So am I.'],
@@ -559,9 +572,67 @@ export const REGION4: Record<string, ScriptFn> = {
   vueltaACasa,
   ortigas,
   ortiga,
-  guia_jaguar: talk(
-    ['¡Hola! Cuidado: aquí hay ortigas escondidas en el pasto. Lee el diario de Ortiga: ella sabe por dónde caminar.', 'Hi! Careful: there are nettles hidden in the grass. Read Ortiga’s diary: she knows where to walk.'],
-    ['Ortiga usa Palabritas de tipo Planta y Veneno. ¡El fuego y los voladores les ganan a las plantas!', 'Ortiga uses Plant and Poison types. Fire and flyers beat plants!'],
+  guia_jaguar: () =>
+    flag('jaguarPiedra')
+      ? lines(
+          ['¡Hola! Cuidado: aquí hay ortigas escondidas en el pasto. Lee el diario de Ortiga: ella sabe por dónde caminar.', 'Hi! Careful: there are nettles hidden in the grass. Read Ortiga’s diary: she knows where to walk.'],
+          ['Ortiga usa Palabritas de tipo Planta y Veneno. ¡El fuego y los voladores les ganan a las plantas!', 'Ortiga uses Plant and Poison types. Fire and flyers beat plants!'],
+        )
+      : lines(
+          ['La líder Ortiga no está. Se fue al Templo del Jaguar: dice que la selva está demasiado callada.', 'Leader Ortiga isn’t here. She went to the Jaguar Temple: she says the jungle is far too quiet.'],
+          ['Los otros entrenadores fueron con ella. Yo cuido el jardín... ¡y las ortigas!', 'The other trainers went with her. I’m looking after the garden... and the nettles!'],
+        ),
+  abuela_jaguar: untilJaguar(
+    [
+      ['Antes, los monos congo nos despertaban cada mañana. ¡Gritaban muy fuerte!', 'The howler monkeys used to wake us every morning. They howled really loud!'],
+      ['Pero hace unos días, la selva se calló. Ni un mono, ni un pájaro...', 'But a few days ago, the jungle went quiet. Not a monkey, not a bird...'],
+    ],
+    [
+      ['Dicen que la jaguar se volvió de piedra... y que tú cuidas a su hijo.', 'They say the jaguar turned to stone... and that you look after her child.'],
+      ['Cuando él ruja, los monos van a volver. ¡Yo lo sé!', 'When he roars, the monkeys will come back. I know it!'],
+    ],
+  ),
+  nino_jaguar: untilJaguar(
+    [
+      ['Ayer fui a la selva con mi papá. ¡No escuchamos ni un pájaro!', 'Yesterday I went into the jungle with my dad. We didn’t hear a single bird!'],
+      ['Mi papá dice que es por la gente de negro.', 'My dad says it’s because of the people in black.'],
+    ],
+    [
+      ['¿Tú viste a la jaguar? ¿Era muy grande? ¿Rugió?', 'Did you see the jaguar? Was she really big? Did she roar?'],
+      ['¡Qué suerte! Yo nunca la vi.', 'Lucky you! I never saw her.'],
+    ],
+  ),
+  cacaotera: talk(
+    ['¿Probaste el cacao de Villa Jaguar? Mi abuela plantó estos árboles hace cincuenta años.', 'Have you tried Villa Jaguar’s cacao? My grandmother planted these trees fifty years ago.'],
+    ['Con el cacao hacemos chocolate... y pinolillo, con maíz y cacao. ¡Es la bebida de Nicaragua!', 'With cacao we make chocolate... and pinolillo, with corn and cacao. It’s Nicaragua’s drink!'],
+  ),
+  vecina_jaguar: untilJaguar(
+    [['Anoche no pude dormir. ¡Había demasiado silencio!', 'Last night I couldn’t sleep. It was too quiet!']],
+    [['Anoche dormí mejor. Bueno... todavía hay silencio, pero ahora hay esperanza.', 'Last night I slept better. Well... it’s still quiet, but now there’s hope.']],
+  ),
+  guia_selva: talk(
+    ['Por aquí se va a la selva. Es un laberinto: ¡no te pierdas!', 'This way to the jungle. It’s a labyrinth: don’t get lost!'],
+    ['Ayer entró un grupo de turistas. Salieron muy cansados... ¡pero felices!', 'Yesterday a group of tourists went in. They came out very tired... but happy!'],
+  ),
+  lanchero: talk(
+    ['Llegaste por el río, ¿verdad? Aquí todo llega en lancha: la comida, las cartas... ¡y los visitantes!', 'You came by the river, right? Everything arrives here by boat: food, letters... and visitors!'],
+    ['El río baja hasta el Lago de las Islas. Allá hay nadadores muy fuertes.', 'The river runs down to the Lago de las Islas. There are very strong swimmers there.'],
+  ),
+  viajera_jaguar: untilJaguar(
+    [['Vine a ver la selva, pero está tan callada que da miedo.', 'I came to see the jungle, but it’s so quiet it’s scary.']],
+    [['Hoy escuché un pajarito en la selva. ¡Solo uno! Pero es un comienzo.', 'Today I heard a little bird in the jungle. Just one! But it’s a start.']],
+  ),
+  abuelo_jaguar: untilJaguar(
+    [['Antes, la jaguar rugía cada mañana y yo me levantaba. Ahora duermo hasta tarde... ¡y no me gusta!', 'The jaguar used to roar every morning and I’d get up. Now I sleep till late... and I don’t like it!']],
+    [
+      ['Mi abuelo me contó la leyenda cuando yo era niño: «Cuando su hijo ruja, la selva despertará».', 'My grandfather told me the legend when I was a boy: "When her child roars, the jungle will wake."'],
+      ['Nunca pensé que la iba a ver de verdad.', 'I never thought I’d see it for real.'],
+    ],
+  ),
+  mama_chepe: mamaChepe,
+  ortigaTemplo: talk(
+    ['Soy Ortiga, la líder del gimnasio de Villa Jaguar. Vine porque la selva está demasiado callada.', 'I’m Ortiga, the gym leader of Villa Jaguar. I came because the jungle is far too quiet.'],
+    ['Federico dice que Equipo Silencio está adentro. Son muchos... ¿Tú vas a subir? ¡Ten mucho cuidado!', 'Federico says Equipo Silencio is inside. There are a lot of them... Are you going up? Be very careful!'],
   ),
   jardinera_azucena: fight('jardinera_azucena', ['Ayer regué todas las plantas del jardín. ¡Hoy toca una batalla!', 'Yesterday I watered all the plants in the garden. Today it’s battle time!'], ['¡Ay! Me marchité.', 'Oh! I wilted.'], ['¿Leíste el diario de Ortiga? Yo lo leí tres veces.', 'Did you read Ortiga’s diary? I read it three times.']),
   yerbero_chepe: fight('yerbero_chepe', ['Esta mañana encontré una orquídea nueva. ¡No la pises!', 'This morning I found a new orchid. Don’t step on it!'], ['Perdí... pero la orquídea está bien.', 'I lost... but the orchid is fine.'], ['Ortiga me enseñó todo: qué plantas curan y qué plantas pican.', 'Ortiga taught me everything: which plants heal and which plants sting.']),

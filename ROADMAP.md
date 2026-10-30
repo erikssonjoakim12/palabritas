@@ -143,7 +143,7 @@ creatures.
 1. **The group playtest** up to gym 4, and its feedback.
 2. **Leftover polish:** a full playthrough test (`tests/journey.test.mjs`: one save per medal, each leg's key
    moments, proving the story order holds together) and a pace check of gyms 2–4 with `tools/sim.mjs` (§6).
-3. **Region 5:** Villa Jaguar's people, the temple's past-tense puzzles, the jaguar's roar
+3. **Region 5:** the temple's past-tense puzzles, the jaguar's roar, side quests
    ([plans/region5-jungle.md](plans/region5-jungle.md)). Fly comes with gym 6. Check the curve on the battles page
    (`npm run battles`).
 4. Then gyms 6–8 (§4), with the B1 Spanish (§5), planned the same way.

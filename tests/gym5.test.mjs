@@ -1,4 +1,4 @@
-// Ortiga's garden (gym 5, plans/gym5.md): closed until the jaguar is saved; nettles hidden off the diary's way send
+// Ortiga's garden (gym 5): open but empty until the jaguar is saved (Ortiga waits at the temple); nettles hidden off the diary's way send
 // you back to the door; the diary's way leads past the three trainers to Ortiga, who gives the Medalla Espina.
 import { start } from './lib.mjs';
 
@@ -20,15 +20,18 @@ const go = async (dir, n) => {
   }
 };
 
-await t.fromSave({ map: 'jaguar', x: 22, y: 8, dir: 'up', party, medals });
+// Before the temple: the gym is open but empty; the gardener says Ortiga went to the temple, and she's there.
+await t.fromSave({ map: 'jaguar', x: 22, y: 7, dir: 'up', party, medals });
 await t.walk('up', 2);
-await t.press('z');
-let r = await t.play();
-t.check('before the temple, the gardener keeps the gym shut', (await pos()).startsWith('jaguar') && r.said.some((x) => x.includes('selva')), [await pos(), r.said]);
+const empty = await t.game(() => ['ortiga', 'jardinera_azucena'].every((id) => !window.__game.npcById(id)?.visible));
+let r = await t.talk('gym_jaguar', 7, 14, 'right');
+t.check('before the temple, the gym is open but empty: Ortiga is at the temple', (await pos()).startsWith('gym_jaguar') && empty && r.said.some((x) => x.includes('Templo')), [await pos(), empty, r.said]);
+r = await t.talk('templo', 16, 13, 'up');
+t.check('Ortiga waits at the temple', r.said.some((x) => x.includes('Ortiga')), r.said);
+r = await t.talk('casa_jaguar2', 1, 2, 'up');
+t.check('Chepe’s mom feeds you gallo pinto', r.said.some((x) => x.includes('gallo pinto')), r.said);
 
-await t.fromSave({ map: 'jaguar', x: 22, y: 7, dir: 'up', party, medals, flags: { jaguarPiedra: true } });
-await t.walk('up', 2);
-t.check('after the temple, the gym is open', (await pos()).startsWith('gym_jaguar'), await pos());
+await t.fromSave({ map: 'gym_jaguar', x: 6, y: 15, dir: 'up', party, medals, flags: { jaguarPiedra: true } });
 
 await t.warp('gym_jaguar', 10, 12, 'left');
 await t.walk('left', 1);

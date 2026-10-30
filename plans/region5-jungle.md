@@ -21,7 +21,7 @@ Palabritas get their themes (the jaguar's could be the legend, in the past tense
 
 ## The story (built)
 
-1. **Villa Jaguar.** The jungle has gone quiet: no howler monkeys, no birds at dawn. (Townspeople's lines: to write.)
+1. **Villa Jaguar.** The jungle has gone quiet: no howler monkeys, no birds at dawn. Its people talk about the silence (built), then about the jaguar and her cub; Chepe's mom feeds you gallo pinto (a heal).
 2. **The labyrinth.** The trainers mention the silence, and people in black with a machine going to the temple; the
    Silencioso on lookout works for **Comandante Mutis**.
 3. **The clearing.** Federico tells the legend (a black jaguar looked after the jungle; every morning she roared and
@@ -38,11 +38,10 @@ Palabritas get their themes (the jaguar's could be the legend, in the past tense
 
 - **The hook:** once Rugidito becomes Rugidón (level 40) and you bring it to the statue, it roars, and its mother
   wakes (her voice back, the jungle loud again). A reward, and a reason to raise it.
-- **Townspeople** in Villa Jaguar about the silence; Federico's lines after the altar are in.
 - **Floor puzzles** in the past tense (the stone doors that open when you tell what happened next; pressure plates,
   darkness, statues): the floors' layouts are ready for them.
 - **Gym 5** ✓ (2026-10-30): Ortiga's garden (`gym_jaguar`), shut until the jaguar is saved; Villa Jaguar's Palacentro,
-  shop and two houses (empty until the townspeople).
+  shop and two houses. The gym is open but empty until the jaguar is saved: Ortiga waits at the temple's clearing.
 - **The rainforest's own Palabritas** (feedback-round2.md part 6) replace the placeholder wild ones and teams.
 
 ## Also planned

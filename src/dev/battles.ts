@@ -115,7 +115,10 @@ const head = el('tr');
 const rows = mons.map((s) => {
   const tr = el('tr');
   const sprite = el('td', 'sprite');
+  // Each drawing keeps its own shape: the longer side 56 px.
   const img = creatureArt(s.id).front;
+  const k = 56 / Math.max(img.width, img.height);
+  Object.assign(img.style, { width: `${img.width * k}px`, height: `${img.height * k}px` });
   img.className = 'mon';
   sprite.append(img);
   const types = el('td');

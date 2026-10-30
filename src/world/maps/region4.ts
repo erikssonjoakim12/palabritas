@@ -915,28 +915,20 @@ export const REGION4_MAPS: Record<string, MapDef> = {
       { x: 13, y: 12, to: 'casa_jaguar1', tx: 4, ty: 6 },
       { x: 20, y: 12, to: 'casa_jaguar2', tx: 4, ty: 6 },
     ],
-    // Ortiga went into the silent jungle; she's back once the jaguar is saved (plans/gym5.md).
-    gates: [
-      {
-        id: 'jardinero_gym',
-        look: 'campesino',
-        opens: () => flag('jaguarPiedra'),
-        at: [22, 6, 'down'],
-        aside: [24, 6],
-        road: [],
-        back: 'down',
-        closed: [
-          ['La líder Ortiga se fue a la selva. Dice que está demasiado callada...', 'Leader Ortiga went into the jungle. She says it’s far too quiet...'],
-          ['Yo la espero aquí. Si vas al templo, ¡ten cuidado!', 'I’m waiting for her here. If you go to the temple, be careful!'],
-        ],
-        open: [['¡Ortiga volvió! Te espera en su jardín.', 'Ortiga is back! She’s waiting for you in her garden.']],
-      },
+    // The townspeople: the silent jungle, then the jaguar and her cub (region4.ts).
+    npcs: [
+      { id: 'abuela_jaguar', x: 8, y: 7, look: 'granny', dir: 'down', script: 'abuela_jaguar', wanders: true },
+      { id: 'nino_jaguar', x: 10, y: 14, look: 'boy', dir: 'down', script: 'nino_jaguar', wanders: true },
+      { id: 'cacaotera', x: 4, y: 7, look: 'lady', dir: 'down', script: 'cacaotera', turns: true },
+      { id: 'vecina_jaguar', x: 20, y: 7, look: 'painter', dir: 'down', script: 'vecina_jaguar', turns: true },
+      { id: 'guia_selva', x: 3, y: 13, look: 'hiker', dir: 'down', script: 'guia_selva' },
+      { id: 'lanchero', x: 17, y: 16, look: 'fisher', dir: 'left', script: 'lanchero' },
     ],
   },
-  centro_jaguar: centro('centro_jaguar', { to: 'jaguar', x: 5, y: 13 }),
+  centro_jaguar: centro('centro_jaguar', { to: 'jaguar', x: 5, y: 13 }, [{ id: 'viajera_jaguar', x: 2, y: 4, look: 'tourist', dir: 'right', script: 'viajera_jaguar' }]),
   tienda_jaguar: tienda('tienda_jaguar', { to: 'jaguar', x: 14, y: 6 }),
-  casa_jaguar1: casa('casa_jaguar1', 'Casa', { to: 'jaguar', x: 13, y: 13 }, [], { rows: HOUSES.hamaca }),
-  casa_jaguar2: casa('casa_jaguar2', 'Casa', { to: 'jaguar', x: 20, y: 13 }, [], { rows: HOUSES.cocina }),
+  casa_jaguar1: casa('casa_jaguar1', 'Casa', { to: 'jaguar', x: 13, y: 13 }, [{ id: 'abuelo_jaguar', x: 3, y: 2, look: 'abuelo', dir: 'down', script: 'abuelo_jaguar' }], { rows: HOUSES.hamaca }),
+  casa_jaguar2: casa('casa_jaguar2', 'Casa', { to: 'jaguar', x: 20, y: 13 }, [{ id: 'mama_chepe', x: 1, y: 1, look: 'lady', dir: 'up', script: 'mama_chepe', turns: true }], { rows: HOUSES.cocina }),
   // Ortiga's garden (gym 5): nettles hidden in the grass; only the way in her diary has none (plans/gym5.md).
   gym_jaguar: {
     id: 'gym_jaguar',
@@ -974,12 +966,13 @@ export const REGION4_MAPS: Record<string, MapDef> = {
       },
       { x: 1, y: 5, es: 'Un árbol de cacao.', en: 'A cacao tree.' },
     ],
+    // Open from the start, but empty: Ortiga and her trainers are at the temple until the jaguar is saved (the user).
     npcs: [
       // Each where the diary's way can't get past them.
-      { id: 'jardinera_azucena', x: 4, y: 13, look: 'voluntaria', dir: 'up', script: 'jardinera_azucena', sight: 1 },
-      { id: 'yerbero_chepe', x: 3, y: 7, look: 'campesino', dir: 'left', script: 'yerbero_chepe', sight: 1 },
-      { id: 'botanica_iris', x: 8, y: 4, look: 'ornitologa', dir: 'left', script: 'botanica_iris', sight: 1 },
-      { id: 'ortiga', x: 7, y: 1, look: 'ortiga', dir: 'down', script: 'ortiga' },
+      { id: 'jardinera_azucena', x: 4, y: 13, look: 'voluntaria', dir: 'up', script: 'jardinera_azucena', sight: 1, show: () => flag('jaguarPiedra') },
+      { id: 'yerbero_chepe', x: 3, y: 7, look: 'campesino', dir: 'left', script: 'yerbero_chepe', sight: 1, show: () => flag('jaguarPiedra') },
+      { id: 'botanica_iris', x: 8, y: 4, look: 'ornitologa', dir: 'left', script: 'botanica_iris', sight: 1, show: () => flag('jaguarPiedra') },
+      { id: 'ortiga', x: 7, y: 1, look: 'ortiga', dir: 'down', script: 'ortiga', show: () => flag('jaguarPiedra') },
       { id: 'guia_jaguar', x: 8, y: 14, look: 'voluntaria', dir: 'left', script: 'guia_jaguar' },
     ],
   },
@@ -1115,6 +1108,8 @@ export const REGION4_MAPS: Record<string, MapDef> = {
     signs: [{ x: 14, y: 12, es: 'TEMPLO DEL JAGUAR. Muy antiguo. Nadie sabe quién lo construyó.', en: 'JAGUAR TEMPLE. Very old. Nobody knows who built it.' }],
     npcs: [
       { id: 'federico_templo', x: 13, y: 11, look: 'arqueologo', dir: 'left', script: 'federicoTemplo' },
+      // Villa Jaguar's gym leader, worried about the silence, until the jaguar is saved (then back in her garden).
+      { id: 'ortiga_templo', x: 16, y: 12, look: 'ortiga', dir: 'up', script: 'ortigaTemplo', show: () => !flag('jaguarPiedra') },
       { id: 'rugidito_cachorro', x: 10, y: 11, object: 'rugiditoCachorro', script: 'cachorroJaguar', show: () => !flag('rugiditoRecibido') },
     ],
   },
