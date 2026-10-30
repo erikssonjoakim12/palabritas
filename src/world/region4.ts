@@ -10,7 +10,7 @@ import { TRAINERS } from '../data/trainers';
 import { info, setSpeaker } from '../ui/textbox';
 import { ask } from '../ui/menu';
 import { launchFirework } from '../art/fireworks';
-import { refreshNpcs, walkNpc, type ScriptFn, type ScriptCtx } from './world';
+import { refreshNpcs, walkNpc, warp, type ScriptFn, type ScriptCtx } from './world';
 import type { Line } from './maps';
 import { TORCHES } from './maps/region4';
 import { lines, as, talk, cutTo, talkMode, heal, blackout, fight, rivalBattle, gymLeader, gift, pay, receiveMon, practice, practiceUntilRight, question, untilRight } from './flows';
@@ -254,6 +254,41 @@ async function tizon() {
   // Surf opens with the 4th medal (plans/surf-fly.md).
   await as('tizon', ['Con cuatro medallas, las Palabritas grandes del agua ya te pueden llevar. ¡Prueba en el río o en el lago!', 'With four medals, big water Palabritas can carry you now. Try the river or the lake!']);
   await info('¡Felicidades! Terminaste la cuarta parte de Palabritas.', { en: 'Congratulations! You finished the fourth part of Palabritas.' });
+  await info('Sigue entrenando a tus Palabritas y atrapando nuevas. ¡Pronto habrá más aventuras!', { en: 'Keep training your Palabritas and catching new ones. More adventures are coming soon!' });
+}
+
+// ---------- Gym 5: Jardín de Ortiga (plans/gym5.md) ----------
+
+/** A nettle hidden in the grass: off the diary's way. It stings, and you run back to the door. */
+async function ortigas() {
+  sfx('hit');
+  await info('¡Ay! Había ortigas escondidas en el pasto. ¡Pican mucho!', { en: 'Ouch! There were nettles hidden in the grass. They really sting!' });
+  setFlag('ortigaPicada');
+  await info('{name} vuelve corriendo a la entrada.', { en: '{name} runs back to the entrance.' });
+  await warp('gym_jaguar', 6, 15, 'up', false);
+}
+
+/** Ortiga, gym 5: the Medalla Espina, and Cut. */
+async function ortiga() {
+  const won = await gymLeader('ortiga', {
+    medal: ['Espina', 'Thorn'],
+    intro: [
+      ...(flag('ortigaPicada') ? [['¡Te picaron mis ortigas! No te preocupes: a mí también me picaron cuando era niña.', 'My nettles stung you! Don’t worry: they stung me too when I was a girl.'] as Line] : []),
+      ['Me llamo Ortiga. Como la planta: soy suave... ¡pero si me tocas, pico!', 'My name is Ortiga. Like the plant: I’m soft... but if you touch me, I sting!'],
+      ['Ayer fui a la selva. Encontré a Federico y me contó todo: Mutis, la máquina, la jaguar... Gracias, {name}.', 'Yesterday I went to the jungle. I found Federico and he told me everything: Mutis, the machine, the jaguar... Thank you, {name}.'],
+    ],
+    ready: ['¿Estás list{o/a}?', 'Are you ready?'],
+    notReady: ['Las plantas tienen paciencia. Yo también.', 'Plants are patient. So am I.'],
+    outro: ['¡Me ganaste! Fue como una tormenta en la selva.', 'You beat me! It was like a storm in the jungle.'],
+    after: [
+      ['Con esta medalla, tus Palabritas pueden cortar arbolitos delgados. Hojarasco, Hormigón, Perezosito... ¡ellos saben cortar!', 'With this medal, your Palabritas can cut thin little trees. Hojarasco, Hormigón, Perezosito... they know how to cut!'],
+      ['Al norte de la Ruta 4 hay un arbolito así. Detrás empieza un camino nuevo.', 'North of Route 4 there’s a little tree like that. Behind it a new path begins.'],
+      ['Y para volver a casa: cerca del templo hay otro, en el camino a la Ruta 4.', 'And to get back home: near the temple there’s another one, on the path to Route 4.'],
+    ],
+    beaten: [['Ayer una ortiga me picó... ¡otra vez! Nunca aprendo.', 'Yesterday a nettle stung me... again! I never learn.']],
+  });
+  if (!won) return;
+  await info('¡Felicidades! Terminaste la quinta parte de Palabritas.', { en: 'Congratulations! You finished the fifth part of Palabritas.' });
   await info('Sigue entrenando a tus Palabritas y atrapando nuevas. ¡Pronto habrá más aventuras!', { en: 'Keep training your Palabritas and catching new ones. More adventures are coming soon!' });
 }
 
@@ -522,6 +557,15 @@ export const REGION4: Record<string, ScriptFn> = {
     ['Don Tizón usa Palabritas de tipo Fuego. ¡El agua es tu mejor amiga!', 'Don Tizón uses Fire types. Water is your best friend!'],
   ),
   vueltaACasa,
+  ortigas,
+  ortiga,
+  guia_jaguar: talk(
+    ['¡Hola! Cuidado: aquí hay ortigas escondidas en el pasto. Lee el diario de Ortiga: ella sabe por dónde caminar.', 'Hi! Careful: there are nettles hidden in the grass. Read Ortiga’s diary: she knows where to walk.'],
+    ['Ortiga usa Palabritas de tipo Planta y Veneno. ¡El fuego y los voladores les ganan a las plantas!', 'Ortiga uses Plant and Poison types. Fire and flyers beat plants!'],
+  ),
+  jardinera_azucena: fight('jardinera_azucena', ['Ayer regué todas las plantas del jardín. ¡Hoy toca una batalla!', 'Yesterday I watered all the plants in the garden. Today it’s battle time!'], ['¡Ay! Me marchité.', 'Oh! I wilted.'], ['¿Leíste el diario de Ortiga? Yo lo leí tres veces.', 'Did you read Ortiga’s diary? I read it three times.']),
+  yerbero_chepe: fight('yerbero_chepe', ['Esta mañana encontré una orquídea nueva. ¡No la pises!', 'This morning I found a new orchid. Don’t step on it!'], ['Perdí... pero la orquídea está bien.', 'I lost... but the orchid is fine.'], ['Ortiga me enseñó todo: qué plantas curan y qué plantas pican.', 'Ortiga taught me everything: which plants heal and which plants sting.']),
+  botanica_iris: fight('botanica_iris', ['¡Llegaste al camino del medio! ¿Quién te dijo por dónde caminar?', 'You made it to the middle path! Who told you where to walk?'], ['Leíste bien el diario.', 'You read the diary well.'], ['La líder está ahí arriba, en su silla. ¡Suerte!', 'The leader is up there, in her chair. Good luck!']),
 
   // ---------- Side quests ----------
   hamaquera,

@@ -139,7 +139,63 @@ export const TRAINERS: Record<string, TrainerDef> = {
   silencioso15: { id: 'silencioso15', name: 'Silencioso', defenseMode: 'type', team: [['taranton', 35], ['murcielon', 34]] },
   buscatesoros_vero: { id: 'buscatesoros_vero', name: 'Buscatesoros Vero', defenseMode: 'speak', team: [['dardito', 34], ['puercoespin', 35]] },
   mutis: { id: 'mutis', name: 'Comandante Mutis', defenseMode: 'type', team: [['murcielon', 35], ['tinajon', 35], ['petroglifon', 36], ['taranton', 37]] },
+  // Ortiga's garden, gym 5 (plans/gym5.md).
+  jardinera_azucena: { id: 'jardinera_azucena', name: 'Jardinera Azucena', defenseMode: 'choose', team: [['pestanita', 33], ['coquito', 33]] },
+  yerbero_chepe: { id: 'yerbero_chepe', name: 'Yerbero Chepe', defenseMode: 'listen', team: [['dardito', 34], ['hojarasco', 34]] },
+  botanica_iris: { id: 'botanica_iris', name: 'Botánica Iris', defenseMode: 'type', team: [['ranojito', 34], ['cocotero', 35]] },
+  ortiga: { id: 'ortiga', name: 'Líder Ortiga', defenseMode: 'type', team: [['dardito', 36], ['hojarasco', 37], ['ranojon', 37], ['oropelon', 39]] },
   sigilo: { id: 'sigilo', name: 'Don Sigilo', defenseMode: 'type', team: [['murcielon', 27], ['taranton', 28], ['petroglifon', 29]] },
   lucas3: { id: 'lucas3', name: 'Lucas', defenseMode: 'type', team: [['nubarron', 28], ['hojarasco', 25], ['palomon', 25], ['cangrejon', 26]] },
   tizon: { id: 'tizon', name: 'Líder Don Tizón', defenseMode: 'type', team: [['chocoyote', 27], ['coheton', 28], ['brasaurio', 32]] },
 };
+
+/**
+ * Every trainer in the order you meet them on the way through the story, leg by leg (each leg ends at a gym), for the
+ * battles page (batallas.html) to show the difficulty curve. Optional trainers sit where you can first reach them.
+ * The data test checks that every trainer is here once.
+ */
+export const BATTLE_ORDER: { leg: string; en: string; trainers: string[] }[] = [
+  { leg: 'Rutas 1–2 → Gimnasio Brisa', en: 'Routes 1–2 → gym 1', trainers: ['sofia', 'rosita', 'javi', 'mateo', 'tomas', 'valeria', 'andres', 'ivan', 'paloma'] },
+  {
+    leg: 'Ruta 3 → Cueva del Eco',
+    en: 'Route 3 and the cave',
+    trainers: ['rodrigo', 'isabel', 'pablo', 'kevin', 'camila', 'ernesto', 'marcos', 'raul', 'daniela', 'federico', 'javier', 'rocio'],
+  },
+  {
+    leg: 'Ruta 4, el cañón → Villa Ocote',
+    en: 'Route 4, the canyon, the mine → gym 2',
+    trainers: ['armando', 'elena', 'lucia', 'julio', 'rosa', 'lucas1', 'silencioso1', 'silencioso2', 'silencioso3', 'silencioso4', 'capataz', 'tito', 'rosario', 'petra'],
+  },
+  {
+    leg: 'Rutas 5–6 → Playa Carey',
+    en: 'Routes 5–6, the turtle beach → gym 3',
+    trainers: [
+      'ramon', 'laura', 'esteban', 'juana', 'hugo', 'mario', 'andrea', 'tono',
+      'surfista1', 'banista1', 'pescador_r7', 'surfista2', 'banista2', 'turista_r7',
+      'lucas2', 'silencioso8', 'silencioso9', 'silencioso10', 'callada',
+      'surfista_gym', 'salvavidas', 'banista_gym', 'marina',
+    ],
+  },
+  {
+    leg: 'Ruta 7, el volcán, Rutas 8–9 → Ciudad Chispa',
+    en: 'Route 7, the volcano, Routes 8–9 → gym 4',
+    trainers: [
+      'campesino', 'vaquera_r8', 'pescadora_r8', 'turista_r8', 'cortador', 'cortadora', 'granjero', 'ciclista', 'cortadora_marta', 'cortador_wilmer',
+      'guardaparque1', 'vulcanologa1', 'guardaparque2', 'excursionista_noel', 'vulcanologa_sara', 'fotografo_max', 'vulcanologo2',
+      'lucas3', 'silencioso5', 'silencioso6', 'silencioso7', 'sigilo',
+      'campesina_r9', 'ciclista_r9', 'excursionista_r9', 'vulcanologo_oscar', 'excursionista_lidia', 'guardaparque_ivan',
+      'polvorera', 'malabarista', 'fritanguero', 'tizon',
+    ],
+  },
+  {
+    leg: 'El río, el lago, la selva, el templo → Villa Jaguar',
+    en: 'Surf: the river and the lake, the jungle, the temple → gym 5',
+    trainers: [
+      'nadadora_rosa', 'nadador_chema', 'nadadora_ivania', 'nadador_pancho', 'nadadora_karla',
+      'nadador_tomas', 'nadadora_elena', 'nadador_rodolfo', 'nadadora_lucia',
+      'exploradora_ines', 'biologa_maite', 'fotografo_rene', 'silencioso11',
+      'silenciosa12', 'buscatesoros_leo', 'silencioso13', 'arqueologo_tito', 'silenciosa14', 'silencioso15', 'buscatesoros_vero', 'mutis',
+      'jardinera_azucena', 'yerbero_chepe', 'botanica_iris', 'ortiga',
+    ],
+  },
+];

@@ -21,6 +21,7 @@ Plans for finished work are removed once built: the code is the truth.
 | `npm run art` | the art review page (`/art.html`): every sprite, tile, map and the stitched world |
 | `npm run music` | the music page (`/musica.html`): every song and jingle, with voices to mute |
 | `npm run words` | the dictionary (`/palabras.html`): every word and phrase, its lists and levels, who learns it |
+| `npm run battles` | the battles page (`/batallas.html`): every trainer in battle order (`BATTLE_ORDER` in trainers.ts) with a chart of the level curve, and every Palabrita's base stats and moves |
 | `npm run typecheck` / `npm run build` | |
 | `npm test` | every browser test; `npm test -- cave maps` runs some. Uses a dev server on **port 5181**, starting and stopping its own if none is there |
 
@@ -99,7 +100,7 @@ is a string of tiles (legend at the top of `kit.ts`).
    put it where the path can't avoid its line of sight.
 3. Add a script: `id: fight(id, intro, defeated, after)`. Each line is `[es, en]`.
 
-A beaten trainer sets `beat:<id>`.
+A beaten trainer sets `beat:<id>`. Add it to `BATTLE_ORDER` (trainers.ts) where you meet it: the battles page shows the curve.
 
 **A gate guard** (blocks a road until something happens): a `gates` entry on the map, with `opens()`, the
 guard's spot, where they wait once the road is open, the road tiles, where you're sent back, and their lines.

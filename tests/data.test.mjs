@@ -84,4 +84,10 @@ t.check('the dictionary page loads and lists the words', artErrors.length === 0 
 await art.goto(BASE + '/musica.html', { waitUntil: 'networkidle0' });
 const songs = await art.evaluate(() => document.querySelectorAll('.song').length);
 t.check('the music page loads and every song fits its bars', artErrors.length === 0 && songs >= 20, [songs, ...artErrors]);
+// The battles page: every trainer in battle order (none missing from BATTLE_ORDER), every Palabrita.
+await art.goto(BASE + '/batallas.html', { waitUntil: 'networkidle0' });
+const battles = await art.evaluate(() => ({ trainers: document.querySelectorAll('table.trainers tr:not(:first-child)').length, mons: document.querySelectorAll('table.mons canvas').length, warn: document.querySelector('.warn')?.textContent }));
+const nTrainers = await t.game(() => Object.keys(window.__game.TRAINERS).length);
+const nMons = await t.game(() => Object.keys(window.__game.SPECIES).length);
+t.check('the battles page lists every trainer in order and every Palabrita', artErrors.length === 0 && !battles.warn && battles.trainers === nTrainers && battles.mons === nMons, [JSON.stringify(battles), nTrainers, nMons, ...artErrors]);
 await t.end();

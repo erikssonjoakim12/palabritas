@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="icon-192.png" />
+    <title>Palabritas battles</title>
+    <style>
+      body { font-family: system-ui, sans-serif; background: #f4f4ec; color: #222; margin: 0; padding: 16px; }
+      h1 { font-size: 20px; margin: 0 0 4px; }
+      h2 { font-size: 16px; margin: 28px 0 8px; border-bottom: 2px solid #ccc; padding-bottom: 4px; }
+      h3 { font-size: 15px; margin: 20px 0 2px; }
+      p { margin: 4px 0; color: #555; font-size: 14px; }
+      p.warn { color: #b02020; font-weight: 600; }
+      a { color: #2a6a9a; }
+      table { border-collapse: collapse; width: 100%; background: #fff; font-size: 14px; margin-top: 6px; }
+      th, td { text-align: left; vertical-align: middle; padding: 5px 8px; border-bottom: 1px solid #e4e4dc; }
+      th { background: #e8e8dc; font-weight: 600; white-space: nowrap; }
+      th.sortable { cursor: pointer; text-decoration: underline dotted; }
+      td.num { text-align: right; font-variant-numeric: tabular-nums; }
+      td.total { font-weight: 600; }
+      tr.leader td { background: #fdf0d8; font-weight: 600; }
+      tr.boss td { background: #ece8f4; }
+      .chip { display: inline-block; background: #eef2e4; border: 1px solid #d4dcc4; border-radius: 10px; padding: 1px 7px; margin: 1px 2px 1px 0; font-size: 12px; white-space: nowrap; font-weight: 400; }
+      .type { display: inline-block; border-radius: 4px; padding: 0 5px; margin: 1px 2px 1px 0; font-size: 11px; font-weight: 600; white-space: nowrap; }
+      td.top { white-space: nowrap; }
+      td.top b { display: inline-block; width: 22px; }
+      .bar { display: inline-block; height: 8px; background: #6a9ad0; border-radius: 2px; vertical-align: middle; }
+      tr.leader .bar { background: #d06040; }
+      td.sprite { padding: 2px 4px; }
+      canvas.mon { width: 48px; height: 48px; image-rendering: pixelated; display: block; }
+      td.name { font-weight: 600; white-space: nowrap; }
+      .sub { display: block; font-weight: 400; color: #777; font-size: 12px; }
+      td.evo { font-size: 12px; color: #555; }
+      .move { display: block; white-space: nowrap; font-size: 13px; }
+      .move b { display: inline-block; width: 40px; color: #555; font-weight: 600; }
+      .wrap { overflow-x: auto; }
+      svg { background: #fff; display: block; }
+      svg .grid { stroke: #e4e4dc; }
+      svg .axis { font-size: 10px; fill: #777; }
+      svg .band { fill: #f4f4ec; }
+      svg .line { fill: none; stroke: #b8c8d8; stroke-width: 1; }
+      svg .dot { fill: #6a9ad0; }
+      svg .leader { fill: #d06040; stroke: #fff; }
+      svg .boss { fill: #705898; }
+    </style>
+  </head>
+  <body>
+    <!-- Every trainer in battle order and every Palabrita's stats (npm run battles, or batallas.html next to the game). -->
+    <h1>Palabritas battles</h1>
+    <p>
+      The difficulty curve: trainers from <code>src/data/trainers.ts</code> (in <code>BATTLE_ORDER</code>) and Palabritas from
+      <code>src/data/species.ts</code>. Words: <a href="palabras.html">palabras.html</a> · Art: <a href="art.html">art.html</a> ·
+      Music: <a href="musica.html">musica.html</a>.
+    </p>
+    <div id="battles"></div>
+    <script type="module" src="/src/dev/battles.ts"></script>
+  </body>
+</html>

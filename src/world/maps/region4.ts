@@ -12,6 +12,8 @@ export const TORCHES = [
   { color: 'Verde', es: 'verde', en: 'green', x: 1 },
   { color: 'Amarilla', es: 'amarilla', en: 'yellow', x: 8 },
 ];
+/** Where nettles hide in Ortiga's garden (gym 5): on every way but the one in her diary (plans/gym5.md). */
+export const ORTIGAS: [number, number][] = [[9, 12], [2, 4], [11, 4], [11, 6]];
 /** A torch: its unlit stand, and the same spot burning once it's lit. */
 const torch = (t: (typeof TORCHES)[number]): NpcDef[] => [
   { id: `antorcha${t.color}`, x: t.x, y: 5, object: `antorcha${t.color}`, script: 'antorcha', show: () => !flag(`antorcha:${t.color}`) },
@@ -906,6 +908,80 @@ export const REGION4_MAPS: Record<string, MapDef> = {
       '~~~~~~~~~~~~~~~HH~~~~~~~~~~~~~~~',
     ],
     signs: [{ x: 15, y: 7, es: 'VILLA JAGUAR. Por la puerta de piedra: la selva y el Templo del Jaguar.', en: 'JAGUAR VILLAGE. Through the stone gate: the jungle and the Jaguar Temple.' }],
+    doors: [
+      { x: 5, y: 12, to: 'centro_jaguar', tx: 4, ty: 7 },
+      { x: 14, y: 5, to: 'tienda_jaguar', tx: 4, ty: 6 },
+      { x: 22, y: 5, to: 'gym_jaguar', tx: 6, ty: 15 },
+      { x: 13, y: 12, to: 'casa_jaguar1', tx: 4, ty: 6 },
+      { x: 20, y: 12, to: 'casa_jaguar2', tx: 4, ty: 6 },
+    ],
+    // Ortiga went into the silent jungle; she's back once the jaguar is saved (plans/gym5.md).
+    gates: [
+      {
+        id: 'jardinero_gym',
+        look: 'campesino',
+        opens: () => flag('jaguarPiedra'),
+        at: [22, 6, 'down'],
+        aside: [24, 6],
+        road: [],
+        back: 'down',
+        closed: [
+          ['La líder Ortiga se fue a la selva. Dice que está demasiado callada...', 'Leader Ortiga went into the jungle. She says it’s far too quiet...'],
+          ['Yo la espero aquí. Si vas al templo, ¡ten cuidado!', 'I’m waiting for her here. If you go to the temple, be careful!'],
+        ],
+        open: [['¡Ortiga volvió! Te espera en su jardín.', 'Ortiga is back! She’s waiting for you in her garden.']],
+      },
+    ],
+  },
+  centro_jaguar: centro('centro_jaguar', { to: 'jaguar', x: 5, y: 13 }),
+  tienda_jaguar: tienda('tienda_jaguar', { to: 'jaguar', x: 14, y: 6 }),
+  casa_jaguar1: casa('casa_jaguar1', 'Casa', { to: 'jaguar', x: 13, y: 13 }, [], { rows: HOUSES.hamaca }),
+  casa_jaguar2: casa('casa_jaguar2', 'Casa', { to: 'jaguar', x: 20, y: 13 }, [], { rows: HOUSES.cocina }),
+  // Ortiga's garden (gym 5): nettles hidden in the grass; only the way in her diary has none (plans/gym5.md).
+  gym_jaguar: {
+    id: 'gym_jaguar',
+    name: 'Jardín de Ortiga',
+    outdoor: false,
+    floor: '.',
+    ground: 'grass',
+    rows: [
+      '##############',
+      '#------.-----#',
+      '#-..........-#',
+      '#-.----.---.-#',
+      '#-.----..--.-#',
+      '#Y..........-#',
+      '#-*--------.-#',
+      '#-*.-------.-#',
+      '#-*--------.-#',
+      '#~H~~~~~~~~H~#',
+      '#-.--------.-#',
+      '#-.--------.-#',
+      '#-....FF....-#',
+      '#---..FF..---#',
+      '#----......--#',
+      '#----S..-----#',
+      '#-----mm-----#',
+    ],
+    exit: { to: 'jaguar', x: 22, y: 6 },
+    triggers: ORTIGAS.map(([x, y]) => ({ x, y, script: 'ortigas' })),
+    signs: [
+      {
+        x: 5,
+        y: 15,
+        es: 'Diario de Ortiga. Ayer entré a mi jardín. En la fuente, doblé a la izquierda. Crucé el puente y caminé entre las orquídeas. En el árbol de cacao, doblé a la derecha. Después, subí por el camino del medio... ¡y llegué a mi silla sin una sola picadura!',
+        en: 'Ortiga’s diary. Yesterday I went into my garden. At the fountain, I turned left. I crossed the bridge and walked among the orchids. At the cacao tree, I turned right. Then I went up the middle path... and reached my chair without a single sting!',
+      },
+      { x: 1, y: 5, es: 'Un árbol de cacao.', en: 'A cacao tree.' },
+    ],
+    npcs: [
+      // Each where the diary's way can't get past them.
+      { id: 'jardinera_azucena', x: 4, y: 13, look: 'voluntaria', dir: 'up', script: 'jardinera_azucena', sight: 1 },
+      { id: 'yerbero_chepe', x: 3, y: 7, look: 'campesino', dir: 'left', script: 'yerbero_chepe', sight: 1 },
+      { id: 'botanica_iris', x: 8, y: 4, look: 'ornitologa', dir: 'left', script: 'botanica_iris', sight: 1 },
+      { id: 'ortiga', x: 7, y: 1, look: 'ortiga', dir: 'down', script: 'ortiga' },
+      { id: 'guia_jaguar', x: 8, y: 14, look: 'voluntaria', dir: 'left', script: 'guia_jaguar' },
+    ],
   },
   // The Selva del Jaguar: a labyrinth of narrow paths through dense jungle, darker under the canopy (the user).
   selva: {

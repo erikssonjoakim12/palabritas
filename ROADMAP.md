@@ -19,7 +19,8 @@ Plans for what's next: [plans/](plans/README.md).
 - **Surf and Cut ✓** (4 and 5 medals; Palabritas that can really do it, nothing to teach): [plans/surf-fly.md](plans/surf-fly.md).
 - **Region 5, mostly built:** Villa Jaguar by the river, the Selva del Jaguar (a labyrinth), the Templo del Jaguar
   (four floors, Equipo Silencio, the black jaguar's story, Rugidito), the jungle's own Palabritas; swimmers on the
-  river and the lake ([plans/region5-jungle.md](plans/region5-jungle.md)). Gym 5 still to build.
+  river and the lake ([plans/region5-jungle.md](plans/region5-jungle.md)). **Gym 5 ✓**: Ortiga's garden, where nettles
+  hide off the way her diary tells in the past tense (Planta/Veneno, Medalla Espina, Cut).
 - **Day and night** by the phone's clock (golden at 18, night from 19, morning by 7), with lit windows, fireflies
   and darker caves, plus story night scenes.
 - **Paused:** the bus (fast travel), until there are big roads.
@@ -36,6 +37,7 @@ past the volcano, and down the ledge into Pueblo Amanecer.
 | 2 · Pine highlands | **Villa Ocote**: Petra, Roca/Tierra, Medalla Barro | the muted town and the clay mine | the lost words · Beto's hat · the echo room and a fossil · the lost oxen · the national bird |
 | 3 · Pacific coast | **Playa Carey**: Marina, Agua, Medalla Ola | the night of the turtles (*la arribada*) | the seafood restaurant · the fishing rod · the message in a bottle |
 | 4 · Volcanoes | **Ciudad Chispa**: Don Tizón, Fuego, Medalla Chispa | the stolen fireworks and the volcano | a hammock for Mom · the lost parakeet chick · the haunted house · the Torovenado costume · the legend of the Carreta Nagua |
+| 5 · Rainforest | **Villa Jaguar**: Ortiga, Planta/Veneno, Medalla Espina | the silent jungle and the black jaguar | (to come) |
 
 ## 2. Evolutions ✓
 
@@ -83,7 +85,7 @@ Route trainers sit between the previous leader and the next one.
 | 2 ✓ | Villa Ocote, a pine-highland town past the cave | Roca / Tierra | 3 | 21 | 12-18 |
 | 3 ✓ | Playa Carey, a fishing village on the Pacific | Agua | 3 | 25 | 17-21 |
 | 4 ✓ | Ciudad Chispa, the volcano town | Fuego | 3 | 32 | 18-26 |
-| 5 | Villa Jaguar, the rainforest town | Planta / Veneno | 4 | 39 | 28-35 |
+| 5 ✓ | Villa Jaguar, the rainforest town | Planta / Veneno | 4 | 39 | 28-35 |
 | 6 | the lake archipelago, stormy | Eléctrico | 4 | 43 | 34-40 |
 | 7 | cloud-forest highlands | Psíquico (emotions) | 4 | 50 | 40-47 |
 | 8 | the old capital | Dragón | 5 | 58 | 47-55 |
@@ -141,6 +143,7 @@ creatures.
 1. **The group playtest** up to gym 4, and its feedback.
 2. **Leftover polish:** a full playthrough test (`tests/journey.test.mjs`: one save per medal, each leg's key
    moments, proving the story order holds together) and a pace check of gyms 2–4 with `tools/sim.mjs` (§6).
-3. **Region 5:** Villa Jaguar's people, the temple's past-tense puzzles, gym 5 (Planta/Veneno, the past tense:
-   [plans/gym5.md](plans/gym5.md); [plans/region5-jungle.md](plans/region5-jungle.md)). Fly comes with gym 6.
+3. **Region 5:** Villa Jaguar's people, the temple's past-tense puzzles, the jaguar's roar
+   ([plans/region5-jungle.md](plans/region5-jungle.md)). Fly comes with gym 6. Check the curve on the battles page
+   (`npm run battles`).
 4. Then gyms 6–8 (§4), with the B1 Spanish (§5), planned the same way.

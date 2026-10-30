@@ -25,5 +25,5 @@ Who can, and how many medals: `FIELD_MOVES` in src/data/species.ts (the user's l
 1. **Fly** (6 medals, the user, 2026-10-30; Zopilotón, Maletícano, Palomón, Guardabarranco, Chocoyote): START → MAPA, pick a town you've
    been to, land outside its Palacentro. The save needs a list of visited towns.
 2. **Surf's music**, and the riding sprite (the user's art).
-3. **The 5th medal:** gym 5 in Villa Jaguar ([gym5.md](gym5.md)); its leader names Cut and the thin tree north of Ruta 4.
+3. **The 5th medal** ✓: Ortiga (gym 5) names Cut and the thin tree north of Ruta 4.
 4. Later, maybe: climbing the Cañón's waterfall ('!', «Tal vez algún día puedas subirla...»).

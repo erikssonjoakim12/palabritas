@@ -515,6 +515,29 @@ export const ART: Record<string, TileArt> = {
   },
   /** Flagstones (the temple's floors). */
   templeFloor: { pal: OUTDOOR.temple, rows: tile8(['00000001', '00000001', '00000001', '00000001', '00000001', '00000001', '00000001', '11111111']) },
+  /** A thorny hedge (zarza): a dense wall of leaves with pale thorns (Ortiga's garden, gym 5). */
+  zarza: {
+    pal: OUTDOOR.grass,
+    extra: TREES.zarza,
+    rows: onGrass([
+      '..ab...abba...a.',
+      '.abba.abbbba.aba',
+      'abbsbaabbcbbaabb',
+      'abbbbcbbsbbbcbsb',
+      'bsbcbbbbbbcbbbbb',
+      'bbbbbsbcbbbbsbcb',
+      'bcbbbbbbbsbbbbbb',
+      'bbbsbcbbbbbcbbsb',
+      'sbbbbbbsbbbbbbbc',
+      'bbcbbsbbbcbsbbbb',
+      'bbbbbbbcbbbbbcbs',
+      'cbsbcbbbbsbbbbbb',
+      'bbbbbbsbcbbbsbcb',
+      'cbcbsbbcbbcbbbbc',
+      'ccbccbcccbccbccc',
+      'cccccccccccccccc',
+    ]),
+  },
   /** A tall columnar cactus with two arms (drawn over the ground). */
   cactus: {
     pal: OUTDOOR.cactus,

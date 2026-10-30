@@ -634,6 +634,8 @@ export const LOOKS: Record<string, Look> = {
   sigilo: { head: 'crew', body: 'coat', color: 'black' },
   /** Comandante Mutis, Equipo Silencio's commander in the Templo del Jaguar. */
   mutis: { head: 'bun', body: 'coat', color: 'black' },
+  /** Ortiga, gym 5's leader: the herbalist, in green. */
+  ortiga: { head: 'bun', body: 'dress', color: 'green' },
   bailarina1: { head: 'longColor', body: 'dress', color: 'pink' },
   bailarina2: { head: 'bun', body: 'dress', color: 'yellow' },
   bailarin1: { head: 'crew', body: 'pants', color: 'purple' },

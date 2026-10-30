@@ -4,7 +4,7 @@ import { start } from './lib.mjs';
 
 const t = await start('hms');
 const yes = { choose: (opts) => (opts.includes('Sí') ? 'Sí' : undefined) };
-const medals = (n) => ['Brisa', 'Barro', 'Ola', 'Chispa', 'Selva'].slice(0, n);
+const medals = (n) => ['Brisa', 'Barro', 'Ola', 'Chispa', 'Espina'].slice(0, n);
 const surfing = () => t.save().then((s) => !!s.surfing);
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 

@@ -141,6 +141,7 @@ export const TILES: Record<string, TileDef> = {
   U: solid({ look: { es: 'Ollas, jarras y tinajas de barro.', en: 'Clay pots, jugs and water jars.' } }),
   K: open(),
   s: open(),
+  '-': solid({ look: { es: 'Una zarza llena de espinas. ¡Mejor no tocarla!', en: 'A bramble full of thorns. Better not touch it!' } }),
   y: solid({ look: { es: 'Un cactus. ¡No lo toques, pica!', en: 'A cactus. Don’t touch it, it’s prickly!' } }),
   z: open({ kind: 'tallgrass' }),
   i: open(),
@@ -473,6 +474,8 @@ function render(ch: string, env: TileEnv): Img {
       return paintArt(ART.lemonTree);
     case '/':
       return paintArt(ART.arbolito);
+    case '-':
+      return paintArt(ART.zarza);
     case '{':
       return stack(waterImage(env), paintArt(ART.mangle));
     case '^':

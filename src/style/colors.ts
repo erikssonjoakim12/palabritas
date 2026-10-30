@@ -67,6 +67,8 @@ export const TREES = {
   palm: { a: '#b0e070', b: '#58a030', c: '#306818', k: '#d0a868', K: '#987040', n: '#7a5028' },
   /** Rainforest: deeper, bluer greens. */
   jungle: { a: '#78c060', b: '#348838', c: '#1c5028', ...TRUNK },
+  /** A thorny hedge (zarza, Ortiga's garden): the jungle's greens, pale thorns. */
+  zarza: { a: '#78c060', b: '#348838', c: '#1c5028', s: '#f0e8b8' },
 };
 
 /** Under the jungle's canopy (style canopy): every tile is multiplied by this, so it's visibly darker. */
