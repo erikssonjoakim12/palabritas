@@ -92,7 +92,7 @@ Route trainers sit between the previous leader and the next one.
 | E4 | Elite Four | Lucha, Acero, Fantasma (folklore), ... | 4-5 each | 60 → 70 | 52-58 (Victory Road) |
 
 Elite Four idea: Lucha (sports), Acero (construction/materials), Fantasma (Nicaraguan legends:
-El Cadejo, La Mocuana, La Carreta Nagua), and the master with a mixed team at 65-70.
+La Mocuana, La Carreta Nagua; El Cadejo became two legendary Palabritas, [plans/cadejos.md](plans/cadejos.md)), and the master with a mixed team at 65-70.
 
 **Pace check:** from level 41, mastering a word needs good answers on two different days. Reaching ~58 for
 gym 8 therefore takes weeks of daily play. That fits language learning (you can't cram to fluency), but the
