@@ -6,20 +6,24 @@ both at level 50. Decided with the user on 2026-10-31; not built yet.
 
 Psíquico does nothing to Siniestro: the white dog can't fight the black one, only lead you away from it.
 
-## The story
+## The story (the user's)
 
-1. **First meeting: the foggy mountains north of Ruta 4** (behind the thin tree, ruta5 80,2). At night, chains in
-   the fog and two red eyes: a black dog waits at the edge of the road, trots ahead, waits again. Following it, the
-   fog closes in (a fog version of `map.night`'s small circle of light), the paths repeat, hard wild Palabritas and
-   lost trainers, no Palacentro. When your team is nearly out: a bell, and a white dog walks you back to the road.
-   - A coffee picker who didn't come home is the reason you're on the road at night (her family asks you to look);
-     the black dog leads you to her, the white one leads you both home.
-   - You hear **only parts of the legend** here («Mi abuela decía que de noche no hay que seguir a un perro
-     negro...»). No battle: neither dog can be caught yet.
-   - The fog story doesn't have to match the gym's theme.
-2. **Second meeting: around or after gym 7.** The dogs come back, someone (the coffee picker's grandmother, or a
-   person near gym 7) **tells you the whole tale**, and from then on Cadenegro roams the wild and can be caught.
-   Cadeblanco comes after.
+**First meeting: the fog on the way to gym 6**, in the foggy mountains north of Ruta 4 (behind the thin tree, ruta5
+80,2). You come out of it in the gym 6 city, not back where you started.
+
+1. Someone asks you to find a person who is lost in the fog, and describes them (easy to recognize from it).
+2. You walk toward the fog. The black dog appears; you follow it **5–10 times** (it waits, trots ahead, vanishes,
+   appears again further on) until you are completely lost, facing tough wild Palabritas and trainers on the way.
+3. The black dog doesn't lead you all the way to the missing person (that would be too kind): you walk blindly a bit.
+4. You find them.
+5. Wandering on, you notice the fog is a little lighter in one direction. Following it, you see the white dog: it's
+   why the fog eased. It leads you out, and once you're safely on the other side you can pet it.
+
+You hear **only parts of the legend** here («Mi abuela decía que de noche no hay que seguir a un perro negro...»).
+No battle: neither dog can be caught yet. The fog story doesn't have to match the gym's theme.
+
+**Second meeting: around or after gym 7.** The dogs come back, someone tells you **the whole tale**, and from then on
+Cadenegro roams the wild and can be caught. Cadeblanco comes after.
 
 ## Catching them
 
@@ -43,6 +47,6 @@ jaguar: red eyes, goat hooves and dragging chains (all from the legend).
 
 ## Open
 
-- **The gym order.** The north road was planned "toward gym 6", but ROADMAP §4 put the cloud forest at gym 7 and the
-  stormy lake archipelago at gym 6. See the session's question to the user.
+- Who asks you to search, and how they hear the news when you come out at the gym 6 city.
+- The fog itself: a maze, or a "dark tunnel" walk with little to see (like Rock Tunnel without Flash, outside).
 - The Elite Four's Fantasma member had El Cadejo in its idea: it keeps La Mocuana instead.

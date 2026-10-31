@@ -66,7 +66,7 @@ rainforest animals live along rivers). Animals, visual hooks and color direction
 | Tropical beaches and coasts | around gym 3 | (coast colors) |
 | Lakes, rivers, wetlands | the lake archipelago, SURF routes | aqua, turquoise, muddy brown |
 | Dense tropical rainforest | around gym 5 | emerald, teal, vivid warning colors |
-| Cool mountain and cloud forest | the highlands (gym 7 proposal) | moss green, misty gray |
+| Cool mountain and cloud forest | the foggy mountains north of Ruta 4 (gym 6) | moss green, misty gray |
 
 Nicaraguan flavor for later: **voseo** («vos sos», «¿qué querés?») is everyday Spanish there, plus
 local words (*chunche*, *tuani*, *¡ideay!*, *va pues*). Great B1/B2 content: regional variety.
@@ -86,8 +86,8 @@ Route trainers sit between the previous leader and the next one.
 | 3 ✓ | Playa Carey, a fishing village on the Pacific | Agua | 3 | 25 | 17-21 |
 | 4 ✓ | Ciudad Chispa, the volcano town | Fuego | 3 | 32 | 18-26 |
 | 5 ✓ | Villa Jaguar, the rainforest town | Planta / Veneno | 4 | 39 | 28-35 |
-| 6 | the lake archipelago, stormy | Eléctrico | 4 | 43 | 34-40 |
-| 7 | cloud-forest highlands | Psíquico (emotions) | 4 | 50 | 40-47 |
+| 6 | the foggy cloud-forest mountains, north of Ruta 4 (the user, 2026-10-31) | Psíquico (emotions) | 4 | 43 | 34-40 |
+| 7 | the lake archipelago, stormy (with Fly to the islands) | Eléctrico | 4 | 50 | 40-47 |
 | 8 | the old capital | Dragón | 5 | 58 | 47-55 |
 | E4 | Elite Four | Lucha, Acero, Fantasma (folklore), ... | 4-5 each | 60 → 70 | 52-58 (Victory Road) |
 

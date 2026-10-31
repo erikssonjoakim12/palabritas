@@ -10,7 +10,7 @@ history keeps the old plans.
 | [surf-fly.md](surf-fly.md) | field moves: Surf and Cut (built), Fly with gym 6 |
 | [region5-jungle.md](region5-jungle.md) | Villa Jaguar, the Selva and the Templo del Jaguar: what's placed, the experience to build, open questions |
 | [palabritas.md](palabritas.md) | how a Palabrita's data is made, and the Palabritas planned so far |
-| [cadejos.md](cadejos.md) | later: two legendary dogs, Cadenegro and Cadeblanco, met in the foggy north and caught around gym 7 |
+| [cadejos.md](cadejos.md) | later: two legendary dogs, Cadenegro and Cadeblanco, met in the fog on the way to gym 6 and caught around gym 7 |
 
 **Writing a plan** (as for gyms 2–4, which worked well):
 - Draw and check every map before writing it down: every way in and out reachable (ledges are one-way),
