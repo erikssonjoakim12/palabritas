@@ -26,7 +26,8 @@ close by; **after you find him, you wake up in his clearing, healed, with him be
 **The fog is a little trippy:** you see a small gray-lit circle with drifting clouds hiding the rest, and the paths
 shuffle, a bit randomized, so you really get lost. After the white dog appears, the fog gets more and more
 deterministic: the lighter-fog direction (your circle of sight grows the right way, shrinks the wrong way) leads out.
-The black dog's way is **fixed** (the road); only straying from it is random (the user). **No healing** in the fog:
+The black dog's way is **fixed** (the road); only straying from it is random (the user). From the first patch, back the
+way you came leads out again; deeper in, there is no way back until you find the boy (the user). **No healing** in the fog:
 the black dog takes you on a dangerous journey. Dark as dusk at any hour. Wild Palabritas around **level 30**.
 Once the boy is home **the fog lifts** and the patches settle into the dog's road, the same every time.
 

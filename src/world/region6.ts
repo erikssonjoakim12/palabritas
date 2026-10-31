@@ -107,6 +107,8 @@ function leave(d: Dir): string | null {
   }
   switch (walk.phase) {
     case 'dog':
+      // The first patch is still the edge of the fog: back the way you came is back out (the user). Deeper in, it's not.
+      if (walk.onRoad && walk.step === 0 && d === roadEntry(0)) return OUT;
       if (d !== walk.exit) {
         walk.onRoad = false;
         return elsewhere();
