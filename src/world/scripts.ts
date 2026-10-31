@@ -24,6 +24,7 @@ import { lines, as, sayOrMime, talkMode, showCreature, heal, blackout, fight, gy
 import { REGION2 } from './region2';
 import { REGION3 } from './region3';
 import { REGION4, hamacaParaMama } from './region4';
+import { REGION6 } from './region6';
 import { TILES } from '../art/tiles';
 import { notNow } from '../ui/bag';
 import { MINI_BALL, BALL_COLORS, FLASH_COLORS, drawPattern } from '../art/balls';
@@ -774,5 +775,5 @@ async function lucasElige() {
 }
 
 export function registerScripts() {
-  Object.assign(SCRIPTS, S, REGION2, REGION3, REGION4);
+  Object.assign(SCRIPTS, S, REGION2, REGION3, REGION4, REGION6);
 }

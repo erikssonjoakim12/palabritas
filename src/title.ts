@@ -9,9 +9,13 @@ import { initSpeech } from './lang/speech';
 import { say, closeText } from './ui/textbox';
 import { menu, ask } from './ui/menu';
 import { promptText } from './ui/challenge';
-import { loadMap, worldScene, fadeIn, setFade } from './world/world';
+import { loadMap, worldScene, fadeIn, setFade, runScript, SCRIPTS } from './world/world';
+import { startFogDemo } from './world/region6';
 import { importGame } from './ui/startmenu';
 import { showHelpButton } from './ui/faq';
+
+/** A demo of something not yet reached in the game (?demo=niebla: the fog of region 6). Nothing is saved. */
+const DEMO = new URLSearchParams(location.search).get('demo') === 'niebla';
 
 let t = 0;
 const titleScene = {
@@ -69,7 +73,7 @@ export async function runTitle() {
   setScene(titleScene);
   const title = el('div', 'title', 'PALABRITAS');
   title.dataset.text = 'PALABRITAS'; // the shine (style.css) draws over the same letters
-  const sub = el('div', 'subtitle', 'Aprende español con Palabritas');
+  const sub = el('div', 'subtitle', DEMO ? 'DEMO: LA NIEBLA' : 'Aprende español con Palabritas');
   const tap = el('div', 'blink-text', 'TOCA PARA EMPEZAR');
   overlay.append(title, sub, tap);
   showHelpButton(true);
@@ -78,6 +82,17 @@ export async function runTitle() {
   initSpeech();
   sfx('select');
   tap.remove();
+
+  if (DEMO) {
+    title.remove();
+    sub.remove();
+    showHelpButton(false);
+    startFogDemo(loadGame() ? G.save : null); // only reads your game: the demo saves nothing
+    applySettings();
+    await enterWorld();
+    runScript(SCRIPTS.nieblaDemo);
+    return;
+  }
 
   let start: 'new' | 'continue' | 'import' = 'new';
   // Importing a save file brings a game from another device (or a backup).

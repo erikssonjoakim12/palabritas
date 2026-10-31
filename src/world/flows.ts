@@ -16,7 +16,7 @@ import { challenge, chooseText, type ChallengeSpec } from '../ui/challenge';
 import { spriteCanvas } from '../ui/party';
 import { trainerBattle } from '../battle/battle';
 import { speak, canListen } from '../lang/speech';
-import { warp, npcById, fadeOut, currentMap, type ScriptFn } from './world';
+import { warp, npcById, fadeOut, currentMap, setFollower, SCRIPTS, type ScriptFn } from './world';
 import type { Dir } from '../engine/input';
 import type { Line } from './maps';
 
@@ -85,13 +85,19 @@ export async function blackout() {
   // Like Gold/Silver: losing costs half your money.
   const lost = Math.floor(G.save.money / 2);
   G.save.money -= lost;
-  await info('{name} corre de vuelta a un lugar seguro...', { en: '{name} hurries back to a safe place...' });
-  if (lost) await info(`¡Con las prisas, se te cayeron ${money(lost)}!`, { en: `In the rush, you dropped ${money(lost)}!` });
   healParty();
+  const wake = currentMap().wakeUp;
+  if (wake && (await SCRIPTS[wake]({ data: { lost } }))) return;
+  await info('{name} corre de vuelta a un lugar seguro...', { en: '{name} hurries back to a safe place...' });
+  if (lost) await droppedMoney(lost);
+  setFollower(null); // whoever followed you stays behind
   const h = G.save.heal;
   await warp(h.map, h.x, h.y, 'down');
   await info('Tus Palabritas se recuperaron.', { en: 'Your Palabritas recovered.' });
 }
+
+/** The money that fell out of your pockets as you fainted. */
+export const droppedMoney = (lost: number) => info(`¡Con las prisas, se te cayeron ${money(lost)}!`, { en: `In the rush, you dropped ${money(lost)}!` });
 
 // ---------- Trainers ----------
 

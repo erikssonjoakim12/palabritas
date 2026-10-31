@@ -147,6 +147,9 @@ export const TRAINERS: Record<string, TrainerDef> = {
   sigilo: { id: 'sigilo', name: 'Don Sigilo', defenseMode: 'type', team: [['murcielon', 27], ['taranton', 28], ['petroglifon', 29]] },
   lucas3: { id: 'lucas3', name: 'Lucas', defenseMode: 'type', team: [['nubarron', 28], ['hojarasco', 25], ['palomon', 25], ['cangrejon', 26]] },
   tizon: { id: 'tizon', name: 'Líder Don Tizón', defenseMode: 'type', team: [['chocoyote', 27], ['coheton', 28], ['brasaurio', 32]] },
+  // Region 6 (planned): lost in the fog outside the gym 6 city (the fog demo).
+  excursionista_rodrigo: { id: 'excursionista_rodrigo', name: 'Excursionista Rodrigo', defenseMode: 'listen', team: [['murcielon', 30], ['taranton', 31]] },
+  espeleologo_ismael: { id: 'espeleologo_ismael', name: 'Espeleólogo Ismael', defenseMode: 'type', team: [['lamparita', 31], ['zopiloton', 32]] },
 };
 
 /**
@@ -198,4 +201,5 @@ export const BATTLE_ORDER: { leg: string; en: string; trainers: string[] }[] = [
       'jardinera_azucena', 'yerbero_chepe', 'botanica_iris', 'ortiga',
     ],
   },
+  { leg: 'La niebla (región 6, en preparación)', en: 'The fog outside the gym 6 city (region 6, being planned: the fog demo)', trainers: ['excursionista_rodrigo', 'espeleologo_ismael'] },
 ];

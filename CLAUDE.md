@@ -22,6 +22,7 @@ Plans for finished work are removed once built: the code is the truth.
 | `npm run music` | the music page (`/musica.html`): every song and jingle, with voices to mute |
 | `npm run words` | the dictionary (`/palabras.html`): every word and phrase, its lists and levels, who learns it |
 | `npm run battles` | the battles page (`/batallas.html`): every trainer in battle order (`BATTLE_ORDER` in trainers.ts) with a chart of the level curve, and every Palabrita's base stats and moves |
+| `?demo=niebla` | the fog demo (region 6, plans/cadejos.md): starts in the fog's story with your name, saves nothing (`G.demo`) |
 | `npm run typecheck` / `npm run build` | |
 | `npm test` | every browser test; `npm test -- cave maps` runs some. Uses a dev server on **port 5181**, starting and stopping its own if none is there |
 
@@ -56,7 +57,7 @@ Plans for finished work are removed once built: the code is the truth.
 | Palabritas, moves, types | `src/data/species.ts`, `src/data/types.ts` |
 | Trainers, items | `src/data/trainers.ts`, `src/data/items.ts`, `src/game/bag.ts` |
 | Maps (every town, route, interior) | `src/world/maps/`: one file per region (`region1.ts`...), `kit.ts` (tile legend, types, shared rooms), `index.ts` |
-| Scripts (every NPC, quest, trainer talk) | `src/world/region2.ts`...`region4.ts` (one file per region), `src/world/scripts.ts` (region 1, the Palacentro, shop and box, and the registry) |
+| Scripts (every NPC, quest, trainer talk) | `src/world/region2.ts`...`region4.ts`, `region6.ts` (the fog demo) (one file per region), `src/world/scripts.ts` (region 1, the Palacentro, shop and box, and the registry) |
 | Script building blocks (talking, trainers, gym leaders, Lucas, gifts, questions) | `src/world/flows.ts` |
 | Overworld engine: walking, ledges, doors, gates, encounters, drawing | `src/world/world.ts`, `src/world/layout.ts` |
 | Battles | `src/battle/battle.ts` |
@@ -105,6 +106,11 @@ A beaten trainer sets `beat:<id>`. Add it to `BATTLE_ORDER` (trainers.ts) where 
 **A gate guard** (blocks a road until something happens): a `gates` entry on the map, with `opens()`, the
 guard's spot, where they wait once the road is open, the road tiles, where you're sent back, and their lines.
 No script needed.
+
+**Fog** (region 6): `fog: 'patch'` maps are pieces of the fog walk (src/world/region6.ts decides where each edge
+leads; `fogView` how far you see); `fog: 'edge'` rolls in at a map's top. **Someone following you** (Tomás):
+`setFollower({ look, script })` (kept in the save). NPCs can wake when you come `near`, `glow` through the fog, and
+`mirrors` (side-view animals). A map's `wakeUp` script can wake you somewhere else after fainting.
 
 **Field moves** (Surf, Cut): who can and how many medals in `FIELD_MOVES` (src/data/species.ts); a water map's
 wild Palabritas while swimming in `surf`. Walking or swimming off an edge with no connection (or into a hole) goes

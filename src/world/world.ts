@@ -7,10 +7,11 @@ import { personFrames, OBJECTS, type Frames } from '../art/chars';
 import { fromRows, mirror, type Img } from '../art/pixel';
 import { MAPS, type MapDef, type NpcDef, type Conn, type EncounterEntry } from './maps';
 import { worldLayout, mapAcross } from './layout';
-import { G, flag, saveGame, playerLook, clockHour } from '../game/state';
+import { G, flag, saveGame, playerLook, clockHour, type SaveData } from '../game/state';
 import { rematchReady } from '../game/rematch';
 import { shuffled, pickRandom } from '../game/random';
-import { NIGHT, NIGHT_CLEAR, FIREFLY, MARK, BLACK, SHADOW, ACCENT } from '../style/colors';
+import { NIGHT, NIGHT_CLEAR, FIREFLY, MARK, BLACK, SHADOW, ACCENT, FOG } from '../style/colors';
+import { OBJECTS_ART } from '../style/people';
 import { lightAt, drawLights, skyAt, type Light } from '../art/lights';
 import { drawFireworks } from '../art/fireworks';
 import { setMapMusic, musicFor } from '../audio/bgm';
@@ -80,6 +81,8 @@ function neighborsOf(m: MapDef): Neighbor[] {
 /** People in the connected towns/routes, drawn at the map's edges (they only move once you get there). */
 let edgeNpcs: NpcRT[] = [];
 let fade = 0;
+/** What the screen fades to: black, or the fog's gray (from one patch of fog into the next). */
+let fadeColor = BLACK;
 let banner: HTMLElement | null = null;
 const grassOverlays: Record<string, Img> = {};
 
@@ -152,6 +155,7 @@ export function loadMap(id: string, x: number, y: number, dir: Dir) {
   // Maps change between versions: never leave a loaded save standing inside a wall.
   [x, y] = nearestFree(x, y);
   Object.assign(player, { x, y, dir, moving: false, prog: 0 });
+  if (G.save.follower) placeFollower();
   if (G.save.surfing && !isWater(tileAt(x, y))) G.save.surfing = false;
   const frames = framesFor(walkerLook());
   if (player.frames !== frames) {
@@ -267,14 +271,16 @@ export async function runScript(fn: ScriptFn | undefined, c: ScriptCtx = {}) {
   }
 }
 
-export async function fadeOut(n = 8) {
+export async function fadeOut(n = 8, color = BLACK) {
+  fadeColor = color;
   for (let i = 1; i <= n; i++) {
     fade = i / n;
     await nextFrame();
   }
 }
 
-export async function fadeIn(n = 8) {
+export async function fadeIn(n = 8, color = BLACK) {
+  fadeColor = color;
   for (let i = n - 1; i >= 0; i--) {
     fade = i / n;
     await nextFrame();
@@ -345,6 +351,27 @@ export async function scriptedStep(d: Dir) {
   player.scripted = false;
 }
 
+// ---------- Someone following you ----------
+
+/**
+ * Someone walking one step behind you, through every map (Tomás out of the fog), like Pikachu in Pokémon Yellow:
+ * kept in the save (G.save.follower), talked to by facing them, and never in anyone's way.
+ */
+const follower = { x: 0, y: 0, fromX: 0, fromY: 0, dir: 'down' as Dir };
+
+/** Someone starts following you, from where they stand (or right behind you); null: they stay behind. */
+export function setFollower(f: SaveData['follower'] | null, at?: [number, number]) {
+  G.save.follower = f ?? undefined;
+  if (f) placeFollower(at);
+}
+
+/** Behind you (on your own spot when that's a wall: they step out after you). */
+function placeFollower(at?: [number, number]) {
+  const behind: [number, number] = [player.x - DX[player.dir], player.y - DY[player.dir]];
+  const [x, y] = at ?? (inBounds(...behind) && TILES[tileAt(...behind)].solid ? [player.x, player.y] : behind);
+  Object.assign(follower, { x, y, fromX: x, fromY: y, dir: player.dir });
+}
+
 // ---------- Movement ----------
 
 /** The tall grass you just stepped into: it shakes for a moment, like Gold/Silver. */
@@ -353,6 +380,12 @@ const RUSTLE_MS = 320;
 
 /** Start moving to (nx, ny), `dist` pixels away (a normal step is one tile; hopping a ledge is two). */
 function startMove(nx: number, ny: number, dist = T) {
+  // Whoever follows you takes the spot you're leaving (not when a step just carries on into the next map).
+  if (G.save.follower && (nx !== player.x || ny !== player.y)) {
+    Object.assign(follower, { fromX: follower.x, fromY: follower.y, x: player.x, y: player.y });
+    const [dx, dy] = [follower.x - follower.fromX, follower.y - follower.fromY];
+    if (dx || dy) follower.dir = dx < 0 ? 'left' : dx > 0 ? 'right' : dy < 0 ? 'up' : 'down';
+  }
   if (TILES[tileAt(nx, ny)].kind === 'tallgrass') rustle = { x: nx, y: ny, at: performance.now() };
   // Swimming onto land: you're on foot again.
   if (G.save.surfing && !isWater(tileAt(nx, ny))) {
@@ -378,6 +411,7 @@ function tryMove(d: Dir) {
   const nx = player.x + DX[d];
   const ny = player.y + DY[d];
   if (!inBounds(nx, ny)) {
+    if (map.fog === 'patch') return void runScript(SCRIPTS.__fogEdge, { data: { dir: d } });
     if (!map.outdoor && map.exit && TILES[tileAt(player.x, player.y)].kind === 'mat' && d === 'down') {
       warp(map.exit.to, map.exit.x, map.exit.y, 'down');
       return;
@@ -412,7 +446,7 @@ function onStep() {
     runScript(SCRIPTS[trig.script]);
     return;
   }
-  if (checkTrainers()) return;
+  if (checkTrainers() || checkNear()) return;
   if (G.save.repel) {
     if (!--G.save.repel) runScript(() => say('El Repelente se acabó.', { en: 'The Repel wore off.' }));
     return;
@@ -459,12 +493,25 @@ function checkTrainers(): boolean {
   return false;
 }
 
+/** Someone who stirs when you come within `near` steps, from any side, without a «!» (the dogs in the fog). */
+function checkNear(): boolean {
+  const n = npcs.find((n) => n.visible && n.def.near && n.def.script && Math.abs(n.x - player.x) + Math.abs(n.y - player.y) <= n.def.near);
+  if (n) runScript(SCRIPTS[n.def.script!], { npc: n });
+  return !!n;
+}
+
 /** What someone on a muted map acts out, when they have no mime of their own. */
 export const MUTED_MIME = '(They try to speak, but no words come out!)';
 
 function interact() {
   const fx = player.x + DX[player.dir];
   const fy = player.y + DY[player.dir];
+  const f = G.save.follower;
+  if (f && follower.x === fx && follower.y === fy) {
+    follower.dir = OPP[player.dir];
+    runScript(SCRIPTS[f.script]);
+    return;
+  }
   let n = npcAt(fx, fy);
   if (!n && TILES[tileAt(fx, fy)].kind === 'counter') n = npcAt(fx + DX[player.dir], fy + DY[player.dir]);
   const muted = !!map.muted?.();
@@ -517,29 +564,43 @@ export async function walkNpc(id: string, path: Dir[], { speed = 1 } = {}) {
 export async function approachPlayer(id: string, opts: { speed?: number } = {}) {
   const n = npcById(id);
   if (!n) return console.warn(`approachPlayer: no NPC ${id}`);
-  const besideYou = (x: number, y: number) => Math.abs(x - player.x) + Math.abs(y - player.y) === 1;
+  const path = pathFor(n, (x, y) => Math.abs(x - player.x) + Math.abs(y - player.y) === 1);
+  if (!path) return;
+  await walkNpc(id, path, opts);
+  n.dir = player.x < n.x ? 'left' : player.x > n.x ? 'right' : player.y < n.y ? 'up' : 'down';
+}
+
+/** Walk an NPC to (x, y) by the shortest way (the white dog heading for the way out of a patch of fog). */
+export async function walkNpcTo(id: string, x: number, y: number, opts: { speed?: number } = {}) {
+  const n = npcById(id);
+  if (!n) return console.warn(`walkNpcTo: no NPC ${id}`);
+  const path = pathFor(n, (px, py) => px === x && py === y);
+  if (path) await walkNpc(id, path, opts);
+}
+
+/** The shortest way for an NPC over open ground (not through you) to a spot `end` accepts, or null. */
+function pathFor(n: NpcRT, end: (x: number, y: number) => boolean): Dir[] | null {
   const from = new Map<string, [string, Dir] | null>([[`${n.x},${n.y}`, null]]);
   const queue = [[n.x, n.y]];
-  let end: number[] | null = besideYou(n.x, n.y) ? [n.x, n.y] : null;
-  while (queue.length && !end) {
+  let last: number[] | null = end(n.x, n.y) ? [n.x, n.y] : null;
+  while (queue.length && !last) {
     const [x, y] = queue.shift()!;
     for (const d of DIRS) {
       const [nx, ny] = [x + DX[d], y + DY[d]];
       const k = `${nx},${ny}`;
       if (from.has(k) || !walkable(nx, ny) || (nx === player.x && ny === player.y)) continue;
       from.set(k, [`${x},${y}`, d]);
-      if (besideYou(nx, ny)) {
-        end = [nx, ny];
+      if (end(nx, ny)) {
+        last = [nx, ny];
         break;
       }
       queue.push([nx, ny]);
     }
   }
-  if (!end) return;
+  if (!last) return null;
   const path: Dir[] = [];
-  for (let k = `${end[0]},${end[1]}`, step = from.get(k); step; k = step[0], step = from.get(k)) path.unshift(step[1]);
-  await walkNpc(id, path, opts);
-  n.dir = player.x < n.x ? 'left' : player.x > n.x ? 'right' : player.y < n.y ? 'up' : 'down';
+  for (let k = `${last[0]},${last[1]}`, step = from.get(k); step; k = step[0], step = from.get(k)) path.unshift(step[1]);
+  return path;
 }
 
 /** Put an NPC at (x, y), visible (e.g. the rival arriving from off-screen before walking in). */
@@ -831,6 +892,99 @@ function drawRustle(g: CanvasRenderingContext2D, camX: number, camY: number) {
   g.restore();
 }
 
+// ---------- Fog ----------
+
+/** How the fog looks around you in a patch (world/region6.ts sets it as you walk): how far you see, and where it thins. */
+export const fogView = { radius: 34, lean: null as Dir | null, leanBy: 0 };
+let fogRadius = 34;
+
+/** A cloud of fog: a dithered oval (pixels, not a blur, like everything else). */
+let cloudImg: Img | null = null;
+function cloud(): Img {
+  if (cloudImg) return cloudImg;
+  const [w, h] = [44, 16];
+  const rows = Array.from({ length: h }, (_, y) =>
+    Array.from({ length: w }, (_, x) => {
+      const d = Math.hypot((x - w / 2 + 0.5) / (w / 2), (y - h / 2 + 0.5) / (h / 2));
+      return d < 0.7 || (d < 1 && (x + y) % 2 === 0) ? 'c' : '.';
+    }).join(''),
+  );
+  return (cloudImg = fromRows(rows, { c: FOG.cloud }, 'cloud'));
+}
+
+/**
+ * The fog over everything: in a patch, a gloom (dusk-dark at any hour) and gray all around except a small patch where
+ * you are (it leans toward where the fog thins); at an 'edge', gray along the top of the map. Clouds drifting
+ * by (a little slower than the ground, so walking moves you through them), and what shines through.
+ */
+function drawFog(g: CanvasRenderingContext2D, cx: number, cy: number, camX: number, camY: number) {
+  const t = performance.now() / 1000;
+  g.save();
+  let cloudsAbove = H;
+  if (map.fog === 'patch') {
+    g.globalCompositeOperation = 'multiply';
+    g.fillStyle = FOG.gloom;
+    g.fillRect(0, 0, W, H);
+    g.globalCompositeOperation = 'source-over';
+    fogRadius += (fogView.radius - fogRadius) * 0.05;
+    const r = fogRadius + Math.sin(t * 1.3) * 1.5;
+    const [lx, ly] = fogView.lean ? [DX[fogView.lean] * fogView.leanBy, DY[fogView.lean] * fogView.leanBy] : [0, 0];
+    const fog = g.createRadialGradient(cx, cy, r * 0.45, cx + lx, cy + ly, r + Math.hypot(lx, ly));
+    fog.addColorStop(0, FOG.clear);
+    fog.addColorStop(1, FOG.thick);
+    g.fillStyle = fog;
+  } else {
+    // Thick above the map, thinning out over its first rows: you step out of it onto the trail.
+    const top = -T - camY;
+    const fog = g.createLinearGradient(0, top + 4 * T, 0, top);
+    fog.addColorStop(0, FOG.clear);
+    fog.addColorStop(1, FOG.thick);
+    g.fillStyle = fog;
+    cloudsAbove = top + 2 * T;
+  }
+  g.fillRect(0, 0, W, H);
+  g.globalAlpha = 0.45;
+  const img = cloud();
+  const [spanX, spanY] = [W + img.width, H + img.height];
+  for (let i = 0; i < 7; i++) {
+    const x = ((((i * 61 + t * (5 + (i % 3) * 3) - camX * 0.6) % spanX) + spanX) % spanX) - img.width;
+    const y = ((((i * 47 + Math.sin(t * 0.4 + i) * 6 - camY * 0.6) % spanY) + spanY) % spanY) - img.height;
+    if (y < cloudsAbove) g.drawImage(img, Math.round(x), Math.round(y));
+  }
+  g.globalAlpha = 1;
+  // Through the fog: the black dog's eyes, the white dog's glow.
+  for (const n of npcs) {
+    if (!n.visible || !n.def.glow || !n.def.object) continue;
+    const [sx, sy] = [n.x * T - camX + (n.off?.x ?? 0), n.y * T - camY + (n.off?.y ?? 0)];
+    if (n.def.glow === 'body') {
+      g.globalAlpha = 0.8;
+      g.drawImage(objectImg(n), sx, sy);
+      g.globalAlpha = 1;
+      continue;
+    }
+    for (const [ex, ey] of eyesOf(n.def.object)) {
+      const x = sx + (n.def.mirrors && n.dir === 'right' ? 15 - ex : ex);
+      g.fillStyle = FOG.eyeGlow;
+      g.fillRect(x - 1, sy + ey - 1, 3, 3);
+      g.fillStyle = FOG.eye;
+      g.fillRect(x, sy + ey, 1, 1);
+    }
+  }
+  g.restore();
+}
+
+/** Where an object's eyes are: the pixels of color 0 in its art. */
+const eyeCache: Record<string, [number, number][]> = {};
+const eyesOf = (object: string) =>
+  (eyeCache[object] ??= OBJECTS_ART[object].rows.flatMap((row, y) => [...row].flatMap((ch, x) => (ch === '0' ? [[x, y] as [number, number]] : []))));
+
+/** An object's sprite, turned to face right when it's an animal seen from the side (NpcDef `mirrors`). */
+const mirrored: Record<string, Img> = {};
+function objectImg(n: NpcRT): Img {
+  const id = n.def.object!;
+  return n.def.mirrors && n.dir === 'right' ? (mirrored[id] ??= mirror(OBJECTS[id])) : OBJECTS[id];
+}
+
 /** Snap to the screen's real pixels: smooth motion (finer than game pixels) that stays crisp. */
 const snap = (v: number) => Math.round(v * scaleFactor) / scaleFactor;
 
@@ -858,13 +1012,22 @@ export function renderWorld(g: CanvasRenderingContext2D) {
     sprites.push({
       y: n.y * T + (n.def.object ? 0 : 0.5),
       draw: () => {
-        if (n.def.object) g.drawImage(OBJECTS[n.def.object], sx, sy);
+        if (n.def.object) g.drawImage(objectImg(n), sx, sy);
         else g.drawImage(framesFor(n.def.look ?? 'man')[n.dir][n.off?.frame ?? 0], sx, sy - 4);
         n.overlay?.(g, sx, sy);
         if (n.bubble > 0) g.drawImage(ALERT, sx + 4, sy - 16);
         else if (rematchReady(n.def.id)) g.drawImage(REMATCH, sx + 6, sy - 13);
       },
     });
+  }
+  const f = G.save.follower;
+  if (f && !player.hidden) {
+    // One step behind you, as far along as you are.
+    const k = player.moving ? prog / player.dist : 1;
+    const fx = (follower.fromX + (follower.x - follower.fromX) * k) * T - camX;
+    const fy = (follower.fromY + (follower.y - follower.fromY) * k) * T - camY;
+    const walking = player.moving && (follower.x !== follower.fromX || follower.y !== follower.fromY) && k < 0.5;
+    sprites.push({ y: fy + camY - 0.5, draw: () => g.drawImage(framesFor(f.look)[follower.dir][walking ? 1 + player.step : 0], Math.round(fx), Math.round(fy) - 4) });
   }
   if (!player.hidden && player.frames) {
     const fr = player.frames[player.dir];
@@ -906,9 +1069,10 @@ export function renderWorld(g: CanvasRenderingContext2D) {
     drawDayTime(g, camX, camY);
     drawFireflies(g, camX, camY);
   } else if (map.floor === ';') drawDayTime(g, camX, camY); // caves (and the temple) darken at night too
+  if (map.fog && !map.fogLifts?.()) drawFog(g, 72, 68 - hop, camX, camY);
   if (fade > 0) {
     g.globalAlpha = fade;
-    g.fillStyle = BLACK;
+    g.fillStyle = fadeColor;
     g.fillRect(0, 0, W, H);
     g.globalAlpha = 1;
   }

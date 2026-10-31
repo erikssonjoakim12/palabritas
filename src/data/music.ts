@@ -716,6 +716,14 @@ export const MAP_MUSIC: Record<string, string> = {
   lago: 'ruta',
   chispa: 'chispa',
   chispa_noche: 'chispa',
+  niebla_borde: 'pinos',
+  niebla1: 'cueva',
+  niebla2: 'cueva',
+  niebla3: 'cueva',
+  niebla4: 'cueva',
+  niebla5: 'cueva',
+  niebla6: 'cueva',
+  niebla_claro: 'cueva',
 };
 
 /** Battle songs: gym leaders, Equipo Silencio, every other trainer, and wild Palabritas. */

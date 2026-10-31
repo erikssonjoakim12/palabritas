@@ -247,7 +247,12 @@ export async function start(name, { phone = true } = {}) {
           continue;
         }
         if (s.list) {
-          await game(() => document.querySelector('.fullpanel .list-row').click());
+          // In battle, the first Palabrita that can still fight (a fainted one can't be sent out); otherwise the first.
+          await game((battle) => {
+            const rows = [...document.querySelectorAll('.fullpanel .list-row')];
+            const alive = rows.find((r) => !(r.querySelector('.mon-hp .small')?.textContent ?? '').startsWith('0/'));
+            ((battle && alive) || rows[0]).click();
+          }, s.battle);
           await sleep(200);
           continue;
         }

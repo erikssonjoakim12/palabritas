@@ -126,6 +126,20 @@ export const DAY_CYCLE: { h: number; tint: string; light: number }[] = [
 /** The evolution scene: the outline the Palabrita flashes in while it changes. */
 export const EVOLUTION_OUTLINE = '#383848';
 
+/**
+ * The fog (world/region6.ts): a dark gray-blue all around you, a gloom laid over the view (dusk even at noon), the
+ * fade from one patch of fog to the next, the clouds drifting by, and the black dog's eyes glowing through it.
+ */
+export const FOG = {
+  thick: 'rgba(84, 92, 108, 0.93)',
+  clear: 'rgba(84, 92, 108, 0)',
+  gloom: '#8890a4',
+  fade: '#545c6c',
+  cloud: '#b0b8c8',
+  eye: '#f84040',
+  eyeGlow: 'rgba(248, 64, 64, 0.3)',
+};
+
 /** Fireflies at night where wild Chispitas live: the glow, and the halo around it. */
 export const FIREFLY = { glow: '#f8f070', halo: 'rgba(248, 240, 112, 0.35)' };
 
@@ -232,6 +246,9 @@ export const OBJECT_PALS: Record<string, Pal> = {
   // The Templo del Jaguar: the black jaguars (green eyes, fur, rosettes) and the stone the mother becomes.
   jaguar: ['#90e868', '#3c3a4c', '#5a5670', SPRITE_INK],
   jaguarPiedra: ['#c8c8b0', '#888874', '#585c4c', SPRITE_INK],
+  // The Cadejos (plans/cadejos.md), until the user's art: eyes, chain and hooves, coat.
+  cadenegro: ['#f84040', '#9898a8', '#3c3a48', SPRITE_INK],
+  cadeblanco: ['#58a8e8', '#c8d0e0', '#f8f8f0', SPRITE_INK],
   michi: ['', '#f0f0e8', '#e09848', SPRITE_INK],
   armchair: ['', '#f0b0b8', '#d05058', SPRITE_INK],
   /** The armchair with Cojincito on it: a cream cushion (0) on the seat. */

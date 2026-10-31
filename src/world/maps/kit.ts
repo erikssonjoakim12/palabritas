@@ -47,6 +47,12 @@ export interface NpcDef {
   show?: () => boolean;
   /** Trainers: how many tiles ahead they can see you. */
   sight?: number;
+  /** Runs its script when you come within this many steps, from any side, without a «!» (the dogs in the fog). */
+  near?: number;
+  /** Shows through the fog: its eyes (color 0 of its art) or its whole body (the white dog). */
+  glow?: 'eyes' | 'body';
+  /** An object seen from the side (an animal): its art faces left, and it turns to face right. */
+  mirrors?: boolean;
   /** Looks around now and then. */
   turns?: boolean;
   /** Walks about now and then, at most WANDER tiles from where they stand (townspeople; never trainers). */
@@ -120,6 +126,18 @@ export interface MapDef {
   night?: boolean;
   /** Fireworks in the night sky (the festival in Ciudad Chispa). */
   fireworks?: boolean;
+  /**
+   * Fog (world/region6.ts). 'patch': a piece of the fog walk, where you see only a little around you and walking off
+   * an edge goes wherever the fog leads (SCRIPTS.__fogEdge), not into the world. 'edge': the fog rolls in at the
+   * top of the map. Drawn until `fogLifts`.
+   */
+  fog?: 'patch' | 'edge';
+  fogLifts?: () => boolean;
+  /**
+   * After fainting here, a script that wakes you somewhere else instead of at the Palacentro (in the fog, once Tomás
+   * is with you: his clearing). It gets the money you dropped (data.lost) and resolves false to wake up as usual.
+   */
+  wakeUp?: string;
   /** Roof color for 'r' buildings (key in ROOFS, style/colors.ts). */
   roof?: string;
   connections?: Partial<Record<Dir, Conn>>;

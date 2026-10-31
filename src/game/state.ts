@@ -57,6 +57,8 @@ export interface SaveData {
   bag: Record<string, number>;
   /** Swimming on a Palabrita (Surf): water is the way, land ends it. */
   surfing?: boolean;
+  /** Someone walking behind you (world.ts setFollower): how they look, and what they say when you talk to them. */
+  follower?: { look: string; script: string };
   /** Steps left on a Repelente (no wild Palabritas while > 0). */
   repel?: number;
   /** The starter you picked, while Professor Ceiba's training is still going on. */
@@ -121,6 +123,8 @@ export function newSave(): SaveData {
 export const G = {
   save: newSave(),
   lock: 0,
+  /** A demo (title.ts, ?demo=...): nothing is saved, so the real game stays as it was. */
+  demo: false,
 };
 
 export function hasSave(): boolean {
@@ -257,6 +261,7 @@ function migrate(s: SaveData) {
 }
 
 export function saveGame(): boolean {
+  if (G.demo) return true;
   try {
     localStorage.setItem(KEY, JSON.stringify(G.save));
     return true;

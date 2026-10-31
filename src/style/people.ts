@@ -640,7 +640,32 @@ export const LOOKS: Record<string, Look> = {
   bailarina2: { head: 'bun', body: 'dress', color: 'yellow' },
   bailarin1: { head: 'crew', body: 'pants', color: 'purple' },
   bailarin2: { head: 'crew', body: 'pants', color: 'teal' },
+  /** Tomás, lost in the fog: an orange cap and shirt, as his grandmother describes him. */
+  tomas: { head: 'cap', body: 'pants', color: 'orange' },
 };
+
+/**
+ * The Cadejos on the map (placeholders until the user's art): a lean dog seen from the side, facing left (NpcDef
+ * `mirrors` turns it), with glowing eyes (0) and a chain at its neck and hooves (1).
+ */
+const CADEJO = [
+  '................',
+  '................',
+  '..3.3...........',
+  '.32323.......3..',
+  '.302223.....323.',
+  '302222233333223.',
+  '32222222222223..',
+  '.33122222222223.',
+  '..312222222223..',
+  '..322222222223..',
+  '..3223....3223..',
+  '..3223....3223..',
+  '..3113....3113..',
+  '..3333....3333..',
+  '................',
+  '................',
+];
 
 // ---------- Objects in the world (same 3-color sprite rules) ----------
 
@@ -888,6 +913,8 @@ export const OBJECTS_ART: Record<string, { pal: Pal; rows: string[] }> = {
       '................',
     ],
   },
+  cadenegro: { pal: OBJECT_PALS.cadenegro, rows: CADEJO },
+  cadeblanco: { pal: OBJECT_PALS.cadeblanco, rows: CADEJO },
   /** Rugidito, the black jaguar cub, on the map (by the temple, before you raise it). */
   rugiditoCachorro: {
     pal: OBJECT_PALS.jaguar,

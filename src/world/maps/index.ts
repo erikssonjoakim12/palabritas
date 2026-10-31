@@ -3,10 +3,11 @@ import { REGION1_MAPS } from './region1';
 import { REGION2_MAPS } from './region2';
 import { REGION3_MAPS } from './region3';
 import { REGION4_MAPS } from './region4';
+import { REGION6_MAPS } from './region6';
 
 // Every map, one file per region (the building blocks they share are in kit.ts).
 export * from './kit';
-Object.assign(MAPS, REGION1_MAPS, REGION2_MAPS, REGION3_MAPS, REGION4_MAPS);
+Object.assign(MAPS, REGION1_MAPS, REGION2_MAPS, REGION3_MAPS, REGION4_MAPS, REGION6_MAPS);
 
 // Each gate's guard (on the road, or aside once it's open) and the tiles where you get stopped.
 for (const m of Object.values(MAPS)) {

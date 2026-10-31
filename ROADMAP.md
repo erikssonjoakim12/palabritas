@@ -21,6 +21,8 @@ Plans for what's next: [plans/](plans/README.md).
   (four floors, Equipo Silencio, the black jaguar's story, Rugidito), the jungle's own Palabritas; swimmers on the
   river and the lake ([plans/region5-jungle.md](plans/region5-jungle.md)). **Gym 5 ✓**: Ortiga's garden, where nettles
   hide off the way her diary tells in the past tense (Planta/Veneno, Medalla Espina, Cut).
+- **Region 6, a first piece as a demo** (`?demo=niebla`): the fog outside the gym 6 city, the black and white dogs and
+  the lost boy ([plans/cadejos.md](plans/cadejos.md)).
 - **Day and night** by the phone's clock (golden at 18, night from 19, morning by 7), with lit windows, fireflies
   and darker caves, plus story night scenes.
 - **Paused:** the bus (fast travel), until there are big roads.
