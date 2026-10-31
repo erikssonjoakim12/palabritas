@@ -18,8 +18,8 @@ import { lines, as, fight, droppedMoney } from './flows';
 /*
   Region 6 (planned: plans/cadejos.md). So far only the fog outside the gym 6 city, played as a demo
   (?demo=niebla, title.ts). Doña Rosa's grandson is lost on the Cerro de la Niebla (maps/region6.ts). The black dog
-  (Cadenegro) leads you up its road, patch by patch, waiting twice in each; stray from it and the fog shuffles you
-  about until it finds you again, 2–3 patches later. At the end of its road it leaves you, lost; you find Tomás on
+  (Cadenegro) leads you up its road, patch by patch, waiting twice in each; stray from it and the fog walks you in
+  circles, through patches you've already been, until it finds you again, 2–3 patches later. At the end of its road it leaves you, lost; you find Tomás on
   your own, follow where the fog grows lighter (the way back, fixed from the start), and the white dog (Cadeblanco)
   leads you both out. Once he's home the fog lifts and the mountain is an open route.
 */
@@ -87,8 +87,16 @@ const gap = (cell: Cell, side: Dir) => {
 /** Where walking out of this patch (way `d`) takes you, as the walk moves on: a patch, out of the fog, or nowhere. */
 function leave(d: Dir): Cell | 'out' | null {
   const cell = here();
-  // Lost: any other patch you could come into from that side (never the clearing before it's time).
-  const astray = () => pickRandom(CELLS.filter((c) => !same(c, cell) && !same(c, CLEARING) && opening(c, OPP[d]).length));
+  /**
+   * Lost: a patch you could come into from that side. Off a way, only one you've walked already (the user: you walk
+   * in circles, never ahead); alone, anywhere but the clearing before it's time.
+   */
+  const astray = () => {
+    const been = walk.phase === 'dog' ? ROAD.slice(0, walk.step + 1) : walk.phase === 'blind' ? null : BACK.slice(0, walk.step + 1);
+    const pool = been ?? CELLS.filter((c) => !same(c, cell) && !same(c, CLEARING));
+    const fits = pool.filter((c) => opening(c, OPP[d]).length);
+    return pickRandom(fits.length ? fits : pool); // enter() comes in by another side when this one is shut
+  };
   if (lifted()) return d === 'down' && same(cell, ENTRY) ? 'out' : null; // only the mountain's own edge comes here then
   switch (walk.phase) {
     case 'dog': {

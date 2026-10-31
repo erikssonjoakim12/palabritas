@@ -136,13 +136,18 @@ for (let i = 0; i < 3; i++) await leaveBy((await fog()).exit);
 w = await fog();
 t.check('following the dog walks its road (Campista Lorena fights on the way)', w.onWay && w.step === 3 && (await t.save()).flags['beat:campista_lorena'], w);
 
-// Straying: no dog for 2-3 patches, then it finds you and leads you back onto its road.
+// Straying: no dog for 2-3 patches, walking in circles through patches of its road you've been, then it finds you
+// and leads you back onto its road.
+const walked = ['2,4', '1,4', '0,4', '0,3'];
 await leaveBy((await others(w.exit))[0]);
 let without = 0;
+const strayed = [(await fog()).cell + ''];
 for (let i = 0; i < 5 && (await fog()).lostFor > 0; i++) {
   if (!(await dog())) without++;
   await leaveBy((await others())[0]);
+  strayed.push((await fog()).cell + '');
 }
+t.check('straying walks you in circles, only through patches you have been', strayed.every((c) => walked.includes(c)), strayed);
 const found = await dog();
 await leaveBy((await fog()).exit);
 w = await fog();
@@ -176,7 +181,7 @@ t.check('fainting with Tomás, you wake up in his clearing, healed, with him bes
 // The way back: the lighter fog leads along it; stray, and it leads you back onto it.
 await leaveBy((await fog()).exit);
 await leaveBy((await others((await fog()).exit))[0]);
-t.check('off the way back, the fog shuffles you', !(await fog()).onWay, await fog());
+t.check('off the way back, the fog walks you in circles', !(await fog()).onWay && ['3,0', '4,0'].includes((await fog()).cell + ''), await fog());
 await leaveBy((await fog()).exit);
 w = await fog();
 t.check('the lighter fog leads you back onto the way back', w.onWay && w.step === 1 && w.cell + '' === '4,0', w);
