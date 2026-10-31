@@ -3,7 +3,7 @@ import { input, type Dir } from '../engine/input';
 import { sfx } from '../engine/sfx';
 import { nextFrame, frames, frameAlpha, whenIdle, clearIdle } from '../engine/loop';
 import { TILES, tallGrassImage, tileImage, tileOf, envAt, owns, isHole, ANIMATED } from '../art/tiles';
-import { personFrames, OBJECTS, type Frames } from '../art/chars';
+import { personFrames, animalEyes, OBJECTS, type Frames } from '../art/chars';
 import { fromRows, mirror, type Img } from '../art/pixel';
 import { MAPS, type MapDef, type NpcDef, type Conn, type EncounterEntry } from './maps';
 import { worldLayout, mapAcross } from './layout';
@@ -11,7 +11,6 @@ import { G, flag, saveGame, playerLook, clockHour, type SaveData } from '../game
 import { rematchReady } from '../game/rematch';
 import { shuffled, pickRandom } from '../game/random';
 import { NIGHT, NIGHT_CLEAR, FIREFLY, MARK, BLACK, SHADOW, ACCENT, FOG } from '../style/colors';
-import { OBJECTS_ART } from '../style/people';
 import { lightAt, drawLights, skyAt, type Light } from '../art/lights';
 import { drawFireworks } from '../art/fireworks';
 import { setMapMusic, musicFor } from '../audio/bgm';
@@ -407,11 +406,20 @@ function bump() {
   }
 }
 
+/** In a fogged map of patches, while the fog lasts: is (x, y) in another patch than you? */
+function intoNextPatch(x: number, y: number) {
+  const p = map.fogPatch;
+  if (!p || map.fogLifts?.()) return false;
+  return Math.floor(x / p[0]) !== Math.floor(player.x / p[0]) || Math.floor(y / p[1]) !== Math.floor(player.y / p[1]);
+}
+
 function tryMove(d: Dir) {
   const nx = player.x + DX[d];
   const ny = player.y + DY[d];
+  if (map.fog === 'patch' && (!inBounds(nx, ny) || (intoNextPatch(nx, ny) && canEnter(nx, ny)))) {
+    return void runScript(SCRIPTS.__fogEdge, { data: { dir: d } });
+  }
   if (!inBounds(nx, ny)) {
-    if (map.fog === 'patch') return void runScript(SCRIPTS.__fogEdge, { data: { dir: d } });
     if (!map.outdoor && map.exit && TILES[tileAt(player.x, player.y)].kind === 'mat' && d === 'down') {
       warp(map.exit.to, map.exit.x, map.exit.y, 'down');
       return;
@@ -451,8 +459,10 @@ function onStep() {
     if (!--G.save.repel) runScript(() => say('El Repelente se acabó.', { en: 'The Repel wore off.' }));
     return;
   }
-  // Swimming: the map's water Palabritas on every step; on foot: in tall grass (or everywhere, in caves).
-  const wild = G.save.surfing ? map.surf : map.encounters;
+  // Swimming: the map's water Palabritas on every step; on foot: in tall grass (or everywhere, in caves), by the
+  // part of the map you're in.
+  const zone = map.encounterZones?.find((z) => x >= z.x && x < z.x + z.w && y >= z.y && y < z.y + z.h);
+  const wild = G.save.surfing ? map.surf : map.encounters && (zone ? { ...map.encounters, table: zone.table } : map.encounters);
   const wildHere = wild && (G.save.surfing || map.encounters?.everywhere || TILES[tileAt(x, y)].kind === 'tallgrass');
   if (wildHere && Math.random() < wild.rate) runScript(SCRIPTS.__wild, { data: pickEncounter(wild.table) });
 }
@@ -954,35 +964,24 @@ function drawFog(g: CanvasRenderingContext2D, cx: number, cy: number, camX: numb
   g.globalAlpha = 1;
   // Through the fog: the black dog's eyes, the white dog's glow.
   for (const n of npcs) {
-    if (!n.visible || !n.def.glow || !n.def.object) continue;
-    const [sx, sy] = [n.x * T - camX + (n.off?.x ?? 0), n.y * T - camY + (n.off?.y ?? 0)];
+    if (!n.visible || !n.def.glow || !n.def.look) continue;
+    const [sx, sy] = [n.x * T - camX + (n.off?.x ?? 0), n.y * T - camY + (n.off?.y ?? 0) - 4];
+    const frame = n.off?.frame ?? 0;
     if (n.def.glow === 'body') {
       g.globalAlpha = 0.8;
-      g.drawImage(objectImg(n), sx, sy);
+      g.drawImage(framesFor(n.def.look)[n.dir][frame], sx, sy);
       g.globalAlpha = 1;
       continue;
     }
-    for (const [ex, ey] of eyesOf(n.def.object)) {
-      const x = sx + (n.def.mirrors && n.dir === 'right' ? 15 - ex : ex);
+    for (const [ex, ey] of animalEyes(n.def.look, n.dir)) {
+      const [x, y] = [Math.round(sx + ex), Math.round(sy + ey + (frame ? 1 : 0))];
       g.fillStyle = FOG.eyeGlow;
-      g.fillRect(x - 1, sy + ey - 1, 3, 3);
+      g.fillRect(x - 1, y - 1, 3, 3);
       g.fillStyle = FOG.eye;
-      g.fillRect(x, sy + ey, 1, 1);
+      g.fillRect(x, y, 1, 1);
     }
   }
   g.restore();
-}
-
-/** Where an object's eyes are: the pixels of color 0 in its art. */
-const eyeCache: Record<string, [number, number][]> = {};
-const eyesOf = (object: string) =>
-  (eyeCache[object] ??= OBJECTS_ART[object].rows.flatMap((row, y) => [...row].flatMap((ch, x) => (ch === '0' ? [[x, y] as [number, number]] : []))));
-
-/** An object's sprite, turned to face right when it's an animal seen from the side (NpcDef `mirrors`). */
-const mirrored: Record<string, Img> = {};
-function objectImg(n: NpcRT): Img {
-  const id = n.def.object!;
-  return n.def.mirrors && n.dir === 'right' ? (mirrored[id] ??= mirror(OBJECTS[id])) : OBJECTS[id];
 }
 
 /** Snap to the screen's real pixels: smooth motion (finer than game pixels) that stays crisp. */
@@ -1012,7 +1011,7 @@ export function renderWorld(g: CanvasRenderingContext2D) {
     sprites.push({
       y: n.y * T + (n.def.object ? 0 : 0.5),
       draw: () => {
-        if (n.def.object) g.drawImage(objectImg(n), sx, sy);
+        if (n.def.object) g.drawImage(OBJECTS[n.def.object], sx, sy);
         else g.drawImage(framesFor(n.def.look ?? 'man')[n.dir][n.off?.frame ?? 0], sx, sy - 4);
         n.overlay?.(g, sx, sy);
         if (n.bubble > 0) g.drawImage(ALERT, sx + 4, sy - 16);

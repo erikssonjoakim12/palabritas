@@ -11,7 +11,7 @@ await t.page.waitForFunction(() => window.__game?.MAPS);
 
 const report = await t.game(() => {
   const g = window.__game;
-  const { MAPS, TILES, LOOKS, OBJECTS_ART, SCRIPTS, SPECIES, TRAINERS } = g;
+  const { MAPS, TILES, LOOKS, ANIMALS, OBJECTS_ART, SCRIPTS, SPECIES, TRAINERS } = g;
   const D = { up: [0, -1], down: [0, 1], left: [-1, 0], right: [1, 0] };
   const OPP = { up: 'down', down: 'up', left: 'right', right: 'left' };
   const out = {};
@@ -74,7 +74,7 @@ const report = await t.game(() => {
       const swims = LOOKS[n.look]?.body === 'swim';
       const free = (x, y) => open(m, x, y) || (swims && TILES[tile(m, x, y)]?.kind === 'water');
       if (n.look && !free(n.x, n.y)) say(`${n.id} stands on a wall (${n.x},${n.y})`);
-      if (n.look && !LOOKS[n.look]) say(`${n.id} has an unknown look '${n.look}'`);
+      if (n.look && !LOOKS[n.look] && !ANIMALS[n.look]) say(`${n.id} has an unknown look '${n.look}'`);
       if (n.object && !OBJECTS_ART[n.object]) say(`${n.id} is an unknown object '${n.object}'`);
       // Objects without a script are decoration (museum pieces); people always have one.
       if ((n.look || n.script) && !SCRIPTS[n.script]) say(`${n.id} has no script '${n.script}'`);

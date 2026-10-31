@@ -107,10 +107,12 @@ A beaten trainer sets `beat:<id>`. Add it to `BATTLE_ORDER` (trainers.ts) where 
 guard's spot, where they wait once the road is open, the road tiles, where you're sent back, and their lines.
 No script needed.
 
-**Fog** (region 6): `fog: 'patch'` maps are pieces of the fog walk (src/world/region6.ts decides where each edge
-leads; `fogView` how far you see); `fog: 'edge'` rolls in at a map's top. **Someone following you** (Tomás):
-`setFollower({ look, script })` (kept in the save). NPCs can wake when you come `near`, `glow` through the fog, and
-`mirrors` (side-view animals). A map's `wakeUp` script can wake you somewhere else after fainting.
+**Fog** (region 6): a `fog: 'patch'` map with `fogPatch` is a grid of patches; while the fog lasts, src/world/region6.ts
+decides where stepping into the next patch leads (`fogView`: how far you see); `fog: 'edge'` rolls in at a map's top.
+**Someone following you** (Tomás): `setFollower({ look, script })` (kept in the save). **Animals** that walk about
+(the Cadejos): `ANIMALS` in style/people.ts, used as a `look`. NPCs can wake when you come `near` and `glow` through
+the fog. A map's `wakeUp` script can wake you somewhere else after fainting; `encounterZones` give part of a map its
+own wild Palabritas.
 
 **Field moves** (Surf, Cut): who can and how many medals in `FIELD_MOVES` (src/data/species.ts); a water map's
 wild Palabritas while swimming in `surf`. Walking or swimming off an edge with no connection (or into a hole) goes

@@ -644,11 +644,26 @@ export const LOOKS: Record<string, Look> = {
   tomas: { head: 'cap', body: 'pants', color: 'orange' },
 };
 
+// ---------- Animals that walk about (the Cadejos) ----------
+
 /**
- * The Cadejos on the map (placeholders until the user's art): a lean dog seen from the side, facing left (NpcDef
- * `mirrors` turns it), with glowing eyes (0) and a chain at its neck and hooves (1).
+ * An animal on the map, walking like a person (art/chars.ts personFrames): its colors (eyes 0, 1, 2, ink 3) and
+ * 16×16 views, each [standing, step A, step B]. The side view faces left (it's turned for right).
  */
-const CADEJO = [
+export interface Animal {
+  pal: Pal;
+  side: string[][];
+  down: string[][];
+  up: string[][];
+}
+
+/** A body over its legs: standing, one step, the other step. */
+const stepping = (body: string[], legs: { stand: string[]; a: string[]; b: string[] }, below: string[] = []) =>
+  [legs.stand, legs.a, legs.b].map((l) => [...body, ...l, ...below]);
+
+// The Cadejos (placeholders until the user's art): a lean dog with glowing eyes (0), a chain at its neck and goat
+// hooves (1).
+const DOG_SIDE = [
   '................',
   '................',
   '..3.3...........',
@@ -659,13 +674,49 @@ const CADEJO = [
   '.33122222222223.',
   '..312222222223..',
   '..322222222223..',
-  '..3223....3223..',
-  '..3223....3223..',
-  '..3113....3113..',
-  '..3333....3333..',
-  '................',
-  '................',
 ];
+const DOG_SIDE_LEGS = {
+  stand: ['..3223....3223..', '..3223....3223..', '..3113....3113..', '..3333....3333..'],
+  a: ['..3223....3223..', '.3223......3223.', '.3113......3113.', '.3333......3333.'],
+  b: ['...3223..3223...', '...3223..3223...', '...3113..3113...', '...3333..3333...'],
+};
+const DOG_HEAD = ['................', '...3........3...', '...33......33...', '...3233333323...', '...3222222223...'];
+const DOG_FRONT = [
+  ...DOG_HEAD,
+  '...3202222023...',
+  '...3222222223...',
+  '....32233223....',
+  '.....322223.....',
+  '....31222213....',
+  '...3222222223...',
+  '...3222222223...',
+];
+const DOG_BACK = [
+  ...DOG_HEAD,
+  '...3222222223...',
+  '...3222222223...',
+  '....32222223....',
+  '.....321123.....',
+  '....32222223....',
+  '...3222222223...',
+  '...3222222223...',
+];
+const DOG_FRONT_LEGS = {
+  stand: ['...3223..3223...', '...3223..3223...', '...3113..3113...', '...3333..3333...'],
+  a: ['...3223..3223...', '...3113..3223...', '...3333..3113...', '.........3333...'],
+  b: ['...3223..3223...', '...3223..3113...', '...3113..3333...', '...3333.........'],
+};
+const dog = (pal: Pal): Animal => ({
+  pal,
+  side: stepping(DOG_SIDE, DOG_SIDE_LEGS, ['................', '................']),
+  down: stepping(DOG_FRONT, DOG_FRONT_LEGS),
+  up: stepping(DOG_BACK, DOG_FRONT_LEGS),
+});
+
+export const ANIMALS: Record<string, Animal> = {
+  cadenegro: dog(OBJECT_PALS.cadenegro),
+  cadeblanco: dog(OBJECT_PALS.cadeblanco),
+};
 
 // ---------- Objects in the world (same 3-color sprite rules) ----------
 
@@ -913,8 +964,6 @@ export const OBJECTS_ART: Record<string, { pal: Pal; rows: string[] }> = {
       '................',
     ],
   },
-  cadenegro: { pal: OBJECT_PALS.cadenegro, rows: CADEJO },
-  cadeblanco: { pal: OBJECT_PALS.cadeblanco, rows: CADEJO },
   /** Rugidito, the black jaguar cub, on the map (by the temple, before you raise it). */
   rugiditoCachorro: {
     pal: OBJECT_PALS.jaguar,

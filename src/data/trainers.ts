@@ -147,9 +147,18 @@ export const TRAINERS: Record<string, TrainerDef> = {
   sigilo: { id: 'sigilo', name: 'Don Sigilo', defenseMode: 'type', team: [['murcielon', 27], ['taranton', 28], ['petroglifon', 29]] },
   lucas3: { id: 'lucas3', name: 'Lucas', defenseMode: 'type', team: [['nubarron', 28], ['hojarasco', 25], ['palomon', 25], ['cangrejon', 26]] },
   tizon: { id: 'tizon', name: 'Líder Don Tizón', defenseMode: 'type', team: [['chocoyote', 27], ['coheton', 28], ['brasaurio', 32]] },
-  // Region 6 (planned): lost in the fog outside the gym 6 city (the fog demo).
+  // Region 6 (planned): lost in the fog outside the gym 6 city (the fog demo): seven on the black dog's road, three on
+  // the way back. The only battles there you can't run from.
+  campista_lorena: { id: 'campista_lorena', name: 'Campista Lorena', defenseMode: 'choose', team: [['ardillon', 29], ['murcielon', 29]] },
   excursionista_rodrigo: { id: 'excursionista_rodrigo', name: 'Excursionista Rodrigo', defenseMode: 'listen', team: [['murcielon', 30], ['taranton', 31]] },
-  espeleologo_ismael: { id: 'espeleologo_ismael', name: 'Espeleólogo Ismael', defenseMode: 'type', team: [['lamparita', 31], ['zopiloton', 32]] },
+  lenador_abel: { id: 'lenador_abel', name: 'Leñador Abel', defenseMode: 'type', team: [['taranton', 30], ['torovenado', 31]] },
+  espeleologo_ismael: { id: 'espeleologo_ismael', name: 'Espeleólogo Ismael', defenseMode: 'type', team: [['lamparita', 31], ['zopiloton', 31]] },
+  observadora_marta: { id: 'observadora_marta', name: 'Observadora Marta', defenseMode: 'listen', team: [['zumbador', 31], ['zopiloton', 31]] },
+  cafetalero_julio: { id: 'cafetalero_julio', name: 'Cafetalero Julio', defenseMode: 'choose', team: [['perezosito', 31], ['ardillon', 32]] },
+  ciclista_kevin: { id: 'ciclista_kevin', name: 'Ciclista Kevin', defenseMode: 'type', team: [['zumbador', 32], ['murcielon', 32]] },
+  guardaparque_elena: { id: 'guardaparque_elena', name: 'Guardaparque Elena', defenseMode: 'listen', team: [['torovenado', 31], ['perezosito', 31]] },
+  musico_rafa: { id: 'musico_rafa', name: 'Músico Rafa', defenseMode: 'choose', team: [['lamparita', 32], ['murcielon', 31]] },
+  turista_paola: { id: 'turista_paola', name: 'Turista Paola', defenseMode: 'type', team: [['zopiloton', 32], ['taranton', 32]] },
 };
 
 /**
@@ -201,5 +210,12 @@ export const BATTLE_ORDER: { leg: string; en: string; trainers: string[] }[] = [
       'jardinera_azucena', 'yerbero_chepe', 'botanica_iris', 'ortiga',
     ],
   },
-  { leg: 'La niebla (región 6, en preparación)', en: 'The fog outside the gym 6 city (region 6, being planned: the fog demo)', trainers: ['excursionista_rodrigo', 'espeleologo_ismael'] },
+  {
+    leg: 'La niebla (región 6, en preparación)',
+    en: 'The fog outside the gym 6 city (region 6, being planned: the fog demo)',
+    trainers: [
+      'campista_lorena', 'excursionista_rodrigo', 'lenador_abel', 'espeleologo_ismael', 'observadora_marta', 'cafetalero_julio',
+      'ciclista_kevin', 'guardaparque_elena', 'musico_rafa', 'turista_paola',
+    ],
+  },
 ];

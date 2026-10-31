@@ -31,21 +31,32 @@ way you came leads out again; deeper in, there is no way back until you find the
 the black dog takes you on a dangerous journey. Dark as dusk at any hour. Wild Palabritas around **level 30**.
 Once the boy is home **the fog lifts** and the patches settle into the dog's road, the same every time.
 
-### The demo (built 2026-10-31)
+### The demo (built 2026-10-31, reworked after the user's playtest the same day)
 
 Open the game with `?demo=niebla` (on the phone: `https://erikssonjoakim12.github.io/palabritas/?demo=niebla`). It
 starts at the edge of the fog with your name and look (read from your game, never written: `G.demo`), a team at
-33–35, Pociones and Palabolas. Doña Rosa and her grandson Tomás; Excursionista Rodrigo and Espeleólogo Ismael (who
-"almost" fits the description: orange, but a helmet) on the road; placeholder dogs. Code: `src/world/region6.ts`
-(the fog walk and the story), `src/world/maps/region6.ts` (the patches), world.ts (fog drawing, `near` NPCs,
-`setFollower`, `wakeUp`); test: `tests/fog.test.mjs`.
+33–35, Pociones and Palabolas.
+
+- **The Cerro de la Niebla** is one map of 5×5 patches (18×16 each). While the fog lasts, crossing into the next patch
+  goes where the fog walk says; once it lifts, it's an open route (on the art page with the other maps).
+- **The black dog's road**: 16 patches the long way up the left side; it waits **twice a patch** (halfway, then by the
+  way out) and runs on, animated. Stray, and it's gone for **2–3 patches**, then finds you and leads you back. At the
+  end of its road it leaves you; 4 patches alone, then Tomás's clearing at the top.
+- **The way back**: down the right side, 7 patches, **fixed from the start** (the same way the open map shows later).
+  The lighter fog leans along it and leads back onto it if you stray; from its 5th patch the white dog leads.
+- **Ten lost trainers** (7 on the dog's road, 3 on the way back, levels 29–32): the only battles you can't run from.
+  Wild Palabritas only in the (plentiful) tall grass.
+- **A rare Puercoespín** (30–32) in the meadow beside the clearing; Don Lencho at the trail mentions it.
+
+Code: `src/world/region6.ts` (the fog walk and the story), `src/world/maps/region6.ts` (the mountain, built from
+patch kinds), world.ts (fog drawing, `fogPatch`, `near` NPCs, `setFollower`, `wakeUp`, `encounterZones`), animals in
+style/people.ts (`ANIMALS`); test: `tests/fog.test.mjs`.
 
 When it becomes the real region 6:
 - The trail (`niebla_borde`) joins the gym 6 city, and `G.save.heal` is the city's Palacentro.
 - The fog walk's state isn't saved: a game saved inside the fog should load at the trail (a migration or a check on
   load).
-- Once lifted, the patches are separate little maps joined by the walk; the onward road past the last patch (toward
-  gym 7) is still to draw.
+- The onward road toward gym 7 leaves the mountain somewhere (still to draw).
 - Real Palabritas of the region instead of the borrowed night ones; the dogs' art from the user.
 
 You hear **only parts of the legend** here («Mi abuela decía que de noche no hay que seguir a un perro negro...»).

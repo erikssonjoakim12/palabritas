@@ -8,7 +8,7 @@ import { NIGHT } from '../style/colors';
 import { mapLights, drawLights } from '../art/lights';
 import { MAPS, type MapDef } from '../world/maps';
 import { worldLayout } from '../world/layout';
-import { LOOKS } from '../style/people';
+import { LOOKS, ANIMALS } from '../style/people';
 import { PALETTE } from '../style/colors';
 import { SPECIES, DEX_ORDER } from '../data/species';
 import { TYPE_COLORS } from '../data/types';
@@ -94,6 +94,11 @@ const walk = section('Overworld sprites', 'Down, up, left, right (standing), the
 for (const id of Object.keys(LOOKS)) {
   const f = personFrames(id);
   card(walk, id, [f.down[0], f.up[0], f.left[0], f.right[0], f.down[1], f.left[1]], 4);
+}
+// Animals that walk about (the Cadejos): every view's steps, so their run can be checked.
+for (const id of Object.keys(ANIMALS)) {
+  const f = personFrames(id);
+  card(walk, `${id} (animal)`, [...f.down, ...f.up, ...f.left, f.right[0]], 4);
 }
 
 // ---------- Map tiles and whole maps ----------

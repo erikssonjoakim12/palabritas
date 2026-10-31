@@ -105,7 +105,7 @@ if (import.meta.env.DEV) {
       ...state, ...world, ...battle, ...mon, ...maps,
       fill: textbox.fill, SPECIES: species.SPECIES, TILES: tiles.TILES, creatureArt: creatures.creatureArt, CREATURE_IDS: creatures.CREATURE_IDS, LOOKS: people.LOOKS,
       OBJECTS_ART: people.OBJECTS_ART, TRAINERS: trainers.TRAINERS, ITEM_DEFS: items.ITEM_DEFS, SHOPS: items.SHOPS,
-      content, curriculum, learning, bgm, backup, worldLayout: layout.worldLayout, fogWalk: region6.fogWalkState, blackout: flows.blackout,
+      content, curriculum, learning, bgm, backup, worldLayout: layout.worldLayout, fogWalk: region6.fogWalkState, fogJump: region6.fogJump, blackout: flows.blackout, ANIMALS: people.ANIMALS,
     };
   });
 }

@@ -49,10 +49,8 @@ export interface NpcDef {
   sight?: number;
   /** Runs its script when you come within this many steps, from any side, without a «!» (the dogs in the fog). */
   near?: number;
-  /** Shows through the fog: its eyes (color 0 of its art) or its whole body (the white dog). */
+  /** Shows through the fog: its eyes (an animal's color 0) or its whole body (the white dog). */
   glow?: 'eyes' | 'body';
-  /** An object seen from the side (an animal): its art faces left, and it turns to face right. */
-  mirrors?: boolean;
   /** Looks around now and then. */
   turns?: boolean;
   /** Walks about now and then, at most WANDER tiles from where they stand (townspeople; never trainers). */
@@ -134,6 +132,11 @@ export interface MapDef {
   fog?: 'patch' | 'edge';
   fogLifts?: () => boolean;
   /**
+   * A fogged map made of patches this big (tiles): while the fog lasts, stepping from one patch into the next goes
+   * wherever the fog leads too (SCRIPTS.__fogEdge); once it lifts, it's one open map.
+   */
+  fogPatch?: [w: number, h: number];
+  /**
    * After fainting here, a script that wakes you somewhere else instead of at the Palacentro (in the fog, once Tomás
    * is with you: his clearing). It gets the money you dropped (data.lost) and resolves false to wake up as usual.
    */
@@ -158,6 +161,8 @@ export interface MapDef {
   surf?: { rate: number; table: EncounterEntry[] };
   /** Wild Palabritas in tall grass, or (`everywhere`, caves) on every step. */
   encounters?: { rate: number; everywhere?: boolean; table: EncounterEntry[] };
+  /** Parts of the map with wild Palabritas of their own (a rare one in a meadow), instead of `encounters`. */
+  encounterZones?: { x: number; y: number; w: number; h: number; table: EncounterEntry[] }[];
   /** What bites when you fish here (FRESHWATER when left out). */
   fishing?: { table: EncounterEntry[] };
 }
