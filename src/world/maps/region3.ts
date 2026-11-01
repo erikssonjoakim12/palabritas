@@ -56,17 +56,17 @@ export const REGION3_MAPS: Record<string, MapDef> = {
     encounters: {
       rate: 0.12,
       table: [
-        { sp: 'conejito', min: 16, max: 17, w: 20 },
+        { sp: 'conejito', min: 12, max: 17, w: 20 },
         { sp: 'liebron', min: 18, max: 19, w: 5 },
-        { sp: 'hojadillo', min: 16, max: 19, w: 20 },
-        { sp: 'ardillita', min: 16, max: 19, w: 15 },
-        { sp: 'colibri', min: 16, max: 19, w: 15 },
-        { sp: 'palomon', min: 16, max: 18, w: 10 },
-        { sp: 'espinita', min: 17, max: 19, w: 10 },
-        { sp: 'ollita', min: 17, max: 19, w: 10 },
+        { sp: 'hojadillo', min: 13, max: 19, w: 20 },
+        { sp: 'ardillita', min: 13, max: 19, w: 15 },
+        { sp: 'colibri', min: 13, max: 19, w: 15 },
+        { sp: 'palomon', min: 14, max: 18, w: 10 },
+        { sp: 'espinita', min: 13, max: 19, w: 10 },
+        { sp: 'ollita', min: 13, max: 19, w: 10 },
       ],
     },
-    fishing: { table: [{ sp: 'tilapita', min: 14, max: 18, w: 100 }] },
+    fishing: { table: [{ sp: 'tilapita', min: 13, max: 18, w: 100 }] },
     npcs: [
       // Each takes one lane of the pine road, looking across the other.
       { id: 'ramon', x: 21, y: 3, look: 'lenador', dir: 'down', script: 'ramon', sight: 1 },
@@ -144,11 +144,11 @@ export const REGION3_MAPS: Record<string, MapDef> = {
     encounters: {
       rate: 0.12,
       table: [
-        { sp: 'cangrejito', min: 17, max: 20, w: 30 },
-        { sp: 'coquito', min: 17, max: 20, w: 25 },
-        { sp: 'pelicanito', min: 18, max: 20, w: 25 },
-        { sp: 'palomon', min: 17, max: 19, w: 10 },
-        { sp: 'hojadillo', min: 17, max: 19, w: 10 },
+        { sp: 'cangrejito', min: 14, max: 20, w: 30 },
+        { sp: 'coquito', min: 14, max: 20, w: 25 },
+        { sp: 'pelicanito', min: 14, max: 20, w: 25 },
+        { sp: 'palomon', min: 14, max: 19, w: 10 },
+        { sp: 'hojadillo', min: 13, max: 19, w: 10 },
       ],
     },
     fishing: { table: [{ sp: 'tilapita', min: 12, max: 18, w: 55 }, { sp: 'cangrejito', min: 14, max: 20, w: 35 }, { sp: 'espadon', min: 20, max: 22, w: 10 }] },
@@ -370,9 +370,9 @@ export const REGION3_MAPS: Record<string, MapDef> = {
     encounters: {
       rate: 0.12,
       table: [
-        { sp: 'cangrejito', min: 18, max: 21, w: 40 },
-        { sp: 'coquito', min: 18, max: 21, w: 35 },
-        { sp: 'pelicanito', min: 18, max: 21, w: 25 },
+        { sp: 'cangrejito', min: 15, max: 21, w: 40 },
+        { sp: 'coquito', min: 15, max: 21, w: 35 },
+        { sp: 'pelicanito', min: 15, max: 21, w: 25 },
       ],
     },
     fishing: { table: [{ sp: 'tilapita', min: 12, max: 18, w: 55 }, { sp: 'cangrejito', min: 14, max: 20, w: 35 }, { sp: 'espadon', min: 20, max: 22, w: 10 }] },

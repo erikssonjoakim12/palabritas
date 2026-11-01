@@ -644,11 +644,11 @@ export const REGION1_MAPS: Record<string, MapDef> = {
     encounters: {
       rate: 0.12,
       table: [
-        { sp: 'ardillita', min: 10, max: 13, w: 30 },
-        { sp: 'colibri', min: 10, max: 13, w: 25 },
-        { sp: 'espinita', min: 11, max: 13, w: 20 },
-        { sp: 'hojadillo', min: 10, max: 12, w: 15 },
-        { sp: 'pajarito', min: 10, max: 12, w: 10 },
+        { sp: 'ardillita', min: 9, max: 13, w: 30 },
+        { sp: 'colibri', min: 9, max: 13, w: 25 },
+        { sp: 'espinita', min: 9, max: 13, w: 20 },
+        { sp: 'hojadillo', min: 8, max: 12, w: 15 },
+        { sp: 'pajarito', min: 8, max: 12, w: 10 },
       ],
     },
     // The foot of the clifftop trail: Lucas catches up with you (rival battle #1).

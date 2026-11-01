@@ -222,11 +222,11 @@ const onWayBack = (id: string, look: string, i: number) => besideWayOut(id, look
 
 /** Wild Palabritas in the fog's tall grass: night creatures and ghosts, around level 30 (the user, 2026-10-31). */
 const FOG_WILD = [
-  { sp: 'murcielon', min: 28, max: 31, w: 30 },
-  { sp: 'lamparita', min: 28, max: 31, w: 20 },
-  { sp: 'taranton', min: 28, max: 31, w: 20 },
-  { sp: 'zopiloton', min: 29, max: 32, w: 15 },
-  { sp: 'perezosito', min: 28, max: 30, w: 15 },
+  { sp: 'murcielon', min: 22, max: 31, w: 30 },
+  { sp: 'lamparita', min: 22, max: 31, w: 20 },
+  { sp: 'taranton', min: 24, max: 31, w: 20 },
+  { sp: 'zopiloton', min: 28, max: 32, w: 15 },
+  { sp: 'perezosito', min: 21, max: 30, w: 15 },
 ];
 
 /**
@@ -237,11 +237,11 @@ const rosaHome = () => flag('rosaEnCasa');
 
 /** Wild Palabritas on Ruta 10: the cloud forest's squirrels, hummingbirds, moths, tree frogs and deer. */
 const RUTA10_WILD = [
-  { sp: 'ardillon', min: 27, max: 29, w: 25 },
-  { sp: 'zumbador', min: 27, max: 29, w: 20 },
-  { sp: 'mariposita', min: 26, max: 28, w: 20 },
-  { sp: 'ranojito', min: 26, max: 29, w: 20 },
-  { sp: 'venadito', min: 26, max: 28, w: 15 },
+  { sp: 'ardillon', min: 20, max: 29, w: 25 },
+  { sp: 'zumbador', min: 22, max: 29, w: 20 },
+  { sp: 'mariposita', min: 20, max: 28, w: 20 },
+  { sp: 'ranojito', min: 20, max: 29, w: 20 },
+  { sp: 'venadito', min: 20, max: 28, w: 15 },
 ];
 
 export const REGION6_MAPS: Record<string, MapDef> = {
@@ -435,7 +435,7 @@ export const REGION6_MAPS: Record<string, MapDef> = {
     resume: 'nieblaReanudar',
     rows: MOUNTAIN,
     encounters: { rate: 0.11, table: FOG_WILD },
-    encounterZones: [{ ...at(MEADOW, 0, 0), w: PATCH.w, h: PATCH.h, table: [...FOG_WILD, { sp: 'puercoespin', min: 30, max: 32, w: 12 }] }],
+    encounterZones: [{ ...at(MEADOW, 0, 0), w: PATCH.w, h: PATCH.h, table: [...FOG_WILD, { sp: 'puercoespin', min: 22, max: 32, w: 12 }] }],
     npcs: [
       // The dogs: placed by the fog walk wherever they wait (they start at the trail).
       { id: 'cadenegro', ...at(ENTRY, 8, 7), look: 'cadenegro', dir: 'down', script: 'cadenegro', near: 3, glow: 'eyes', show: () => inFog.has('cadenegro') },

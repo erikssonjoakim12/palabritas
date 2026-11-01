@@ -25,11 +25,11 @@ const TEMPLO_WILD: MapDef['encounters'] = {
   rate: 0.08,
   everywhere: true,
   table: [
-    { sp: 'ecolin', min: 29, max: 31, w: 30 },
-    { sp: 'ochopatas', min: 29, max: 31, w: 25 },
-    { sp: 'taranton', min: 31, max: 32, w: 15 },
-    { sp: 'murcielon', min: 31, max: 32, w: 15 },
-    { sp: 'pestanita', min: 30, max: 32, w: 15 },
+    { sp: 'ecolin', min: 22, max: 31, w: 30 },
+    { sp: 'ochopatas', min: 22, max: 31, w: 25 },
+    { sp: 'taranton', min: 24, max: 32, w: 15 },
+    { sp: 'murcielon', min: 22, max: 32, w: 15 },
+    { sp: 'pestanita', min: 22, max: 32, w: 15 },
   ],
 };
 
@@ -113,17 +113,17 @@ export const REGION4_MAPS: Record<string, MapDef> = {
     encounters: {
       rate: 0.12,
       table: [
-        { sp: 'hormiguita', min: 15, max: 18, w: 30 },
-        { sp: 'zopilotito', min: 16, max: 18, w: 25 },
-        { sp: 'brasita', min: 15, max: 17, w: 8 },
-        { sp: 'hojadillo', min: 16, max: 19, w: 10 },
+        { sp: 'hormiguita', min: 13, max: 18, w: 30 },
+        { sp: 'zopilotito', min: 13, max: 18, w: 25 },
+        { sp: 'brasita', min: 12, max: 17, w: 8 },
+        { sp: 'hojadillo', min: 13, max: 19, w: 10 },
         { sp: 'liebron', min: 17, max: 19, w: 10 },
-        { sp: 'cuernito', min: 17, max: 19, w: 5 },
+        { sp: 'cuernito', min: 13, max: 19, w: 5 },
         { sp: 'herculeo', min: 19, max: 20, w: 3 },
         { sp: 'tinajon', min: 18, max: 20, w: 2 },
       ],
     },
-    fishing: { table: [{ sp: 'tilapita', min: 14, max: 19, w: 85 }, { sp: 'espadon', min: 20, max: 21, w: 15 }] },
+    fishing: { table: [{ sp: 'tilapita', min: 13, max: 19, w: 85 }, { sp: 'espadon', min: 20, max: 21, w: 15 }] },
     npcs: [
       { id: 'campesino', x: 9, y: 19, look: 'campesino', dir: 'down', script: 'campesino', sight: 2 },
       { id: 'vaquera_r8', x: 20, y: 31, look: 'vaquera', dir: 'up', script: 'vaquera_r8', sight: 1 },
@@ -305,7 +305,7 @@ export const REGION4_MAPS: Record<string, MapDef> = {
     ],
     exit: { to: 'chispa', x: 5, y: 27 },
     doors: [{ x: 4, y: 0, to: 'cuarto_embrujado', tx: 3, ty: 5, dir: 'up' }],
-    encounters: { rate: 0.1, everywhere: true, table: [{ sp: 'cojincito', min: 20, max: 22, w: 70 }, { sp: 'sillon', min: 22, max: 24, w: 30 }] },
+    encounters: { rate: 0.1, everywhere: true, table: [{ sp: 'cojincito', min: 15, max: 22, w: 70 }, { sp: 'sillon', min: 18, max: 24, w: 30 }] },
   },
   cuarto_embrujado: {
     id: 'cuarto_embrujado',
@@ -324,7 +324,7 @@ export const REGION4_MAPS: Record<string, MapDef> = {
     ],
     doors: [{ x: 3, y: 6, to: 'casa_embrujada', tx: 4, ty: 1, dir: 'down' }],
     npcs: [{ id: 'lampara', x: 3, y: 1, object: 'lampara', script: 'lampara', show: () => !flag('lamparaCalmada') }],
-    encounters: { rate: 0.1, everywhere: true, table: [{ sp: 'cojincito', min: 20, max: 22, w: 70 }, { sp: 'sillon', min: 22, max: 24, w: 30 }] },
+    encounters: { rate: 0.1, everywhere: true, table: [{ sp: 'cojincito', min: 15, max: 22, w: 70 }, { sp: 'sillon', min: 18, max: 24, w: 30 }] },
   },
 
   // The fireworks workshop: four torches to light in the poem's order open the door to Don Tizón (stage 3).
@@ -434,12 +434,12 @@ export const REGION4_MAPS: Record<string, MapDef> = {
     encounters: {
       rate: 0.12,
       table: [
-        { sp: 'zopilotito', min: 25, max: 27, w: 30 },
-        { sp: 'chispita', min: 25, max: 27, w: 25 },
-        { sp: 'hormigon', min: 26, max: 28, w: 15 },
-        { sp: 'liebron', min: 26, max: 28, w: 15 },
-        { sp: 'chocoyito', min: 25, max: 27, w: 10 },
-        { sp: 'brasita', min: 24, max: 26, w: 5 },
+        { sp: 'zopilotito', min: 19, max: 27, w: 30 },
+        { sp: 'chispita', min: 19, max: 27, w: 25 },
+        { sp: 'hormigon', min: 22, max: 28, w: 15 },
+        { sp: 'liebron', min: 20, max: 28, w: 15 },
+        { sp: 'chocoyito', min: 19, max: 27, w: 10 },
+        { sp: 'brasita', min: 18, max: 26, w: 5 },
       ],
     },
     npcs: [
@@ -488,11 +488,11 @@ export const REGION4_MAPS: Record<string, MapDef> = {
     encounters: {
       rate: 0.12,
       table: [
-        { sp: 'zopilotito', min: 22, max: 25, w: 35 },
-        { sp: 'liebron', min: 22, max: 25, w: 25 },
-        { sp: 'palomon', min: 22, max: 25, w: 15 },
-        { sp: 'brasita', min: 22, max: 24, w: 10 },
-        { sp: 'hormigon', min: 23, max: 25, w: 10 },
+        { sp: 'zopilotito', min: 18, max: 25, w: 35 },
+        { sp: 'liebron', min: 18, max: 25, w: 25 },
+        { sp: 'palomon', min: 18, max: 25, w: 15 },
+        { sp: 'brasita', min: 17, max: 24, w: 10 },
+        { sp: 'hormigon', min: 22, max: 25, w: 10 },
       ],
     },
     npcs: [
@@ -550,10 +550,10 @@ export const REGION4_MAPS: Record<string, MapDef> = {
     encounters: {
       rate: 0.12,
       table: [
-        { sp: 'chispita', min: 19, max: 22, w: 35 },
-        { sp: 'chocoyito', min: 20, max: 22, w: 25 },
-        { sp: 'zopilotito', min: 19, max: 22, w: 20 },
-        { sp: 'brasita', min: 19, max: 21, w: 15 },
+        { sp: 'chispita', min: 15, max: 22, w: 35 },
+        { sp: 'chocoyito', min: 15, max: 22, w: 25 },
+        { sp: 'zopilotito', min: 15, max: 22, w: 20 },
+        { sp: 'brasita', min: 15, max: 21, w: 15 },
       ],
     },
     npcs: [
@@ -612,11 +612,11 @@ export const REGION4_MAPS: Record<string, MapDef> = {
       rate: 0.08,
       everywhere: true,
       table: [
-        { sp: 'ecolin', min: 20, max: 22, w: 30 },
+        { sp: 'ecolin', min: 15, max: 22, w: 30 },
         { sp: 'murcielon', min: 21, max: 23, w: 20 },
-        { sp: 'ochopatas', min: 20, max: 22, w: 20 },
+        { sp: 'ochopatas', min: 15, max: 22, w: 20 },
         { sp: 'taranton', min: 22, max: 23, w: 10 },
-        { sp: 'chispita', min: 21, max: 23, w: 20 },
+        { sp: 'chispita', min: 16, max: 23, w: 20 },
       ],
     },
     npcs: [
@@ -666,7 +666,7 @@ export const REGION4_MAPS: Record<string, MapDef> = {
     ],
     connections: { down: { to: 'laderas', offset: 0, scenery: true }, left: { to: 'ruta10', offset: 35 } },
     doors: [{ x: 16, y: 25, to: 'tubo', tx: 36, ty: 2, dir: 'down' }],
-    encounters: { rate: 0.15, table: [{ sp: 'chocoyito', min: 22, max: 24, w: 75 }, { sp: 'chispita', min: 22, max: 24, w: 25 }] },
+    encounters: { rate: 0.15, table: [{ sp: 'chocoyito', min: 17, max: 24, w: 75 }, { sp: 'chispita', min: 17, max: 24, w: 25 }] },
     npcs: [
       // On the walkways' outer edge, against the rock: the lava is hot.
       { id: 'silencioso5', x: 2, y: 16, look: 'silencioso', dir: 'right', script: 'silencioso5', sight: 3 },
@@ -781,7 +781,7 @@ export const REGION4_MAPS: Record<string, MapDef> = {
     ],
     connections: { right: { to: 'ruta2', offset: -5 }, down: { to: 'ruta9', offset: 0 }, left: { to: 'rio', offset: 34, scenery: true } },
     signs: [{ x: 37, y: 83, es: 'LAGO DE LAS ISLAS. El río baja del Cañón del Guardabarranco.', en: 'LAKE OF THE ISLANDS. The river comes down from the Guardabarranco Canyon.' }],
-    fishing: { table: [{ sp: 'mojarrita', min: 14, max: 19, w: 70 }, { sp: 'mordisquito', min: 20, max: 22, w: 30 }] },
+    fishing: { table: [{ sp: 'mojarrita', min: 13, max: 19, w: 70 }, { sp: 'mordisquito', min: 20, max: 22, w: 30 }] },
     npcs: [
       { id: 'pescador_lago', x: 40, y: 22, look: 'fisher', dir: 'left', script: 'pescador_lago' },
       // Out in the water: you'll meet them once you can swim.
@@ -1019,13 +1019,13 @@ export const REGION4_MAPS: Record<string, MapDef> = {
       rate: 0.12,
       // The jungle's own (the viper, the frogs) and rainforest Palabritas from elsewhere.
       table: [
-        { sp: 'pestanita', min: 28, max: 30, w: 22 },
-        { sp: 'ranojito', min: 28, max: 30, w: 22 },
-        { sp: 'dardito', min: 29, max: 31, w: 10 },
-        { sp: 'perezosito', min: 28, max: 30, w: 14 },
-        { sp: 'mariposita', min: 28, max: 30, w: 12 },
-        { sp: 'colibri', min: 28, max: 30, w: 10 },
-        { sp: 'taranton', min: 30, max: 31, w: 10 },
+        { sp: 'pestanita', min: 21, max: 30, w: 22 },
+        { sp: 'ranojito', min: 21, max: 30, w: 22 },
+        { sp: 'dardito', min: 22, max: 31, w: 10 },
+        { sp: 'perezosito', min: 21, max: 30, w: 14 },
+        { sp: 'mariposita', min: 21, max: 30, w: 12 },
+        { sp: 'colibri', min: 21, max: 30, w: 10 },
+        { sp: 'taranton', min: 24, max: 31, w: 10 },
       ],
     },
     npcs: [

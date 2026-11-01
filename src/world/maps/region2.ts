@@ -313,10 +313,10 @@ export const REGION2_MAPS: Record<string, MapDef> = {
       rate: 0.08,
       everywhere: true,
       table: [
-        { sp: 'piedrita', min: 11, max: 14, w: 40 },
-        { sp: 'ollita', min: 11, max: 14, w: 35 },
-        { sp: 'ochopatas', min: 11, max: 13, w: 15 },
-        { sp: 'ecolin', min: 11, max: 13, w: 10 },
+        { sp: 'piedrita', min: 10, max: 14, w: 40 },
+        { sp: 'ollita', min: 10, max: 14, w: 35 },
+        { sp: 'ochopatas', min: 9, max: 13, w: 15 },
+        { sp: 'ecolin', min: 9, max: 13, w: 10 },
       ],
     },
     npcs: [
@@ -370,10 +370,10 @@ export const REGION2_MAPS: Record<string, MapDef> = {
       rate: 0.08,
       everywhere: true,
       table: [
-        { sp: 'piedrita', min: 13, max: 15, w: 35 },
-        { sp: 'ollita', min: 13, max: 15, w: 30 },
-        { sp: 'ochopatas', min: 13, max: 15, w: 20 },
-        { sp: 'ecolin', min: 13, max: 15, w: 15 },
+        { sp: 'piedrita', min: 11, max: 15, w: 35 },
+        { sp: 'ollita', min: 11, max: 15, w: 30 },
+        { sp: 'ochopatas', min: 11, max: 15, w: 20 },
+        { sp: 'ecolin', min: 11, max: 15, w: 15 },
       ],
     },
     npcs: [
@@ -442,11 +442,11 @@ export const REGION2_MAPS: Record<string, MapDef> = {
     encounters: {
       rate: 0.12,
       table: [
-        { sp: 'colibri', min: 12, max: 14, w: 30 },
-        { sp: 'ardillita', min: 12, max: 14, w: 25 },
-        { sp: 'espinita', min: 12, max: 15, w: 25 },
-        { sp: 'mariposita', min: 12, max: 13, w: 15 },
-        { sp: 'guardabarranco', min: 13, max: 15, w: 5 },
+        { sp: 'colibri', min: 10, max: 14, w: 30 },
+        { sp: 'ardillita', min: 10, max: 14, w: 25 },
+        { sp: 'espinita', min: 11, max: 15, w: 25 },
+        { sp: 'mariposita', min: 10, max: 13, w: 15 },
+        { sp: 'guardabarranco', min: 11, max: 15, w: 5 },
       ],
     },
     npcs: [
