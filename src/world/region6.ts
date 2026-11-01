@@ -12,12 +12,12 @@ import {
   fogView, player, DX, DY, OPP, type ScriptFn, type ScriptCtx, type NpcRT,
 } from './world';
 import { MAPS, type Line } from './maps';
-import { inFog, PATCH, CELLS, ROAD, BACK, CLEARING, ENTRY, wayTo, type Cell } from './maps/region6';
-import { lines, as, fight, droppedMoney } from './flows';
+import { inFog, PATCH, CELLS, ROAD, BACK, CLEARING, ENTRY, TOWN6, wayTo, type Cell } from './maps/region6';
+import { lines, as, talk, fight, droppedMoney } from './flows';
 
 /*
-  Region 6 (planned: plans/cadejos.md). So far only the fog outside the gym 6 city, played as a demo
-  (?demo=niebla, title.ts). Doña Rosa's grandson is lost on the Cerro de la Niebla (maps/region6.ts). The black dog
+  Region 6 (plans/cadejos.md): Ruta 10, Villa Bruma (gym 6, still closed) and the fog north of the town, also played
+  as a demo (?demo=niebla, title.ts). Doña Rosa's grandson is lost on the Cerro de la Niebla (maps/region6.ts). The black dog
   (Cadenegro) leads you up its road, patch by patch, waiting twice in each; stray from it and the fog walks you in
   circles, through patches you've already been, until it finds you again, 2–3 patches later. At the end of its road it leaves you, lost; you find Tomás on
   your own, follow where the fog grows lighter (the way back, fixed from the start), and the white dog (Cadeblanco)
@@ -268,11 +268,24 @@ async function nieblaEntrar() {
     return scriptedStep('down');
   }
   Object.assign(walk, { phase: 'dog', step: 0, onWay: true, lostFor: 0, count: 0, met: false });
+  // Fainting before you find Tomás wakes you in the town's Palacentro, close by (plans/cadejos.md).
+  if (!G.demo) G.save.heal = { map: 'centro_bruma', x: 4, y: 3 };
   await enter(ENTRY, 'up');
   if (!flag('nieblaAdentro')) {
     setFlag('nieblaAdentro');
     await info('La niebla es tan espesa que casi no te ves los pies.', { en: 'The fog is so thick you can hardly see your own feet.' });
   }
+}
+
+/** The bottom of the trail, to the town: not with Tomás (his grandmother is right here), nor in the demo. */
+async function bordeSalida() {
+  if (G.demo) {
+    await info('En la demo, el camino al pueblo está cerrado.', { en: 'In the demo, the way to the town is closed.' });
+    return scriptedStep('up');
+  }
+  if (!G.save.follower) return;
+  await as('tomas', ['¡Espera! Mi abuela está aquí, en el sendero.', 'Wait! My grandma is right here, on the trail.']);
+  return scriptedStep('up');
 }
 
 /** Where the fog walk is (for tests): its state, the patch you're in, and that patch's ways through. */
@@ -375,15 +388,30 @@ async function despertarNiebla(c: ScriptCtx) {
   const dropped = c.data?.lost as number;
   if (dropped) await droppedMoney(dropped);
   await fadeOut(24, FOG.fade);
-  const spot = { x: CLEARING[0] * PATCH.w + 5, y: CLEARING[1] * PATCH.h + 7 }; // where you found him
-  loadMap(MOUNTAIN, spot.x, spot.y, 'down');
-  setFollower(G.save.follower, [spot.x + 1, spot.y]);
-  wayBack();
+  backToClearing();
   await fadeIn(24, FOG.fade);
   await info(`Despiertas en el claro. ${NINO} está a tu lado.`, { en: `You wake up in the clearing. ${NINO} is beside you.` });
   await as('tomas', ['¡Despertaste! No te dejé sol{o/a} ni un momento.', 'You’re awake! I didn’t leave you alone for a moment.']);
   await info('Descansaste un rato: tus Palabritas se recuperaron.', { en: 'You rested a while: your Palabritas recovered.' });
   return true;
+}
+
+/** Back in Tomás's clearing, where you found him, with him beside you: the way back starts over. */
+function backToClearing() {
+  const [x, y] = [CLEARING[0] * PATCH.w + 5, CLEARING[1] * PATCH.h + 7];
+  loadMap(MOUNTAIN, x, y, 'down');
+  setFollower(G.save.follower!, [x + 1, y]);
+  wayBack();
+}
+
+/**
+ * A game saved in the fog: the walk isn't saved, so you start again where it can go on. With Tomás, in his clearing;
+ * before, at the top of the trail.
+ */
+async function nieblaReanudar() {
+  if (lifted()) return;
+  if (G.save.follower) return backToClearing();
+  loadMap(OUT, 6, 1, 'down');
 }
 
 /** Tomás, following you (or home again). */
@@ -438,8 +466,13 @@ async function reunion() {
   if (G.demo) {
     await info('¡Fin de la demo! Gracias por jugar.', { en: 'The end of the demo! Thanks for playing.' });
     await info('Sin la niebla, el cerro es un camino abierto. Puedes subir al prado junto al claro, si quieres.', { en: 'Without the fog, the hill is an open route. You can climb to the meadow by the clearing, if you like.' });
-    await info('Para jugar otra vez, vuelve a abrir la página.', { en: 'To play again, reload the page.' });
+    return info('Para jugar otra vez, vuelve a abrir la página.', { en: 'To play again, reload the page.' });
   }
+  // They walk home, into their house in the town.
+  await lines([`Vamos a casa, ${NINO}. {name}, visítanos cuando quieras: vivimos en ${TOWN6}.`, `Let’s go home, ${NINO}. {name}, visit us whenever you like: we live in ${TOWN6}.`]);
+  await Promise.all([walkNpcTo('abuela_niebla', 5, 11), walkNpcTo('tomas_casa', 6, 11)]);
+  setFlag('rosaEnCasa');
+  refreshNpcs();
 }
 
 /** An old man at the trail: the rare Palabrita in the meadow up by the clearing. */
@@ -450,6 +483,17 @@ const donLencho = (): Promise<void> =>
         ['Allá arriba, junto al claro, hay un prado donde vive un Puercoespín. Dicen que sus púas curan.', 'Up there, by the clearing, there’s a meadow where a Puercoespín lives. They say its spines heal.'],
         ['Pero con esta niebla, nadie sube.', 'But in this fog, nobody goes up.'],
       );
+
+// ---------- Villa Bruma ----------
+
+/** Someone in town: one thing while the fog lasts, another once it has lifted and Tomás is home. */
+const untilLifted = (fog: Line[], after: Line[]): ScriptFn => () => lines(...(lifted() ? after : fog));
+
+/** The gym door: closed until its Psíquico Palabritas are ready (plans/cadejos.md). */
+async function gimnasioBruma() {
+  await lines(['La puerta está cerrada. Un letrero dice: «Volvemos pronto».', 'The door is locked. A sign says: “Back soon.”']);
+  return scriptedStep('down');
+}
 
 // ---------- The demo (?demo=niebla) ----------
 
@@ -496,6 +540,71 @@ export const REGION6: Record<string, ScriptFn> = {
   despertarNiebla,
   abuela_niebla: abuelaNiebla,
   don_lencho: donLencho,
+  bordeSalida,
+  nieblaReanudar,
+  gimnasioBruma,
+  vecina_bruma: untilLifted(
+    [
+      [`¿Ya supiste? ${NINO}, el nieto de ${ABUELA}, se ha perdido en la niebla.`, `Have you heard? ${NINO}, ${ABUELA}’s grandson, has gotten lost in the fog.`],
+      [`${ABUELA} lo espera en el sendero, al norte del pueblo. Está muy preocupada.`, `${ABUELA} is waiting for him on the trail, north of the town. She’s very worried.`],
+    ],
+    [[`¡Has encontrado a ${NINO}! Todo ${TOWN6} habla de ti.`, `You’ve found ${NINO}! All of ${TOWN6} is talking about you.`]],
+  ),
+  cafetalero_bruma: talk(
+    ['Aquí hay bruma casi todas las mañanas. La bruma es como la niebla, pero más suave.', 'There’s mist here almost every morning. «Bruma» is like fog, but softer.'],
+    ['Por eso nuestro café crece despacio... ¡y es tan rico!', 'That’s why our coffee grows slowly... and it’s so good!'],
+  ),
+  nino_bruma: talk(
+    ['¿Vienes por el gimnasio? Está cerrado: su líder ha salido de viaje.', 'Are you here for the gym? It’s closed: its leader has gone on a trip.'],
+    ['Dicen que sus Palabritas pueden leer tus emociones. ¡Qué miedo!', 'They say its Palabritas can read your emotions. How scary!'],
+  ),
+  guia_bruma: untilLifted(
+    [
+      ['Este sendero sube al Cerro de la Niebla. Con tanta niebla, nadie sube.', 'This trail goes up the Cerro de la Niebla. In all this fog, nobody goes up.'],
+      ['Bueno... casi nadie.', 'Well... almost nobody.'],
+    ],
+    [['¡Se ha ido la niebla! Desde el cerro se ven los volcanes y el lago.', 'The fog is gone! From the hill you can see the volcanoes and the lake.']],
+  ),
+  viajero_bruma: talk(
+    ['He venido a ver el quetzal. Dicen que vive en estos bosques nublados.', 'I’ve come to see the quetzal. They say it lives in these cloud forests.'],
+    ['Todavía no lo he visto... pero mañana voy a madrugar.', 'I haven’t seen one yet... but tomorrow I’m going to get up early.'],
+  ),
+  cafetalera_bruma: talk(
+    ['¿Quieres un cafecito? Aquí en el norte todos tomamos café, ¡hasta los niños!', 'Would you like a little coffee? Here in the north we all drink coffee, even the kids!'],
+    ['Bueno, los niños lo toman con mucha leche.', 'Well, the kids have it with lots of milk.'],
+  ),
+  abuelo_bruma: untilLifted(
+    [
+      ['Cuando yo era niño, mi abuelo contaba de dos perros que andan de noche por estos cerros.', 'When I was a boy, my grandfather told of two dogs that roam these hills at night.'],
+      ['Uno negro y uno blanco... ¿Qué más decía? Ay, ya no me acuerdo.', 'A black one and a white one... What else did he say? Oh, I don’t remember anymore.'],
+    ],
+    [['¿Has visto a los dos perros en la niebla? Entonces la historia de mi abuelo es verdad...', 'You’ve seen the two dogs in the fog? Then my grandfather’s story is true...']],
+  ),
+  // Ruta 10
+  campista_noemi: fight(
+    'campista_noemi',
+    ['¡Hola! Acampé aquí anoche. Hizo tanto frío que no he dormido nada. ¡Peleemos!', 'Hi! I camped here last night. It was so cold I haven’t slept at all. Let’s battle!'],
+    ['Ahora tengo sueño y perdí. ¡Qué día!', 'Now I’m sleepy and I lost. What a day!'],
+    ['Dicen que más arriba hay un cerro con una niebla tan espesa que la gente se pierde.', 'They say higher up there’s a hill with fog so thick that people get lost.'],
+  ),
+  cafetalero_ramiro: fight(
+    'cafetalero_ramiro',
+    ['¡Cuidado con mis matas de café! ... Bueno, ya que estás aquí, ¡peleemos!', 'Careful with my coffee plants! ... Well, since you’re here, let’s battle!'],
+    ['¡Qué fuerte! Te has ganado un cafecito.', 'So strong! You’ve earned yourself a little coffee.'],
+    ['El café de estos cerros crece despacio, entre la bruma. Por eso es tan rico.', 'The coffee on these hills grows slowly, in the mist. That’s why it’s so good.'],
+  ),
+  excursionista_diego: fight(
+    'excursionista_diego',
+    [`¡Uf, qué subida! ¿Has estado en ${TOWN6} alguna vez? Primero, ¡una pelea!`, `Phew, what a climb! Have you ever been to ${TOWN6}? First, a battle!`],
+    ['¡Me ganaste! Necesito descansar un rato.', 'You beat me! I need to rest a while.'],
+    ['Arriba hace frío y hay mucha bruma. ¡Espero que tengas un suéter!', 'It’s cold up there and very misty. I hope you have a sweater!'],
+  ),
+  ornitologa_celia: fight(
+    'ornitologa_celia',
+    ['¡Shh! He esperado toda la mañana para ver un quetzal... ¡y lo espantaste! ¡Peleemos!', 'Shh! I’ve waited all morning to see a quetzal... and you scared it off! Let’s battle!'],
+    ['Bueno... el quetzal no ha vuelto, pero fue una buena pelea.', 'Well... the quetzal hasn’t come back, but it was a good battle.'],
+    ['El quetzal tiene la cola más larga que su cuerpo. ¡Algún día lo voy a ver!', 'The quetzal has a tail longer than its body. Someday I’m going to see one!'],
+  ),
   campista_lorena: fight(
     'campista_lorena',
     ['¡Qué susto! Pensé que eras un fantasma. Mi tienda está por aquí... creo. ¡Peleemos!', 'What a fright! I thought you were a ghost. My tent is around here... I think. Let’s battle!'],

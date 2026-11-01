@@ -53,6 +53,7 @@ export const SHOPS: Record<string, string[]> = {
   tienda_ocote: ['palabola', 'pocion', 'superpocion', 'repelente'],
   tienda_carey: ['palabola', 'superbola', 'pocion', 'superpocion', 'repelente'],
   tienda_chispa: ['palabola', 'superbola', 'pocion', 'superpocion', 'revivir', 'repelente'],
+  tienda_bruma: ['palabola', 'superbola', 'pocion', 'superpocion', 'revivir', 'repelente'],
 };
 
 /** "una Palabola", "dos Pociones"... (amounts 1-5 in words). */

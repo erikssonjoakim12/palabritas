@@ -147,8 +147,13 @@ export const TRAINERS: Record<string, TrainerDef> = {
   sigilo: { id: 'sigilo', name: 'Don Sigilo', defenseMode: 'type', team: [['murcielon', 27], ['taranton', 28], ['petroglifon', 29]] },
   lucas3: { id: 'lucas3', name: 'Lucas', defenseMode: 'type', team: [['nubarron', 28], ['hojarasco', 25], ['palomon', 25], ['cangrejon', 26]] },
   tizon: { id: 'tizon', name: 'Líder Don Tizón', defenseMode: 'type', team: [['chocoyote', 27], ['coheton', 28], ['brasaurio', 32]] },
-  // Region 6 (planned): lost in the fog outside the gym 6 city (the fog demo): seven on the black dog's road, three on
-  // the way back. The only battles there you can't run from.
+  // Region 6: Ruta 10, up to Villa Bruma.
+  campista_noemi: { id: 'campista_noemi', name: 'Campista Noemí', defenseMode: 'listen', team: [['mariposita', 29], ['murcielon', 30]] },
+  cafetalero_ramiro: { id: 'cafetalero_ramiro', name: 'Cafetalero Ramiro', defenseMode: 'type', team: [['ranojito', 30], ['hojarasco', 31]] },
+  excursionista_diego: { id: 'excursionista_diego', name: 'Excursionista Diego', defenseMode: 'listen', team: [['venadito', 29], ['ardillon', 30], ['taranton', 30]] },
+  ornitologa_celia: { id: 'ornitologa_celia', name: 'Ornitóloga Celia', defenseMode: 'choose', team: [['palomon', 30], ['zumbador', 31]] },
+  // Lost in the fog north of Villa Bruma: seven on the black dog's road, three on the way back. The only battles
+  // there you can't run from.
   campista_lorena: { id: 'campista_lorena', name: 'Campista Lorena', defenseMode: 'choose', team: [['ardillon', 29], ['murcielon', 29]] },
   excursionista_rodrigo: { id: 'excursionista_rodrigo', name: 'Excursionista Rodrigo', defenseMode: 'listen', team: [['murcielon', 30], ['taranton', 31]] },
   lenador_abel: { id: 'lenador_abel', name: 'Leñador Abel', defenseMode: 'type', team: [['taranton', 30], ['torovenado', 31]] },
@@ -211,9 +216,10 @@ export const BATTLE_ORDER: { leg: string; en: string; trainers: string[] }[] = [
     ],
   },
   {
-    leg: 'La niebla (región 6, en preparación)',
-    en: 'The fog outside the gym 6 city (region 6, being planned: the fog demo)',
+    leg: 'Ruta 10, Villa Bruma, la niebla',
+    en: 'Route 10 up to Villa Bruma, and the fog north of it (region 6; the gym is still to come)',
     trainers: [
+      'campista_noemi', 'cafetalero_ramiro', 'excursionista_diego', 'ornitologa_celia',
       'campista_lorena', 'excursionista_rodrigo', 'lenador_abel', 'espeleologo_ismael', 'observadora_marta', 'cafetalero_julio',
       'ciclista_kevin', 'guardaparque_elena', 'musico_rafa', 'turista_paola',
     ],

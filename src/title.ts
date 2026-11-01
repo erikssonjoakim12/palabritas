@@ -11,6 +11,7 @@ import { menu, ask } from './ui/menu';
 import { promptText } from './ui/challenge';
 import { loadMap, worldScene, fadeIn, setFade, runScript, SCRIPTS } from './world/world';
 import { startFogDemo } from './world/region6';
+import { MAPS } from './world/maps';
 import { importGame } from './ui/startmenu';
 import { showHelpButton } from './ui/faq';
 
@@ -163,6 +164,8 @@ async function enterWorld() {
   const s = G.save;
   setFade(1);
   loadMap(s.map, s.x, s.y, s.dir);
+  const resume = MAPS[s.map]?.resume;
+  if (resume) SCRIPTS[resume]({});
   setScene(worldScene);
   await nextFrame();
   await fadeIn(12);

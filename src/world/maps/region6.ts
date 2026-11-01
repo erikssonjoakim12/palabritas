@@ -1,14 +1,20 @@
 import type { Dir } from '../../engine/input';
-import { flag } from '../../game/state';
-import type { MapDef, NpcDef } from './kit';
+import { G, flag } from '../../game/state';
+import { casa, centro, tienda, itemBall, HOUSES, type MapDef, type NpcDef } from './kit';
 
 /*
-  Region 6 (plans/cadejos.md), so far only the fog outside the gym 6 city, played as a demo (?demo=niebla).
-  The Cerro de la Niebla is one big map, a grid of patches. While the fog lasts, stepping from one patch into the
+  Region 6 (plans/cadejos.md): the cool cloud-forest mountains north of Ruta 4. Past the thin tree at the top of
+  Ruta 4 (Cut, after the 5th medal), Ruta 10 climbs through the pines to Villa Bruma, the town in the clouds (gym 6,
+  Psíquico). North of the town, a trail leads to the Cerro de la Niebla, where Doña Rosa's grandson is lost.
+  The Cerro is one big map, a grid of patches. While the fog lasts, stepping from one patch into the
   next goes wherever the fog walk (world/region6.ts) leads; once it lifts, it's an open route like any other.
   Its roads: the black dog's, the long way up the left side to Tomás's clearing at the top, and the way back, down the
   right side (fixed from the start). Beside the clearing, a meadow where a rare Puercoespín lives.
+  The fog demo (?demo=niebla) starts on the trail.
 */
+
+/** The gym 6 town. */
+export const TOWN6 = 'Villa Bruma';
 
 /** Who is in the fog with you right now: world/region6.ts places the dogs as you walk, and they show by it. */
 export const inFog = new Set<string>();
@@ -223,8 +229,160 @@ const FOG_WILD = [
   { sp: 'perezosito', min: 28, max: 30, w: 15 },
 ];
 
+/**
+ * Doña Rosa and Tomás once he's home: they wait on the trail until the fog lifts, then walk home (world/region6.ts),
+ * into their house in the town. In the demo they stay on the trail.
+ */
+const rosaHome = () => flag('rosaEnCasa');
+
+/** Wild Palabritas on Ruta 10: the cloud forest's squirrels, hummingbirds, moths, tree frogs and deer. */
+const RUTA10_WILD = [
+  { sp: 'ardillon', min: 27, max: 29, w: 25 },
+  { sp: 'zumbador', min: 27, max: 29, w: 20 },
+  { sp: 'mariposita', min: 26, max: 28, w: 20 },
+  { sp: 'ranojito', min: 26, max: 29, w: 20 },
+  { sp: 'venadito', min: 26, max: 28, w: 15 },
+];
+
 export const REGION6_MAPS: Record<string, MapDef> = {
-  /** Where the trail from the city meets the fog (the demo starts here; one day it joins the gym 6 city). */
+  // Ruta 10 (id ruta11: the routes after the cave are shown one lower, CLAUDE.md): from the thin tree at the top of
+  // Ruta 4 up through the pines, over a mountain stream, to Villa Bruma. Ledges hop back down past the stream's
+  // meadows; a rocky lookout up high.
+  ruta11: {
+    id: 'ruta11',
+    name: 'Ruta 10',
+    outdoor: true,
+    floor: '.',
+    ground: 'grass',
+    style: { trees: 'pine' },
+    at: { map: 'ruta5', x: 66, y: -44 },
+    connections: { up: { to: 'bruma', offset: 2 } },
+    rows: [
+      'IIIIIIIIIIIII==IIIIIIIIIIIIIII',
+      'IIIIIIIIIIIII==IIIIIIIIIIIIIII',
+      'IIIII,,,,IIII==III^^^^^^^^IIII',
+      'IIII,,,,,,,..==..I^^^^^^^^^III',
+      'III,,,,,,,,..==...:::::::::^II',
+      'III,,,II,,,..==...:::::::::^II',
+      'III,,,II,,,..==...::::::::::II',
+      'IIII,,,,,,...==...I^^^^^^:::II',
+      'IIIII,,,,....==..II^^^^^^:::II',
+      'III**........==..II^^^^^^:::II',
+      'III*......=====..III::::::::II',
+      'IIIIIIII..==.....III::::::::II',
+      'IIIIIIII..==..IIIIIIIIIIIIIIII',
+      'IIIIII....==..,,,,,,,,,,,,IIII',
+      'IIIII.....==..,,,,,,,,,,,,,III',
+      'IIII......==..,,,,IIII,,,,,,II',
+      'IIII......==..,,,,IIII,,,,,,II',
+      'IIII*.....==..........,,,,,,II',
+      'IIIIvvvvvv==vvvvvvvv..,,,,,,II',
+      'IIII......==..........IIIIIIII',
+      '~~~~~~~~~~HH~~~~~~~~~~~~~~~~~~',
+      '~~~~~~~~~~HH~~~~~~~~~~~~~~~~~~',
+      'IIII......==......IIIIIIIIIIII',
+      'III.......==.......IIIIIIIIIII',
+      'III,,,,,,.==.,,,,,,,,,IIIIIIII',
+      'II,,,,,,,.==.,,,,,,,,,,IIIIIII',
+      'II,,,,,,,.==.,,,,II,,,,,IIIIII',
+      'II,,,,,,,.==.,,,,II,,,,,,IIIII',
+      'III,,,,,..==..,,,,,,,,,,,IIIII',
+      'IIIIIIII..==.............IIIII',
+      'IIIIIIII..===========....IIIII',
+      'IIIIIIIIIIIIIIIIIII==...,IIIII',
+      'IIIIII,,,,,,,,,,,,,==..,,,IIII',
+      'IIIII,,,,,,,,,,,,,,==..,,,,III',
+      'IIII,,,,IIII,,,,,,,==..,,,,III',
+      'IIII,,,,IIII,,,,,,,==...,,,III',
+      'IIII,,,,,,,,,,,,,,,==....IIIII',
+      'IIIII,,,,,,,,,.....==....IIIII',
+      'IIIIIIIIIIII.......==S...IIIII',
+      'IIIIIIIIIIII..=======....IIIII',
+      'IIIIIIIIIIII..==.........IIIII',
+      'IIIIIIIIIIIII.==.IIIIIIIIIIIII',
+      'IIIIIIIIIIIIII=IIIIIIIIIIIIIII',
+      'IIIIIIIIIIIIII=IIIIIIIIIIIIIII',
+    ],
+    encounters: { rate: 0.12, table: RUTA10_WILD },
+    signs: [{ x: 21, y: 38, es: `RUTA 10. Al norte: ${TOWN6}, el pueblo entre las nubes.`, en: `ROUTE 10. North: ${TOWN6}, the town in the clouds.` }],
+    npcs: [
+      { id: 'campista_noemi', x: 21, y: 34, look: 'campista', dir: 'left', script: 'campista_noemi', sight: 2 },
+      { id: 'cafetalero_ramiro', x: 12, y: 26, look: 'campesino', dir: 'left', script: 'cafetalero_ramiro', sight: 2 },
+      { id: 'excursionista_diego', x: 9, y: 14, look: 'hiker', dir: 'right', script: 'excursionista_diego', sight: 2 },
+      { id: 'ornitologa_celia', x: 15, y: 5, look: 'ornitologa', dir: 'left', script: 'ornitologa_celia', sight: 2 },
+      itemBall('ruta11_superpocion', 21, 11, 'superpocion'),
+      itemBall('ruta11_revivir', 3, 10, 'revivir'),
+    ],
+  },
+  // Villa Bruma (gym 6): a coffee town of wooden houses in the cloud forest, misty most mornings, with a little
+  // coffee garden by the shop. The trail north leads to the Cerro de la Niebla.
+  bruma: {
+    id: 'bruma',
+    name: TOWN6,
+    outdoor: true,
+    floor: '.',
+    ground: 'town',
+    roof: 'brown',
+    style: { trees: 'pine' },
+    connections: { down: { to: 'ruta11', offset: -2 }, up: { to: 'niebla_borde', offset: -10 } },
+    rows: [
+      'IIIIIIIIIIIIIII==IIIIIIIIIIIIIII',
+      'IIIIIIIIIIIIIII==IIIIIIIIIIIIIII',
+      'II...*.........==.........*...II',
+      'II.pppppp......==.....rrrrr...II',
+      'II.pppppp......==.....rrrrr...II',
+      'II.hwGwwh......==.....hwwwh...II',
+      'II.hhdhhh......==.....hwdwh...II',
+      'II.**..........==..........**.II',
+      'II........============........II',
+      'II...S....=====FF=====....S...II',
+      'II.ooooo..=====FF=====rrrrffffII',
+      'II.ooooo..============rrrrfTTfII',
+      'II.hwcwh....==....==..hwMhfTTfII',
+      'II.hwdwh....==....==..hwdhffffII',
+      'II.*..I.....==....==.....I..*.II',
+      'II.rrrr.II..==....==II.rrrrr..II',
+      'II.rrrr.II..==....==II.rrrrr..II',
+      'II.hwwh.....==....==...hwwwh..II',
+      'II.hwdh.....========...hwdwh..II',
+      'II...*.........==.........*...II',
+      'IIIIIIIIIIIIIII==IIIIIIIIIIIIIII',
+      'IIIIIIIIIIIIIII==IIIIIIIIIIIIIII',
+    ],
+    signs: [
+      { x: 5, y: 9, es: `${TOWN6.toUpperCase()}. El pueblo entre las nubes.`, en: `${TOWN6.toUpperCase()}. The town in the clouds.` },
+      { x: 26, y: 9, es: 'Al norte: el sendero al Cerro de la Niebla. ¡No subas cuando hay niebla!', en: 'North: the trail to the Cerro de la Niebla. Don’t climb when it’s foggy!' },
+    ],
+    doors: [
+      { x: 5, y: 13, to: 'centro_bruma', tx: 4, ty: 7 },
+      { x: 24, y: 13, to: 'tienda_bruma', tx: 4, ty: 6 },
+      { x: 24, y: 6, to: 'casa_rosa', tx: 4, ty: 6 },
+      { x: 5, y: 18, to: 'casa_bruma2', tx: 4, ty: 6 },
+      { x: 25, y: 18, to: 'casa_bruma3', tx: 4, ty: 6 },
+    ],
+    // The gym is closed until its Psíquico Palabritas are ready (plans/cadejos.md).
+    triggers: [{ x: 5, y: 6, script: 'gimnasioBruma' }],
+    npcs: [
+      { id: 'vecina_bruma', x: 9, y: 14, look: 'lady', dir: 'down', script: 'vecina_bruma', wanders: true },
+      { id: 'cafetalero_bruma', x: 22, y: 8, look: 'campesino', dir: 'down', script: 'cafetalero_bruma', turns: true },
+      { id: 'nino_bruma', x: 7, y: 7, look: 'boy', dir: 'left', script: 'nino_bruma', turns: true },
+      { id: 'guia_bruma', x: 17, y: 3, look: 'hiker', dir: 'left', script: 'guia_bruma' },
+    ],
+  },
+  centro_bruma: centro('centro_bruma', { to: 'bruma', x: 5, y: 14 }, [{ id: 'viajero_bruma', x: 1, y: 5, look: 'tourist', dir: 'right', script: 'viajero_bruma' }]),
+  tienda_bruma: tienda('tienda_bruma', { to: 'bruma', x: 24, y: 14 }),
+  // Doña Rosa's house: Tomás's photo on the table; the two of them, once he's home.
+  casa_rosa: casa('casa_rosa', 'Casa de Doña Rosa', { to: 'bruma', x: 24, y: 7 }, [
+    { id: 'abuela_casa', x: 5, y: 2, look: 'granny', dir: 'down', script: 'abuela_niebla', show: rosaHome },
+    { id: 'tomas_en_casa', x: 4, y: 3, look: 'tomas', dir: 'down', script: 'tomasSigue', show: rosaHome },
+  ], {
+    rows: HOUSES.familia,
+    signs: [{ x: 2, y: 4, es: 'Una foto: un niño con gorra anaranjada sonríe junto a su abuela.', en: 'A photo: a boy in an orange cap smiles beside his grandma.' }],
+  }),
+  casa_bruma2: casa('casa_bruma2', 'Casa', { to: 'bruma', x: 5, y: 19 }, [{ id: 'cafetalera_bruma', x: 1, y: 1, look: 'lady', dir: 'up', script: 'cafetalera_bruma', turns: true }], { rows: HOUSES.cocina }),
+  casa_bruma3: casa('casa_bruma3', 'Casa', { to: 'bruma', x: 25, y: 19 }, [{ id: 'abuelo_bruma', x: 3, y: 2, look: 'abuelo', dir: 'down', script: 'abuelo_bruma' }], { rows: HOUSES.hamaca }),
+
+  /** Where the trail from the town meets the fog (the demo starts here). */
   niebla_borde: {
     id: 'niebla_borde',
     name: 'Borde de la niebla',
@@ -234,6 +392,7 @@ export const REGION6_MAPS: Record<string, MapDef> = {
     style: { trees: 'pine' },
     fog: 'edge',
     fogLifts: lifted,
+    connections: { down: { to: 'bruma', offset: 10 } },
     rows: [
       'IIIII==IIIII',
       'IIII,==,IIII',
@@ -246,13 +405,18 @@ export const REGION6_MAPS: Record<string, MapDef> = {
       'I....==....I',
       'I....==....I',
       'I....==....I',
-      'IIIIIIIIIIII',
+      'IIIII==IIIII',
     ],
-    triggers: [{ x: 5, y: 0, script: 'nieblaEntrar' }, { x: 6, y: 0, script: 'nieblaEntrar' }],
+    triggers: [
+      { x: 5, y: 0, script: 'nieblaEntrar' },
+      { x: 6, y: 0, script: 'nieblaEntrar' },
+      { x: 5, y: 11, script: 'bordeSalida' },
+      { x: 6, y: 11, script: 'bordeSalida' },
+    ],
     signs: [{ x: 2, y: 7, es: '¡Cuidado! Niebla espesa. No te salgas del camino.', en: 'Careful! Thick fog. Don’t leave the path.' }],
     npcs: [
-      { id: 'abuela_niebla', x: 7, y: 8, look: 'granny', dir: 'left', script: 'abuela_niebla' },
-      { id: 'tomas_casa', x: 8, y: 8, look: 'tomas', dir: 'left', script: 'tomasSigue', show: () => flag('tomasEnCasa') },
+      { id: 'abuela_niebla', x: 7, y: 8, look: 'granny', dir: 'left', script: 'abuela_niebla', show: () => G.demo || !rosaHome() },
+      { id: 'tomas_casa', x: 8, y: 8, look: 'tomas', dir: 'left', script: 'tomasSigue', show: () => flag('tomasEnCasa') && (G.demo || !rosaHome()) },
       { id: 'don_lencho', x: 2, y: 9, look: 'abuelo', dir: 'right', script: 'don_lencho' },
       { id: 'cadeblanco_borde', x: 6, y: 3, look: 'cadeblanco', dir: 'down', script: 'cadeblancoBorde', glow: 'body', show: () => flag('nieblaSalida') && !flag('cadeblancoAcariciado') },
     ],
@@ -268,6 +432,7 @@ export const REGION6_MAPS: Record<string, MapDef> = {
     fogPatch: [PATCH.w, PATCH.h],
     fogLifts: lifted,
     wakeUp: 'despertarNiebla',
+    resume: 'nieblaReanudar',
     rows: MOUNTAIN,
     encounters: { rate: 0.11, table: FOG_WILD },
     encounterZones: [{ ...at(MEADOW, 0, 0), w: PATCH.w, h: PATCH.h, table: [...FOG_WILD, { sp: 'puercoespin', min: 30, max: 32, w: 12 }] }],

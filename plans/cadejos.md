@@ -51,14 +51,21 @@ starts at the edge of the fog with your name and look (read from your game, neve
 
 Code: `src/world/region6.ts` (the fog walk and the story), `src/world/maps/region6.ts` (the mountain, built from
 patch kinds), world.ts (fog drawing, `fogPatch`, `near` NPCs, `setFollower`, `wakeUp`, `encounterZones`), animals in
-style/people.ts (`ANIMALS`); test: `tests/fog.test.mjs`.
+style/people.ts (`ANIMALS`); tests: `tests/fog.test.mjs` (the demo), `tests/region6.test.mjs` (the real game).
 
-When it becomes the real region 6:
-- The trail (`niebla_borde`) joins the gym 6 city, and `G.save.heal` is the city's Palacentro.
-- The fog walk's state isn't saved: a game saved inside the fog should load at the trail (a migration or a check on
-  load).
-- The onward road toward gym 7 leaves the mountain somewhere (still to draw).
-- Real Palabritas of the region instead of the borrowed night ones; the dogs' art from the user.
+### In the real game (built 2026-11-01)
+
+Ruta 10 (`ruta11`) climbs from the thin tree at the top of Ruta 4 (Cut, after the 5th medal) to **Villa Bruma**, the
+coffee town in the clouds (gym 6): Palacentro, shop, three homes, a coffee garden, four trainers on the route (29–31).
+The trail (`niebla_borde`) is north of the town. Entering the fog makes the town's Palacentro where you wake up after
+fainting. A game saved in the fog starts again at the top of the trail, or with Tomás in his clearing (`resume` on the
+map). Tomás won't go down to the town before he's home; afterwards he and Doña Rosa walk home, to their house
+(`rosaEnCasa`). The gym is closed («Volvemos pronto») until its Psíquico Palabritas exist.
+
+Still to do:
+- The gym 6 leader and team (new Psíquico Palabritas first), Fly with the medal.
+- The onward road toward gym 7 leaves the mountain or the town somewhere (still to draw).
+- Real Palabritas of the region instead of the borrowed night ones in the fog; the dogs' art from the user.
 
 You hear **only parts of the legend** here («Mi abuela decía que de noche no hay que seguir a un perro negro...»).
 No battle: neither dog can be caught yet. The fog story doesn't have to match the gym's theme.

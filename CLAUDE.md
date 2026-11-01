@@ -57,7 +57,7 @@ Plans for finished work are removed once built: the code is the truth.
 | Palabritas, moves, types | `src/data/species.ts`, `src/data/types.ts` |
 | Trainers, items | `src/data/trainers.ts`, `src/data/items.ts`, `src/game/bag.ts` |
 | Maps (every town, route, interior) | `src/world/maps/`: one file per region (`region1.ts`...), `kit.ts` (tile legend, types, shared rooms), `index.ts` |
-| Scripts (every NPC, quest, trainer talk) | `src/world/region2.ts`...`region4.ts`, `region6.ts` (the fog demo) (one file per region), `src/world/scripts.ts` (region 1, the Palacentro, shop and box, and the registry) |
+| Scripts (every NPC, quest, trainer talk) | `src/world/region2.ts`...`region4.ts`, `region6.ts` (Villa Bruma and the fog) (one file per region), `src/world/scripts.ts` (region 1, the Palacentro, shop and box, and the registry) |
 | Script building blocks (talking, trainers, gym leaders, Lucas, gifts, questions) | `src/world/flows.ts` |
 | Overworld engine: walking, ledges, doors, gates, encounters, drawing | `src/world/world.ts`, `src/world/layout.ts` |
 | Battles | `src/battle/battle.ts` |
@@ -72,8 +72,8 @@ Plans for finished work are removed once built: the code is the truth.
 
 ## Recipes
 
-**Route numbers:** the routes after the Cueva del Eco were renumbered (the user): map ids `ruta5`…`ruta10` are shown
-as Ruta 4…9 (the cave is `ruta4`, shown as Cueva del Eco). Ids stay as they are, for saves.
+**Route numbers:** the routes after the Cueva del Eco were renumbered (the user): map ids `ruta5`…`ruta11` are shown
+as Ruta 4…10 (the cave is `ruta4`, shown as Cueva del Eco). Ids stay as they are, for saves.
 
 **A map** (in its region's file in src/world/maps/; a new region gets a new file, added in `index.ts`). Each row
 is a string of tiles (legend at the top of `kit.ts`).
@@ -199,7 +199,7 @@ await t.end();                                             // ✓/✗ per check,
   hot reloads (only `fromSave` uses imports, before the game starts).
 - Add or extend a test with every feature (only what's really needed: the user doesn't want tests that just cost time).
 - Before committing, run the tests for the area you changed (`npm test -- maps quests2`). Run them all (`npm test`,
-  ~10-15 min) only for changes to the engine, saves, menus or start-up, which every test goes through, and before a
+  ~40 min) only for changes to the engine, saves, menus or start-up, which every test goes through, and before a
   playtest. Don't edit code while a run is going: the dev server reloads mid-test.
 
 ## Tools (`tools/`, all silent)

@@ -141,6 +141,11 @@ export interface MapDef {
    * is with you: his clearing). It gets the money you dropped (data.lost) and resolves false to wake up as usual.
    */
   wakeUp?: string;
+  /**
+   * A script run when a saved game starts here, before you see it: the fog walk isn't saved, so it puts you back
+   * where the walk can go on.
+   */
+  resume?: string;
   /** Roof color for 'r' buildings (key in ROOFS, style/colors.ts). */
   roof?: string;
   connections?: Partial<Record<Dir, Conn>>;
