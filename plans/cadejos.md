@@ -58,8 +58,8 @@ style/people.ts (`ANIMALS`); tests: `tests/fog.test.mjs` (the demo), `tests/regi
 Ruta 10 (`ruta11`) climbs from the thin tree at the top of Ruta 4 (Cut, after the 5th medal) to **Villa Bruma**, the
 coffee town in the clouds (gym 6): Palacentro, shop, three homes, a coffee garden, four trainers on the route (29–31).
 The trail (`niebla_borde`) is north of the town. Entering the fog makes the town's Palacentro where you wake up after
-fainting. A game saved in the fog starts again at the top of the trail, or with Tomás in his clearing (`resume` on the
-map). Tomás won't go down to the town before he's home; afterwards he and Doña Rosa walk home, to their house
+fainting. A game saved in the fog loads where you were: the walk is saved too (`G.save.fogWalk`, picked up by
+`resume` on the map). Tomás won't go down to the town before he's home; afterwards he and Doña Rosa walk home, to their house
 (`rosaEnCasa`). The gym is closed («Volvemos pronto») until its Psíquico Palabritas exist.
 
 Still to do:

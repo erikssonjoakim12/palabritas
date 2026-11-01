@@ -142,8 +142,8 @@ export interface MapDef {
    */
   wakeUp?: string;
   /**
-   * A script run when a saved game starts here, before you see it: the fog walk isn't saved, so it puts you back
-   * where the walk can go on.
+   * A script run when a saved game starts here, before you see it: in the fog, it picks the walk up where it was
+   * (the save keeps it) and puts the dog back where it waited.
    */
   resume?: string;
   /** Roof color for 'r' buildings (key in ROOFS, style/colors.ts). */

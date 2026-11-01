@@ -247,6 +247,7 @@ async function fogEdge(c: ScriptCtx) {
   await fadeOut(10, FOG.fade);
   loadMap(OUT, 6, 0, 'down');
   inFog.clear();
+  delete G.save.fogWalk;
   await fadeIn(10, FOG.fade);
   await scriptedStep('down');
   if (G.save.follower) {
@@ -268,6 +269,7 @@ async function nieblaEntrar() {
     return scriptedStep('down');
   }
   Object.assign(walk, { phase: 'dog', step: 0, onWay: true, lostFor: 0, count: 0, met: false });
+  keepWalk();
   // Fainting before you find Tomás wakes you in the town's Palacentro, close by (plans/cadejos.md).
   if (!G.demo) G.save.heal = { map: 'centro_bruma', x: 4, y: 3 };
   await enter(ENTRY, 'up');
@@ -296,6 +298,7 @@ export function fogJump(phase: Phase, step: number) {
   const way = phase === 'dog' ? ROAD : BACK;
   const entry = step ? wayTo(way[step], way[step - 1]) : 'down';
   Object.assign(walk, { phase, step, onWay: true, lostFor: 0, count: 0, met: false });
+  keepWalk();
   loadMap(MOUNTAIN, ...gap(way[step], entry), OPP[entry]);
   arrange(entry);
 }
@@ -361,6 +364,7 @@ async function cadeblancoBorde() {
 /** On the way back with Tomás: from his clearing, where the fog is a little lighter one way. */
 function wayBack() {
   Object.assign(walk, { phase: 'light', step: 0, onWay: true });
+  keepWalk();
   arrange('down');
 }
 
@@ -404,14 +408,30 @@ function backToClearing() {
   wayBack();
 }
 
+/** The fog walk goes into the save (the same object, so it's always up to date), so a game saved in the fog loads there. */
+function keepWalk() {
+  if (!G.demo) G.save.fogWalk = walk;
+}
+
 /**
- * A game saved in the fog: the walk isn't saved, so you start again where it can go on. With Tomás, in his clearing;
- * before, at the top of the trail.
+ * A game saved in the fog: you go on from where you were, the walk just as it was. (A game saved before the walk was
+ * saved starts again at the top of the trail, or with Tomás in his clearing.)
  */
 async function nieblaReanudar() {
   if (lifted()) return;
-  if (G.save.follower) return backToClearing();
-  loadMap(OUT, 6, 1, 'down');
+  if (!G.save.fogWalk) return G.save.follower ? backToClearing() : loadMap(OUT, 6, 1, 'down');
+  Object.assign(walk, G.save.fogWalk);
+  keepWalk();
+  // The dog you were following waits where it last stood (if it had already run on, it runs on again).
+  inFog.clear();
+  const dog = walk.phase === 'dog' && (walk.onWay || walk.lostFor === 0) ? 'cadenegro' : walk.phase === 'white' ? 'cadeblanco' : null;
+  if (dog && walk.spots.length) {
+    inFog.add(dog);
+    const [x, y] = walk.spots[walk.at];
+    placeNpc(dog, x, y, towardYou(x, y));
+  }
+  refreshNpcs();
+  view();
 }
 
 /** Tomás, following you (or home again). */

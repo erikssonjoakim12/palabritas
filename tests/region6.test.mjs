@@ -1,6 +1,6 @@
 // Region 6 in the real game: Ruta 10 from the top of Ruta 4 up to Villa Bruma (its gym still closed), and the fog north
 // of the town: entering it after Doña Rosa asks makes the town's Palacentro where you wake up; a game saved in the fog
-// starts again at the trail (or in Tomás's clearing, with him); Tomás won't leave the trail before he's home; then he
+// loads where you were, the walk too; Tomás won't leave the trail before he's home; then he
 // and his grandmother walk home, into their house. (The fog walk itself: fog.test.mjs.)
 import { start } from './lib.mjs';
 
@@ -41,9 +41,13 @@ await t.play();
 const heal = (await t.save()).heal;
 t.check('into the fog: fainting now wakes you in Villa Bruma’s Palacentro', (await pos())[0] === 'cerro_niebla' && heal.map === 'centro_bruma', [await pos(), heal]);
 
-// A game saved in the fog starts again where the walk can go on.
+// A game saved in the fog goes on from there: the walk is saved too (here, 4 patches along the dog's road).
+const fogWalk = { phase: 'dog', step: 3, onWay: true, lostFor: 0, count: 0, exit: 'right', spots: [[11, 58], [15, 56]], at: 0, met: false };
+await t.fromSave({ map: 'cerro_niebla', x: 9, y: 62, dir: 'up', party, fogWalk, flags: { nieblaBusqueda: true } });
+const back = await t.game(() => { const g = window.__game; const n = g.npcById('cadenegro'); return { w: g.fogWalk(), dog: n.visible ? [n.x, n.y] : null }; });
+t.check('a game saved in the fog loads where you were, the black dog waiting', (await pos()) + '' === 'cerro_niebla,9,62' && back.w.step === 3 && back.w.onWay && back.dog + '' === '11,58', [await pos(), back]);
 await t.fromSave({ map: 'cerro_niebla', x: 45, y: 72, dir: 'up', party, flags: { nieblaBusqueda: true } });
-t.check('a game saved in the fog starts again at the top of the trail', (await pos()) + '' === 'niebla_borde,6,1', await pos());
+t.check('(a game saved before the walk was saved starts again at the top of the trail)', (await pos()) + '' === 'niebla_borde,6,1', await pos());
 await t.fromSave({ map: 'cerro_niebla', x: 80, y: 40, dir: 'up', party, follower: tomas, flags: { nieblaBusqueda: true, tomasHallado: true } });
 const w = await t.game(() => window.__game.fogWalk());
 t.check('…and with Tomás, in his clearing with him, on the way back', w.cell + '' === '3,0' && w.phase === 'light' && (await t.save()).follower?.look === 'tomas', [w.cell, w.phase]);

@@ -59,6 +59,8 @@ export interface SaveData {
   surfing?: boolean;
   /** Someone walking behind you (world.ts setFollower): how they look, and what they say when you talk to them. */
   follower?: { look: string; script: string };
+  /** While you're in the fog (world/region6.ts): how far along the dog's road or the way back you are. */
+  fogWalk?: Record<string, unknown>;
   /** Steps left on a Repelente (no wild Palabritas while > 0). */
   repel?: number;
   /** The starter you picked, while Professor Ceiba's training is still going on. */
