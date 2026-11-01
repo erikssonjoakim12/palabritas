@@ -15,7 +15,7 @@ altar.
 | `templo` | the clearing with the stepped pyramid: Federico (from the Cueva del Eco) and the crying cub by the doorway. |
 | `templo1`–`templo4` | four floors, 8 trainers: 2 + 2 + 3 (the third floor has rooms and wide halls now) + Comandante Mutis at the top. |
 
-**Rugidito and Rugidón** (placeholder drawings until the user's art): a black jaguar, Siniestro; the grown form
+**Rugidito and Rugidón** (the user's art): a black jaguar, Siniestro; the grown form
 Siniestro/Planta, the jungle's guardian, at level 40. They borrow the `naturaleza` words until region 5's
 Palabritas get their themes (the jaguar's could be the legend, in the past tense).
 

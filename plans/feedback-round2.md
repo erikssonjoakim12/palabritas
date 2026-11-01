@@ -51,7 +51,7 @@ fits well. Ideas from the rainforest (BIOMES.md §2), with Nicaraguan names wher
 - the **lapa roja** (scarlet macaw);
 - the **red-eyed tree frog**, and the **poison dart frog** (Veneno);
 - the **danto** (tapir), big and gentle;
-- the **jaguar**: done, Rugidito and Rugidón (region5-jungle.md), placeholder drawings for the user's art.
+- the **jaguar**: done, Rugidito and Rugidón (region5-jungle.md), with the user's art (2026-11-01).
 Each family brings a theme (one file in src/data/content/).
 
 ## Order
