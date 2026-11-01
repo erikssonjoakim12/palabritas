@@ -21,7 +21,7 @@ Plans for what's next: [plans/](plans/README.md).
   (four floors, Equipo Silencio, the black jaguar's story, Rugidito), the jungle's own Palabritas; swimmers on the
   river and the lake ([plans/region5-jungle.md](plans/region5-jungle.md)). **Gym 5 ✓**: Ortiga's garden, where nettles
   hide off the way her diary tells in the past tense (Planta/Veneno, Medalla Espina, Cut).
-- **Region 6, the way there and the town:** Ruta 10 climbs from the top of Ruta 4 (Cut) to **Villa Bruma**, the coffee
+- **Region 6, the way there and the town:** Ruta 10 climbs in switchbacks from the top of Ruta 4 (Cut) to **Villa Bruma**, the coffee
   town in the clouds; north of it, the fog on the Cerro de la Niebla, the black and white dogs and the lost boy
   ([plans/cadejos.md](plans/cadejos.md); also a demo, `?demo=niebla`). The gym waits for its Psíquico Palabritas.
 - **Day and night** by the phone's clock (golden at 18, night from 19, morning by 7), with lit windows, fireflies
@@ -81,7 +81,10 @@ with the 6th (the user, 2026-10-30): [plans/surf-fly.md](plans/surf-fly.md).
 ## 4. Gyms and the level curve
 
 Leaders' strongest Palabrita goes from 12 to ~58; the Elite Four from 55 to 70.
-Route trainers sit between the previous leader and the next one.
+Route trainers sit well below the next leader (the user, 2026-11-01: the leaders are the challenge): a region's
+first trainers about 5 below the leader you just beat, rising to 6-10 below the next one; bosses (Lucas, Equipo
+Silencio) about 4 below it, the gym's own trainers about 5 below. Wild Palabritas: the lowest about 70% of the highest.
+Rematches (2-4 per route, once a day) follow your strongest Palabrita, up to 8 levels above their first battle.
 
 | # | City / habitat | Type | Team | Top level | Route trainers before it |
 |---|---|---|---|---|---|
@@ -89,10 +92,10 @@ Route trainers sit between the previous leader and the next one.
 | 2 ✓ | Villa Ocote, a pine-highland town past the cave | Roca / Tierra | 3 | 21 | 12-18 |
 | 3 ✓ | Playa Carey, a fishing village on the Pacific | Agua | 3 | 25 | 17-21 |
 | 4 ✓ | Ciudad Chispa, the volcano town | Fuego | 3 | 32 | 18-26 |
-| 5 ✓ | Villa Jaguar, the rainforest town | Planta / Veneno | 4 | 39 | 28-35 |
-| 6 | Villa Bruma, in the foggy cloud-forest mountains north of Ruta 4 (the user, 2026-10-31) | Psíquico (emotions) | 4 | 43 | 34-40 |
-| 7 | the lake archipelago, stormy (with Fly to the islands) | Eléctrico | 4 | 50 | 40-47 |
-| 8 | the old capital | Dragón | 5 | 58 | 47-55 |
+| 5 ✓ | Villa Jaguar, the rainforest town | Planta / Veneno | 4 | 39 | 27-35 |
+| 6 | Villa Bruma, in the foggy cloud-forest mountains north of Ruta 4 (the user, 2026-10-31) | Psíquico (emotions) | 4 | 43 | 29-34 (gym ~37) |
+| 7 | the lake archipelago, stormy (with Fly to the islands) | Eléctrico | 4 | 50 | 36-44 |
+| 8 | the old capital | Dragón | 5 | 58 | 42-52 |
 | E4 | Elite Four | Lucha, Acero, Fantasma (folklore), ... | 4-5 each | 60 → 70 | 52-58 (Victory Road) |
 
 Elite Four idea: Lucha (sports), Acero (construction/materials), Fantasma (Nicaraguan legends:

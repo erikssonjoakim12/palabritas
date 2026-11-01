@@ -9,7 +9,7 @@ export interface TrainerDef {
    */
   defenseMode: Mode;
   team: [string, number][];
-  /** One or two per route: asks for a rematch once a day when you talk to them (game/rematch.ts). */
+  /** A few on every route: asks for a rematch once a day when you talk to them (game/rematch.ts). */
   rematch?: boolean;
 }
 
@@ -115,43 +115,49 @@ export const TRAINERS: Record<string, TrainerDef> = {
   excursionista_lidia: { id: 'excursionista_lidia', name: 'Excursionista Lidia', defenseMode: 'type', rematch: true, team: [['hormigon', 27], ['chocoyote', 27]] },
   guardaparque_ivan: { id: 'guardaparque_ivan', name: 'Guardaparque Iván', defenseMode: 'listen', team: [['zopilotito', 27], ['liebron', 28]] },
   // The Lago de las Islas: swimmers, met once you can swim (plans/surf-fly.md).
-  nadador_tomas: { id: 'nadador_tomas', name: 'Nadador Tomás', defenseMode: 'listen', team: [['mojarrita', 30], ['mordisquito', 31]] },
-  nadadora_elena: { id: 'nadadora_elena', name: 'Nadadora Elena', defenseMode: 'type', rematch: true, team: [['paslamita', 31], ['cangrejon', 31]] },
-  nadador_rodolfo: { id: 'nadador_rodolfo', name: 'Nadador Rodolfo', defenseMode: 'listen', team: [['pelicanito', 31], ['mordisquito', 32]] },
-  nadadora_lucia: { id: 'nadadora_lucia', name: 'Nadadora Lucía', defenseMode: 'speak', team: [['mojarrita', 31], ['cangrejito', 31], ['mordisquito', 33]] },
+  nadador_tomas: { id: 'nadador_tomas', name: 'Nadador Tomás', defenseMode: 'listen', team: [['mojarrita', 27], ['mordisquito', 28]] },
+  nadadora_elena: { id: 'nadadora_elena', name: 'Nadadora Elena', defenseMode: 'type', rematch: true, team: [['paslamita', 28], ['cangrejon', 28]] },
+  nadador_rodolfo: { id: 'nadador_rodolfo', name: 'Nadador Rodolfo', defenseMode: 'listen', rematch: true, team: [['pelicanito', 28], ['mordisquito', 29]] },
+  nadadora_lucia: { id: 'nadadora_lucia', name: 'Nadadora Lucía', defenseMode: 'speak', team: [['mojarrita', 28], ['cangrejito', 28], ['mordisquito', 30]] },
   // The Río Guardabarranco, down to Villa Jaguar (once you can swim).
-  nadadora_rosa: { id: 'nadadora_rosa', name: 'Nadadora Rosa', defenseMode: 'listen', team: [['tilapita', 30], ['mojarrita', 30]] },
-  nadador_chema: { id: 'nadador_chema', name: 'Nadador Chema', defenseMode: 'type', team: [['mordisquito', 31], ['tilapita', 31]] },
-  nadadora_ivania: { id: 'nadadora_ivania', name: 'Nadadora Ivania', defenseMode: 'speak', rematch: true, team: [['pelicanito', 31], ['mojarrita', 32]] },
-  nadador_pancho: { id: 'nadador_pancho', name: 'Nadador Pancho', defenseMode: 'listen', team: [['cangrejon', 32], ['mordisquito', 32]] },
-  nadadora_karla: { id: 'nadadora_karla', name: 'Nadadora Karla', defenseMode: 'type', team: [['mojarrita', 32], ['pelicanito', 32], ['mordisquito', 33]] },
+  nadadora_rosa: { id: 'nadadora_rosa', name: 'Nadadora Rosa', defenseMode: 'listen', team: [['tilapita', 27], ['mojarrita', 27]] },
+  nadador_chema: { id: 'nadador_chema', name: 'Nadador Chema', defenseMode: 'type', rematch: true, team: [['mordisquito', 28], ['tilapita', 28]] },
+  nadadora_ivania: { id: 'nadadora_ivania', name: 'Nadadora Ivania', defenseMode: 'speak', rematch: true, team: [['pelicanito', 28], ['mojarrita', 29]] },
+  nadador_pancho: { id: 'nadador_pancho', name: 'Nadador Pancho', defenseMode: 'listen', team: [['cangrejon', 29], ['mordisquito', 29]] },
+  nadadora_karla: { id: 'nadadora_karla', name: 'Nadadora Karla', defenseMode: 'type', team: [['mojarrita', 29], ['pelicanito', 29], ['mordisquito', 30]] },
   // The Selva del Jaguar's labyrinth (region 5).
-  exploradora_ines: { id: 'exploradora_ines', name: 'Exploradora Inés', defenseMode: 'listen', team: [['ranojito', 32], ['pestanita', 32]] },
-  biologa_maite: { id: 'biologa_maite', name: 'Bióloga Maite', defenseMode: 'type', rematch: true, team: [['mariposita', 32], ['dardito', 33]] },
-  fotografo_rene: { id: 'fotografo_rene', name: 'Fotógrafo René', defenseMode: 'choose', team: [['colibri', 33], ['ranojito', 33], ['perezosito', 32]] },
-  silencioso11: { id: 'silencioso11', name: 'Silencioso', defenseMode: 'listen', team: [['murcielon', 33], ['taranton', 34]] },
+  exploradora_ines: { id: 'exploradora_ines', name: 'Exploradora Inés', defenseMode: 'listen', team: [['ranojito', 29], ['pestanita', 29]] },
+  biologa_maite: { id: 'biologa_maite', name: 'Bióloga Maite', defenseMode: 'type', rematch: true, team: [['mariposita', 29], ['dardito', 30]] },
+  fotografo_rene: { id: 'fotografo_rene', name: 'Fotógrafo René', defenseMode: 'choose', rematch: true, team: [['colibri', 30], ['ranojito', 31], ['perezosito', 30]] },
+  silencioso11: { id: 'silencioso11', name: 'Silencioso', defenseMode: 'listen', team: [['murcielon', 30], ['taranton', 31]] },
   // The Templo del Jaguar (region 5): Equipo Silencio has taken it over; two treasure hunters and an archaeologist.
-  silenciosa12: { id: 'silenciosa12', name: 'Silenciosa', defenseMode: 'listen', team: [['ochopatas', 33], ['murcielon', 33]] },
-  buscatesoros_leo: { id: 'buscatesoros_leo', name: 'Buscatesoros Leo', defenseMode: 'choose', team: [['petroglifon', 34], ['ardillon', 33]] },
-  silencioso13: { id: 'silencioso13', name: 'Silencioso', defenseMode: 'listen', team: [['taranton', 34], ['ecolin', 33]] },
-  arqueologo_tito: { id: 'arqueologo_tito', name: 'Arqueólogo Tito', defenseMode: 'type', rematch: true, team: [['tinajon', 34], ['petroglifon', 34]] },
-  silenciosa14: { id: 'silenciosa14', name: 'Silenciosa', defenseMode: 'listen', team: [['murcielon', 34], ['ochopatas', 35]] },
-  silencioso15: { id: 'silencioso15', name: 'Silencioso', defenseMode: 'type', team: [['taranton', 35], ['murcielon', 34]] },
-  buscatesoros_vero: { id: 'buscatesoros_vero', name: 'Buscatesoros Vero', defenseMode: 'speak', team: [['dardito', 34], ['puercoespin', 35]] },
-  mutis: { id: 'mutis', name: 'Comandante Mutis', defenseMode: 'type', team: [['murcielon', 35], ['tinajon', 35], ['petroglifon', 36], ['taranton', 37]] },
+  silenciosa12: { id: 'silenciosa12', name: 'Silenciosa', defenseMode: 'listen', team: [['ochopatas', 31], ['murcielon', 31]] },
+  buscatesoros_leo: { id: 'buscatesoros_leo', name: 'Buscatesoros Leo', defenseMode: 'choose', team: [['petroglifon', 32], ['ardillon', 31]] },
+  silencioso13: { id: 'silencioso13', name: 'Silencioso', defenseMode: 'listen', team: [['taranton', 32], ['ecolin', 31]] },
+  arqueologo_tito: { id: 'arqueologo_tito', name: 'Arqueólogo Tito', defenseMode: 'type', rematch: true, team: [['tinajon', 32], ['petroglifon', 32]] },
+  silenciosa14: { id: 'silenciosa14', name: 'Silenciosa', defenseMode: 'listen', team: [['murcielon', 32], ['ochopatas', 33]] },
+  silencioso15: { id: 'silencioso15', name: 'Silencioso', defenseMode: 'type', team: [['taranton', 33], ['murcielon', 32]] },
+  buscatesoros_vero: { id: 'buscatesoros_vero', name: 'Buscatesoros Vero', defenseMode: 'speak', rematch: true, team: [['dardito', 32], ['puercoespin', 33]] },
+  mutis: { id: 'mutis', name: 'Comandante Mutis', defenseMode: 'type', team: [['murcielon', 33], ['tinajon', 33], ['petroglifon', 34], ['taranton', 35]] },
   // Ortiga's garden, gym 5 (plans/gym5.md).
-  jardinera_azucena: { id: 'jardinera_azucena', name: 'Jardinera Azucena', defenseMode: 'choose', team: [['pestanita', 33], ['coquito', 33]] },
-  yerbero_chepe: { id: 'yerbero_chepe', name: 'Yerbero Chepe', defenseMode: 'listen', team: [['dardito', 34], ['hojarasco', 34]] },
-  botanica_iris: { id: 'botanica_iris', name: 'Botánica Iris', defenseMode: 'type', team: [['ranojito', 34], ['cocotero', 35]] },
+  jardinera_azucena: { id: 'jardinera_azucena', name: 'Jardinera Azucena', defenseMode: 'choose', team: [['pestanita', 32], ['coquito', 32]] },
+  yerbero_chepe: { id: 'yerbero_chepe', name: 'Yerbero Chepe', defenseMode: 'listen', team: [['dardito', 33], ['hojarasco', 33]] },
+  botanica_iris: { id: 'botanica_iris', name: 'Botánica Iris', defenseMode: 'type', team: [['ranojito', 33], ['cocotero', 34]] },
   ortiga: { id: 'ortiga', name: 'Líder Ortiga', defenseMode: 'type', team: [['dardito', 36], ['hojarasco', 37], ['ranojon', 37], ['oropelon', 39]] },
   sigilo: { id: 'sigilo', name: 'Don Sigilo', defenseMode: 'type', team: [['murcielon', 27], ['taranton', 28], ['petroglifon', 29]] },
   lucas3: { id: 'lucas3', name: 'Lucas', defenseMode: 'type', team: [['nubarron', 28], ['hojarasco', 25], ['palomon', 25], ['cangrejon', 26]] },
   tizon: { id: 'tizon', name: 'Líder Don Tizón', defenseMode: 'type', team: [['chocoyote', 27], ['coheton', 28], ['brasaurio', 32]] },
-  // Region 6: Ruta 10, up to Villa Bruma.
-  campista_noemi: { id: 'campista_noemi', name: 'Campista Noemí', defenseMode: 'listen', team: [['mariposita', 29], ['murcielon', 30]] },
-  cafetalero_ramiro: { id: 'cafetalero_ramiro', name: 'Cafetalero Ramiro', defenseMode: 'type', team: [['ranojito', 30], ['hojarasco', 31]] },
+  // Region 6: Ruta 10, up to Villa Bruma (29-34, rising as it climbs; the lookout's Vicky is optional).
+  campista_noemi: { id: 'campista_noemi', name: 'Campista Noemí', defenseMode: 'listen', rematch: true, team: [['mariposita', 29], ['murcielon', 30]] },
   excursionista_diego: { id: 'excursionista_diego', name: 'Excursionista Diego', defenseMode: 'listen', team: [['venadito', 29], ['ardillon', 30], ['taranton', 30]] },
-  ornitologa_celia: { id: 'ornitologa_celia', name: 'Ornitóloga Celia', defenseMode: 'choose', team: [['palomon', 30], ['zumbador', 31]] },
+  cafetalero_ramiro: { id: 'cafetalero_ramiro', name: 'Cafetalero Ramiro', defenseMode: 'type', rematch: true, team: [['ranojito', 30], ['hojarasco', 31]] },
+  recolector_wilber: { id: 'recolector_wilber', name: 'Recolector Wilber', defenseMode: 'choose', team: [['perezosito', 30], ['ranojito', 31]] },
+  lenador_mauro: { id: 'lenador_mauro', name: 'Leñador Mauro', defenseMode: 'listen', team: [['hojarasco', 31], ['ardillon', 32]] },
+  pescador_beto: { id: 'pescador_beto', name: 'Pescador Beto', defenseMode: 'type', team: [['espadon', 31], ['mordisquito', 32]] },
+  guardaparque_sonia: { id: 'guardaparque_sonia', name: 'Guardaparque Sonia', defenseMode: 'listen', rematch: true, team: [['torovenado', 32], ['zopiloton', 32]] },
+  exploradora_vicky: { id: 'exploradora_vicky', name: 'Exploradora Vicky', defenseMode: 'type', rematch: true, team: [['taranton', 33], ['petroglifon', 33], ['ardillon', 34]] },
+  ornitologa_celia: { id: 'ornitologa_celia', name: 'Ornitóloga Celia', defenseMode: 'choose', team: [['palomon', 32], ['zumbador', 33]] },
+  pintora_gaby: { id: 'pintora_gaby', name: 'Pintora Gaby', defenseMode: 'choose', team: [['mariposita', 33], ['chocoyote', 34]] },
   // Lost in the fog north of Villa Bruma: seven on the black dog's road, three on the way back. The only battles
   // there you can't run from.
   campista_lorena: { id: 'campista_lorena', name: 'Campista Lorena', defenseMode: 'choose', team: [['ardillon', 29], ['murcielon', 29]] },
@@ -219,7 +225,8 @@ export const BATTLE_ORDER: { leg: string; en: string; trainers: string[] }[] = [
     leg: 'Ruta 10, Villa Bruma, la niebla',
     en: 'Route 10 up to Villa Bruma, and the fog north of it (region 6; the gym is still to come)',
     trainers: [
-      'campista_noemi', 'cafetalero_ramiro', 'excursionista_diego', 'ornitologa_celia',
+      'campista_noemi', 'excursionista_diego', 'cafetalero_ramiro', 'recolector_wilber', 'lenador_mauro', 'pescador_beto',
+      'guardaparque_sonia', 'exploradora_vicky', 'ornitologa_celia', 'pintora_gaby',
       'campista_lorena', 'excursionista_rodrigo', 'lenador_abel', 'espeleologo_ismael', 'observadora_marta', 'cafetalero_julio',
       'ciclista_kevin', 'guardaparque_elena', 'musico_rafa', 'turista_paola',
     ],

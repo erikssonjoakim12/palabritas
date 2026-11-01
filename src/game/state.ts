@@ -238,6 +238,11 @@ function migrate(s: SaveData) {
     if (s.map === 'selva') Object.assign(s, { x: 28, y: 20, dir: 'up' });
     s.flags.selvaLaberinto = true;
   }
+  // Ruta 10 became a longer climb in switchbacks (the user): anyone saved on it starts again at its foot.
+  if (!s.flags.ruta10Curvas) {
+    if (s.map === 'ruta11') Object.assign(s, { x: 14, y: 52, dir: 'up' });
+    s.flags.ruta10Curvas = true;
+  }
   if (s.flags.starter && !s.flags.lucasSeFue) Object.assign(s.flags, { lucasEligio: true, lucasSeFue: true });
   s.money ??= 0;
   s.starterPicked ??= ['salchichita', 'gotita', 'aguacatito'].find((sp) => s.caught.includes(sp));

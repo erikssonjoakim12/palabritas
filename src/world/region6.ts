@@ -625,6 +625,42 @@ export const REGION6: Record<string, ScriptFn> = {
     ['Bueno... el quetzal no ha vuelto, pero fue una buena pelea.', 'Well... the quetzal hasn’t come back, but it was a good battle.'],
     ['El quetzal tiene la cola más larga que su cuerpo. ¡Algún día lo voy a ver!', 'The quetzal has a tail longer than its body. Someday I’m going to see one!'],
   ),
+  recolector_wilber: fight(
+    'recolector_wilber',
+    ['¡Hoy he recogido tres canastas de café! Y todavía tengo energía para una pelea.', 'Today I’ve picked three baskets of coffee! And I still have energy for a battle.'],
+    ['¡Ay! Ahora sí estoy cansado.', 'Oh! Now I really am tired.'],
+    ['Solo recogemos los granos rojos. Los verdes todavía no están listos.', 'We only pick the red beans. The green ones aren’t ready yet.'],
+  ),
+  lenador_mauro: fight(
+    'lenador_mauro',
+    ['¿Has visto el río? Baja frío, directo de las nubes. ¡Peleemos junto al agua!', 'Have you seen the stream? It comes down cold, straight from the clouds. Let’s battle by the water!'],
+    ['¡Qué fuerza! Mejor vuelvo a mi trabajo.', 'What strength! I’d better get back to work.'],
+    ['Solo cortamos los árboles viejos. Por cada uno, plantamos dos nuevos.', 'We only cut the old trees. For each one, we plant two new ones.'],
+  ),
+  pescador_beto: fight(
+    'pescador_beto',
+    ['¡Llevo tres horas aquí y no he pescado nada! ¿Peleamos mientras tanto?', 'I’ve been here three hours and haven’t caught anything! Shall we battle in the meantime?'],
+    ['Hoy no es mi día... ni para pescar ni para pelear.', 'Today’s not my day... not for fishing, not for battling.'],
+    ['El agua de este río es tan fría que me duelen las manos.', 'The water in this stream is so cold my hands hurt.'],
+  ),
+  guardaparque_sonia: fight(
+    'guardaparque_sonia',
+    ['Este bosque es un área protegida. ¿Has cuidado bien a tus Palabritas? ¡Vamos a ver!', 'This forest is a protected area. Have you taken good care of your Palabritas? Let’s see!'],
+    ['Muy bien. Ya veo que sí.', 'Very good. I see you have.'],
+    ['En el bosque nuboso, los árboles beben el agua de las nubes. ¡Por eso todo está tan verde!', 'In the cloud forest, the trees drink water from the clouds. That’s why everything is so green!'],
+  ),
+  exploradora_vicky: fight(
+    'exploradora_vicky',
+    ['¡Has llegado al mirador! Desde aquí se ve todo el valle... cuando no hay nubes. ¡Peleemos!', 'You’ve reached the lookout! From here you can see the whole valley... when there are no clouds. Let’s battle!'],
+    ['¡Increíble! Subiste hasta aquí y todavía tienes fuerzas.', 'Incredible! You climbed all the way up here and you still have strength.'],
+    ['Allá abajo se ve el camino por donde subiste. ¡Qué lejos!', 'Down there you can see the road you came up. So far!'],
+  ),
+  pintora_gaby: fight(
+    'pintora_gaby',
+    ['Estoy pintando las nubes, pero se mueven todo el tiempo. ¡Mejor peleamos!', 'I’m painting the clouds, but they keep moving. Let’s battle instead!'],
+    ['¡Perdí! Pero ya tengo una idea para mi cuadro: ¡tú y tus Palabritas!', 'I lost! But now I have an idea for my painting: you and your Palabritas!'],
+    [`${TOWN6} está justo arriba. Por las mañanas, la bruma cubre todos los techos.`, `${TOWN6} is just up there. In the mornings, the mist covers all the roofs.`],
+  ),
   campista_lorena: fight(
     'campista_lorena',
     ['¡Qué susto! Pensé que eras un fantasma. Mi tienda está por aquí... creo. ¡Peleemos!', 'What a fright! I thought you were a ghost. My tent is around here... I think. Let’s battle!'],

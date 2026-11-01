@@ -13,10 +13,18 @@ const tomas = { look: 'tomas', script: 'tomasSigue' };
 await t.fromSave({ map: 'ruta5', x: 80, y: 1, dir: 'up', party });
 await t.walk('up', 2);
 t.check('the top of Ruta 4 leads onto Ruta 10', (await pos())[0] === 'ruta11', await pos());
-await t.warp('ruta11', 19, 37, 'up');
-await t.walk('up', 3);
+await t.warp('ruta11', 16, 46, 'right');
+await t.walk('right', 6);
 let r = await t.play();
 t.check('Campista Noemí battles you on Ruta 10', (await t.save()).flags['beat:campista_noemi'] && r.said.some((x) => x.includes('Acampé')), r.said.slice(0, 2));
+// Rematches come back one level under your strongest (35), at most 8 levels above the first time (Vulcanóloga Clara's
+// were 22), and evolved as far as that level allows.
+const rematch = await t.game(() => {
+  const g = window.__game;
+  return [g.rematchTeam(g.TRAINERS.campista_noemi).team, g.rematchTeam(g.TRAINERS.vulcanologa1).team];
+});
+t.check('rematch teams follow you, up to 8 levels more', JSON.stringify(rematch[0]) === '[["mariposita",34],["murcielon",34]]', rematch[0]);
+t.check('and their Palabritas evolve as they grow', JSON.stringify(rematch[1]) === '[["coheton",30],["zopiloton",30]]', rematch[1]);
 
 // Villa Bruma: up the route into town; the gym is closed for now.
 await t.warp('ruta11', 13, 1, 'up');
