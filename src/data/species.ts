@@ -623,11 +623,11 @@ evolution('aguacatono', 36, {
   },
 });
 
-evolution('piedrita', 18, {
+evolution('piedrita', 20, {
   id: 'petroglifon',
   name: 'Petroglifón',
   types: ['Roca', 'Psíquico'],
-  base: { hp: 70, atk: 78, def: 96, spd: 36 },
+  base: { hp: 74, atk: 84, def: 98, spd: 40 },
   dex: {
     es: 'Las espirales de su cuerpo brillan de noche. Cuenta historias muy antiguas.',
     en: 'The spirals on its body glow at night. It tells very old stories.',

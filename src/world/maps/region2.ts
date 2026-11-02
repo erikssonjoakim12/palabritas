@@ -374,7 +374,6 @@ export const REGION2_MAPS: Record<string, MapDef> = {
         { sp: 'ollita', min: 11, max: 15, w: 30 },
         { sp: 'ochopatas', min: 11, max: 15, w: 20 },
         { sp: 'ecolin', min: 11, max: 15, w: 15 },
-        { sp: 'petroglifon', min: 18, max: 19, w: 4 },
       ],
     },
     npcs: [
