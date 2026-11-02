@@ -1,5 +1,5 @@
 import { flag } from '../../game/state';
-import { itemBall, tienda, casa, HOUSES, escuela, night, centro, RIVER_SURF, LAKE_SURF, RIVER_FISHING, wildStarter, type MapDef, type NpcDef } from './kit';
+import { itemBall, tienda, casa, HOUSES, escuela, night, centro, RIVER_SURF, LAKE_SURF, RIVER_FISHING, wildStarter, type MapDef, type EncounterEntry, type NpcDef } from './kit';
 
 // Region 4: the volcanoes and dry forest. Ruta 7 east from Playa Carey, Ciudad Chispa (a colonial festival town,
 // like Masaya), up the Volcán Chocoyo (the slopes, the lava tube, the crater), and Ruta 8 home to Pueblo Amanecer.
@@ -21,6 +21,17 @@ const torch = (t: (typeof TORCHES)[number]): NpcDef[] => [
 ];
 
 /** Wild Palabritas in the Templo del Jaguar, every floor: cave dwellers, and vipers that come in from the jungle. */
+/** Ruta 9 below the step (reached from Ruta 5): the dry west side's Palabritas at Ruta 5 and 6's levels. */
+const RUTA9_LOW: EncounterEntry[] = [
+  { sp: 'zopilotito', min: 13, max: 18, w: 25 },
+  { sp: 'hormiguita', min: 13, max: 18, w: 20 },
+  { sp: 'conejito', min: 13, max: 17, w: 15 },
+  { sp: 'liebron', min: 18, max: 19, w: 4 },
+  { sp: 'chocoyito', min: 13, max: 17, w: 15 },
+  { sp: 'gequito', min: 13, max: 17, w: 5 },
+  { sp: 'palomon', min: 14, max: 18, w: 10 },
+];
+
 const TEMPLO_WILD: MapDef['encounters'] = {
   rate: 0.08,
   everywhere: true,
@@ -453,6 +464,12 @@ export const REGION4_MAPS: Record<string, MapDef> = {
         { sp: 'brasita', min: 18, max: 26, w: 5 },
       ],
     },
+    // Below the step, the trail and the field are reached from Ruta 5, long before the volcano: their green grass
+    // has Ruta 5 and 6's levels (the zones cover the trail and the field, not the volcano side above the step).
+    encounterZones: [
+      { x: 0, y: 0, w: 6, h: 24, table: RUTA9_LOW },
+      { x: 0, y: 25, w: 14, h: 6, table: RUTA9_LOW },
+    ],
     npcs: [
       { id: 'vulcanologo_oscar', x: 31, y: 28, look: 'vulcanologo', dir: 'right', script: 'vulcanologo_oscar', sight: 1 },
       { id: 'excursionista_lidia', x: 20, y: 23, look: 'hiker', dir: 'up', script: 'excursionista_lidia', sight: 2 },
