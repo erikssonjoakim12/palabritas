@@ -3,7 +3,7 @@ import { frames } from '../engine/loop';
 import type { Dir } from '../engine/input';
 import { G, flag, setFlag, newSave, type SaveData } from '../game/state';
 import { pickRandom } from '../game/random';
-import { newMon } from '../game/mon';
+import { newMon, markSeen } from '../game/mon';
 import { TILES } from '../art/tiles';
 import { FOG } from '../style/colors';
 import { info } from '../ui/textbox';
@@ -310,6 +310,7 @@ async function cadenegro() {
   if (walk.phase !== 'dog') return;
   if (!flag('cadenegroVisto')) {
     setFlag('cadenegroVisto');
+    markSeen('cadenegro');
     await lines(
       ['Entre la niebla brillan dos ojos rojos...', 'Two red eyes glow in the fog...'],
       ['Es un perro negro, enorme. Arrastra una cadena por el suelo.', 'It’s a black dog, a huge one. It drags a chain along the ground.'],
@@ -340,6 +341,7 @@ async function cadeblanco() {
   if (walk.phase !== 'white') return;
   if (!walk.met) {
     walk.met = true;
+    markSeen('cadeblanco');
     await approachPlayer('cadeblanco');
     await lines(
       ['De la niebla sale un perro blanco. Brilla un poco, como la luna.', 'A white dog comes out of the fog. It glows a little, like the moon.'],

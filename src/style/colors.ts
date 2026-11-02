@@ -369,3 +369,14 @@ export const PALETTE: Record<string, string[]> = {
   purple: ['#381858', '#6040a0', '#9070d0', '#c8b0f0'],
   pink: ['#702848', '#b04878', '#e880a8', '#f8c8d8'],
 };
+
+/** The Cadejos in battle (placeholders until the user's art): the same colors as on the map (OBJECT_PALS). */
+export const CADEJOS = {
+  red: OBJECT_PALS.cadenegro[0],
+  chain: OBJECT_PALS.cadenegro[1],
+  black: OBJECT_PALS.cadenegro[2],
+  blackLight: '#5a5670',
+  blue: OBJECT_PALS.cadeblanco[0],
+  shade: OBJECT_PALS.cadeblanco[1],
+  white: OBJECT_PALS.cadeblanco[2],
+};

@@ -1,13 +1,39 @@
 import { Pix, mirror, fromRows, trim, makeCanvas, type Img } from './pixel';
-import { SPRITE_INK, VIPER as V, TREEFROG as F, DARTFROG as D, LUNAMOTH as M, DUENDE as U, CAPUCHIN as C, QUETZAL as Q } from '../style/colors';
+import { SPRITE_INK, VIPER as V, TREEFROG as F, DARTFROG as D, LUNAMOTH as M, DUENDE as U, CAPUCHIN as C, QUETZAL as Q, CADEJOS as J } from '../style/colors';
 import { PALABRITA_ART } from '../style/palabritas';
 
 // Palabrita sprites: hand-made pixel art (style/palabritas.ts), or for the ones that don't have
 // it yet, 48x48 drawings from simple shapes with a hard pixel outline (below).
 type Draw = (p: Pix) => void;
 
+/** A big dog standing side-on, facing left (the Cadejos): coat, its shade, eye color. */
+function cadejo(p: Pix, coat: string, shade: string, eye: string) {
+  p.poly([[38, 22], [46, 12], [44, 24]], coat); // the tail
+  p.ellipse(28, 28, 14, 8, coat);
+  p.ellipse(30, 32, 11, 4, shade);
+  for (const x of [17, 22, 32, 37]) p.rect(x, 32, 4, 11, x === 22 || x === 37 ? shade : coat);
+  p.ellipse(13, 20, 8, 7, coat);
+  p.ellipse(6, 23, 5, 3.5, coat); // the snout
+  p.poly([[11, 14], [13, 6], [17, 14]], coat).poly([[15, 14], [19, 7], [20, 15]], shade); // the ears
+  p.ellipse(11, 19, 1.8, 1.6, eye);
+  p.set(2, 22, SPRITE_INK);
+}
+
 /** Placeholders for new Palabritas until the user's art arrives. */
 const DRAW: Record<string, Draw> = {
+  /** Cadenegro: huge and black, red eyes, goat hooves, a chain dragging from its neck. */
+  cadenegro(p) {
+    cadejo(p, J.black, J.blackLight, J.red);
+    for (const x of [17, 22, 32, 37]) p.rect(x, 42, 4, 3, J.chain); // goat hooves
+    for (let i = 0; i < 6; i++) p.ellipse(18 + i * 5, 24 + i * 4 - (i > 3 ? (i - 3) * 3 : 0), 1.8, 1.4, J.chain);
+    p.line(18, 24, 44, 45, J.chain);
+    p.outline(SPRITE_INK);
+  },
+  /** Cadeblanco: white, glowing a little like the moon, kind blue eyes. */
+  cadeblanco(p) {
+    cadejo(p, J.white, J.shade, J.blue);
+    p.outline(SPRITE_INK);
+  },
   /** The eyelash viper: a green coil, a raised head with spiky "eyelashes" over the eyes. */
   pestanita(p) {
     p.ellipse(24, 40, 15, 6, V.dark).ellipse(24, 39, 14, 5, V.green);

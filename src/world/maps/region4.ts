@@ -118,6 +118,8 @@ export const REGION4_MAPS: Record<string, MapDef> = {
         { sp: 'hormigon', min: 22, max: 24, w: 5 },
         { sp: 'zopilotito', min: 13, max: 18, w: 25 },
         { sp: 'hojadillo', min: 13, max: 19, w: 10 },
+        { sp: 'aguacatito', min: 13, max: 16, w: 3 },
+        { sp: 'aguacatono', min: 17, max: 19, w: 1 },
         { sp: 'conejito', min: 13, max: 17, w: 8 },
         { sp: 'liebron', min: 18, max: 20, w: 5 },
         { sp: 'cuernito', min: 13, max: 19, w: 6 },
@@ -437,9 +439,9 @@ export const REGION4_MAPS: Record<string, MapDef> = {
     encounters: {
       rate: 0.12,
       table: [
-        { sp: 'zopilotito', min: 19, max: 27, w: 28 },
+        { sp: 'zopilotito', min: 19, max: 27, w: 24 },
         { sp: 'zopiloton', min: 28, max: 29, w: 3 },
-        { sp: 'chispita', min: 19, max: 27, w: 22 },
+        { sp: 'chispita', min: 19, max: 27, w: 19 },
         { sp: 'coheton', min: 26, max: 28, w: 4 },
         { sp: 'hormiguita', min: 18, max: 22, w: 12 },
         { sp: 'hormigon', min: 22, max: 28, w: 5 },
@@ -498,6 +500,8 @@ export const REGION4_MAPS: Record<string, MapDef> = {
         { sp: 'zopilotito', min: 18, max: 25, w: 35 },
         { sp: 'liebron', min: 18, max: 25, w: 25 },
         { sp: 'palomon', min: 18, max: 25, w: 15 },
+        { sp: 'salchichita', min: 15, max: 17, w: 3 },
+        { sp: 'hamburgueson', min: 18, max: 22, w: 1 },
         { sp: 'hormiguita', min: 17, max: 21, w: 12 },
         { sp: 'hormigon', min: 22, max: 25, w: 4 },
       ],
@@ -557,12 +561,12 @@ export const REGION4_MAPS: Record<string, MapDef> = {
     encounters: {
       rate: 0.12,
       table: [
-        { sp: 'chispita', min: 15, max: 22, w: 35 },
+        { sp: 'chispita', min: 15, max: 22, w: 39 },
         { sp: 'coheton', min: 26, max: 27, w: 3 },
-        { sp: 'chocoyito', min: 15, max: 22, w: 25 },
+        { sp: 'chocoyito', min: 15, max: 22, w: 29 },
         { sp: 'chocoyote', min: 25, max: 26, w: 4 },
         { sp: 'zopilotito', min: 15, max: 22, w: 20 },
-        { sp: 'brasita', min: 15, max: 21, w: 15 },
+        { sp: 'brasita', min: 15, max: 21, w: 5 },
       ],
     },
     npcs: [
@@ -675,7 +679,7 @@ export const REGION4_MAPS: Record<string, MapDef> = {
     ],
     connections: { down: { to: 'laderas', offset: 0, scenery: true }, left: { to: 'ruta10', offset: 35 } },
     doors: [{ x: 16, y: 25, to: 'tubo', tx: 36, ty: 2, dir: 'down' }],
-    encounters: { rate: 0.15, table: [{ sp: 'chocoyito', min: 17, max: 24, w: 65 }, { sp: 'chocoyote', min: 25, max: 26, w: 5 }, { sp: 'chispita', min: 17, max: 24, w: 22 }, { sp: 'brasita', min: 17, max: 23, w: 10 }] },
+    encounters: { rate: 0.15, table: [{ sp: 'chocoyito', min: 17, max: 24, w: 65 }, { sp: 'chocoyote', min: 25, max: 26, w: 5 }, { sp: 'chispita', min: 17, max: 24, w: 25 }, { sp: 'brasita', min: 17, max: 23, w: 5 }] },
     npcs: [
       // On the walkways' outer edge, against the rock: the lava is hot.
       { id: 'silencioso5', x: 2, y: 16, look: 'silencioso', dir: 'right', script: 'silencioso5', sight: 3 },
@@ -1037,6 +1041,8 @@ export const REGION4_MAPS: Record<string, MapDef> = {
         { sp: 'ranojon', min: 33, max: 33, w: 2 },
         { sp: 'dardito', min: 22, max: 31, w: 10 },
         { sp: 'perezosito', min: 21, max: 30, w: 14 },
+        { sp: 'gotita', min: 17, max: 20, w: 3 },
+        { sp: 'nubarron', min: 21, max: 26, w: 1 },
         { sp: 'mariposita', min: 21, max: 30, w: 12 },
         { sp: 'colibri', min: 21, max: 30, w: 10 },
         { sp: 'zumbador', min: 22, max: 31, w: 4 },

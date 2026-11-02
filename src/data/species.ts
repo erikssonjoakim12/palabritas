@@ -608,6 +608,36 @@ export const SPECIES: Record<string, Species> = {
       en: 'It lives among the forest’s clouds. They say that if you see one, your wish comes true.',
     },
   },
+  // ----- The Cadejos (plans/cadejos.md): two legendary dogs, as strong as Volcasaurio (420). Met in the fog, not
+  // caught yet. They borrow the moth's night words and the travelling words until they get their own. -----
+  /** The black dog: red eyes, goat hooves, a dragging chain. It leads travelers astray. */
+  cadenegro: {
+    id: 'cadenegro',
+    name: 'Cadenegro',
+    types: ['Siniestro'],
+    theme: 'noche',
+    base: { hp: 100, atk: 120, def: 90, spd: 110 },
+    moves: [m('Mordida Oscura', 'Siniestro', 'choose'), m('Cadenazo', 'Acero', 'type'), m('Aullido', 'Siniestro', 'listen', 20), m('Ojos Rojos', 'Siniestro', 'speak', 30)],
+    catchRate: 0.03,
+    dex: {
+      es: 'Sigue a los viajeros de noche con sus ojos rojos. Quien lo sigue se pierde en la niebla.',
+      en: 'It follows travelers at night with its red eyes. Whoever follows it gets lost in the fog.',
+    },
+  },
+  /** The white dog: it glows a little, like the moon, and leads travelers home. */
+  cadeblanco: {
+    id: 'cadeblanco',
+    name: 'Cadeblanco',
+    types: ['Psíquico'],
+    theme: 'viaje',
+    base: { hp: 110, atk: 95, def: 105, spd: 110 },
+    moves: [m('Luz Blanca', 'Psíquico', 'choose'), m('Paso Firme', 'Normal', 'type'), m('Aullido Suave', 'Psíquico', 'listen', 20), m('Camino a Casa', 'Psíquico', 'speak', 30)],
+    catchRate: 0.03,
+    dex: {
+      es: 'Cuida a los viajeros perdidos y los lleva a casa. Nunca pelea con el perro negro.',
+      en: 'It watches over lost travelers and leads them home. It never fights the black dog.',
+    },
+  },
 };
 
 /**
@@ -1097,5 +1127,5 @@ export const DEX_ORDER = [
   'paslamita', 'paslamona',
   'brasita', 'brasaurio', 'volcasaurio', 'hormiguita', 'hormigon', 'zopilotito', 'zopiloton', 'chocoyito', 'chocoyote',
   'chispita', 'coheton', 'lamparita', 'perezosito', 'venadito', 'torovenado', 'pestanita', 'oropelon', 'ranojito', 'ranojon', 'dardito', 'carablanquita', 'carablanca', 'rugidito', 'rugidon',
-  'quetzalito', 'quetzalon',
+  'quetzalito', 'quetzalon', 'cadenegro', 'cadeblanco',
 ];

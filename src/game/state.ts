@@ -268,6 +268,9 @@ function migrate(s: SaveData) {
   if (s.flags.esferas) s.flags.palabolas = true;
   delete s.flags.esferas;
   for (const m of [...s.party, ...s.box]) m.sp = fix(m.sp);
+  // The Cadejos joined the dex (2026-11-02): seen if you've already met them in the fog.
+  if (s.flags.cadenegroVisto && !s.seen.includes('cadenegro')) s.seen.push('cadenegro');
+  if (s.flags.nieblaSalida && !s.seen.includes('cadeblanco')) s.seen.push('cadeblanco');
   s.seen = [...new Set(s.seen.map(fix))];
   s.caught = [...new Set(s.caught.map(fix))];
   // Items that moved (old trainer topics, words now shared with the core list) keep their progress.

@@ -93,7 +93,9 @@ Cadenegro roams the wild and can be caught. Cadeblanco comes after.
 | Cadenegro | Siniestro | 50 | the night and fears |
 | Cadeblanco | Psíquico | 50 | the road and travelling |
 
-Each needs a theme file (157 lines) and a placeholder drawing until the user's art. They should look unlike the black
+In the dex since 2026-11-02 (as strong as Volcasaurio: 420 in total; seen once you meet them in the fog), with placeholder
+drawings. For now they borrow the moth's night words (`noche`) and the travelling words (`viaje`); each still needs its own
+theme file (157 lines) when they become catchable. They should look unlike the black
 jaguar: red eyes, goat hooves and dragging chains (all from the legend).
 
 ## Also decided
