@@ -260,6 +260,7 @@ const RUTA10_HIGH = [
   { sp: 'perezosito', min: 22, max: 31, w: 15 },
   { sp: 'venadito', min: 21, max: 30, w: 10 },
   { sp: 'torovenado', min: 30, max: 32, w: 3 },
+  { sp: 'quetzalito', min: 22, max: 27, w: 2 },
 ];
 
 export const REGION6_MAPS: Record<string, MapDef> = {

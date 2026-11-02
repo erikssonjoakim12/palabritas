@@ -298,6 +298,18 @@ export const OBJECT_PALS: Record<string, Pal> = {
 export const VIPER = { green: '#80c848', dark: '#3a7a28', gold: '#f0d048', goldDark: '#b89020', lash: '#f8e870', tongue: '#d84040' };
 export const TREEFROG = { green: '#58c040', dark: '#2e7a28', belly: '#f0f0d0', eye: '#e83030', foot: '#f08830', flank: '#4868d0' };
 export const DARTFROG = { blue: '#3c80e8', light: '#88b8f8', dark: '#1c3c90' };
+// Gym 6's Psíquico families, until the user's art (from the master palette below).
+/** The luna moth line: caterpillar greens and moon-dots, the dry leaf cocoon, pale wings with yellow eyespots. */
+export const LUNAMOTH = {
+  green: '#84b14e', dark: '#2f5928', dot: '#f8f0a0', pale: '#d9ec8d', paleEdge: '#a0e0d0', eye: '#f0d040', eyeDark: '#7a6010',
+  leaf: '#945a2c', leafDark: '#6c3717', body: '#f8f8f8', antenna: '#c89058',
+};
+/** The duende: a big brown hat with a red band, skin, a white beard, a green shirt. */
+export const DUENDE = { hat: '#945a2c', hatDark: '#4a2a14', band: '#d85058', skin: '#e8a890', skinDark: '#c87858', beard: '#d8d8dc', shirt: '#518436', boots: '#4a2a14' };
+/** The capuchin: dark fur, a white face and chest, a pink face; grey stones with a lilac glow. */
+export const CAPUCHIN = { fur: '#3a3a42', furLight: '#6e6e78', white: '#f8f8f8', face: '#f8d8c0', stone: '#a8a8b0', stoneDark: '#6e6e78', glow: '#c8b0f0' };
+/** The quetzal: shining green, a red breast, a yellow beak. */
+export const QUETZAL = { green: '#518436', light: '#84b14e', shine: '#38a8a0', dark: '#1c3a18', red: '#d85058', beak: '#f0d040' };
 /** Palabolas drawn as little patterns (art/balls.ts): teal top and white bottom, gray once fainted, the healing machine's flash, an empty slot. */
 export const BALL = { top: '#38a8a0', bottom: '#f0f0e8', faintedTop: '#8c8c8c', faintedBottom: '#c8c8c0', flash: '#f8f8b0', empty: '#c8c8c0' };
 

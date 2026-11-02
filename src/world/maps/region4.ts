@@ -1040,6 +1040,7 @@ export const REGION4_MAPS: Record<string, MapDef> = {
         { sp: 'mariposita', min: 21, max: 30, w: 12 },
         { sp: 'colibri', min: 21, max: 30, w: 10 },
         { sp: 'zumbador', min: 22, max: 31, w: 4 },
+        { sp: 'carablanquita', min: 21, max: 25, w: 3 },
         { sp: 'taranton', min: 24, max: 31, w: 10 },
       ],
     },

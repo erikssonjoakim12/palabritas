@@ -548,6 +548,66 @@ export const SPECIES: Record<string, Species> = {
       en: 'It changes color with its mood: blue when sad, red when angry.',
     },
   },
+  // ----- Gym 6's Psíquico families (plans/palabritas.md), met rarely before region 6 -----
+  /** The luna moth's caterpillar (Ruta 4 and 5, rare): green, with little moon-dots. Its words: the night and dreams. */
+  lunarcito: {
+    id: 'lunarcito',
+    name: 'Lunarcito',
+    types: ['Bicho'],
+    theme: 'noche',
+    base: { hp: 48, atk: 38, def: 52, spd: 42 },
+    moves: [m('Mordidita', 'Bicho', 'choose'), m('Hilo de Seda', 'Bicho', 'type'), m('Luz de Luna', 'Psíquico', 'listen'), m('Polvo de Sueño', 'Psíquico', 'speak')],
+    catchRate: 0.25,
+    dex: {
+      es: 'Duerme de día bajo las hojas. De noche, sus puntitos brillan como lunas pequeñas.',
+      en: 'It sleeps under the leaves by day. At night, its little dots glow like tiny moons.',
+    },
+  },
+  /**
+   * The duende of Nicaraguan stories (Ruta 4 and the canyon, very rare): small, a big hat, it hides people's things.
+   * It doesn't evolve, but it's strong, and hard to catch. Its words: hiding and finding.
+   */
+  duende: {
+    id: 'duende',
+    name: 'Duende',
+    types: ['Psíquico'],
+    theme: 'escondites',
+    base: { hp: 66, atk: 82, def: 70, spd: 82 },
+    moves: [m('Travesura', 'Psíquico', 'choose'), m('Sombrerazo', 'Normal', 'type'), m('Risita', 'Psíquico', 'listen', 12), m('Desaparecer', 'Psíquico', 'speak', 18)],
+    catchRate: 0.06,
+    dex: {
+      es: 'Vive en los cerros del norte. Esconde las cosas de la gente y se ríe cuando las buscan.',
+      en: 'It lives in the northern hills. It hides people’s things and laughs when they look for them.',
+    },
+  },
+  /** The white-faced capuchin (the Selva, rare): it opens nuts with stones, and makes them float. Its words: thinking and opinions. */
+  carablanquita: {
+    id: 'carablanquita',
+    name: 'Carablanquita',
+    types: ['Psíquico', 'Lucha'],
+    theme: 'ideas',
+    base: { hp: 50, atk: 56, def: 42, spd: 60 },
+    moves: [m('Pedrada', 'Roca', 'choose'), m('Idea Brillante', 'Psíquico', 'type'), m('Grito del Monte', 'Lucha', 'listen'), m('Piedra Flotante', 'Psíquico', 'speak')],
+    catchRate: 0.2,
+    dex: {
+      es: 'Es muy lista: abre nueces con piedras. Cuando piensa mucho, las piedras flotan.',
+      en: 'It’s very clever: it opens nuts with stones. When it thinks hard, the stones float.',
+    },
+  },
+  /** The resplendent quetzal (Ruta 10's upper slopes, very rare): sacred, and free. Its words: wishes and hope. */
+  quetzalito: {
+    id: 'quetzalito',
+    name: 'Quetzalito',
+    types: ['Psíquico', 'Volador'],
+    theme: 'deseos',
+    base: { hp: 48, atk: 46, def: 44, spd: 70 },
+    moves: [m('Picotazo', 'Volador', 'choose'), m('Pluma Verde', 'Psíquico', 'type'), m('Canto del Bosque', 'Psíquico', 'listen', 8), m('Deseo', 'Psíquico', 'speak', 14)],
+    catchRate: 0.1,
+    dex: {
+      es: 'Vive entre las nubes del bosque. Dicen que si lo ves, se cumple tu deseo.',
+      en: 'It lives among the forest’s clouds. They say that if you see one, your wish comes true.',
+    },
+  },
 };
 
 /**
@@ -954,6 +1014,47 @@ evolution('venadito', 30, {
   },
 });
 
+evolution('lunarcito', 15, {
+  id: 'hojaluna',
+  name: 'Hojaluna',
+  types: ['Bicho', 'Psíquico'],
+  base: { hp: 62, atk: 36, def: 92, spd: 34 },
+  dex: {
+    es: 'Se envuelve en una hoja seca y sueña. Si la tocas, brilla un poquito.',
+    en: 'It wraps itself in a dry leaf and dreams. If you touch it, it glows a little.',
+  },
+});
+evolution('hojaluna', 30, {
+  id: 'polilluna',
+  name: 'Polilluna',
+  types: ['Bicho', 'Psíquico'],
+  base: { hp: 72, atk: 80, def: 66, spd: 102 },
+  dex: {
+    es: 'Las manchas de sus alas parecen ojos que hipnotizan. No tiene boca: vive para soñar con la luna.',
+    en: 'The spots on its wings look like hypnotizing eyes. It has no mouth: it lives to dream of the moon.',
+  },
+});
+evolution('carablanquita', 26, {
+  id: 'carablanca',
+  name: 'Carablanca',
+  types: ['Psíquico', 'Lucha'],
+  base: { hp: 70, atk: 84, def: 60, spd: 82 },
+  dex: {
+    es: 'Hace flotar piedras con la mente y las lanza. Siempre tiene una idea nueva.',
+    en: 'It makes stones float with its mind and throws them. It always has a new idea.',
+  },
+});
+evolution('quetzalito', 30, {
+  id: 'quetzalon',
+  name: 'Quetzalón',
+  types: ['Psíquico', 'Volador'],
+  base: { hp: 72, atk: 78, def: 64, spd: 102 },
+  dex: {
+    es: 'Su cola es más larga que su cuerpo. Nunca vive en una jaula: necesita ser libre.',
+    en: 'Its tail is longer than its body. It never lives in a cage: it needs to be free.',
+  },
+});
+
 /** The first form of a Palabrita's line (its words are chosen by the first form). */
 export function firstForm(id: string): string {
   const prev = Object.values(SPECIES).find((s) => s.evolves?.to === id);
@@ -988,9 +1089,10 @@ export const DEX_ORDER = [
   'pajarito', 'palomon', 'conejito', 'liebron', 'gusanito', 'capullito', 'mariposita', 'cojincito', 'sillon',
   'hojadillo', 'hojarasco', 'ecolin', 'murcielon', 'ochopatas', 'taranton', 'cuernito', 'herculeo',
   'ardillita', 'ardillon', 'colibri', 'zumbador', 'espinita', 'puercoespin', 'piedrita', 'petroglifon', 'ollita', 'tinajon',
-  'caparazonte', 'gliptodon', 'guardabarranco',
+  'caparazonte', 'gliptodon', 'guardabarranco', 'lunarcito', 'hojaluna', 'polilluna', 'duende',
   'cangrejito', 'cangrejon', 'coquito', 'cocotero', 'pelicanito', 'maleticano', 'mojarrita', 'mordisquito', 'mordiscon', 'tilapita', 'espadon',
   'paslamita', 'paslamona',
   'brasita', 'brasaurio', 'volcasaurio', 'hormiguita', 'hormigon', 'zopilotito', 'zopiloton', 'chocoyito', 'chocoyote',
-  'chispita', 'coheton', 'lamparita', 'perezosito', 'venadito', 'torovenado', 'pestanita', 'oropelon', 'ranojito', 'ranojon', 'dardito', 'rugidito', 'rugidon',
+  'chispita', 'coheton', 'lamparita', 'perezosito', 'venadito', 'torovenado', 'pestanita', 'oropelon', 'ranojito', 'ranojon', 'dardito', 'carablanquita', 'carablanca', 'rugidito', 'rugidon',
+  'quetzalito', 'quetzalon',
 ];

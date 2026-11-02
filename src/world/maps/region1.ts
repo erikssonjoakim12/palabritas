@@ -650,6 +650,8 @@ export const REGION1_MAPS: Record<string, MapDef> = {
         { sp: 'hojadillo', min: 8, max: 12, w: 15 },
         { sp: 'pajarito', min: 8, max: 12, w: 10 },
         { sp: 'palomon', min: 14, max: 15, w: 3 },
+        { sp: 'lunarcito', min: 9, max: 12, w: 2 },
+        { sp: 'duende', min: 11, max: 13, w: 1 },
       ],
     },
     // The foot of the clifftop trail: Lucas catches up with you (rival battle #1).

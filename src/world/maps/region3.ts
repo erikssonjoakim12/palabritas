@@ -65,6 +65,7 @@ export const REGION3_MAPS: Record<string, MapDef> = {
         { sp: 'espinita', min: 13, max: 19, w: 10 },
         { sp: 'ollita', min: 13, max: 19, w: 10 },
         { sp: 'ardillon', min: 20, max: 22, w: 4 },
+        { sp: 'lunarcito', min: 12, max: 15, w: 2 },
       ],
     },
     fishing: { table: [{ sp: 'tilapita', min: 13, max: 18, w: 100 }] },

@@ -447,6 +447,7 @@ export const REGION2_MAPS: Record<string, MapDef> = {
         { sp: 'espinita', min: 11, max: 15, w: 25 },
         { sp: 'mariposita', min: 10, max: 13, w: 15 },
         { sp: 'guardabarranco', min: 11, max: 15, w: 5 },
+        { sp: 'duende', min: 12, max: 15, w: 1 },
       ],
     },
     npcs: [

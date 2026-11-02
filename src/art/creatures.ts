@@ -1,5 +1,5 @@
 import { Pix, mirror, fromRows, trim, makeCanvas, type Img } from './pixel';
-import { SPRITE_INK, VIPER as V, TREEFROG as F, DARTFROG as D } from '../style/colors';
+import { SPRITE_INK, VIPER as V, TREEFROG as F, DARTFROG as D, LUNAMOTH as M, DUENDE as U, CAPUCHIN as C, QUETZAL as Q } from '../style/colors';
 import { PALABRITA_ART } from '../style/palabritas';
 
 // Palabrita sprites: hand-made pixel art (style/palabritas.ts), or for the ones that don't have
@@ -70,6 +70,109 @@ const DRAW: Record<string, Draw> = {
     for (const [x, y] of [[19, 38], [28, 36], [24, 41], [30, 40], [18, 32]]) p.ellipse(x, y, 1.8, 1.5, SPRITE_INK);
     p.ellipse(19, 26, 2.5, 2.5, SPRITE_INK).ellipse(29, 26, 2.5, 2.5, SPRITE_INK);
     p.set(18, 25, D.light).set(28, 25, D.light);
+    p.outline(SPRITE_INK);
+  },
+  /** The luna moth's caterpillar: a plump green body in segments, pale moon-dots along its side. */
+  lunarcito(p) {
+    for (const [x, y, r] of [[8, 40, 5], [14, 38, 6], [21, 37, 6.5], [28, 37, 6.5], [35, 36, 6]]) p.ellipse(x, y, r, r, M.green);
+    for (const x of [11, 18, 25, 32]) p.line(x, 33, x, 42, M.dark);
+    for (const [x, y] of [[8, 38], [15, 35], [22, 34], [29, 34]]) p.ellipse(x, y, 1.5, 1.5, M.dot);
+    p.ellipse(39, 29, 7, 7, M.green);
+    p.ellipse(37, 28, 1.5, 2, SPRITE_INK).ellipse(42, 28, 1.5, 2, SPRITE_INK);
+    p.line(37, 32, 41, 32, M.dark);
+    for (const x of [10, 17, 24, 31]) p.rect(x, 43, 2, 2, M.dark);
+    p.outline(SPRITE_INK);
+  },
+  /** Hojaluna: a cocoon wrapped in a dry leaf, hanging from a twig, glowing faintly, asleep. */
+  hojaluna(p) {
+    p.rect(22, 2, 4, 6, M.leafDark);
+    p.ellipse(24, 26, 11, 18, M.leaf);
+    p.line(24, 9, 24, 43, M.leafDark);
+    for (const y of [16, 24, 32]) p.line(24, y, 17, y - 4, M.leafDark).line(24, y, 31, y - 4, M.leafDark);
+    p.ellipse(24, 27, 5, 6, M.pale);
+    p.line(21, 26, 23, 26, SPRITE_INK).line(25, 26, 27, 26, SPRITE_INK);
+    for (const [x, y] of [[16, 20], [31, 30], [18, 36]]) p.set(x, y, M.dot);
+    p.outline(SPRITE_INK);
+  },
+  /** Polilluna: pale green wings with yellow eyespots and long trailing tails, a fuzzy white body. */
+  polilluna(p) {
+    p.ellipse(13, 17, 12, 10, M.pale).ellipse(35, 17, 12, 10, M.pale);
+    p.ellipse(15, 30, 9, 8, M.pale).ellipse(33, 30, 9, 8, M.pale);
+    p.poly([[12, 34], [8, 46], [14, 38]], M.paleEdge).poly([[36, 34], [40, 46], [34, 38]], M.paleEdge);
+    for (const [x, y] of [[12, 17], [36, 17]]) p.ellipse(x, y, 4, 4, M.eye).ellipse(x, y, 2, 2, M.eyeDark);
+    p.line(4, 10, 20, 26, M.paleEdge).line(44, 10, 28, 26, M.paleEdge);
+    p.ellipse(24, 24, 3.5, 11, M.body);
+    p.line(22, 14, 16, 4, M.antenna).line(26, 14, 32, 4, M.antenna);
+    p.ellipse(22, 16, 1, 1.2, SPRITE_INK).ellipse(26, 16, 1, 1.2, SPRITE_INK);
+    p.outline(SPRITE_INK);
+  },
+  /** The duende: tiny, under a huge brown hat with a red band, a white beard, a cheeky grin. */
+  duende(p) {
+    p.rect(18, 40, 4, 5, U.boots).rect(26, 40, 4, 5, U.boots);
+    p.ellipse(24, 34, 9, 8, U.shirt);
+    p.ellipse(24, 24, 7, 6, U.skin);
+    p.ellipse(24, 29, 6, 4, U.beard);
+    p.ellipse(24, 25, 2, 2, U.skinDark);
+    p.ellipse(21, 22, 1, 1.2, SPRITE_INK).ellipse(27, 22, 1, 1.2, SPRITE_INK);
+    p.ellipse(24, 17, 22, 5, U.hat);
+    p.ellipse(24, 11, 10, 8, U.hat);
+    p.rect(14, 14, 20, 3, U.band);
+    p.line(4, 19, 44, 19, U.hatDark);
+    p.outline(SPRITE_INK);
+  },
+  /** Carablanquita: a small dark monkey with a white face and chest, a stone floating over its hand. */
+  carablanquita(p) {
+    p.poly([[32, 40], [42, 30], [44, 34], [34, 44]], C.fur);
+    p.ellipse(22, 36, 9, 8, C.fur);
+    p.ellipse(22, 37, 5, 5, C.white);
+    p.ellipse(22, 22, 9, 8, C.white);
+    p.ellipse(22, 24, 6, 5, C.face);
+    p.ellipse(22, 16, 6, 3, C.fur);
+    p.ellipse(19, 22, 1.3, 1.5, SPRITE_INK).ellipse(25, 22, 1.3, 1.5, SPRITE_INK);
+    p.line(20, 27, 24, 27, C.furLight);
+    p.rect(12, 32, 4, 8, C.fur);
+    p.ellipse(10, 24, 5, 3, C.glow).ellipse(10, 23, 3.5, 2.5, C.stone);
+    p.set(9, 22, C.white);
+    p.outline(SPRITE_INK);
+  },
+  /** Carablanca: bigger, sitting tall, stones floating around it in a lilac glow. */
+  carablanca(p) {
+    p.poly([[30, 42], [44, 36], [46, 40], [32, 46]], C.fur);
+    p.ellipse(24, 34, 12, 10, C.fur);
+    p.ellipse(24, 34, 7, 7, C.white);
+    p.ellipse(24, 18, 11, 9, C.white);
+    p.ellipse(24, 20, 7, 6, C.face);
+    p.ellipse(24, 11, 7, 3, C.fur);
+    p.ellipse(21, 18, 1.5, 1.8, SPRITE_INK).ellipse(27, 18, 1.5, 1.8, SPRITE_INK);
+    p.line(21, 24, 27, 24, C.furLight);
+    for (const [x, y, r] of [[6, 14, 4], [42, 12, 3.5], [8, 30, 3]]) p.ellipse(x, y, r + 1.5, r + 0.5, C.glow).ellipse(x, y, r, r - 0.5, C.stone).set(x - 1, y - 1, C.white);
+    p.outline(SPRITE_INK);
+  },
+  /** Quetzalito: a round, shining green chick with a red breast, a little crest and a short tail. */
+  quetzalito(p) {
+    p.poly([[28, 38], [40, 44], [38, 40]], Q.green);
+    p.ellipse(22, 32, 11, 10, Q.green);
+    p.ellipse(21, 36, 7, 6, Q.red);
+    p.ellipse(22, 20, 8, 7, Q.green);
+    p.poly([[19, 14], [22, 8], [25, 14]], Q.light);
+    p.ellipse(26, 26, 5, 6, Q.shine);
+    p.poly([[13, 20], [10, 22], [14, 22]], Q.beak);
+    p.ellipse(18, 19, 1.5, 1.8, SPRITE_INK);
+    p.rect(19, 42, 2, 3, Q.beak).rect(24, 42, 2, 3, Q.beak);
+    p.outline(SPRITE_INK);
+  },
+  /** Quetzalón: perched tall, a crest like a crown, two tail feathers trailing far below it. */
+  quetzalon(p) {
+    p.poly([[22, 32], [30, 47], [33, 47], [26, 32]], Q.light);
+    p.poly([[25, 32], [36, 47], [39, 47], [29, 32]], Q.green);
+    p.ellipse(22, 22, 9, 12, Q.green);
+    p.ellipse(20, 28, 6, 6, Q.red);
+    p.ellipse(25, 18, 5, 8, Q.shine);
+    p.ellipse(19, 9, 6, 6, Q.green);
+    p.poly([[14, 6], [19, 0], [24, 6]], Q.light);
+    p.poly([[13, 9], [9, 11], [14, 11]], Q.beak);
+    p.ellipse(17, 8, 1.5, 1.8, SPRITE_INK);
+    p.rect(17, 34, 2, 3, Q.beak).rect(22, 34, 2, 3, Q.beak);
     p.outline(SPRITE_INK);
   },
 };
