@@ -1,5 +1,5 @@
 import { Pix, mirror, fromRows, trim, makeCanvas, type Img } from './pixel';
-import { SPRITE_INK, VIPER as V, TREEFROG as F, DARTFROG as D, LUNAMOTH as M, DUENDE as U, CAPUCHIN as C, QUETZAL as Q, CADEJOS as J } from '../style/colors';
+import { SPRITE_INK, VIPER as V, TREEFROG as F, DARTFROG as D, LUNAMOTH as M, DUENDE as U, CAPUCHIN as C, QUETZAL as Q, CADEJOS as J, FRIGATE as R, LIZARD as L, TAPIR as T, MARGAY as G } from '../style/colors';
 import { PALABRITA_ART } from '../style/palabritas';
 
 // Palabrita sprites: hand-made pixel art (style/palabritas.ts), or for the ones that don't have
@@ -21,6 +21,91 @@ function cadejo(p: Pix, coat: string, shade: string, eye: string) {
 
 /** Placeholders for new Palabritas until the user's art arrives. */
 const DRAW: Record<string, Draw> = {
+  /** Tijeretita: a young frigatebird, black with a white head, a forked tail and a small yellow pouch. */
+  tijeretita(p) {
+    p.poly([[30, 34], [44, 40], [36, 34], [44, 32]], R.black); // the forked tail
+    p.ellipse(24, 30, 10, 8, R.black);
+    p.poly([[18, 26], [6, 18], [20, 32]], R.sheen); // a wing
+    p.ellipse(16, 20, 7, 6, R.white);
+    p.ellipse(18, 27, 4, 3, R.pouch);
+    p.poly([[10, 19], [3, 22], [10, 22]], R.beak);
+    p.ellipse(14, 18, 1.4, 1.6, SPRITE_INK);
+    p.rect(21, 37, 2, 4, R.beak).rect(26, 37, 2, 4, R.beak);
+    p.outline(SPRITE_INK);
+  },
+  /** Fragatón: wings spread wide, a huge glowing yellow pouch, a long forked tail. */
+  fragaton(p) {
+    p.poly([[2, 14], [20, 22], [16, 28]], R.black).poly([[46, 14], [28, 22], [32, 28]], R.black);
+    p.poly([[22, 36], [16, 47], [24, 40], [32, 47], [26, 36]], R.black);
+    p.ellipse(24, 28, 8, 9, R.black);
+    p.ellipse(24, 32, 7, 7, R.pouch).ellipse(22, 30, 3, 3, R.pouchLight);
+    p.ellipse(24, 15, 5, 5, R.black);
+    p.poly([[20, 15], [12, 18], [20, 18]], R.beak);
+    p.ellipse(23, 13, 1.4, 1.6, R.white);
+    for (const [x, y] of [[14, 30], [34, 30], [24, 41]]) p.set(x, y, R.pouchLight);
+    p.outline(SPRITE_INK);
+  },
+  /** Gequito: a small yellow-green gecko with big eyes, round toe pads and yellow spots. */
+  gequito(p) {
+    p.poly([[30, 36], [44, 40], [32, 40]], L.green); // the tail
+    p.ellipse(22, 36, 11, 5, L.green);
+    p.ellipse(10, 31, 7, 5, L.green);
+    p.ellipse(8, 29, 2.5, 2.5, L.eye).set(8, 29, SPRITE_INK);
+    for (const [x, y] of [[14, 41], [28, 41], [17, 31], [30, 32]]) p.ellipse(x, y, 2, 1.5, L.greenDark);
+    for (const [x, y] of [[20, 34], [26, 35], [33, 38], [14, 30]]) p.ellipse(x, y, 1.3, 1.3, L.yellow);
+    p.outline(SPRITE_INK);
+  },
+  /** Garrobón: a big dark spiny-tailed iguana on its front legs, a crest of spikes and splashes of yellow. */
+  garrobon(p) {
+    p.poly([[30, 40], [47, 34], [46, 38], [32, 44]], L.dark); // the tail
+    for (let x = 34; x < 46; x += 3) p.poly([[x, 37 - (x - 34) / 3], [x + 1, 33 - (x - 34) / 3], [x + 2, 37 - (x - 34) / 3]], L.darkLight);
+    p.ellipse(24, 35, 13, 8, L.dark);
+    p.ellipse(22, 38, 9, 4, L.belly);
+    p.ellipse(11, 24, 8, 7, L.dark);
+    for (let x = 12; x < 32; x += 4) p.poly([[x, 28], [x + 2, 21], [x + 4, 28]], L.darkLight);
+    p.rect(10, 30, 4, 12, L.dark).rect(30, 38, 5, 6, L.dark);
+    p.ellipse(8, 22, 2, 2, L.eye).set(8, 22, SPRITE_INK);
+    for (const [x, y] of [[18, 31], [25, 33], [31, 31], [14, 26], [38, 37], [11, 36]]) p.ellipse(x, y, 1.8, 1.4, L.yellow);
+    p.outline(SPRITE_INK);
+  },
+  /** Dantito: a brown tapir calf with white zig-zag stripes, a short trunk. */
+  dantito(p) {
+    p.ellipse(26, 30, 14, 9, T.brown);
+    for (const x of [15, 20, 31, 36]) p.rect(x, 34, 4, 9, T.brown);
+    p.ellipse(12, 26, 7, 6, T.brownLight);
+    p.poly([[6, 26], [2, 30], [6, 31]], T.brownLight); // the trunk
+    for (const y of [25, 30, 35]) for (let x = 16; x < 38; x += 4) p.line(x, y, x + 2, y - 2, T.stripe).line(x + 2, y - 2, x + 4, y, T.stripe);
+    p.ellipse(10, 24, 1.3, 1.5, SPRITE_INK);
+    p.poly([[12, 19], [14, 16], [16, 20]], T.brownLight);
+    p.outline(SPRITE_INK);
+  },
+  /** Dantón: big and grey-brown, a pale face, a long trunk crackling with sparks. */
+  danton(p) {
+    p.ellipse(26, 27, 18, 12, T.grey);
+    for (const x of [12, 18, 32, 38]) p.rect(x, 33, 5, 12, T.greyDark);
+    p.ellipse(10, 22, 8, 7, T.grey);
+    p.ellipse(8, 21, 5, 4, T.pale);
+    p.poly([[4, 22], [0, 30], [3, 31], [6, 24]], T.grey); // the trunk
+    p.ellipse(8, 19, 1.4, 1.6, SPRITE_INK);
+    p.poly([[11, 14], [13, 10], [15, 15]], T.pale);
+    for (const [x, y] of [[1, 33], [4, 34], [0, 36]]) p.set(x, y, T.spark);
+    p.outline(SPRITE_INK);
+  },
+  /** Tigrillo: a slim golden cat with dark rosettes, huge eyes and a long ringed tail, mid-leap. */
+  tigrillo(p) {
+    p.poly([[34, 26], [46, 14], [44, 12], [32, 24]], G.fur); // the tail, up
+    for (const [x, y] of [[42, 15], [38, 19]]) p.ellipse(x, y, 1.5, 1.5, G.spot);
+    p.ellipse(24, 30, 13, 7, G.fur);
+    p.ellipse(22, 34, 8, 3, G.belly);
+    for (const x of [14, 18, 30, 34]) p.rect(x, 34, 3, 9, G.fur);
+    p.ellipse(11, 22, 7, 7, G.fur);
+    p.poly([[6, 18], [7, 12], [11, 17]], G.fur).poly([[12, 16], [15, 11], [16, 17]], G.fur);
+    p.ellipse(8, 21, 2.2, 2.4, G.eye).ellipse(13, 21, 2.2, 2.4, G.eye);
+    p.set(8, 21, SPRITE_INK).set(13, 21, SPRITE_INK);
+    p.ellipse(10, 26, 3, 2, G.belly);
+    for (const [x, y] of [[20, 27], [26, 26], [31, 29], [24, 31], [17, 30], [29, 33]]) p.ellipse(x, y, 1.8, 1.5, G.spot);
+    p.outline(SPRITE_INK);
+  },
   /** Cadenegro: huge and black, red eyes, goat hooves, a chain dragging from its neck. */
   cadenegro(p) {
     cadejo(p, J.black, J.blackLight, J.red);

@@ -608,6 +608,63 @@ export const SPECIES: Record<string, Species> = {
       en: 'It lives among the forest’s clouds. They say that if you see one, your wish comes true.',
     },
   },
+  // ----- Gym 7's Eléctrico families (plans/palabritas.md); two of them can be caught before you surf -----
+  /** The frigatebird (region 3's coast): it flies ahead of the storms. Its words: news and forecasts. */
+  tijeretita: {
+    id: 'tijeretita',
+    name: 'Tijeretita',
+    types: ['Volador', 'Eléctrico'],
+    theme: 'noticias',
+    base: { hp: 46, atk: 50, def: 40, spd: 72 },
+    moves: [m('Cola de Tijera', 'Volador', 'choose'), m('Robo en Vuelo', 'Normal', 'type'), m('Buche Brillante', 'Eléctrico', 'listen'), m('Rayo del Mar', 'Eléctrico', 'speak')],
+    catchRate: 0.25,
+    dex: {
+      es: 'Vuela sobre el mar antes de las tormentas. Nunca se posa en el agua.',
+      en: 'It flies over the sea before storms. It never lands on the water.',
+    },
+  },
+  /** The gecko (region 4): it waits by the lamps for insects, and charges up there. Its words: light and electricity. */
+  gequito: {
+    id: 'gequito',
+    name: 'Gequito',
+    types: ['Eléctrico'],
+    theme: 'electricidad',
+    base: { hp: 44, atk: 52, def: 42, spd: 66 },
+    moves: [m('Lengüetazo', 'Normal', 'choose'), m('Patas Pegajosas', 'Eléctrico', 'type'), m('Chispazo', 'Eléctrico', 'listen'), m('Descarga', 'Eléctrico', 'speak')],
+    catchRate: 0.3,
+    dex: {
+      es: 'Espera junto a los bombillos a que lleguen los insectos. Así se carga de energía.',
+      en: 'It waits by the light bulbs for the insects to come. That’s how it charges up.',
+    },
+  },
+  /** The tapir calf (the rainforest and its rivers): stripes like lightning. Its words: caring for the planet. */
+  dantito: {
+    id: 'dantito',
+    name: 'Dantito',
+    types: ['Eléctrico'],
+    theme: 'ambiente',
+    base: { hp: 64, atk: 50, def: 60, spd: 36 },
+    moves: [m('Trompazo', 'Normal', 'choose'), m('Rayas de Rayo', 'Eléctrico', 'type'), m('Chapuzón', 'Agua', 'listen'), m('Trompa Eléctrica', 'Eléctrico', 'speak', 12)],
+    catchRate: 0.2,
+    dex: {
+      es: 'Sus rayas blancas parecen relámpagos. Siembra semillas por toda la selva.',
+      en: 'Its white stripes look like lightning. It plants seeds all over the jungle.',
+    },
+  },
+  /** The margay (the Selva, rare): no evolution, fast and strong, like lightning in the trees. Its words: calls and messages. */
+  tigrillo: {
+    id: 'tigrillo',
+    name: 'Tigrillo',
+    types: ['Eléctrico'],
+    theme: 'llamadas',
+    base: { hp: 62, atk: 88, def: 56, spd: 114 },
+    moves: [m('Garra Veloz', 'Normal', 'choose'), m('Salto de Rama', 'Normal', 'type'), m('Imitación', 'Eléctrico', 'listen', 12), m('Relámpago', 'Eléctrico', 'speak', 18)],
+    catchRate: 0.06,
+    dex: {
+      es: 'Imita la voz de otros animales para engañarlos. Corre por las ramas como un rayo.',
+      en: 'It imitates other animals’ voices to trick them. It runs along the branches like lightning.',
+    },
+  },
   // ----- The Cadejos (plans/cadejos.md): two legendary dogs, as strong as Volcasaurio (420). Met in the fog, not
   // caught yet. They borrow the moth's night words and the travelling words until they get their own. -----
   /** The black dog: red eyes, goat hooves, a dragging chain. It leads travelers astray. */
@@ -1085,6 +1142,37 @@ evolution('quetzalito', 30, {
   },
 });
 
+evolution('tijeretita', 26, {
+  id: 'fragaton',
+  name: 'Fragatón',
+  types: ['Volador', 'Eléctrico'],
+  base: { hp: 70, atk: 82, def: 60, spd: 98 },
+  dex: {
+    es: 'Infla su buche amarillo y lo llena de electricidad. Cuando brilla, viene una tormenta.',
+    en: 'It puffs up its yellow throat pouch and fills it with electricity. When it glows, a storm is coming.',
+  },
+});
+evolution('gequito', 24, {
+  id: 'garrobon',
+  name: 'Garrobón',
+  types: ['Eléctrico', 'Roca'],
+  base: { hp: 72, atk: 86, def: 74, spd: 72 },
+  dex: {
+    es: 'Toma el sol en las piedras del volcán. Sus manchas amarillas echan chispas.',
+    en: 'It sunbathes on the volcano’s rocks. Its yellow spots give off sparks.',
+  },
+});
+evolution('dantito', 32, {
+  id: 'danton',
+  name: 'Dantón',
+  types: ['Eléctrico'],
+  base: { hp: 100, atk: 86, def: 92, spd: 52 },
+  dex: {
+    es: 'Es el jardinero del bosque. Su trompa está llena de electricidad.',
+    en: 'It’s the gardener of the forest. Its trunk is full of electricity.',
+  },
+});
+
 /** The first form of a Palabrita's line (its words are chosen by the first form). */
 export function firstForm(id: string): string {
   const prev = Object.values(SPECIES).find((s) => s.evolves?.to === id);
@@ -1123,9 +1211,9 @@ export const DEX_ORDER = [
   'hojadillo', 'hojarasco', 'ecolin', 'murcielon', 'ochopatas', 'taranton', 'cuernito', 'herculeo',
   'ardillita', 'ardillon', 'colibri', 'zumbador', 'espinita', 'puercoespin', 'piedrita', 'petroglifon', 'ollita', 'tinajon',
   'caparazonte', 'gliptodon', 'guardabarranco', 'lunarcito', 'hojaluna', 'polilluna', 'duende',
-  'cangrejito', 'cangrejon', 'coquito', 'cocotero', 'pelicanito', 'maleticano', 'mojarrita', 'mordisquito', 'mordiscon', 'tilapita', 'espadon',
+  'cangrejito', 'cangrejon', 'coquito', 'cocotero', 'pelicanito', 'maleticano', 'tijeretita', 'fragaton', 'mojarrita', 'mordisquito', 'mordiscon', 'tilapita', 'espadon',
   'paslamita', 'paslamona',
-  'brasita', 'brasaurio', 'volcasaurio', 'hormiguita', 'hormigon', 'zopilotito', 'zopiloton', 'chocoyito', 'chocoyote',
-  'chispita', 'coheton', 'lamparita', 'perezosito', 'venadito', 'torovenado', 'pestanita', 'oropelon', 'ranojito', 'ranojon', 'dardito', 'carablanquita', 'carablanca', 'rugidito', 'rugidon',
+  'brasita', 'brasaurio', 'volcasaurio', 'hormiguita', 'hormigon', 'zopilotito', 'zopiloton', 'chocoyito', 'chocoyote', 'gequito', 'garrobon',
+  'chispita', 'coheton', 'lamparita', 'perezosito', 'venadito', 'torovenado', 'pestanita', 'oropelon', 'ranojito', 'ranojon', 'dardito', 'carablanquita', 'carablanca', 'dantito', 'danton', 'tigrillo', 'rugidito', 'rugidon',
   'quetzalito', 'quetzalon', 'cadenegro', 'cadeblanco',
 ];

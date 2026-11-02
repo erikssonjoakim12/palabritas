@@ -181,9 +181,12 @@ export interface EncounterEntry {
 }
 
 /** What you meet swimming: in the river, the lake and the sea (Surf). */
-export const RIVER_SURF = { rate: 0.08, table: [{ sp: 'tilapita', min: 15, max: 21, w: 35 }, { sp: 'espadon', min: 22, max: 31, w: 5 }, { sp: 'mojarrita', min: 15, max: 21, w: 25 }, { sp: 'mordisquito', min: 22, max: 32, w: 20 }, { sp: 'ranojito', min: 21, max: 30, w: 15 }] };
+export const RIVER_SURF = { rate: 0.08, table: [{ sp: 'tilapita', min: 15, max: 21, w: 35 }, { sp: 'espadon', min: 22, max: 31, w: 5 }, { sp: 'mojarrita', min: 15, max: 21, w: 25 }, { sp: 'mordisquito', min: 22, max: 32, w: 20 }, { sp: 'ranojito', min: 21, max: 30, w: 15 }, { sp: 'dantito', min: 18, max: 24, w: 4 }] };
 export const LAKE_SURF = { rate: 0.08, table: [{ sp: 'mojarrita', min: 15, max: 21, w: 30 }, { sp: 'mordisquito', min: 23, max: 33, w: 35 }, { sp: 'pelicanito', min: 16, max: 22, w: 15 }, { sp: 'maleticano', min: 22, max: 32, w: 5 }, { sp: 'tilapita', min: 15, max: 21, w: 10 }, { sp: 'espadon', min: 22, max: 32, w: 8 }] };
-export const SEA_SURF = { rate: 0.08, table: [{ sp: 'cangrejito', min: 20, max: 29, w: 35 }, { sp: 'cangrejon', min: 22, max: 29, w: 5 }, { sp: 'pelicanito', min: 20, max: 29, w: 30 }, { sp: 'maleticano', min: 22, max: 29, w: 5 }, { sp: 'mojarrita', min: 14, max: 20, w: 25 }, { sp: 'espadon', min: 21, max: 30, w: 10 }] };
+export const SEA_SURF = { rate: 0.08, table: [{ sp: 'cangrejito', min: 20, max: 29, w: 35 }, { sp: 'cangrejon', min: 22, max: 29, w: 5 }, { sp: 'pelicanito', min: 20, max: 29, w: 30 }, { sp: 'maleticano', min: 22, max: 29, w: 5 }, { sp: 'mojarrita', min: 14, max: 20, w: 25 }, { sp: 'espadon', min: 21, max: 30, w: 10 }, { sp: 'fragaton', min: 26, max: 29, w: 2 }] };
+
+/** A starter in the wild (the user): only first forms, rare, and always level 10 (from region 4 on). */
+export const wildStarter = (sp: string, w: number): EncounterEntry => ({ sp, min: 10, max: 10, w });
 
 /** What bites in rivers and ponds (with the rod, from Playa Carey; there's only the one rod). */
 export const FRESHWATER: EncounterEntry[] = [{ sp: 'tilapita', min: 8, max: 14, w: 100 }];

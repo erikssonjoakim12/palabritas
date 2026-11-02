@@ -1,5 +1,5 @@
 import { flag } from '../../game/state';
-import { itemBall, tienda, casa, HOUSES, escuela, night, centro, RIVER_SURF, LAKE_SURF, RIVER_FISHING, type MapDef, type NpcDef } from './kit';
+import { itemBall, tienda, casa, HOUSES, escuela, night, centro, RIVER_SURF, LAKE_SURF, RIVER_FISHING, wildStarter, type MapDef, type NpcDef } from './kit';
 
 // Region 4: the volcanoes and dry forest. Ruta 7 east from Playa Carey, Ciudad Chispa (a colonial festival town,
 // like Masaya), up the Volcán Chocoyo (the slopes, the lava tube, the crater), and Ruta 8 home to Pueblo Amanecer.
@@ -116,9 +116,10 @@ export const REGION4_MAPS: Record<string, MapDef> = {
       table: [
         { sp: 'hormiguita', min: 13, max: 19, w: 30 },
         { sp: 'hormigon', min: 22, max: 24, w: 5 },
+        { sp: 'gequito', min: 13, max: 18, w: 4 },
         { sp: 'zopilotito', min: 13, max: 18, w: 25 },
         { sp: 'hojadillo', min: 13, max: 19, w: 10 },
-        { sp: 'aguacatito', min: 13, max: 16, w: 3 },
+        wildStarter('aguacatito', 3),
         { sp: 'conejito', min: 13, max: 17, w: 8 },
         { sp: 'liebron', min: 18, max: 20, w: 5 },
         { sp: 'cuernito', min: 13, max: 19, w: 6 },
@@ -438,7 +439,9 @@ export const REGION4_MAPS: Record<string, MapDef> = {
     encounters: {
       rate: 0.12,
       table: [
-        { sp: 'zopilotito', min: 19, max: 27, w: 24 },
+        { sp: 'zopilotito', min: 19, max: 27, w: 20 },
+        { sp: 'gequito', min: 18, max: 23, w: 3 },
+        { sp: 'garrobon', min: 24, max: 27, w: 1 },
         { sp: 'zopiloton', min: 28, max: 29, w: 3 },
         { sp: 'chispita', min: 19, max: 27, w: 19 },
         { sp: 'coheton', min: 26, max: 28, w: 4 },
@@ -499,7 +502,7 @@ export const REGION4_MAPS: Record<string, MapDef> = {
         { sp: 'zopilotito', min: 18, max: 25, w: 35 },
         { sp: 'liebron', min: 18, max: 25, w: 25 },
         { sp: 'palomon', min: 18, max: 25, w: 15 },
-        { sp: 'salchichita', min: 15, max: 17, w: 3 },
+        wildStarter('salchichita', 3),
         { sp: 'hormiguita', min: 17, max: 21, w: 12 },
         { sp: 'hormigon', min: 22, max: 25, w: 4 },
       ],
@@ -559,7 +562,8 @@ export const REGION4_MAPS: Record<string, MapDef> = {
     encounters: {
       rate: 0.12,
       table: [
-        { sp: 'chispita', min: 15, max: 22, w: 39 },
+        { sp: 'chispita', min: 15, max: 22, w: 36 },
+        { sp: 'gequito', min: 15, max: 20, w: 3 },
         { sp: 'coheton', min: 26, max: 27, w: 3 },
         { sp: 'chocoyito', min: 15, max: 22, w: 29 },
         { sp: 'chocoyote', min: 25, max: 26, w: 4 },
@@ -1039,11 +1043,13 @@ export const REGION4_MAPS: Record<string, MapDef> = {
         { sp: 'ranojon', min: 33, max: 33, w: 2 },
         { sp: 'dardito', min: 22, max: 31, w: 10 },
         { sp: 'perezosito', min: 21, max: 30, w: 14 },
-        { sp: 'gotita', min: 17, max: 20, w: 3.5 },
+        wildStarter('gotita', 3.5),
         { sp: 'mariposita', min: 21, max: 30, w: 12 },
         { sp: 'colibri', min: 21, max: 30, w: 10 },
         { sp: 'zumbador', min: 22, max: 31, w: 4 },
         { sp: 'carablanquita', min: 21, max: 25, w: 3 },
+        { sp: 'dantito', min: 21, max: 25, w: 3 },
+        { sp: 'tigrillo', min: 24, max: 28, w: 1.5 },
         { sp: 'taranton', min: 24, max: 31, w: 10 },
       ],
     },

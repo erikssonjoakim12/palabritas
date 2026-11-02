@@ -380,3 +380,13 @@ export const CADEJOS = {
   shade: OBJECT_PALS.cadeblanco[1],
   white: OBJECT_PALS.cadeblanco[2],
 };
+
+// Gym 7's Eléctrico families, until the user's art (from the master palette).
+/** The frigatebird: glossy black, a yellow throat pouch, a grey hooked beak. */
+export const FRIGATE = { black: '#3a3a42', sheen: '#6040a0', pouch: '#f0d040', pouchLight: '#f8f0a0', beak: '#a8a8b0', white: '#f8f8f8' };
+/** The gecko and the garrobo: yellow-green skin, yellow spots; the garrobo dark grey with yellow splashes. */
+export const LIZARD = { green: '#84b14e', greenDark: '#518436', yellow: '#f0d040', dark: '#3a3a42', darkLight: '#6e6e78', belly: '#d8d8dc', eye: '#c0601c' };
+/** The tapir: the calf brown with white zig-zag stripes, the adult grey-brown with a pale face. */
+export const TAPIR = { brown: '#6c3717', brownLight: '#945a2c', stripe: '#f8f0a0', grey: '#6e6e78', greyDark: '#3a3a42', pale: '#d8d8dc', spark: '#f0d040' };
+/** The margay: golden fur, dark rosettes, a cream belly, big eyes. */
+export const MARGAY = { fur: '#f09030', furLight: '#f8c070', spot: '#4a2a14', belly: '#f8f0a0', eye: '#518436' };
