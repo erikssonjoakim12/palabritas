@@ -23,7 +23,8 @@ Plans for what's next: [plans/](plans/README.md).
   hide off the way her diary tells in the past tense (Planta/Veneno, Medalla Espina, Cut).
 - **Region 6, the way there and the town:** Ruta 10 climbs in switchbacks from the top of Ruta 4 (Cut) to **Villa Bruma**, the coffee
   town in the clouds; north of it, the fog on the Cerro de la Niebla, the black and white dogs and the lost boy
-  ([plans/cadejos.md](plans/cadejos.md); also a demo, `?demo=niebla`). The gym waits for its Psíquico Palabritas.
+  ([plans/cadejos.md](plans/cadejos.md); also a demo, `?demo=niebla`). **Gym 6 ✓**: Doña Esperanza's café, where she reads
+  the future in coffee grounds (Psíquico: the luna moth, the Duende, the quetzal and her ace, the capuchin; Medalla Nube, Fly).
 - **Day and night** by the phone's clock (golden at 18, night from 19, morning by 7), with lit windows, fireflies
   and darker caves, plus story night scenes.
 - **Paused:** the bus (fast travel), until there are big roads.
@@ -41,7 +42,7 @@ past the volcano, and down the ledge into Pueblo Amanecer.
 | 3 · Pacific coast | **Playa Carey**: Marina, Agua, Medalla Ola | the night of the turtles (*la arribada*) | the seafood restaurant · the fishing rod · the message in a bottle |
 | 4 · Volcanoes | **Ciudad Chispa**: Don Tizón, Fuego, Medalla Chispa | the stolen fireworks and the volcano | a hammock for Mom · the lost parakeet chick · the haunted house · the Torovenado costume · the legend of the Carreta Nagua |
 | 5 · Rainforest | **Villa Jaguar**: Ortiga, Planta/Veneno, Medalla Espina | the silent jungle and the black jaguar | (to come) |
-| 6 · Cloud forest | **Villa Bruma** (gym to come), Psíquico | the boy lost in the fog, and the two dogs | (to come) |
+| 6 · Cloud forest | **Villa Bruma** ✓, Psíquico | the boy lost in the fog, and the two dogs | (to come) |
 
 ## 2. Evolutions ✓
 
@@ -93,7 +94,7 @@ Rematches (2-4 per route, once a day) follow your strongest Palabrita, up to 8 l
 | 3 ✓ | Playa Carey, a fishing village on the Pacific | Agua | 3 | 25 | 17-21 |
 | 4 ✓ | Ciudad Chispa, the volcano town | Fuego | 3 | 32 | 18-26 |
 | 5 ✓ | Villa Jaguar, the rainforest town | Planta / Veneno | 4 | 39 | 27-35 |
-| 6 | Villa Bruma, in the foggy cloud-forest mountains north of Ruta 4 (the user, 2026-10-31) | Psíquico (emotions) | 4 | 43 | 29-34 (gym ~37) |
+| 6 ✓ | Villa Bruma, in the foggy cloud-forest mountains north of Ruta 4 (the user, 2026-10-31) | Psíquico (emotions) | 4 | 43 | 29-34 (gym ~37) |
 | 7 | the lake archipelago, stormy (with Fly to the islands) | Eléctrico | 4 | 50 | 36-44 |
 | 8 | the old capital | Dragón | 5 | 58 | 42-52 |
 | E4 | Elite Four | Lucha, Acero, Fantasma (folklore), ... | 4-5 each | 60 → 70 | 52-58 (Victory Road) |

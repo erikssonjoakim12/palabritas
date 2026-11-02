@@ -78,6 +78,8 @@ export interface SaveData {
   /** Private classes: the day of the last one at each school (one a day). */
   lessons: Record<string, string>;
   medals: string[];
+  /** The towns you've been to: where Fly can take you (world/fly.ts). */
+  visited: string[];
   prog: Record<string, ItemProg>;
   seen: string[];
   caught: string[];
@@ -103,13 +105,14 @@ export function newSave(): SaveData {
     dir: 'down',
     party: [],
     box: [],
-    flags: { amanecerWide: true, ruta5East: true, rutasCortas: true, sinEstacion: true, canonCascada: true, ruta2Nueva: true, palancaJunto: true, craterDerrumbe: true, oesteCorto: true, selvaLaberinto: true },
+    flags: { amanecerWide: true, ruta5East: true, rutasCortas: true, sinEstacion: true, canonCascada: true, ruta2Nueva: true, palancaJunto: true, craterDerrumbe: true, oesteCorto: true, selvaLaberinto: true, ruta10Curvas: true, flyTowns: true },
     gender: 'boy',
     money: 0,
     bag: {},
     rematch: {},
     lessons: {},
     medals: [],
+    visited: [],
     prog: {},
     seen: [],
     caught: [],
@@ -154,6 +157,9 @@ export function useSave(data: SaveData) {
   migrate(G.save);
 }
 
+/** Each medal's town (for older saves' visited towns). */
+const MEDAL_TOWNS: Record<string, string> = { Brisa: 'brisa', Barro: 'ocote', Ola: 'carey', Chispa: 'chispa', Espina: 'jaguar', Nube: 'bruma' };
+
 /** Palabritas that were renamed between versions: old id -> new id. */
 const RENAMED: Record<string, string> = { perrito: 'salchichita' };
 
@@ -166,6 +172,12 @@ function migrate(s: SaveData) {
   s.bag ??= {};
   s.box ??= [];
   s.rematch ??= {};
+  // Fly (the 6th medal) needs the towns you've been to: older saves get home, Villa Limón, each medal's town and the
+  // town of the Palacentro you last rested at.
+  if (!s.flags.flyTowns) {
+    s.visited = [...new Set([...(s.visited ?? []), 'amanecer', 'limon', ...s.medals.map((m) => MEDAL_TOWNS[m]).filter(Boolean), s.heal.map.replace(/^centro_/, '')])];
+    s.flags.flyTowns = true;
+  }
   s.lessons ??= {};
   s.gender ??= 'boy';
   // Music was on/off; now it has levels (the user found 100% too loud: 60 is the default).

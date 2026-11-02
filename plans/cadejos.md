@@ -62,10 +62,11 @@ lookout is optional) and stronger wild Palabritas above the stream.
 The trail (`niebla_borde`) is north of the town. Entering the fog makes the town's Palacentro where you wake up after
 fainting. A game saved in the fog loads where you were: the walk is saved too (`G.save.fogWalk`, picked up by
 `resume` on the map). Tomás won't go down to the town before he's home; afterwards he and Doña Rosa walk home, to their house
-(`rosaEnCasa`). The gym is closed («Volvemos pronto») until its Psíquico Palabritas exist.
+(`rosaEnCasa`). The gym is closed («Volvemos pronto») until then: Doña Esperanza's café (`gym_bruma`, built
+2026-11-02) opens once the fog has lifted. She reads the future in coffee grounds; three students, then her Psíquico
+team at 40–43 (plans/palabritas.md); the Medalla Nube, and Fly.
 
 Still to do:
-- The gym 6 leader and team (new Psíquico Palabritas first), Fly with the medal.
 - The onward road toward gym 7 leaves the mountain or the town somewhere (still to draw).
 - Real Palabritas of the region instead of the borrowed night ones in the fog; the dogs' art from the user.
 

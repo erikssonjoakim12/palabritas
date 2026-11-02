@@ -1028,7 +1028,7 @@ evolution('hojaluna', 30, {
   id: 'polilluna',
   name: 'Polilluna',
   types: ['Bicho', 'Psíquico'],
-  base: { hp: 72, atk: 80, def: 66, spd: 102 },
+  base: { hp: 76, atk: 92, def: 72, spd: 80 },
   dex: {
     es: 'Las manchas de sus alas parecen ojos que hipnotizan. No tiene boca: vive para soñar con la luna.',
     en: 'The spots on its wings look like hypnotizing eyes. It has no mouth: it lives to dream of the moon.',
@@ -1038,7 +1038,7 @@ evolution('carablanquita', 26, {
   id: 'carablanca',
   name: 'Carablanca',
   types: ['Psíquico', 'Lucha'],
-  base: { hp: 70, atk: 84, def: 60, spd: 82 },
+  base: { hp: 80, atk: 96, def: 88, spd: 72 },
   dex: {
     es: 'Hace flotar piedras con la mente y las lanza. Siempre tiene una idea nueva.',
     en: 'It makes stones float with its mind and throws them. It always has a new idea.',
@@ -1071,9 +1071,10 @@ export const learnLevel = (m: Move) => m.level ?? MODE_INFO[m.mode].learnAt;
 
 /** The Palabritas' numbers (the dex in the START menu, and the art page): families together, starters first. */
 /** Moves used on the map, not in battle (like Gold/Silver's HMs): no move to teach; Palabritas that can really do it. */
-export type FieldMove = 'surf' | 'cut';
+export type FieldMove = 'surf' | 'cut' | 'fly';
 /**
- * Who can (the user) and how many medals it takes: Surf after the 4th, Cut after the 5th (plans/surf-fly.md).
+ * Who can (the user) and how many medals it takes: Surf after the 4th, Cut after the 5th, Fly after the 6th
+ * (plans/surf-fly.md).
  * Only the big swimmers carry you (not Paslamita, the hatchling).
  */
 export const FIELD_MOVES: Record<FieldMove, { medals: number; species: string[] }> = {
@@ -1082,6 +1083,8 @@ export const FIELD_MOVES: Record<FieldMove, { medals: number; species: string[] 
     medals: 5,
     species: ['hojadillo', 'hojarasco', 'cangrejito', 'cangrejon', 'hormiguita', 'hormigon', 'perezosito', 'espadon', 'brasita', 'brasaurio', 'volcasaurio', 'liebron'],
   },
+  // The big birds (the user), and the quetzal.
+  fly: { medals: 6, species: ['zopiloton', 'maleticano', 'palomon', 'guardabarranco', 'chocoyote', 'quetzalon'] },
 };
 
 export const DEX_ORDER = [

@@ -116,7 +116,8 @@ decides where stepping into the next patch leads (`fogView`: how far you see); `
 the fog. A map's `wakeUp` script can wake you somewhere else after fainting; `encounterZones` give part of a map its
 own wild Palabritas.
 
-**Field moves** (Surf, Cut): who can and how many medals in `FIELD_MOVES` (src/data/species.ts); a water map's
+**Field moves** (Surf, Cut, Fly): who can and how many medals in `FIELD_MOVES` (src/data/species.ts); Fly's towns
+(`src/world/fly.ts`: every town with a Palacentro, once you've been there, `G.save.visited`); a water map's
 wild Palabritas while swimming in `surf`. Walking or swimming off an edge with no connection (or into a hole) goes
 into whatever map is there in the world.
 

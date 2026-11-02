@@ -420,6 +420,38 @@ export const REGION6_MAPS: Record<string, MapDef> = {
   }),
   casa_bruma2: casa('casa_bruma2', 'Casa', { to: 'bruma', x: 5, y: 19 }, [{ id: 'cafetalera_bruma', x: 1, y: 1, look: 'lady', dir: 'up', script: 'cafetalera_bruma', turns: true }], { rows: HOUSES.cocina }),
   casa_bruma3: casa('casa_bruma3', 'Casa', { to: 'bruma', x: 25, y: 19 }, [{ id: 'abuelo_bruma', x: 3, y: 2, look: 'abuelo', dir: 'down', script: 'abuelo_bruma' }], { rows: HOUSES.hamaca }),
+  // Gym 6: Doña Esperanza's café, where she reads the future in the coffee grounds. No puzzle: her three students
+  // watch the way up between the tables (open once the fog has lifted: region6.ts gimnasioBruma).
+  gym_bruma: {
+    id: 'gym_bruma',
+    name: 'Café La Esperanza',
+    outdoor: false,
+    floor: '_',
+    rows: [
+      '############',
+      'P____RR____P',
+      '_____RR_____',
+      '_kk_______kk',
+      '_kk_______kk',
+      '____________',
+      '______kk____',
+      'CCCC__kk____',
+      '____________',
+      '_kk_____kk__',
+      '_kk_____kk__',
+      '____________',
+      'P__________P',
+      '_____mm_____',
+    ],
+    exit: { to: 'bruma', x: 5, y: 7 },
+    npcs: [
+      { id: 'barista_joel', x: 1, y: 11, look: 'baker', dir: 'right', script: 'barista_joel', sight: 4 },
+      { id: 'sonadora_alba', x: 9, y: 8, look: 'painter', dir: 'left', script: 'sonadora_alba', sight: 4 },
+      { id: 'adivino_teo', x: 1, y: 5, look: 'abuelo', dir: 'right', script: 'adivino_teo', sight: 4 },
+      { id: 'esperanza', x: 5, y: 1, look: 'esperanza', dir: 'down', script: 'esperanza' },
+      { id: 'guia_cafe', x: 8, y: 12, look: 'lady', dir: 'left', script: 'guia_cafe' },
+    ],
+  },
 
   /** Where the trail from the town meets the fog (the demo starts here). */
   niebla_borde: {

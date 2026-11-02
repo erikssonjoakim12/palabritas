@@ -642,6 +642,8 @@ export const LOOKS: Record<string, Look> = {
   bailarin2: { head: 'crew', body: 'pants', color: 'teal' },
   /** Tomás, lost in the fog: an orange cap and shirt, as his grandmother describes him. */
   tomas: { head: 'cap', body: 'pants', color: 'orange' },
+  /** Doña Esperanza, gym 6's leader: she reads the future in coffee grounds, in a purple shawl. */
+  esperanza: { head: 'hoodLong', body: 'dress', color: 'purple' },
 };
 
 // ---------- Animals that walk about (the Cadejos) ----------

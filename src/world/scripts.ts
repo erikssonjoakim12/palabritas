@@ -17,7 +17,9 @@ import { ask, menu } from '../ui/menu';
 import { pickFrom } from '../ui/party';
 import { startMenu } from '../ui/startmenu';
 import { wildBattle } from '../battle/battle';
-import { SCRIPTS, scriptedStep, currentMap, refreshNpcs, npcById, pickEncounter, facingTile, facingSpot, walkNpc, startSurf, cutTree, isWater, MUTED_MIME, type ScriptFn } from './world';
+import { SCRIPTS, scriptedStep, currentMap, refreshNpcs, npcById, pickEncounter, facingTile, facingSpot, walkNpc, startSurf, cutTree, isWater, warp, MUTED_MIME, type ScriptFn } from './world';
+import { townMap } from '../ui/townmap';
+import { flySpots, flyTowns } from './fly';
 import type { Mon } from '../game/state';
 import { gateOf, closedLines, FRESHWATER } from './maps';
 import { lines, as, sayOrMime, talkMode, showCreature, heal, blackout, fight, gymLeader, gift, receiveMon, practice, untilRight } from './flows';
@@ -104,6 +106,23 @@ const S: Record<string, ScriptFn> = {
     if (G.save.surfing) return info('¡Ya estás nadando!', { en: 'You’re already swimming!' });
     if (!isWater(facingTile())) return info('Aquí no hay agua para nadar.', { en: 'There’s no water here to swim in.' });
     return surf(c.data!.mon as Mon);
+  },
+
+  /**
+   * VOLAR from the team menu (Fly, from the 6th medal): pick a town you've been to, and land outside its Palacentro.
+   * Not indoors, and not in the fog while it lasts (the story there needs you on foot).
+   */
+  async volar(c) {
+    const m = currentMap();
+    if (!m.outdoor) return info('Aquí adentro no se puede volar.', { en: 'You can’t fly indoors.' });
+    if ((m.fog && !flag('tomasEnCasa')) || G.save.follower) return info('La niebla es demasiado espesa para volar.', { en: 'The fog is too thick to fly.' });
+    const to = await townMap(flyTowns());
+    if (!to) return;
+    const at = flySpots()[to];
+    const bird = monName(c.data!.mon as Mon);
+    sfx('jump');
+    await info(`¡${bird} te lleva volando!`, { en: `${bird} carries you through the sky!`, auto: 1200 });
+    await warp(to, at.x, at.y, 'down', false);
   },
 
   /** A thin tree (A facing it), or CORTAR from the team menu: cut it with a Palabrita that can (from the 5th medal). */

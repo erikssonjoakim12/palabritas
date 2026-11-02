@@ -9,6 +9,7 @@ import { MAPS, type MapDef, type NpcDef, type Conn, type EncounterEntry } from '
 import { worldLayout, mapAcross } from './layout';
 import { G, flag, saveGame, playerLook, clockHour, type SaveData } from '../game/state';
 import { rematchReady } from '../game/rematch';
+import { visit } from './fly';
 import { shuffled, pickRandom } from '../game/random';
 import { NIGHT, NIGHT_CLEAR, FIREFLY, MARK, BLACK, SHADOW, ACCENT, FOG } from '../style/colors';
 import { lightAt, drawLights, skyAt, type Light } from '../art/lights';
@@ -137,6 +138,7 @@ export function loadMap(id: string, x: number, y: number, dir: Dir) {
   if (map && map.id !== id) growBack(map);
   map = MAPS[id];
   validate(map);
+  visit(id);
   const npc = (def: NpcDef, dx = 0, dy = 0): NpcRT => ({
     def,
     x: def.x + dx,

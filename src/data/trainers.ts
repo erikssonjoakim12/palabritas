@@ -170,6 +170,11 @@ export const TRAINERS: Record<string, TrainerDef> = {
   guardaparque_elena: { id: 'guardaparque_elena', name: 'Guardaparque Elena', defenseMode: 'listen', team: [['torovenado', 31], ['perezosito', 31]] },
   musico_rafa: { id: 'musico_rafa', name: 'Músico Rafa', defenseMode: 'choose', team: [['lamparita', 32], ['murcielon', 31]] },
   turista_paola: { id: 'turista_paola', name: 'Turista Paola', defenseMode: 'type', team: [['zopiloton', 32], ['taranton', 32]] },
+  // Gym 6, Doña Esperanza's café in Villa Bruma: her students, then her (Psíquico; plans/palabritas.md).
+  barista_joel: { id: 'barista_joel', name: 'Barista Joel', defenseMode: 'listen', team: [['perezosito', 36], ['carablanca', 37]] },
+  sonadora_alba: { id: 'sonadora_alba', name: 'Soñadora Alba', defenseMode: 'speak', team: [['polilluna', 36], ['petroglifon', 37]] },
+  adivino_teo: { id: 'adivino_teo', name: 'Adivino Teo', defenseMode: 'choose', team: [['quetzalito', 35], ['lamparita', 37], ['quetzalon', 38]] },
+  esperanza: { id: 'esperanza', name: 'Líder Esperanza', defenseMode: 'type', team: [['duende', 40], ['polilluna', 41], ['quetzalon', 41], ['carablanca', 43]] },
 };
 
 /**
@@ -222,13 +227,14 @@ export const BATTLE_ORDER: { leg: string; en: string; trainers: string[] }[] = [
     ],
   },
   {
-    leg: 'Ruta 10, Villa Bruma, la niebla',
-    en: 'Route 10 up to Villa Bruma, and the fog north of it (region 6; the gym is still to come)',
+    leg: 'Ruta 10, la niebla → Villa Bruma',
+    en: 'Route 10 up to Villa Bruma, the fog north of it → gym 6',
     trainers: [
       'campista_noemi', 'excursionista_diego', 'cafetalero_ramiro', 'recolector_wilber', 'lenador_mauro', 'pescador_beto',
       'guardaparque_sonia', 'exploradora_vicky', 'ornitologa_celia', 'pintora_gaby',
       'campista_lorena', 'excursionista_rodrigo', 'lenador_abel', 'espeleologo_ismael', 'observadora_marta', 'cafetalero_julio',
       'ciclista_kevin', 'guardaparque_elena', 'musico_rafa', 'turista_paola',
+      'barista_joel', 'sonadora_alba', 'adivino_teo', 'esperanza',
     ],
   },
 ];

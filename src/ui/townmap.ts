@@ -122,9 +122,14 @@ function nextPlace(places: Place[], from: number, dir: Dir): number {
   return best;
 }
 
-/** Show the town map until A, B or a tap outside it. */
-export function townMap(): Promise<void> {
-  const { canvas: world, x0, y0, places } = drawWorld();
+/**
+ * Show the town map until A, B or a tap outside it. With `pick` (Fly), only those towns can be chosen: A, or
+ * tapping the chosen one again, picks it (resolves its map id); B or a tap outside resolves nothing.
+ */
+export function townMap(pick?: string[]): Promise<string | undefined> {
+  const drawn = drawWorld();
+  const { canvas: world, x0, y0 } = drawn;
+  const places = pick ? drawn.places.filter((p) => pick.includes(p.id)) : drawn.places;
   const L = worldLayout();
   const here = outdoorOf(currentMap());
   const you = here && { x: (L[here.map.id].x - x0 + (here.x ?? player.x)) / S, y: (L[here.map.id].y - y0 + (here.y ?? player.y)) / S };
@@ -135,7 +140,7 @@ export function townMap(): Promise<void> {
   view.width = world.width;
   view.height = world.height;
   const name = el('div', 'townmap-name');
-  box.append(el('div', 'menu-title', 'MAPA'), view, name);
+  box.append(el('div', 'menu-title', pick ? 'VOLAR: ¿ADÓNDE?' : 'MAPA'), view, name);
   overlay.appendChild(box);
 
   let blink = true;
@@ -156,15 +161,16 @@ export function townMap(): Promise<void> {
   const timer = setInterval(() => ((blink = !blink), draw()), 400);
 
   return new Promise((resolve) => {
-    const close = () => {
+    const close = (picked?: string) => {
       clearInterval(timer);
       pop();
       box.remove();
       sfx('select');
-      resolve();
+      resolve(picked);
     };
     const pop = input.push((b) => {
-      if (b === 'A' || b === 'B') return close();
+      if (b === 'A') return close(pick ? places[sel].id : undefined);
+      if (b === 'B') return close();
       if (b !== 'up' && b !== 'down' && b !== 'left' && b !== 'right') return;
       const next = nextPlace(places, sel, b);
       if (next !== sel) (sel = next), sfx('blip'), draw();
@@ -178,8 +184,9 @@ export function townMap(): Promise<void> {
         const d = (p.x - x) ** 2 + (p.y - y) ** 2;
         if (d < dist) (best = i), (dist = d);
       });
+      if (pick && best === sel) return close(places[sel].id);
       if (best !== sel) (sel = best), sfx('blip'), draw();
     });
-    box.addEventListener('click', close);
+    box.addEventListener('click', () => close());
   });
 }

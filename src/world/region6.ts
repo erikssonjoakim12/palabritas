@@ -8,15 +8,15 @@ import { TILES } from '../art/tiles';
 import { FOG } from '../style/colors';
 import { info } from '../ui/textbox';
 import {
-  currentMap, loadMap, placeNpc, refreshNpcs, walkNpcTo, approachPlayer, scriptedStep, fadeOut, fadeIn, setFollower, npcById,
+  currentMap, loadMap, placeNpc, refreshNpcs, walkNpcTo, approachPlayer, scriptedStep, fadeOut, fadeIn, setFollower, npcById, warp,
   fogView, player, DX, DY, OPP, type ScriptFn, type ScriptCtx, type NpcRT,
 } from './world';
 import { MAPS, type Line } from './maps';
 import { inFog, PATCH, CELLS, ROAD, BACK, CLEARING, ENTRY, TOWN6, wayTo, type Cell } from './maps/region6';
-import { lines, as, talk, fight, droppedMoney } from './flows';
+import { lines, as, talk, fight, gymLeader, droppedMoney } from './flows';
 
 /*
-  Region 6 (plans/cadejos.md): Ruta 10, Villa Bruma (gym 6, still closed) and the fog north of the town, also played
+  Region 6 (plans/cadejos.md): Ruta 10, Villa Bruma (gym 6, open once the fog lifts) and the fog north of the town, also played
   as a demo (?demo=niebla, title.ts). Doña Rosa's grandson is lost on the Cerro de la Niebla (maps/region6.ts). The black dog
   (Cadenegro) leads you up its road, patch by patch, waiting twice in each; stray from it and the fog walks you in
   circles, through patches you've already been, until it finds you again, 2–3 patches later. At the end of its road it leaves you, lost; you find Tomás on
@@ -509,10 +509,37 @@ const donLencho = (): Promise<void> =>
 /** Someone in town: one thing while the fog lasts, another once it has lifted and Tomás is home. */
 const untilLifted = (fog: Line[], after: Line[]): ScriptFn => () => lines(...(lifted() ? after : fog));
 
-/** The gym door: closed until its Psíquico Palabritas are ready (plans/cadejos.md). */
+/** The gym door: closed while the fog lasts (Doña Esperanza is away); once Tomás is home, her café is open. */
 async function gimnasioBruma() {
+  if (lifted()) return warp('gym_bruma', 5, 12, 'up');
   await lines(['La puerta está cerrada. Un letrero dice: «Volvemos pronto».', 'The door is locked. A sign says: “Back soon.”']);
   return scriptedStep('down');
+}
+
+/** Doña Esperanza, gym 6: she reads the future in coffee grounds. The Medalla Nube, and Fly. */
+async function esperanza() {
+  const won = await gymLeader('esperanza', {
+    medal: ['Nube', 'Cloud'],
+    intro: [
+      ['Bienvenid{o/a}, {name}. Te estaba esperando: te vi esta mañana en la borra del café.', 'Welcome, {name}. I was expecting you: I saw you this morning in the coffee grounds.'],
+      [`Me llamo Esperanza. Gracias por traer a ${NINO} a casa: ${ABUELA} es mi mejor amiga.`, `My name is Esperanza. Thank you for bringing ${NINO} home: ${ABUELA} is my best friend.`],
+      ['Leo el futuro en las tazas de café. Y en la tuya veo... una batalla.', 'I read the future in coffee cups. And in yours I see... a battle.'],
+    ],
+    ready: ['¿Quieres saber cómo terminará?', 'Do you want to know how it will end?'],
+    notReady: ['El café se enfría, pero el futuro espera. Vuelve cuando quieras.', 'Coffee gets cold, but the future waits. Come back whenever you want.'],
+    go: ['Espero que estés list{o/a}: ¡mis Palabritas leen la mente!', 'I hope you’re ready: my Palabritas read minds!'],
+    outro: ['¡No lo vi venir! Y eso que leo el futuro...', 'I didn’t see that coming! And I read the future...'],
+    handOver: [['Te ganaste la Medalla Nube. La borra de tu taza dice que llegarás muy lejos.', 'You’ve earned the Cloud Medal. The grounds in your cup say you’ll go very far.']],
+    after: [
+      ['Con seis medallas, las Palabritas que vuelan pueden llevarte por el cielo.', 'With six medals, Palabritas that fly can carry you through the sky.'],
+      ['Elige VOLAR en el menú de tus Palabritas, y después un pueblo donde ya has estado.', 'Choose VOLAR in your Palabritas menu, then a town you’ve already been to.'],
+      ['Ojalá que tu viaje sea largo y feliz, {name}. Espero que nos volvamos a ver pronto.', 'I hope your journey is long and happy, {name}. I hope we see each other again soon.'],
+    ],
+    beaten: [['Esta mañana leí tu taza otra vez. Veo un lago, tormentas... y otra medalla.', 'This morning I read your cup again. I see a lake, storms... and another medal.']],
+  });
+  if (!won) return;
+  await info('¡Felicidades! Terminaste la sexta parte de Palabritas.', { en: 'Congratulations! You finished the sixth part of Palabritas.' });
+  await info('Sigue entrenando a tus Palabritas y atrapando nuevas. ¡Pronto habrá más aventuras!', { en: 'Keep training your Palabritas and catching new ones. More adventures are coming soon!' });
 }
 
 // ---------- The demo (?demo=niebla) ----------
@@ -563,6 +590,29 @@ export const REGION6: Record<string, ScriptFn> = {
   bordeSalida,
   nieblaReanudar,
   gimnasioBruma,
+  esperanza,
+  barista_joel: fight(
+    'barista_joel',
+    ['¿Un cafecito antes de la batalla? ¿No? ¡Entonces vamos directo a pelear!', 'A little coffee before the battle? No? Then let’s go straight to battling!'],
+    ['¡Uf! Necesito otro café.', 'Phew! I need another coffee.'],
+    ['Doña Esperanza dice que el café ayuda a pensar. Yo creo que solo ayuda a hablar más rápido.', 'Doña Esperanza says coffee helps you think. I think it only helps you talk faster.'],
+  ),
+  sonadora_alba: fight(
+    'sonadora_alba',
+    ['Anoche soñé que vendrías. ¡Y aquí estás! Mis sueños nunca se equivocan.', 'Last night I dreamed you would come. And here you are! My dreams are never wrong.'],
+    ['Eso no lo soñé...', 'I didn’t dream that...'],
+    ['Esta noche espero soñar con algo más tranquilo.', 'Tonight I hope to dream about something calmer.'],
+  ),
+  adivino_teo: fight(
+    'adivino_teo',
+    ['Veo tu futuro... ¡Veo que vas a perder!', 'I see your future... I see that you’re going to lose!'],
+    ['Creo que leí mal la taza.', 'I think I read the cup wrong.'],
+    ['El futuro no está escrito. Doña Esperanza siempre dice que lo escribimos nosotros.', 'The future isn’t written. Doña Esperanza always says we write it ourselves.'],
+  ),
+  guia_cafe: talk(
+    ['¡Hola! Doña Esperanza te espera al fondo, junto a la ventana.', 'Hi! Doña Esperanza is waiting for you at the back, by the window.'],
+    ['Usa Palabritas de tipo Psíquico. ¡Los Bicho, los Fantasma y los Siniestro les ganan!', 'She uses Psychic types. Bugs, Ghosts and Dark types beat them!'],
+  ),
   vecina_bruma: untilLifted(
     [
       [`¿Ya supiste? ${NINO}, el nieto de ${ABUELA}, se ha perdido en la niebla.`, `Have you heard? ${NINO}, ${ABUELA}’s grandson, has gotten lost in the fog.`],
@@ -574,9 +624,15 @@ export const REGION6: Record<string, ScriptFn> = {
     ['Aquí hay bruma casi todas las mañanas. La bruma es como la niebla, pero más suave.', 'There’s mist here almost every morning. «Bruma» is like fog, but softer.'],
     ['Por eso nuestro café crece despacio... ¡y es tan rico!', 'That’s why our coffee grows slowly... and it’s so good!'],
   ),
-  nino_bruma: talk(
-    ['¿Vienes por el gimnasio? Está cerrado: su líder ha salido de viaje.', 'Are you here for the gym? It’s closed: its leader has gone on a trip.'],
-    ['Dicen que sus Palabritas pueden leer tus emociones. ¡Qué miedo!', 'They say its Palabritas can read your emotions. How scary!'],
+  nino_bruma: untilLifted(
+    [
+      ['¿Vienes por el gimnasio? Está cerrado: su líder ha salido de viaje.', 'Are you here for the gym? It’s closed: its leader has gone on a trip.'],
+      ['Dicen que sus Palabritas pueden leer tus emociones. ¡Qué miedo!', 'They say its Palabritas can read your emotions. How scary!'],
+    ],
+    [
+      ['¡Doña Esperanza ya volvió! El gimnasio es su café: ella lee el futuro en las tazas.', 'Doña Esperanza is back! The gym is her café: she reads the future in the cups.'],
+      [`Dice que vio en su taza que traerías a ${NINO}. ¡Y lo trajiste!`, `She says she saw in her cup that you would bring ${NINO} back. And you did!`],
+    ],
   ),
   guia_bruma: untilLifted(
     [

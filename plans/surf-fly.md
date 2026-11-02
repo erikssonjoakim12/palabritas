@@ -22,8 +22,10 @@ Who can, and how many medals: `FIELD_MOVES` in src/data/species.ts (the user's l
 
 ## Next
 
-1. **Fly** (6 medals, the user, 2026-10-30; Zopilotón, Maletícano, Palomón, Guardabarranco, Chocoyote): START → MAPA, pick a town you've
-   been to, land outside its Palacentro. The save needs a list of visited towns.
+1. **Fly** ✓ (built 2026-11-02; 6 medals, the user, 2026-10-30; Zopilotón, Maleticano, Palomón, Guardabarranco, Chocoyote,
+   and Quetzalón): VOLAR in the team menu shows the town map with only the towns you've been to (`G.save.visited`,
+   src/world/fly.ts); you land outside its Palacentro (at home, outside your house). Not indoors, not in the fog.
+   Doña Esperanza tells you with the 6th medal. Test: tests/gym6.test.mjs.
 2. **Surf's music**, and the riding sprite (the user's art).
 3. **The 5th medal** ✓: Ortiga (gym 5) names Cut and the thin tree north of Ruta 4.
 4. Later, maybe: climbing the Cañón's waterfall ('!', «Tal vez algún día puedas subirla...»).
