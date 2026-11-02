@@ -72,6 +72,15 @@ for (const [id, one, two, plain, key] of orders) {
   t.check(`shop item ${id} can be ordered`, one === 'perfect' && two === 'perfect' && plain && !key, [one, two, plain]);
 }
 
+// Wild Palabritas: an evolved form is never met below the level it evolves at (a rare grown one beside its young is fine).
+const tooYoung = await t.game(() => {
+  const g = window.__game;
+  const at = Object.fromEntries(Object.values(g.SPECIES).filter((s) => s.evolves).map((s) => [s.evolves.to, s.evolves.level]));
+  const tables = Object.values(g.MAPS).flatMap((m) => [m.encounters?.table, m.surf?.table, m.fishing?.table, ...(m.encounterZones ?? []).map((z) => z.table)].filter(Boolean).map((tb) => [m.id, tb]));
+  return tables.flatMap(([id, tb]) => tb.filter((e) => e.min < (at[e.sp] ?? 0)).map((e) => `${id}: ${e.sp} ${e.min} (evolves at ${at[e.sp]})`));
+});
+t.check('no wild evolved Palabrita below its evolution level', tooYoung.length === 0, tooYoung);
+
 const art = await t.page.browser().newPage();
 const artErrors = [];
 art.on('pageerror', (e) => artErrors.push(e.message));

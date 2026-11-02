@@ -494,8 +494,8 @@ export const REGION1_MAPS: Record<string, MapDef> = {
       table: [
         { sp: 'hojadillo', min: 7, max: 11, w: 40 },
         { sp: 'pajarito', min: 7, max: 11, w: 30 },
-        { sp: 'capullito', min: 7, max: 9, w: 15 },
-        { sp: 'mariposita', min: 10, max: 11, w: 15 },
+        { sp: 'capullito', min: 7, max: 10, w: 20 },
+        { sp: 'mariposita', min: 10, max: 12, w: 5 },
       ],
     },
     // Trainers look like Ruta 2's. Those in the passes and spurs can't be walked past unseen.
@@ -649,6 +649,7 @@ export const REGION1_MAPS: Record<string, MapDef> = {
         { sp: 'espinita', min: 9, max: 13, w: 20 },
         { sp: 'hojadillo', min: 8, max: 12, w: 15 },
         { sp: 'pajarito', min: 8, max: 12, w: 10 },
+        { sp: 'palomon', min: 14, max: 15, w: 3 },
       ],
     },
     // The foot of the clifftop trail: Lucas catches up with you (rival battle #1).

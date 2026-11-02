@@ -1,5 +1,5 @@
 import { flag } from '../../game/state';
-import { itemBall, tienda, casa, HOUSES, escuela, night, centro, RIVER_SURF, LAKE_SURF, type MapDef, type NpcDef } from './kit';
+import { itemBall, tienda, casa, HOUSES, escuela, night, centro, RIVER_SURF, LAKE_SURF, RIVER_FISHING, type MapDef, type NpcDef } from './kit';
 
 // Region 4: the volcanoes and dry forest. Ruta 7 east from Playa Carey, Ciudad Chispa (a colonial festival town,
 // like Masaya), up the Volcán Chocoyo (the slopes, the lava tube, the crater), and Ruta 8 home to Pueblo Amanecer.
@@ -25,11 +25,12 @@ const TEMPLO_WILD: MapDef['encounters'] = {
   rate: 0.08,
   everywhere: true,
   table: [
-    { sp: 'ecolin', min: 22, max: 31, w: 30 },
-    { sp: 'ochopatas', min: 22, max: 31, w: 25 },
-    { sp: 'taranton', min: 24, max: 32, w: 15 },
-    { sp: 'murcielon', min: 22, max: 32, w: 15 },
-    { sp: 'pestanita', min: 22, max: 32, w: 15 },
+    { sp: 'ecolin', min: 18, max: 23, w: 28 },
+    { sp: 'murcielon', min: 22, max: 32, w: 12 },
+    { sp: 'ochopatas', min: 20, max: 25, w: 25 },
+    { sp: 'taranton', min: 24, max: 32, w: 12 },
+    { sp: 'pestanita', min: 22, max: 31, w: 15 },
+    { sp: 'oropelon', min: 32, max: 33, w: 2 },
   ],
 };
 
@@ -113,14 +114,16 @@ export const REGION4_MAPS: Record<string, MapDef> = {
     encounters: {
       rate: 0.12,
       table: [
-        { sp: 'hormiguita', min: 13, max: 18, w: 30 },
+        { sp: 'hormiguita', min: 13, max: 19, w: 30 },
+        { sp: 'hormigon', min: 22, max: 24, w: 5 },
         { sp: 'zopilotito', min: 13, max: 18, w: 25 },
-        { sp: 'brasita', min: 12, max: 17, w: 8 },
         { sp: 'hojadillo', min: 13, max: 19, w: 10 },
-        { sp: 'liebron', min: 17, max: 19, w: 10 },
-        { sp: 'cuernito', min: 13, max: 19, w: 5 },
-        { sp: 'herculeo', min: 19, max: 20, w: 3 },
-        { sp: 'tinajon', min: 18, max: 20, w: 2 },
+        { sp: 'conejito', min: 13, max: 17, w: 8 },
+        { sp: 'liebron', min: 18, max: 20, w: 5 },
+        { sp: 'cuernito', min: 13, max: 19, w: 6 },
+        { sp: 'herculeo', min: 26, max: 27, w: 2 },
+        { sp: 'ollita', min: 14, max: 19, w: 5 },
+        { sp: 'tinajon', min: 21, max: 22, w: 2 },
       ],
     },
     fishing: { table: [{ sp: 'tilapita', min: 13, max: 19, w: 85 }, { sp: 'espadon', min: 20, max: 21, w: 15 }] },
@@ -305,7 +308,7 @@ export const REGION4_MAPS: Record<string, MapDef> = {
     ],
     exit: { to: 'chispa', x: 5, y: 27 },
     doors: [{ x: 4, y: 0, to: 'cuarto_embrujado', tx: 3, ty: 5, dir: 'up' }],
-    encounters: { rate: 0.1, everywhere: true, table: [{ sp: 'cojincito', min: 15, max: 22, w: 70 }, { sp: 'sillon', min: 18, max: 24, w: 30 }] },
+    encounters: { rate: 0.1, everywhere: true, table: [{ sp: 'cojincito', min: 15, max: 22, w: 75 }, { sp: 'sillon', min: 18, max: 24, w: 12 }] },
   },
   cuarto_embrujado: {
     id: 'cuarto_embrujado',
@@ -324,7 +327,7 @@ export const REGION4_MAPS: Record<string, MapDef> = {
     ],
     doors: [{ x: 3, y: 6, to: 'casa_embrujada', tx: 4, ty: 1, dir: 'down' }],
     npcs: [{ id: 'lampara', x: 3, y: 1, object: 'lampara', script: 'lampara', show: () => !flag('lamparaCalmada') }],
-    encounters: { rate: 0.1, everywhere: true, table: [{ sp: 'cojincito', min: 15, max: 22, w: 70 }, { sp: 'sillon', min: 18, max: 24, w: 30 }] },
+    encounters: { rate: 0.1, everywhere: true, table: [{ sp: 'cojincito', min: 15, max: 22, w: 75 }, { sp: 'sillon', min: 18, max: 24, w: 12 }] },
   },
 
   // The fireworks workshop: four torches to light in the poem's order open the door to Don Tizón (stage 3).
@@ -434,11 +437,15 @@ export const REGION4_MAPS: Record<string, MapDef> = {
     encounters: {
       rate: 0.12,
       table: [
-        { sp: 'zopilotito', min: 19, max: 27, w: 30 },
-        { sp: 'chispita', min: 19, max: 27, w: 25 },
-        { sp: 'hormigon', min: 22, max: 28, w: 15 },
+        { sp: 'zopilotito', min: 19, max: 27, w: 28 },
+        { sp: 'zopiloton', min: 28, max: 29, w: 3 },
+        { sp: 'chispita', min: 19, max: 27, w: 22 },
+        { sp: 'coheton', min: 26, max: 28, w: 4 },
+        { sp: 'hormiguita', min: 18, max: 22, w: 12 },
+        { sp: 'hormigon', min: 22, max: 28, w: 5 },
         { sp: 'liebron', min: 20, max: 28, w: 15 },
         { sp: 'chocoyito', min: 19, max: 27, w: 10 },
+        { sp: 'chocoyote', min: 25, max: 28, w: 3 },
         { sp: 'brasita', min: 18, max: 26, w: 5 },
       ],
     },
@@ -491,8 +498,8 @@ export const REGION4_MAPS: Record<string, MapDef> = {
         { sp: 'zopilotito', min: 18, max: 25, w: 35 },
         { sp: 'liebron', min: 18, max: 25, w: 25 },
         { sp: 'palomon', min: 18, max: 25, w: 15 },
-        { sp: 'brasita', min: 17, max: 24, w: 10 },
-        { sp: 'hormigon', min: 22, max: 25, w: 10 },
+        { sp: 'hormiguita', min: 17, max: 21, w: 12 },
+        { sp: 'hormigon', min: 22, max: 25, w: 4 },
       ],
     },
     npcs: [
@@ -551,7 +558,9 @@ export const REGION4_MAPS: Record<string, MapDef> = {
       rate: 0.12,
       table: [
         { sp: 'chispita', min: 15, max: 22, w: 35 },
+        { sp: 'coheton', min: 26, max: 27, w: 3 },
         { sp: 'chocoyito', min: 15, max: 22, w: 25 },
+        { sp: 'chocoyote', min: 25, max: 26, w: 4 },
         { sp: 'zopilotito', min: 15, max: 22, w: 20 },
         { sp: 'brasita', min: 15, max: 21, w: 15 },
       ],
@@ -613,9 +622,9 @@ export const REGION4_MAPS: Record<string, MapDef> = {
       everywhere: true,
       table: [
         { sp: 'ecolin', min: 15, max: 22, w: 30 },
-        { sp: 'murcielon', min: 21, max: 23, w: 20 },
-        { sp: 'ochopatas', min: 15, max: 22, w: 20 },
-        { sp: 'taranton', min: 22, max: 23, w: 10 },
+        { sp: 'murcielon', min: 22, max: 24, w: 8 },
+        { sp: 'ochopatas', min: 15, max: 22, w: 25 },
+        { sp: 'taranton', min: 24, max: 25, w: 5 },
         { sp: 'chispita', min: 16, max: 23, w: 20 },
       ],
     },
@@ -666,7 +675,7 @@ export const REGION4_MAPS: Record<string, MapDef> = {
     ],
     connections: { down: { to: 'laderas', offset: 0, scenery: true }, left: { to: 'ruta10', offset: 35 } },
     doors: [{ x: 16, y: 25, to: 'tubo', tx: 36, ty: 2, dir: 'down' }],
-    encounters: { rate: 0.15, table: [{ sp: 'chocoyito', min: 17, max: 24, w: 75 }, { sp: 'chispita', min: 17, max: 24, w: 25 }] },
+    encounters: { rate: 0.15, table: [{ sp: 'chocoyito', min: 17, max: 24, w: 65 }, { sp: 'chocoyote', min: 25, max: 26, w: 5 }, { sp: 'chispita', min: 17, max: 24, w: 22 }, { sp: 'brasita', min: 17, max: 23, w: 10 }] },
     npcs: [
       // On the walkways' outer edge, against the rock: the lava is hot.
       { id: 'silencioso5', x: 2, y: 16, look: 'silencioso', dir: 'right', script: 'silencioso5', sight: 3 },
@@ -781,7 +790,7 @@ export const REGION4_MAPS: Record<string, MapDef> = {
     ],
     connections: { right: { to: 'ruta2', offset: -5 }, down: { to: 'ruta9', offset: 0 }, left: { to: 'rio', offset: 34, scenery: true } },
     signs: [{ x: 37, y: 83, es: 'LAGO DE LAS ISLAS. El río baja del Cañón del Guardabarranco.', en: 'LAKE OF THE ISLANDS. The river comes down from the Guardabarranco Canyon.' }],
-    fishing: { table: [{ sp: 'mojarrita', min: 13, max: 19, w: 70 }, { sp: 'mordisquito', min: 20, max: 22, w: 30 }] },
+    fishing: { table: [{ sp: 'mojarrita', min: 13, max: 19, w: 60 }, { sp: 'mordisquito', min: 20, max: 22, w: 25 }, { sp: 'tilapita', min: 13, max: 19, w: 15 }, { sp: 'espadon', min: 20, max: 23, w: 12 }] },
     npcs: [
       { id: 'pescador_lago', x: 40, y: 22, look: 'fisher', dir: 'left', script: 'pescador_lago' },
       // Out in the water: you'll meet them once you can swim.
@@ -797,6 +806,7 @@ export const REGION4_MAPS: Record<string, MapDef> = {
   rio: {
     id: 'rio',
     surf: RIVER_SURF,
+    fishing: { table: RIVER_FISHING },
     name: 'Río Guardabarranco',
     outdoor: true,
     floor: '.',
@@ -879,6 +889,7 @@ export const REGION4_MAPS: Record<string, MapDef> = {
   jaguar: {
     id: 'jaguar',
     surf: RIVER_SURF,
+    fishing: { table: RIVER_FISHING },
     name: 'Villa Jaguar',
     outdoor: true,
     floor: '.',
@@ -934,6 +945,7 @@ export const REGION4_MAPS: Record<string, MapDef> = {
     id: 'gym_jaguar',
     name: 'Jardín de Ortiga',
     outdoor: false,
+    fishing: { table: RIVER_FISHING },
     floor: '.',
     ground: 'grass',
     rows: [
@@ -1020,11 +1032,14 @@ export const REGION4_MAPS: Record<string, MapDef> = {
       // The jungle's own (the viper, the frogs) and rainforest Palabritas from elsewhere.
       table: [
         { sp: 'pestanita', min: 21, max: 30, w: 22 },
+        { sp: 'oropelon', min: 32, max: 33, w: 3 },
         { sp: 'ranojito', min: 21, max: 30, w: 22 },
+        { sp: 'ranojon', min: 33, max: 33, w: 2 },
         { sp: 'dardito', min: 22, max: 31, w: 10 },
         { sp: 'perezosito', min: 21, max: 30, w: 14 },
         { sp: 'mariposita', min: 21, max: 30, w: 12 },
         { sp: 'colibri', min: 21, max: 30, w: 10 },
+        { sp: 'zumbador', min: 22, max: 31, w: 4 },
         { sp: 'taranton', min: 24, max: 31, w: 10 },
       ],
     },

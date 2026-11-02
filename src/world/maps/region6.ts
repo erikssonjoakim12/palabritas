@@ -1,6 +1,6 @@
 import type { Dir } from '../../engine/input';
 import { G, flag } from '../../game/state';
-import { casa, centro, tienda, itemBall, HOUSES, type MapDef, type NpcDef } from './kit';
+import { casa, centro, tienda, itemBall, HOUSES, MOUNTAIN_FISHING, type MapDef, type NpcDef } from './kit';
 
 /*
   Region 6 (plans/cadejos.md): the cool cloud-forest mountains north of Ruta 4. Past the thin tree at the top of
@@ -222,10 +222,13 @@ const onWayBack = (id: string, look: string, i: number) => besideWayOut(id, look
 
 /** Wild Palabritas in the fog's tall grass: night creatures and ghosts, around level 30 (the user, 2026-10-31). */
 const FOG_WILD = [
-  { sp: 'murcielon', min: 22, max: 31, w: 30 },
+  { sp: 'murcielon', min: 22, max: 31, w: 20 },
+  { sp: 'ecolin', min: 18, max: 23, w: 12 },
   { sp: 'lamparita', min: 22, max: 31, w: 20 },
-  { sp: 'taranton', min: 24, max: 31, w: 20 },
-  { sp: 'zopiloton', min: 28, max: 32, w: 15 },
+  { sp: 'taranton', min: 24, max: 31, w: 12 },
+  { sp: 'ochopatas', min: 20, max: 24, w: 8 },
+  { sp: 'zopiloton', min: 28, max: 32, w: 8 },
+  { sp: 'zopilotito', min: 21, max: 27, w: 8 },
   { sp: 'perezosito', min: 21, max: 30, w: 15 },
 ];
 
@@ -237,20 +240,26 @@ const rosaHome = () => flag('rosaEnCasa');
 
 /** Wild Palabritas on Ruta 10: the cloud forest's squirrels, hummingbirds, moths, tree frogs and deer. */
 const RUTA10_WILD = [
-  { sp: 'ardillon', min: 20, max: 29, w: 25 },
-  { sp: 'zumbador', min: 22, max: 29, w: 20 },
+  { sp: 'ardillita', min: 16, max: 20, w: 12 },
+  { sp: 'ardillon', min: 20, max: 29, w: 15 },
+  { sp: 'colibri', min: 17, max: 22, w: 12 },
+  { sp: 'zumbador', min: 22, max: 29, w: 8 },
   { sp: 'mariposita', min: 20, max: 28, w: 20 },
   { sp: 'ranojito', min: 20, max: 29, w: 20 },
   { sp: 'venadito', min: 20, max: 28, w: 15 },
 ];
 /** Above the stream, nearer the clouds: a little stronger, and the sloths. */
 const RUTA10_HIGH = [
-  { sp: 'ardillon', min: 22, max: 32, w: 25 },
-  { sp: 'zumbador', min: 22, max: 32, w: 20 },
+  { sp: 'ardillita', min: 18, max: 21, w: 8 },
+  { sp: 'ardillon', min: 22, max: 32, w: 15 },
+  { sp: 'colibri', min: 19, max: 22, w: 8 },
+  { sp: 'zumbador', min: 22, max: 32, w: 12 },
   { sp: 'mariposita', min: 22, max: 31, w: 15 },
   { sp: 'ranojito', min: 22, max: 31, w: 15 },
+  { sp: 'ranojon', min: 33, max: 34, w: 2 },
   { sp: 'perezosito', min: 22, max: 31, w: 15 },
   { sp: 'venadito', min: 21, max: 30, w: 10 },
+  { sp: 'torovenado', min: 30, max: 32, w: 3 },
 ];
 
 export const REGION6_MAPS: Record<string, MapDef> = {
@@ -324,6 +333,7 @@ export const REGION6_MAPS: Record<string, MapDef> = {
       'IIIIIIIIIIIIII=IIIIIIIIIIIIIIIIIIIIIIIIIIIIIII',
     ],
     encounters: { rate: 0.12, table: RUTA10_WILD },
+    fishing: { table: MOUNTAIN_FISHING },
     encounterZones: [{ x: 0, y: 0, w: 46, h: 23, table: RUTA10_HIGH }],
     signs: [{ x: 16, y: 48, es: `RUTA 10. Al norte: ${TOWN6}, el pueblo entre las nubes.`, en: `ROUTE 10. North: ${TOWN6}, the town in the clouds.` }],
     npcs: [
@@ -463,6 +473,7 @@ export const REGION6_MAPS: Record<string, MapDef> = {
     resume: 'nieblaReanudar',
     rows: MOUNTAIN,
     encounters: { rate: 0.11, table: FOG_WILD },
+    fishing: { table: MOUNTAIN_FISHING },
     encounterZones: [{ ...at(MEADOW, 0, 0), w: PATCH.w, h: PATCH.h, table: [...FOG_WILD, { sp: 'puercoespin', min: 22, max: 32, w: 12 }] }],
     npcs: [
       // The dogs: placed by the fog walk wherever they wait (they start at the trail).

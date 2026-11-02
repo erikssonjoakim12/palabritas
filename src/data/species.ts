@@ -805,7 +805,7 @@ evolution('mojarrita', 20, {
   id: 'mordisquito',
   name: 'Mordisquito',
   types: ['Agua'],
-  base: { hp: 46, atk: 60, def: 42, spd: 58 },
+  base: { hp: 56, atk: 66, def: 51, spd: 69 },
   catchRate: 0.4,
   dex: {
     es: 'Ya es el terror de los peces del lago. Si se le cae un diente, le crece otro.',
