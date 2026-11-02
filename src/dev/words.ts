@@ -3,15 +3,12 @@
 import { ITEMS, THEMES, type Item } from '../data/content';
 import { SPECIES, DEX_ORDER, firstForm } from '../data/species';
 import { el } from '../engine/dom';
+import { pageNav, wrapped } from './page';
+
+pageNav();
 
 const root = document.getElementById('words')!;
 
-/** A table that scrolls sideways on narrow screens. */
-const wrapped = (table: HTMLElement) => {
-  const w = el('div', 'wrap');
-  w.append(table);
-  return w;
-};
 
 /** The families that learn each list ("Gotita → Nubarrón → Huracán"), in dex order; the core list is learned by all. */
 const families: Record<string, string[]> = {};

@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="icon-192.png" />
+    <title>Palabritas in the wild</title>
+    <style>
+      body { font-family: system-ui, sans-serif; background: #f4f4ec; color: #222; margin: 0; padding: 16px; }
+      h1 { font-size: 20px; margin: 0 0 4px; }
+      p { margin: 4px 0; color: #555; font-size: 14px; }
+      button { font: inherit; font-size: 14px; background: #fff; border: 1px solid #ccc; border-radius: 12px; padding: 3px 12px; cursor: pointer; }
+      button.on { background: #2a6a9a; border-color: #2a6a9a; color: #fff; }
+      .layout { display: flex; gap: 16px; align-items: flex-start; margin-top: 10px; }
+      .side { position: sticky; top: 8px; flex: 0 0 auto; text-align: center; }
+      canvas.mini { image-rendering: pixelated; display: block; max-width: 38vw; max-height: 85vh; width: auto; height: auto; border: 1px solid #ccc; cursor: pointer; }
+      .caption { font-weight: 600; color: #222; }
+      .main { flex: 1; min-width: 0; }
+      .tabs { display: flex; gap: 6px; margin-bottom: 6px; }
+      .wrap { overflow-x: auto; }
+      table { border-collapse: collapse; width: 100%; background: #fff; font-size: 14px; }
+      th, td { text-align: left; vertical-align: middle; padding: 5px 8px; border-bottom: 1px solid #e4e4dc; }
+      th { background: #e8e8dc; font-weight: 600; white-space: nowrap; }
+      tr { cursor: pointer; }
+      tr:hover td { background: #f8f8f0; }
+      tr.picked td { background: #fdf0d8; }
+      tr.tame td { color: #999; }
+      td.sprite { padding: 2px 4px; width: 44px; }
+      canvas.mon { image-rendering: pixelated; display: block; margin: auto; }
+      td.name { font-weight: 600; white-space: nowrap; }
+      .sub { display: block; margin-top: 2px; }
+      .type { display: inline-block; border-radius: 4px; padding: 0 5px; margin: 1px 2px 1px 0; font-size: 11px; font-weight: 600; }
+      .where { display: block; font-size: 13px; white-space: nowrap; }
+      .none { font-size: 13px; }
+      td.evo, td.how { font-size: 12px; color: #555; white-space: nowrap; }
+      .chip { display: inline-block; background: #eef2e4; border: 1px solid #d4dcc4; border-radius: 10px; padding: 1px 7px; margin: 1px 2px 1px 0; font-size: 12px; white-space: nowrap; }
+      /* A phone: the map on top (staying in view while you scroll the list), the lists below. */
+      @media (max-width: 700px) {
+        .layout { flex-direction: column; align-items: stretch; }
+        .side { background: #f4f4ec; z-index: 1; padding-bottom: 4px; top: 0; }
+        canvas.mini { max-width: 100%; max-height: 32vh; margin: auto; }
+        td.name, td.how { white-space: normal; }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Where each Palabrita lives: npm run wild, or salvajes.html next to the published game. -->
+    <h1>Palabritas in the wild</h1>
+    <p>
+      Where each Palabrita lives and at which levels, read from the maps in <code>src/world/maps/</code>. Tap a Palabrita to
+      light up its places on the map, or a place (in the list or on the map) to see who lives there. Caves and buildings
+      show as a dot at their way in. Fishing works wherever there's water.
+    </p>
+    <div id="wild"></div>
+    <script type="module" src="/src/dev/wild.ts"></script>
+  </body>
+</html>

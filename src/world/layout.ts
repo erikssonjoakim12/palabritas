@@ -65,3 +65,14 @@ lookAcrossEdges((id, x, y) => {
   const there = mapAcross(id, x, y);
   return there && MAPS[there.id].rows[there.y][there.x];
 });
+
+/** Which outdoor map a place belongs to: itself, its day version, or the map its way out leads to. */
+export function outdoorOf(m: MapDef, seen = new Set<string>()): { map: MapDef; x?: number; y?: number } | null {
+  const L = worldLayout();
+  if (L[m.id]) return { map: m };
+  const day = MAPS[m.id.replace(/_noche$/, '')];
+  if (day && L[day.id]) return { map: day };
+  if (!m.exit || seen.has(m.id)) return null;
+  const out = outdoorOf(MAPS[m.exit.to], seen.add(m.id));
+  return out && { map: out.map, x: out.x ?? m.exit.x, y: out.y ?? m.exit.y };
+}

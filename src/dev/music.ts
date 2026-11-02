@@ -3,6 +3,9 @@
 import { MusicPlayer, arrange, type Voice } from '../audio/music';
 import { SONGS } from '../data/music';
 import { el } from '../engine/dom';
+import { pageNav } from './page';
+
+pageNav();
 
 const root = document.getElementById('music')!;
 const player = new MusicPlayer();

@@ -18,7 +18,9 @@ Plans for finished work are removed once built: the code is the truth.
 | | |
 |---|---|
 | `npm run dev` | dev server (the user runs their own for the phone: never stop it) |
-| `npm run art` | the art review page (`/art.html`): every sprite, tile, map and the stitched world |
+| `npm run art` | the art review page (`/art.html`): every sprite, tile and map. Every dev page has a bar of links to the others (`src/dev/page.ts`) |
+| `npm run world` | the world map (`/mundo.html`): every town and route stitched together, to zoom and scroll |
+| `npm run wild` | the wild Palabritas (`/salvajes.html`): where each one lives, at which levels and how often, on a small world map |
 | `npm run music` | the music page (`/musica.html`): every song and jingle, with voices to mute |
 | `npm run words` | the dictionary (`/palabras.html`): every word and phrase, its lists and levels, who learns it |
 | `npm run battles` | the battles page (`/batallas.html`): every trainer in battle order (`BATTLE_ORDER` in trainers.ts) with a chart of the level curve, and every Palabrita's base stats and moves |
@@ -67,7 +69,7 @@ Plans for finished work are removed once built: the code is the truth.
 | Tile logic (solid, kinds, auto-edges) / tile art | `src/art/tiles.ts` / `src/style/tiles.ts` |
 | People and objects | `src/style/people.ts` (heads, bodies, `LOOKS`, `OBJECTS_ART`), `src/art/portraits.ts` (battle portraits) |
 | Palabrita art | `src/style/palabritas.ts` (the user's art), `src/art/creatures.ts` (placeholder drawings) |
-| Art review page | `src/dev/art.ts` |
+| Dev pages (art, world map, wild Palabritas, battles, words, music) | `src/dev/` (`page.ts`: what they share; a new page goes in its `PAGES` and in vite.config.ts) |
 | Browser tests / tools | `tests/` (see below), `tools/` |
 
 ## Recipes
@@ -93,7 +95,7 @@ is a string of tiles (legend at the top of `kit.ts`).
 - **Doors:** `doors: [{ x, y, to, tx, ty, dir? }]`. You arrive at (tx, ty) facing `dir` (default up).
 - **Caves:** `encounters.everywhere: true` makes every step count as tall grass.
 - **Check your work:** `npm test -- maps` checks every map (connections both ways, doors, NPCs, gates, and
-  that every way out is reachable). Then look at the map on the art page (Maps, World).
+  that every way out is reachable). Then look at the map on the art page (Maps) and the world map page.
 
 **A trainer:**
 1. Add `TRAINERS[id]` (name with its kind, e.g. 'Exploradora Daniela'; `defenseMode`; team).

@@ -4,24 +4,14 @@
 import { SPECIES, DEX_ORDER, MODE_INFO, learnLevel, type Species } from '../data/species';
 import { TRAINERS, BATTLE_ORDER } from '../data/trainers';
 import { THEMES } from '../data/content';
-import { TYPE_COLORS, TYPE_TEXT } from '../style/colors';
 import { creatureArt } from '../art/creatures';
 import { el } from '../engine/dom';
+import { pageNav, wrapped, typeChip } from './page';
+
+pageNav();
 
 const root = document.getElementById('battles')!;
 
-/** A table that scrolls sideways on narrow screens. */
-const wrapped = (table: HTMLElement) => {
-  const w = el('div', 'wrap');
-  w.append(table);
-  return w;
-};
-const typeChip = (t: keyof typeof TYPE_COLORS) => {
-  const c = el('span', 'type', t);
-  c.style.background = TYPE_COLORS[t];
-  c.style.color = TYPE_TEXT;
-  return c;
-};
 /** Rivals and villains' bosses, drawn like leaders (Lucas, the admins, Don Sigilo). */
 const BOSSES = new Set(['lucas1', 'lucas2', 'lucas3', 'capataz', 'callada', 'sigilo', 'mutis']);
 const isLeader = (id: string) => TRAINERS[id].name.startsWith('Líder');

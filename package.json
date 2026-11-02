@@ -13,6 +13,8 @@
     "words": "vite --open /palabras.html",
     "music": "vite --open /musica.html",
     "battles": "vite --open /batallas.html",
+    "world": "vite --open /mundo.html",
+    "wild": "vite --open /salvajes.html",
     "test": "node tests/run.mjs"
   },
   "devDependencies": {

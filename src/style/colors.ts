@@ -88,6 +88,17 @@ export const TOWN_MAP = {
   cursor: '#f8d048',
 };
 
+/** The small world map on the wild Palabritas page (dev/wild.ts): where you walk, the tall grass, the rest. */
+export const WILD_MAP = {
+  beyond: TOWN_MAP.beyond,
+  open: OUTDOOR.grass[0],
+  tallGrass: OUTDOOR.grass[1],
+  solid: OUTDOOR.grass[2],
+  water: OUTDOOR.water[2],
+  /** The places a Palabrita lives. */
+  mark: '#e8a020',
+};
+
 // ---------- Caves ----------
 
 /** Cave looks by map style (style cave: 'clay' | 'basalt'); the default is CAVE's wall and floor. */

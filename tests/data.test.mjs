@@ -90,4 +90,12 @@ const battles = await art.evaluate(() => ({ trainers: document.querySelectorAll(
 const nTrainers = await t.game(() => Object.keys(window.__game.TRAINERS).length);
 const nMons = await t.game(() => Object.keys(window.__game.SPECIES).length);
 t.check('the battles page lists every trainer in order and every Palabrita', artErrors.length === 0 && !battles.warn && battles.trainers === nTrainers && battles.mons === nMons, [JSON.stringify(battles), nTrainers, nMons, ...artErrors]);
+// The world map (every outdoor map, linked from the bar on top of every page) and where each Palabrita lives.
+await art.goto(BASE + '/mundo.html', { waitUntil: 'networkidle0' });
+const world = await art.evaluate(() => ({ places: document.querySelectorAll('.places button').length, links: document.querySelectorAll('nav.pages a').length }));
+const nOutdoor = await t.game(() => Object.keys(window.__game.worldLayout()).length);
+t.check('the world map page shows every outdoor map, and links to the other pages', artErrors.length === 0 && world.places === nOutdoor && world.links >= 6, [JSON.stringify(world), nOutdoor, ...artErrors]);
+await art.goto(BASE + '/salvajes.html', { waitUntil: 'networkidle0' });
+const wild = await art.evaluate(() => ({ mons: document.querySelectorAll('table.mons canvas').length, wild: document.querySelectorAll('table.mons tr:not(.tame) .where').length }));
+t.check('the wild Palabritas page lists every Palabrita and where they live', artErrors.length === 0 && wild.mons === nMons && wild.wild > 100, [JSON.stringify(wild), ...artErrors]);
 await t.end();

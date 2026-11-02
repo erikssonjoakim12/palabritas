@@ -24,12 +24,16 @@ function phoneQr(): Plugin {
 // Chrome only allows the microphone on secure pages.
 export default defineConfig(({ mode }) => ({
   base: './',
-  // The game, plus the art review page (art.html), the dictionary (palabras.html), the music samples
-  // (musica.html) and the battles (batallas.html: trainers and Palabritas' stats), to check on any device.
+  // The game, plus the dev pages (src/dev/page.ts lists them): the art (art.html), the world map (mundo.html), the
+  // wild Palabritas (salvajes.html), the battles (batallas.html), the dictionary (palabras.html) and the music
+  // (musica.html), to check on any device.
   // The code both pages share is one chunk, named for what it is (the bundler would name it after any one file).
   build: {
     rollupOptions: {
-      input: { main: 'index.html', art: 'art.html', palabras: 'palabras.html', musica: 'musica.html', batallas: 'batallas.html' },
+      input: {
+        main: 'index.html', art: 'art.html', mundo: 'mundo.html', salvajes: 'salvajes.html',
+        batallas: 'batallas.html', palabras: 'palabras.html', musica: 'musica.html',
+      },
       output: { chunkFileNames: (c) => (c.isDynamicEntry ? 'assets/[name]-[hash].js' : 'assets/shared-[hash].js') },
     },
   },

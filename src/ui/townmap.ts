@@ -2,7 +2,7 @@ import { overlay, el } from '../engine/screen';
 import { input, type Dir } from '../engine/input';
 import { sfx } from '../engine/sfx';
 import { MAPS, type MapDef } from '../world/maps';
-import { worldLayout } from '../world/layout';
+import { worldLayout, outdoorOf } from '../world/layout';
 import { currentMap, player } from '../world/world';
 import { TOWN_MAP } from '../style/colors';
 import { isHole } from '../art/tiles';
@@ -15,17 +15,6 @@ import { isHole } from '../art/tiles';
 
 /** World tiles per pixel of the map: chunky, like the Game Boy's. */
 const S = 2;
-
-/** Which outdoor map a place belongs to: itself, its day version, or the map its way out leads to. */
-function outdoorOf(m: MapDef, seen = new Set<string>()): { map: MapDef; x?: number; y?: number } | null {
-  const L = worldLayout();
-  if (L[m.id]) return { map: m };
-  const day = MAPS[m.id.replace(/_noche$/, '')];
-  if (day && L[day.id]) return { map: day };
-  if (!m.exit || seen.has(m.id)) return null;
-  const out = outdoorOf(MAPS[m.exit.to], seen.add(m.id));
-  return out && { map: out.map, x: out.x ?? m.exit.x, y: out.y ?? m.exit.y };
-}
 
 /** Every map you can walk to from home: by roads, doors and ways out (not scenery). */
 function reachable(): Set<string> {
