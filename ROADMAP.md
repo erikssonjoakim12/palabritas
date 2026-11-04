@@ -90,7 +90,7 @@ Rematches (2-4 per route, once a day) follow your strongest Palabrita, up to 8 l
 | # | City / habitat | Type | Team | Top level | Route trainers before it |
 |---|---|---|---|---|---|
 | 1 ✓ | Ciudad Brisa | Volador (birds) | 2 | 12 | 3-6 |
-| 2 ✓ | Villa Ocote, a pine-highland town past the cave | Roca / Tierra | 3 | 21 | 12-18 |
+| 2 ✓ | Villa Ocote, a pine-highland town past the cave | Roca / Tierra | 2 | 22 | 12-18 |
 | 3 ✓ | Playa Carey, a fishing village on the Pacific | Agua | 3 | 25 | 17-21 |
 | 4 ✓ | Ciudad Chispa, the volcano town | Fuego | 3 | 32 | 18-26 |
 | 5 ✓ | Villa Jaguar, the rainforest town | Planta / Veneno | 4 | 39 | 27-35 |

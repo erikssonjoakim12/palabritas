@@ -46,7 +46,8 @@ export const TRAINERS: Record<string, TrainerDef> = {
   capataz: { id: 'capataz', name: 'Capataz Silencioso', defenseMode: 'listen', team: [['piedrita', 16], ['ollita', 17], ['piedrita', 17]] },
   tito: { id: 'tito', name: 'Alfarero Tito', defenseMode: 'type', team: [['ollita', 17], ['piedrita', 17]] },
   rosario: { id: 'rosario', name: 'Minera Rosario', defenseMode: 'type', team: [['piedrita', 17], ['ollita', 18]] },
-  petra: { id: 'petra', name: 'Líder Petra', defenseMode: 'type', team: [['piedrita', 17], ['ollita', 19], ['petroglifon', 21]] },
+  // Only grown Palabritas (the user): her trainers bring the young ones, so the leader stands apart.
+  petra: { id: 'petra', name: 'Líder Petra', defenseMode: 'type', team: [['tinajon', 21], ['petroglifon', 22]] },
   // Ruta 4 and the canyon (you defend by listening in the highlands).
   armando: { id: 'armando', name: 'Leñador Armando', defenseMode: 'listen', team: [['ardillita', 12], ['pajarito', 12]], rematch: true },
   elena: { id: 'elena', name: 'Campista Elena', defenseMode: 'listen', team: [['colibri', 12], ['espinita', 13]] },
