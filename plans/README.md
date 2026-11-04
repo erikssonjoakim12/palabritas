@@ -6,6 +6,7 @@ history keeps the old plans.
 
 | File | What |
 |---|---|
+| [feedback-round3.md](feedback-round3.md) | the user's notes after gym 2 (2026-11-04): leaders apart from their gym trainers, slower rematches |
 | [feedback-round2.md](feedback-round2.md) | the user's feedback of 2026-10-28: what's left (parts 1–3 are built): Cut, the Selva as a dungeon, rainforest Palabritas |
 | [surf-fly.md](surf-fly.md) | field moves: Surf and Cut (built), Fly with gym 6 |
 | [region5-jungle.md](region5-jungle.md) | Villa Jaguar, the Selva and the Templo del Jaguar: what's placed, the experience to build, open questions |
