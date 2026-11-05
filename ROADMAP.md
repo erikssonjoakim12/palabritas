@@ -85,7 +85,8 @@ Leaders' strongest Palabrita goes from 12 to ~58; the Elite Four from 55 to 70.
 Route trainers sit well below the next leader (the user, 2026-11-01: the leaders are the challenge): a region's
 first trainers about 5 below the leader you just beat, rising to 6-10 below the next one; bosses (Lucas, Equipo
 Silencio) about 4 below it, the gym's own trainers about 5 below. Wild Palabritas: the lowest about 70% of the highest.
-Rematches (2-4 per route, once a day) follow your strongest Palabrita, up to 8 levels above their first battle.
+Rematches (2-4 per route, once a day) grow at most 2 levels each time, never closer than 6 to the next leader's
+strongest (game/rematch.ts). A leader brings other Palabritas than their gym's trainers (or the grown forms of theirs).
 
 | # | City / habitat | Type | Team | Top level | Route trainers before it |
 |---|---|---|---|---|---|

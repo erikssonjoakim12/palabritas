@@ -4,7 +4,7 @@ import { sfx } from '../engine/sfx';
 import { frames } from '../engine/loop';
 import { G, flag, setFlag, today } from '../game/state';
 import { shuffled } from '../game/random';
-import { rematchReady, rematchTeam } from '../game/rematch';
+import { rematchReady, rematchTeam, rematchGrowth } from '../game/rematch';
 import { addItem, money } from '../game/bag';
 import { giveMon, healParty, lucasStarter, formAt } from '../game/mon';
 import { record } from '../game/learning';
@@ -119,7 +119,7 @@ export async function trainerFight(id: string, l: TrainerLines) {
   const res = await trainerBattle(TRAINERS[id], { look: npcById(id)?.def.look, outro: l.defeated });
   if (res === 'lose') return blackout();
   setFlag(`beat:${id}`);
-  if (TRAINERS[id].rematch) G.save.rematch[id] = today();
+  if (TRAINERS[id].rematch) G.save.rematch[id] = { day: today(), up: 0 };
 }
 
 /** A beaten trainer: the rematch trainers ask for one (once a day); everyone else just talks. */
@@ -131,9 +131,10 @@ async function afterBeaten(id: string, l: TrainerLines) {
     return;
   }
   if (!(await ask('¡Hola otra vez! ¿Quieres la revancha?', { en: 'Hi again! Do you want a rematch?' }))) return lines(['¡Otro día será!', 'Another day, then!']);
-  const res = await trainerBattle(rematchTeam(t), { look: npcById(id)?.def.look, outro: l.defeated, prize: 0.5 });
+  const up = rematchGrowth(id);
+  const res = await trainerBattle(rematchTeam(t, up), { look: npcById(id)?.def.look, outro: l.defeated, prize: 0.5 });
   if (res === 'lose') return blackout();
-  G.save.rematch[id] = today();
+  G.save.rematch[id] = { day: today(), up };
 }
 
 /** A trainer's script: what they say before, when beaten, and afterwards. */

@@ -22,7 +22,7 @@ export const TRAINERS: Record<string, TrainerDef> = {
   tomas: { id: 'tomas', name: 'Excursionista Tomás', defenseMode: 'choose', team: [['conejito', 4], ['pajarito', 4]] },
   valeria: { id: 'valeria', name: 'Pintora Valeria', defenseMode: 'choose', team: [['gusanito', 5], ['capullito', 5]], rematch: true },
   andres: { id: 'andres', name: 'Joven Andrés', defenseMode: 'type', team: [['pajarito', 5], ['conejito', 6], ['gusanito', 6]], rematch: true },
-  ivan: { id: 'ivan', name: 'Aprendiz Iván', defenseMode: 'choose', team: [['pajarito', 7], ['capullito', 7]] },
+  ivan: { id: 'ivan', name: 'Aprendiz Iván', defenseMode: 'choose', team: [['colibri', 7], ['capullito', 7]] },
   paloma: { id: 'paloma', name: 'Líder Paloma', defenseMode: 'type', team: [['pajarito', 9], ['palomon', 12]] },
   // Ruta 3
   rodrigo: { id: 'rodrigo', name: 'Excursionista Rodrigo', defenseMode: 'type', team: [['conejito', 9], ['pajarito', 9]] },
@@ -74,7 +74,7 @@ export const TRAINERS: Record<string, TrainerDef> = {
   silencioso9: { id: 'silencioso9', name: 'Silenciosa', defenseMode: 'listen', team: [['ochopatas', 20], ['petroglifon', 20]] },
   silencioso10: { id: 'silencioso10', name: 'Silencioso', defenseMode: 'listen', team: [['ecolin', 20], ['ollita', 20]] },
   callada: { id: 'callada', name: 'Callada', defenseMode: 'listen', team: [['ochopatas', 22], ['murcielon', 22], ['petroglifon', 23]] },
-  surfista_gym: { id: 'surfista_gym', name: 'Surfista Kike', defenseMode: 'type', team: [['cangrejito', 21], ['mordisquito', 21]] },
+  surfista_gym: { id: 'surfista_gym', name: 'Surfista Kike', defenseMode: 'type', team: [['cangrejito', 21], ['mojarrita', 21]] },
   salvavidas: { id: 'salvavidas', name: 'Salvavidas Fer', defenseMode: 'type', team: [['pelicanito', 21], ['cangrejito', 21]] },
   banista_gym: { id: 'banista_gym', name: 'Bañista Tere', defenseMode: 'type', team: [['coquito', 22], ['pelicanito', 21]] },
   marina: { id: 'marina', name: 'Líder Marina', defenseMode: 'type', team: [['maleticano', 23], ['mordisquito', 24], ['cangrejon', 25]] },
@@ -98,8 +98,8 @@ export const TRAINERS: Record<string, TrainerDef> = {
   silencioso6: { id: 'silencioso6', name: 'Silenciosa', defenseMode: 'listen', team: [['ochopatas', 24], ['ollita', 24]] },
   silencioso7: { id: 'silencioso7', name: 'Silencioso', defenseMode: 'listen', team: [['petroglifon', 24], ['murcielon', 25]] },
   polvorera: { id: 'polvorera', name: 'Polvorera Gloria', defenseMode: 'type', team: [['chispita', 25], ['chispita', 25]] },
-  malabarista: { id: 'malabarista', name: 'Malabarista Ricky', defenseMode: 'type', team: [['chocoyito', 25], ['coheton', 26]] },
-  fritanguero: { id: 'fritanguero', name: 'Fritanguero Neno', defenseMode: 'type', team: [['chocoyote', 26], ['chispita', 26]] },
+  malabarista: { id: 'malabarista', name: 'Malabarista Ricky', defenseMode: 'type', team: [['chocoyito', 25], ['lamparita', 26]] },
+  fritanguero: { id: 'fritanguero', name: 'Fritanguero Neno', defenseMode: 'type', team: [['hamburgueson', 26], ['chispita', 26]] },
   campesina_r9: { id: 'campesina_r9', name: 'Campesina Tula', defenseMode: 'listen', team: [['zopilotito', 24], ['liebron', 25]] },
   ciclista_r9: { id: 'ciclista_r9', name: 'Ciclista Bruno', defenseMode: 'listen', rematch: true, team: [['zopilotito', 25], ['hormigon', 25]] },
   excursionista_r9: { id: 'excursionista_r9', name: 'Excursionista Lila', defenseMode: 'listen', team: [['palomon', 25], ['liebron', 26]] },
@@ -142,7 +142,7 @@ export const TRAINERS: Record<string, TrainerDef> = {
   mutis: { id: 'mutis', name: 'Comandante Mutis', defenseMode: 'type', team: [['murcielon', 33], ['tinajon', 33], ['petroglifon', 34], ['taranton', 35]] },
   // Ortiga's garden, gym 5 (plans/gym5.md).
   jardinera_azucena: { id: 'jardinera_azucena', name: 'Jardinera Azucena', defenseMode: 'choose', team: [['pestanita', 32], ['coquito', 32]] },
-  yerbero_chepe: { id: 'yerbero_chepe', name: 'Yerbero Chepe', defenseMode: 'listen', team: [['dardito', 33], ['hojarasco', 33]] },
+  yerbero_chepe: { id: 'yerbero_chepe', name: 'Yerbero Chepe', defenseMode: 'listen', team: [['hojadillo', 33], ['aguacatono', 33]] },
   botanica_iris: { id: 'botanica_iris', name: 'Botánica Iris', defenseMode: 'type', team: [['ranojito', 33], ['cocotero', 34]] },
   ortiga: { id: 'ortiga', name: 'Líder Ortiga', defenseMode: 'type', team: [['dardito', 36], ['hojarasco', 37], ['ranojon', 37], ['oropelon', 39]] },
   sigilo: { id: 'sigilo', name: 'Don Sigilo', defenseMode: 'type', team: [['murcielon', 27], ['taranton', 28], ['petroglifon', 29]] },
@@ -171,10 +171,11 @@ export const TRAINERS: Record<string, TrainerDef> = {
   guardaparque_elena: { id: 'guardaparque_elena', name: 'Guardaparque Elena', defenseMode: 'listen', team: [['torovenado', 31], ['perezosito', 31]] },
   musico_rafa: { id: 'musico_rafa', name: 'Músico Rafa', defenseMode: 'choose', team: [['lamparita', 32], ['murcielon', 31]] },
   turista_paola: { id: 'turista_paola', name: 'Turista Paola', defenseMode: 'type', team: [['zopiloton', 32], ['taranton', 32]] },
-  // Gym 6, Doña Esperanza's café in Villa Bruma: her students, then her (Psíquico; plans/palabritas.md).
-  barista_joel: { id: 'barista_joel', name: 'Barista Joel', defenseMode: 'listen', team: [['perezosito', 36], ['carablanca', 37]] },
-  sonadora_alba: { id: 'sonadora_alba', name: 'Soñadora Alba', defenseMode: 'speak', team: [['polilluna', 36], ['petroglifon', 37]] },
-  adivino_teo: { id: 'adivino_teo', name: 'Adivino Teo', defenseMode: 'choose', team: [['quetzalito', 35], ['lamparita', 37], ['quetzalon', 38]] },
+  // Gym 6, Doña Esperanza's café in Villa Bruma: her students, then her (Psíquico; plans/palabritas.md). Like every gym,
+  // the students bring other Palabritas than their leader, or the young forms of hers (the user, 2026-11-04).
+  barista_joel: { id: 'barista_joel', name: 'Barista Joel', defenseMode: 'listen', team: [['perezosito', 36], ['petroglifon', 37]] },
+  sonadora_alba: { id: 'sonadora_alba', name: 'Soñadora Alba', defenseMode: 'speak', team: [['lamparita', 36], ['hojaluna', 37]] },
+  adivino_teo: { id: 'adivino_teo', name: 'Adivino Teo', defenseMode: 'choose', team: [['quetzalito', 36], ['carablanquita', 37]] },
   esperanza: { id: 'esperanza', name: 'Líder Esperanza', defenseMode: 'type', team: [['duende', 40], ['polilluna', 41], ['quetzalon', 41], ['carablanca', 43]] },
 };
 

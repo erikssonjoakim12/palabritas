@@ -69,8 +69,9 @@ export interface SaveData {
   starterPicked?: string;
   /** The day you lent the shell fossil to the museum (it wakes up the next day). */
   fossilDay?: string;
-  /** Rematch trainers: the day of your last battle with each (they ask again on a later day). */
-  rematch: Record<string, string>;
+  /** Rematch trainers: the day of your last battle with each (they ask again on a later day), and how many levels
+   * above the first battle they were then (game/rematch.ts). */
+  rematch: Record<string, { day: string; up: number }>;
   /** El Pelícano Feliz: today's shift as a waiter (which round, which orders, whether you heard the order). */
   restaurante?: { round: number; orders: number[]; heard: boolean };
   /** The day of your last full shift at the restaurant (one a day after the first time). */
@@ -172,6 +173,8 @@ function migrate(s: SaveData) {
   s.bag ??= {};
   s.box ??= [];
   s.rematch ??= {};
+  // Rematches used to remember only the day; now also how much they've grown (from nothing: they start again slowly).
+  for (const [id, v] of Object.entries(s.rematch)) if (typeof v === 'string') s.rematch[id] = { day: v, up: 0 };
   // Fly (the 6th medal) needs the towns you've been to: older saves get home, Villa Limón, each medal's town and the
   // town of the Palacentro you last rested at.
   if (!s.flags.flyTowns) {

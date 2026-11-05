@@ -17,14 +17,17 @@ await t.warp('ruta11', 16, 46, 'right');
 await t.walk('right', 6);
 let r = await t.play();
 t.check('Campista Noemí battles you on Ruta 10', (await t.save()).flags['beat:campista_noemi'] && r.said.some((x) => x.includes('Acampé')), r.said.slice(0, 2));
-// Rematches come back one level under your strongest (35), at most 8 levels above the first time (Vulcanóloga Clara's
-// were 22), and evolved as far as that level allows.
+// Rematches grow 2 levels a time (with five medals, up to Doña Esperanza's 43 − 6), and evolve as they grow:
+// Vulcanóloga Clara (22), already 6 up, comes back 8 up, at 30: Cohetón and Zopilotón.
 const rematch = await t.game(() => {
   const g = window.__game;
-  return [g.rematchTeam(g.TRAINERS.campista_noemi).team, g.rematchTeam(g.TRAINERS.vulcanologa1).team];
+  g.G.save.medals = ['Brisa', 'Barro', 'Ola', 'Chispa', 'Espina'];
+  g.G.save.rematch.vulcanologa1 = { day: '2000-01-01', up: 6 };
+  const team = (id) => g.rematchTeam(g.TRAINERS[id], g.rematchGrowth(id)).team;
+  return [team('campista_noemi'), team('vulcanologa1')];
 });
-t.check('rematch teams follow you, up to 8 levels more', JSON.stringify(rematch[0]) === '[["mariposita",34],["murcielon",34]]', rematch[0]);
-t.check('and their Palabritas evolve as they grow', JSON.stringify(rematch[1]) === '[["coheton",30],["zopiloton",30]]', rematch[1]);
+t.check('a rematch comes back 2 levels stronger', JSON.stringify(rematch[0]) === '[["mariposita",31],["murcielon",32]]', rematch[0]);
+t.check('and its Palabritas evolve as they grow', JSON.stringify(rematch[1]) === '[["coheton",30],["zopiloton",30]]', rematch[1]);
 
 // Villa Bruma: up the route into town; the gym is closed for now.
 await t.warp('ruta11', 13, 1, 'up');
