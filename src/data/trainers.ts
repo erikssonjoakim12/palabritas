@@ -22,8 +22,8 @@ export const TRAINERS: Record<string, TrainerDef> = {
   tomas: { id: 'tomas', name: 'Excursionista Tomás', defenseMode: 'choose', team: [['conejito', 4], ['pajarito', 4]] },
   valeria: { id: 'valeria', name: 'Pintora Valeria', defenseMode: 'choose', team: [['gusanito', 5], ['capullito', 5]], rematch: true },
   andres: { id: 'andres', name: 'Joven Andrés', defenseMode: 'type', team: [['pajarito', 5], ['conejito', 6], ['gusanito', 6]], rematch: true },
-  ivan: { id: 'ivan', name: 'Aprendiz Iván', defenseMode: 'choose', team: [['colibri', 7], ['capullito', 7]] },
-  paloma: { id: 'paloma', name: 'Líder Paloma', defenseMode: 'type', team: [['pajarito', 9], ['palomon', 12]] },
+  ivan: { id: 'ivan', name: 'Aprendiz Iván', defenseMode: 'choose', team: [['pajarito', 7], ['capullito', 7]] },
+  paloma: { id: 'paloma', name: 'Líder Paloma', defenseMode: 'type', team: [['colibri', 9], ['palomon', 12]] },
   // Ruta 3
   rodrigo: { id: 'rodrigo', name: 'Excursionista Rodrigo', defenseMode: 'type', team: [['conejito', 9], ['pajarito', 9]] },
   isabel: { id: 'isabel', name: 'Pintora Isabel', defenseMode: 'type', team: [['capullito', 9], ['hojadillo', 9]], rematch: true },
@@ -99,7 +99,7 @@ export const TRAINERS: Record<string, TrainerDef> = {
   silencioso7: { id: 'silencioso7', name: 'Silencioso', defenseMode: 'listen', team: [['petroglifon', 24], ['murcielon', 25]] },
   polvorera: { id: 'polvorera', name: 'Polvorera Gloria', defenseMode: 'type', team: [['chispita', 25], ['chispita', 25]] },
   malabarista: { id: 'malabarista', name: 'Malabarista Ricky', defenseMode: 'type', team: [['chocoyito', 25], ['lamparita', 26]] },
-  fritanguero: { id: 'fritanguero', name: 'Fritanguero Neno', defenseMode: 'type', team: [['hamburgueson', 26], ['chispita', 26]] },
+  fritanguero: { id: 'fritanguero', name: 'Fritanguero Neno', defenseMode: 'type', team: [['zopilotito', 26], ['chispita', 26]] },
   campesina_r9: { id: 'campesina_r9', name: 'Campesina Tula', defenseMode: 'listen', team: [['zopilotito', 24], ['liebron', 25]] },
   ciclista_r9: { id: 'ciclista_r9', name: 'Ciclista Bruno', defenseMode: 'listen', rematch: true, team: [['zopilotito', 25], ['hormigon', 25]] },
   excursionista_r9: { id: 'excursionista_r9', name: 'Excursionista Lila', defenseMode: 'listen', team: [['palomon', 25], ['liebron', 26]] },
@@ -142,7 +142,7 @@ export const TRAINERS: Record<string, TrainerDef> = {
   mutis: { id: 'mutis', name: 'Comandante Mutis', defenseMode: 'type', team: [['murcielon', 33], ['tinajon', 33], ['petroglifon', 34], ['taranton', 35]] },
   // Ortiga's garden, gym 5 (plans/gym5.md).
   jardinera_azucena: { id: 'jardinera_azucena', name: 'Jardinera Azucena', defenseMode: 'choose', team: [['pestanita', 32], ['coquito', 32]] },
-  yerbero_chepe: { id: 'yerbero_chepe', name: 'Yerbero Chepe', defenseMode: 'listen', team: [['hojadillo', 33], ['aguacatono', 33]] },
+  yerbero_chepe: { id: 'yerbero_chepe', name: 'Yerbero Chepe', defenseMode: 'listen', team: [['hojadillo', 33], ['coquito', 34]] },
   botanica_iris: { id: 'botanica_iris', name: 'Botánica Iris', defenseMode: 'type', team: [['ranojito', 33], ['cocotero', 34]] },
   ortiga: { id: 'ortiga', name: 'Líder Ortiga', defenseMode: 'type', team: [['dardito', 36], ['hojarasco', 37], ['ranojon', 37], ['oropelon', 39]] },
   sigilo: { id: 'sigilo', name: 'Don Sigilo', defenseMode: 'type', team: [['murcielon', 27], ['taranton', 28], ['petroglifon', 29]] },
