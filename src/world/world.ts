@@ -11,7 +11,7 @@ import { G, flag, saveGame, playerLook, clockHour, type SaveData } from '../game
 import { rematchReady } from '../game/rematch';
 import { visit } from './fly';
 import { shuffled, pickRandom } from '../game/random';
-import { NIGHT, NIGHT_CLEAR, FIREFLY, MARK, BLACK, SHADOW, ACCENT, FOG } from '../style/colors';
+import { NIGHT, NIGHT_CLEAR, FIREFLY, MARK, BLACK, SHADOW, ACCENT, FOG, ASH_PUFF } from '../style/colors';
 import { lightAt, drawLights, skyAt, type Light } from '../art/lights';
 import { drawFireworks } from '../art/fireworks';
 import { setMapMusic, musicFor } from '../audio/bgm';
@@ -29,6 +29,8 @@ export interface NpcRT {
   off?: { x: number; y: number; frame: number };
   /** Extra drawing on top of the sprite (e.g. Palabolas glowing in the healing machine). */
   overlay?: (g: CanvasRenderingContext2D, x: number, y: number) => void;
+  /** Riding a board down the volcano (npcRideDown): the board is drawn under them. */
+  board?: boolean;
 }
 
 export interface ScriptCtx {
@@ -52,6 +54,8 @@ export const OPP: Record<Dir, Dir> = { up: 'down', down: 'up', left: 'right', ri
  */
 const WALK_FRAMES = 13;
 const RUN_FRAMES = 9;
+/** Frames per tile sliding down the volcano on a board: fast. */
+const BOARD_FRAMES = 4;
 /** Tiles of surroundings prepared around the map: more than half a screen, so the edges are covered. */
 const GRID = 7;
 const T = 16;
@@ -106,6 +110,9 @@ export const player = {
   hopping: false,
   /** Being carried by a water current this way (you keep facing where you were going). */
   slide: null as Dir | null,
+  /** On a board down the volcano (rideDown): the step can be diagonal, from glideFrom to (x, y). */
+  board: false,
+  glideFrom: null as { x: number; y: number } | null,
   frames: null as Frames | null,
 };
 
@@ -133,7 +140,8 @@ function validate(m: MapDef) {
   });
 }
 
-export function loadMap(id: string, x: number, y: number, dir: Dir) {
+/** `exact`: stand right there even inside a wall (a board ride carries on across the slope). */
+export function loadMap(id: string, x: number, y: number, dir: Dir, exact = false) {
   const prevName = map?.name;
   if (map && map.id !== id) growBack(map);
   map = MAPS[id];
@@ -154,7 +162,7 @@ export function loadMap(id: string, x: number, y: number, dir: Dir) {
   ({ grid, w: gridW, lights, alt: gridAlt } = gridFor(map));
   prepareNeighbors();
   // Maps change between versions: never leave a loaded save standing inside a wall.
-  [x, y] = nearestFree(x, y);
+  if (!exact) [x, y] = nearestFree(x, y);
   Object.assign(player, { x, y, dir, moving: false, prog: 0 });
   if (G.save.follower) placeFollower();
   if (G.save.surfing && !isWater(tileAt(x, y))) G.save.surfing = false;
@@ -569,6 +577,79 @@ export async function walkNpc(id: string, path: Dir[], { speed = 1 } = {}) {
   }
 }
 
+// ---------- Sandboarding down the volcano (plans/volcano.md) ----------
+
+/** Ash thrown up by a board: screen pixels, each drifting by (vx, vy) a frame (the camera's motion) and fading. */
+const puffs: { x: number; y: number; vx: number; vy: number; life: number }[] = [];
+const PUFF_LIFE = 18;
+const puff = (x: number, y: number, vx = 0, vy = 0) => puffs.push({ x, y, vx, vy, life: PUFF_LIFE });
+
+/**
+ * Slide down on a board: one step per [dx, dy] (diagonals too), fast, straight through the slope, and on across a
+ * map's edge into whatever map is there in the world (the crater, the strip of slope, Ruta 7). Ash puffs up behind.
+ */
+export async function rideDown(steps: [number, number][]) {
+  G.lock++;
+  Object.assign(player, { board: true, scripted: true, dir: 'down' as Dir });
+  for (const [dx, dy] of steps) {
+    let [nx, ny] = [player.x + dx, player.y + dy];
+    if (!inBounds(nx, ny)) {
+      const there = mapAcross(map.id, nx, ny);
+      if (!there) break;
+      loadMap(there.id, there.x - dx, there.y - dy, 'down', true);
+      [nx, ny] = [there.x, there.y];
+    }
+    player.glideFrom = { x: player.x, y: player.y };
+    Object.assign(player, { x: nx, y: ny, dist: T, prog: 0, moving: true });
+    while (player.moving) {
+      // Behind the board, drifting back as the camera follows you down.
+      puff(72 - dx * 4, 76 - dy * 4, -dx * (T / BOARD_FRAMES), -dy * (T / BOARD_FRAMES));
+      await nextFrame();
+    }
+  }
+  Object.assign(player, { board: false, scripted: false, glideFrom: null });
+  Object.assign(G.save, { map: map.id, x: player.x, y: player.y, dir: player.dir });
+  G.lock--;
+}
+
+/** Someone else slides down on a board (Don Sigilo escaping): the same steps, through the slope, until gone. */
+export async function npcRideDown(id: string, steps: [number, number][]) {
+  const n = npcById(id);
+  if (!n) return console.warn(`npcRideDown: no NPC ${id}`);
+  Object.assign(n, { board: true, dir: 'down' as Dir });
+  for (const [dx, dy] of steps) {
+    [n.x, n.y] = [n.x + dx, n.y + dy];
+    for (let f = BOARD_FRAMES; f > 0; f--) {
+      n.off = { x: -dx * T * (f / BOARD_FRAMES), y: -dy * T * (f / BOARD_FRAMES), frame: 0 };
+      if (f % 2) puffs.push({ x: n.x * T + n.off.x - camera.x + 8 - dx * 4, y: n.y * T + n.off.y - camera.y + 12 - dy * 4, vx: 0, vy: 0, life: PUFF_LIFE });
+      await nextFrame();
+    }
+  }
+  n.off = undefined;
+  n.board = false;
+}
+
+/** The board under a rider: drawn at the rider's feet (x, y: the tile's top-left on screen). */
+function drawBoard(g: CanvasRenderingContext2D, x: number, y: number) {
+  g.drawImage(OBJECTS.tabla, x, y);
+}
+
+function updatePuffs() {
+  for (const p of puffs) Object.assign(p, { x: p.x + p.vx, y: p.y + p.vy, life: p.life - 1 });
+  while (puffs.length && puffs[0].life <= 0) puffs.shift();
+}
+
+function drawPuffs(g: CanvasRenderingContext2D) {
+  for (const p of puffs) {
+    g.globalAlpha = p.life / PUFF_LIFE;
+    g.fillStyle = ASH_PUFF;
+    g.beginPath();
+    g.arc(p.x, p.y, 1.5 + (PUFF_LIFE - p.life) / 5, 0, Math.PI * 2);
+    g.fill();
+  }
+  g.globalAlpha = 1;
+}
+
 /**
  * Walk an NPC up to you, by the shortest way, to a tile right next to you, and turn to face you (a rival
  * catching up). If nothing leads there, it stays where it is.
@@ -658,10 +739,11 @@ function updateNpcs() {
 
 export function updateWorld() {
   G.save.playMs += 1000 / 60;
+  updatePuffs();
   if (player.bumpCd > 0) player.bumpCd--;
   updateNpcs();
   if (player.moving) {
-    player.speed = T / (input.isHeld('B') && !player.scripted && !player.slide ? RUN_FRAMES : WALK_FRAMES);
+    player.speed = T / (player.board ? BOARD_FRAMES : input.isHeld('B') && !player.scripted && !player.slide ? RUN_FRAMES : WALK_FRAMES);
     player.prog += player.speed;
     if (player.prog >= player.dist - 1e-6) {
       player.moving = false;
@@ -986,6 +1068,9 @@ function drawFog(g: CanvasRenderingContext2D, cx: number, cy: number, camX: numb
   g.restore();
 }
 
+/** Where the camera was last drawn (its top-left, in the map's pixels): for effects placed on the screen. */
+const camera = { x: 0, y: 0 };
+
 /** Snap to the screen's real pixels: smooth motion (finer than game pixels) that stays crisp. */
 const snap = (v: number) => Math.round(v * scaleFactor) / scaleFactor;
 
@@ -996,13 +1081,17 @@ export function renderWorld(g: CanvasRenderingContext2D) {
   /** Hopping a ledge: the player rises and falls, over a shadow. */
   const hop = player.moving && (player.dist > T || player.hopping) ? Math.round(Math.sin((Math.PI * prog) / player.dist) * 8) : 0;
   const moveDir = player.slide ?? player.dir;
-  const px = player.x * T - DX[moveDir] * off;
-  const py = player.y * T - DY[moveDir] * off;
+  // On a board the step can be diagonal: from where it started (glideFrom) to (x, y).
+  const gf = player.moving ? player.glideFrom : null;
+  const px = gf ? (gf.x + (player.x - gf.x) * (prog / player.dist)) * T : player.x * T - DX[moveDir] * off;
+  const py = gf ? (gf.y + (player.y - gf.y) * (prog / player.dist)) * T : player.y * T - DY[moveDir] * off;
   const camX = snap(px - 64);
   const camY = snap(py - 64);
+  Object.assign(camera, { x: camX, y: camY });
   drawTiles(g, camX, camY);
   drawRustle(g, camX, camY);
   drawCut(g, camX, camY);
+  drawPuffs(g);
 
   const sprites: { y: number; draw: () => void }[] = [];
   for (const n of npcs.concat(edgeNpcs)) {
@@ -1013,6 +1102,7 @@ export function renderWorld(g: CanvasRenderingContext2D) {
     sprites.push({
       y: n.y * T + (n.def.object ? 0 : 0.5),
       draw: () => {
+        if (n.board) drawBoard(g, sx, sy - 1);
         if (n.def.object) g.drawImage(OBJECTS[n.def.object], sx, sy);
         else g.drawImage(framesFor(n.def.look ?? 'man')[n.dir][n.off?.frame ?? 0], sx, sy - 4);
         n.overlay?.(g, sx, sy);
@@ -1032,7 +1122,7 @@ export function renderWorld(g: CanvasRenderingContext2D) {
   }
   if (!player.hidden && player.frames) {
     const fr = player.frames[player.dir];
-    const img = player.moving && !player.slide && player.prog < 8 ? fr[player.step ? 1 : 2] : fr[0];
+    const img = player.moving && !player.slide && !player.board && player.prog < 8 ? fr[player.step ? 1 : 2] : fr[0];
     sprites.push({
       y: py,
       draw: () => {
@@ -1042,6 +1132,7 @@ export function renderWorld(g: CanvasRenderingContext2D) {
         }
         // Swimming, you sit on your water Palabrita: it under you, you a little higher.
         if (G.save.surfing) g.drawImage(mountImg(player.dir), 64, 63 - hop);
+        if (player.board) drawBoard(g, 64, 63);
         g.drawImage(img, 64, (G.save.surfing ? 57 : 60) - hop);
       },
     });

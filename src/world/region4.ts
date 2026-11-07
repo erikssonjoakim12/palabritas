@@ -7,10 +7,10 @@ import { wordItem } from '../data/content';
 import { chooseText } from '../ui/challenge';
 import { trainerBattle, wildBattle } from '../battle/battle';
 import { TRAINERS } from '../data/trainers';
-import { info, setSpeaker } from '../ui/textbox';
+import { info, setSpeaker, closeText } from '../ui/textbox';
 import { ask } from '../ui/menu';
 import { launchFirework } from '../art/fireworks';
-import { refreshNpcs, walkNpc, warp, type ScriptFn, type ScriptCtx } from './world';
+import { refreshNpcs, walkNpc, warp, scriptedStep, rideDown, npcRideDown, player, type ScriptFn, type ScriptCtx } from './world';
 import type { Line } from './maps';
 import { TORCHES } from './maps/region4';
 import { lines, as, talk, cutTo, talkMode, heal, blackout, fight, rivalBattle, gymLeader, gift, pay, receiveMon, practice, practiceUntilRight, question, untilRight } from './flows';
@@ -88,7 +88,55 @@ async function lucasVolcan() {
   await as('lucas', ['Ve tú al cráter. Yo bajo a avisar a los guardaparques. ¡Ten cuidado!', 'You go to the crater. I’ll go down and tell the rangers. Be careful!']);
 }
 
-/** Don Sigilo, Equipo Silencio's boss, on the crater's north rim with the stolen fireworks. */
+// ---------- The volcano's west slope: sandboarding, like on the Cerro Negro (plans/volcano.md) ----------
+
+/**
+ * The ride from the crater's west rim (its launch spot, 1, 12) down the slope to Ruta 7's landing clearing (37, 18):
+ * down the west flank alongside its edge (16 down, 9 of them a step left: the slope's angle), then a skid left onto
+ * the flat at its foot.
+ */
+const SLIDE: [number, number][] = [
+  ...Array.from({ length: 16 }, (_, i): [number, number] => [Math.floor(((i + 1) * 9) / 16) > Math.floor((i * 9) / 16) ? -1 : 0, 1]),
+  [-1, 0], [-1, 0], [-1, 0],
+];
+/** Don Sigilo's escape: onto the launch spot, then down the same way until he's out of sight. */
+const SIGILO_ESCAPE: [number, number][] = [[-1, 0], ...SLIDE.slice(0, 8)];
+
+/** To the launch spot at the west rim, then down on a board to Ruta 7. */
+async function bajarEnTabla() {
+  closeText();
+  if (player.y < 12) await scriptedStep('down'); // from beside the guide
+  while (player.x > 1) await scriptedStep('left');
+  sfx('jump');
+  await rideDown(SLIDE);
+  sfx('bump');
+  await lines(['¡Qué rápido! Un ayudante sube la tabla de vuelta al cráter.', 'So fast! A helper takes the board back up to the crater.']);
+}
+
+/** The board rental at the crater's west rim: down the slope to Ruta 7. The first time, the helmet. Resolves true if you rode. */
+async function guiaTablas(): Promise<boolean> {
+  if (!flag('tablaExplicada')) {
+    await lines(
+      ['Alquilo tablas para bajar el volcán. ¡Es como en el Cerro Negro, cerca de León!', 'I rent out boards to go down the volcano. It’s like on the Cerro Negro, near León!'],
+      ['Te subes a la tabla y bajas por la ceniza, ¡muy rápido! Pero solo hacia abajo: para subir, hay que caminar.', 'You get on the board and slide down the ash, really fast! But only down: to come up, you have to walk.'],
+      ['Primero, lo más importante. ¿Cómo se dice lo que te pones en la cabeza?', 'First, the most important thing. What do you call what you put on your head?'],
+    );
+    await practiceUntilRight(
+      { item: wordItem('el casco', 'the hard hat'), mode: 'type', title: '🏂 Tablas' },
+      () => lines(['¡Casi! Es lo que protege tu cabeza.', 'Almost! It’s what protects your head.']),
+    );
+    await lines(['¡Eso! Con el casco puesto, ya puedes bajar.', 'That’s it! With the helmet on, you can go down.']);
+    setFlag('tablaExplicada');
+  }
+  if (!(await ask('¿Quieres bajar en tabla?', { en: 'Do you want to slide down on a board?' }))) {
+    await lines(['¡Cuando quieras! Aquí estaré.', 'Whenever you want! I’ll be here.']);
+    return false;
+  }
+  await bajarEnTabla();
+  return true;
+}
+
+/** Don Sigilo, Equipo Silencio's boss, on the crater's west rim (the stolen fireworks are at the top). */
 async function sigilo() {
   if (flag('beat:sigilo')) return;
   await lines(
@@ -100,13 +148,23 @@ async function sigilo() {
   if (res === 'lose') return blackout();
   setFlag('beat:sigilo');
   await lines(['Esto no se acaba aquí. Algún día, todo el país va a estar en silencio. ¡Shhh!', 'This isn’t over. Someday, the whole country will be silent. Shhh!']);
-  await walkNpc('sigilo', ['left', 'left', 'left', 'left', 'left', 'left'], { speed: 1.5 });
+  // He escapes down the west slope on a board (the user): your first look at the ride.
+  await info('Don Sigilo agarra una tabla y...', { en: 'Don Sigilo grabs a board and...' });
+  sfx('jump');
+  await npcRideDown('sigilo', SIGILO_ESCAPE);
   setFlag('sigiloSeFue');
+  refreshNpcs();
+  await info('...¡se escapa volcán abajo!', { en: '...escapes down the volcano!' });
   sfx('caught');
   await info('¡Recuperaste los cohetes!', { en: 'You got the rockets back!' });
   setFlag('cohetesRecuperados');
   refreshNpcs();
-  await cutTo(['Bajas del volcán con los cohetes...', 'You come down the volcano with the rockets...'], 'chispa', 27, 13, 'right');
+  await as('campista', ['¡Oye! ¡Ese señor se llevó una de mis tablas sin pagar!', 'Hey! That man took one of my boards without paying!']);
+  const rode = await guiaTablas();
+  await cutTo(
+    rode ? ['Llevas los cohetes a Ciudad Chispa...', 'You take the rockets to Ciudad Chispa...'] : ['Bajas del volcán con los cohetes...', 'You come down the volcano with the rockets...'],
+    'chispa', 27, 13, 'right',
+  );
   await as('tizon', ['¡Los cohetes! ¡Eres increíble!', 'The rockets! You’re incredible!']);
   setSpeaker('tizon');
   await invitacion();
@@ -553,6 +611,7 @@ export const REGION4: Record<string, ScriptFn> = {
   elsa,
   lucasVolcan,
   sigilo,
+  guiaTablas: async () => { await guiaTablas(); },
   federicoTemplo,
   cachorroJaguar,
   altarJaguar,

@@ -265,6 +265,8 @@ function migrate(s: SaveData) {
     s.flags.ruta10Curvas = true;
   }
   if (s.flags.starter && !s.flags.lucasSeFue) Object.assign(s.flags, { lucasEligio: true, lucasSeFue: true });
+  // Don Sigilo now escapes on a board after his battle (plans/volcano.md): beaten before that, he's long gone.
+  if (s.flags['beat:sigilo']) s.flags.sigiloSeFue = true;
   s.money ??= 0;
   s.starterPicked ??= ['salchichita', 'gotita', 'aguacatito'].find((sp) => s.caught.includes(sp));
   // The Ruta 2 potion became a general item ball.

@@ -270,6 +270,8 @@ export const OBJECT_PALS: Record<string, Pal> = {
   /** The armchair with Cojincito on it: a cream cushion (0) on the seat. */
   armchairCojin: ['#f8f0d8', '#f0b0b8', '#d05058', SPRITE_INK],
   maquina: ['', '#e8e8e0', '#a0a0a8', SPRITE_INK],
+  /** The sandboard you ride down the volcano on: light wood, wood, its dark edge. */
+  tabla: ['', '#e8c890', '#b07840', SPRITE_INK],
   /** The Palacentro's parrot (a lora): its yellow nape and beak (0), green, darker green; the perch is ink. */
   lora: ['#f0d040', '#84b14e', '#518436', SPRITE_INK],
   carreta: ['', '#d8a868', '#906048', SPRITE_INK],
@@ -406,3 +408,6 @@ export const MARGAY = { fur: '#f09030', furLight: '#f8c070', spot: '#4a2a14', be
 const BASALT_SHADES = ['#d0c8c8', '#b0a8a8', '#8c8488', '#706870', '#585058', '#403840'];
 export const SLOPE: Pal[] = [0, 1, 2, 3].map((s) => [BASALT_SHADES[s], BASALT_SHADES[s + 1], BASALT_SHADES[s + 2], INK]);
 export const SLOPE_GULLY = [0, 1, 2, 3].map((s) => ({ k: BASALT_SHADES[Math.min(5, s + 3)], l: BASALT_SHADES[Math.max(0, s - 1)] }));
+
+/** The ash a sandboard throws up on the volcano's slope (world.ts puffs). */
+export const ASH_PUFF = '#d8d4d0';

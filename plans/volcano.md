@@ -85,7 +85,9 @@ So the slide comes only after Equipo Silencio:
    shore and Ciudad Chispa's top trees; the gap is a scenery strip, `ladera_oeste`; the switchback with everyone on it;
    old saves on the slopes start at the foot of the path): the crater and the slopes in the new outline; the strip given to a map (widen one, keeping
    every connection lined up: `npm test -- maps`); the lake's edge; the foot.
-4. **Sandboarding:** the board look, the slide movement and its ash trail, the rental guide and the ride from the crater
+4. ✓ **Sandboarding** (built 2026-11-07: the ride in the map, 4 frames a step, diagonal along the west flank then a skid onto
+   Ruta 7's landing clearing at (37, 18); Sigilo slides first; the crater reordered; Ruta 9's trainers and items on the
+   landing path; old saves past Sigilo get sigiloSeFue): the board look, the slide movement and its ash trail, the rental guide and the ride from the crater
    down to Ruta 7; a test (rent, slide, land in Ruta 7, can't walk back up).
 5. **Top-left of the volcano:** Ruta 9 redesigned (woods, lava rocks, ash) or replaced by a new city: the user decides.
 6. **Saves:** anyone standing where a walkable tile became solid is moved (loadMap already moves you off walls; add

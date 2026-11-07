@@ -1158,6 +1158,18 @@ export const OBJECTS_ART: Record<string, { pal: Pal; rows: string[] }> = {
       '................',
     ],
   },
+  /** A sandboard (the volcano's west slope): drawn under a rider's feet. */
+  tabla: {
+    pal: OBJECT_PALS.tabla,
+    rows: [
+      ...Array(11).fill('................'),
+      '..333333333333..',
+      '.31111111111113.',
+      '.32222222222223.',
+      '..333333333333..',
+      '................',
+    ],
+  },
   /** The Palacentro's parrot on its perch: it repeats your words with you (scripts.ts lora). */
   lora: {
     pal: OBJECT_PALS.lora,
