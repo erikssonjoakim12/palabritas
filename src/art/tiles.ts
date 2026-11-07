@@ -68,6 +68,24 @@ export interface TileEnv extends MapLook {
  */
 export const ANIMATED = new Set(['~', '{', 'j', '*', '!', 'X', '8', '2', '4', '6']);
 
+/**
+ * Lava bubbles: each lava tile, by where it is, stays calm (0, 4, 5), gets a bubble in the second frame (1), has one in the
+ * first frame somewhere else (2), or has a bubble that pops (3). The frames swap for all tiles at once, so across a
+ * lava lake bubbles come and go in different places, never all together.
+ */
+const lavaBubbles = (env: TileEnv) => (((env.x * 7 + env.y * 13) % 6) + 6) % 6;
+function lavaImage(env: TileEnv): Img {
+  const base = paintArt(framed(ART.lava, env, 1, 1));
+  const second = !!env.frame;
+  const bubble = (dx: number, dy: number, art: TileArt = ART.lavaBubble) => stack(base, paintArt({ ...art, rows: shift(art.rows, dx, dy) }));
+  switch (lavaBubbles(env)) {
+    case 1: return second ? bubble(0, 0) : base;
+    case 2: return second ? base : bubble(5, 6);
+    case 3: return bubble(2, 5, second ? ART.lavaPop : ART.lavaBubble);
+    default: return base;
+  }
+}
+
 /** A tile's rows moved by (dx, dy) pixels, wrapping around (the patterns repeat, so it's seamless). */
 const shift = (rows: string[], dx: number, dy: number) =>
   rows.map((_, y) => {
@@ -387,7 +405,7 @@ export function tileImage(ch: string, env: TileEnv): Img {
   if (ch === 'T') ch = treeAt(env);
   const nb = neighbors(env);
   const st = env.style;
-  const key = [ch, env.ground, env.roof, env.floor, env.outdoor, env.y === 0, nb.n, nb.s, nb.w, nb.e, st?.walls, st?.rock, st?.cave, st?.trees === 'jungle', st?.canopy, env.frame].join('|');
+  const key = [ch, env.ground, env.roof, env.floor, env.outdoor, env.y === 0, nb.n, nb.s, nb.w, nb.e, st?.walls, st?.rock, st?.cave, st?.trees === 'jungle', st?.canopy, env.frame, ch === 'j' && lavaBubbles(env)].join('|');
   let img = cache.get(key);
   if (!img) {
     img = render(ch, env);
@@ -426,7 +444,7 @@ function render(ch: string, env: TileEnv): Img {
     case 'i':
       return paintArt(ART.ash);
     case 'j':
-      return paintArt(framed(ART.lava, env, 1, 1));
+      return lavaImage(env);
     case '!':
       return paintArt(framed(ART.waterfall, env, 0, 4));
     case 'X': {
