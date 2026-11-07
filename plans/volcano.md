@@ -56,6 +56,20 @@ Ciudad Chispa, as now.
   becomes the board rental. Until decided, Ruta 9 stays as it is.
 - Fits **deportes** (the sports theme) for her lines; Spanish in the region's level.
 
+## The crater, reordered (the user, 2026-11-07)
+
+So the slide comes only after Equipo Silencio:
+- **The fallen rock moves to the bottom-left** of the crater's walkway (it blocks the west side from below; today it
+  lies on the west walkway, rows 8–12): you go round the east walkway to the top, as now.
+- **At the top, a grunt guards the rocket boxes** where Don Sigilo stood (16, 2).
+- **Don Sigilo waits at the west rim, just before the slide** (the board rental's spot). Idea: when he loses he escapes
+  **on a board, sliding down the slope**: the first look at the ride; then the guide offers you one. Either you slide
+  down yourself, or today's cut to Ciudad Chispa («Bajas del volcán con los cohetes...») stays. The user decides.
+- **The way to Ruta 9 (the crater's top-left exit) is blocked with rock.** Ruta 9's upper part is then out of reach
+  (only the crater led there): its three trainers (Vulcanólogo Óscar, Excursionista Lidia with rematches, Guardaparque
+  Iván) and two items move (to the new switchback and Ruta 7), unless Ruta 9 is decided first.
+- Built together with the sandboarding (step 4): before the slide exists, the west rim would lead nowhere.
+
 ## Steps (one per session, each ending playable with tests green)
 
 1. **Slope tiles:** a first look (2026-11-07, [tests/out/volcano-slopes.png](../tests/out/volcano-slopes.png), redrawn
