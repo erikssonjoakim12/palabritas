@@ -1,16 +1,15 @@
 // Profesora Ceiba's starter training: pick Gotita, answer its first words (the first one wrong),
-// stop halfway, find the other balls closed, then finish with Ceiba and get Gotita at level 5; Lucas takes his.
+// stop halfway (✕), find the other balls closed, then finish with Ceiba and get Gotita at level 5; Lucas takes his.
 import { start, sleep } from './lib.mjs';
 
 const t = await start('starter');
 await t.fromSave({ map: 'lab', x: 3, y: 3, dir: 'up' });
 await t.press('z'); // Gotita's ball
-let stopped = false;
-const first = await t.play({
-  right: (n) => n > 0,
-  // Say no the first time Ceiba asks whether to go on.
-  choose: (opts, text) => (text.includes('Seguimos') && !stopped ? ((stopped = true), opts.find((o) => o.startsWith('No'))) : undefined),
-});
+// Three words (the first one wrong), then ✕ and «Sí»: stop for now.
+let done = 0;
+const first = await t.play({ right: (n) => ((done = n + 1), n > 0), until: (u) => !!u.challenge && done >= 3 });
+await t.quitChallenge();
+await t.play({ choose: (opts) => (opts.includes('Sí') ? 'Sí' : undefined) });
 let s = await t.save();
 t.check('training started with Gotita', s.starterChoice === 'gotita', s.starterChoice);
 t.check('no Palabrita yet while training', s.party.length === 0, s.party.length);

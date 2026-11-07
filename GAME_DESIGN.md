@@ -44,7 +44,8 @@ A creature's **lealtad** (loyalty) is the share of its mastered items that aren'
 Below 70%, it may ignore your command. You get it back by answering a review
 question correctly ("¡Háblale!"). Battles pick fading and due words first, so playing keeps
 your team obedient. Outside battles you can review too, but never learn new words: Palabritas only grow by fighting.
-- The **parrot** in every Palacentro: «¡Repite conmigo!», five of your due words, any time.
+- The **parrot** in every Palacentro: «¡Repite conmigo!», ten of your due words, any time. In any study drill, ✕ (or Esc)
+  asks «¿Quieres terminar?».
 - The **schools** (one in every gym town): REPASO (ten due words), CLASE PARTICULAR (one Palabrita's own due words,
   its fading ones first: its loyalty), and the town's grammar topic. A level that a review completes comes in the next
   battle.

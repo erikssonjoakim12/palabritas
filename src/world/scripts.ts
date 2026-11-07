@@ -579,14 +579,14 @@ const S: Record<string, ScriptFn> = {
     }
   },
 
-  /** The Palacentro's parrot: «¡Repite conmigo!», five of your words due for review (never new ones), any time. */
+  /** The Palacentro's parrot: «¡Repite conmigo!», ten of your words due for review (never new ones), any time. */
   async lora() {
     if (currentMap().muted?.()) return info('La lora abre el pico... pero no sale ningún sonido.', { en: 'The parrot opens its beak... but no sound comes out.' });
     const due = dueItems();
     if (!due.length) return lines(['¡Cuac! ¡Ya repasaste todo! ¡Cuac!', 'Squawk! You’ve reviewed everything! Squawk!']);
     await lines(['¡Cuac! ¡Repite conmigo! ¡Repite conmigo!', 'Squawk! Repeat after me! Repeat after me!']);
-    await drill(due.slice(0, 5), { title: (d, t) => `Lora ${d + 1}/${t}`, mode: reviewMode });
-    await lines(['¡Cuac! ¡Muy bien, muy bien!', 'Squawk! Very good, very good!']);
+    const finished = await drill(due.slice(0, 10), { title: (d, t) => `Lora ${d + 1}/${t}`, mode: reviewMode });
+    await lines(finished ? ['¡Cuac! ¡Muy bien, muy bien!', 'Squawk! Very good, very good!'] : ['¡Cuac! ¡Hasta luego, hasta luego!', 'Squawk! See you, see you!']);
   },
 
   async maquina() {

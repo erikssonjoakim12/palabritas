@@ -46,12 +46,20 @@ t.check('with nothing left to review, there’s no class (no new words)', r.answ
 r = await lesson('TEMA DEL DÍA');
 t.check('the topic of the day asks 8 questions', r.answered === 8, r.answered);
 
-// The parrot in Ciudad Brisa's Palacentro: five of your due words, and then you're caught up.
+// The parrot in Ciudad Brisa's Palacentro: up to ten of your due words (here all six).
 await t.fromSave({ map: 'centro_brisa', x: 1, y: 2, dir: 'up', party });
 await t.game(() => {
   const g = window.__game;
   for (const id of Object.keys(g.content.ITEMS).filter((id) => id.startsWith('colores:')).slice(0, 6)) g.G.save.prog[id] = { seen: 3, right: 3, wrong: 0, learned: true, box: 2, due: 1, last: 1, good: 2, goodDays: [], lastGood: 1 };
 });
 r = await t.talk('centro_brisa', 1, 2, 'up');
-t.check('the parrot repeats five of your due words with you', r.answered === 5 && r.said.some((x) => x.includes('Repite conmigo')), [r.answered, r.said.slice(0, 1)]);
+t.check('the parrot repeats your due words with you (up to ten)', r.answered === 6 && r.said.some((x) => x.includes('Repite conmigo')), [r.answered, r.said.slice(0, 1)]);
+
+// ✕ stops a drill: «¿Quieres terminar?» → Sí, and nothing more is asked.
+await t.game(() => { for (const p of Object.values(window.__game.G.save.prog)) p.due = 1; });
+await t.press('z');
+await t.play({ until: (u) => !!u.challenge });
+await t.quitChallenge();
+r = await t.play({ choose: (opts) => (opts.includes('Sí') ? 'Sí' : undefined) });
+t.check('✕ asks whether to stop, and stops', r.answered === 0 && r.said.some((x) => x.includes('Quieres')), [r.answered, r.said]);
 await t.end();

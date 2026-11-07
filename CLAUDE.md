@@ -196,7 +196,7 @@ await t.end();                                             // ✓/✗ per check,
 
 - `t.play({ choose, right, answers, choices, until })` drives anything; `t.talk(map, x, y, dir, opts)` stands
   somewhere, presses A and plays it out. Other helpers: `t.wild(sp, level)`,
-  `t.warp()`, `t.nextText()`, `t.ui()`, `t.save()`, `t.pos()`, `t.shot(name)` (screenshots go to
+  `t.warp()`, `t.nextText()`, `t.ui()`, `t.quitChallenge()` (a study drill's ✕), `t.save()`, `t.pos()`, `t.shot(name)` (screenshots go to
   `tests/out/`, which isn't committed), `t.game(fn)` (runs in the page; `window.__game` is the game).
 - In the page, use `window.__game` for game modules. A fresh `import('/src/...')` can be a second copy after
   hot reloads (only `fromSave` uses imports, before the game starts).

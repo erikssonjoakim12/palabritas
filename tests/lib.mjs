@@ -175,6 +175,16 @@ export async function start(name, { phone = true } = {}) {
         o.click();
       }, label),
 
+    /** Press a study drill's ✕ on the next question (continuing past an answer's result first). */
+    quitChallenge: () =>
+      game(() => new Promise((ok) => {
+        const id = setInterval(() => {
+          const quit = document.querySelector('.ch-quit');
+          if (quit) return clearInterval(id), quit.click(), ok();
+          document.querySelector('#challenge .btn.primary')?.click();
+        }, 150);
+      })),
+
     /**
      * Answer the open challenge: right (the expected Spanish/meaning), wrong, or with your own `text`.
      * Returns false when it only switched a speaking challenge to writing (answer again next).

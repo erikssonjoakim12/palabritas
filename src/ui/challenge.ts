@@ -22,6 +22,8 @@ export interface ChallengeSpec {
   label?: string;
   /** Custom grading that runs before the normal check (return null to fall through). */
   validate?: (answer: string) => Grade | null;
+  /** Show a ✕ (and take Esc) to stop: resolves with `quit`, nothing answered (study drills, not battles). */
+  quittable?: boolean;
 }
 
 export interface ChallengeResult {
@@ -30,6 +32,8 @@ export interface ChallengeResult {
   /** The mode actually used (speak can fall back to type). */
   mode: Mode;
   answer: string;
+  /** The ✕ was pressed (quittable challenges): nothing was answered. */
+  quit?: boolean;
 }
 
 function showPanel() {
@@ -183,7 +187,20 @@ export function challenge(spec: ChallengeSpec): Promise<ChallengeResult> {
       return custom ? { grade: custom, target: item.es } : check(answer, item.accept, speech);
     };
 
+    // ✕ or Esc (B on a keyboard): leave without answering; the drill asks whether you really want to stop.
+    const onEsc = (e: KeyboardEvent) => e.key === 'Escape' && (e.preventDefault(), quit());
+    if (spec.quittable) window.addEventListener('keydown', onEsc);
+    function quit() {
+      window.removeEventListener('keydown', onEsc);
+      stopSpeaking();
+      hidePanel();
+      blockGame();
+      releaseMusic();
+      resolve({ grade: 'wrong', helped: false, mode, answer: '', quit: true });
+    }
+
     const finish = (grade: Grade, answer: string, res?: CheckResult) => {
+      window.removeEventListener('keydown', onEsc);
       stopSpeaking();
       showResult(grade, answer, res);
     };
@@ -195,6 +212,7 @@ export function challenge(spec: ChallengeSpec): Promise<ChallengeResult> {
       head.appendChild(tag);
       if (spec.title) head.appendChild(el('span', '', spec.title));
       if (isNew) head.appendChild(el('span', 'tag new', '¡NUEVO!'));
+      if (spec.quittable) head.appendChild(button('✕', 'btn ghost ch-quit', quit));
       p.appendChild(head);
 
       const prompt = el('div', 'ch-prompt');

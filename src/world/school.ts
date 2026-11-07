@@ -36,7 +36,8 @@ const defaultMode = (item: Item): Mode => (isUnseen(item) ? 'choose' : 'type');
 
 /**
  * A run of questions: each item is asked and recorded (it counts toward mastery), and asked again later while
- * `again` says so; «¿Seguimos?» every 6. Resolves false if you stopped early.
+ * `again` says so. The ✕ (or Esc) asks whether to stop; staying asks the same one again. Resolves false if you
+ * stopped early.
  */
 export async function drill(items: Item[], opts: DrillOpts): Promise<boolean> {
   const queue = [...items];
@@ -46,11 +47,16 @@ export async function drill(items: Item[], opts: DrillOpts): Promise<boolean> {
     while (queue.length) {
       const item = queue.shift()!;
       const done = Math.max(0, items.length - queue.length - 1);
-      const r = await challenge({ item, mode: (opts.mode ?? defaultMode)(item, asked), title: opts.title(done, items.length) });
+      const r = await challenge({ item, mode: (opts.mode ?? defaultMode)(item, asked), title: opts.title(done, items.length), quittable: true });
+      if (r.quit) {
+        if (await ask('¿Quieres terminar?', { en: 'Do you want to stop?' })) return false;
+        queue.unshift(item);
+        continue;
+      }
       record(item, r.mode, r.grade, r.helped);
       saveGame();
       if (opts.again?.(item, r)) queue.push(item);
-      if (++asked % 6 === 0 && queue.length && !(await ask('¡Vas muy bien! ¿Seguimos?', { en: 'You’re doing great! Shall we continue?' }))) return false;
+      asked++;
     }
   } finally {
     hide();

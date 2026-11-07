@@ -212,7 +212,7 @@ const CENTRO = ['##u####u##', 'PxxxxxxxxP', 'xxxCCCCxxx', 'xxxxxxxxQx', 'xxxxxxx
 /** Something to pick up, once (flag item:<id>): a Palabola on the ground, or its own look (`object`, e.g. the fossil). */
 export const itemBall = (id: string, x: number, y: number, item: string, object = 'palabola'): NpcDef => ({ id, x, y, object, item, script: 'itemBall', show: () => !flag(`item:${id}`) });
 const MAQUINA: NpcDef = { id: 'maquina', x: 5, y: 1, object: 'maquina', script: 'maquina' };
-/** The parrot in every Palacentro: «¡Repite conmigo!», your words due for review (never new ones). */
+/** The parrot in every Palacentro: «¡Repite conmigo!», ten of your words due for review (never new ones). */
 const LORA: NpcDef = { id: 'lora', x: 1, y: 1, object: 'lora', script: 'lora' };
 const TIENDA = ['P########P', '++++++++++', '+C++++kk++', '+C++++kk++', '++++++++++', '++++kk++++', '++++++++++', '++++m+++++'];
 const CAJERA: NpcDef = { id: 'cajera', x: 0, y: 2, look: 'cashier', dir: 'right', script: 'cajera', servesWhenMuted: true };
