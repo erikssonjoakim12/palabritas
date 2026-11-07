@@ -7,6 +7,7 @@ history keeps the old plans.
 | File | What |
 |---|---|
 | [feedback-round2.md](feedback-round2.md) | the user's feedback of 2026-10-28: what's left (parts 1–3 are built): Cut, the Selva as a dungeon, rainforest Palabritas |
+| [volcano.md](volcano.md) | the Volcán Chocoyo as a cone: slope tiles, the new outline, a west tunnel, woods instead of rock blocks around it |
 | [surf-fly.md](surf-fly.md) | field moves: Surf and Cut (built), Fly with gym 6 |
 | [region5-jungle.md](region5-jungle.md) | Villa Jaguar, the Selva and the Templo del Jaguar: what's placed, the experience to build, open questions |
 | [palabritas.md](palabritas.md) | how a Palabrita's data is made, and the Palabritas planned so far |
