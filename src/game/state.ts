@@ -106,7 +106,7 @@ export function newSave(): SaveData {
     dir: 'down',
     party: [],
     box: [],
-    flags: { amanecerWide: true, ruta5East: true, rutasCortas: true, sinEstacion: true, canonCascada: true, ruta2Nueva: true, palancaJunto: true, craterDerrumbe: true, oesteCorto: true, selvaLaberinto: true, ruta10Curvas: true, flyTowns: true },
+    flags: { amanecerWide: true, ruta5East: true, rutasCortas: true, sinEstacion: true, canonCascada: true, ruta2Nueva: true, palancaJunto: true, craterDerrumbe: true, oesteCorto: true, selvaLaberinto: true, ruta10Curvas: true, flyTowns: true, volcanZigzag: true },
     gender: 'boy',
     money: 0,
     bag: {},
@@ -252,6 +252,12 @@ function migrate(s: SaveData) {
   if (!s.flags.selvaLaberinto) {
     if (s.map === 'selva') Object.assign(s, { x: 28, y: 20, dir: 'up' });
     s.flags.selvaLaberinto = true;
+  }
+  // The Volcán Chocoyo became a cone, its front path a switchback (plans/volcano.md): anyone saved on the old
+  // terraces starts again at the foot of the path.
+  if (!s.flags.volcanZigzag) {
+    if (s.map === 'laderas') Object.assign(s, { x: 20, y: 25, dir: 'up' });
+    s.flags.volcanZigzag = true;
   }
   // Ruta 10 became a longer climb in switchbacks (the user): anyone saved on it starts again at its foot.
   if (!s.flags.ruta10Curvas) {

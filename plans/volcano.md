@@ -79,9 +79,11 @@ So the slide comes only after Equipo Silencio:
    by the scratch cone-mock tool): chunky basalt gravel lit from the left (left flank light, right dark, front between),
    erosion gullies fanning out from the crater. The user approves or adjusts → added as tiles: a few shades × with or
    without a gully, chosen per tile by its angle from the crater (recipe in CLAUDE.md "A tile").
-2. **A full mock-up** of the new outline with the real tiles (crater, slopes, the strip, Ruta 7's edge, the lake's
+2. ✓ **A full mock-up** (approved 2026-11-07: [tests/out/volcano-full.png](../tests/out/volcano-full.png), scratch full-mock tool) of the new outline with the real tiles (crater, slopes, the strip, Ruta 7's edge, the lake's
    edge, Ruta 9's upper part): shown to the user before any map changes.
-3. **Build the volcano:** the crater and the slopes in the new outline; the strip given to a map (widen one, keeping
+3. ✓ **Build the volcano** (built 2026-11-07: the slope over the crater, the slopes, Ruta 7's forest edge, the lake's
+   shore and Ciudad Chispa's top trees; the gap is a scenery strip, `ladera_oeste`; the switchback with everyone on it;
+   old saves on the slopes start at the foot of the path): the crater and the slopes in the new outline; the strip given to a map (widen one, keeping
    every connection lined up: `npm test -- maps`); the lake's edge; the foot.
 4. **Sandboarding:** the board look, the slide movement and its ash trail, the rental guide and the ride from the crater
    down to Ruta 7; a test (rent, slide, land in Ruta 7, can't walk back up).
