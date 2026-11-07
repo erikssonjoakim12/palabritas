@@ -2,8 +2,8 @@ import { overlay, el } from '../engine/screen';
 import { sfx } from '../engine/sfx';
 import { frames } from '../engine/loop';
 import { G, flag, setFlag } from '../game/state';
-import { dueCount } from '../game/review';
-import { drill } from './school';
+import { dueCount, dueItems } from '../game/review';
+import { drill, reviewMode } from './school';
 import { addItem, itemCount, money } from '../game/bag';
 import { ITEM_DEFS, SHOPS, amountOf } from '../data/items';
 import { gradeOrder } from '../lang/order';
@@ -573,10 +573,20 @@ const S: Record<string, ScriptFn> = {
       G.save.heal = { map: currentMap().id, x: 4, y: 3 };
       await sayOrMime(['¡Listo! Tus Palabritas están sanas. ¡Vuelve pronto!', 'Done! Your Palabritas are healthy. Come back soon!'], '(She gives them back with a big smile and a thumbs up.)');
       const due = dueCount();
-      if (due >= 15 && !muted) await lines([`Por cierto: tienes ${due} palabras para repasar. ¡En la escuela te ayudan!`, `By the way: you have ${due} words to review. The school can help!`]);
+      if (due >= 15 && !muted) await lines([`Por cierto: tienes ${due} palabras para repasar. ¡Nuestra lora te ayuda!`, `By the way: you have ${due} words to review. Our parrot can help!`]);
     } else {
       await sayOrMime(['¡Vuelve pronto!', 'Come back soon!'], '(She waves.)');
     }
+  },
+
+  /** The Palacentro's parrot: «¡Repite conmigo!», five of your words due for review (never new ones), any time. */
+  async lora() {
+    if (currentMap().muted?.()) return info('La lora abre el pico... pero no sale ningún sonido.', { en: 'The parrot opens its beak... but no sound comes out.' });
+    const due = dueItems();
+    if (!due.length) return lines(['¡Cuac! ¡Ya repasaste todo! ¡Cuac!', 'Squawk! You’ve reviewed everything! Squawk!']);
+    await lines(['¡Cuac! ¡Repite conmigo! ¡Repite conmigo!', 'Squawk! Repeat after me! Repeat after me!']);
+    await drill(due.slice(0, 5), { title: (d, t) => `Lora ${d + 1}/${t}`, mode: reviewMode });
+    await lines(['¡Cuac! ¡Muy bien, muy bien!', 'Squawk! Very good, very good!']);
   },
 
   async maquina() {

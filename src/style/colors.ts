@@ -265,6 +265,8 @@ export const OBJECT_PALS: Record<string, Pal> = {
   /** The armchair with Cojincito on it: a cream cushion (0) on the seat. */
   armchairCojin: ['#f8f0d8', '#f0b0b8', '#d05058', SPRITE_INK],
   maquina: ['', '#e8e8e0', '#a0a0a8', SPRITE_INK],
+  /** The Palacentro's parrot (a lora): its yellow nape and beak (0), green, darker green; the perch is ink. */
+  lora: ['#f0d040', '#84b14e', '#518436', SPRITE_INK],
   carreta: ['', '#d8a868', '#906048', SPRITE_INK],
   palanca: ['', '#c8c8d0', '#d04048', SPRITE_INK],
   compuerta: ['', '#c89058', '#7a4a24', SPRITE_INK],

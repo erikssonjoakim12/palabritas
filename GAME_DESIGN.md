@@ -37,12 +37,17 @@ Goal: a Palabrita at **level 60 ≈ B1** (you can keep most conversations going 
 
 ### Control (lealtad): use it or lose it
 
-Mastered items are scheduled for review with spaced repetition (1, 2, 4, 8, 16… days).
+Mastered items are scheduled for review with spaced repetition (1, 2, 4, 8, 16… days). Any right answer moves a word
+to the next step, accents or not (only in battle does a perfect answer matter: it can be a critical hit).
 An item you haven't used well past its review date is **fading**.
 A creature's **lealtad** (loyalty) is the share of its mastered items that aren't fading.
 Below 70%, it may ignore your command. You get it back by answering a review
 question correctly ("¡Háblale!"). Battles pick fading and due words first, so playing keeps
-your team obedient. The **schools** (one in every gym town) also offer REPASO: the words due for review.
+your team obedient. Outside battles you can review too, but never learn new words: Palabritas only grow by fighting.
+- The **parrot** in every Palacentro: «¡Repite conmigo!», five of your due words, any time.
+- The **schools** (one in every gym town): REPASO (ten due words), CLASE PARTICULAR (one Palabrita's own due words,
+  its fading ones first: its loyalty), and the town's grammar topic. A level that a review completes comes in the next
+  battle.
 
 ## Names
 

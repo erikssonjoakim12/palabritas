@@ -1158,6 +1158,28 @@ export const OBJECTS_ART: Record<string, { pal: Pal; rows: string[] }> = {
       '................',
     ],
   },
+  /** The Palacentro's parrot on its perch: it repeats your words with you (scripts.ts lora). */
+  lora: {
+    pal: OBJECT_PALS.lora,
+    rows: [
+      '................',
+      '......3333......',
+      '.....311113.....',
+      '....31131113....',
+      '....311111003...',
+      '....300111033...',
+      '....3011113.....',
+      '...321111123....',
+      '...322111223....',
+      '...322111223....',
+      '....3221223.....',
+      '.....32223......',
+      '......323.......',
+      '.3333333333333..',
+      '.......33.......',
+      '......3333......',
+    ],
+  },
   /** Palacentro healing machine: 6 sockets where your Palabolas light up while healing. */
   /** Palacentro healing machine: a tray with 6 slots where your Palabolas glow while healing. */
   maquina: {

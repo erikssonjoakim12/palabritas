@@ -98,9 +98,10 @@ export function record(item: Item, _mode: Mode, grade: Grade, helped = false): R
     p.due = now + INTERVALS[1];
     return { learnedNow: true };
   }
-  // A successful review (close to or after its due date) pushes the next review further out.
+  // A successful review (close to or after its due date) pushes the next review further out. A close answer (an
+  // accent missing) counts like a perfect one here; only battles tell them apart, for critical hits (the user).
   if (p.learned && now >= p.due - INTERVALS[Math.min(p.box, 7)] * 0.25) {
-    if (grade === 'perfect') p.box = Math.min(7, p.box + 1);
+    p.box = Math.min(7, p.box + 1);
     p.due = now + INTERVALS[Math.max(1, p.box)];
   }
   return { learnedNow: false };
@@ -113,6 +114,14 @@ export function lealtad(mon: Mon): number {
   const now = Date.now();
   const fresh = learned.filter((i) => !isFading(peekProg(i.id), now)).length;
   return fresh / learned.length;
+}
+
+/** A Palabrita's learned words that are due for review: the fading ones first, then the most overdue. */
+export function dueForMon(mon: Mon): Item[] {
+  const now = Date.now();
+  return itemsUpTo(mon.sp, mon.level)
+    .filter((i) => isDue(peekProg(i.id), now))
+    .sort((a, b) => Number(isFading(peekProg(b.id), now)) - Number(isFading(peekProg(a.id), now)) || prog(a.id).due - prog(b.id).due);
 }
 
 export function fadingItems(mon: Mon): Item[] {

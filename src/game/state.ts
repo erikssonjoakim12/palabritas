@@ -76,7 +76,7 @@ export interface SaveData {
   restaurante?: { round: number; orders: number[]; heard: boolean };
   /** The day of your last full shift at the restaurant (one a day after the first time). */
   restauranteDia?: string;
-  /** Private classes: the day of the last one at each school (one a day). */
+  /** Private classes once were one a day: the day of the last one at each school (no longer used; kept for old saves). */
   lessons: Record<string, string>;
   medals: string[];
   /** The towns you've been to: where Fly can take you (world/fly.ts). */
