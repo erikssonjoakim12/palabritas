@@ -1,6 +1,6 @@
 import { makeCanvas, type Img } from './pixel';
-import { ART, ROCK_EDGES, type TileArt } from '../style/tiles';
-import { ROOFS, OUTDOOR, CAVE_STYLES, CANOPY, type Pal, ACCENT } from '../style/colors';
+import { ART, ROCK_EDGES, gullyRows, type TileArt } from '../style/tiles';
+import { ROOFS, OUTDOOR, CAVE_STYLES, CANOPY, SLOPE, SLOPE_GULLY, type Pal, ACCENT } from '../style/colors';
 import type { Dir } from '../engine/input';
 
 /*
@@ -23,6 +23,11 @@ export interface MapStyle {
   cave?: 'cave' | 'clay' | 'basalt' | 'temple';
   /** A dense canopy overhead (the jungle): every tile darker. */
   canopy?: boolean;
+  /**
+   * The volcano's crater center, in this map's tiles (it can lie outside the map): slope tiles ('`') take their shade
+   * and gullies from where they are around it, so the cone reads the same across the maps it spans.
+   */
+  volcano?: [number, number];
 }
 
 /** What drawing a whole map needs (a MapDef has all of this). */
@@ -74,6 +79,30 @@ export const ANIMATED = new Set(['~', '{', 'j', '*', '!', 'X', '8', '2', '4', '6
  * lava lake bubbles come and go in different places, never all together.
  */
 const lavaBubbles = (env: TileEnv) => (((env.x * 7 + env.y * 13) % 6) + 6) % 6;
+
+/**
+ * Where a slope tile ('`') is on the volcano's cone, seen from the crater's center (MapStyle.volcano; y counts 1.6 times,
+ * the cone being drawn a little foreshortened): its shade, lit from the left (0 the left flank, 1 left of the front,
+ * 2 the front, 3 the right flank in shadow), and the gully through it, if any: they fan out from the crater every 0.22
+ * radians, below its rim. Without a volcano in the map's style, a slope tile is front, without a gully.
+ */
+function slopeAt(env: TileEnv): { shade: number; gully: number | null; variant: number } {
+  const variant = ((env.x * 5 + env.y * 3) % 2 + 2) % 2;
+  const v = env.style?.volcano;
+  if (!v) return { shade: 2, gully: null, variant };
+  const [px, py] = [env.x + 0.5, env.y + 0.5];
+  const a = Math.atan2(px - v[0], (py - v[1]) * 1.6);
+  const shade = a < -0.55 ? 0 : a < -0.22 ? 1 : a <= 0.22 ? 2 : 3;
+  const onGully = Math.abs((((a / 0.22) % 1) + 1) % 1 - 0.5) > 0.42 && py > v[1] + 8;
+  // The gully's direction, rounded to 0.1 radians: a few drawings serve the whole cone.
+  return { shade, gully: onGully ? Math.round(a * 10) / 10 : null, variant };
+}
+const slopeKey = (env: TileEnv) => { const s = slopeAt(env); return `${s.shade},${s.gully},${s.variant}`; };
+function slopeImage(env: TileEnv): Img {
+  const { shade, gully, variant } = slopeAt(env);
+  const gravel = paintArt({ ...(variant ? ART.slope2 : ART.slope1), pal: SLOPE[shade] });
+  return gully === null ? gravel : stack(gravel, paintArt({ rows: gullyRows(gully), pal: SLOPE[shade], extra: SLOPE_GULLY[shade] }));
+}
 function lavaImage(env: TileEnv): Img {
   const base = paintArt(framed(ART.lava, env, 1, 1));
   const second = !!env.frame;
@@ -176,6 +205,7 @@ export const TILES: Record<string, TileDef> = {
   l: open(),
   q: solid(),
   N: solid({ look: { es: 'El campanario de la iglesia. ¡Las campanas suenan los domingos!', en: 'The church bell tower. The bells ring on Sundays!' } }),
+  '`': solid({ look: { es: 'La ladera del volcán: ceniza y piedras sueltas. Es demasiado empinada para subir.', en: 'The volcano’s slope: ash and loose stones. It’s too steep to climb.' } }),
   A: solid({ look: { es: 'El faro. De noche, su luz guía a los barcos.', en: 'The lighthouse. At night, its light guides the boats.' } }),
   W: solid(),
   $: solid({ look: { es: 'Un fogón de leña. ¡Huele a tortillas!', en: 'A wood stove. It smells like tortillas!' } }),
@@ -405,7 +435,7 @@ export function tileImage(ch: string, env: TileEnv): Img {
   if (ch === 'T') ch = treeAt(env);
   const nb = neighbors(env);
   const st = env.style;
-  const key = [ch, env.ground, env.roof, env.floor, env.outdoor, env.y === 0, nb.n, nb.s, nb.w, nb.e, st?.walls, st?.rock, st?.cave, st?.trees === 'jungle', st?.canopy, env.frame, ch === 'j' && lavaBubbles(env)].join('|');
+  const key = [ch, env.ground, env.roof, env.floor, env.outdoor, env.y === 0, nb.n, nb.s, nb.w, nb.e, st?.walls, st?.rock, st?.cave, st?.trees === 'jungle', st?.canopy, env.frame, ch === 'j' && lavaBubbles(env), ch === '`' && slopeKey(env)].join('|');
   let img = cache.get(key);
   if (!img) {
     img = render(ch, env);
@@ -445,6 +475,8 @@ function render(ch: string, env: TileEnv): Img {
       return paintArt(ART.ash);
     case 'j':
       return lavaImage(env);
+    case '`':
+      return slopeImage(env);
     case '!':
       return paintArt(framed(ART.waterfall, env, 0, 4));
     case 'X': {

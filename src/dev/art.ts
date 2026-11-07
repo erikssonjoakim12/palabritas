@@ -110,7 +110,7 @@ const TILE_NAMES: Record<string, string> = {
   h: 'wall', w: 'window', d: 'door', c: 'Palacentro sign', G: 'gym sign', a: 'bakery sign', M: 'shop sign', é: 'school sign', _: 'wood floor',
   '+': 'tile floor', x: 'Palacentro floor', '#': 'inside wall', k: 'table', B: 'bed', L: 'shelf', P: 'plant',
   V: 'TV', C: 'counter', Q: 'computer', n: 'sofa', u: 'poster', m: 'exit mat', R: 'rug', $: 'wood stove', '&': 'rocking chair', '<': 'hammock (2 wide)', '@': 'wardrobe',
-  '^': 'mountain', ':': 'rocky ground', O: 'cave entrance', '%': 'cave wall', ';': 'cave floor', e: 'cave exit', D: 'tunnel (walk south into it)', H: 'bridge / pier', F: 'fountain (2×2)', U: 'market stall / pottery shelf', K: 'mine rails', W: 'mine support', Z: 'ladder (to the floor above or below)', s: 'sand', y: 'cactus', z: 'dry tall grass (zacate)', A: 'lighthouse', i: 'volcanic ash', j: 'lava', X: 'steam vent', E: 'black volcanic boulder', '[': 'temple stone', ']': 'temple stairs', '(': 'temple doorway', ')': 'doorway you walk down into', '!': 'waterfall', '|': 'sugarcane (tall grass)', l: 'cobblestones', q: 'church roof', N: 'bell tower', '8': 'current up', '2': 'current down', '4': 'current left', '6': 'current right',
+  '^': 'mountain', ':': 'rocky ground', O: 'cave entrance', '%': 'cave wall', ';': 'cave floor', e: 'cave exit', D: 'tunnel (walk south into it)', H: 'bridge / pier', F: 'fountain (2×2)', U: 'market stall / pottery shelf', K: 'mine rails', W: 'mine support', Z: 'ladder (to the floor above or below)', s: 'sand', y: 'cactus', z: 'dry tall grass (zacate)', A: 'lighthouse', i: 'volcanic ash', j: 'lava', X: 'steam vent', E: 'black volcanic boulder', '[': 'temple stone', ']': 'temple stairs', '(': 'temple doorway', ')': 'doorway you walk down into', '!': 'waterfall', '|': 'sugarcane (tall grass)', l: 'cobblestones', q: 'church roof', N: 'bell tower', '`': 'volcano slope', '8': 'current up', '2': 'current down', '4': 'current left', '6': 'current right',
 };
 const INDOOR = '_+x#kBLPVCQnumR$&<@';
 
@@ -128,6 +128,26 @@ card(tiles, 'mountain · cave (samples)', [
   renderMap({ rows: MOUNTAIN_SAMPLE, outdoor: true, floor: '.', ground: 'grass', border: '^' }),
   renderMap({ rows: CAVE_SAMPLE, outdoor: false, floor: ';', border: '%' }),
 ], 3);
+
+// The volcano's slope ('`') takes its shade and gullies from where it is around the crater (style.volcano): a small cone
+// with a crater, lit from the left, on the dry forest.
+{
+  const W = 30, H = 20, cx = 15, cy = 3.5;
+  const rows = Array.from({ length: H }, (_, y) =>
+    Array.from({ length: W }, (_, x) => {
+      const [px, py] = [x + 0.5, y + 0.5];
+      const crater = ((px - cx) / 7) ** 2 + ((py - cy) / 3.2) ** 2;
+      if (crater <= 0.35) return 'j';
+      if (crater <= 0.7) return 'i';
+      if (crater <= 1) return '^';
+      const half = 7 + (py - cy) * 0.75;
+      return py > cy && Math.abs(px - cx) <= half && py < H - 1 ? '`' : 't';
+    }).join(''),
+  );
+  card(tiles, "'`' volcano slope: shaded and furrowed by where it is on the cone (map style 'volcano': the crater's center)", [
+    renderMap({ rows, outdoor: true, floor: '.', ground: 'ash', border: 't', style: { rock: 'basalt', trees: 'dry', volcano: [cx, cy] } }),
+  ], 2);
+}
 
 // Map styles: the same tiles in each region's look.
 const TOWN_SAMPLE = ['TTTTTTTT', 'T.rrrr.T', 'T.rrrr.T', 'T.hwwh.T', 'T.hwdh.T', 'T......T', 'TTTTTTTT'];

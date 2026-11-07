@@ -23,6 +23,41 @@ export interface TileArt {
 /** Repeat an 8x8 pattern into 16x16. */
 const tile8 = (rows8: string[]) => [...rows8, ...rows8].map((r) => r + r);
 
+/**
+ * The volcano slope's gravel: 2×2 clumps, mostly the middle color, some light, some dark (0, 1, 2 of its shade's
+ * palette). Two variants, so a slope doesn't look tiled; drawn from a fixed hash, so it's the same every time.
+ */
+function gravelRows(seed: number): string[] {
+  const hash = (a: number, b: number) => {
+    let h = (a * 374761393 + b * 668265263 + seed * 2246822519) | 0;
+    h = Math.imul(h ^ (h >>> 13), 1274126177);
+    return ((h ^ (h >>> 16)) >>> 0) / 4294967296;
+  };
+  return Array.from({ length: 16 }, (_, y) =>
+    Array.from({ length: 16 }, (_, x) => {
+      const r = hash(x >> 1, y >> 1);
+      return r < 0.18 ? '0' : r < 0.75 ? '1' : '2';
+    }).join(''),
+  );
+}
+
+/**
+ * A gully through a slope tile's middle, running downhill at angle a (radians from straight down, + to the right):
+ * a dark line (k) with a lighter edge on its left (l). Drawn over the gravel.
+ */
+export function gullyRows(a: number): string[] {
+  const g = Array.from({ length: 16 }, () => Array(16).fill('.'));
+  for (let s = -9; s <= 9; s += 0.5) {
+    const x = Math.round(8 + Math.sin(a) * s), y = Math.round(8 + Math.cos(a) * s);
+    if (y < 0 || y > 15) continue;
+    for (const [dx, ch] of [[0, 'k'], [1, 'k'], [-1, 'l']] as const) {
+      const px = x + dx;
+      if (px >= 0 && px < 16 && (ch === 'k' || g[y][px] !== 'k')) g[y][px] = ch;
+    }
+  }
+  return g.map((r) => r.join(''));
+}
+
 /** Put `ch` at the given [row, col] spots (only where `onlyOn` is). */
 const accents = (rows: string[], spots: [number, number][], ch: string, onlyOn = '2') =>
   rows.map((r, y) =>
@@ -399,6 +434,9 @@ export const ART: Record<string, TileArt> = {
     extra: { k: '#4a2a28' },
     rows: tile8(['11001111', '10000111', '11001k11', '1111kkk1', 'k1111k11', 'kk112111', '1k110011', '11120001']),
   },
+  /** The volcano's slope: gravel in two variants (its palette is the shade: art/tiles.ts slopeImage). */
+  slope1: { pal: OUTDOOR.basalt, rows: gravelRows(1) },
+  slope2: { pal: OUTDOOR.basalt, rows: gravelRows(2) },
   /** A bubble swelling on the lava (drawn over it, moved about per tile: art/tiles.ts lavaImage). */
   lavaBubble: {
     pal: OUTDOOR.lava,

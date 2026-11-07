@@ -74,7 +74,8 @@ So the slide comes only after Equipo Silencio:
 
 ## Steps (one per session, each ending playable with tests green)
 
-1. **Slope tiles:** a first look (2026-11-07, [tests/out/volcano-slopes.png](../tests/out/volcano-slopes.png), redrawn
+1. ✓ **Slope tiles** (built 2026-11-07: tile '`', its shade and gullies from MapStyle.volcano, the crater's center in each
+   map's tiles; a sample on the art page). A first look (2026-11-07, [tests/out/volcano-slopes.png](../tests/out/volcano-slopes.png), redrawn
    by the scratch cone-mock tool): chunky basalt gravel lit from the left (left flank light, right dark, front between),
    erosion gullies fanning out from the crater. The user approves or adjusts → added as tiles: a few shades × with or
    without a gully, chosen per tile by its angle from the crater (recipe in CLAUDE.md "A tile").

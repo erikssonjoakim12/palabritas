@@ -397,3 +397,12 @@ export const LIZARD = { green: '#84b14e', greenDark: '#518436', yellow: '#f0d040
 export const TAPIR = { brown: '#6c3717', brownLight: '#945a2c', stripe: '#f8f0a0', grey: '#6e6e78', greyDark: '#3a3a42', pale: '#d8d8dc', spark: '#f0d040' };
 /** The margay: golden fur, dark rosettes, a cream belly, big eyes. */
 export const MARGAY = { fur: '#f09030', furLight: '#f8c070', spot: '#4a2a14', belly: '#f8f0a0', eye: '#518436' };
+
+/**
+ * The volcano's slope (tile '`', art/tiles.ts slopeImage): basalt greys, lightest first. A slope tile takes three of
+ * them in a row by its shade, from 0 (the lit left flank) to 3 (the right flank, in shadow); its gully is three darker,
+ * with an edge one lighter.
+ */
+const BASALT_SHADES = ['#d0c8c8', '#b0a8a8', '#8c8488', '#706870', '#585058', '#403840'];
+export const SLOPE: Pal[] = [0, 1, 2, 3].map((s) => [BASALT_SHADES[s], BASALT_SHADES[s + 1], BASALT_SHADES[s + 2], INK]);
+export const SLOPE_GULLY = [0, 1, 2, 3].map((s) => ({ k: BASALT_SHADES[Math.min(5, s + 3)], l: BASALT_SHADES[Math.max(0, s - 1)] }));
