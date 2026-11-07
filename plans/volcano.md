@@ -26,11 +26,24 @@ to no map. The lake (`lago`) touches the volcano's east side.
   trees, `t`) with stray lava rocks and patches of ash. The same at the foot on both sides.
 - **On the lake side:** the slope runs into the water; a few lava rocks stand in the shallows.
 
-## The way down the west side
+## The way down the west side: sandboarding (the user, 2026-11-07)
 
-The crater's west gate would now open onto the slope. Instead, a **short tunnel** through the flank: from the crater's
-west side down to the foot, coming out in Ruta 9's woods. Either a new small cave map or a second branch of the Tubo de
-Lava (to decide). Ruta 9 below keeps its one-way step, so it still can't be climbed from Ruta 5.
+No tunnel: you **slide down the west flank on a board**, like the tourists on the Cerro Negro near León, the
+Nicaraguan volcano famous for volcano boarding. Only down, never up: the way back to the crater is the front path from
+Ciudad Chispa, as now.
+
+- **At the crater's west rim**, where the gate is today, a board rental: a guide with boards leaning on the rock.
+  «¿Quieres bajar en tabla? ¡Es como en el Cerro Negro!». The first time she explains (and asks one safety word:
+  «el casco», the helmet, a real item so it counts); afterwards just «¿Otra vez?». Free.
+- **The ride** (2–3 seconds, a short cutscene in the real map, not a fade): you on the board (a new look, like the
+  swimming one: ), sliding fast down the slope tiles in a straight line to the foot, the camera
+  following, a trail of ash puffs behind you, a whoosh. It crosses from the crater's map into Ruta 9's on the way
+  (the slide moves through solid slope tiles, so it needs its own movement: like scriptedStep, faster, ignoring
+  solidity, crossing map edges).
+- **The landing** at the foot, in Ruta 9's woods: a little skid and a dust cloud, «¡Qué rápido!», the board goes back
+  up with the guide's helper (no item to carry).
+- **One-way:** the slope tiles are solid, so walking up is impossible; Ruta 9 keeps its one-way step below.
+- Fits **deportes** (the sports theme) for her lines; Spanish in the region's level.
 
 ## Steps (one per session, each ending playable with tests green)
 
@@ -39,13 +52,13 @@ Lava (to decide). Ruta 9 below keeps its one-way step, so it still can't be clim
    edge, Ruta 9's upper part): shown to the user before any map changes.
 3. **Build the volcano:** the crater and the slopes in the new outline; the strip given to a map (widen one, keeping
    every connection lined up: `npm test -- maps`); the lake's edge; the foot.
-4. **The west tunnel and Ruta 9's upper part:** woods, lava rocks, ash; the tunnel; trainers and items moved where
-   needed.
-5. **Saves:** anyone standing where a walkable tile became solid is moved (loadMap already moves you off walls; add
+4. **Sandboarding:** the board look, the slide movement and its ash trail, the rental guide and the ride across the
+   two maps; a test (rent, slide, land at the foot, can't walk back up).
+5. **Ruta 9's upper part:** woods, lava rocks, ash where the rock blocks were; trainers and items moved where needed.
+6. **Saves:** anyone standing where a walkable tile became solid is moved (loadMap already moves you off walls; add
    a migration where a whole area changes). Wild tables and trainers stay; check sight lines.
 
 ## Open questions for the user
 
 - The slope tiles' look (step 1).
-- The west tunnel: its own small cave, or a branch of the Tubo de Lava?
 - How much of Ruta 9's upper part to turn into woods (all of the rock blocks, or keep a ridge)?
