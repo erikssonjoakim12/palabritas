@@ -36,7 +36,7 @@ Ciudad Chispa, as now.
   «¿Quieres bajar en tabla? ¡Es como en el Cerro Negro!». The first time she explains (and asks one safety word:
   «el casco», the helmet, a real item so it counts); afterwards just «¿Otra vez?». Free.
 - **The ride** (2–3 seconds, a short cutscene in the real map, not a fade): you on the board (a new look, like the
-  swimming one: ), sliding fast down the slope tiles in a straight line to the foot, the camera
+  swimming one: `playerBoard`), sliding fast down the slope tiles in a straight line to the foot, the camera
   following, a trail of ash puffs behind you, a whoosh. It crosses from the crater's map into Ruta 9's on the way
   (the slide moves through solid slope tiles, so it needs its own movement: like scriptedStep, faster, ignoring
   solidity, crossing map edges).
