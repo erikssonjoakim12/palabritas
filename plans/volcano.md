@@ -47,8 +47,8 @@ Ciudad Chispa, as now.
   following, a trail of ash puffs behind you, a whoosh. It crosses from the crater's map into Ruta 9's on the way
   (the slide moves through solid slope tiles, so it needs its own movement: like scriptedStep, faster, ignoring
   solidity, crossing map edges).
-- **The landing** at the west foot, **in Ruta 7** (the user, 2026-11-07: it makes more sense than Ruta 9), in a clearing
-  in its eastern woods: a little skid and a dust cloud, «¡Qué rápido!», the board goes back
+- **The landing** at the west foot, **in Ruta 7** (the user, 2026-11-07: it makes more sense than Ruta 9), at the top
+  of the small landing path (see the crater below): a little skid and a dust cloud, «¡Qué rápido!», the board goes back
   up with the guide's helper (no item to carry).
 - **One-way:** the slope tiles are solid, so walking up is impossible.
 - **Ruta 9's future is open** (the user is deciding): maybe it goes, and a new city takes its place, top-left of the
@@ -62,12 +62,14 @@ So the slide comes only after Equipo Silencio:
 - **The fallen rock moves to the bottom-left** of the crater's walkway (it blocks the west side from below; today it
   lies on the west walkway, rows 8–12): you go round the east walkway to the top, as now.
 - **At the top, a grunt guards the rocket boxes** where Don Sigilo stood (16, 2).
-- **Don Sigilo waits at the west rim, just before the slide** (the board rental's spot). Idea: when he loses he escapes
-  **on a board, sliding down the slope**: the first look at the ride; then the guide offers you one. Either you slide
-  down yourself, or today's cut to Ciudad Chispa («Bajas del volcán con los cohetes...») stays. The user decides.
+- **Don Sigilo waits at the west rim, just before the slide** (the board rental's spot). When he loses he escapes **on a
+  board, sliding down the slope first** (the user, 2026-11-07): your first look at the ride. Then the guide comes out
+  of hiding and offers you a board.
 - **The way to Ruta 9 (the crater's top-left exit) is blocked with rock.** Ruta 9's upper part is then out of reach
   (only the crater led there): its three trainers (Vulcanólogo Óscar, Excursionista Lidia with rematches, Guardaparque
-  Iván) and two items move (to the new switchback and Ruta 7), unless Ruta 9 is decided first.
+  Iván) and two items move to **a small extra path in Ruta 7 where the slide lands** (the user): you can only get onto it
+  from the volcano; it ends in a ledge down into the rest of Ruta 7, so from Ruta 7 it can't be reached before the
+  volcano. Part of Ruta 7 is reshaped to make room.
 - Built together with the sandboarding (step 4): before the slide exists, the west rim would lead nowhere.
 
 ## Steps (one per session, each ending playable with tests green)
