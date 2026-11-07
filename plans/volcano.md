@@ -24,6 +24,8 @@ to no map. The lake (`lago`) touches the volcano's east side.
 - **The crater's rim stays** (the outer rocky edge is the top of the cone); the bubbling lava lake stays.
 - **Around it, less mountain:** the big rock blocks top-left of the volcano (Ruta 9's upper part) become woods (dry
   trees, `t`) with stray lava rocks and patches of ash. The same at the foot on both sides.
+- **Ruta 9's trail comes down** closer to the volcano's foot (the user): from where the board ride lands, along the
+  foot, to where Ruta 9 leaves for Ruta 5 today (its one-way step stays).
 - **On the lake side:** the slope runs into the water; a few lava rocks stand in the shallows.
 
 ## The way down the west side: sandboarding (the user, 2026-11-07)
@@ -35,7 +37,8 @@ Ciudad Chispa, as now.
 - **At the crater's west rim**, where the gate is today, a board rental: a guide with boards leaning on the rock.
   «¿Quieres bajar en tabla? ¡Es como en el Cerro Negro!». The first time she explains (and asks one safety word:
   «el casco», the helmet, a real item so it counts); afterwards just «¿Otra vez?». Free.
-- **The ride** (2–3 seconds, a short cutscene in the real map, not a fade): you on the board (a new look, like the
+- **The ride** (2–3 seconds). First try it **in the map**; if that doesn't look good, a **cutscene** instead (a side view of
+  you boarding down the black slope, the dust flying). In the map: you on the board (a new look, like the
   swimming one: `playerBoard`), sliding fast down the slope tiles in a straight line to the foot, the camera
   following, a trail of ash puffs behind you, a whoosh. It crosses from the crater's map into Ruta 9's on the way
   (the slide moves through solid slope tiles, so it needs its own movement: like scriptedStep, faster, ignoring
@@ -47,7 +50,10 @@ Ciudad Chispa, as now.
 
 ## Steps (one per session, each ending playable with tests green)
 
-1. **Slope tiles:** designs on a patch → the user picks → added as tiles (recipe in CLAUDE.md "A tile").
+1. **Slope tiles:** a first look (2026-11-07, [tests/out/volcano-slopes.png](../tests/out/volcano-slopes.png), redrawn
+   by the scratch cone-mock tool): chunky basalt gravel lit from the left (left flank light, right dark, front between),
+   erosion gullies fanning out from the crater. The user approves or adjusts → added as tiles: a few shades × with or
+   without a gully, chosen per tile by its angle from the crater (recipe in CLAUDE.md "A tile").
 2. **A full mock-up** of the new outline with the real tiles (crater, slopes, the strip, Ruta 7's edge, the lake's
    edge, Ruta 9's upper part): shown to the user before any map changes.
 3. **Build the volcano:** the crater and the slopes in the new outline; the strip given to a map (widen one, keeping
