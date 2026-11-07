@@ -42,14 +42,17 @@ t.check('the pulled lever looks pulled', levers === 'palancaAbajo', levers);
 await t.fromSave({ map: 'mina1', x: 8, y: 3, dir: 'up', party: strong, flags: { palancaJunto: false } });
 t.check('an old save in the old lever room stands in the new one', String(await t.pos()) === 'mina1,18,3', await t.pos());
 
-// 4. The Capataz spots you, battles, the Silenciador breaks, Petra comes and takes you back to town.
+// 4. The Capataz spots you, battles, the Silenciador breaks; Petra comes, points at the note and the words he left
+// behind, and goes. You stay in the mine to pick them up.
 await t.fromSave({ map: 'mina2', x: 22, y: 19, dir: 'up', party: strong, flags: { compuertaAbierta: true } });
 await t.walk('up', 1);
 r = await t.play();
 const s4 = await t.save();
 t.check('the Capataz battles you', r.said.some((x) => x.includes('Silenciador')), r.said.slice(0, 3));
 t.check('the Silenciador breaks and Petra comes back', s4.flags.silenciadorRoto && s4.flags.petraVolvio, s4.flags);
-t.check('you’re back in Villa Ocote', s4.map === 'ocote', [s4.map, s4.x, s4.y]);
+t.check('you stay in the mine, with the note and the lost words', s4.map === 'mina2' && r.said.some((x) => x.includes('Recógelas')), [s4.map, r.said.slice(-3)]);
+const left = await t.game(() => window.__game.currentMap().npcs?.filter((n) => ['nota', 'palabra_historia', 'palabra_pregunta'].includes(n.id) && (n.show?.() ?? true)).length);
+t.check('…lying there to pick up', left === 3, left);
 r = await t.talk('ocote', 15, 21, 'up');
 t.check('the town talks again', r.said.some((x) => x.includes('mensaje')), r.said);
 // The museum's pieces stand on its tables; looking at one reads its plaque.

@@ -92,10 +92,13 @@ async function capataz() {
     ['¡Puedo hablar otra vez! Gracias, de verdad.', 'I can talk again! Thank you, really.'],
     ['Soy Petra, la líder del gimnasio de Villa Ocote. Vine sola a la mina... ¡qué tonta fui!', 'I’m Petra, the leader of the Villa Ocote gym. I came to the mine alone... how silly of me!'],
     ['Ven a mi gimnasio cuando estés list{o/a}. ¡Te espero!', 'Come to my gym when you’re ready. I’ll be waiting!'],
+    // You walk out yourself (the user found the note and the words left behind when this warped you to town).
+    ['Mira: el Capataz dejó caer una nota. Y algunas palabras se quedaron aquí, en la mina. ¡Recógelas antes de salir!', 'Look: the Capataz dropped a note. And some words were left here in the mine. Pick them up before you leave!'],
   );
+  await walkNpc('petra_mina', Array(Math.max(0, 21 - stop)).fill('down'));
   setFlag('petraVolvio');
-  await warp('ocote', 19, 4, 'down');
-  await info('¡Se oyen voces por todo el pueblo! Villa Ocote habla otra vez.', { en: 'Voices everywhere in town! Villa Ocote is talking again.' });
+  refreshNpcs();
+  await info('A lo lejos se oyen voces... ¡Villa Ocote habla otra vez!', { en: 'Voices in the distance... Villa Ocote is talking again!' });
 }
 
 /** The note the Capataz dropped as he ran: it points at Equipo Silencio's next plan (phase 3). */
