@@ -25,7 +25,8 @@ to no map. The lake (`lago`) touches the volcano's east side.
 - **Around it, less mountain:** the big rock blocks top-left of the volcano (Ruta 9's upper part) become woods (dry
   trees, `t`) with stray lava rocks and patches of ash. The same at the foot on both sides.
 - **The front path zigzags** up the slope (the user, 2026-11-07): a 2-tile ash path in switchbacks, left, right, left,
-  right, from Ciudad Chispa to the cave at the top, with small patches of dry tall grass (z) at the bends for the
+  right, from Ciudad Chispa to the cave at the top, inside the front's medium grey band (the user): long runs near the
+  base, shorter ones up to the cave (each run as wide as the band at its height, ±0.22 rad from the crater's center), with small patches of dry tall grass (z) at the bends for the
   wild Palabritas and a few steam vents beside it. Draft: [tests/out/volcano-zigzag.png](../tests/out/volcano-zigzag.png)
   (scratch tools laderas-zigzag + cone-mock). Its trainers, Elsa and Lucas go on the runs, where the path can't avoid
   their sight.
