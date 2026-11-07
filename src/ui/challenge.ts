@@ -212,7 +212,7 @@ export function challenge(spec: ChallengeSpec): Promise<ChallengeResult> {
       head.appendChild(tag);
       if (spec.title) head.appendChild(el('span', '', spec.title));
       if (isNew) head.appendChild(el('span', 'tag new', '¡NUEVO!'));
-      if (spec.quittable) head.appendChild(button('✕', 'btn ghost ch-quit', quit));
+      if (spec.quittable) head.appendChild(button('✕', 'btn danger ch-quit', quit));
       p.appendChild(head);
 
       const prompt = el('div', 'ch-prompt');

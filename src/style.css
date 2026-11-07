@@ -455,6 +455,7 @@ html { touch-action: manipulation; }
 }
 .btn:active { transform: translateY(2px); box-shadow: 0 1px 0 var(--shell-dark); }
 .btn.primary { background: #3a8a4a; box-shadow: 0 3px 0 #1d4a26; }
+.btn.danger { background: #b83a3a; box-shadow: 0 3px 0 #5e1d1d; }
 .btn.ghost { background: transparent; box-shadow: none; color: #c8c0e8; text-decoration: underline; }
 .btn.big { width: 100%; font-size: 13px; padding: 16px; }
 .btn[disabled] { opacity: 0.5; }
@@ -560,4 +561,4 @@ mark.diff { background: #ffd23a; color: var(--ink); border-radius: 3px; padding:
 
 /* A move's type symbol (art/typeIcon.ts): a tiny pixel picture in the text's size. */
 .type-icon { width: 1em; height: 1em; image-rendering: pixelated; vertical-align: -0.08em; margin-right: 0.3em; }
-.ch-head .ch-quit { padding: 2px 10px; font-size: 14px; margin-left: auto; }
+.ch-head .ch-quit { padding: 6px 10px; font-size: 12px; margin-left: auto; }
