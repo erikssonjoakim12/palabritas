@@ -24,8 +24,11 @@ to no map. The lake (`lago`) touches the volcano's east side.
 - **The crater's rim stays** (the outer rocky edge is the top of the cone); the bubbling lava lake stays.
 - **Around it, less mountain:** the big rock blocks top-left of the volcano (Ruta 9's upper part) become woods (dry
   trees, `t`) with stray lava rocks and patches of ash. The same at the foot on both sides.
-- **Ruta 9's trail comes down** closer to the volcano's foot (the user): from where the board ride lands, along the
-  foot, to where Ruta 9 leaves for Ruta 5 today (its one-way step stays).
+- **The front path zigzags** up the slope (the user, 2026-11-07): a 2-tile ash path in switchbacks, left, right, left,
+  right, from Ciudad Chispa to the cave at the top, with small patches of dry tall grass () at the bends for the
+  wild Palabritas and a few steam vents beside it. Draft: [tests/out/volcano-zigzag.png](../tests/out/volcano-zigzag.png)
+  (scratch tools laderas-zigzag + cone-mock). Its trainers, Elsa and Lucas go on the runs, where the path can't avoid
+  their sight.
 - **On the lake side:** the slope runs into the water; a few lava rocks stand in the shallows.
 
 ## The way down the west side: sandboarding (the user, 2026-11-07)
@@ -43,9 +46,13 @@ Ciudad Chispa, as now.
   following, a trail of ash puffs behind you, a whoosh. It crosses from the crater's map into Ruta 9's on the way
   (the slide moves through solid slope tiles, so it needs its own movement: like scriptedStep, faster, ignoring
   solidity, crossing map edges).
-- **The landing** at the foot, in Ruta 9's woods: a little skid and a dust cloud, «¡Qué rápido!», the board goes back
+- **The landing** at the west foot, **in Ruta 7** (the user, 2026-11-07: it makes more sense than Ruta 9), in a clearing
+  in its eastern woods: a little skid and a dust cloud, «¡Qué rápido!», the board goes back
   up with the guide's helper (no item to carry).
-- **One-way:** the slope tiles are solid, so walking up is impossible; Ruta 9 keeps its one-way step below.
+- **One-way:** the slope tiles are solid, so walking up is impossible.
+- **Ruta 9's future is open** (the user is deciding): maybe it goes, and a new city takes its place, top-left of the
+  volcano. If so, its trainers (six, Lidia with rematches) and its way to Ruta 5 move or go; the crater's west gate
+  becomes the board rental. Until decided, Ruta 9 stays as it is.
 - Fits **deportes** (the sports theme) for her lines; Spanish in the region's level.
 
 ## Steps (one per session, each ending playable with tests green)
@@ -58,13 +65,13 @@ Ciudad Chispa, as now.
    edge, Ruta 9's upper part): shown to the user before any map changes.
 3. **Build the volcano:** the crater and the slopes in the new outline; the strip given to a map (widen one, keeping
    every connection lined up: `npm test -- maps`); the lake's edge; the foot.
-4. **Sandboarding:** the board look, the slide movement and its ash trail, the rental guide and the ride across the
-   two maps; a test (rent, slide, land at the foot, can't walk back up).
-5. **Ruta 9's upper part:** woods, lava rocks, ash where the rock blocks were; trainers and items moved where needed.
+4. **Sandboarding:** the board look, the slide movement and its ash trail, the rental guide and the ride from the crater
+   down to Ruta 7; a test (rent, slide, land in Ruta 7, can't walk back up).
+5. **Top-left of the volcano:** Ruta 9 redesigned (woods, lava rocks, ash) or replaced by a new city: the user decides.
 6. **Saves:** anyone standing where a walkable tile became solid is moved (loadMap already moves you off walls; add
    a migration where a whole area changes). Wild tables and trainers stay; check sight lines.
 
 ## Open questions for the user
 
 - The slope tiles' look (step 1).
-- How much of Ruta 9's upper part to turn into woods (all of the rock blocks, or keep a ridge)?
+- Ruta 9: keep it (redesigned with woods) or replace it with a new city?
