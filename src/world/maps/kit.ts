@@ -13,8 +13,8 @@ import type { MapStyle } from '../../art/tiles';
                    Y  lemon tree                    ~  water       f  fence      S  sign
   /  thin tree that blocks a path (cut it once you can)      {  mangrove (roots in the water; you can't land)
   -  thorny hedge (zarza: Ortiga's garden)
-  r b o p  roofs (red, blue, orange = Centro, purple = Gym)
-  h  wall          w  window                        d  door        a  bakery sign   M  shop sign
+  r b o p  roofs (the town's color, teal = School, orange = Centro, purple = Gym)
+  h  wall          w  window                        d  door        a  bakery sign   M  shop sign   é  school sign
   _  wood floor    +  tile floor                    #  inside wall
   k  table         B  bed       L  shelf            P  plant       V  TV
   $  wood stove     &  rocking chair    <  hammock (2 wide)    @  wardrobe

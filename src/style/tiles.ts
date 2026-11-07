@@ -863,6 +863,29 @@ export const ART: Record<string, TileArt> = {
       '................',
     ],
   },
+  /** The school's sign over its door: a little chalkboard with «ABC». */
+  schoolSignOverlay: {
+    pal: OUTDOOR.wall,
+    extra: { g: ACCENT.chalkboard, w: ACCENT.chalk },
+    rows: [
+      '................',
+      '................',
+      '.33333333333333.',
+      '.3gggggggggggg3.',
+      '.3ggwggwwgggww3.',
+      '.3gwgwgwgwgwgg3.',
+      '.3gwwwgwwggwgg3.',
+      '.3gwgwgwgwgwgg3.',
+      '.3gwgwgwwgggww3.',
+      '.3gggggggggggg3.',
+      '.33333333333333.',
+      '.....3....3.....',
+      '................',
+      '................',
+      '................',
+      '................',
+    ],
+  },
   /** A bread sign over the bakery door. */
   bakerySignOverlay: {
     pal: OUTDOOR.wall,

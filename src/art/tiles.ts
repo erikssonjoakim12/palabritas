@@ -108,6 +108,7 @@ export const TILES: Record<string, TileDef> = {
   G: solid({ look: { es: 'GIMNASIO. ¡Solo para entrenadores valientes!', en: 'GYM. Only for brave trainers!' } }),
   a: solid({ look: { es: 'PANADERÍA DON PEPE. ¡Pan recién hecho todos los días!', en: 'DON PEPE’S BAKERY. Fresh bread every day!' } }),
   M: solid({ look: { es: 'TIENDA. Palabolas y pociones para tu aventura.', en: 'SHOP. Palabolas and potions for your adventure.' } }),
+  é: solid({ look: { es: 'ESCUELA. Repaso, clases y el tema del día.', en: 'SCHOOL. Review, classes and the topic of the day.' } }),
   d: open({ kind: 'door' }),
   _: open(),
   '+': open(),
@@ -209,8 +210,7 @@ const setCol = (g: Grid, x: number, ch: string) => g.forEach((row) => (row[x] = 
 // ---------- Neighbors ----------
 
 const ROOF_CHARS = 'rbopq';
-const WALL_CHARS = 'hwdcGaM';
-const roofKey = (ch: string) => (ch === 'b' ? 'r' : ch);
+const WALL_CHARS = 'hwdcGaMé';
 
 function neighbors(env: TileEnv) {
   const at = (dx: number, dy: number) => drawnTileOf(env, env.x + dx, env.y + dy);
@@ -241,13 +241,14 @@ function underImage(env: TileEnv, under: 'ground' | 'floor' | 'auto'): Img {
 
 function roofImage(ch: string, env: TileEnv): Img {
   const nb = neighbors(env);
-  const same = (c: string) => ROOF_CHARS.includes(c) && roofKey(c) === roofKey(ch);
+  const same = (c: string) => ROOF_CHARS.includes(c) && c === ch;
   const g = grid(ART.roof.rows);
   if (!same(nb.n)) (setRow(g, 0, '3'), setRow(g, 1, '0'));
   if (!same(nb.s)) (setRow(g, 13, '3'), setRow(g, 14, '0'), setRow(g, 15, '3'));
   if (!same(nb.w)) (setCol(g, 0, '3'), g.forEach((r, y) => y > 1 && y < 13 && (r[1] = '0')));
   if (!same(nb.e)) (setCol(g, 15, '3'), g.forEach((r, y) => y > 1 && y < 13 && (r[14] = '2')));
-  const color = ch === 'o' ? 'red' : ch === 'p' ? 'purple' : ch === 'q' ? 'cream' : env.roof ?? 'red';
+  // The Palacentro, the gym, the church and the school (teal in every town, so you can find it) keep their colors.
+  const color = ch === 'o' ? 'red' : ch === 'p' ? 'purple' : ch === 'q' ? 'cream' : ch === 'b' ? 'school' : env.roof ?? 'red';
   return paintArt(ART.roof, g, color);
 }
 
@@ -548,6 +549,8 @@ function render(ch: string, env: TileEnv): Img {
       return stack(wallImage(env), paintArt(ART.bakerySignOverlay));
     case 'M':
       return stack(wallImage(env), paintArt(ART.martSignOverlay));
+    case 'é':
+      return stack(wallImage(env), paintArt(ART.schoolSignOverlay));
     case '_':
       return paintArt(ART.floor);
     case '+':

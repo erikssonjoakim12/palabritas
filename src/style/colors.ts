@@ -176,6 +176,9 @@ export const ACCENT = {
   breadCrust: '#c07838',
   breadLight: '#e8b860',
   martBlue: '#3858c0',
+  /** The school's chalkboard sign: the board, its chalk. */
+  chalkboard: '#2f5928',
+  chalk: '#f8f8f0',
   stallRed: '#d05058',
   stallWhite: '#f8f8f0',
   clayPot: '#c87048',
@@ -202,6 +205,8 @@ export const ROOFS: Record<string, Pal> = {
   red: ['#f8d8d0', '#e8a8a0', '#c06058', INK],
   purple: ['#e8d8f8', '#c8a8e8', '#8868b8', INK],
   brown: ['#f0e0c8', '#c8a080', '#906848', INK],
+  /** Every school (roof tile 'b'): teal, a color no town uses, so you can always find it. */
+  school: ['#d8f8f0', '#70c8b8', '#287878', INK],
   /** The church in Ciudad Chispa (roof tile 'q'). */
   cream: ['#fff8e8', '#f0e0c0', '#c8b088', INK],
 };
