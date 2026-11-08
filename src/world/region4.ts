@@ -99,8 +99,12 @@ const SLIDE: [number, number][] = [
   ...Array.from({ length: 16 }, (_, i): [number, number] => [Math.floor(((i + 2) * 9) / 16) > Math.floor(((i + 1) * 9) / 16) ? -1 : 0, 1]),
   [-1, 0], [-1, 0], [-1, 0],
 ];
-/** Don Sigilo's escape: onto the launch spot, then down the same way until he's out of sight. */
-const SIGILO_ESCAPE: [number, number][] = [[-1, 0], ...SLIDE.slice(0, 8)];
+/**
+ * Don Sigilo's escape: onto the launch spot, then down the same way, the camera following him partway (SIGILO_FOLLOW
+ * steps) and staying while he slides on out of sight.
+ */
+const SIGILO_ESCAPE: [number, number][] = [[-1, 0], ...SLIDE.slice(0, 14)];
+const SIGILO_FOLLOW = 9;
 
 /** To the launch spot at the west rim, then down on a board to Ruta 7. */
 async function bajarEnTabla() {
@@ -150,8 +154,9 @@ async function sigilo() {
   await lines(['Esto no se acaba aquí. Algún día, todo el país va a estar en silencio. ¡Shhh!', 'This isn’t over. Someday, the whole country will be silent. Shhh!']);
   // He escapes down the west slope on a board (the user): your first look at the ride.
   await info('Don Sigilo agarra una tabla y...', { en: 'Don Sigilo grabs a board and...' });
+  closeText();
   sfx('jump');
-  await npcRideDown('sigilo', SIGILO_ESCAPE);
+  await npcRideDown('sigilo', SIGILO_ESCAPE, SIGILO_FOLLOW);
   setFlag('sigiloSeFue');
   refreshNpcs();
   await info('...¡se escapa volcán abajo!', { en: '...escapes down the volcano!' });

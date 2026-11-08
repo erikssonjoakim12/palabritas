@@ -625,22 +625,31 @@ export async function rideDown(steps: [number, number][]) {
   G.lock--;
 }
 
-/** Someone else slides down on a board (Don Sigilo escaping): the same steps, through the slope, until gone. */
-export async function npcRideDown(id: string, steps: [number, number][]) {
+/**
+ * Someone else slides down on a board (Don Sigilo escaping): the same steps, through the slope, until gone. The camera
+ * follows them for the first `follow` steps, stays while they slide on out of sight, then comes back to you.
+ */
+export async function npcRideDown(id: string, steps: [number, number][], follow = 0) {
   const n = npcById(id);
   if (!n) return console.warn(`npcRideDown: no NPC ${id}`);
   Object.assign(n, { board: true, dir: 'left' as Dir });
+  const [sx, sy] = [n.x, n.y];
   for (const [i, [dx, dy]] of steps.entries()) {
     [n.x, n.y] = [n.x + dx, n.y + dy];
     const frames = boardFrames(i, steps.length, false); // out of sight before he stops
     for (let f = frames; f > 0; f--) {
       n.off = { x: -dx * T * (f / frames), y: -dy * T * (f / frames), frame: 0 };
+      if (i < follow) Object.assign(pan, { x: Math.round((n.x - sx) * T + n.off.x), y: Math.round((n.y - sy) * T + n.off.y) });
       if (f % 2) puffs.push({ x: n.x * T + n.off.x - camera.x + 8 - dx * 4, y: n.y * T + n.off.y - camera.y + 12 - dy * 4, vx: 0, vy: 0, life: PUFF_LIFE });
       await nextFrame();
     }
   }
   n.off = undefined;
   n.board = false;
+  if (follow) {
+    for (let f = 0; f < 20; f++) await nextFrame();
+    await panCamera(0, 0, 45);
+  }
 }
 
 /** The board under a rider: drawn at the rider's feet (x, y: the tile's top-left on screen). */
@@ -1084,6 +1093,18 @@ function drawFog(g: CanvasRenderingContext2D, cx: number, cy: number, camX: numb
 
 /** Where the camera was last drawn (its top-left, in the map's pixels): for effects placed on the screen. */
 const camera = { x: 0, y: 0 };
+/** The camera moved off you, in whole pixels (a cutscene following someone else: panCamera). */
+const pan = { x: 0, y: 0 };
+
+/** Move the camera to (x, y) pixels off you, smoothly over a number of frames (0, 0: back on you). */
+export async function panCamera(x: number, y: number, frames: number) {
+  const [x0, y0] = [pan.x, pan.y];
+  for (let f = 1; f <= frames; f++) {
+    const k = (1 - Math.cos((Math.PI * f) / frames)) / 2; // ease in and out
+    Object.assign(pan, { x: Math.round(x0 + (x - x0) * k), y: Math.round(y0 + (y - y0) * k) });
+    await nextFrame();
+  }
+}
 
 /** Snap to the screen's real pixels: smooth motion (finer than game pixels) that stays crisp. */
 const snap = (v: number) => Math.round(v * scaleFactor) / scaleFactor;
@@ -1099,8 +1120,10 @@ export function renderWorld(g: CanvasRenderingContext2D) {
   const gf = player.moving ? player.glideFrom : null;
   const px = gf ? (gf.x + (player.x - gf.x) * (prog / player.dist)) * T : player.x * T - DX[moveDir] * off;
   const py = gf ? (gf.y + (player.y - gf.y) * (prog / player.dist)) * T : player.y * T - DY[moveDir] * off;
-  const camX = snap(px - 64);
-  const camY = snap(py - 64);
+  const camX = snap(px - 64 + pan.x);
+  const camY = snap(py - 64 + pan.y);
+  /** Where you are on the screen: its middle, unless the camera is panned off you. */
+  const [ox, oy] = [64 - pan.x, 64 - pan.y];
   Object.assign(camera, { x: camX, y: camY });
   drawTiles(g, camX, camY);
   drawRustle(g, camX, camY);
@@ -1142,12 +1165,12 @@ export function renderWorld(g: CanvasRenderingContext2D) {
       draw: () => {
         if (hop) {
           g.fillStyle = SHADOW;
-          g.fillRect(67, 74, 10, 2);
+          g.fillRect(ox + 3, oy + 10, 10, 2);
         }
         // Swimming, you sit on your water Palabrita: it under you, you a little higher.
-        if (G.save.surfing) g.drawImage(mountImg(player.dir), 64, 63 - hop);
-        if (player.board) drawBoard(g, 64, 63);
-        g.drawImage(img, 64, (G.save.surfing ? 57 : 60) - hop);
+        if (G.save.surfing) g.drawImage(mountImg(player.dir), ox, oy - 1 - hop);
+        if (player.board) drawBoard(g, ox, oy - 1);
+        g.drawImage(img, ox, oy - (G.save.surfing ? 7 : 4) - hop);
       },
     });
   }
@@ -1159,7 +1182,7 @@ export function renderWorld(g: CanvasRenderingContext2D) {
   const under = player.moving ? [[player.x, player.y], [player.x - DX[player.dir], player.y - DY[player.dir]]] : [[player.x, player.y]];
   g.save();
   g.beginPath();
-  g.rect(64, 64 + 9, T, T - 9);
+  g.rect(ox, oy + 9, T, T - 9);
   g.clip();
   for (const [tx, ty] of under) {
     if (TILES[tileAt(tx, ty)].kind !== 'tallgrass') continue;
@@ -1168,14 +1191,14 @@ export function renderWorld(g: CanvasRenderingContext2D) {
   }
   g.restore();
   if (map.night) {
-    drawNight(g, 72, 68 - hop);
+    drawNight(g, ox + 8, oy + 4 - hop);
     drawLights(g, lights, -camX, -camY);
     if (map.fireworks) drawFireworks(g);
   } else if (map.outdoor) {
     drawDayTime(g, camX, camY);
     drawFireflies(g, camX, camY);
   } else if (map.floor === ';') drawDayTime(g, camX, camY); // caves (and the temple) darken at night too
-  if (map.fog && !map.fogLifts?.()) drawFog(g, 72, 68 - hop, camX, camY);
+  if (map.fog && !map.fogLifts?.()) drawFog(g, ox + 8, oy + 4 - hop, camX, camY);
   if (fade > 0) {
     g.globalAlpha = fade;
     g.fillStyle = fadeColor;
