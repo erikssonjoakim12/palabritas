@@ -15,9 +15,9 @@ await t.walk('up', 3);
 t.check('the fallen rock closes the west walkway from below', String(await t.pos()) === 'crater,3,19', await t.pos());
 
 // The way out to Ruta 9 at the top-left is closed.
-await t.warp('crater', 3, 3, 'left');
+await t.warp('crater', 6, 3, 'left');
 await t.walk('left', 3);
-t.check('the way to Ruta 9 is closed', String(await t.pos()) === 'crater,3,3', await t.pos());
+t.check('the way to Ruta 9 is closed', String(await t.pos()) === 'crater,6,3', await t.pos());
 
 // Don Sigilo at the west rim: the battle, his escape on a board, the rockets, the guide and her helmet, and down you go.
 let r = await t.talk('crater', 3, 12, 'left', yes);
