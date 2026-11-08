@@ -19,8 +19,9 @@ await t.warp('crater', 6, 3, 'left');
 await t.walk('left', 3);
 t.check('the way to Ruta 9 is closed', String(await t.pos()) === 'crater,6,3', await t.pos());
 
-// Don Sigilo at the west rim: the battle, his escape on a board, the rockets, the guide and her helmet, and down you go.
-let r = await t.talk('crater', 3, 12, 'left', yes);
+// Don Sigilo with the rockets on the west walkway: the battle, his escape on a board, the rockets, the guide and her
+// helmet, and down you go.
+let r = await t.talk('crater', 3, 9, 'down', yes);
 let s = await t.save();
 t.check('Don Sigilo battles you at the west rim', s.flags['beat:sigilo'] && r.said.some((x) => x.includes('agarra una tabla')), r.said.slice(0, 3));
 t.check('he escapes on a board; you get the rockets back', s.flags.sigiloSeFue && s.flags.cohetesRecuperados, s.flags);
@@ -29,7 +30,7 @@ t.check('the guide asks for the helmet, then you ride down and the story goes on
 // Another day (an old save, from before he escaped on a board): the guide rents you a board; you land in Ruta 7's
 // clearing at the volcano's foot.
 await t.fromSave({ map: 'crater', x: 3, y: 12, dir: 'up', party, flags: { ...story, 'beat:sigilo': true, cohetesRecuperados: true, tablaExplicada: true } }); // an old save: gone since his battle
-await t.talk('crater', 3, 12, 'up', yes);
+await t.talk('crater', 3, 13, 'right', yes);
 t.check('the board ride lands in Ruta 7, at the foot of the slope', String(await t.pos()) === 'ruta8,37,18', await t.pos());
 
 // The landing path ends in a ledge down into the pasture, and there's no way back up.

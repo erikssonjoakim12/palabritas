@@ -10,7 +10,7 @@ import { TRAINERS } from '../data/trainers';
 import { info, setSpeaker, closeText } from '../ui/textbox';
 import { ask } from '../ui/menu';
 import { launchFirework } from '../art/fireworks';
-import { refreshNpcs, walkNpc, warp, scriptedStep, rideDown, npcRideDown, player, type ScriptFn, type ScriptCtx } from './world';
+import { refreshNpcs, walkNpc, walkNpcTo, warp, scriptedStep, rideDown, npcRideDown, player, type ScriptFn, type ScriptCtx } from './world';
 import type { Line } from './maps';
 import { TORCHES } from './maps/region4';
 import { lines, as, talk, cutTo, talkMode, heal, blackout, fight, rivalBattle, gymLeader, gift, pay, receiveMon, practice, practiceUntilRight, question, untilRight } from './flows';
@@ -99,18 +99,24 @@ const SLIDE: [number, number][] = [
   ...Array.from({ length: 16 }, (_, i): [number, number] => [Math.floor(((i + 2) * 9) / 16) > Math.floor(((i + 1) * 9) / 16) ? -1 : 0, 1]),
   [-1, 0], [-1, 0], [-1, 0],
 ];
+/** The slide's launch spot: a notch in the rim's rock on the west walkway. */
+const LAUNCH = { x: 1, y: 12 };
 /**
- * Don Sigilo's escape: onto the launch spot, then down the same way, the camera following him partway (SIGILO_FOLLOW
- * steps) and staying while he slides on out of sight.
+ * Don Sigilo's escape: he walks to the launch spot, then down the same way, the camera following him partway
+ * (SIGILO_FOLLOW steps) and staying while he slides on out of sight.
  */
-const SIGILO_ESCAPE: [number, number][] = [[-1, 0], ...SLIDE.slice(0, 14)];
+const SIGILO_ESCAPE: [number, number][] = SLIDE.slice(0, 14);
 const SIGILO_FOLLOW = 9;
 
-/** To the launch spot at the west rim, then down on a board to Ruta 7. */
+/**
+ * To the launch spot, then down on a board to Ruta 7. The way there never crosses the guide (4, 13): into the
+ * walkway's column 3 or west of it, along it to the launch spot's row, then west.
+ */
 async function bajarEnTabla() {
   closeText();
-  if (player.y < 12) await scriptedStep('down'); // from beside the guide
-  while (player.x > 1) await scriptedStep('left');
+  while (player.x > LAUNCH.x + 2) await scriptedStep('left');
+  while (player.y !== LAUNCH.y) await scriptedStep(player.y < LAUNCH.y ? 'down' : 'up');
+  while (player.x > LAUNCH.x) await scriptedStep('left');
   sfx('jump');
   await rideDown(SLIDE);
   sfx('bump');
@@ -155,6 +161,7 @@ async function sigilo() {
   // He escapes down the west slope on a board (the user): your first look at the ride.
   await info('Don Sigilo agarra una tabla y...', { en: 'Don Sigilo grabs a board and...' });
   closeText();
+  await walkNpcTo('sigilo', LAUNCH.x, LAUNCH.y, { speed: 1.5 });
   sfx('jump');
   await npcRideDown('sigilo', SIGILO_ESCAPE, SIGILO_FOLLOW);
   setFlag('sigiloSeFue');
