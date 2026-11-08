@@ -13,7 +13,7 @@ Plans for what's next: [plans/](plans/README.md).
   save files to move a game between devices.
 - **World:** the whole loop, Pueblo Amanecer to Ciudad Chispa and home: Rutas 1–9, the Cueva del Eco, Villa
   Ocote and its mine, the Cañón del Guardabarranco, Playa Carey and the turtle beach, Ciudad Chispa and the
-  Volcán Chocoyo, and Ruta 9 (a one-way shortcut from the crater to Ruta 5). The middle of the world: the Río
+  Volcán Chocoyo, and Ruta 9 (plain grass for now, closed by a thin tree: plans/volcano.md). The middle of the world: the Río
   Guardabarranco from Ruta 4 down to the Lago de las Islas, lined with mangroves (swim it with Surf; two small
   beaches from Ruta 2 and Ruta 8). START → MAPA shows it all.
 - **Surf and Cut ✓** (4 and 5 medals; Palabritas that can really do it, nothing to teach): [plans/surf-fly.md](plans/surf-fly.md).

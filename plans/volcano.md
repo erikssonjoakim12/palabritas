@@ -51,9 +51,9 @@ Ciudad Chispa, as now.
   of the small landing path (see the crater below): a little skid and a dust cloud, «¡Qué rápido!», the board goes back
   up with the guide's helper (no item to carry).
 - **One-way:** the slope tiles are solid, so walking up is impossible.
-- **Ruta 9's future is open** (the user is deciding): maybe it goes, and a new city takes its place, top-left of the
-  volcano. If so, its trainers (six, Lidia with rematches) and its way to Ruta 5 move or go; the crater's west gate
-  becomes the board rental. Until decided, Ruta 9 stays as it is.
+- **Ruta 9's future is open** (the user is deciding): maybe a new city takes its place, top-left of the volcano. For
+  now (the user, 2026-11-08) it is plain grass, with the river's land below the volcano, closed from Ruta 5 by a thin
+  tree: a blank area to plan later, and the volcano's outline shows against it.
 - Fits **deportes** (the sports theme) for her lines; Spanish in the region's level.
 
 ## The crater, reordered (the user, 2026-11-07)
@@ -89,11 +89,13 @@ So the slide comes only after Equipo Silencio:
    Ruta 7's landing clearing at (37, 18); Sigilo slides first; the crater reordered; Ruta 9's trainers and items on the
    landing path; old saves past Sigilo get sigiloSeFue): the board look, the slide movement and its ash trail, the rental guide and the ride from the crater
    down to Ruta 7; a test (rent, slide, land in Ruta 7, can't walk back up).
-5. **Top-left of the volcano:** Ruta 9 redesigned (woods, lava rocks, ash) or replaced by a new city: the user decides.
+5. ✓ **Top-left of the volcano, for now** (2026-11-08): Ruta 9 and the river's bottom-right land are plain grass (no wild
+   Palabritas), trees along Ruta 5 and a thin tree across its road in; old saves there start on Ruta 5's road. What goes
+   there later (woods and lava rocks, or a new city) the user decides.
 6. **Saves:** anyone standing where a walkable tile became solid is moved (loadMap already moves you off walls; add
    a migration where a whole area changes). Wild tables and trainers stay; check sight lines.
 
 ## Open questions for the user
 
 - The slope tiles' look (step 1).
-- Ruta 9: keep it (redesigned with woods) or replace it with a new city?
+- Ruta 9 (plain grass for now): woods and lava rocks, or a new city?

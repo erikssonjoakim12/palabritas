@@ -106,7 +106,7 @@ export function newSave(): SaveData {
     dir: 'down',
     party: [],
     box: [],
-    flags: { amanecerWide: true, ruta5East: true, rutasCortas: true, sinEstacion: true, canonCascada: true, ruta2Nueva: true, palancaJunto: true, craterDerrumbe: true, oesteCorto: true, selvaLaberinto: true, ruta10Curvas: true, flyTowns: true, volcanZigzag: true },
+    flags: { amanecerWide: true, ruta5East: true, rutasCortas: true, sinEstacion: true, canonCascada: true, ruta2Nueva: true, palancaJunto: true, craterDerrumbe: true, oesteCorto: true, selvaLaberinto: true, ruta10Curvas: true, flyTowns: true, volcanZigzag: true, ruta9Pasto: true },
     gender: 'boy',
     money: 0,
     bag: {},
@@ -258,6 +258,12 @@ function migrate(s: SaveData) {
   if (!s.flags.volcanZigzag) {
     if (s.map === 'laderas') Object.assign(s, { x: 20, y: 25, dir: 'up' });
     s.flags.volcanZigzag = true;
+  }
+  // Ruta 9 and the river's land below the volcano became plain grass, closed from Ruta 5 by a thin tree (the user):
+  // anyone saved there starts again on Ruta 5's road, just outside.
+  if (!s.flags.ruta9Pasto) {
+    if (s.map === 'ruta10' || (s.map === 'rio' && s.x >= 42 && s.y >= 37)) Object.assign(s, { map: 'ruta6', x: 34, y: 29, dir: 'left' });
+    s.flags.ruta9Pasto = true;
   }
   // Ruta 10 became a longer climb in switchbacks (the user): anyone saved on it starts again at its foot.
   if (!s.flags.ruta10Curvas) {
