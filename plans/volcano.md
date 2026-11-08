@@ -91,7 +91,8 @@ So the slide comes only after Equipo Silencio:
    down to Ruta 7; a test (rent, slide, land in Ruta 7, can't walk back up).
 5. ✓ **Top-left of the volcano, for now** (2026-11-08): Ruta 9 and the river's bottom-right land are plain grass (no wild
    Palabritas), trees along Ruta 5 and a thin tree across its road in; old saves there start on Ruta 5's road. What goes
-   there later (woods and lava rocks, or a new city) the user decides.
+   there later (woods and lava rocks, or a new city) the user decides. The crater's top made round (the user): its rock only a
+   ring around the walkway, grass outside above, slope below (the lake's rocky shore beside it too).
 6. **Saves:** anyone standing where a walkable tile became solid is moved (loadMap already moves you off walls; add
    a migration where a whole area changes). Wild tables and trainers stay; check sight lines.
 
