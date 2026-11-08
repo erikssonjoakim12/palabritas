@@ -92,11 +92,11 @@ async function lucasVolcan() {
 
 /**
  * The ride from the crater's west rim (its launch spot, 1, 12) down the slope to Ruta 7's landing clearing (37, 18):
- * down the west flank alongside its edge (16 down, 9 of them a step left: the slope's angle), then a skid left onto
- * the flat at its foot.
+ * out through the gap in the rim's rock, down the west flank alongside its edge (16 down, 9 of them evenly a step left,
+ * the first one too: the slope's angle), then a skid left onto the flat at its foot.
  */
 const SLIDE: [number, number][] = [
-  ...Array.from({ length: 16 }, (_, i): [number, number] => [Math.floor(((i + 1) * 9) / 16) > Math.floor((i * 9) / 16) ? -1 : 0, 1]),
+  ...Array.from({ length: 16 }, (_, i): [number, number] => [Math.floor(((i + 2) * 9) / 16) > Math.floor(((i + 1) * 9) / 16) ? -1 : 0, 1]),
   [-1, 0], [-1, 0], [-1, 0],
 ];
 /** Don Sigilo's escape: onto the launch spot, then down the same way until he's out of sight. */
