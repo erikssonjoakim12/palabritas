@@ -54,8 +54,17 @@ export const OPP: Record<Dir, Dir> = { up: 'down', down: 'up', left: 'right', ri
  */
 const WALK_FRAMES = 13;
 const RUN_FRAMES = 9;
-/** Frames per tile sliding down the volcano on a board: fast. */
+/** Frames per tile sliding down the volcano on a board: fast. It picks up speed over the first steps, and the last ones
+ * (the skid out onto the flat) slow to a stop. */
 const BOARD_FRAMES = 4;
+const BOARD_START = [12, 9, 7, 5];
+const BOARD_STOP = [6, 10, 16];
+/** Frames for step i of n on a board: speeding up, at full speed, then (if it ends here) slowing down. */
+function boardFrames(i: number, n: number, stops: boolean) {
+  if (i < BOARD_START.length) return BOARD_START[i];
+  const left = n - i;
+  return stops && left <= BOARD_STOP.length ? BOARD_STOP[BOARD_STOP.length - left] : BOARD_FRAMES;
+}
 /** Tiles of surroundings prepared around the map: more than half a screen, so the edges are covered. */
 const GRID = 7;
 const T = 16;
@@ -112,6 +121,8 @@ export const player = {
   slide: null as Dir | null,
   /** On a board down the volcano (rideDown): the step can be diagonal, from glideFrom to (x, y). */
   board: false,
+  /** Frames for the current step on a board (rideDown). */
+  boardFrames: BOARD_FRAMES,
   glideFrom: null as { x: number; y: number } | null,
   frames: null as Frames | null,
 };
@@ -585,25 +596,27 @@ const PUFF_LIFE = 18;
 const puff = (x: number, y: number, vx = 0, vy = 0) => puffs.push({ x, y, vx, vy, life: PUFF_LIFE });
 
 /**
- * Slide down on a board: one step per [dx, dy] (diagonals too), fast, straight through the slope, and on across a
- * map's edge into whatever map is there in the world (the crater, the strip of slope, Ruta 7). Ash puffs up behind.
+ * Slide down on a board: one step per [dx, dy] (diagonals too), straight through the slope, and on across a map's edge
+ * into whatever map is there in the world (the crater, the strip of slope, Ruta 7). Facing the way down the flank
+ * (left), speeding up, then gliding to a stop at the end. Ash puffs up behind, less as the board slows.
  */
 export async function rideDown(steps: [number, number][]) {
   G.lock++;
-  Object.assign(player, { board: true, scripted: true, dir: 'down' as Dir });
-  for (const [dx, dy] of steps) {
+  Object.assign(player, { board: true, scripted: true, dir: 'left' as Dir });
+  for (const [i, [dx, dy]] of steps.entries()) {
+    const frames = boardFrames(i, steps.length, true);
     let [nx, ny] = [player.x + dx, player.y + dy];
     if (!inBounds(nx, ny)) {
       const there = mapAcross(map.id, nx, ny);
       if (!there) break;
-      loadMap(there.id, there.x - dx, there.y - dy, 'down', true);
+      loadMap(there.id, there.x - dx, there.y - dy, player.dir, true);
       [nx, ny] = [there.x, there.y];
     }
     player.glideFrom = { x: player.x, y: player.y };
-    Object.assign(player, { x: nx, y: ny, dist: T, prog: 0, moving: true });
-    while (player.moving) {
+    Object.assign(player, { x: nx, y: ny, dist: T, prog: 0, moving: true, boardFrames: frames });
+    for (let f = 0; player.moving; f++) {
       // Behind the board, drifting back as the camera follows you down.
-      puff(72 - dx * 4, 76 - dy * 4, -dx * (T / BOARD_FRAMES), -dy * (T / BOARD_FRAMES));
+      if (f % Math.ceil(frames / BOARD_FRAMES) === 0) puff(72 - dx * 4, 76 - dy * 4, -dx * (T / frames), -dy * (T / frames));
       await nextFrame();
     }
   }
@@ -616,11 +629,12 @@ export async function rideDown(steps: [number, number][]) {
 export async function npcRideDown(id: string, steps: [number, number][]) {
   const n = npcById(id);
   if (!n) return console.warn(`npcRideDown: no NPC ${id}`);
-  Object.assign(n, { board: true, dir: 'down' as Dir });
-  for (const [dx, dy] of steps) {
+  Object.assign(n, { board: true, dir: 'left' as Dir });
+  for (const [i, [dx, dy]] of steps.entries()) {
     [n.x, n.y] = [n.x + dx, n.y + dy];
-    for (let f = BOARD_FRAMES; f > 0; f--) {
-      n.off = { x: -dx * T * (f / BOARD_FRAMES), y: -dy * T * (f / BOARD_FRAMES), frame: 0 };
+    const frames = boardFrames(i, steps.length, false); // out of sight before he stops
+    for (let f = frames; f > 0; f--) {
+      n.off = { x: -dx * T * (f / frames), y: -dy * T * (f / frames), frame: 0 };
       if (f % 2) puffs.push({ x: n.x * T + n.off.x - camera.x + 8 - dx * 4, y: n.y * T + n.off.y - camera.y + 12 - dy * 4, vx: 0, vy: 0, life: PUFF_LIFE });
       await nextFrame();
     }
@@ -743,7 +757,7 @@ export function updateWorld() {
   if (player.bumpCd > 0) player.bumpCd--;
   updateNpcs();
   if (player.moving) {
-    player.speed = T / (player.board ? BOARD_FRAMES : input.isHeld('B') && !player.scripted && !player.slide ? RUN_FRAMES : WALK_FRAMES);
+    player.speed = T / (player.board ? player.boardFrames : input.isHeld('B') && !player.scripted && !player.slide ? RUN_FRAMES : WALK_FRAMES);
     player.prog += player.speed;
     if (player.prog >= player.dist - 1e-6) {
       player.moving = false;
