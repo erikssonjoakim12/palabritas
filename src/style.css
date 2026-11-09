@@ -299,6 +299,11 @@ html { touch-action: manipulation; }
 .detail .word { display: flex; justify-content: space-between; gap: 0.5em; padding: 0.25em 0; border-bottom: 1px dashed #c8c8d8; }
 .detail .word .en { color: #5a5a78; font-size: 0.8em; text-align: right; }
 .detail canvas.big { image-rendering: pixelated; float: right; width: 30%; }
+.detail .muted.section { margin-top: 0.8em; }
+.detail .type-chip { margin-right: 0.4em; border-radius: 4px; }
+/* Spanish you can tap to hear. */
+.tap-to-hear { cursor: pointer; }
+.dex-unseen { width: 2.4em; }
 
 /* ---------- Town map ---------- */
 .purse { position: absolute; top: 0; right: 0; font-size: var(--fs); padding: calc(var(--px) * 3) calc(var(--px) * 5); }
@@ -425,6 +430,8 @@ html { touch-action: manipulation; }
 .ch-prompt .label { font-size: 9px; color: #6a6a88; margin-bottom: 8px; }
 .ch-prompt .reveal { margin-top: 10px; color: #2a6ab0; }
 .ch-row { display: flex; gap: 8px; align-items: stretch; flex-wrap: wrap; }
+.ch-speak { margin-top: 8px; }
+.ch-continue { margin-top: 12px; }
 .ch-input {
   flex: 1;
   min-width: 0;
@@ -460,7 +467,7 @@ html { touch-action: manipulation; }
 .btn.big { width: 100%; font-size: 13px; padding: 16px; }
 .btn[disabled] { opacity: 0.5; }
 .ch-actions { display: flex; gap: 8px; margin-top: 10px; justify-content: space-between; }
-.choices { display: grid; grid-template-columns: 1fr; gap: 8px; }
+.choices { display: grid; grid-template-columns: 1fr; gap: 8px; margin-top: 10px; }
 .choices .btn { text-align: left; font-size: 12px; line-height: 1.5; padding: 12px; }
 .mic {
   width: 96px; height: 96px;

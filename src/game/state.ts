@@ -322,7 +322,7 @@ export function deleteSave() {
  * the fossil...). Tests can set window.__today = '2026-10-18'.
  */
 export function today(): string {
-  const fake = (globalThis as { __today?: string }).__today;
+  const fake = globalThis.__today;
   if (fake) return fake;
   const d = new Date();
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
@@ -330,7 +330,7 @@ export function today(): string {
 
 /** The phone's local time in hours (19.5 = half past seven), for day and night. Tests can set window.__hour = 22. */
 export function clockHour(): number {
-  const fake = (globalThis as { __hour?: number }).__hour;
+  const fake = globalThis.__hour;
   if (fake !== undefined) return fake;
   const d = new Date();
   return d.getHours() + d.getMinutes() / 60;

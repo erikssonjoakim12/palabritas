@@ -728,7 +728,7 @@ const WANDER = 2;
 
 /** A wandering person takes a step: a random way that's open ground, near home (not a door, a mat or a trigger). */
 function wander(n: NpcRT) {
-  if ((globalThis as { __still?: boolean }).__still) return; // tests (tools/browser.mjs)
+  if (globalThis.__still) return; // tests (tools/browser.mjs)
   for (const d of shuffled(DIRS)) {
     const [nx, ny] = [n.x + DX[d], n.y + DY[d]];
     if (Math.abs(nx - n.def.x) > WANDER || Math.abs(ny - n.def.y) > WANDER) continue;

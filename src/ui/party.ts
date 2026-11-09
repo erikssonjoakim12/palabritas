@@ -154,7 +154,7 @@ export function detailBox(sp: string, title: string) {
 export function wordRow(es: string, en: string, mark = '') {
   const w = el('div', 'word');
   const left = el('span', '', mark ? `${mark} ${es}` : es);
-  left.style.cursor = 'pointer';
+  left.classList.add('tap-to-hear');
   left.addEventListener('click', (e) => {
     e.stopPropagation();
     speak(es);
@@ -190,11 +190,9 @@ export function showDetails(mon: Mon): Promise<void> {
   const box = detailBox(mon.sp, `${sp.name}  Nv${mon.level}`);
   const types = el('div', 'row');
   for (const t of sp.types) {
-    const chip = el('span', '', ` ${t} `);
+    const chip = el('span', 'type-chip', ` ${t} `);
     chip.style.background = TYPE_COLORS[t];
     chip.style.color = TYPE_TEXT;
-    chip.style.marginRight = '0.4em';
-    chip.style.borderRadius = '4px';
     types.appendChild(chip);
   }
   box.appendChild(types);
@@ -240,13 +238,13 @@ export function showDetails(mon: Mon): Promise<void> {
   const { review } = lp;
   if (review.all.length) {
     words.appendChild(
-      el('div', 'muted', `Repaso del nivel ${review.level}: ${lp.reviewDone}/${lp.reviewTotal}`),
-    ).style.marginTop = '0.8em';
+      el('div', 'muted section', `Repaso del nivel ${review.level}: ${lp.reviewDone}/${lp.reviewTotal}`),
+    );
     for (const it of review.all) addWord(it.es, it.en, review.todo.includes(it) ? '↻' : '✓');
   }
   const learned = itemsUpTo(mon.sp, mon.level - 1).filter(isLearned);
   if (learned.length) {
-    words.appendChild(el('div', 'muted', `Ya dominadas (${learned.length}):`)).style.marginTop = '0.8em';
+    words.appendChild(el('div', 'muted section', `Ya dominadas (${learned.length}):`));
     for (const it of learned) addWord(it.es, it.en, isFading(peekProg(it.id)) ? '⚠' : '✓');
   }
   box.appendChild(words);

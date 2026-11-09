@@ -76,8 +76,7 @@ function button(text: string, cls = 'btn', onClick?: () => void) {
 }
 
 function speakButtons(text: string) {
-  const row = el('div', 'ch-row');
-  row.style.marginTop = '8px';
+  const row = el('div', 'ch-row ch-speak');
   row.append(
     button('🔊 Oír', 'btn', () => speak(text)),
     button('🐢 Lento', 'btn', () => speak(text, true)),
@@ -144,7 +143,6 @@ function inputRow(onSubmit: (value: string) => void) {
 /** A column of answer buttons. */
 function choiceList(options: string[], onPick: (i: number) => void) {
   const list = el('div', 'choices');
-  list.style.marginTop = '10px';
   options.forEach((o, i) => list.appendChild(button(o, 'btn', () => onPick(i))));
   return list;
 }
@@ -174,7 +172,7 @@ function hintFor(es: string) {
 export function challenge(spec: ChallengeSpec): Promise<ChallengeResult> {
   return new Promise((resolve) => {
     const { item } = spec;
-    if (import.meta.env.DEV) (window as any).__challenge = spec; // lets automated tests read the question
+    if (import.meta.env.DEV) window.__challenge = spec; // lets automated tests read the question
     const isNew = isUnseen(item);
     let mode: Mode = spec.mode;
     let helped = false;
@@ -186,16 +184,22 @@ export function challenge(spec: ChallengeSpec): Promise<ChallengeResult> {
       const custom = spec.validate?.(answer);
       return custom ? { grade: custom, target: item.es } : check(answer, item.accept, speech);
     };
+    /** With 💡 help, a perfect answer only counts as close. */
+    const withHelp = (g: Grade): Grade => (helped && g === 'perfect' ? 'close' : g);
+    /** Hand the screen and the music back to the game. */
+    const close = () => {
+      stopSpeaking();
+      hidePanel();
+      blockGame();
+      releaseMusic();
+    };
 
     // ✕ or Esc (B on a keyboard): leave without answering; the drill asks whether you really want to stop.
     const onEsc = (e: KeyboardEvent) => e.key === 'Escape' && (e.preventDefault(), quit());
     if (spec.quittable) window.addEventListener('keydown', onEsc);
     function quit() {
       window.removeEventListener('keydown', onEsc);
-      stopSpeaking();
-      hidePanel();
-      blockGame();
-      releaseMusic();
+      close();
       resolve({ grade: 'wrong', helped: false, mode, answer: '', quit: true });
     }
 
@@ -284,7 +288,7 @@ export function challenge(spec: ChallengeSpec): Promise<ChallengeResult> {
               sfx('wrong');
               return;
             }
-            finish(helped && best.r.grade === 'perfect' ? 'close' : best.r.grade, best.a, best.r);
+            finish(withHelp(best.r.grade), best.a, best.r);
           } catch (err) {
             mic.classList.remove('listening');
             const msg = (err as Error).message;
@@ -310,7 +314,7 @@ export function challenge(spec: ChallengeSpec): Promise<ChallengeResult> {
       // listen / type: text input
       const { row } = inputRow((v) => {
         const r = grade(v, false);
-        finish(helped && r.grade === 'perfect' ? 'close' : r.grade, v, r);
+        finish(withHelp(r.grade), v, r);
       });
       p.append(row);
       actions.appendChild(dontKnow);
@@ -333,11 +337,11 @@ export function challenge(spec: ChallengeSpec): Promise<ChallengeResult> {
 
       const prompt = el('div', 'ch-prompt');
       const target = res?.target ?? item.es;
-      if (mode !== 'choose' && answer && grade !== 'perfect') {
-        prompt.appendChild(el('div', 'label', `Tu respuesta: ${answer}`));
-      }
+      // A written or spoken answer that wasn't perfect: what you said, and what's different in the right one.
+      const showDiff = mode !== 'choose' && answer && grade !== 'perfect';
+      if (showDiff) prompt.appendChild(el('div', 'label', `Tu respuesta: ${answer}`));
       const es = el('div', 'answer-es');
-      if (mode !== 'choose' && answer && grade !== 'perfect') {
+      if (showDiff) {
         for (const seg of diffMarks(answer, target)) {
           es.appendChild(seg.bad ? el('mark', 'diff', seg.text) : document.createTextNode(seg.text));
         }
@@ -350,8 +354,7 @@ export function challenge(spec: ChallengeSpec): Promise<ChallengeResult> {
       p.appendChild(speakButtons(item.es));
       speak(target);
 
-      const cont = button('Continuar ▶', 'btn primary big', () => done());
-      cont.style.marginTop = '12px';
+      const cont = button('Continuar ▶', 'btn primary big ch-continue', () => done());
       p.appendChild(cont);
       const onKey = (e: KeyboardEvent) => {
         if (e.key === 'Enter' || e.key === ' ' || e.key === 'z') {
@@ -365,10 +368,7 @@ export function challenge(spec: ChallengeSpec): Promise<ChallengeResult> {
         if (closed) return;
         closed = true;
         window.removeEventListener('keydown', onKey);
-        stopSpeaking();
-        hidePanel();
-        blockGame();
-        releaseMusic();
+        close();
         resolve({ grade, helped, mode, answer });
       }
     };

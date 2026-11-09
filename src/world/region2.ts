@@ -489,6 +489,7 @@ const petra = () =>
 // ---------- People ----------
 
 export const REGION2: Record<string, ScriptFn> = {
+  silenciadorObj: () => lines(['Una máquina gris con un embudo. Tiene un letrero: «SHHH».', 'A gray machine with a funnel. It has a sign: "SHHH".']),
   mensajeOcote,
   notaCapataz,
   lucasMina,

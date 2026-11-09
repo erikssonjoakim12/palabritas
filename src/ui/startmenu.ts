@@ -88,7 +88,7 @@ async function dictionary() {
     const seen = G.save.seen.includes(id);
     const caught = G.save.caught.includes(id);
     if (seen) row.appendChild(iconCanvas(id));
-    else row.appendChild(el('div', '', '?')).style.width = '2.4em';
+    else row.appendChild(el('div', 'dex-unseen', '?'));
     const label = el('div', 'grow', `${String(n + 1).padStart(3, '0')} ${seen ? SPECIES[id].name : '???'}`);
     row.appendChild(label);
     row.appendChild(el('div', 'small', caught ? '●' : seen ? '○' : ''));
@@ -111,7 +111,7 @@ function dexEntry(id: string): Promise<void> {
   const box = detailBox(id, sp.name);
   box.append(el('div', 'row', sp.types.join(' / ')), el('div', 'row', `Tema: ${THEMES[sp.theme].name}`));
   const es = el('div', 'row', sp.dex.es);
-  es.style.cursor = 'pointer';
+  es.classList.add('tap-to-hear');
   es.addEventListener('click', (e) => {
     e.stopPropagation();
     speak(sp.dex.es);

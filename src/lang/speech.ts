@@ -84,6 +84,10 @@ export function stopSpeaking() {
 
 // ---------- Recognition ----------
 
+/** One thing heard: its alternatives (best first), and whether it's final or still being spoken. */
+type RecResult = { isFinal: boolean; length: number; [i: number]: { transcript: string } };
+
+/** The browser's speech recognizer (SpeechRecognition, webkitSpeechRecognition in Chrome): the parts used here. */
 type Rec = {
   lang: string;
   interimResults: boolean;
@@ -92,13 +96,13 @@ type Rec = {
   start(): void;
   stop(): void;
   abort(): void;
-  onresult: ((e: any) => void) | null;
-  onerror: ((e: any) => void) | null;
+  onresult: ((e: { results: ArrayLike<RecResult> }) => void) | null;
+  onerror: ((e: { error?: string }) => void) | null;
   onend: (() => void) | null;
 };
 
 function recCtor(): (new () => Rec) | null {
-  const w = window as any;
+  const w = window as unknown as { SpeechRecognition?: new () => Rec; webkitSpeechRecognition?: new () => Rec };
   return w.SpeechRecognition ?? w.webkitSpeechRecognition ?? null;
 }
 
@@ -125,7 +129,7 @@ export function listen(onPartial?: (text: string) => void): ListenHandle {
   let finals: string[] = [];
   let lastPartial = '';
   const result = new Promise<string[]>((resolve, reject) => {
-    rec.onresult = (e: any) => {
+    rec.onresult = (e) => {
       const res = e.results[e.results.length - 1];
       if (res.isFinal) {
         finals = Array.from({ length: res.length }, (_, i) => String(res[i].transcript));
@@ -134,7 +138,7 @@ export function listen(onPartial?: (text: string) => void): ListenHandle {
         onPartial?.(lastPartial);
       }
     };
-    rec.onerror = (e: any) => {
+    rec.onerror = (e) => {
       if (e.error === 'no-speech' || e.error === 'aborted') return;
       reject(new Error(e.error || 'error'));
     };

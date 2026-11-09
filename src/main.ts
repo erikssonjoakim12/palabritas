@@ -102,7 +102,7 @@ if (import.meta.env.DEV) {
     import('./world/flows'),
     import('./game/rematch'),
   ]).then(([state, world, battle, mon, maps, textbox, species, content, curriculum, learning, tiles, creatures, people, trainers, items, bgm, layout, backup, region6, flows, rematch]) => {
-    (window as any).__game = {
+    window.__game = {
       ...state, ...world, ...battle, ...mon, ...maps,
       fill: textbox.fill, SPECIES: species.SPECIES, TILES: tiles.TILES, creatureArt: creatures.creatureArt, CREATURE_IDS: creatures.CREATURE_IDS, LOOKS: people.LOOKS,
       OBJECTS_ART: people.OBJECTS_ART, TRAINERS: trainers.TRAINERS, ITEM_DEFS: items.ITEM_DEFS, SHOPS: items.SHOPS,

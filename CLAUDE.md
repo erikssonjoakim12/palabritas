@@ -59,10 +59,10 @@ Plans for finished work are removed once built: the code is the truth.
 | Palabritas, moves, types | `src/data/species.ts`, `src/data/types.ts` |
 | Trainers, items | `src/data/trainers.ts`, `src/data/items.ts`, `src/game/bag.ts` |
 | Maps (every town, route, interior) | `src/world/maps/`: one file per region (`region1.ts`...), `kit.ts` (tile legend, types, shared rooms), `index.ts` |
-| Scripts (every NPC, quest, trainer talk) | `src/world/region2.ts`...`region4.ts`, `region6.ts` (Villa Bruma and the fog) (one file per region), `src/world/scripts.ts` (region 1, the Palacentro, shop and box, and the registry) |
+| Scripts (every NPC, quest, trainer talk) | `src/world/region1.ts`...`region4.ts`, `region6.ts` (Villa Bruma and the fog) (one file per region), `src/world/scripts.ts` (what every town shares: the Palacentro, shop and box, gates, items on the ground, Surf, Fly, Cut, fishing; and the registry) |
 | Script building blocks (talking, trainers, gym leaders, Lucas, gifts, questions) | `src/world/flows.ts` |
 | Overworld engine: walking, ledges, doors, gates, encounters, drawing | `src/world/world.ts`, `src/world/layout.ts` |
-| Battles | `src/battle/battle.ts` |
+| Battles | `src/battle/battle.ts` (the battle: turns, answers, damage, catching), `stage.ts` (what's drawn and how it moves), `hud.ts` (the name and PS boxes) |
 | Music | `src/audio/music.ts` (the player), `src/data/music.ts` (the songs, which plays where), `src/audio/bgm.ts` (the game's music: maps, battles, jingles, quieter for Spanish) |
 | Dialog, menus, challenges | `src/ui/textbox.ts` (`say`, `info`), `src/ui/menu.ts` (`menu`, `ask`), `src/ui/challenge.ts` |
 | Start menu, town map | `src/ui/startmenu.ts`, `src/ui/townmap.ts` (START → MAPA: the outdoor world, one pixel per tile) |
@@ -110,7 +110,7 @@ guard's spot, where they wait once the road is open, the road tiles, where you'r
 No script needed.
 
 **Fog** (region 6): a `fog: 'patch'` map with `fogPatch` is a grid of patches; while the fog lasts, src/world/region6.ts
-decides where stepping into the next patch leads (`fogView`: how far you see); `fog: 'edge'` rolls in at a map's top.
+decides where stepping into the next patch leads (`fogView`: how far you see; the fog is drawn in src/art/fog.ts); `fog: 'edge'` rolls in at a map's top.
 **Someone following you** (Tomás): `setFollower({ look, script })` (kept in the save). **Animals** that walk about
 (the Cadejos): `ANIMALS` in style/people.ts, used as a `look`. NPCs can wake when you come `near` and `glow` through
 the fog. A map's `wakeUp` script can wake you somewhere else after fainting; `encounterZones` give part of a map its
@@ -165,8 +165,7 @@ male. **An object:** `OBJECTS_ART` (people.ts) + `OBJECT_PALS` (colors.ts). An o
 decoration: facing it reads the sign on its spot (museum pieces: `exhibit()` in maps/kit.ts).
 
 **A script or quest:**
-- Add a function in its region's file (src/world/region2.ts...; region 1 in scripts.ts) and list it in the
-  region's record (`REGION2`...).
+- Add a function in its region's file (src/world/region1.ts...) and list it in the region's record (`REGION1`...).
 - The building blocks are in flows.ts; use them rather than writing the steps again:
   - talking: `lines()`, `as(look, ...)` (someone else speaks), `talk(...)` (the same lines each time),
     `sayOrMime(line, mime)` (on a muted map: «…» and what they act out),
