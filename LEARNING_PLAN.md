@@ -2,7 +2,7 @@
 
 How a Palabrita's levels map to real Spanish learning, and what material is still to write.
 Status: **every Palabrita has its Spanish up to level 50**: the core list (A1, A2 and the first B1 steps in
-src/data/content/core.ts) and all 28 themes (157 lines each). Browse it all on the dictionary page (palabras.html). The rules below live in src/data/content/index.ts and src/game/curriculum.ts; `tools/sim.mjs` measures them.
+src/data/content/core.ts) and all 40 themes (157 lines each). Browse it all on the dictionary page (palabras.html). The rules below live in src/data/content/index.ts and src/game/curriculum.ts; `tools/sim.mjs` measures them.
 
 ## Two tracks in every level
 
@@ -55,7 +55,7 @@ Answers per level, measured with the real code (a starter):
 
 ## Themes
 
-A theme belongs to a Palabrita family (not its type), and every new family gets its own as a rule: 28 so far
+A theme belongs to a Palabrita family (not its type), and every new family gets its own as a rule: 40 so far
 (perro, tiempo, comida, naturaleza, números, colores, casa; cuerpo, cocina, deportes, música, salud, historia,
 Latinoamérica; playa, frutas, mar, pesca, viaje, familia; fiesta, conversación, ciudad, ropa, rutina, emociones,
 animales, trabajo). Grammar topics come on top (src/data/content/trainers.ts): two per school (Villa Ocote:

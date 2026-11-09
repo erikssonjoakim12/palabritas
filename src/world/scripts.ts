@@ -14,7 +14,7 @@ import { ask, menu } from '../ui/menu';
 import { pickFrom } from '../ui/party';
 import { startMenu } from '../ui/startmenu';
 import { wildBattle } from '../battle/battle';
-import { SCRIPTS, scriptedStep, currentMap, refreshNpcs, npcById, pickEncounter, facingTile, facingSpot, startSurf, cutTree, isWater, warp, MUTED_MIME, type ScriptFn } from './world';
+import { SCRIPTS, scriptedStep, currentMap, refreshNpcs, npcById, pickEncounter, facingTile, facingSpot, startSurf, cutTree, isWater, warp, useStrength, strengthOn, MUTED_MIME, type ScriptFn } from './world';
 import { townMap } from '../ui/townmap';
 import { flySpots, flyTowns } from './fly';
 import type { Mon } from '../game/state';
@@ -25,6 +25,8 @@ import { REGION2 } from './region2';
 import { REGION3 } from './region3';
 import { REGION4 } from './region4';
 import { REGION6 } from './region6';
+import { REGION7 } from './region7';
+import { REGION8 } from './region8';
 import { TILES } from '../art/tiles';
 import { notNow } from '../ui/bag';
 import { MINI_BALL, BALL_COLORS, FLASH_COLORS, drawPattern } from '../art/balls';
@@ -126,6 +128,23 @@ const S: Record<string, ScriptFn> = {
     await frames(30); // the slash and the leaves
     await info(`¡${name} cortó el arbolito!`, { en: `${name} cut the little tree!` });
   },
+
+  /**
+   * FUERZA from the team menu, or A facing a boulder: a strong Palabrita (from the 7th medal) lets you push boulders
+   * until you leave the map.
+   */
+  async fuerza(c) {
+    if (strengthOn()) return info('¡Camina hacia una roca para empujarla!', { en: 'Walk into a boulder to push it!' });
+    const chosen = c.data?.mon as Mon | undefined;
+    const strong = chosen ?? fieldHelper('strength');
+    if (!strong) return say('Es una roca enorme. Una Palabrita muy fuerte podría moverla.', { en: 'It’s a huge boulder. A very strong Palabrita could move it.' });
+    const name = monName(strong);
+    if (!chosen && !(await ask(`Es una roca enorme. ¿Quieres usar FUERZA con ${name}?`, { en: `It’s a huge boulder. Do you want to use Strength with ${name}?` }))) return;
+    useStrength();
+    sfx('hit');
+    await info(`¡${name} usó FUERZA! Ahora puedes empujar las rocas.`, { en: `${name} used Strength! Now you can push the boulders.` });
+  },
+  roca: (c) => SCRIPTS.fuerza(c),
 
   /** Fishing with the rod, facing water: sometimes something bites. */
   async fish() {
@@ -300,5 +319,5 @@ const S: Record<string, ScriptFn> = {
 };
 
 export function registerScripts() {
-  Object.assign(SCRIPTS, S, REGION1, REGION2, REGION3, REGION4, REGION6);
+  Object.assign(SCRIPTS, S, REGION1, REGION2, REGION3, REGION4, REGION6, REGION7, REGION8);
 }

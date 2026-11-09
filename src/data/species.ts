@@ -665,6 +665,63 @@ export const SPECIES: Record<string, Species> = {
       en: 'It imitates other animals’ voices to trick them. It runs along the branches like lightning.',
     },
   },
+  // ----- Gym 8's Dragón families (plans/region7-8.md): strong, slow to grow, each with its own theme -----
+  /** The caiman of the great lake: old and patient, it has seen everything. Its words: advice. */
+  lagartito: {
+    id: 'lagartito',
+    name: 'Lagartito',
+    types: ['Agua'],
+    theme: 'consejos',
+    base: { hp: 60, atk: 62, def: 58, spd: 40 },
+    moves: [m('Mordisco', 'Agua', 'choose'), m('Coletazo', 'Agua', 'type'), m('Ojo del Lago', 'Dragón', 'listen', 12), m('Rugido Antiguo', 'Dragón', 'speak', 18)],
+    catchRate: 0.15,
+    dex: {
+      es: 'Espera horas sin moverse, como un tronco en el agua. Los pescadores dicen que da buenos consejos.',
+      en: 'It waits for hours without moving, like a log in the water. Fishermen say it gives good advice.',
+    },
+  },
+  /** The basilisk of the jungle rivers: it runs across the water on its back legs. Its words: goals and effort. */
+  basiliquito: {
+    id: 'basiliquito',
+    name: 'Basiliquito',
+    types: ['Normal'],
+    theme: 'logros',
+    base: { hp: 48, atk: 52, def: 40, spd: 75 },
+    moves: [m('Carrerita', 'Normal', 'choose'), m('Salto del Río', 'Agua', 'type'), m('Cresta Verde', 'Dragón', 'listen', 12), m('Paso sobre el Agua', 'Dragón', 'speak', 18)],
+    catchRate: 0.15,
+    dex: {
+      es: 'Corre sobre el agua sin hundirse. De pequeño se cae muchas veces, pero nunca se rinde.',
+      en: 'It runs on the water without sinking. When it’s little it falls in many times, but it never gives up.',
+    },
+  },
+  /** The lava salamander: it sleeps in the warm ash and warns when the volcano wakes. Its words: emergencies. */
+  salamandrita: {
+    id: 'salamandrita',
+    name: 'Salamandrita',
+    types: ['Fuego'],
+    theme: 'emergencias',
+    base: { hp: 52, atk: 60, def: 48, spd: 55 },
+    moves: [m('Lengua de Fuego', 'Fuego', 'choose'), m('Ceniza Caliente', 'Fuego', 'type'), m('Escama Roja', 'Dragón', 'listen', 12), m('Río de Lava', 'Fuego', 'speak', 18)],
+    catchRate: 0.15,
+    dex: {
+      es: 'Duerme en la ceniza caliente. Cuando el volcán va a despertar, sale corriendo a avisar.',
+      en: 'It sleeps in the warm ash. When the volcano is about to wake, it runs out to warn everyone.',
+    },
+  },
+  /** The feathered serpent: as old as the old capital's stones. Its words: legends. */
+  culebrita: {
+    id: 'culebrita',
+    name: 'Culebrita',
+    types: ['Dragón'],
+    theme: 'leyendas',
+    base: { hp: 55, atk: 58, def: 52, spd: 60 },
+    moves: [m('Enrosque', 'Normal', 'choose'), m('Pluma Antigua', 'Volador', 'type'), m('Aliento de Dragón', 'Dragón', 'listen', 14), m('Leyenda', 'Dragón', 'speak', 20)],
+    catchRate: 0.08,
+    dex: {
+      es: 'Una pequeña serpiente con plumas verdes. Dicen que es tan vieja como las piedras de la ciudad antigua.',
+      en: 'A little snake with green feathers. They say it’s as old as the ancient city’s stones.',
+    },
+  },
   // ----- The Cadejos (plans/cadejos.md): two legendary dogs, as strong as Volcasaurio (420). Met in the fog, not
   // caught yet. They borrow the moth's night words and the travelling words until they get their own. -----
   /** The black dog: red eyes, goat hooves, a dragging chain. It leads travelers astray. */
@@ -1172,6 +1229,46 @@ evolution('dantito', 32, {
     en: 'It’s the gardener of the forest. Its trunk is full of electricity.',
   },
 });
+evolution('lagartito', 36, {
+  id: 'lagarton',
+  name: 'Lagartón',
+  types: ['Agua', 'Dragón'],
+  base: { hp: 100, atk: 115, def: 100, spd: 70 },
+  dex: {
+    es: 'El rey del gran lago. Tiene cien años y cien dientes, y nunca tiene prisa.',
+    en: 'The king of the great lake. It’s a hundred years old, has a hundred teeth, and is never in a hurry.',
+  },
+});
+evolution('basiliquito', 38, {
+  id: 'basilisco',
+  name: 'Basilisco',
+  types: ['Dragón'],
+  base: { hp: 75, atk: 100, def: 70, spd: 125 },
+  dex: {
+    es: 'Cruza el lago entero corriendo sobre el agua. Su cresta verde brilla como una bandera.',
+    en: 'It crosses the whole lake running on the water. Its green crest shines like a flag.',
+  },
+});
+evolution('salamandrita', 40, {
+  id: 'salamandron',
+  name: 'Salamandrón',
+  types: ['Fuego', 'Dragón'],
+  base: { hp: 85, atk: 120, def: 85, spd: 95 },
+  dex: {
+    es: 'Nada en la lava como en el agua. Ha salvado a muchos viajeros perdidos en el volcán.',
+    en: 'It swims in lava as if it were water. It has saved many travelers lost on the volcano.',
+  },
+});
+evolution('culebrita', 45, {
+  id: 'emplumon',
+  name: 'Emplumón',
+  types: ['Dragón', 'Volador'],
+  base: { hp: 95, atk: 120, def: 90, spd: 110 },
+  dex: {
+    es: 'La serpiente emplumada de las leyendas. Cuando vuela sobre los volcanes, empieza a llover.',
+    en: 'The feathered serpent of the legends. When it flies over the volcanoes, it starts to rain.',
+  },
+});
 
 /** The first form of a Palabrita's line (its words are chosen by the first form). */
 export function firstForm(id: string): string {
@@ -1189,7 +1286,7 @@ export const learnLevel = (m: Move) => m.level ?? MODE_INFO[m.mode].learnAt;
 
 /** The Palabritas' numbers (the dex in the START menu, and the art page): families together, starters first. */
 /** Moves used on the map, not in battle (like Gold/Silver's HMs): no move to teach; Palabritas that can really do it. */
-export type FieldMove = 'surf' | 'cut' | 'fly';
+export type FieldMove = 'surf' | 'cut' | 'fly' | 'strength';
 /**
  * Who can (the user) and how many medals it takes: Surf after the 4th, Cut after the 5th, Fly after the 6th
  * (plans/surf-fly.md).
@@ -1203,6 +1300,11 @@ export const FIELD_MOVES: Record<FieldMove, { medals: number; species: string[] 
   },
   // The big birds (the user), and the quetzal.
   fly: { medals: 6, species: ['zopiloton', 'maleticano', 'palomon', 'guardabarranco', 'chocoyote', 'quetzalon'] },
+  // The strong ones (the user), from the 7th medal: Carablanca makes the stones float.
+  strength: {
+    medals: 7,
+    species: ['carablanca', 'danton', 'garrobon', 'petroglifon', 'tinajon', 'herculeo', 'ardillon', 'torovenado', 'rugidon', 'lagarton', 'salamandron'],
+  },
 };
 
 export const DEX_ORDER = [
@@ -1215,5 +1317,5 @@ export const DEX_ORDER = [
   'paslamita', 'paslamona',
   'brasita', 'brasaurio', 'volcasaurio', 'hormiguita', 'hormigon', 'zopilotito', 'zopiloton', 'chocoyito', 'chocoyote', 'gequito', 'garrobon',
   'chispita', 'coheton', 'lamparita', 'perezosito', 'venadito', 'torovenado', 'pestanita', 'oropelon', 'ranojito', 'ranojon', 'dardito', 'carablanquita', 'carablanca', 'dantito', 'danton', 'tigrillo', 'rugidito', 'rugidon',
-  'quetzalito', 'quetzalon', 'cadenegro', 'cadeblanco',
+  'quetzalito', 'quetzalon', 'lagartito', 'lagarton', 'basiliquito', 'basilisco', 'salamandrita', 'salamandron', 'culebrita', 'emplumon', 'cadenegro', 'cadeblanco',
 ];

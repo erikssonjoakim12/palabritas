@@ -96,8 +96,8 @@ strongest (game/rematch.ts). A leader brings other Palabritas than their gym's t
 | 4 ✓ | Ciudad Chispa, the volcano town | Fuego | 3 | 32 | 18-26 |
 | 5 ✓ | Villa Jaguar, the rainforest town | Planta / Veneno | 4 | 39 | 27-35 |
 | 6 ✓ | Villa Bruma, in the foggy cloud-forest mountains north of Ruta 4 (the user, 2026-10-31) | Psíquico (emotions) | 4 | 43 | 29-34 (gym ~37) |
-| 7 | the lake archipelago, stormy (with Fly to the islands) | Eléctrico | 4 | 50 | 36-44 |
-| 8 | the old capital | Dragón | 5 | 58 | 42-52 |
+| 7 ✓ | Puerto Rayo, on the islands of a stormy lake, by Ruta 11 from high on Ruta 10 (the user, 2026-11-09) | Eléctrico | 4 | 50 | 35-42 |
+| 8 ✓ | Ciudad Ceniza, the old capital in the lava, behind boulders (Strength) by the volcano | Dragón | 5 | 58 | 42-50 |
 | E4 | Elite Four | Lucha, Acero, Fantasma (folklore), ... | 4-5 each | 60 → 70 | 52-58 (Victory Road) |
 
 Elite Four idea: Lucha (sports), Acero (construction/materials), Fantasma (Nicaraguan legends:

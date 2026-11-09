@@ -209,6 +209,10 @@ export const ROOFS: Record<string, Pal> = {
   school: ['#d8f8f0', '#70c8b8', '#287878', INK],
   /** The church in Ciudad Chispa (roof tile 'q'). */
   cream: ['#fff8e8', '#f0e0c0', '#c8b088', INK],
+  /** Puerto Rayo, under the storm: slate. */
+  slate: ['#e0e4f0', '#a0a8c0', '#606880', INK],
+  /** Ciudad Ceniza, built on the lava: charcoal. */
+  charcoal: ['#d8d0d0', '#8c8488', '#585058', INK],
 };
 
 // ---------- Indoors ----------
@@ -272,6 +276,8 @@ export const OBJECT_PALS: Record<string, Pal> = {
   maquina: ['', '#e8e8e0', '#a0a0a8', SPRITE_INK],
   /** The sandboard you ride down the volcano on: light wood, wood, its dark edge. */
   tabla: ['', '#e8c890', '#b07840', SPRITE_INK],
+  /** A boulder Strength can push: round, black basalt. */
+  roca: ['', '#706870', '#403840', SPRITE_INK],
   /** The Palacentro's parrot (a lora): its yellow nape and beak (0), green, darker green; the perch is ink. */
   lora: ['#f0d040', '#84b14e', '#518436', SPRITE_INK],
   carreta: ['', '#d8a868', '#906048', SPRITE_INK],
@@ -400,6 +406,16 @@ export const TAPIR = { brown: '#6c3717', brownLight: '#945a2c', stripe: '#f8f0a0
 /** The margay: golden fur, dark rosettes, a cream belly, big eyes. */
 export const MARGAY = { fur: '#f09030', furLight: '#f8c070', spot: '#4a2a14', belly: '#f8f0a0', eye: '#518436' };
 
+// Gym 8's Dragón families, until the user's art (from the master palette).
+/** The caiman: olive-green and knobbly, a pale belly, yellow eyes, white teeth; grown, darker with a ridged back. */
+export const CAIMAN = { olive: '#518436', oliveDark: '#1c3a18', back: '#84b14e', belly: '#f8f0a0', eye: '#f0d040', tooth: '#f8f8f8' };
+/** The basilisk: bright green with a tall crest and a long striped tail. */
+export const BASILISK = { green: '#84b14e', greenDark: '#518436', crest: '#38a8a0', stripe: '#1c3a18', belly: '#f8f0a0', eye: '#f09030' };
+/** The lava salamander: black skin with glowing red and orange spots, like cooling lava. */
+export const SALAMANDER = { black: '#3a3a42', dark: '#6e6e78', red: '#d85058', glow: '#f09030', spark: '#f0d040', eye: '#f8f0a0' };
+/** The feathered serpent: green scales, a ruff of turquoise and red feathers, a gold beak. */
+export const SERPENT = { green: '#518436', light: '#84b14e', feather: '#38a8a0', red: '#d85058', gold: '#f0d040', dark: '#1c3a18' };
+
 /**
  * The volcano's slope (tile '`', art/tiles.ts slopeImage): basalt greys, lightest first. A slope tile takes three of
  * them in a row by its shade, from 0 (the lit left flank) to 3 (the right flank, in shadow); its gully is three darker,
@@ -408,6 +424,9 @@ export const MARGAY = { fur: '#f09030', furLight: '#f8c070', spot: '#4a2a14', be
 const BASALT_SHADES = ['#d0c8c8', '#b0a8a8', '#8c8488', '#706870', '#585058', '#403840'];
 export const SLOPE: Pal[] = [0, 1, 2, 3].map((s) => [BASALT_SHADES[s], BASALT_SHADES[s + 1], BASALT_SHADES[s + 2], INK]);
 export const SLOPE_GULLY = [0, 1, 2, 3].map((s) => ({ k: BASALT_SHADES[Math.min(5, s + 3)], l: BASALT_SHADES[Math.max(0, s - 1)] }));
+
+/** The storm over town 7's lake (art/storm.ts): the dimmed light, the rain, the lightning. */
+export const STORM = { gloom: '#a8b0c8', rain: '#d8e0f8', flash: '#f8f8f8' };
 
 /** The ash a sandboard throws up on the volcano's slope (world.ts puffs). */
 export const ASH_PUFF = '#d8d4d0';

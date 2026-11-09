@@ -51,7 +51,7 @@ export const REGION3_MAPS: Record<string, MapDef> = {
       'ttssJsssssssssssssss==sssssssssssstt',
       'TTTTTTTTTTTTTTTTTTTT==TTTTTTTTTTTTTT',
     ],
-    connections: { up: { to: 'ocote', offset: 6 }, down: { to: 'ruta7', offset: 2 }, right: { to: 'ruta10', offset: -27 } },
+    connections: { up: { to: 'ocote', offset: 6 }, down: { to: 'ruta7', offset: 2 }, right: { to: 'ceniza', offset: -27 } },
     signs: [{ x: 15, y: 1, es: 'RUTA 5. Al sur: el mar.', en: 'ROUTE 5. South: the sea.' }],
     encounters: {
       rate: 0.12,

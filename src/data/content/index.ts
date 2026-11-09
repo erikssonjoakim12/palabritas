@@ -37,6 +37,10 @@ import { electricidad } from './electricidad';
 import { noticias } from './noticias';
 import { ambiente } from './ambiente';
 import { llamadas } from './llamadas';
+import { consejos } from './consejos';
+import { logros } from './logros';
+import { emergencias } from './emergencias';
+import { leyendas } from './leyendas';
 
 /**
  * A theme is a slice of Spanish. Lines look like `"el perro | el can = the dog"`:
@@ -186,7 +190,7 @@ for (const src of [perro, tiempo, comida, naturaleza, numeros, colores, casa, cu
  * earlier list keeps that list's level, so new content never moves the words existing Palabritas already have.
  * Their own Palabritas still meet the word at its place in their list.
  */
-const LATER: ThemeSource[] = [fiesta, conversacion, ciudad, ropa, rutina, emociones, animales, trabajo, compras, pasado, deseos, escondites, noche, ideas, electricidad, noticias, ambiente, llamadas];
+const LATER: ThemeSource[] = [fiesta, conversacion, ciudad, ropa, rutina, emociones, animales, trabajo, compras, pasado, deseos, escondites, noche, ideas, electricidad, noticias, ambiente, llamadas, consejos, logros, emergencias, leyendas];
 for (const src of LATER) build(src, src.levels ? splitIntoLevels(src.levels) : (src.tiers ?? {}), false);
 
 export function tierItems(themeId: string, tier: number): Item[] {

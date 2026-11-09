@@ -59,7 +59,7 @@ Plans for finished work are removed once built: the code is the truth.
 | Palabritas, moves, types | `src/data/species.ts`, `src/data/types.ts` |
 | Trainers, items | `src/data/trainers.ts`, `src/data/items.ts`, `src/game/bag.ts` |
 | Maps (every town, route, interior) | `src/world/maps/`: one file per region (`region1.ts`...), `kit.ts` (tile legend, types, shared rooms), `index.ts` |
-| Scripts (every NPC, quest, trainer talk) | `src/world/region1.ts`...`region4.ts`, `region6.ts` (Villa Bruma and the fog) (one file per region), `src/world/scripts.ts` (what every town shares: the Palacentro, shop and box, gates, items on the ground, Surf, Fly, Cut, fishing; and the registry) |
+| Scripts (every NPC, quest, trainer talk) | `src/world/region1.ts`...`region4.ts`, `region6.ts` (Villa Bruma and the fog), `region7.ts` (Ruta 11, Puerto Rayo), `region8.ts` (Ciudad Ceniza) (one file per region), `src/world/scripts.ts` (what every town shares: the Palacentro, shop and box, gates, items on the ground, Surf, Fly, Cut, fishing; and the registry) |
 | Script building blocks (talking, trainers, gym leaders, Lucas, gifts, questions) | `src/world/flows.ts` |
 | Overworld engine: walking, ledges, doors, gates, encounters, drawing | `src/world/world.ts`, `src/world/layout.ts` |
 | Battles | `src/battle/battle.ts` (the battle: turns, answers, damage, catching), `stage.ts` (what's drawn and how it moves), `hud.ts` (the name and PS boxes) |
@@ -116,9 +116,9 @@ decides where stepping into the next patch leads (`fogView`: how far you see; th
 the fog. A map's `wakeUp` script can wake you somewhere else after fainting; `encounterZones` give part of a map its
 own wild Palabritas.
 
-**Field moves** (Surf, Cut, Fly): who can and how many medals in `FIELD_MOVES` (src/data/species.ts); Fly's towns
+**Field moves** (Surf, Cut, Fly, Strength): who can and how many medals in `FIELD_MOVES` (src/data/species.ts); Fly's towns
 (`src/world/fly.ts`: every town with a Palacentro, once you've been there, `G.save.visited`); a water map's
-wild Palabritas while swimming in `surf`. Walking or swimming off an edge with no connection (or into a hole) goes
+wild Palabritas while swimming in `surf`. **Boulders** (Strength, 7 medals): `boulder(id, x, y)` in a map's NPCs; with Strength on (A on a boulder, or FUERZA), walking into one pushes it, and `G.save.boulders` keeps where it is. **A storm** over a map: `storm: true` (rain and soft lightning, src/art/storm.ts). Walking or swimming off an edge with no connection (or into a hole) goes
 into whatever map is there in the world.
 
 **An item on the ground:** `itemBall(id, x, y, itemId)` in the map's NPCs. It's picked up once (flag

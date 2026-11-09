@@ -18,7 +18,7 @@ import { dueCount } from '../game/review';
 import { musicSettingChanged } from '../audio/bgm';
 import { townMap } from './townmap';
 
-/** What to do once the START menu closes: an item used from the bag, a field move from the team (NADAR, CORTAR, VOLAR). */
+/** What to do once the START menu closes: an item used from the bag, a field move from the team (NADAR, CORTAR, VOLAR, FUERZA). */
 export interface AfterMenu {
   script: string;
   data?: Record<string, unknown>;
@@ -56,6 +56,7 @@ const FIELD_OPTIONS = [
   { move: 'surf', label: 'NADAR', script: 'nadar' },
   { move: 'cut', label: 'CORTAR', script: 'cortar' },
   { move: 'fly', label: 'VOLAR', script: 'volar' },
+  { move: 'strength', label: 'FUERZA', script: 'fuerza' },
 ] as const;
 
 async function PalabritasMenu(): Promise<AfterMenu | undefined> {

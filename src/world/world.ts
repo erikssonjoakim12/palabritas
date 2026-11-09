@@ -6,6 +6,7 @@ import { TILES, tallGrassImage, tileImage, tileOf, envAt, owns, isHole, ANIMATED
 import { personFrames, animalEyes, OBJECTS, type Frames } from '../art/chars';
 import { fromRows, mirror, T, type Img } from '../art/pixel';
 import { drawFog, type Glow } from '../art/fog';
+import { drawStorm } from '../art/storm';
 import { MAPS, type MapDef, type NpcDef, type Conn, type EncounterEntry } from './maps';
 import { worldLayout, mapAcross } from './layout';
 import { G, flag, saveGame, playerLook, clockHour, type SaveData } from '../game/state';
@@ -151,14 +152,18 @@ function validate(m: MapDef) {
 /** `exact`: stand right there even inside a wall (a board ride carries on across the slope). */
 export function loadMap(id: string, x: number, y: number, dir: Dir, exact = false) {
   const prevName = map?.name;
-  if (map && map.id !== id) growBack(map);
+  if (map && map.id !== id) {
+    growBack(map);
+    strength = false;
+  }
   map = MAPS[id];
   validate(map);
   visit(id);
-  const npc = (def: NpcDef, dx = 0, dy = 0): NpcRT => ({
+  // A pushed boulder stands where it was left.
+  const npc = (def: NpcDef, dx = 0, dy = 0, [x, y] = (def.boulder && G.save.boulders[def.id]) || [def.x, def.y]): NpcRT => ({
     def,
-    x: def.x + dx,
-    y: def.y + dy,
+    x: x + dx,
+    y: y + dy,
     dir: def.dir ?? 'down',
     visible: def.show ? def.show() : true,
     bubble: 0,
@@ -456,8 +461,33 @@ function tryMove(d: Dir) {
     sfx('jump');
     return startMove(lx, ly, 2 * T);
   }
+  const boulder = npcAt(nx, ny);
+  if (boulder?.def.boulder) return void pushBoulder(boulder, d);
   if (!canEnter(nx, ny)) return bump();
   startMove(nx, ny);
+}
+
+// ---------- Strength ----------
+
+/** Strength is in use: walking into a boulder pushes it. Until you leave the map, like Gold/Silver. */
+let strength = false;
+export const useStrength = () => void (strength = true);
+export const strengthOn = () => strength;
+
+/** Push a boulder a tile the way you're walking, if Strength is on and the tile beyond is free. */
+async function pushBoulder(n: NpcRT, d: Dir) {
+  const [bx, by] = [n.x + DX[d], n.y + DY[d]];
+  if (!strength || !walkable(bx, by) || isHole(map, bx, by)) return bump();
+  G.lock++;
+  sfx('hit');
+  Object.assign(n, { x: bx, y: by });
+  G.save.boulders[n.def.id] = [bx, by];
+  for (let f = 8; f > 0; f--) {
+    n.off = { x: -DX[d] * T * (f / 8), y: -DY[d] * T * (f / 8), frame: 0 };
+    await nextFrame();
+  }
+  n.off = undefined;
+  G.lock--;
 }
 
 function onStep() {
@@ -1125,6 +1155,7 @@ export function renderWorld(g: CanvasRenderingContext2D) {
     drawDayTime(g, camX, camY);
     drawFireflies(g, camX, camY);
   } else if (map.floor === ';') drawDayTime(g, camX, camY); // caves (and the temple) darken at night too
+  if (map.storm) drawStorm(g, camX, camY);
   if (map.fog && !map.fogLifts?.()) drawFog(g, map.fog, ox + 8, oy + 4 - hop, camX, camY, glowsThroughFog(camX, camY));
   if (fade > 0) {
     g.globalAlpha = fade;

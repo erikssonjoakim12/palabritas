@@ -177,6 +177,35 @@ export const TRAINERS: Record<string, TrainerDef> = {
   sonadora_alba: { id: 'sonadora_alba', name: 'Soñadora Alba', defenseMode: 'speak', team: [['lamparita', 36], ['hojaluna', 37]] },
   adivino_teo: { id: 'adivino_teo', name: 'Adivino Teo', defenseMode: 'choose', team: [['quetzalito', 36], ['carablanquita', 37]] },
   esperanza: { id: 'esperanza', name: 'Líder Esperanza', defenseMode: 'type', team: [['duende', 40], ['polilluna', 41], ['quetzalon', 41], ['carablanca', 43]] },
+  // Ruta 11, from Ruta 10 high up down to the stormy lake (plans/region7-8.md): about 8 below Esperanza at first,
+  // rising to 11 below Trueno's 50 (the user: a few levels easier than the rule).
+  excursionista_hugo: { id: 'excursionista_hugo', name: 'Excursionista Hugo', defenseMode: 'choose', team: [['hojaluna', 35], ['basiliquito', 35]] },
+  ornitologa_irene: { id: 'ornitologa_irene', name: 'Ornitóloga Irene', defenseMode: 'listen', team: [['quetzalito', 35], ['fragaton', 36]], rematch: true },
+  campista_leo: { id: 'campista_leo', name: 'Campista Leo', defenseMode: 'type', team: [['dantito', 36], ['carablanquita', 36], ['gequito', 37]], rematch: true },
+  pintora_luisa: { id: 'pintora_luisa', name: 'Pintora Luisa', defenseMode: 'choose', team: [['polilluna', 37], ['basiliquito', 37]] },
+  guardaparque_tono: { id: 'guardaparque_tono', name: 'Guardaparque Toño', defenseMode: 'listen', team: [['danton', 38], ['garrobon', 38]], rematch: true },
+  fotografa_nora: { id: 'fotografa_nora', name: 'Fotógrafa Nora', defenseMode: 'type', team: [['tigrillo', 39], ['hojaluna', 38]] },
+  // Puerto Rayo's lake: two swimmers, and a fisherman on an islet you reach by Surf.
+  nadador_kiko: { id: 'nadador_kiko', name: 'Nadador Kiko', defenseMode: 'choose', team: [['lagartito', 39], ['mordiscon', 39]] },
+  nadadora_vale: { id: 'nadadora_vale', name: 'Nadadora Vale', defenseMode: 'listen', team: [['tijeretita', 39], ['lagartito', 40]] },
+  pescador_ruben: { id: 'pescador_ruben', name: 'Pescador Rubén', defenseMode: 'type', team: [['espadon', 40], ['lagarton', 41]], rematch: true },
+  // Gym 7, the lighthouse keeper's in Puerto Rayo (Eléctrico): his crew with the young forms, then his own.
+  electricista_rolando: { id: 'electricista_rolando', name: 'Electricista Rolando', defenseMode: 'listen', team: [['gequito', 41], ['zumbador', 42]] },
+  meteorologa_ines: { id: 'meteorologa_ines', name: 'Meteoróloga Inés', defenseMode: 'type', team: [['tijeretita', 41], ['dantito', 42]] },
+  marinera_paz: { id: 'marinera_paz', name: 'Marinera Paz', defenseMode: 'speak', team: [['dantito', 42], ['zumbador', 42]] },
+  trueno: { id: 'trueno', name: 'Líder Trueno', defenseMode: 'listen', team: [['fragaton', 47], ['garrobon', 48], ['tigrillo', 48], ['danton', 50]] },
+  // Ciudad Ceniza's lava fields: about 8 below Trueno at first, rising to 9 below Aurora's 58 (the user).
+  bombero_julio: { id: 'bombero_julio', name: 'Bombero Julio', defenseMode: 'choose', team: [['salamandrita', 42], ['garrobon', 43]] },
+  vulcanologa_eva: { id: 'vulcanologa_eva', name: 'Vulcanóloga Eva', defenseMode: 'listen', team: [['salamandrita', 43], ['zopiloton', 44]], rematch: true },
+  arqueologo_saul: { id: 'arqueologo_saul', name: 'Arqueólogo Saúl', defenseMode: 'type', team: [['petroglifon', 44], ['culebrita', 44]] },
+  excursionista_pili: { id: 'excursionista_pili', name: 'Excursionista Pili', defenseMode: 'choose', team: [['basiliquito', 45], ['tinajon', 45]], rematch: true },
+  guardaparque_nestor: { id: 'guardaparque_nestor', name: 'Guardaparque Néstor', defenseMode: 'listen', team: [['lagarton', 46], ['garrobon', 46]] },
+  cronista_amalia: { id: 'cronista_amalia', name: 'Cronista Amalia', defenseMode: 'type', team: [['culebrita', 47], ['salamandron', 48], ['carablanca', 49]], rematch: true },
+  // Gym 8, the old capital's archive (Dragón): Doña Aurora's students with the young forms, then her.
+  historiadora_clara: { id: 'historiadora_clara', name: 'Historiadora Clara', defenseMode: 'type', team: [['culebrita', 49], ['basiliquito', 50]] },
+  restaurador_efren: { id: 'restaurador_efren', name: 'Restaurador Efrén', defenseMode: 'listen', team: [['salamandrita', 49], ['lagartito', 50]] },
+  archivera_luz: { id: 'archivera_luz', name: 'Archivera Luz', defenseMode: 'speak', team: [['basiliquito', 50], ['culebrita', 50]] },
+  aurora: { id: 'aurora', name: 'Líder Aurora', defenseMode: 'type', team: [['gliptodon', 54], ['lagarton', 55], ['basilisco', 55], ['salamandron', 56], ['emplumon', 58]] },
 };
 
 /**
@@ -237,6 +266,23 @@ export const BATTLE_ORDER: { leg: string; en: string; trainers: string[] }[] = [
       'campista_lorena', 'excursionista_rodrigo', 'lenador_abel', 'espeleologo_ismael', 'observadora_marta', 'cafetalero_julio',
       'ciclista_kevin', 'guardaparque_elena', 'musico_rafa', 'turista_paola',
       'barista_joel', 'sonadora_alba', 'adivino_teo', 'esperanza',
+    ],
+  },
+  {
+    leg: 'Ruta 11, el lago de la tormenta → Puerto Rayo',
+    en: 'Route 11 from Route 10, the stormy lake → gym 7',
+    trainers: [
+      'excursionista_hugo', 'ornitologa_irene', 'campista_leo', 'pintora_luisa', 'guardaparque_tono', 'fotografa_nora',
+      'nadador_kiko', 'nadadora_vale', 'pescador_ruben',
+      'electricista_rolando', 'meteorologa_ines', 'marinera_paz', 'trueno',
+    ],
+  },
+  {
+    leg: 'Los campos de lava → Ciudad Ceniza',
+    en: 'Strength, the lava fields of the old capital → gym 8',
+    trainers: [
+      'bombero_julio', 'vulcanologa_eva', 'arqueologo_saul', 'excursionista_pili', 'guardaparque_nestor', 'cronista_amalia',
+      'historiadora_clara', 'restaurador_efren', 'archivera_luz', 'aurora',
     ],
   },
 ];

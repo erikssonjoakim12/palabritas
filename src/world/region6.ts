@@ -522,7 +522,7 @@ async function gimnasioBruma() {
 
 /** Doña Esperanza, gym 6: she reads the future in coffee grounds. The Medalla Nube, and Fly. */
 async function esperanza() {
-  const won = await gymLeader('esperanza', {
+  await gymLeader('esperanza', {
     medal: ['Nube', 'Cloud'],
     intro: [
       ['Bienvenid{o/a}, {name}. Te estaba esperando: te vi esta mañana en la borra del café.', 'Welcome, {name}. I was expecting you: I saw you this morning in the coffee grounds.'],
@@ -541,9 +541,6 @@ async function esperanza() {
     ],
     beaten: [['Esta mañana leí tu taza otra vez. Veo un lago, tormentas... y otra medalla.', 'This morning I read your cup again. I see a lake, storms... and another medal.']],
   });
-  if (!won) return;
-  await info('¡Felicidades! Terminaste la sexta parte de Palabritas.', { en: 'Congratulations! You finished the sixth part of Palabritas.' });
-  await info('Sigue entrenando a tus Palabritas y atrapando nuevas. ¡Pronto habrá más aventuras!', { en: 'Keep training your Palabritas and catching new ones. More adventures are coming soon!' });
 }
 
 // ---------- The demo (?demo=niebla) ----------

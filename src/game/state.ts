@@ -81,6 +81,8 @@ export interface SaveData {
   medals: string[];
   /** The towns you've been to: where Fly can take you (world/fly.ts). */
   visited: string[];
+  /** Boulders pushed with Strength, by their id: where they are now on their map. */
+  boulders: Record<string, [number, number]>;
   prog: Record<string, ItemProg>;
   seen: string[];
   caught: string[];
@@ -106,7 +108,7 @@ export function newSave(): SaveData {
     dir: 'down',
     party: [],
     box: [],
-    flags: { amanecerWide: true, ruta5East: true, rutasCortas: true, sinEstacion: true, canonCascada: true, ruta2Nueva: true, palancaJunto: true, craterDerrumbe: true, oesteCorto: true, selvaLaberinto: true, ruta10Curvas: true, flyTowns: true, volcanZigzag: true, ruta9Pasto: true },
+    flags: { amanecerWide: true, ruta5East: true, rutasCortas: true, sinEstacion: true, canonCascada: true, ruta2Nueva: true, palancaJunto: true, craterDerrumbe: true, oesteCorto: true, selvaLaberinto: true, ruta10Curvas: true, flyTowns: true, volcanZigzag: true, ruta9Pasto: true, cenizaCiudad: true },
     gender: 'boy',
     money: 0,
     bag: {},
@@ -114,6 +116,7 @@ export function newSave(): SaveData {
     lessons: {},
     medals: [],
     visited: [],
+    boulders: {},
     prog: {},
     seen: [],
     caught: [],
@@ -159,7 +162,7 @@ export function useSave(data: SaveData) {
 }
 
 /** Each medal's town (for older saves' visited towns). */
-const MEDAL_TOWNS: Record<string, string> = { Brisa: 'brisa', Barro: 'ocote', Ola: 'carey', Chispa: 'chispa', Espina: 'jaguar', Nube: 'bruma' };
+const MEDAL_TOWNS: Record<string, string> = { Brisa: 'brisa', Barro: 'ocote', Ola: 'carey', Chispa: 'chispa', Espina: 'jaguar', Nube: 'bruma', Rayo: 'rayo', Ceniza: 'ceniza' };
 
 /** Palabritas that were renamed between versions: old id -> new id. */
 const RENAMED: Record<string, string> = { perrito: 'salchichita' };
@@ -264,6 +267,12 @@ function migrate(s: SaveData) {
   if (!s.flags.ruta9Pasto) {
     if (s.map === 'ruta10' || (s.map === 'rio' && s.x >= 42 && s.y >= 37)) Object.assign(s, { map: 'ruta6', x: 34, y: 29, dir: 'left' });
     s.flags.ruta9Pasto = true;
+  }
+  // Ruta 9 and the river's land became Ciudad Ceniza, closed by boulders (plans/region7-8.md): anyone saved there
+  // starts again on Ruta 5's road, just outside.
+  if (!s.flags.cenizaCiudad) {
+    if (s.map === 'ruta10' || (s.map === 'rio' && s.x >= 42 && s.y >= 39)) Object.assign(s, { map: 'ruta6', x: 34, y: 29, dir: 'left' });
+    s.flags.cenizaCiudad = true;
   }
   // Ruta 10 became a longer climb in switchbacks (the user): anyone saved on it starts again at its foot.
   if (!s.flags.ruta10Curvas) {

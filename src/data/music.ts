@@ -744,13 +744,15 @@ export const MAP_MUSIC: Record<string, string> = {
   ruta8: 'fuego',
   laderas: 'fuego',
   crater: 'fuego',
-  ruta10: 'fuego',
+  ceniza: 'chispa',
   lago: 'ruta',
   chispa: 'chispa',
   chispa_noche: 'chispa',
   ruta11: 'pinos',
   bruma: 'bruma',
   niebla_borde: 'pinos',
+  ruta12: 'pinos',
+  rayo: 'carey',
   cerro_niebla: 'cueva',
 };
 

@@ -58,6 +58,8 @@ export interface NpcDef {
   wanders?: boolean;
   /** Item balls: what's inside (key in ITEM_DEFS). */
   item?: string;
+  /** A boulder (boulder()): Strength pushes it. */
+  boulder?: boolean;
   /** On a muted map: what they act out (the EN line; the Spanish is «…»). */
   mime?: string;
   /**
@@ -132,6 +134,8 @@ export interface MapDef {
    */
   fog?: 'patch' | 'edge';
   fogLifts?: () => boolean;
+  /** A storm over the map (town 7's lake): dimmed light, rain and now and then a soft flash of lightning. */
+  storm?: boolean;
   /**
    * A fogged map made of patches this big (tiles): while the fog lasts, stepping from one patch into the next goes
    * wherever the fog leads too (SCRIPTS.__fogEdge); once it lifts, it's one open map.
@@ -182,8 +186,8 @@ export interface EncounterEntry {
 }
 
 /** What you meet swimming: in the river, the lake and the sea (Surf). */
-export const RIVER_SURF = { rate: 0.08, table: [{ sp: 'tilapita', min: 15, max: 21, w: 35 }, { sp: 'espadon', min: 22, max: 31, w: 5 }, { sp: 'mojarrita', min: 15, max: 21, w: 25 }, { sp: 'mordisquito', min: 22, max: 32, w: 20 }, { sp: 'ranojito', min: 21, max: 30, w: 15 }, { sp: 'dantito', min: 18, max: 24, w: 4 }] };
-export const LAKE_SURF = { rate: 0.08, table: [{ sp: 'mojarrita', min: 15, max: 21, w: 30 }, { sp: 'mordisquito', min: 23, max: 33, w: 35 }, { sp: 'pelicanito', min: 16, max: 22, w: 15 }, { sp: 'maleticano', min: 22, max: 32, w: 5 }, { sp: 'tilapita', min: 15, max: 21, w: 10 }, { sp: 'espadon', min: 22, max: 32, w: 8 }] };
+export const RIVER_SURF = { rate: 0.08, table: [{ sp: 'tilapita', min: 15, max: 21, w: 35 }, { sp: 'espadon', min: 22, max: 31, w: 5 }, { sp: 'mojarrita', min: 15, max: 21, w: 25 }, { sp: 'mordisquito', min: 22, max: 32, w: 20 }, { sp: 'ranojito', min: 21, max: 30, w: 15 }, { sp: 'dantito', min: 18, max: 24, w: 4 }, { sp: 'lagartito', min: 20, max: 26, w: 4 }] };
+export const LAKE_SURF = { rate: 0.08, table: [{ sp: 'mojarrita', min: 15, max: 21, w: 30 }, { sp: 'mordisquito', min: 23, max: 33, w: 35 }, { sp: 'pelicanito', min: 16, max: 22, w: 15 }, { sp: 'maleticano', min: 22, max: 32, w: 5 }, { sp: 'tilapita', min: 15, max: 21, w: 10 }, { sp: 'espadon', min: 22, max: 32, w: 8 }, { sp: 'lagartito', min: 22, max: 28, w: 5 }] };
 export const SEA_SURF = { rate: 0.08, table: [{ sp: 'cangrejito', min: 20, max: 29, w: 35 }, { sp: 'cangrejon', min: 22, max: 29, w: 5 }, { sp: 'pelicanito', min: 20, max: 29, w: 30 }, { sp: 'maleticano', min: 22, max: 29, w: 5 }, { sp: 'mojarrita', min: 14, max: 20, w: 25 }, { sp: 'espadon', min: 21, max: 30, w: 10 }, { sp: 'fragaton', min: 26, max: 29, w: 2 }] };
 
 /** A starter in the wild (the user): only first forms, rare, and always level 10 (from region 4 on). */
@@ -211,6 +215,8 @@ export const HOUSES = {
 // a computer (Q) and waiting sofas (n).
 const CENTRO = ['##u####u##', 'PxxxxxxxxP', 'xxxCCCCxxx', 'xxxxxxxxQx', 'xxxxxxxxxx', 'nxxxxxxxxn', 'nxxxxxxxxn', 'xxxxmxxxxx'];
 /** Something to pick up, once (flag item:<id>): a Palabola on the ground, or its own look (`object`, e.g. the fossil). */
+/** A boulder you can push with Strength (FUERZA, the 7th medal): where you leave it, it stays (G.save.boulders). */
+export const boulder = (id: string, x: number, y: number): NpcDef => ({ id, x, y, object: 'roca', script: 'roca', boulder: true });
 export const itemBall = (id: string, x: number, y: number, item: string, object = 'palabola'): NpcDef => ({ id, x, y, object, item, script: 'itemBall', show: () => !flag(`item:${id}`) });
 const MAQUINA: NpcDef = { id: 'maquina', x: 5, y: 1, object: 'maquina', script: 'maquina' };
 /** The parrot in every Palacentro: «¡Repite conmigo!», ten of your words due for review (never new ones). */

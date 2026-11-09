@@ -644,6 +644,16 @@ export const LOOKS: Record<string, Look> = {
   tomas: { head: 'cap', body: 'pants', color: 'orange' },
   /** Doña Esperanza, gym 6's leader: she reads the future in coffee grounds, in a purple shawl. */
   esperanza: { head: 'hoodLong', body: 'dress', color: 'purple' },
+  // Towns 7 and 8 (plans/region7-8.md): Puerto Rayo's lighthouse keeper and crew, Ciudad Ceniza's historian and hers.
+  trueno: { head: 'cap', body: 'coat', color: 'yellow' },
+  electricista: { head: 'helmet', body: 'pants', color: 'yellow' },
+  meteorologa: { head: 'long', body: 'coat', color: 'blue' },
+  marinera: { head: 'longColor', body: 'pants', color: 'navy' },
+  aurora: { head: 'short', body: 'coat', color: 'navy' },
+  bombero: { head: 'helmet', body: 'coat', color: 'red' },
+  historiadora: { head: 'bun', body: 'dress', color: 'navy' },
+  restaurador: { head: 'crew', body: 'coat', color: 'khaki' },
+  archivera: { head: 'long', body: 'coat', color: 'gray' },
 };
 
 // ---------- Animals that walk about (the Cadejos) ----------
@@ -1168,6 +1178,28 @@ export const OBJECTS_ART: Record<string, { pal: Pal; rows: string[] }> = {
       '.32222222222223.',
       '..333333333333..',
       '................',
+    ],
+  },
+  /** A boulder Strength can push (kit.ts boulder): round black basalt, a crack across it. */
+  roca: {
+    pal: OBJECT_PALS.roca,
+    rows: [
+      '................',
+      '................',
+      '.......33.......',
+      '....33311333....',
+      '...3111111113...',
+      '..311111211113..',
+      '.31111112111113.',
+      '.31111121111113.',
+      '.31111112111123.',
+      '.31111111112223.',
+      '.31111111122223.',
+      '.31111111222223.',
+      '..311112222223..',
+      '...3112222223...',
+      '....33322333....',
+      '.......33.......',
     ],
   },
   /** The Palacentro's parrot on its perch: it repeats your words with you (scripts.ts lora). */

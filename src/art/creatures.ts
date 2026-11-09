@@ -1,5 +1,5 @@
 import { Pix, mirror, fromRows, trim, makeCanvas, type Img } from './pixel';
-import { SPRITE_INK, VIPER as V, TREEFROG as F, DARTFROG as D, LUNAMOTH as M, DUENDE as U, CAPUCHIN as C, QUETZAL as Q, CADEJOS as J, FRIGATE as R, LIZARD as L, TAPIR as T, MARGAY as G } from '../style/colors';
+import { SPRITE_INK, VIPER as V, TREEFROG as F, DARTFROG as D, LUNAMOTH as M, DUENDE as U, CAPUCHIN as C, QUETZAL as Q, CADEJOS as J, FRIGATE as R, LIZARD as L, TAPIR as T, MARGAY as G, CAIMAN as K, BASILISK as B, SALAMANDER as S, SERPENT as E } from '../style/colors';
 import { PALABRITA_ART } from '../style/palabritas';
 
 // Palabrita sprites: hand-made pixel art (style/palabritas.ts), or for the ones that don't have
@@ -104,6 +104,104 @@ const DRAW: Record<string, Draw> = {
     p.set(8, 21, SPRITE_INK).set(13, 21, SPRITE_INK);
     p.ellipse(10, 26, 3, 2, G.belly);
     for (const [x, y] of [[20, 27], [26, 26], [31, 29], [24, 31], [17, 30], [29, 33]]) p.ellipse(x, y, 1.8, 1.5, G.spot);
+    p.outline(SPRITE_INK);
+  },
+  /** Lagartito: a small olive caiman, low and long, eyes on top of its head, a little grin of teeth. */
+  lagartito(p) {
+    p.poly([[30, 36], [46, 38], [30, 41]], K.olive); // the tail
+    p.ellipse(24, 37, 11, 5, K.olive);
+    p.ellipse(22, 40, 8, 2, K.belly);
+    p.poly([[4, 37], [14, 33], [16, 40], [4, 40]], K.olive); // the snout
+    p.ellipse(13, 33, 3, 2.5, K.olive).ellipse(13, 32, 1.6, 1.6, K.eye).set(13, 32, SPRITE_INK);
+    for (let x = 5; x < 14; x += 3) p.set(x, 39, K.tooth);
+    for (const x of [16, 30]) p.rect(x, 40, 3, 4, K.oliveDark);
+    for (const [x, y] of [[20, 34], [25, 33], [30, 34]]) p.ellipse(x, y, 1.5, 1, K.back);
+    p.outline(SPRITE_INK);
+  },
+  /** Lagartón: a huge dark caiman, its back a row of ridges, its jaws open in a slow, toothy smile. */
+  lagarton(p) {
+    p.poly([[30, 34], [47, 40], [30, 42]], K.oliveDark); // the tail
+    p.ellipse(24, 36, 15, 7, K.oliveDark);
+    p.ellipse(22, 40, 11, 3, K.belly);
+    p.poly([[0, 34], [14, 28], [16, 36], [2, 38]], K.oliveDark); // the upper jaw, open
+    p.poly([[1, 41], [14, 38], [16, 42], [2, 42]], K.olive); // the lower jaw
+    for (let x = 2; x < 14; x += 3) p.set(x, 37, K.tooth).set(x + 1, 39, K.tooth);
+    p.ellipse(14, 28, 3.5, 3, K.oliveDark).ellipse(14, 27, 1.8, 1.8, K.eye).set(14, 27, SPRITE_INK);
+    for (let x = 18; x < 40; x += 4) p.poly([[x, 30], [x + 2, 26], [x + 4, 30]], K.olive);
+    for (const x of [14, 32]) p.rect(x, 41, 4, 5, K.oliveDark);
+    p.outline(SPRITE_INK);
+  },
+  /** Basiliquito: a slim green lizard up on its back legs, mid-run, with a small crest and a long tail. */
+  basiliquito(p) {
+    p.poly([[26, 34], [46, 44], [44, 46], [24, 37]], B.green); // the tail
+    for (let i = 0; i < 4; i++) p.ellipse(30 + i * 4, 37 + i * 2, 1, 1, B.stripe);
+    p.ellipse(22, 30, 7, 9, B.green);
+    p.ellipse(20, 33, 4, 5, B.belly);
+    p.ellipse(15, 20, 6, 5, B.green);
+    p.poly([[15, 15], [19, 9], [21, 16]], B.crest);
+    p.ellipse(12, 19, 1.8, 1.8, B.eye).set(12, 19, SPRITE_INK);
+    p.rect(20, 38, 3, 7, B.greenDark).rect(25, 37, 3, 6, B.greenDark); // the running legs
+    p.rect(17, 45, 6, 1, B.greenDark).rect(25, 43, 6, 1, B.greenDark);
+    p.outline(SPRITE_INK);
+  },
+  /** Basilisco: tall and fast, a great sail-like crest down its back, legs a blur over the water. */
+  basilisco(p) {
+    p.poly([[28, 32], [47, 44], [45, 47], [26, 36]], B.greenDark); // the tail
+    p.ellipse(22, 27, 9, 11, B.green);
+    p.ellipse(20, 31, 5, 6, B.belly);
+    p.poly([[24, 12], [36, 16], [32, 32], [26, 30]], B.crest); // the back crest
+    p.ellipse(14, 15, 7, 6, B.green);
+    p.poly([[13, 9], [18, 1], [21, 11]], B.crest);
+    p.ellipse(10, 14, 2, 2, B.eye).set(10, 14, SPRITE_INK);
+    p.rect(18, 37, 4, 8, B.greenDark).rect(25, 36, 4, 7, B.greenDark);
+    for (const x of [14, 18, 22, 26, 30]) p.set(x, 46, B.crest).set(x + 1, 45, B.crest);
+    p.outline(SPRITE_INK);
+  },
+  /** Salamandrita: a small black salamander with glowing red and orange spots, curled on a warm stone. */
+  salamandrita(p) {
+    p.poly([[30, 38], [42, 32], [44, 34], [32, 41]], S.black); // the tail, curling up
+    p.ellipse(24, 38, 10, 5, S.black);
+    p.ellipse(12, 35, 6, 5, S.black);
+    p.ellipse(9, 34, 1.8, 1.8, S.eye).set(9, 34, SPRITE_INK);
+    for (const x of [16, 28]) p.rect(x, 41, 3, 4, S.dark);
+    for (const [x, y, c] of [[20, 36, S.red], [26, 38, S.glow], [31, 36, S.red], [14, 32, S.glow], [38, 34, S.spark]] as const) p.ellipse(x, y, 1.6, 1.4, c);
+    p.outline(SPRITE_INK);
+  },
+  /** Salamandrón: long and heavy, cracks of lava glowing all along its black back, smoke from its nostrils. */
+  salamandron(p) {
+    p.poly([[32, 34], [47, 30], [47, 34], [34, 40]], S.black); // the tail
+    p.ellipse(24, 34, 14, 7, S.black);
+    p.ellipse(10, 29, 8, 6, S.black);
+    p.ellipse(7, 27, 2, 2, S.eye).set(7, 27, SPRITE_INK);
+    for (const x of [14, 32]) p.rect(x, 38, 5, 7, S.dark);
+    for (let x = 14; x < 40; x += 5) p.line(x, 29, x + 3, 33, S.glow).line(x + 3, 33, x + 1, 37, S.red);
+    for (const [x, y] of [[3, 24], [1, 21], [4, 19]]) p.set(x, y, S.dark);
+    p.outline(SPRITE_INK);
+  },
+  /** Culebrita: a little green snake coiled up, a ruff of turquoise and red feathers round its head. */
+  culebrita(p) {
+    p.ellipse(26, 40, 13, 5, E.green);
+    p.ellipse(26, 35, 9, 4, E.light);
+    p.ellipse(24, 31, 6, 3, E.green);
+    p.poly([[14, 22], [10, 16], [16, 18], [18, 13], [21, 20], [24, 17], [22, 24]], E.feather); // the ruff
+    p.poly([[16, 18], [18, 13], [19, 19]], E.red);
+    p.ellipse(16, 25, 6, 5, E.green);
+    p.poly([[9, 25], [12, 23], [12, 27]], E.gold); // the little beak
+    p.ellipse(15, 24, 1.6, 1.6, E.gold).set(15, 24, SPRITE_INK);
+    p.outline(SPRITE_INK);
+  },
+  /** Emplumón: the feathered serpent rising in coils, wide feathered wings, a crest of red and gold. */
+  emplumon(p) {
+    p.poly([[22, 14], [2, 2], [8, 14], [0, 18], [20, 22]], E.feather); // the wings
+    p.poly([[28, 14], [46, 2], [42, 14], [48, 18], [30, 22]], E.feather);
+    p.ellipse(26, 42, 14, 4, E.green);
+    p.ellipse(28, 35, 8, 4, E.light);
+    p.poly([[22, 34], [26, 18], [30, 18], [28, 34]], E.green); // the neck, rising
+    p.ellipse(24, 15, 7, 5, E.green);
+    p.poly([[22, 10], [24, 2], [27, 9], [30, 4], [30, 12]], E.red); // the crest
+    p.poly([[15, 15], [18, 13], [18, 17]], E.gold); // the beak
+    p.ellipse(22, 14, 1.8, 1.8, E.gold).set(22, 14, SPRITE_INK);
+    for (let x = 14; x < 40; x += 5) p.set(x, 42, E.dark);
     p.outline(SPRITE_INK);
   },
   /** Cadenegro: huge and black, red eyes, goat hooves, a chain dragging from its neck. */

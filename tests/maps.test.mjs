@@ -116,8 +116,8 @@ const report = await t.game(() => {
     }
     if (m.exit) m.rows.forEach((r, y) => [...r].forEach((ch, x) => TILES[ch]?.kind === 'mat' && exits.push([x, y])));
 
-    // NPCs that are always there block their tile (gate guards and item balls come and go).
-    const blocked = new Set((m.npcs ?? []).filter((n) => !n.show).map((n) => `${n.x},${n.y}`));
+    // NPCs that are always there block their tile (gate guards and item balls come and go; Strength pushes boulders).
+    const blocked = new Set((m.npcs ?? []).filter((n) => !n.show && !n.boulder).map((n) => `${n.x},${n.y}`));
     const reach = (from) => {
       const seen = new Set([from.join()]);
       const q = [from];

@@ -25,14 +25,8 @@ await t.walk('left', 6);
 const said = await t.nextText();
 t.check('Pintora Lucía stops you on the long road', said.includes('pintando'), said);
 
-// Ruta 9 is plain grass for now, closed from Ruta 5 by a thin tree: an old save there starts again on Ruta 5's road, and
-// the tree stops you going back in.
-await t.fromSave({ map: 'ruta10', x: 2, y: 25, dir: 'up', party: [['gotita', 15]], flags: { ruta9Pasto: false } });
-t.check('an old save on Ruta 9 starts on Ruta 5’s road', String(await t.pos()) === 'ruta6,34,29', await t.pos());
-await t.walk('right', 3);
-t.check('a thin tree closes Ruta 9 from Ruta 5', String(await t.pos()) === 'ruta10,0,2', await t.pos());
-
 // The thin tree north of Ruta 4's road blocks the way to gym 6, until you can cut it.
+await t.fromSave({ map: 'ruta5', x: 80, y: 4, dir: 'up', party: [['gotita', 15]] });
 const r = await t.talk('ruta5', 80, 3, 'up');
 t.check('the thin tree on Ruta 4 looks like it could be cut', r.said[0]?.includes('cortar'), r.said);
 
