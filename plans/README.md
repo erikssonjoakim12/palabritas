@@ -12,6 +12,7 @@ history keeps the old plans.
 | [region5-jungle.md](region5-jungle.md) | Villa Jaguar, the Selva and the Templo del Jaguar: what's placed, the experience to build, open questions |
 | [palabritas.md](palabritas.md) | how a Palabrita's data is made, and the Palabritas planned so far |
 | [region7-8.md](region7-8.md) | towns 7 and 8 (built 2026-11-09): Ruta 11, Puerto Rayo on its stormy lake, the trail down through Ruta 3, Ciudad Ceniza behind its boulders, the Dragón families, Strength |
+| [world-life.md](world-life.md) | a world that feels alive: small movements on the map, greetings by the clock, weather by region (with rain Palabritas and a forecast board), people who notice what you've done; pinned: your Palabrita walking behind you, a weekly event |
 | [cadejos.md](cadejos.md) | region 6: Villa Bruma and the fog (built), the two legendary dogs Cadenegro and Cadeblanco, caught around gym 7 (later), what's left for gym 6 |
 
 **Writing a plan** (as for gyms 2–4, which worked well):
