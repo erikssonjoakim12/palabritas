@@ -108,7 +108,7 @@ export function newSave(): SaveData {
     dir: 'down',
     party: [],
     box: [],
-    flags: { amanecerWide: true, ruta5East: true, rutasCortas: true, sinEstacion: true, canonCascada: true, ruta2Nueva: true, palancaJunto: true, craterDerrumbe: true, oesteCorto: true, selvaLaberinto: true, ruta10Curvas: true, flyTowns: true, volcanZigzag: true, ruta9Pasto: true, cenizaCiudad: true },
+    flags: { amanecerWide: true, ruta5East: true, rutasCortas: true, sinEstacion: true, canonCascada: true, ruta2Nueva: true, palancaJunto: true, craterDerrumbe: true, oesteCorto: true, selvaLaberinto: true, ruta10Curvas: true, flyTowns: true, volcanZigzag: true, ruta9Pasto: true, cenizaCiudad: true, rayoSur: true },
     gender: 'boy',
     money: 0,
     bag: {},
@@ -267,6 +267,13 @@ function migrate(s: SaveData) {
   if (!s.flags.ruta9Pasto) {
     if (s.map === 'ruta10' || (s.map === 'rio' && s.x >= 42 && s.y >= 37)) Object.assign(s, { map: 'ruta6', x: 34, y: 29, dir: 'left' });
     s.flags.ruta9Pasto = true;
+  }
+  // Ruta 11 grew 16 rows longer, so Puerto Rayo lies further south (the user): its south path and Ruta 3's old trail
+  // are gone, and anyone there starts again on the lake's new south-west shore.
+  if (!s.flags.rayoSur) {
+    if (s.map === 'ruta12' && s.y >= 28) s.y += 16;
+    if ((s.map === 'rayo' && s.y >= 37 && s.x <= 27) || (s.map === 'ruta3' && s.x >= 54 && s.y <= 21)) Object.assign(s, { map: 'rayo', x: 20, y: 35, dir: 'up' });
+    s.flags.rayoSur = true;
   }
   // Ruta 9 and the river's land became Ciudad Ceniza, closed by boulders (plans/region7-8.md): anyone saved there
   // starts again on Ruta 5's road, just outside.

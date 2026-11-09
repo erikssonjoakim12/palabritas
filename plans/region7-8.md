@@ -8,7 +8,8 @@ data/trainers.ts). Waiting for the user's playthrough and art (the eight new Pal
 ## The road: Ruta 11 (`ruta12`)
 
 - Leaves **Ruta 10 high up, close to Villa Bruma** (the user), from its east edge, so gyms 6 and 7 can be done in
-  either order. East through rainy cloud forest, then down to the lake's north shore.
+  either order. East through rainy cloud forest, then a long winding descent to the lake's north shore (the user:
+  longer, and the lake further south, beside Ruta 3's mountains).
 - Trainers at 35–39, the lake's 39–41, the gym's 41–42 (the user: a few levels below the rule; the leader stays at 50), three with rematches. Wild Palabritas of the
   cloud forest and the rain; Basiliquito by the streams.
 
@@ -25,10 +26,10 @@ data/trainers.ts). Waiting for the user's playthrough and art (the eight new Pal
 
 ## The way back south, through Ruta 3
 
-- From the lake's south-west shore, a **ledge** down into Ruta 3's north-east mountains (one way), and a **thin
-  tree** beside it: once you can cut, you can climb back up. Before Cut (medal 5) nobody from Ruta 3 gets up there.
-- A trail down through the mountains (rocks and trees cleared) to the road to Ciudad Brisa, and on to a **small
-  beach** on the Lago de las Islas.
+- From the lake's south-west shore, a trail west through Ruta 3's mountains to a **ledge** just above Ruta 3's own
+  path (the user: close to the way you walked before), one way, and a **thin tree** beside it: once you can cut, you
+  can climb back up. Before Cut (medal 5) nobody from Ruta 3 gets up there.
+- Down Ruta 3's path to the road to Ciudad Brisa, and on to a **small beach** on the Lago de las Islas.
 
 ## Town 8: Ciudad Ceniza, the old capital in the lava (gym 8, Dragón)
 

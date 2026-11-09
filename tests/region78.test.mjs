@@ -13,16 +13,19 @@ const medalFlags = Object.fromEntries(MEDALS.map((m) => [`medal${m}`, true]));
 await t.fromSave({ map: 'ruta11', x: 43, y: 10, dir: 'right', party, medals: MEDALS, flags: { ...medalFlags, 'beat:exploradora_vicky': true } });
 await t.walk('right', 3);
 t.check('Ruta 10 leads east into Ruta 11', (await t.pos())[0] === 'ruta12', await t.pos());
-await t.warp('ruta12', 29, 27, 'down');
+await t.warp('ruta12', 29, 43, 'down');
 await t.walk('down', 4);
 t.check('Ruta 11 comes down to Puerto Rayo', (await t.pos())[0] === 'rayo', await t.pos());
 
-// The trail south: off the lake's south-west shore into Ruta 3, over a ledge you can't climb back up.
-await t.warp('rayo', 18, 50, 'down');
-await t.walk('down', 4);
+// The trail south: off the lake's south-west shore into Ruta 3's mountains, and west to a ledge just above the path
+// you walked there before (the user), which you can't climb back up.
+await t.warp('rayo', 18, 35, 'down');
+for (const [dir, n] of [['down', 5], ['left', 6], ['down', 3], ['left', 14], ['down', 1]]) await t.walk(dir, n);
 const down = await t.pos();
 await t.walk('up', 3);
-t.check('the trail drops into Ruta 3 over a ledge, one way', down[0] === 'ruta3' && down[2] >= 2 && String(await t.pos()) === 'ruta3,58,2', [down, await t.pos()]);
+t.check('the trail drops into Ruta 3 over a ledge, one way', String(down) === 'ruta3,38,8' && String(await t.pos()) === 'ruta3,38,8', [down, await t.pos()]);
+await t.fromSave({ map: 'ruta3', x: 56, y: 10, dir: 'up', party, flags: { rayoSur: false } });
+t.check('an old save on the old trail starts on the lake\'s new shore', String(await t.pos()) === 'rayo,20,35', await t.pos());
 
 // Gym 7: Trueno, the Medalla Rayo (the 7th).
 const crew7 = { 'beat:electricista_rolando': true, 'beat:meteorologa_ines': true, 'beat:marinera_paz': true };
