@@ -4,13 +4,13 @@ import { start } from './lib.mjs';
 const t = await start('money');
 
 // Niña Sofía stands right in front of you on Ruta 1.
-await t.fromSave({ map: 'ruta1', x: 13, y: 12, dir: 'right', money: 0, party: [['aguacatito', 15]] });
+await t.fromSave({ map: 'ruta1', x: 19, y: 12, dir: 'right', money: 0, party: [['aguacatito', 15]] });
 await t.press('z');
 let r = await t.play();
 let s = await t.save();
 t.check('beating Sofía pays prize money', s.money > 0 && r.said.some((x) => x.includes('Ganaste')), s.money);
 
-await t.fromSave({ map: 'ruta1', x: 13, y: 12, dir: 'right', money: 100, party: [['aguacatito', 2]] });
+await t.fromSave({ map: 'ruta1', x: 19, y: 12, dir: 'right', money: 100, party: [['aguacatito', 2]] });
 await t.press('z');
 r = await t.play({ right: false });
 s = await t.save();

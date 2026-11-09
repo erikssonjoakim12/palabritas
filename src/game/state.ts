@@ -108,7 +108,7 @@ export function newSave(): SaveData {
     dir: 'down',
     party: [],
     box: [],
-    flags: { amanecerWide: true, ruta5East: true, rutasCortas: true, sinEstacion: true, canonCascada: true, ruta2Nueva: true, palancaJunto: true, craterDerrumbe: true, oesteCorto: true, selvaLaberinto: true, ruta10Curvas: true, flyTowns: true, volcanZigzag: true, ruta9Pasto: true, cenizaCiudad: true, rayoSur: true },
+    flags: { amanecerWide: true, ruta5East: true, rutasCortas: true, sinEstacion: true, canonCascada: true, ruta2Nueva: true, palancaJunto: true, craterDerrumbe: true, oesteCorto: true, selvaLaberinto: true, ruta10Curvas: true, flyTowns: true, volcanZigzag: true, ruta9Pasto: true, cenizaCiudad: true, rayoSur: true, ruta1Ancha: true },
     gender: 'boy',
     money: 0,
     bag: {},
@@ -267,6 +267,11 @@ function migrate(s: SaveData) {
   if (!s.flags.ruta9Pasto) {
     if (s.map === 'ruta10' || (s.map === 'rio' && s.x >= 42 && s.y >= 37)) Object.assign(s, { map: 'ruta6', x: 34, y: 29, dir: 'left' });
     s.flags.ruta9Pasto = true;
+  }
+  // Ruta 1 grew 6 tiles to the west (the user): everything on it moved right.
+  if (!s.flags.ruta1Ancha) {
+    if (s.map === 'ruta1') s.x += 6;
+    s.flags.ruta1Ancha = true;
   }
   // Ruta 11 grew 16 rows longer, so Puerto Rayo lies further south (the user): its south path and Ruta 3's old trail
   // are gone, and anyone there starts again on the lake's new south-west shore.

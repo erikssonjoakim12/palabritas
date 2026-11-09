@@ -13,7 +13,7 @@ const phone = (w, h) => page.emulate({
 await phone(915, 412);
 await page.goto(BASE + '/', { waitUntil: 'networkidle0' });
 await page.evaluate(() => {
-  localStorage.setItem('palabritas.save.v1', JSON.stringify({ v: 1, name: 'Ana', map: 'ruta1', x: 4, y: 9, dir: 'down',
+  localStorage.setItem('palabritas.save.v1', JSON.stringify({ v: 1, name: 'Ana', map: 'ruta1', x: 10, y: 9, dir: 'down',
     party: [{ uid: 'a', sp: 'gotita', level: 3, hp: 20 }], flags: { starter: true, metCeiba: true },
     settings: { textScale: 6, dialogVoice: false, slowVoice: false } }));
 });

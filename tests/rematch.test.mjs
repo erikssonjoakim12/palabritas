@@ -5,7 +5,7 @@ import { start } from './lib.mjs';
 
 const t = await start('rematch');
 // Sofía stands right in front of you on Ruta 1.
-await t.fromSave({ map: 'ruta1', x: 13, y: 12, dir: 'right', party: [['aguacatito', 15]] });
+await t.fromSave({ map: 'ruta1', x: 19, y: 12, dir: 'right', party: [['aguacatito', 15]] });
 const today = await t.game(() => window.__game.today());
 await t.press('z');
 await t.play();

@@ -37,7 +37,7 @@ await t.play({ choose: () => more.shift(), answers: ['me da una superpocion'] })
 s = await t.save();
 t.check('bought a Superpoción for C$250', s.bag.superpocion === 1 && s.money === 750, { bag: s.bag, money: s.money });
 
-await t.fromSave({ map: 'ruta1', x: 3, y: 4, dir: 'right', party: [['gotita', 8, { hp: 0 }], ['conejito', 6]], bag: { revivir: 1 } });
+await t.fromSave({ map: 'ruta1', x: 9, y: 4, dir: 'right', party: [['gotita', 8, { hp: 0 }], ['conejito', 6]], bag: { revivir: 1 } });
 const revive = ['MOCHILA', 'Revivir', 'B', 'SALIR'];
 await t.press('Enter');
 await t.play({ choose: (opts) => opts.find((o) => o.startsWith('Gotita')) ?? revive.shift() });
@@ -49,5 +49,5 @@ await t.game(() => { window.__game.G.save.repel = 3; Math.random = () => 0; }); 
 await t.walk('right', 3);
 const said = await t.nextText();
 s = await t.save();
-t.check('no wild Palabritas while the Repelente lasts, then it wears off', s.x === 6 && !s.repel && said.includes('Repelente'), { x: s.x, said });
+t.check('no wild Palabritas while the Repelente lasts, then it wears off', s.x === 12 && !s.repel && said.includes('Repelente'), { x: s.x, said });
 await t.end();

@@ -17,7 +17,7 @@ await sleep(200);
 t.check('a house plays the song of its town', (await music()).playing === 'limon');
 
 // A wild battle: its song, then a whisper while answering.
-await t.warp('ruta1', 9, 10, 'up');
+await t.warp('ruta1', 15, 10, 'up');
 await t.wild('gusanito', 3);
 await t.play({ until: (u) => !!u.challenge && !u.challenge.result });
 const inChallenge = await music();

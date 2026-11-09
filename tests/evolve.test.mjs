@@ -3,7 +3,7 @@
 import { start, sleep } from './lib.mjs';
 
 const t = await start('evolve');
-await t.fromSave({ map: 'ruta1', x: 10, y: 20, dir: 'up', party: [['salchichita', 15, { since: 0 }]] });
+await t.fromSave({ map: 'ruta1', x: 16, y: 20, dir: 'up', party: [['salchichita', 15, { since: 0 }]] });
 const before = await t.game(() => {
   const g = window.__game;
   for (const i of g.curriculum.itemsUpTo('salchichita', 15)) g.learning.record(i, 'type', 'perfect', false);

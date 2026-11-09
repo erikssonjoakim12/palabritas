@@ -3,7 +3,7 @@
 import { start, sleep } from './lib.mjs';
 
 const t = await start('battle');
-await t.fromSave({ map: 'ruta1', x: 3, y: 3, dir: 'down', party: [['gotita', 2]] });
+await t.fromSave({ map: 'ruta1', x: 9, y: 3, dir: 'down', party: [['gotita', 2]] });
 
 await t.wild('conejito', 2);
 let r = await t.play();
@@ -23,7 +23,7 @@ await t.game(() => {
   g.G.save.flags.palabolas = true;
   g.G.save.bag = { palabola: 5 };
   Math.random = () => 0; // the ball always holds (the luck of a catch isn't what this tests)
-  g.loadMap('ruta1', 3, 3, 'down');
+  g.loadMap('ruta1', 9, 3, 'down');
 });
 let caught = false;
 for (let tries = 0; tries < 5 && !caught; tries++) {

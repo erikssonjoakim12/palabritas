@@ -26,7 +26,7 @@ await useComputer('RETIRAR');
 t.check('withdrawing brings it back', (await counts()).join() === '2,0', await counts());
 
 const six = [['gotita', 8], ['conejito', 6], ['salchichita', 6], ['aguacatito', 6], ['gotita', 5], ['conejito', 5]];
-await t.fromSave({ map: 'ruta1', x: 10, y: 5, party: six, bag: { palabola: 5 } });
+await t.fromSave({ map: 'ruta1', x: 16, y: 5, party: six, bag: { palabola: 5 } });
 await t.game(() => { Math.random = () => 0; }); // the ball always holds
 await t.wild('conejito', 3);
 let thrown = false;
