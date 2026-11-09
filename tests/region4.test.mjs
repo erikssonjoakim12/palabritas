@@ -24,7 +24,7 @@ t.check('Lucas battles you at the foot of the trail, with his evolved starter', 
 
 // The crater's west walkway: Don Sigilo, with the rockets, spots you; the rockets come back, you ride down, and the festival night follows.
 await t.fromSave({ map: 'crater', x: 3, y: 6, dir: 'down', party, flags: { cohetesRobados: true, lucas3: true } });
-await t.walk('down', 3);
+await t.walk('down', 4);
 await t.play(yes);
 t.check('beating Don Sigilo brings the rockets back', (await flags()).cohetesRecuperados && (await flags())['beat:sigilo']);
 t.check('and the festival night starts (fireworks)', (await t.pos())[0] === 'chispa_noche' && (await t.game(() => !!window.__game.currentMap().fireworks)), await t.pos());

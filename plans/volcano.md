@@ -62,8 +62,8 @@ So the slide comes only after Equipo Silencio:
 - **The fallen rock moves to the bottom-left** of the crater's walkway (it blocks the west side from below; today it
   lies on the west walkway, rows 8–12): you go round the east walkway to the top, as now.
 - **At the top, a grunt keeps watch** where Don Sigilo stood (16, 2).
-- **Don Sigilo waits on the west walkway with the rocket crates beside him, by the lava** (the user, 2026-11-08), two
-  tiles above the slide's launch spot, so he doesn't stand in it; the guide comes out beside it afterwards. When he loses he escapes **on a
+- **Don Sigilo waits against the west walkway's wall with the rocket crates beside him** (the user, 2026-11-09), two
+  tiles above the slide's launch spot, so he doesn't stand in it; the guide comes out by the wall below it afterwards (not by the lava). When he loses he escapes **on a
   board, sliding down the slope first** (the user, 2026-11-07): your first look at the ride. Then the guide comes out
   of hiding and offers you a board.
 - **The way to Ruta 9 (the crater's top-left exit) is blocked with rock.** Ruta 9's upper part is then out of reach

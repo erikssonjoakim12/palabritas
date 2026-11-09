@@ -697,15 +697,15 @@ export const REGION4_MAPS: Record<string, MapDef> = {
       // On the east walkway's outer edge, against the rock (the lava is hot): every grunt comes before Don Sigilo.
       { id: 'silencioso5', x: 29, y: 18, look: 'silencioso', dir: 'left', script: 'silencioso5', sight: 2 },
       { id: 'silencioso6', x: 29, y: 8, look: 'silenciosa', dir: 'left', script: 'silencioso6', sight: 2 },
-      // A Silencioso keeps watch at the top. Don Sigilo stands on the west walkway with the stolen rockets, by the lava,
-      // about to throw them in (plans/volcano.md): you only get there after the others, round by the east walkway,
-      // and he blocks the way to the slide's launch spot (1, 12) until he's gone.
+      // A Silencioso keeps watch at the top. Don Sigilo stands against the west walkway's wall with the stolen rockets
+      // (plans/volcano.md): you only get there after the others, round by the east walkway, and he watches the way to
+      // the slide's launch spot (1, 12) until he's gone.
       { id: 'silencioso7', x: 16, y: 2, look: 'silencioso', dir: 'down', script: 'silencioso7', sight: 2 },
-      { id: 'sigilo', x: 3, y: 10, look: 'sigilo', dir: 'up', script: 'sigilo', sight: 2, show: () => !flag('sigiloSeFue') },
-      { id: 'cohetes1', x: 2, y: 10, object: 'cajaCohetes', script: 'cohetes', show: () => !flag('cohetesRecuperados') },
-      { id: 'cohetes2', x: 4, y: 10, object: 'cajaCohetes', script: 'cohetes', show: () => !flag('cohetesRecuperados') },
-      // The board rental's guide comes out once he's gone, beside the launch spot: down the west slope, to Ruta 7.
-      { id: 'guia_tablas', x: 4, y: 13, look: 'campista', dir: 'left', script: 'guiaTablas', show: () => flag('sigiloSeFue') },
+      { id: 'sigilo', x: 2, y: 10, look: 'sigilo', dir: 'right', script: 'sigilo', sight: 2, show: () => !flag('sigiloSeFue') },
+      { id: 'cohetes1', x: 2, y: 9, object: 'cajaCohetes', script: 'cohetes', show: () => !flag('cohetesRecuperados') },
+      { id: 'cohetes2', x: 2, y: 11, object: 'cajaCohetes', script: 'cohetes', show: () => !flag('cohetesRecuperados') },
+      // The board rental's guide comes out once he's gone, by the wall below the launch spot (away from the lava).
+      { id: 'guia_tablas', x: 2, y: 13, look: 'campista', dir: 'right', script: 'guiaTablas', show: () => flag('sigiloSeFue') },
       { id: 'nido_chocoyos', x: 30, y: 12, object: 'nido', script: 'nidoChocoyos' },
     ],
   },

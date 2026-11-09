@@ -109,13 +109,15 @@ const SIGILO_ESCAPE: [number, number][] = SLIDE.slice(0, 14);
 const SIGILO_FOLLOW = 9;
 
 /**
- * To the launch spot, then down on a board to Ruta 7. The way there never crosses the guide (4, 13): into the
- * walkway's column 3 or west of it, along it to the launch spot's row, then west.
+ * To the launch spot, then down on a board to Ruta 7. The way there never crosses the guide (2, 13): along the
+ * walkway's middle (column 3) to the launch spot's row, then west.
  */
 async function bajarEnTabla() {
   closeText();
-  while (player.x > LAUNCH.x + 2) await scriptedStep('left');
-  while (player.y !== LAUNCH.y) await scriptedStep(player.y < LAUNCH.y ? 'down' : 'up');
+  if (player.y !== LAUNCH.y) {
+    while (player.x !== LAUNCH.x + 2) await scriptedStep(player.x > LAUNCH.x + 2 ? 'left' : 'right');
+    while (player.y !== LAUNCH.y) await scriptedStep(player.y < LAUNCH.y ? 'down' : 'up');
+  }
   while (player.x > LAUNCH.x) await scriptedStep('left');
   sfx('jump');
   await rideDown(SLIDE);
