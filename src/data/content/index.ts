@@ -140,7 +140,7 @@ export const THEMES: Record<string, Theme> = {};
 export const ITEMS: Record<string, Item> = {};
 
 /** What makes two lines "the same Spanish": the shown form, ignoring case and ¡!¿?.,. */
-export const spanishKey = (es: string) => es.toLowerCase().replace(/[¡!¿?.,]/g, '').trim();
+const spanishKey = (es: string) => es.toLowerCase().replace(/[¡!¿?.,]/g, '').trim();
 const BY_KEY = new Map<string, Item>();
 /** The same Spanish with different English in two lists (the first list's English wins, so the other is lost). data.test lists them. */
 export const EN_CONFLICTS: string[] = [];

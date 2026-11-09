@@ -1,13 +1,8 @@
-import { W, H, overlay, el } from '../engine/screen';
-import { setScene, getScene, nextFrame, frames } from '../engine/loop';
+import { W, overlay, el } from '../engine/screen';
+import { setScene, getScene, frames } from '../engine/loop';
 import { sfx } from '../engine/sfx';
 import { creatureArt } from '../art/creatures';
-import { OBJECTS } from '../art/chars';
-import { makeCanvas } from '../art/pixel';
-import { EVOLUTION_OUTLINE, BLACK, BATTLE } from '../style/colors';
 import { portrait } from '../art/portraits';
-import type { Img } from '../art/pixel';
-import { LINEUP_BALL, BALL_COLORS, FAINTED_COLORS, EMPTY_COLORS, drawPattern } from '../art/balls';
 import { G, playerLook, type Mon } from '../game/state';
 import { stats, monName, checkLevelUps, firstAble, markSeen, keepMon, newMon, knownMoves, newMoves, evolutionsDue, evolve, type LevelUp } from '../game/mon';
 import { SPECIES, MODE_INFO, type Move } from '../data/species';
@@ -22,244 +17,19 @@ import { ITEM_DEFS } from '../data/items';
 import { menu } from '../ui/menu';
 import { typeIcon } from '../art/typeIcon';
 import { setBattleMusic, battleMusicFor, playOverlay, clearOverlay, endBattleSong } from '../audio/bgm';
-
-/** An element with a small picture in front of its text. */
-const withIcon = (icon: Node, e: HTMLElement) => (e.prepend(icon), e);
-import { pickMon, hpClass } from '../ui/party';
+import { pickMon } from '../ui/party';
+import { stage, clearStage, battleScene, fighter, enemyFighter, myFighter, lunge, hitAnim, sinkAnim, slide, encounterFlash, throwBall, shakeBall, breakOut, silhouette, SLOT, ENEMY_POS, ME_POS, type Fighter } from './stage';
+import { buildHud, type Hud } from './hud';
 import { canListen } from '../lang/speech';
 import type { TrainerDef } from '../data/trainers';
 
+/** An element with a small picture in front of its text. */
+const withIcon = (icon: Node, e: HTMLElement) => (e.prepend(icon), e);
+
 export type BattleResult = 'win' | 'lose' | 'run' | 'caught';
 
-/** Anything standing on the battlefield: a Palabrita, a trainer or you. */
-interface Fighter {
-  img: Img;
-  x: number;
-  y: number;
-  blink: number;
-  sink: number;
-  hidden: boolean;
-  lunge: number;
-  /** A Palabrita (not a trainer): it breathes (bobs a pixel) and hops when it comes out. */
-  alive: boolean;
-  /** Pixels up, while hopping out. */
-  hop: number;
-}
-
-interface Ball {
-  x: number;
-  y: number;
-  shake: number;
-}
-
-/**
- * Each side has a 56x56 slot (Gen 2's sprite size); sprites stand on its bottom, centered.
- * The opponent's slot ends at y=54, just above your health box.
- */
-const SLOT = 56;
 /** How often a perfect answer (on a non-tap move) is a critical hit. */
 const CRIT_CHANCE = 0.5;
-const ENEMY_POS = { x: 100, y: -2 };
-const ME_POS = { x: 4, y: 38 };
-
-let enemyF: Fighter | null = null;
-let meF: Fighter | null = null;
-let ball: Ball | null = null;
-let flashOn = false;
-/** The evolution scene: the whole screen is the evolving Palabrita (the battle waits behind it). */
-let evo: { img: Img } | null = null;
-/** Gen 2 style row of Palabolas (one per Palabrita) shown when a trainer battle starts. */
-let lineups: { enemy?: Mon[]; me?: Mon[] } = {};
-
-const battleScene = {
-  update() {
-    for (const f of [enemyF, meF]) if (f && f.blink > 0) f.blink--;
-  },
-  render(g: CanvasRenderingContext2D) {
-    g.fillStyle = flashOn ? BLACK : BATTLE.bg;
-    g.fillRect(0, 0, W, H);
-    if (evo) {
-      // Centered over the text box, like Gold/Silver's evolution screen.
-      g.drawImage(evo.img, Math.round((W - evo.img.width) / 2), Math.round(48 - evo.img.height / 2));
-      return;
-    }
-    if (flashOn) return;
-    g.fillStyle = BATTLE.ground;
-    g.beginPath();
-    g.ellipse(128, 52, 24, 5, 0, 0, Math.PI * 2);
-    g.fill();
-    g.beginPath();
-    g.ellipse(32, 92, 24, 5, 0, 0, Math.PI * 2);
-    g.fill();
-    drawFighter(g, enemyF, 0);
-    drawFighter(g, meF, 1);
-    if (ball) g.drawImage(OBJECTS.palabola, Math.round(ball.x + ball.shake), Math.round(ball.y));
-    if (lineups.enemy) drawLineup(g, lineups.enemy, 8, 14, false);
-    if (lineups.me) drawLineup(g, lineups.me, 96, 80, true);
-  },
-};
-
-/** How long a breath takes (ms): a Palabrita bobs up a pixel for half of it. */
-const BREATH = 1000;
-
-function drawFighter(g: CanvasRenderingContext2D, f: Fighter | null, phase: number) {
-  if (!f || f.hidden || f.sink >= f.img.height) return;
-  if (f.blink > 0 && Math.floor(f.blink / 4) % 2 === 0) return;
-  const { width: w, height: fullH } = f.img;
-  const h = fullH - f.sink; // fainting: it sinks into the ground
-  const x = f.x + Math.floor((SLOT - w) / 2) + f.lunge;
-  // Breathing (yours and the opponent's out of step), not while it's hit, lunging or fainting.
-  const still = !f.alive || f.sink || f.lunge || f.blink || f.hop;
-  const breath = still ? 0 : Math.floor(performance.now() / (BREATH / 2) + phase) % 2;
-  const y = f.y + SLOT - fullH + f.sink - f.hop - breath;
-  g.drawImage(f.img, 0, 0, w, h, Math.round(x), Math.round(y), w, h);
-}
-
-/** 6 slots: a ball per Palabrita (gray when fainted), empty outlines for the rest, on a bracket line. */
-function drawLineup(g: CanvasRenderingContext2D, team: Mon[], x: number, y: number, tickLeft: boolean) {
-  for (let i = 0; i < 6; i++) {
-    const mon = team[i];
-    drawPattern(g, LINEUP_BALL, x + i * 9, y, !mon ? EMPTY_COLORS : mon.hp > 0 ? BALL_COLORS : FAINTED_COLORS);
-  }
-  g.fillStyle = BALL_COLORS.k;
-  g.fillRect(x - 3, y + 10, 6 * 9 + 4, 1);
-  g.fillRect(tickLeft ? x - 3 : x + 6 * 9, y + 4, 1, 6);
-}
-
-const fighter = (img: Img, x: number, y: number, alive = false): Fighter => ({ img, x, y, blink: 0, sink: 0, hidden: false, lunge: 0, alive, hop: 0 });
-/** The opponent's side shows Palabritas from the front, yours from the back. Both start off-screen. */
-const enemyFighter = (mon: Mon) => fighter(creatureArt(mon.sp).front, -SLOT, ENEMY_POS.y, true);
-const myFighter = (mon: Mon) => fighter(creatureArt(mon.sp).back, W, ME_POS.y, true);
-
-async function lunge(f: Fighter, dir: number) {
-  for (let i = 0; i <= 10; i++) {
-    f.lunge = dir * (i <= 5 ? i : 10 - i) * 1.6;
-    await nextFrame();
-  }
-  f.lunge = 0;
-}
-
-async function hitAnim(f: Fighter) {
-  f.blink = 24;
-  await frames(24);
-}
-
-async function sinkAnim(f: Fighter) {
-  for (let i = 0; i <= 24; i++) {
-    f.sink = Math.round((f.img.height * i) / 24);
-    await nextFrame();
-  }
-  f.hidden = true;
-}
-
-/** Slide sideways to x (in from off-screen, or out to it). */
-async function slide(f: Fighter, toX: number) {
-  const fromX = f.x;
-  f.hidden = false;
-  f.sink = 0;
-  for (let i = 1; i <= 24; i++) {
-    f.x = fromX + ((toX - fromX) * i) / 24;
-    await nextFrame();
-  }
-  // A Palabrita arriving hops once (not one sliding away).
-  if (f.alive && toX !== W && toX !== -SLOT) {
-    for (let i = 1; i <= 14; i++) {
-      f.hop = Math.round(Math.sin((Math.PI * i) / 14) * 4);
-      await nextFrame();
-    }
-    f.hop = 0;
-  }
-}
-
-async function encounterFlash() {
-  sfx('encounter');
-  for (let i = 0; i < 6; i++) {
-    flashOn = i % 2 === 0;
-    await frames(5);
-  }
-  flashOn = false;
-}
-
-// ---------- HUD ----------
-
-interface Hud {
-  root: HTMLElement;
-  update(): void;
-  show(side: 'enemy' | 'player', visible: boolean): void;
-}
-
-/**
- * Gold/Silver battle boxes: name, then ":N7" (N for nivel = level), then a "PS:" bar
- * (puntos de salud = HP), inside a bracket line. Yours also shows PS numbers and loyalty.
- */
-function buildHud(getEnemy: () => Mon, getMe: () => Mon, wild: boolean): Hud {
-  const root = el('div');
-  const mk = (cls: string, showNum: boolean) => {
-    const box = el('div', `hud ${cls}`);
-    const name = el('div', 'name');
-    const lv = el('div', 'lv');
-    const br = el('div', 'bracket');
-    const row = el('div', 'hprow');
-    const bar = el('div', 'hpbar');
-    const fill = el('div');
-    bar.appendChild(fill);
-    row.append(el('span', 'hplabel', 'PS:'), bar);
-    br.appendChild(row);
-    const num = el('div', 'hpnum');
-    const loy = el('div', 'loyalty');
-    if (showNum) br.append(num, loy);
-    box.append(name, lv, br);
-    root.appendChild(box);
-    return { box, name, lv, bar, fill, num, loy };
-  };
-  const e = mk('enemy', false);
-  const p = mk('player', true);
-  // A wild Palabrita you've already caught: a tiny Palabola by its level (Gold/Silver show it too).
-  const caught = document.createElement('canvas');
-  caught.className = 'caught';
-  caught.width = caught.height = 7;
-  caught.getContext('2d')!.drawImage(OBJECTS.palabolaMini, 0, 0);
-  e.lv.appendChild(caught);
-  overlay.appendChild(root);
-  const set = (h: ReturnType<typeof mk>, mon: Mon) => {
-    const s = stats(mon);
-    const name = monName(mon);
-    h.name.textContent = name;
-    // Long names (Guardabarranco, Nacatamastín, nicknames) get smaller letters instead of running off the box.
-    h.name.style.fontSize = name.length > 10 ? `${10 / name.length}em` : '';
-    h.lv.textContent = `:N${mon.level}`;
-    h.fill.style.width = `${Math.max(0, (100 * mon.hp) / s.maxHp)}%`;
-    h.bar.className = `hpbar ${hpClass(mon.hp, s.maxHp)}`;
-    h.num.textContent = `${mon.hp}/ ${s.maxHp}`;
-  };
-  return {
-    root,
-    update() {
-      set(e, getEnemy());
-      caught.hidden = !(wild && G.save.caught.includes(getEnemy().sp));
-      e.lv.appendChild(caught); // set() replaced the level's text
-      const me = getMe();
-      set(p, me);
-      const l = lealtad(me);
-      p.loy.textContent = `♥ ${Math.round(l * 100)}%`;
-      p.loy.style.color = l < OBEY_THRESHOLD ? 'var(--bad)' : '';
-    },
-    show(side, visible) {
-      (side === 'enemy' ? e : p).box.style.visibility = visible ? '' : 'hidden';
-    },
-  };
-}
-
-/** A sprite as a solid outline (the evolution scene flashes between the two forms' outlines). */
-function silhouette(img: Img): Img {
-  const c = makeCanvas(img.width, img.height);
-  const g = c.getContext('2d')!;
-  g.drawImage(img, 0, 0);
-  g.globalCompositeOperation = 'source-in';
-  g.fillStyle = EVOLUTION_OUTLINE;
-  g.fillRect(0, 0, img.width, img.height);
-  return c;
-}
 
 // ---------- Damage ----------
 
@@ -297,7 +67,7 @@ interface Config {
 type Action = { type: 'fight'; move: Move } | { type: 'switch'; mon: Mon } | { type: 'ball'; id: string } | { type: 'item' } | { type: 'run' };
 
 /** The messages for level-ups (and the moves they bring): after a battle, a lesson or a review. */
-export async function announceLevelUps(ups: LevelUp[], each?: () => void) {
+async function announceLevelUps(ups: LevelUp[], each?: () => void) {
   for (const up of ups) {
     sfx('levelup');
     each?.();
@@ -339,9 +109,9 @@ async function runBattle(cfg: Config): Promise<BattleResult> {
   const tally = { asked: 0, learned: 0 };
 
   const trainerFighter = () => fighter(portrait(cfg.look ?? 'man'), -SLOT, ENEMY_POS.y);
-  enemyF = trainer ? trainerFighter() : enemyFighter(enemy);
-  meF = fighter(portrait(playerLook(), 'back'), W, ME_POS.y);
-  ball = null;
+  stage.enemyF = trainer ? trainerFighter() : enemyFighter(enemy);
+  stage.meF = fighter(portrait(playerLook(), 'back'), W, ME_POS.y);
+  stage.ball = null;
   closeText();
   overlay.querySelectorAll('.banner').forEach((b) => b.remove()); // the place-name banner
   setScene(battleScene);
@@ -383,27 +153,27 @@ async function runBattle(cfg: Config): Promise<BattleResult> {
     const to = SPECIES[mon.sp].evolves!.to;
     const [oldImg, newImg] = [creatureArt(mon.sp).front, creatureArt(to).front];
     if (hud) hud.root.style.visibility = 'hidden';
-    evo = { img: oldImg };
+    stage.evo = { img: oldImg };
     playOverlay('evolucion', false);
     await info(`¿Qué? ¡${from} está evolucionando!`, { en: `What? ${from} is evolving!` });
     const [oldOut, newOut] = [silhouette(oldImg), silhouette(newImg)];
     for (let i = 0; i < 20; i++) {
-      evo.img = i % 2 ? oldOut : newOut;
+      stage.evo.img = i % 2 ? oldOut : newOut;
       if (i % 2) sfx('blip');
       await frames(Math.max(3, 18 - i));
     }
     // The new form: a flash, then in color.
-    flashOn = true;
+    stage.flash = true;
     await frames(4);
-    flashOn = false;
-    evo.img = newImg;
+    stage.flash = false;
+    stage.evo.img = newImg;
     evolve(mon);
     clearOverlay();
     sfx('caught');
     await info(`¡Felicidades! ¡${from} evolucionó a ${monName(mon)}!`, { en: `Congratulations! ${from} evolved into ${monName(mon)}!` });
     // Back to the battle, where it left off.
-    evo = null;
-    if (mon === me && meF) meF.img = creatureArt(mon.sp).back;
+    stage.evo = null;
+    if (mon === me && stage.meF) stage.meF.img = creatureArt(mon.sp).back;
     if (hud) {
       hud.root.style.visibility = '';
       hud.update();
@@ -412,9 +182,9 @@ async function runBattle(cfg: Config): Promise<BattleResult> {
 
   const sendOut = async (mon: Mon) => {
     me = mon;
-    meF = myFighter(mon);
+    stage.meF = myFighter(mon);
     await info(`¡Adelante, ${monName(mon)}!`, { auto: 700 });
-    await slide(meF, ME_POS.x);
+    await slide(stage.meF, ME_POS.x);
     hud?.update();
   };
 
@@ -538,7 +308,7 @@ async function runBattle(cfg: Config): Promise<BattleResult> {
     }
     const crit = prep.grade === 'perfect' && !prep.helped && prep.mode !== 'choose' && Math.random() < CRIT_CHANCE;
     const mult = crit ? 1.5 : prep.helped ? 0.5 : prep.grade === 'close' ? 0.75 : 1;
-    const eff = await strike(me, meF!, enemy, enemyF!, 1, move, MODE_INFO[prep.mode].power, mult);
+    const eff = await strike(me, stage.meF!, enemy, stage.enemyF!, 1, move, MODE_INFO[prep.mode].power, mult);
     if (!eff) return;
     landed = true;
     if (crit) await info('¡Golpe crítico!', { auto: 900 });
@@ -568,7 +338,7 @@ async function runBattle(cfg: Config): Promise<BattleResult> {
         defended = true;
       }
     }
-    const eff = await strike(enemy, enemyF!, me, meF!, -1, move, MODE_INFO[move.mode].power, mult);
+    const eff = await strike(enemy, stage.enemyF!, me, stage.meF!, -1, move, MODE_INFO[move.mode].power, mult);
     if (!eff) return;
     if (defended) await info(`¡${myName()} resistió el golpe!`, { auto: 900 });
     await effMessage(eff);
@@ -579,18 +349,18 @@ async function runBattle(cfg: Config): Promise<BattleResult> {
     if (enemy.hp > 0) return null;
     await frames(60); // a moment at 0 PS before it falls (the user: it fell too fast)
     sfx('faint');
-    await sinkAnim(enemyF!);
+    await sinkAnim(stage.enemyF!);
     await info(`¡${enemyLabel()} se debilitó!`);
     if (trainer && enemyIdx < cfg.team.length - 1) {
       await endTurn(); // level up before the next one comes out
       enemy = cfg.team[++enemyIdx];
       markSeen(enemy.sp);
-      enemyF = enemyFighter(enemy);
+      stage.enemyF = enemyFighter(enemy);
       hud!.show('enemy', false);
-      lineups = { enemy: cfg.team };
+      stage.lineups = { enemy: cfg.team };
       await info(`¡${trainer.name} envía a ${monName(enemy)}!`, { auto: 900 });
-      lineups = {};
-      await slide(enemyF, ENEMY_POS.x);
+      stage.lineups = {};
+      await slide(stage.enemyF, ENEMY_POS.x);
       hud!.update();
       hud!.show('enemy', true);
       return null;
@@ -602,7 +372,7 @@ async function runBattle(cfg: Config): Promise<BattleResult> {
     if (me.hp > 0) return null;
     await frames(60); // the same moment at 0 PS for yours
     sfx('faint');
-    await sinkAnim(meF!);
+    await sinkAnim(stage.meF!);
     await info(`¡${myName()} se debilitó!`);
     if (!firstAble()) {
       await info('¡No te quedan Palabritas que puedan luchar!');
@@ -613,7 +383,7 @@ async function runBattle(cfg: Config): Promise<BattleResult> {
     return null;
   };
 
-  const throwBall = async (id: string): Promise<'caught' | 'failed' | 'cancel'> => {
+  const tryToCatch = async (id: string): Promise<'caught' | 'failed' | 'cancel'> => {
     if (!takeItem(id)) return 'cancel';
     const sp = SPECIES[enemy.sp];
     const ballDef = ITEM_DEFS[id];
@@ -626,32 +396,14 @@ async function runBattle(cfg: Config): Promise<BattleResult> {
     const r = await challenge({ item, mode: canListen() ? 'speak' : 'type', title: '🔮 ¡Atrápalo!' });
     await learn(item, r);
 
-    sfx('throw');
-    ball = { x: 24, y: 80, shake: 0 };
-    for (let i = 1; i <= 20; i++) {
-      const t = i / 20;
-      ball.x = 24 + (122 - 24) * t;
-      ball.y = 80 - 70 * t + 50 * t * t;
-      await nextFrame();
-    }
-    enemyF!.hidden = true;
-    ball.y = 38;
-    await frames(20);
+    await throwBall();
     const s = stats(enemy);
     const hpFactor = 1 - (2 / 3) * (enemy.hp / s.maxHp);
     const quality = r.grade === 'perfect' ? 1.8 : r.grade === 'close' ? 1.3 : 0.5;
     const p = Math.min(0.95, Math.max(0.05, sp.catchRate * hpFactor * quality * 1.4 * ballDef.ball!));
     const success = Math.random() < p;
     const shakes = success ? 3 : Math.floor(Math.random() * 3);
-    for (let k = 0; k < shakes; k++) {
-      sfx('shake');
-      for (let i = 0; i < 16; i++) {
-        ball.shake = Math.sin((i / 16) * Math.PI * 2) * 3;
-        await nextFrame();
-      }
-      ball.shake = 0;
-      await frames(18);
-    }
+    await shakeBall(shakes);
     if (success) {
       sfx('caught');
       await info(`¡Atrapaste a ${sp.name}!`);
@@ -666,8 +418,7 @@ async function runBattle(cfg: Config): Promise<BattleResult> {
       }
       return 'caught';
     }
-    ball = null;
-    enemyF!.hidden = false;
+    breakOut();
     await info(shakes === 0 ? '¡Oh, no! ¡Se escapó!' : '¡Casi lo atrapas!');
     return 'failed';
   };
@@ -685,22 +436,22 @@ async function runBattle(cfg: Config): Promise<BattleResult> {
     await encounterFlash();
     markSeen(enemy.sp);
     // Like Gold/Silver: you and the opponent slide in from opposite sides.
-    await Promise.all([slide(enemyF, ENEMY_POS.x), slide(meF, ME_POS.x)]);
+    await Promise.all([slide(stage.enemyF, ENEMY_POS.x), slide(stage.meF, ME_POS.x)]);
     if (trainer) {
-      lineups = { enemy: cfg.team, me: G.save.party };
+      stage.lineups = { enemy: cfg.team, me: G.save.party };
       await info(`¡${trainer.name} quiere luchar!`);
-      lineups = {};
-      await slide(enemyF, W);
-      enemyF = enemyFighter(enemy);
+      stage.lineups = {};
+      await slide(stage.enemyF, W);
+      stage.enemyF = enemyFighter(enemy);
       await info(`¡${trainer.name} envía a ${monName(enemy)}!`, { auto: 900 });
-      await slide(enemyF, ENEMY_POS.x);
+      await slide(stage.enemyF, ENEMY_POS.x);
     } else {
       await info(`¡Un ${monName(enemy)} salvaje apareció!`);
     }
     hud = buildHud(() => enemy, () => me, !trainer);
     hud.update();
     hud.show('player', false);
-    await slide(meF, -SLOT);
+    await slide(stage.meF, -SLOT);
     await sendOut(me);
     hud.show('player', true);
 
@@ -713,7 +464,7 @@ async function runBattle(cfg: Config): Promise<BattleResult> {
         return 'run';
       }
       if (action.type === 'ball') {
-        const res = await throwBall(action.id);
+        const res = await tryToCatch(action.id);
         if (res === 'caught') return await finish('caught');
         if (res === 'cancel') continue;
       }
@@ -759,9 +510,7 @@ async function runBattle(cfg: Config): Promise<BattleResult> {
   } finally {
     hud?.root.remove();
     closeText();
-    enemyF = meF = null;
-    ball = null;
-    lineups = {};
+    clearStage();
     setScene(prevScene);
     setBattleMusic(null); // the map's song again (after a wild win's or a catch's jingle)
   }
@@ -773,8 +522,8 @@ async function runBattle(cfg: Config): Promise<BattleResult> {
     if (r === 'win' && trainer) {
       // The trainer comes back out to admit defeat.
       hud?.show('enemy', false);
-      enemyF = trainerFighter();
-      await slide(enemyF, ENEMY_POS.x);
+      stage.enemyF = trainerFighter();
+      await slide(stage.enemyF, ENEMY_POS.x);
       await info(`¡Venciste a ${trainer.name}!`);
       if (cfg.outro) await say(cfg.outro[0], { en: cfg.outro[1] });
       const prize = Math.round(prizeMoney(cfg.team) * (cfg.prize ?? 1));

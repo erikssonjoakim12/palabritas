@@ -20,7 +20,7 @@ export const MODE_INFO: Record<Mode, { icon: string; es: string; en: string; pow
  * stronger ones later): the 3rd at 10, and the 4th only once they've evolved at 16 (Gotita's Electric storm comes
  * with Nubarrón). Evolved forms keep these.
  */
-export const STARTER_MOVES = { third: 10, fourth: 16 };
+const STARTER_MOVES = { third: 10, fourth: 16 };
 
 export interface Move {
   name: string;

@@ -107,7 +107,7 @@ interface TrainerLines {
   after: Line;
 }
 
-export async function trainerFight(id: string, l: TrainerLines) {
+async function trainerFight(id: string, l: TrainerLines) {
   if (flag(`beat:${id}`)) return afterBeaten(id, l);
   await lines(l.intro);
   if (!flag('defenseTip')) {

@@ -13,7 +13,7 @@ const HUNDREDS = [
   'seiscientos', 'setecientos', 'ochocientos', 'novecientos',
 ];
 
-export function numToSpanish(n: number): string {
+function numToSpanish(n: number): string {
   if (n < 30) return UNITS[n];
   if (n < 100) {
     const t = Math.floor(n / 10);

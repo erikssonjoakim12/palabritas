@@ -12,7 +12,7 @@ const MALE_PITCH = 0.75;
 /** Voice names that are male (Google, Microsoft, Apple and Samsung name their voices like this). */
 const MALE_NAMES = /(^|[^a-zé])(male|hombre|masculin|jorge|diego|pablo|carlos|juan|enrique|miguel|ra[uú]l|[aá]lvaro|jos[eé]|andr[eé]s|gonzalo|lorenzo|alonso|jaime)/i;
 
-export const speechSettings = { rate: 0.95, recognitionLang: 'es-MX' };
+const speechSettings = { rate: 0.95, recognitionLang: 'es-MX' };
 
 function pickVoice() {
   if (!('speechSynthesis' in window)) return;

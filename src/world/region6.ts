@@ -9,8 +9,10 @@ import { FOG } from '../style/colors';
 import { info } from '../ui/textbox';
 import {
   currentMap, loadMap, placeNpc, refreshNpcs, walkNpcTo, approachPlayer, scriptedStep, fadeOut, fadeIn, setFollower, npcById, warp,
-  fogView, player, DX, DY, OPP, type ScriptFn, type ScriptCtx, type NpcRT,
+  player, type ScriptFn, type ScriptCtx, type NpcRT,
 } from './world';
+import { DX, DY, OPP } from '../engine/input';
+import { fogView } from '../art/fog';
 import { MAPS, type Line } from './maps';
 import { inFog, PATCH, CELLS, ROAD, BACK, CLEARING, ENTRY, TOWN6, wayTo, type Cell } from './maps/region6';
 import { lines, as, talk, fight, gymLeader, droppedMoney } from './flows';

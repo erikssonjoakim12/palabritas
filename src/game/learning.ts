@@ -3,8 +3,9 @@ import { THEMES, poolUpTo, type Item } from '../data/content';
 import type { Mode } from '../data/species';
 import type { Grade } from '../lang/check';
 import { levelItems, itemsUpTo, maxLevel, answersToMaster, REVIEW_GAP, REVIEW_SHARE } from './curriculum';
-export { REVIEW_GAP, REVIEW_SHARE };
 import { pickRandom, hash } from './random';
+
+export { REVIEW_GAP, REVIEW_SHARE };
 
 const HOUR = 3_600_000;
 const DAY = 24 * HOUR;
@@ -176,7 +177,7 @@ const preferNot = (items: Item[], avoid: string[]) => {
  * Choose what to ask next from a pool:
  * fading words first, then due reviews, then words being learned, then new words.
  */
-export function pickItem(pool: Item[], avoid: string[] = []): Item {
+function pickItem(pool: Item[], avoid: string[] = []): Item {
   const now = Date.now();
   const items = preferNot(pool, avoid);
   const fading = items.filter((i) => isFading(peekProg(i.id), now));

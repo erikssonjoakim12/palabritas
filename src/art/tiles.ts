@@ -1,4 +1,4 @@
-import { makeCanvas, type Img } from './pixel';
+import { makeCanvas, T, type Img } from './pixel';
 import { ART, ROCK_EDGES, gullyRows, type TileArt } from '../style/tiles';
 import { ROOFS, OUTDOOR, CAVE_STYLES, CANOPY, SLOPE, SLOPE_GULLY, type Pal, ACCENT } from '../style/colors';
 import type { Dir } from '../engine/input';
@@ -690,7 +690,6 @@ export const envAt = (m: MapLook, x: number, y: number): TileEnv => ({ id: m.id,
 
 /** A whole map as one image (the art page; the game draws only the tiles on screen). Holes stay see-through. */
 export function renderMap(m: MapLook): Img {
-  const T = 16;
   const c = makeCanvas(m.rows[0].length * T, m.rows.length * T);
   const g = c.getContext('2d')!;
   m.rows.forEach((row, y) =>

@@ -34,7 +34,7 @@ export function loose(s: string): string {
 
 const ARTICLE = /^(el|la|los|las|un|una|unos|unas) /;
 
-export function levenshtein(a: string, b: string): number {
+function levenshtein(a: string, b: string): number {
   if (a === b) return 0;
   const m = a.length;
   const n = b.length;

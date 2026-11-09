@@ -1,4 +1,4 @@
-import { Pix, type Img } from './pixel';
+import { Pix, shade, type Img } from './pixel';
 import { CLOTHES, SKIN, PORTRAIT } from '../style/colors';
 import { LOOKS, type Look } from '../style/people';
 
@@ -10,13 +10,6 @@ import { LOOKS, type Look } from '../style/people';
 */
 
 const { ink: K, white: W, hair: HAIR, grayHair: GRAY_HAIR, mouth: MOUTH } = PORTRAIT;
-
-/** A darker shade of a #rrggbb color. */
-function shade(hex: string, f = 0.72) {
-  const n = parseInt(hex.slice(1), 16);
-  const ch = (s: number) => Math.round(((n >> s) & 255) * f);
-  return `#${((ch(16) << 16) | (ch(8) << 8) | ch(0)).toString(16).padStart(6, '0')}`;
-}
 
 const SKIN_DARK = shade(SKIN, 0.85);
 

@@ -126,7 +126,7 @@ export function markSeen(sp: string) {
   if (!G.save.seen.includes(sp)) G.save.seen.push(sp);
 }
 
-export function markCaught(sp: string) {
+function markCaught(sp: string) {
   markSeen(sp);
   if (!G.save.caught.includes(sp)) G.save.caught.push(sp);
 }

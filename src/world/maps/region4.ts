@@ -13,7 +13,7 @@ export const TORCHES = [
   { color: 'Amarilla', es: 'amarilla', en: 'yellow', x: 8 },
 ];
 /** Where nettles hide in Ortiga's garden (gym 5): on every way but the one in her diary (plans/gym5.md). */
-export const ORTIGAS: [number, number][] = [[9, 12], [2, 4], [11, 4], [11, 6]];
+const ORTIGAS: [number, number][] = [[9, 12], [2, 4], [11, 4], [11, 6]];
 /** A torch: its unlit stand, and the same spot burning once it's lit. */
 const torch = (t: (typeof TORCHES)[number]): NpcDef[] => [
   { id: `antorcha${t.color}`, x: t.x, y: 5, object: `antorcha${t.color}`, script: 'antorcha', show: () => !flag(`antorcha:${t.color}`) },

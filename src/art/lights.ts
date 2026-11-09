@@ -1,5 +1,6 @@
 import { tileOf, type MapLook } from './tiles';
 import { NIGHT_LIGHT, DAY_CYCLE } from '../style/colors';
+import { T } from './pixel';
 
 /** A light at night: its center in map pixels and how far it reaches. */
 export interface Light {
@@ -8,7 +9,6 @@ export interface Light {
   r: number;
 }
 
-const T = 16;
 
 /** The light a tile gives at night, if any: lit windows, and the lighthouse's lamp (its top tile). */
 export function lightAt(m: MapLook, x: number, y: number): Light | undefined {

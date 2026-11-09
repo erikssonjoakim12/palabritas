@@ -1,5 +1,10 @@
 export type Dir = 'up' | 'down' | 'left' | 'right';
 export type Btn = Dir | 'A' | 'B' | 'START';
+
+/** A step in each direction, in tiles, and the way back. */
+export const DX: Record<Dir, number> = { up: 0, down: 0, left: -1, right: 1 };
+export const DY: Record<Dir, number> = { up: -1, down: 1, left: 0, right: 0 };
+export const OPP: Record<Dir, Dir> = { up: 'down', down: 'up', left: 'right', right: 'left' };
 type Handler = (b: Btn) => void;
 
 const isDir = (b: Btn): b is Dir => b === 'up' || b === 'down' || b === 'left' || b === 'right';

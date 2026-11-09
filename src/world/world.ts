@@ -1,17 +1,18 @@
 import { W, H, overlay, el, scaleFactor, ctx } from '../engine/screen';
-import { input, type Dir } from '../engine/input';
+import { input, DX, DY, OPP, type Dir } from '../engine/input';
 import { sfx } from '../engine/sfx';
 import { nextFrame, frames, frameAlpha, whenIdle, clearIdle } from '../engine/loop';
 import { TILES, tallGrassImage, tileImage, tileOf, envAt, owns, isHole, ANIMATED } from '../art/tiles';
 import { personFrames, animalEyes, OBJECTS, type Frames } from '../art/chars';
-import { fromRows, mirror, type Img } from '../art/pixel';
+import { fromRows, mirror, T, type Img } from '../art/pixel';
+import { drawFog, type Glow } from '../art/fog';
 import { MAPS, type MapDef, type NpcDef, type Conn, type EncounterEntry } from './maps';
 import { worldLayout, mapAcross } from './layout';
 import { G, flag, saveGame, playerLook, clockHour, type SaveData } from '../game/state';
 import { rematchReady } from '../game/rematch';
 import { visit } from './fly';
 import { shuffled, pickRandom } from '../game/random';
-import { NIGHT, NIGHT_CLEAR, FIREFLY, MARK, BLACK, SHADOW, ACCENT, FOG, ASH_PUFF } from '../style/colors';
+import { NIGHT, NIGHT_CLEAR, FIREFLY, MARK, BLACK, SHADOW, ACCENT, ASH_PUFF } from '../style/colors';
 import { lightAt, drawLights, skyAt, type Light } from '../art/lights';
 import { drawFireworks } from '../art/fireworks';
 import { setMapMusic, musicFor } from '../audio/bgm';
@@ -43,10 +44,7 @@ export type ScriptFn = (c: ScriptCtx) => Promise<unknown>;
 /** Filled in by scripts.ts. */
 export const SCRIPTS: Record<string, ScriptFn> = {};
 
-export const DX: Record<Dir, number> = { up: 0, down: 0, left: -1, right: 1 };
-export const DY: Record<Dir, number> = { up: -1, down: 1, left: 0, right: 0 };
 const DIRS = Object.keys(DX) as Dir[];
-export const OPP: Record<Dir, Dir> = { up: 'down', down: 'up', left: 'right', right: 'left' };
 
 /**
  * Frames per step (a tile is 16 px). Whole numbers, so every step takes exactly as long.
@@ -67,7 +65,6 @@ function boardFrames(i: number, n: number, stops: boolean) {
 }
 /** Tiles of surroundings prepared around the map: more than half a screen, so the edges are covered. */
 const GRID = 7;
-const T = 16;
 
 let map: MapDef = MAPS.casa;
 let npcs: NpcRT[] = [];
@@ -760,7 +757,7 @@ function updateNpcs() {
   }
 }
 
-export function updateWorld() {
+function updateWorld() {
   G.save.playMs += 1000 / 60;
   updatePuffs();
   if (player.bumpCd > 0) player.bumpCd--;
@@ -972,7 +969,6 @@ function drawFireflies(g: CanvasRenderingContext2D, camX: number, camY: number) 
     }
 }
 
-/** The grass you stepped into shakes: its blades drawn a pixel left, then right, over the tile. */
 /** A thin tree being cut: a white slash across it, then its leaves flying off and falling. */
 let cutFx: { x: number; y: number; at: number } | null = null;
 const CUT_MS = 500;
@@ -993,6 +989,7 @@ function drawCut(g: CanvasRenderingContext2D, camX: number, camY: number) {
   }
 }
 
+/** The grass you stepped into shakes: its blades drawn a pixel left, then right, over the tile. */
 function drawRustle(g: CanvasRenderingContext2D, camX: number, camY: number) {
   if (!rustle) return;
   const t = performance.now() - rustle.at;
@@ -1009,86 +1006,16 @@ function drawRustle(g: CanvasRenderingContext2D, camX: number, camY: number) {
   g.restore();
 }
 
-// ---------- Fog ----------
-
-/** How the fog looks around you in a patch (world/region6.ts sets it as you walk): how far you see, and where it thins. */
-export const fogView = { radius: 34, lean: null as Dir | null, leanBy: 0 };
-let fogRadius = 34;
-
-/** A cloud of fog: a dithered oval (pixels, not a blur, like everything else). */
-let cloudImg: Img | null = null;
-function cloud(): Img {
-  if (cloudImg) return cloudImg;
-  const [w, h] = [44, 16];
-  const rows = Array.from({ length: h }, (_, y) =>
-    Array.from({ length: w }, (_, x) => {
-      const d = Math.hypot((x - w / 2 + 0.5) / (w / 2), (y - h / 2 + 0.5) / (h / 2));
-      return d < 0.7 || (d < 1 && (x + y) % 2 === 0) ? 'c' : '.';
-    }).join(''),
-  );
-  return (cloudImg = fromRows(rows, { c: FOG.cloud }, 'cloud'));
-}
-
-/**
- * The fog over everything: in a patch, a gloom (dusk-dark at any hour) and gray all around except a small patch where
- * you are (it leans toward where the fog thins); at an 'edge', gray along the top of the map. Clouds drifting
- * by (a little slower than the ground, so walking moves you through them), and what shines through.
- */
-function drawFog(g: CanvasRenderingContext2D, cx: number, cy: number, camX: number, camY: number) {
-  const t = performance.now() / 1000;
-  g.save();
-  let cloudsAbove = H;
-  if (map.fog === 'patch') {
-    g.globalCompositeOperation = 'multiply';
-    g.fillStyle = FOG.gloom;
-    g.fillRect(0, 0, W, H);
-    g.globalCompositeOperation = 'source-over';
-    fogRadius += (fogView.radius - fogRadius) * 0.05;
-    const r = fogRadius + Math.sin(t * 1.3) * 1.5;
-    const [lx, ly] = fogView.lean ? [DX[fogView.lean] * fogView.leanBy, DY[fogView.lean] * fogView.leanBy] : [0, 0];
-    const fog = g.createRadialGradient(cx, cy, r * 0.45, cx + lx, cy + ly, r + Math.hypot(lx, ly));
-    fog.addColorStop(0, FOG.clear);
-    fog.addColorStop(1, FOG.thick);
-    g.fillStyle = fog;
-  } else {
-    // Thick above the map, thinning out over its first rows: you step out of it onto the trail.
-    const top = -T - camY;
-    const fog = g.createLinearGradient(0, top + 4 * T, 0, top);
-    fog.addColorStop(0, FOG.clear);
-    fog.addColorStop(1, FOG.thick);
-    g.fillStyle = fog;
-    cloudsAbove = top + 2 * T;
-  }
-  g.fillRect(0, 0, W, H);
-  g.globalAlpha = 0.45;
-  const img = cloud();
-  const [spanX, spanY] = [W + img.width, H + img.height];
-  for (let i = 0; i < 7; i++) {
-    const x = ((((i * 61 + t * (5 + (i % 3) * 3) - camX * 0.6) % spanX) + spanX) % spanX) - img.width;
-    const y = ((((i * 47 + Math.sin(t * 0.4 + i) * 6 - camY * 0.6) % spanY) + spanY) % spanY) - img.height;
-    if (y < cloudsAbove) g.drawImage(img, Math.round(x), Math.round(y));
-  }
-  g.globalAlpha = 1;
-  // Through the fog: the black dog's eyes, the white dog's glow.
-  for (const n of npcs) {
-    if (!n.visible || !n.def.glow || !n.def.look) continue;
-    const [sx, sy] = [n.x * T - camX + (n.off?.x ?? 0), n.y * T - camY + (n.off?.y ?? 0) - 4];
+/** Who shines through the fog, where they are on the screen: the black dog's eyes, the white dog's glow. */
+function glowsThroughFog(camX: number, camY: number): Glow[] {
+  return npcs.flatMap((n): Glow[] => {
+    const look = n.def.look;
+    if (!n.visible || !n.def.glow || !look) return [];
     const frame = n.off?.frame ?? 0;
-    if (n.def.glow === 'body') {
-      g.globalAlpha = 0.8;
-      g.drawImage(framesFor(n.def.look)[n.dir][frame], sx, sy);
-      g.globalAlpha = 1;
-      continue;
-    }
-    for (const [ex, ey] of animalEyes(n.def.look, n.dir)) {
-      const [x, y] = [Math.round(sx + ex), Math.round(sy + ey + (frame ? 1 : 0))];
-      g.fillStyle = FOG.eyeGlow;
-      g.fillRect(x - 1, y - 1, 3, 3);
-      g.fillStyle = FOG.eye;
-      g.fillRect(x, y, 1, 1);
-    }
-  }
-  g.restore();
+    const [x, y] = [n.x * T - camX + (n.off?.x ?? 0), n.y * T - camY + (n.off?.y ?? 0) - 4];
+    if (n.def.glow === 'body') return [{ x, y, body: framesFor(look)[n.dir][frame] }];
+    return [{ x, y: y + (frame ? 1 : 0), eyes: animalEyes(look, n.dir) }];
+  });
 }
 
 /** Where the camera was last drawn (its top-left, in the map's pixels): for effects placed on the screen. */
@@ -1198,7 +1125,7 @@ export function renderWorld(g: CanvasRenderingContext2D) {
     drawDayTime(g, camX, camY);
     drawFireflies(g, camX, camY);
   } else if (map.floor === ';') drawDayTime(g, camX, camY); // caves (and the temple) darken at night too
-  if (map.fog && !map.fogLifts?.()) drawFog(g, ox + 8, oy + 4 - hop, camX, camY);
+  if (map.fog && !map.fogLifts?.()) drawFog(g, map.fog, ox + 8, oy + 4 - hop, camX, camY, glowsThroughFog(camX, camY));
   if (fade > 0) {
     g.globalAlpha = fade;
     g.fillStyle = fadeColor;

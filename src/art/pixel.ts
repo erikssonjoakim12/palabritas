@@ -1,6 +1,16 @@
 export type Img = HTMLCanvasElement;
 export type Palette = Record<string, string>;
 
+/** A tile's size in pixels (the Game Boy's 16×16 blocks). */
+export const T = 16;
+
+/** A darker shade of a #rrggbb color: each channel times f. */
+export function shade(hex: string, f = 0.72) {
+  const n = parseInt(hex.slice(1), 16);
+  const ch = (s: number) => Math.round(((n >> s) & 255) * f);
+  return `#${((ch(16) << 16) | (ch(8) << 8) | ch(0)).toString(16).padStart(6, '0')}`;
+}
+
 export function makeCanvas(w: number, h: number): Img {
   const c = document.createElement('canvas');
   c.width = w;

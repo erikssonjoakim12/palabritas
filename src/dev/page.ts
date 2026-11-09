@@ -9,7 +9,7 @@ import { NIGHT } from '../style/colors';
 import { mapLights, drawLights } from '../art/lights';
 
 /** The dev pages, published next to the game (vite.config.ts builds the same list). */
-export const PAGES: [file: string, label: string][] = [
+const PAGES: [file: string, label: string][] = [
   ['index.html', 'Game'],
   ['art.html', 'Art'],
   ['mundo.html', 'World map'],
