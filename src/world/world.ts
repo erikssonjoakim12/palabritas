@@ -18,6 +18,7 @@ import { lightAt, drawLights, skyAt, type Light } from '../art/lights';
 import { drawFireworks } from '../art/fireworks';
 import { setMapMusic, musicFor } from '../audio/bgm';
 import { closeText, say, setSpeaker } from '../ui/textbox';
+import { ambientMap, stepFx, splashFx, landFx, updateBirds, drawAmbientGround, drawAmbientAir } from './ambient';
 
 export interface NpcRT {
   def: NpcDef;
@@ -158,6 +159,7 @@ export function loadMap(id: string, x: number, y: number, dir: Dir, exact = fals
   }
   map = MAPS[id];
   validate(map);
+  ambientMap(map);
   visit(id);
   // A pushed boulder stands where it was left.
   const npc = (def: NpcDef, dx = 0, dy = 0, [x, y] = (def.boulder && G.save.boulders[def.id]) || [def.x, def.y]): NpcRT => ({
@@ -224,6 +226,7 @@ export async function startSurf() {
   sfx('jump');
   await scriptedStep(player.dir);
   player.hopping = false;
+  splashFx(player.x, player.y);
 }
 
 /** The water Palabrita under you while you swim, by the way you face (a generic one until the user's art). */
@@ -409,6 +412,7 @@ function startMove(nx: number, ny: number, dist = T) {
     if (dx || dy) follower.dir = dx < 0 ? 'left' : dx > 0 ? 'right' : dy < 0 ? 'up' : 'down';
   }
   if (TILES[tileAt(nx, ny)].kind === 'tallgrass') rustle = { x: nx, y: ny, at: performance.now() };
+  stepFx(nx, ny, player.slide ?? player.dir, [player.x, player.y], !!G.save.surfing);
   // Swimming onto land: you're on foot again.
   if (G.save.surfing && !isWater(tileAt(nx, ny))) {
     G.save.surfing = false;
@@ -792,6 +796,7 @@ function updateWorld() {
   updatePuffs();
   if (player.bumpCd > 0) player.bumpCd--;
   updateNpcs();
+  updateBirds(player.x, player.y);
   if (player.moving) {
     player.speed = T / (player.board ? player.boardFrames : input.isHeld('B') && !player.scripted && !player.slide ? RUN_FRAMES : WALK_FRAMES);
     player.prog += player.speed;
@@ -799,6 +804,7 @@ function updateWorld() {
       player.moving = false;
       player.prog = 0;
       player.justMoved = true;
+      if (player.dist > T && !player.board) landFx(player.x, player.y); // after a ledge
       // Always remember where you are (also after being walked by a script), so a save never
       // puts you back on a spot a script moved you away from.
       Object.assign(G.save, { x: player.x, y: player.y, dir: player.dir });
@@ -1083,6 +1089,7 @@ export function renderWorld(g: CanvasRenderingContext2D) {
   const [ox, oy] = [64 - pan.x, 64 - pan.y];
   Object.assign(camera, { x: camX, y: camY });
   drawTiles(g, camX, camY);
+  drawAmbientGround(g, camX, camY);
   drawRustle(g, camX, camY);
   drawCut(g, camX, camY);
   drawPuffs(g);
@@ -1147,6 +1154,7 @@ export function renderWorld(g: CanvasRenderingContext2D) {
     g.drawImage((grassOverlays[ch] ??= tallGrassImage(ch)), tx * T - camX, ty * T - camY);
   }
   g.restore();
+  drawAmbientAir(g, camX, camY);
   if (map.night) {
     drawNight(g, ox + 8, oy + 4 - hop);
     drawLights(g, lights, -camX, -camY);

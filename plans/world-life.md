@@ -4,10 +4,11 @@ Small touches that make the world feel lived in, chosen by the user from a longe
 each, every part ending playable with its tests green. None of it changes saves (the weather and the people's spots
 come from the clock and the flags already kept).
 
-## Part 1 — Small movements on the map
+## Part 1 — Small movements on the map ✓
 
-Little animations, like Gold/Silver's, each drawn on the canvas with its colors in colors.ts. Check them on a phone
-with `tools/perf.mjs` (they must not slow the walk).
+Built 2026-11-10 (src/world/ambient.ts; the grass and the hop's shadow were already there). Little animations, like
+Gold/Silver's, each drawn on the canvas with its colors in colors.ts (`AMBIENT`, `BIRD`); a frame costs the same
+(`tools/perf.mjs`). Chimneys sit on every third house (at least one per town); the birds and the smoke only by day.
 
 - **Grass that moves:** tall grass shakes when you step into it, and its tips cover your feet (like Gold/Silver).
 - **Footprints in the sand** that fade after a few seconds (beaches, the ash fields of Ciudad Ceniza).

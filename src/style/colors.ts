@@ -430,3 +430,19 @@ export const STORM = { gloom: '#a8b0c8', rain: '#d8e0f8', flash: '#f8f8f8' };
 
 /** The ash a sandboard throws up on the volcano's slope (world.ts puffs). */
 export const ASH_PUFF = '#d8d4d0';
+
+/** The small movements on the map (world/ambient.ts, plans/world-life.md). */
+export const AMBIENT = {
+  /** Footprints: pressed into the sand (its darkest shade), and into the ash. */
+  sandPrint: OUTDOOR.sand[2],
+  ashPrint: OUTDOOR.ash[2],
+  /** Foam on the waves, ripples behind a swimmer and the drops of a splash. */
+  foam: OUTDOOR.water[0],
+  /** The dust of a landing after a ledge. */
+  dust: '#b8b098',
+  /** Chimney smoke (its light middle, its grey edge), and the chimney's bricks (light, dark). */
+  smoke: ['#f8f8f8', '#b0b0b0'],
+  chimney: ['#c07858', '#804838'],
+};
+/** A little bird pecking on the paths: d its brown, l its belly, y its beak, k its legs. */
+export const BIRD = { d: '#785838', l: '#e0c8a0', y: '#e8a040', k: '#484038' };

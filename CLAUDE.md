@@ -61,7 +61,7 @@ Plans for finished work are removed once built: the code is the truth.
 | Maps (every town, route, interior) | `src/world/maps/`: one file per region (`region1.ts`...), `kit.ts` (tile legend, types, shared rooms), `index.ts` |
 | Scripts (every NPC, quest, trainer talk) | `src/world/region1.ts`...`region4.ts`, `region6.ts` (Villa Bruma and the fog), `region7.ts` (Ruta 11, Puerto Rayo), `region8.ts` (Ciudad Ceniza) (one file per region), `src/world/scripts.ts` (what every town shares: the Palacentro, shop and box, gates, items on the ground, Surf, Fly, Cut, fishing; and the registry) |
 | Script building blocks (talking, trainers, gym leaders, Lucas, gifts, questions) | `src/world/flows.ts` |
-| Overworld engine: walking, ledges, doors, gates, encounters, drawing | `src/world/world.ts`, `src/world/layout.ts` |
+| Overworld engine: walking, ledges, doors, gates, encounters, drawing | `src/world/world.ts`, `src/world/layout.ts`, `src/world/ambient.ts` (the small movements: footprints, ripples, splashes, landing dust, birds, chimney smoke, waves) |
 | Battles | `src/battle/battle.ts` (the battle: turns, answers, damage, catching), `stage.ts` (what's drawn and how it moves), `hud.ts` (the name and PS boxes) |
 | Music | `src/audio/music.ts` (the player), `src/data/music.ts` (the songs, which plays where), `src/audio/bgm.ts` (the game's music: maps, battles, jingles, quieter for Spanish) |
 | Dialog, menus, challenges | `src/ui/textbox.ts` (`say`, `info`), `src/ui/menu.ts` (`menu`, `ask`), `src/ui/challenge.ts` |
