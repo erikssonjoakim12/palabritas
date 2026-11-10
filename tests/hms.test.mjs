@@ -61,4 +61,8 @@ t.check('and from the Pacific into the turtle beach’s water', (await t.pos())[
 await t.game(() => window.__game.loadMap('pacifico', 2, 40, 'left'));
 await t.walk('left', 2);
 t.check('rocks where the world ends: no swimming past them', String(await t.pos()) === 'pacifico,1,40' || String(await t.pos()) === 'pacifico,2,40', await t.pos());
+// Ruta 10's river runs on into Ruta 11's swamp.
+await t.game(() => window.__game.loadMap('ruta11', 43, 23, 'right'));
+await t.walk('right', 4);
+t.check('down Ruta 10’s river into the swamp of Ruta 11', (await t.pos())[0] === 'ruta12' && (await surfing()), await t.pos());
 await t.end();
