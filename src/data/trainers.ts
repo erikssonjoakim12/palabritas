@@ -181,6 +181,10 @@ export const TRAINERS: Record<string, TrainerDef> = {
   // rising to 11 below Trueno's 50 (the user: a few levels easier than the rule).
   excursionista_hugo: { id: 'excursionista_hugo', name: 'Excursionista Hugo', defenseMode: 'choose', team: [['hojaluna', 35], ['basiliquito', 35]] },
   ornitologa_irene: { id: 'ornitologa_irene', name: 'Ornitóloga Irene', defenseMode: 'listen', team: [['quetzalito', 35], ['fragaton', 36]], rematch: true },
+  // The swamp's fishers (the user): water Palabritas, each by a bridge's end.
+  pescador_chepe: { id: 'pescador_chepe', name: 'Pescador Chepe', defenseMode: 'type', team: [['lagartito', 35], ['espadon', 36]] },
+  pescadora_rosa: { id: 'pescadora_rosa', name: 'Pescadora Rosa', defenseMode: 'listen', team: [['maleticano', 36], ['mordisquito', 37], ['ranojon', 37]], rematch: true },
+  pescador_memo: { id: 'pescador_memo', name: 'Pescador Memo', defenseMode: 'choose', team: [['mordiscon', 38], ['ranojon', 38]] },
   campista_leo: { id: 'campista_leo', name: 'Campista Leo', defenseMode: 'type', team: [['dantito', 36], ['carablanquita', 36], ['gequito', 37]], rematch: true },
   pintora_luisa: { id: 'pintora_luisa', name: 'Pintora Luisa', defenseMode: 'choose', team: [['polilluna', 37], ['basiliquito', 37]] },
   guardaparque_tono: { id: 'guardaparque_tono', name: 'Guardaparque Toño', defenseMode: 'listen', team: [['danton', 38], ['garrobon', 38]], rematch: true },
@@ -272,7 +276,8 @@ export const BATTLE_ORDER: { leg: string; en: string; trainers: string[] }[] = [
     leg: 'Ruta 11, el lago de la tormenta → Puerto Rayo',
     en: 'Route 11 from Route 10, the stormy lake → gym 7',
     trainers: [
-      'excursionista_hugo', 'ornitologa_irene', 'campista_leo', 'pintora_luisa', 'guardaparque_tono', 'fotografa_nora',
+      'excursionista_hugo', 'ornitologa_irene', 'campista_leo', 'pescador_chepe', 'pescadora_rosa', 'pintora_luisa', 'guardaparque_tono',
+      'pescador_memo', 'fotografa_nora',
       'nadador_kiko', 'nadadora_vale', 'pescador_ruben',
       'electricista_rolando', 'meteorologa_ines', 'marinera_paz', 'trueno',
     ],

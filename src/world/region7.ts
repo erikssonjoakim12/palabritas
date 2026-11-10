@@ -49,6 +49,24 @@ export const REGION7: Record<string, ScriptFn> = {
     ['Perdí la batalla y la tienda. ¡Qué día!', 'I lost the battle and the tent. What a day!'],
     ['Mañana vuelvo a intentarlo. Con sol, espero.', 'Tomorrow I’ll try again. With sun, I hope.'],
   ),
+  pescador_chepe: fight(
+    'pescador_chepe',
+    ['¡Picó algo! Ah, no... eres tú. ¡Bueno, a pelear!', 'Something bit! Oh, no... it’s you. Well, let’s battle!'],
+    ['Se me escapó la batalla, como los peces.', 'The battle got away from me, like the fish.'],
+    ['En el pantano hay que tener paciencia. Los peces grandes salen cuando llueve.', 'In the swamp you have to be patient. The big fish come out when it rains.'],
+  ),
+  pescadora_rosa: fight(
+    'pescadora_rosa',
+    ['Llevo horas aquí y no pica nada. ¡Por lo menos tú sí viniste!', 'I’ve been here for hours and nothing’s biting. At least you came!'],
+    ['¡Qué mala suerte tengo hoy!', 'What bad luck I have today!'],
+    ['Mi abuelo pescaba aquí. Decía que en el pantano vive un caimán enorme.', 'My grandpa used to fish here. He said a huge caiman lives in the swamp.'],
+  ),
+  pescador_memo: fight(
+    'pescador_memo',
+    ['¡Shh! Vas a asustar a los peces. ¡Ahora tienes que pelear conmigo!', 'Shh! You’re going to scare the fish. Now you have to battle me!'],
+    ['Está bien, está bien. De todas formas, ya no hay peces.', 'Fine, fine. There are no fish anyway.'],
+    ['Aquí, junto al puente, el agua es más profunda. Ahí se esconden los grandes.', 'Here, by the bridge, the water is deeper. That’s where the big ones hide.'],
+  ),
   pintora_luisa: fight(
     'pintora_luisa',
     ['Pinto la lluvia. ¿Sabes lo difícil que es pintar algo que se mueve?', 'I paint the rain. Do you know how hard it is to paint something that moves?'],

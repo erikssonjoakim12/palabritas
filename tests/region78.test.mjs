@@ -15,6 +15,11 @@ await t.walk('right', 3);
 t.check('Ruta 10 leads east into Ruta 11', (await t.pos())[0] === 'ruta12', await t.pos());
 await t.fromSave({ map: 'ruta12', x: 30, y: 20, dir: 'up', party, flags: { ruta11Pantano: false } });
 t.check('an old save on Ruta 11 (now a swamp) starts where it begins', String(await t.pos()) === 'ruta12,1,10', await t.pos());
+// The swamp's fishers watch the bridges' ends: crossing the long bridge east, Rosa spots you.
+await t.fromSave({ map: 'ruta12', x: 33, y: 20, dir: 'right', party: [['carablanca', 100]], medals: MEDALS, flags: medalFlags });
+await t.walk('right', 3);
+const rosa = await t.play({ max: 600 });
+t.check('a fisher by the bridge spots you and battles', (await t.save()).flags['beat:pescadora_rosa'] && rosa.said.some((x) => x.includes('pica nada')), rosa.said.slice(0, 3));
 await t.warp('ruta12', 29, 43, 'down');
 await t.walk('down', 4);
 t.check('Ruta 11 comes down to Puerto Rayo', (await t.pos())[0] === 'rayo', await t.pos());
