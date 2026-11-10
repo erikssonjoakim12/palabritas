@@ -71,7 +71,7 @@ export interface TileEnv extends MapLook {
  * Tiles with a second frame, swapped by the world now and then: water ripples (and its foam rolls in at beaches),
  * lava churns, flowers sway, waterfalls fall, steam puffs up, currents flow their way, mangroves' water ripples.
  */
-export const ANIMATED = new Set(['~', '{', 'j', '*', '!', 'X', '8', '2', '4', '6']);
+export const ANIMATED = new Set(['~', '{', '0', 'j', '*', '!', 'X', '8', '2', '4', '6']);
 
 /**
  * Lava bubbles: each lava tile, by where it is, stays calm (0, 4, 5), gets a bubble in the second frame (1), has one in the
@@ -143,6 +143,8 @@ export const TILES: Record<string, TileDef> = {
   '/': solid({ script: 'cortar', look: { es: 'Un arbolito delgado bloquea el camino. Parece que se puede cortar.', en: 'A thin little tree blocks the path. It looks like it could be cut.' } }),
   Y: solid({ look: { es: '¡Un limonero! Huele muy bien.', en: 'A lemon tree! It smells very nice.' } }),
   '~': solid({ kind: 'water' }),
+  // Rocks in the sea where the world ends (like Gold/Silver): even swimming, you can't get past them.
+  '0': solid({ look: { es: 'Rocas y olas muy fuertes. Más allá no se puede nadar.', en: 'Rocks and very strong waves. You can’t swim any farther.' } }),
   f: solid(),
   S: solid(),
   r: solid(),
@@ -529,6 +531,8 @@ function render(ch: string, env: TileEnv): Img {
       return paintArt(ART.zarza);
     case '{':
       return stack(waterImage(env), paintArt(ART.mangle));
+    case '0':
+      return stack(waterImage(env), paintArt(ART.seaRock));
     case '^':
       return rockImage(rockArt(env), env, MOUNTAIN_CHARS, underImage(env, 'ground'));
     case 'O':

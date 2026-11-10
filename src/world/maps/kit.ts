@@ -29,7 +29,7 @@ import type { MapStyle } from '../../art/tiles';
   i  volcanic ash    j  lava        X  steam vent    E  black volcanic boulder    |  sugarcane (tall grass)    l  cobblestones
   q  church roof (cream)            N  bell tower (2 tall: the bell on top)
   `  the volcano's slope (solid; shaded by where it is around the crater: style.volcano)
-  [  temple stone    ]  temple stairs    (  temple doorway    )  the same, upside down (you walk down into it)    !  waterfall (climb it one day)
+  [  temple stone    ]  temple stairs    (  temple doorway    )  the same, upside down (you walk down into it)    !  waterfall (climb it one day)    0  rock in the sea (where the world ends on the water)
 */
 
 /** A line of dialog: Spanish, and English for the EN button. */

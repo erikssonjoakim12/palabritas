@@ -325,6 +325,29 @@ export const ART: Record<string, TileArt> = {
     pal: OUTDOOR.water,
     rows: tile8(['22222222', '20222222', '22222222', '22222122', '22222222', '22222222', '21222222', '22222202']),
   },
+  /** A rock standing in the sea, foam around its foot (drawn over the water): where the world ends on the water. */
+  seaRock: {
+    pal: OUTDOOR.stone,
+    extra: { f: OUTDOOR.water[0] },
+    rows: [
+      '................',
+      '....3333333.....',
+      '...300011113....',
+      '..30001111123...',
+      '..30111111223...',
+      '.3011111112223..',
+      '.3011111122223..',
+      '.3111111222223..',
+      '.31111122222233.',
+      '.31112222222223.',
+      '.33122222222233.',
+      'ff332222222233ff',
+      '.ff3333333333ff.',
+      '...ffffffffff...',
+      '................',
+      '................',
+    ],
+  },
   /** A waterfall: white streaks falling down blue water (animated: the streaks move down). */
   waterfall: {
     pal: OUTDOOR.water,
