@@ -739,6 +739,7 @@ export const MAP_MUSIC: Record<string, string> = {
   ocote_noche: 'ocote',
   ruta7: 'costa',
   tortugas: 'costa',
+  pacifico: 'costa',
   tortugas_noche: 'noche',
   carey: 'carey',
   ruta8: 'fuego',

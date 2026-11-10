@@ -49,4 +49,16 @@ await t.game(() => { window.__game.G.save.surfing = true; });
 await t.walk('right', 1);
 const [m, px] = await t.pos();
 t.check('stepping onto the pier, you’re on foot again', !(await surfing()) && m === 'jaguar' && px >= 15, [await surfing(), await t.pos()]);
+
+// The west coast is one sea: from Playa Carey out into the Pacific, and down to the turtle beach's water. Rocks where it ends.
+await t.fromSave({ map: 'carey', x: 2, y: 8, dir: 'left', party: [['gotita', 40]], medals: medals(4) });
+await t.game(() => { Object.assign(window.__game.G.save, { surfing: true, repel: 50 }); window.__game.loadMap('carey', 2, 8, 'left'); }); // no wild ones on the way
+await t.walk('left', 3);
+t.check('swimming west off Playa Carey, into the Pacific', (await t.pos())[0] === 'pacifico', await t.pos());
+await t.game(() => window.__game.loadMap('pacifico', 3, 89, 'right'));
+await t.walk('right', 2);
+t.check('and from the Pacific into the turtle beach’s water', (await t.pos())[0] === 'tortugas', await t.pos());
+await t.game(() => window.__game.loadMap('pacifico', 2, 40, 'left'));
+await t.walk('left', 2);
+t.check('rocks where the world ends: no swimming past them', String(await t.pos()) === 'pacifico,1,40' || String(await t.pos()) === 'pacifico,2,40', await t.pos());
 await t.end();

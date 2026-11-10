@@ -670,10 +670,20 @@ export const isHole = (m: MapLook, x: number, y: number) => m.outdoor && m.rows[
 /** Whether (x, y) is part of the map: inside it, and not a hole. */
 export const owns = (m: MapLook, x: number, y: number) => x >= 0 && y >= 0 && y < m.rows.length && x < m.rows[0].length && !isHole(m, x, y);
 
-/** A map's tile at (x, y). Outside the map or in a hole: its border (trees outdoors, nothing indoors). */
+/**
+ * A map's tile at (x, y). Outside the map or in a hole: its border (trees outdoors, nothing indoors); but beyond an
+ * edge where the map ends in water (or the sea's rocks), open water, as far as the eye can see (the user).
+ */
 export function tileOf(m: MapLook, x: number, y: number): string {
-  return owns(m, x, y) ? m.rows[y][x] : m.border ?? (m.outdoor ? 'T' : ' ');
+  if (owns(m, x, y)) return m.rows[y][x];
+  if (m.outdoor && !isHole(m, x, y)) {
+    const [cx, cy] = [Math.min(Math.max(x, 0), m.rows[0].length - 1), Math.min(Math.max(y, 0), m.rows.length - 1)];
+    if (OPEN_WATER.has(m.rows[cy][cx])) return '~';
+  }
+  return m.border ?? (m.outdoor ? 'T' : ' ');
 }
+/** Edge tiles the water goes on beyond. */
+const OPEN_WATER = new Set(['~', '0']);
 
 /**
  * Beyond a map's edge (or in its hole), the tile of the map next to it in the world, if any. Set by

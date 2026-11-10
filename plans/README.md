@@ -13,6 +13,7 @@ history keeps the old plans.
 | [palabritas.md](palabritas.md) | how a Palabrita's data is made, and the Palabritas planned so far |
 | [region7-8.md](region7-8.md) | towns 7 and 8 (built 2026-11-09): Ruta 11, Puerto Rayo on its stormy lake, the trail down through Ruta 3, Ciudad Ceniza behind its boulders, the Dragón families, Strength |
 | [world-life.md](world-life.md) | a world that feels alive: small movements on the map, greetings by the clock, weather by region (with rain Palabritas and a forecast board), people who notice what you've done; pinned: your Palabrita walking behind you, a weekly event |
+| [victory-road.md](victory-road.md) | after the 8th medal (ideas, not built): Waterfall, the way to Victory Road by sea east from Pueblo Amanecer past a waterfall, a legend above the canyon's falls |
 | [cadejos.md](cadejos.md) | region 6: Villa Bruma and the fog (built), the two legendary dogs Cadenegro and Cadeblanco, caught around gym 7 (later), what's left for gym 6 |
 
 **Writing a plan** (as for gyms 2–4, which worked well):
