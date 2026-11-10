@@ -156,6 +156,9 @@ export function loadMap(id: string, x: number, y: number, dir: Dir, exact = fals
   if (map && map.id !== id) {
     growBack(map);
     strength = false;
+    // Pushed boulders go back to their places once you leave (like Gold/Silver): a grid pushed the wrong way is never
+    // stuck for good. While you stay, the save keeps them where they are.
+    for (const def of map.npcs ?? []) if (def.boulder) delete G.save.boulders[def.id];
   }
   map = MAPS[id];
   validate(map);
@@ -343,7 +346,7 @@ function crossConnection(d: Dir, conn: Conn, nx: number, ny: number) {
   const x = d === 'left' ? target.rows[0].length - 1 : d === 'right' ? 0 : player.x + conn.offset;
   const y = d === 'up' ? target.rows.length - 1 : d === 'down' ? 0 : player.y + conn.offset;
   if (!inMap(target, x, y)) return crossInto(nx, ny, d);
-  if (!passable(tileOf(target, x, y))) return bump();
+  if (!passable(tileOf(target, x, y)) || someoneIn(target, x, y)) return bump();
   enter(conn.to, x, y, d);
 }
 
@@ -353,8 +356,16 @@ function crossConnection(d: Dir, conn: Conn, nx: number, ny: number) {
  */
 function crossInto(nx: number, ny: number, d: Dir) {
   const there = mapAcross(map.id, nx, ny);
-  if (!there || !passable(MAPS[there.id].rows[there.y][there.x])) return bump();
+  if (!there || !passable(MAPS[there.id].rows[there.y][there.x]) || someoneIn(MAPS[there.id], there.x, there.y)) return bump();
   enter(there.id, there.x, there.y, d);
+}
+
+/** Someone (or a boulder) standing on (x, y) of another map: you can't step across an edge into them. */
+function someoneIn(m: MapDef, x: number, y: number) {
+  return (m.npcs ?? []).some((def) => {
+    const [nx, ny] = (def.boulder && G.save.boulders[def.id]) || [def.x, def.y];
+    return nx === x && ny === y && (def.show ? def.show() : true);
+  });
 }
 
 /** The step goes on in another map. */

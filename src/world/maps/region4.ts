@@ -1,5 +1,5 @@
 import { flag } from '../../game/state';
-import { itemBall, tienda, casa, HOUSES, escuela, night, centro, RIVER_SURF, LAKE_SURF, RIVER_FISHING, wildStarter, type MapDef, type NpcDef } from './kit';
+import { itemBall, tienda, casa, HOUSES, escuela, night, centro, RIVER_SURF, LAKE_SURF, RIVER_FISHING, wildStarter, boulder, type MapDef, type NpcDef } from './kit';
 
 // Region 4: the volcanoes and dry forest. Ruta 7 east from Playa Carey, Ciudad Chispa (a colonial festival town,
 // like Masaya), up the Volcán Chocoyo (the slopes, the lava tube, the crater), and Ruta 8 home to Pueblo Amanecer.
@@ -598,16 +598,16 @@ export const REGION4_MAPS: Record<string, MapDef> = {
     border: '^',
     style: { rock: 'basalt', volcano: [15.5, 12.5] },
     rows: [
-      '................................',
+      '..............................EE',
       '........^^^^^^^^^^^^^^^^........',
-      '.....^^^^iiiiiiiiiiiiii^^^^.....',
-      '....^^iiiiiiiiiiiiiiiiiiii^^....',
-      '...^^iiiiiiiiiiiiiiiiiiiiii^^...',
-      '..^^iiiiijjjjjjjjjjjjjjiiiii^^..',
-      '..^iiiijjjjjjjjjjjjjjjjjjiiii^..',
-      '.^^iiijjjjjjjjjjjjjjjjjjjjiii^^.',
-      '.^iiijjjjjjjjjjjjjjjjjjjjjjiii^.',
-      '.^iiijjjjjjjjjjjjjjjjjjjjjj,,,^.',
+      '.....^^^^iiiiiiiiiiiiii^^^^..E..',
+      '....^^iiiiiiiiiiiiiiiiiiii^^.E..',
+      '...^^iiiiiiiiiiiiiiiiiiiiii^^.E.',
+      '..^^iiiiijjjjjjjjjjjjjjiiiii^^EE',
+      '..^iiiijjjjjjjjjjjjjjjjjjiiii^EE',
+      '.^^iiijjjjjjjjjjjjjjjjjjjjiii^EE',
+      '.^iiijjjjjjjjjjjjjjjjjjjjjjiiiEE',
+      '.^iiijjjjjjjjjjjjjjjjjjjjjj,,,EE',
       '`^iiijjjjjjjjjjjjjjjjjjjjjj,,,^`',
       '^^iiijjjjjjjjjjjjjjjjjjjjjj,,,^`',
       '`iiijjjjjjjjjjjjjjjjjjjjjjj,,,^`',
@@ -625,12 +625,14 @@ export const REGION4_MAPS: Record<string, MapDef> = {
       '`````^^^^iiiiiiiiiiiiii^^^^`````',
       '````````^^^^^^^^D^^^^^^^````````',
     ],
-    // The way out to Ruta 9 is closed (plans/volcano.md): the rim's rock rings the walkway; outside it, the grass
-    // around the top joins Ruta 9's (plain grass for now).
+    // The rim's rock rings the walkway; outside it, the ash joins Ciudad Ceniza's (plans/region7-8.md). Its east shore
+    // is black rock, but for a grid of Strength boulders in front of the beach on the lake.
     connections: { down: { to: 'laderas', offset: 0, scenery: true } },
     doors: [{ x: 16, y: 25, to: 'tubo', tx: 36, ty: 2, dir: 'down' }],
     encounters: { rate: 0.15, table: [{ sp: 'chocoyito', min: 17, max: 24, w: 65 }, { sp: 'chocoyote', min: 25, max: 26, w: 5 }, { sp: 'chispita', min: 17, max: 24, w: 25 }, { sp: 'brasita', min: 17, max: 23, w: 5 }, { sp: 'salamandrita', min: 19, max: 24, w: 3 }] },
     npcs: [
+      boulder('roca_ceniza_playa1', 30, 1),
+      boulder('roca_ceniza_playa2', 30, 2),
       // On the east walkway's outer edge, against the rock (the lava is hot): every grunt comes before Don Sigilo.
       { id: 'silencioso5', x: 29, y: 18, look: 'silencioso', dir: 'left', script: 'silencioso5', sight: 2 },
       { id: 'silencioso6', x: 29, y: 8, look: 'silenciosa', dir: 'left', script: 'silencioso6', sight: 2 },

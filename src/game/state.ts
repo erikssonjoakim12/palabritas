@@ -108,7 +108,7 @@ export function newSave(): SaveData {
     dir: 'down',
     party: [],
     box: [],
-    flags: { amanecerWide: true, ruta5East: true, rutasCortas: true, sinEstacion: true, canonCascada: true, ruta2Nueva: true, palancaJunto: true, craterDerrumbe: true, oesteCorto: true, selvaLaberinto: true, ruta10Curvas: true, flyTowns: true, volcanZigzag: true, ruta9Pasto: true, cenizaCiudad: true, rayoSur: true, ruta1Ancha: true, ruta11Pantano: true },
+    flags: { amanecerWide: true, ruta5East: true, rutasCortas: true, sinEstacion: true, canonCascada: true, ruta2Nueva: true, palancaJunto: true, craterDerrumbe: true, oesteCorto: true, selvaLaberinto: true, ruta10Curvas: true, flyTowns: true, volcanZigzag: true, ruta9Pasto: true, cenizaCiudad: true, rayoSur: true, ruta1Ancha: true, ruta11Pantano: true, rocasCosta: true },
     gender: 'boy',
     money: 0,
     bag: {},
@@ -267,6 +267,12 @@ function migrate(s: SaveData) {
   if (!s.flags.ruta9Pasto) {
     if (s.map === 'ruta10' || (s.map === 'rio' && s.x >= 42 && s.y >= 37)) Object.assign(s, { map: 'ruta6', x: 34, y: 29, dir: 'left' });
     s.flags.ruta9Pasto = true;
+  }
+  // Boulders go back to their places when you leave a map now, and Ciudad Ceniza's pier boulder moved into a grid (the
+  // user): forget where any were pushed.
+  if (!s.flags.rocasCosta) {
+    s.boulders = {};
+    s.flags.rocasCosta = true;
   }
   // Ruta 11 became a swamp of islands and bridges (the user): anyone saved on it starts again where it begins.
   if (!s.flags.ruta11Pantano) {

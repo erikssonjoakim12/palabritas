@@ -59,6 +59,15 @@ s = await t.save();
 t.check('the boulder is pushed aside, and the save keeps it there', String(s.boulders.roca_ceniza_camino) === '2,2', s.boulders);
 t.check('the way into Ciudad Ceniza is open', String(await t.pos()) === 'ceniza,1,2', await t.pos());
 
+// The east coast is black rock with grids of boulders: pushing two of them opens the way to the pier (and Surf).
+await t.fromSave({ map: 'ceniza', x: 58, y: 17, dir: 'up', party, medals: seven, flags: { ...medalFlags, medalRayo: true } });
+await t.talk('ceniza', 58, 17, 'up', yes);
+for (const d of ['up', 'up', 'right']) await t.walk(d, 1);
+t.check('pushing the boulders aside opens the way to the pier', String(await t.pos()) === 'ceniza,59,15', [await t.pos(), (await t.save()).boulders]);
+await t.warp('ruta6', 34, 29, 'left');
+s = await t.save();
+t.check('once you leave, the boulders go back to their places', !s.boulders.roca_ceniza_muelle2, s.boulders);
+
 // Gym 8: Aurora, the Medalla Ceniza.
 const crew8 = { 'beat:historiadora_clara': true, 'beat:restaurador_efren': true, 'beat:archivera_luz': true };
 await t.fromSave({ map: 'gym_ceniza', x: 5, y: 3, dir: 'up', party: [['carablanca', 100], ['danton', 100], ['huracan', 100]], medals: seven, flags: { ...medalFlags, medalRayo: true, ...crew8 } });

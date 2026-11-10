@@ -118,7 +118,7 @@ own wild Palabritas.
 
 **Field moves** (Surf, Cut, Fly, Strength): who can and how many medals in `FIELD_MOVES` (src/data/species.ts); Fly's towns
 (`src/world/fly.ts`: every town with a Palacentro, once you've been there, `G.save.visited`); a water map's
-wild Palabritas while swimming in `surf`. **Boulders** (Strength, 7 medals): `boulder(id, x, y)` in a map's NPCs; with Strength on (A on a boulder, or FUERZA), walking into one pushes it, and `G.save.boulders` keeps where it is. **A storm** over a map: `storm: true` (rain and soft lightning, src/art/storm.ts). Walking or swimming off an edge with no connection (or into a hole) goes
+wild Palabritas while swimming in `surf`. **Boulders** (Strength, 7 medals): `boulder(id, x, y)` in a map's NPCs; with Strength on (A on a boulder, or FUERZA), walking into one pushes it, and `G.save.boulders` keeps where it is until you leave the map (then they all go back, like Gold/Silver). **A storm** over a map: `storm: true` (rain and soft lightning, src/art/storm.ts). Walking or swimming off an edge with no connection (or into a hole) goes
 into whatever map is there in the world.
 
 **An item on the ground:** `itemBall(id, x, y, itemId)` in the map's NPCs. It's picked up once (flag

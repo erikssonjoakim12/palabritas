@@ -40,7 +40,10 @@ data/trainers.ts). Waiting for the user's playthrough and art (the eight new Pal
 - Old streets half-swallowed by **black lava** (basalt rock and boulders, ash paths), a ruined church sticking out
   of the rock, newer houses built on the hardened lava.
 - **Getting in needs Strength**: every way in is blocked by boulders you push aside (from Ruta 5's road; from the
-  river, a landing with a boulder behind it). Boulders stay where you push them (the save keeps them).
+  river, a landing with a boulder behind it). The east coast (the user, 2026-11-10) is a band of
+  black rock from the pier down to the beach below the crater, with three grids of boulders (3 wide, 3-4 deep) to push
+  through to the water; the straight rock lines by the volcano are gone, so the town runs into the ash around the
+  crater. Boulders go back to their places when you leave the map (like Gold/Silver), so a grid is never stuck.
 - **The gym**: Dragón, 5 Palabritas, top level 58; route trainers 42–49 in the lava fields around the town; three
   gym trainers at 49–50 (the user: easier trainers, a strong leader). The medal: **Medalla Ceniza**.
 
