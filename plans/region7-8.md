@@ -8,10 +8,11 @@ data/trainers.ts). Waiting for the user's playthrough and art (the eight new Pal
 ## The road: Ruta 11 (`ruta12`)
 
 - Leaves **Ruta 10 high up, close to Villa Bruma** (the user), from its east edge, so gyms 6 and 7 can be done in
-  either order. East through rainy cloud forest, then a long winding descent to the lake's north shore (the user:
-  longer, and the lake further south, beside Ruta 3's mountains).
+  either order. A swamp in the rain (the user): islands joined by bridges, winding east, south, west and east again
+  down to the lake's north shore, with mangroves in the water and frogs, caimans and basilisks to meet while surfing.
+  48 wide, and the lake further south, beside Ruta 3's mountains (the user).
 - Trainers at 35–39, the lake's 39–41, the gym's 41–42 (the user: a few levels below the rule; the leader stays at 50), three with rematches. Wild Palabritas of the
-  cloud forest and the rain; Basiliquito by the streams.
+  cloud forest and the rain; Basiliquito on the islands and the water.
 
 ## Town 7: Puerto Rayo, on a stormy lake (gym 7, Eléctrico)
 

@@ -13,6 +13,8 @@ const medalFlags = Object.fromEntries(MEDALS.map((m) => [`medal${m}`, true]));
 await t.fromSave({ map: 'ruta11', x: 43, y: 10, dir: 'right', party, medals: MEDALS, flags: { ...medalFlags, 'beat:exploradora_vicky': true } });
 await t.walk('right', 3);
 t.check('Ruta 10 leads east into Ruta 11', (await t.pos())[0] === 'ruta12', await t.pos());
+await t.fromSave({ map: 'ruta12', x: 30, y: 20, dir: 'up', party, flags: { ruta11Pantano: false } });
+t.check('an old save on Ruta 11 (now a swamp) starts where it begins', String(await t.pos()) === 'ruta12,1,10', await t.pos());
 await t.warp('ruta12', 29, 43, 'down');
 await t.walk('down', 4);
 t.check('Ruta 11 comes down to Puerto Rayo', (await t.pos())[0] === 'rayo', await t.pos());
