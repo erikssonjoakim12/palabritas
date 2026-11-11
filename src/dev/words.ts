@@ -1,6 +1,7 @@
 // The dictionary page (palabras.html, `npm run words`): every word and phrase the game teaches, which lists use
 // it at which level, and which Palabritas learn it. Published next to the game as palabras.html.
 import { ITEMS, THEMES, type Item } from '../data/content';
+import { SV } from '../data/sv';
 import { SPECIES, DEX_ORDER, firstForm } from '../data/species';
 import { el } from '../engine/dom';
 import { pageNav, wrapped } from './page';
@@ -52,7 +53,7 @@ root.append(wrapped(summary));
 // ---------- Every word ----------
 root.append(el('h2', '', 'Every word and phrase'));
 const controls = el('div', 'controls');
-const search = Object.assign(el('input'), { type: 'search', placeholder: 'Search Spanish or English…' });
+const search = Object.assign(el('input'), { type: 'search', placeholder: 'Search Spanish, English or Swedish…' });
 const filter = el('select');
 filter.append(Object.assign(el('option', '', 'All lists'), { value: '' }));
 for (const t of lists) filter.append(Object.assign(el('option', '', t.name), { value: t.id }));
@@ -71,7 +72,7 @@ controls.append(search, filter, levels, sharedLabel, count);
 root.append(controls);
 
 const table = el('table');
-table.append(Object.assign(el('tr'), { innerHTML: '<th>Spanish</th><th>English</th><th>Taught in</th>' }));
+table.append(Object.assign(el('tr'), { innerHTML: '<th>Spanish</th><th>English</th><th>Swedish</th><th>Taught in</th>' }));
 const rows = items.map((item) => {
   const tr = el('tr');
   const es = el('td', 'es', item.es);
@@ -80,9 +81,10 @@ const rows = items.map((item) => {
   const where_ = el('td');
   const u = (uses.get(item) ?? []).sort((a, b) => a.tier - b.tier);
   for (const { list, tier } of u) where_.append(el('span', `chip${list === 'core' ? ' core' : isTopic(list) ? ' topic' : ''}`, where(list, tier)));
-  tr.append(es, el('td', '', item.en), where_);
+  const sv = SV[item.es] ?? '';
+  tr.append(es, el('td', '', item.en), el('td', sv ? '' : 'missing', sv || '—'), where_);
   table.append(tr);
-  return { tr, item, uses: u, lists: new Set(u.map((x) => x.list)), text: plain(`${item.accept.join(' ')} ${item.en}`) };
+  return { tr, item, uses: u, lists: new Set(u.map((x) => x.list)), text: plain(`${item.accept.join(' ')} ${item.en} ${sv}`) };
 });
 root.append(wrapped(table));
 

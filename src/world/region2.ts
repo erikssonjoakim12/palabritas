@@ -132,7 +132,7 @@ interface LostWord {
   en: string;
   /** Their sentence, with ___ where the word goes. */
   gap: Line;
-  /** What to look for, while the word is missing (English, and Swedish: plans/swedish.md). */
+  /** What to look for, while the word is missing (in English and in Swedish). */
   hint: string;
   hintSv: string;
   thanks: Line;

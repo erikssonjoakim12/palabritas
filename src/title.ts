@@ -144,7 +144,7 @@ async function applySettings() {
 }
 
 /**
- * The translation, before anything is said (plans/swedish.md). A phone set to Swedish starts on Svenska; whatever you
+ * The translation, before anything is said. A phone set to Swedish starts on Svenska; whatever you
  * pick stays until you change it in AJUSTES → Traducción.
  */
 async function chooseGloss() {

@@ -1,12 +1,13 @@
 import { G } from '../game/state';
 
 /*
-  The translation the game helps with (plans/swedish.md): English, or Swedish. The Spanish never changes.
+  The translation the game helps with: English, or Swedish. The Spanish never changes.
 
   The Swedish lives in src/data/sv/, keyed by the Spanish it translates (or, for text with no Spanish, like the FAQ,
   by the English). It's a chunk of its own, loaded only when Swedish is chosen. A line with no Swedish yet shows its
   English. Lines built while playing (a Palabrita's name in them) can't be looked up by their text: they carry their
-  Swedish inline (`sv`). `node tools/sv.mjs` lists what's missing.
+  Swedish inline (`sv`). A challenge label holding its own translation ('¿Qué significa? · What does it mean?') is
+  keyed by the whole label. `node tools/sv.mjs` lists what's missing.
 */
 
 export type Gloss = 'en' | 'sv';

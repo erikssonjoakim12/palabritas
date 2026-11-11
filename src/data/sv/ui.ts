@@ -1,5 +1,5 @@
 // Swedish for what every part of the game shares: the title, menus, challenges, battles, the Palacentro, the shop,
-// field moves, the school. Keyed by the Spanish (or the English, for lines with none). See plans/swedish.md.
+// field moves, the school. Keyed by the Spanish (or the English, for lines with none). See src/lang/gloss.ts.
 export default {
   // The title and a new game
   '¿Borrar la partida guardada y empezar de nuevo?': 'Radera det sparade spelet och börja om?',

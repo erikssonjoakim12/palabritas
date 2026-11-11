@@ -1,4 +1,4 @@
-// Learning through Swedish (plans/swedish.md): chosen when a new game starts and kept in the save, the SV button,
+// Learning through Swedish (src/lang/gloss.ts): chosen when a new game starts and kept in the save, the SV button,
 // challenges in Swedish, back to English in AJUSTES, old saves in English. And the Swedish itself: none left behind
 // by a change to the Spanish, none that loses a difference the English keeps (tools/sv.mjs).
 import { start } from './lib.mjs';

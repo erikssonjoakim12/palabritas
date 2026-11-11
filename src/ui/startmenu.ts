@@ -200,7 +200,7 @@ async function settings() {
       st.musicLevel = st.musicLevel >= 100 ? 0 : st.musicLevel + 20;
       musicSettingChanged();
     } else if (i === 4) {
-      // English or Swedish, from the next line on (plans/swedish.md). What you've learned stays the same.
+      // English or Swedish, from the next line on. What you've learned stays the same.
       st.gloss = st.gloss === 'sv' ? 'en' : 'sv';
       await loadGloss();
     } else if (i === 5) {

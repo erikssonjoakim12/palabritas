@@ -1,4 +1,4 @@
-// The Swedish translation (plans/swedish.md): finds every line the game shows with English, by reading the source,
+// The Swedish translation (src/lang/gloss.ts): finds every line the game shows with English, by reading the source,
 // and compares it with the Swedish in src/data/sv/.
 //
 //   node tools/sv.mjs                 coverage per source file, Swedish left behind, lines built while playing

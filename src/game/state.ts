@@ -37,7 +37,7 @@ export interface Settings {
   slowVoice: boolean;
   /** Music volume in percent: 0 (off), 20, 40, 60, 80 or 100. Sound effects stay either way. */
   musicLevel: number;
-  /** The translation shown with the EN/SV button and in challenges (plans/swedish.md). Kept until you change it. */
+  /** The translation shown with the EN/SV button and in challenges (src/lang/gloss.ts). Kept until you change it. */
   gloss: Gloss;
 }
 
