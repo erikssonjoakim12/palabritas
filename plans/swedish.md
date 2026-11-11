@@ -66,8 +66,8 @@ neither does the voice (speech is Spanish only).
 
 **Choosing it:**
 - **New game:** the first screen after NUEVA PARTIDA is two buttons, **English** and **Svenska**, before the
-  professor speaks. A phone set to Swedish starts with Svenska selected.
-- **While playing:** START → AJUSTES gets a line **AYUDA: English / Svenska**. Switching loads the Swedish (well under
+  professor speaks. A phone set to Swedish starts with Svenska selected (the user). Whatever you pick is kept in the save and never changes by itself, whatever the phone says, until you change it in AJUSTES.
+- **While playing:** START → AJUSTES gets a line **TRADUCCIÓN: English / Svenska** (the user). Switching loads the Swedish (well under
   a second) and the next line shown is in Swedish.
 
 **Dev pages:** the dictionary (`/palabras.html`) gets a Swedish column and a coverage count per list, so missing
@@ -118,8 +118,3 @@ each future feature. The data test catches anything forgotten.
   shows meanwhile.
 - *Translation quality:* phrases that only work in English. A few lines explain English-specific points, such as
   "(the language)" or "you (plural)", and get Swedish of their own. The user reviews samples.
-
-## Open questions for the user
-
-- Default for a phone set to Swedish: start with Svenska selected (proposed), or always English?
-- Is "AYUDA" the right name for the setting, or "TRADUCCIÓN", or "IDIOMA"?
