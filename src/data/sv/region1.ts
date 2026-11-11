@@ -251,4 +251,5 @@ export default {
   'RUTA 3. Al oeste: la Cueva del Eco.': 'RUTA 3. Västerut: Cueva del Eco.',
   'CUEVA DEL ECO. ¡Aquí cada palabra se oye dos veces!': 'CUEVA DEL ECO. Här hörs varje ord två gånger!',
   'RUTA 4. Al oeste: Villa Ocote. Al norte: el Cañón del Guardabarranco.': 'RUTA 4. Västerut: Villa Ocote. Norrut: Cañón del Guardabarranco.',
+  '¿Has visto a Michi?': "Har du sett Michi?",
 } satisfies Record<string, string>;

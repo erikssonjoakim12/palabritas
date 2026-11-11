@@ -171,7 +171,7 @@ export const LOST_WORDS: Record<string, LostWord> = {
     reward: () => pay(150),
   },
   historia: {
-    word: 'la historia', en: 'the history, the story', look: 'abuelo',
+    word: 'la historia', en: 'the story / the history', look: 'abuelo',
     gap: ['Te voy a contar la ___ de Villa Ocote.', 'I’m going to tell you the ___ of Villa Ocote.', 'Jag ska berätta Villa Ocotes ___ för dig.'],
     hint: 'what old people tell about the past',
     hintSv: 'det som de gamla berättar om förr i tiden',

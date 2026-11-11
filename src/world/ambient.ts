@@ -85,12 +85,15 @@ const MAX_MARKS = 30;
 /** Does this ground keep footprints: sand, and the ash around the volcano. */
 const softGround = (ch: string) => ch === 's' || ch === 'i' || (ch === '.' && (here?.ground === 'ash' || here?.ground === 'sand'));
 
-/** A step onto (x, y): footprints on soft ground, a ripple behind you (from, the tile you left) while you swim. */
-export function stepFx(x: number, y: number, dir: Dir, from: [number, number], swimming: boolean) {
+/**
+ * A step: footprints on soft ground, or a ripple while you swim, both on the tile you leave (from). The
+ * step has only begun: marks on the tile ahead would show before you're there (the user: steps only behind you).
+ */
+export function stepFx(dir: Dir, from: [number, number], swimming: boolean) {
   if (!here?.outdoor) return;
-  const ch = tileOf(here, x, y);
+  const ch = tileOf(here, from[0], from[1]);
   if (swimming) marks.push({ kind: 'ripple', x: from[0], y: from[1], dir, at: now() });
-  else if (softGround(ch)) marks.push({ kind: 'print', x, y, dir, at: now(), ash: ch === 'i' || (ch === '.' && here.ground === 'ash') });
+  else if (softGround(ch)) marks.push({ kind: 'print', x: from[0], y: from[1], dir, at: now(), ash: ch === 'i' || (ch === '.' && here.ground === 'ash') });
   if (marks.length > MAX_MARKS) marks.shift();
 }
 
@@ -291,5 +294,6 @@ export function drawAmbientAir(g: CanvasRenderingContext2D, camX: number, camY: 
 
 /** For tests: what a map has (after ambientMap). */
 export const ambientCounts = () => ({ shores: shores.length, birds: birds.length, chimneys: chimneys.length, marks: marks.length });
+export const markSpots = () => marks.map(({ kind, x, y }) => ({ kind, x, y }));
 /** Is anything solid there? (Birds never sit inside a wall: a check the tests make.) */
 export const birdSpots = () => birds.map((b) => ({ x: b.x, y: b.y, flown: !!b.flown, solid: !!here && TILES[tileOf(here, b.x, b.y)].solid }));

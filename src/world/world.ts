@@ -423,7 +423,7 @@ function startMove(nx: number, ny: number, dist = T) {
     if (dx || dy) follower.dir = dx < 0 ? 'left' : dx > 0 ? 'right' : dy < 0 ? 'up' : 'down';
   }
   if (TILES[tileAt(nx, ny)].kind === 'tallgrass') rustle = { x: nx, y: ny, at: performance.now() };
-  stepFx(nx, ny, player.slide ?? player.dir, [player.x, player.y], !!G.save.surfing);
+  stepFx(player.slide ?? player.dir, [player.x, player.y], !!G.save.surfing);
   // Swimming onto land: you're on foot again.
   if (G.save.surfing && !isWater(tileAt(nx, ny))) {
     G.save.surfing = false;

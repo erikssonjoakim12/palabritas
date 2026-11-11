@@ -3,16 +3,22 @@
 import { start, sleep } from './lib.mjs';
 
 const t = await start('ambient');
-await t.game(() => (window.__hour = 12)); // by day: the birds are out
-
 await t.fromSave({ map: 'carey', x: 10, y: 9, dir: 'left', party: [['gotita', 20]] });
 const there = await t.game(() => window.__game.ambient.ambientCounts());
 t.check('Playa Carey has waves on its beaches and smoke from a chimney', there.shores > 0 && there.chimneys > 0, there);
 await t.walk('left', 2);
 const after = await t.game(() => window.__game.ambient.ambientCounts());
 t.check('walking on the sand leaves footprints', after.marks >= 2, after);
+// Only behind you: on the tiles you left, never where you stand or are about to step (the user saw them ahead).
+await t.walk('left', 1);
+const prints = await t.game(() => window.__game.ambient.markSpots());
+const [, mx, my] = await t.pos();
+const me = { x: mx, y: my };
+t.check('…only behind you', prints.length && prints.every((p) => p.y === me.y && p.x > me.x), { me, prints });
 
 await t.fromSave({ map: 'tortugas', x: 10, y: 5, dir: 'down', party: [['gotita', 20]] });
+// By day: the birds are out (after loading, which starts a fresh page; else the test fails in the evening).
+await t.game(() => (window.__hour = 12));
 const birds = await t.game(() => window.__game.ambient.birdSpots());
 t.check('birds peck on the open ground, never inside a wall', birds.length > 0 && birds.every((b) => !b.solid && !b.flown), birds);
 const b = birds[0];

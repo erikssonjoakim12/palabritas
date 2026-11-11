@@ -112,4 +112,7 @@ export default {
   '¡Bienvenid{o/a} a la escuela! ¿Qué quieres estudiar hoy?':
     'Välkommen till skolan! Vad vill du studera i dag? REPASO = repetera orden som är dags. CLASE PARTICULAR = repetera en Palabritas egna ord, så att den lyder dig. TEMA DEL DÍA = dagens grammatikämne.',
   '¡Hasta luego! Estudiar un poco cada día es lo mejor.': 'Vi ses! Att plugga lite varje dag är bäst.',
+  '(They try to speak, but no words come out!)': "(De försöker tala, men inga ord kommer ut!)",
+  'Loyalty: keep using its words or it stops obeying.': "Lojalitet: fortsätt använda dess ord, annars slutar den lyda.",
+  'Ataques · Moves': "Ataques · Attacker",
 } satisfies Record<string, string>;

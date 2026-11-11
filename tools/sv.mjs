@@ -129,14 +129,25 @@ export function sourceLines() {
         // Text in the player's own language (Sam explaining the game in English): keyed by its English.
         if (callee === 'native') for (const v of strings(n.arguments[0])) add(v, null, v, undefined, 'native');
         if (callee === 'sayOrMime' && n.arguments.length >= 2) add(n.arguments[1], null, n.arguments[1], undefined, 'mime');
+        // A museum's plaque: exhibit(x, y, pieces, es, en).
+        if (callee === 'exhibit') add(n, n.arguments[3], n.arguments[4], undefined, 'call');
+        // One-off items (a quest's question): their meaning is shown after answering. wordItem(es, en) is one unless the
+        // word is in a list.
+        if (callee === 'adHocItem' && n.arguments[0]?.type === 'ArrayExpression') add(n, n.arguments[0].elements[0], n.arguments[1], undefined, 'item');
+        if (callee === 'wordItem') add(n, n.arguments[0], n.arguments[1], undefined, 'item');
+      } else if (n.type === 'VariableDeclarator' && /MIME$/.test(n.id?.name) && isStringish(n.init)) {
+        add(n.init, null, n.init, undefined, 'mime');
       } else if (n.type === 'ObjectExpression') {
-        // { es, en } (signs, the Palabridex...), and { name, en } (items, themes).
-        const es = prop(n, 'es') ?? prop(n, 'name') ?? prop(n, 'say'), en = prop(n, 'en');
+        // { es, en } (signs, the Palabridex...), { name, en } (items, themes), and { word, en } (the lost words).
+        const es = prop(n, 'es') ?? prop(n, 'name') ?? prop(n, 'say') ?? prop(n, 'word'), en = prop(n, 'en');
         if (es && en && isStringishOrConst(es.value) && parent?.type !== 'CallExpression') add(n, es.value, en.value, prop(n, 'sv')?.value, 'object');
         // Challenge labels holding their own translation, keyed by themselves (labelSv when built while playing).
         const label = prop(n, 'label');
         // (A label in Spanish only, like 'Completa: «…»', needs none.)
         for (const v of label ? strings(label.value) : []) if (/ · /.test(text(v) ?? src.slice(v.start, v.end)) || prop(n, 'labelSv')) add(v, v, v, prop(n, 'labelSv')?.value, 'label');
+        // What someone acts out on a muted map, keyed by its English.
+        const mime = prop(n, 'mime');
+        for (const v of mime ? strings(mime.value) : []) add(v, null, v, undefined, 'mime');
         const q = prop(n, 'q'), a = prop(n, 'a');
         if (q && a && /faq\.ts$/.test(f)) for (const p of [q, a]) add(p, null, p.value, undefined, 'faq');
       } else if (n.type === 'ArrayExpression' && [2, 3].includes(n.elements.length) && n.elements.every(isStringishOrConst)) {

@@ -11,7 +11,7 @@ import { THEMES } from '../data/content';
 import { TYPE_COLORS } from '../data/types';
 import { TYPE_TEXT } from '../style/colors';
 import { speak } from '../lang/speech';
-import { gloss, meaning, named } from '../lang/gloss';
+import { gloss, glossLabel, meaning, named, native } from '../lang/gloss';
 
 /** A Palabrita's 16x16 icon, for lists (scaled up with hard pixels by the CSS). */
 export function iconCanvas(sp: string) {
@@ -209,10 +209,10 @@ export function showDetails(mon: Mon): Promise<void> {
   if (loy < OBEY_THRESHOLD) fill.style.background = 'var(--bad)';
   meter.appendChild(fill);
   box.appendChild(meter);
-  box.appendChild(el('div', 'row muted', 'Loyalty: keep using its words or it stops obeying.'));
+  box.appendChild(el('div', 'row muted', native('Loyalty: keep using its words or it stops obeying.')));
 
   const moves = el('div', 'row');
-  moves.appendChild(el('div', 'muted', 'Ataques · Moves'));
+  moves.appendChild(el('div', 'muted', glossLabel('Ataques · Moves')));
   for (const m of sp.moves) {
     const known = learnLevel(m) <= mon.level;
     // Moves it hasn't learned yet stay a secret, like in Gold/Silver.

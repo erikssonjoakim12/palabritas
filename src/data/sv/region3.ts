@@ -172,4 +172,5 @@ export default {
   '¡Marina no está! Está en la Playa de las Tortugas. ¡Esta noche es la arribada!': 'Marina är inte här! Hon är på Playa de las Tortugas. I natt är det arribada!',
   '¡Marina te espera! ¡Mucha suerte!': 'Marina väntar på dig! Lycka till!',
   'RESERVA DE TORTUGAS. No toques los nidos.': 'SKÖLDPADDSRESERVAT. Rör inte bona.',
+  '¡Al mar!': "Till havet! / Hitåt! / Kom igen, små sköldpaddor!",
 } satisfies Record<string, string>;
