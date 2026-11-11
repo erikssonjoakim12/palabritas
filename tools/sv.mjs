@@ -143,11 +143,11 @@ export function sourceLines() {
         // Not pairs either: art rows and colors (no words), two Spanish options (Spanish letters in the second).
         const [a, b] = n.elements.map((e) => text(e) ?? src.slice(e.start, e.end));
         // And menu choices in capitals (['NUEVA PARTIDA', 'IMPORTAR']), or a default (choices = ['Sí', 'No']).
-        if (/^#|^[^a-z]*$|^[a-z_0-9]+$/i.test(a) || /[áéíóúñ¿¡]/i.test(b) || /^[^a-z]*$/.test(b) || parent?.type === 'AssignmentPattern') return;
+        if (/^#|^[^a-z]*$|^[a-z_0-9]+$/i.test(a) || (/[áéíóúñ¿¡]/i.test(b) && !ENGLISH.test(b)) || /^[^a-z]*$/.test(b) || parent?.type === 'AssignmentPattern') return;
         // Two names (types: ['Psíquico', 'Lucha']).
         if ([a, b].every((x) => /^[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+$/.test(x))) return;
         // Two Spanish options (['la mesa', 'el zapato']).
-        if (/^(el|la|los|las|un|una) /.test(b)) return;
+        if (/^(el|la|los|las|un|una) /i.test(b)) return;
         // A third element is a line's Swedish only when it's built while playing (static Swedish is in src/data/sv/).
         const sv = n.elements[2];
         if (sv && !(sv.type === 'TemplateLiteral' && sv.expressions.length)) return;
@@ -157,6 +157,8 @@ export function sourceLines() {
   }
   return out;
 }
+/** Common English words: a second element with Spanish letters is still English if it has some ('"Tú" with friends'). */
+const ENGLISH = /\b(the|a|an|and|is|are|you|your|it|with|to|of|in|for|my|I|me)\b/;
 /** The strings an expression can be: 'a', x ?? 'a', c ? 'a' : 'b'. */
 const strings = (n) =>
   !n ? [] : isStringish(n) ? [n] : n.type === 'ConditionalExpression' ? [...strings(n.consequent), ...strings(n.alternate)] : n.type === 'LogicalExpression' ? strings(n.right) : n.type === 'ParenthesizedExpression' ? strings(n.expression) : [];
