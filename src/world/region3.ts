@@ -202,7 +202,7 @@ async function cocinero() {
   if (firstTime) setFlag(`mesero${shift.round}`);
   G.save.money += pay;
   sfx('caught');
-  await info(`¡La mesa está feliz! Ganaste ${money(pay)}.`, { en: `The table is happy! You earned ${money(pay)}.` });
+  await info(`¡La mesa está feliz! Ganaste ${money(pay)}.`, { en: `The table is happy! You earned ${money(pay)}.`, sv: `Bordet är nöjt! Du tjänade ${money(pay)}.` });
   if (shift.round < 3) return;
   G.save.restauranteDia = today();
   if (firstTime) await gift('superpocion', 2, 'dos Superpociones', 'two Super Potions');

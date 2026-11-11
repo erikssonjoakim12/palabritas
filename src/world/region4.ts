@@ -13,6 +13,7 @@ import { launchFirework } from '../art/fireworks';
 import { refreshNpcs, walkNpc, walkNpcTo, warp, scriptedStep, rideDown, npcRideDown, player, type ScriptFn, type ScriptCtx } from './world';
 import type { Line } from './maps';
 import { TORCHES } from './maps/region4';
+import { meaning } from '../lang/gloss';
 import { lines, as, talk, cutTo, talkMode, heal, blackout, fight, rivalBattle, gymLeader, gift, pay, receiveMon, practice, practiceUntilRight, question, untilRight } from './flows';
 import { teacher } from './school';
 
@@ -298,7 +299,7 @@ async function endFestival() {
 async function antorcha(c: ScriptCtx) {
   const t = TORCHES.find((x) => `antorcha${x.color}` === c.npc?.def.id);
   if (!t) return;
-  if (!(await ask(`¿Enciendes la antorcha ${t.es}?`, { en: `Light the ${t.en} torch?` }))) return;
+  if (!(await ask(`¿Enciendes la antorcha ${t.es}?`, { en: `Light the ${t.en} torch?`, sv: `Tänd den ${meaning(t)}a facklan?` }))) return;
   const next = TORCHES.find((x) => !flag(`antorcha:${x.color}`));
   if (next !== t) {
     for (const x of TORCHES) setFlag(`antorcha:${x.color}`, false);
@@ -425,7 +426,7 @@ async function hamaquera() {
       sfx('caught');
       addItem('hamaca');
       setFlag('hamacaComprada');
-      await info(`¡{name} compró la hamaca por ${money(price)}!`, { en: `{name} bought the hammock for ${money(price)}!` });
+      await info(`¡{name} compró la hamaca por ${money(price)}!`, { en: `{name} bought the hammock for ${money(price)}!`, sv: `{name} köpte hängmattan för ${money(price)}!` });
       return lines(['Es para tu mamá, ¿verdad? ¡Qué lindo!', 'It’s for your mom, right? How sweet!']);
     }
     if (step === PRICES.length - 1) {
@@ -576,7 +577,7 @@ async function mascarero() {
     );
     return setFlag('torovenado');
   }
-  if (piecesFound() < PIECES.length) return lines([`Tienes ${piecesFound()} de 5 piezas. ¡Sigue buscando!`, `You have ${piecesFound()} of 5 pieces. Keep looking!`]);
+  if (piecesFound() < PIECES.length) return lines([`Tienes ${piecesFound()} de 5 piezas. ¡Sigue buscando!`, `You have ${piecesFound()} of 5 pieces. Keep looking!`, `Du har ${piecesFound()} av 5 delar. Fortsätt leta!`]);
   if (!flag('torovenadoListo')) {
     setFlag('torovenadoListo');
     await lines(['¡El traje está completo! Esta noche, ¡tú vas a bailar en el desfile!', 'The costume is complete! Tonight, you’re going to dance in the parade!']);

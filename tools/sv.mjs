@@ -102,7 +102,10 @@ export function sourceLines() {
       if (en === undefined && !isStringish(enN) && enN?.type !== 'ConditionalExpression') return;
       // «…» says nothing: what's acted out is keyed by its English (ui/textbox.ts).
       const es = esN && !/^[…. ]*$/.test(text(esN) ?? '-') ? text(esN) : en;
-      out.push({ file: rel(f), line: lineOf(n), es, en: en ?? src.slice(enN.start, enN.end), sv: svN ? text(svN) ?? src.slice(svN.start, svN.end) : undefined, dynamic: es === undefined || en === undefined, kind });
+      const enSrc = src.slice(enN.start, enN.end);
+      // Text put together from translations while playing (`${native('A riddle:')} ${gloss(...)}`) translates itself.
+      const svSrc = svN ? src.slice(svN.start, svN.end) : /\b(gloss|native|meaning|named)\(/.test(enSrc) ? enSrc : undefined;
+      out.push({ file: rel(f), line: lineOf(n), es, en: en ?? enSrc, sv: svN ? text(svN) ?? svSrc : svSrc, dynamic: es === undefined || en === undefined, kind });
     };
     const content = /src[\\/]data[\\/]content[\\/]/.test(f);
     walk(parse(f), (n, parent) => {
@@ -128,16 +131,21 @@ export function sourceLines() {
         if (callee === 'sayOrMime' && n.arguments.length >= 2) add(n.arguments[1], null, n.arguments[1], undefined, 'mime');
       } else if (n.type === 'ObjectExpression') {
         // { es, en } (signs, the Palabridex...), and { name, en } (items, themes).
-        const es = prop(n, 'es') ?? prop(n, 'name'), en = prop(n, 'en');
+        const es = prop(n, 'es') ?? prop(n, 'name') ?? prop(n, 'say'), en = prop(n, 'en');
         if (es && en && isStringishOrConst(es.value) && parent?.type !== 'CallExpression') add(n, es.value, en.value, prop(n, 'sv')?.value, 'object');
         // Challenge labels holding their own translation, keyed by themselves (labelSv when built while playing).
         const label = prop(n, 'label');
-        for (const v of label ? strings(label.value) : []) if (/ · |«/.test(text(v) ?? src.slice(v.start, v.end))) add(v, v, v, prop(n, 'labelSv')?.value, 'label');
+        // (A label in Spanish only, like 'Completa: «…»', needs none.)
+        for (const v of label ? strings(label.value) : []) if (/ · /.test(text(v) ?? src.slice(v.start, v.end)) || prop(n, 'labelSv')) add(v, v, v, prop(n, 'labelSv')?.value, 'label');
         const q = prop(n, 'q'), a = prop(n, 'a');
         if (q && a && /faq\.ts$/.test(f)) for (const p of [q, a]) add(p, null, p.value, undefined, 'faq');
       } else if (n.type === 'ArrayExpression' && [2, 3].includes(n.elements.length) && n.elements.every(isStringishOrConst)) {
-        // ['es', 'en'] lines (and ['es', 'en', 'sv'] when built while playing). Choices (['Sí', 'No']) are given to menu() or ask(): those aren't pairs.
-        if (parent?.type === 'CallExpression' && ['menu', 'ask'].includes(parent.callee.name)) return;
+        // ['es', 'en'] lines (and ['es', 'en', 'sv'] when built while playing). Choices and answers (['Sí', 'No']) given
+        // to menu(), ask(), question()... aren't pairs: the argument where each takes them.
+        const choicesAt = { menu: 0, ask: 2, chooseText: 2, question: 3, untilRight: 3 }[parent?.callee?.name];
+        if (parent?.type === 'CallExpression' && parent.arguments[choicesAt] === n) return;
+        // Nor are lists of Spanish answers (a dish's `need`, a riddle's `wrong` options).
+        if (parent?.type === 'Property' && ['need', 'wrong'].includes(parent.key?.name)) return;
         // A mime with its Swedish (sayOrMime(line, [en, sv])) is done already.
         if (parent?.type === 'CallExpression' && parent.callee.name === 'sayOrMime' && parent.arguments[1] === n) return;
         // Not pairs either: art rows and colors (no words), two Spanish options (Spanish letters in the second).
@@ -147,7 +155,7 @@ export function sourceLines() {
         // Two names (types: ['Psíquico', 'Lucha']).
         if ([a, b].every((x) => /^[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+$/.test(x))) return;
         // Two Spanish options (['la mesa', 'el zapato']).
-        if (/^(el|la|los|las|un|una) /i.test(b)) return;
+        if (/^(el|la|los|las|un|una|en|al) /i.test(b)) return;
         // A third element is a line's Swedish only when it's built while playing (static Swedish is in src/data/sv/).
         const sv = n.elements[2];
         if (sv && !(sv.type === 'TemplateLiteral' && sv.expressions.length)) return;

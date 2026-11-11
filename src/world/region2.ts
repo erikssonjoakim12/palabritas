@@ -9,6 +9,7 @@ import { chooseText } from '../ui/challenge';
 import { trainerBattle, wildBattle } from '../battle/battle';
 import { TRAINERS } from '../data/trainers';
 import { speak } from '../lang/speech';
+import { gloss, meaning, native } from '../lang/gloss';
 import { warp, refreshNpcs, walkNpc, placeNpc, approachPlayer, setFade, fadeOut, currentMap, type ScriptFn } from './world';
 import { gateOf, type Line } from './maps';
 import { lines, as, talk, talkMode, blackout, fight, rivalBattle, gymLeader, gift, pay, receiveMon, practice, practiceUntilRight, untilRight } from './flows';
@@ -131,8 +132,9 @@ interface LostWord {
   en: string;
   /** Their sentence, with ___ where the word goes. */
   gap: Line;
-  /** What to look for, while the word is missing (English). */
+  /** What to look for, while the word is missing (English, and Swedish: plans/swedish.md). */
   hint: string;
+  hintSv: string;
   thanks: Line;
   /** What they say at the party, using their word. */
   party: Line;
@@ -143,64 +145,72 @@ interface LostWord {
 export const LOST_WORDS: Record<string, LostWord> = {
   olla: {
     word: 'la olla', en: 'the pot', look: 'lady',
-    gap: ['Esta ___ es de barro. ¿La quieres?', 'This ___ is made of clay. Do you want it?'],
+    gap: ['Esta ___ es de barro. ¿La quieres?', 'This ___ is made of clay. Do you want it?', 'Den här ___ är gjord av lera. Vill du ha den?'],
     hint: 'something made of clay, for cooking',
+    hintSv: 'något av lera, för matlagning',
     thanks: ['¡Mi olla! «Esta olla es de barro.» ¡Ya lo puedo decir! Toma, un regalo.', 'My pot! "This pot is made of clay." I can say it now! Here, a gift.'],
     party: ['¡Esta olla es para la sopa de la fiesta!', 'This pot is for the party soup!'],
     reward: () => gift('superpocion', 1, 'una Superpoción', 'a Super Potion'),
   },
   tortilla: {
     word: 'la tortilla', en: 'the tortilla', look: 'lady',
-    gap: ['Hago una ___ de maíz para el desayuno.', 'I make a corn ___ for breakfast.'],
+    gap: ['Hago una ___ de maíz para el desayuno.', 'I make a corn ___ for breakfast.', 'Jag gör en ___ av majs till frukost.'],
     hint: 'something round and flat, made of corn',
+    hintSv: 'något runt och platt, gjort av majs',
     thanks: ['¡Una tortilla de maíz! Ya puedo decirlo. Toma, para el camino.', 'A corn tortilla! I can say it now. Here, for the road.'],
     party: ['¡Prueben la tortilla! Está calientita.', 'Try the tortilla! It’s nice and warm.'],
     reward: () => gift('pocion', 2, 'dos Pociones', 'two Potions'),
   },
   bueyes: {
     word: 'los bueyes', en: 'the oxen', look: 'man',
-    gap: ['Mis ___ se llaman Lucero y Canelo.', 'My ___ are called Lucero and Canelo.'],
+    gap: ['Mis ___ se llaman Lucero y Canelo.', 'My ___ are called Lucero and Canelo.', 'Mina ___ heter Lucero och Canelo.'],
     hint: 'big strong animals that pull his cart',
+    hintSv: 'stora starka djur som drar hans kärra',
     thanks: ['¡Los bueyes! «Mis bueyes se llaman Lucero y Canelo.» ¡Gracias, muchach{o/a}!', 'The oxen! "My oxen are called Lucero and Canelo." Thank you, kid!'],
     party: ['Mañana llevo los bueyes al mercado... ¡pero hoy bailo!', 'Tomorrow I take the oxen to market... but today I dance!'],
     reward: () => pay(150),
   },
   historia: {
     word: 'la historia', en: 'the history, the story', look: 'abuelo',
-    gap: ['Te voy a contar la ___ de Villa Ocote.', 'I’m going to tell you the ___ of Villa Ocote.'],
+    gap: ['Te voy a contar la ___ de Villa Ocote.', 'I’m going to tell you the ___ of Villa Ocote.', 'Jag ska berätta Villa Ocotes ___ för dig.'],
     hint: 'what old people tell about the past',
+    hintSv: 'det som de gamla berättar om förr i tiden',
     thanks: ['¡La historia! Ahora sí te la puedo contar...', 'The history! Now I can tell it to you...'],
     party: ['Esta noche también es parte de la historia de Villa Ocote.', 'Tonight is also part of Villa Ocote’s history.'],
     reward: () => pay(200),
   },
   marimba: {
     word: 'la marimba', en: 'the marimba', look: 'musico',
-    gap: ['Toco la ___ todas las noches en la plaza.', 'I play the ___ every night in the plaza.'],
+    gap: ['Toco la ___ todas las noches en la plaza.', 'I play the ___ every night in the plaza.', 'Jag spelar ___ varje kväll på torget.'],
     hint: 'a wooden instrument you play with mallets',
+    hintSv: 'ett instrument av trä som man spelar med klubbor',
     thanks: ['¡La marimba! ¡La música volvió! Toma, para que nada te moleste en el camino.', 'The marimba! The music is back! Here, so nothing bothers you on the road.'],
     party: ['¡Y ahora... la marimba!', 'And now... the marimba!'],
     reward: () => gift('repelente', 1, 'un Repelente', 'a Repel'),
   },
   medicina: {
     word: 'la medicina', en: 'the medicine', look: 'granny',
-    gap: ['Para el dolor de cabeza, toma esta ___.', 'For a headache, take this ___.'],
+    gap: ['Para el dolor de cabeza, toma esta ___.', 'For a headache, take this ___.', 'Mot huvudvärk, ta den här ___.'],
     hint: 'what you take when you’re sick',
+    hintSv: 'det man tar när man är sjuk',
     thanks: ['¡La medicina! Toma, para tus Palabritas. ¡La salud es lo primero!', 'The medicine! Here, for your Palabritas. Health comes first!'],
     party: ['Si alguien baila demasiado, ¡aquí tengo medicina!', 'If anyone dances too much, I have medicine here!'],
     reward: () => gift('superpocion', 2, 'dos Superpociones', 'two Super Potions'),
   },
   pelota: {
     word: 'la pelota', en: 'the ball', look: 'boy',
-    gap: ['¿Jugamos con la ___?', 'Shall we play with the ___?'],
+    gap: ['¿Jugamos con la ___?', 'Shall we play with the ___?', 'Ska vi leka med ___?'],
     hint: 'something round you kick',
+    hintSv: 'något runt som man sparkar',
     thanks: ['¡La pelota! ¡Golazo! Toma, te las regalo.', 'The ball! What a goal! Here, they’re yours.'],
     party: ['¡Después de la fiesta, todos a jugar con la pelota!', 'After the party, everyone come play with the ball!'],
     reward: () => gift('palabola', 3, 'tres Palabolas', 'three Palabolas'),
   },
   pregunta: {
     word: 'la pregunta', en: 'the question', look: 'man',
-    gap: ['Hoy tengo una ___ para ti.', 'Today I have a ___ for you.'],
+    gap: ['Hoy tengo una ___ para ti.', 'Today I have a ___ for you.', 'I dag har jag en ___ till dig.'],
     hint: 'what you ask when you want to know something',
+    hintSv: 'det man ställer när man vill veta något',
     thanks: ['¡La pregunta! Sin preguntas no hay escuela. ¡Gracias!', 'The question! Without questions there’s no school. Thank you!'],
     party: ['Tengo una pregunta: ¿quién quiere más tortillas?', 'I have a question: who wants more tortillas?'],
     reward: async () => {},
@@ -214,7 +224,7 @@ const palabraPerdida: ScriptFn = async (c) => {
   const w = LOST_WORDS[id];
   sfx('alert');
   speak(w.word);
-  await info(`¡Una palabra perdida! Dice: «${w.word}».`, { en: `A lost word! It says: "${w.word}" (${w.en}).` });
+  await info(`¡Una palabra perdida! Dice: «${w.word}».`, { en: `A lost word! It says: "${w.word}" (${w.en}).`, sv: `Ett förlorat ord! Det står: "${w.word}" (${meaning({ es: w.word, en: w.en })}).` });
   setFlag(`palabra:${id}`);
   addItem('palabras');
   refreshNpcs();
@@ -225,7 +235,10 @@ const palabraPerdida: ScriptFn = async (c) => {
 async function verPalabras() {
   const carried = LOST_IDS.filter((id) => flag(`palabra:${id}`) && !flag(`devuelta:${id}`)).map((id) => LOST_WORDS[id]);
   if (!carried.length) return info('No llevas ninguna palabra perdida.', { en: 'You aren’t carrying any lost words.' });
-  await info(`Llevas: ${carried.map((w) => `«${w.word}»`).join(', ')}.`, { en: `You carry: ${carried.map((w) => `"${w.word}" (${w.en})`).join(', ')}.` });
+  await info(`Llevas: ${carried.map((w) => `«${w.word}»`).join(', ')}.`, {
+    en: `You carry: ${carried.map((w) => `"${w.word}" (${w.en})`).join(', ')}.`,
+    sv: `Du bär på: ${carried.map((w) => `"${w.word}" (${meaning({ es: w.word, en: w.en })})`).join(', ')}.`,
+  });
 }
 
 /**
@@ -235,9 +248,9 @@ async function verPalabras() {
 const owner = (id: string, usual: ScriptFn): ScriptFn => async (c) => {
   const w = LOST_WORDS[id];
   if (flag(`devuelta:${id}`)) return usual(c);
-  const [gapEs, gapEn] = w.gap;
+  const [gapEs, gapEn, gapSv] = w.gap;
   if (!flag(`palabra:${id}`)) {
-    await say(gapEs.replace('___', '…'), { en: `(A word is missing: "${gapEn}". Something like: ${w.hint}.)` });
+    await say(gapEs.replace('___', '…'), { en: `(A word is missing: "${gapEn}". Something like: ${w.hint}.)`, sv: `(Ett ord saknas: "${gapSv}". Något i stil med: ${w.hintSv}.)` });
     return lines(['¡Ay, no me sale la palabra!', 'Oh, the word won’t come out!']);
   }
   await lines(['¿Tienes mi palabra? ¡Ayúdame a decirlo!', 'Do you have my word? Help me say it!']);
@@ -462,8 +475,8 @@ const adivinanza: ScriptFn = async (c) => {
   const r = RIDDLES[id];
   await info('La puerta tiene un dibujo y unas palabras...', { en: 'The door has a drawing and some words...' });
   // The hint first, then «read it again».
-  await untilRight(r.q[0], `A riddle: ${r.q[1]}`, r.answer, r.wrong, (misses) => (misses ? ['Mmm, no. Lee otra vez.', 'Hmm, no. Read it again.'] : r.hint), r.q[0]);
-  await info(`«${r.answer[0].toUpperCase()}${r.answer.slice(1)}». ¡La puerta se abre!`, { en: 'The door opens!' });
+  await untilRight(r.q[0], `${native('A riddle:')} ${gloss(r.q[0], r.q[1])}`, r.answer, r.wrong, (misses) => (misses ? ['Mmm, no. Lee otra vez.', 'Hmm, no. Read it again.'] : r.hint), r.q[0]);
+  await info(`«${r.answer[0].toUpperCase()}${r.answer.slice(1)}». ¡La puerta se abre!`, { en: 'The door opens!', sv: 'Dörren öppnas!' });
   sfx('bump');
   setFlag(`adivinanza:${id}`);
   refreshNpcs();
