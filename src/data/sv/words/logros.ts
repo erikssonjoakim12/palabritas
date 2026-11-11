@@ -3,7 +3,7 @@ export default {
   'Metas y logros': 'Mål och framgångar',
   'el logro': 'framgången',
   'el reto': 'utmaningen',
-  'el premio': 'priset',
+  'el premio': 'vinsten (priset man vinner)',
   'el sueño': 'drömmen, sömnigheten',
   'la práctica': 'övning',
   'el progreso': 'framstegen',

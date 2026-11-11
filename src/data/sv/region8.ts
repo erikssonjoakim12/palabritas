@@ -1,0 +1,70 @@
+// Swedish for region 8: Ciudad Ceniza, the ancient capital on the lava (dialogue in src/world/region8.ts, signs in
+// src/world/maps/region8.ts). Place names stay Spanish.
+export default {
+  // Doña Aurora (gym 8)
+  'Bienvenid{o/a} al archivo, {name}. Aquí guardamos la memoria de la ciudad antigua.': 'Välkommen till arkivet, {name}. Här bevarar vi minnet av den gamla staden.',
+  'Soy Aurora. Llevo cuarenta años leyendo lo que la lava no pudo quemar.': 'Jag är Aurora. Jag har ägnat fyrtio år åt att läsa det som lavan inte kunde bränna.',
+  'Y aprendí que las palabras duran más que las piedras. ¿Las tuyas también?': 'Och jag har lärt mig att ord varar längre än stenar. Gör dina det också?',
+  '¿Quieres escribir tu nombre en la historia de esta ciudad?': 'Vill du skriva ditt namn i den här stadens historia?',
+  'La historia sabe esperar. Yo también.': 'Historien kan vänta. Det kan jag också.',
+  'Entonces despierta, Emplumón. ¡Hay alguien que quiere conocer la leyenda!': 'Vakna då, Emplumón. Här är någon som vill möta legenden!',
+  'Increíble... Escribiré esta batalla en el libro de la ciudad.': 'Otroligt... Jag ska skriva in den här striden i stadens bok.',
+  'Te ganaste la Medalla Ceniza. Es tan antigua como estas piedras.': 'Du har vunnit Ceniza-medaljen. Den är lika gammal som de här stenarna.',
+  'Ocho medallas. Pocas personas han llegado tan lejos, {name}.': 'Åtta medaljer. Få har kommit så här långt, {name}.',
+  'Dicen que los mejores entrenadores del país te esperan al otro lado del mar.': 'Det sägs att landets bästa tränare väntar på dig på andra sidan havet.',
+  'Pero esa es otra historia. Hoy, descansa: te lo ganaste.': 'Men det är en annan historia. I dag vilar du: det har du förtjänat.',
+  'Cada día escribo un poco más de tu historia. ¡Ya llevo tres páginas!': 'Varje dag skriver jag lite mer om din historia. Jag är redan på sidan tre!',
+  '¡Felicidades! Terminaste la octava parte de Palabritas.': 'Grattis! Du har klarat åttonde delen av Palabritas.',
+
+  // The legend of the old city
+  '¿Quieres oír una leyenda? Siéntate, que es larga.': 'Vill du höra en legend? Sätt dig, den är lång.',
+  'Hace más de cuatrocientos años, esta era la capital. Había iglesia, plaza y mercado.': 'För mer än fyrahundra år sedan var det här huvudstaden. Det fanns kyrka, torg och marknad.',
+  'Un día, en 1610, la tierra tembló y el volcán despertó. La lava bajó por las calles.': 'En dag år 1610 skakade jorden och vulkanen vaknade. Lavan rann ner genom gatorna.',
+  'Dicen que una serpiente con plumas verdes voló sobre la ciudad y avisó a todos.': 'Det sägs att en orm med gröna fjädrar flög över staden och varnade alla.',
+  'Nadie se quedó atrás. La gente se fue a construir una ciudad nueva... y la vieja se quedó dormida.': 'Ingen blev kvar. Folket gav sig av för att bygga en ny stad... och den gamla somnade in.',
+  'Si ves una culebrita con plumas entre las ruinas, salúdala de mi parte.': 'Om du ser en liten befjädrad orm bland ruinerna, hälsa till den från mig.',
+
+  // Trainers
+  '¡Alto! Soy bombero. Por aquí no se pasa sin una prueba de valor.': 'Stopp! Jag är brandman. Här går ingen förbi utan ett modprov.',
+  '¡Apagaste mi fuego!': 'Du släckte min eld!',
+  'Si alguna vez ves humo en las casas, avísame. Para eso estamos.': 'Om du någon gång ser rök i husen, säg till. Det är därför vi finns.',
+  'Mido la temperatura de la lava vieja. ¡Todavía está tibia, después de cuatrocientos años!': 'Jag mäter den gamla lavans temperatur. Den är fortfarande ljummen, efter fyrahundra år!',
+  'Mis números no mienten: ganaste tú.': 'Mina siffror ljuger inte: du vann.',
+  'Las salamandras duermen en las grietas calientes. Se nota que les gusta.': 'Salamandrarna sover i de varma sprickorna. Man märker att de trivs.',
+  '¡Encontré una campana debajo de la lava! Bueno, casi. ¿Una batalla mientras tanto?': 'Jag hittade en kyrkklocka under lavan! Nåväl, nästan. En strid under tiden?',
+  'Bueno, seguiré excavando.': 'Nåväl, jag fortsätter gräva.',
+  'Cada piedra de esta ciudad tiene una historia.': 'Varje sten i den här staden har en historia.',
+  '¡Entré empujando una roca! ¿Tú también? ¡Entonces eres fuerte!': 'Jag kom in genom att knuffa ett stenblock! Du också? Då är du stark!',
+  'Sí, eres fuerte. Muy fuerte.': 'Ja, du är stark. Väldigt stark.',
+  'Me gustan los retos. Por eso vine hasta aquí.': 'Jag gillar utmaningar. Därför kom jag hela vägen hit.',
+  'Cuido los campos de lava. Hay que tener cuidado: el suelo está caliente.': 'Jag vaktar lavafälten. Man måste vara försiktig: marken är het.',
+  'Buena batalla. Tienes los pies firmes.': 'Bra strid. Du står stadigt.',
+  'Del río suben los lagartos a tomar el sol en las rocas negras.': 'Från floden kryper kajmanerna upp för att sola på de svarta stenarna.',
+  'Escribo la crónica de la ciudad. Tu batalla será el capítulo de hoy.': 'Jag skriver stadens krönika. Din strid blir dagens kapitel.',
+  'Capítulo de hoy: «La gran victoria de {name}».': 'Dagens kapitel: "{name}s stora seger".',
+  'Doña Aurora, la líder del gimnasio, fue mi maestra.': 'Doña Aurora, gymmets ledare, var min lärare.',
+  'Silencio, por favor: estás en un archivo. Bueno... una batalla sí está permitida.': 'Tyst, tack: du är i ett arkiv. Nåväl... en strid är tillåten.',
+  'Lo apuntaré en el libro de visitas.': 'Jag skriver upp det i gästboken.',
+  'Las leyendas de esta ciudad llenan tres estantes enteros.': 'Den här stadens legender fyller tre hela hyllor.',
+  'Restauro libros quemados, página por página. ¡Tengo mucha paciencia!': 'Jag restaurerar brända böcker, sida för sida. Jag har mycket tålamod!',
+  'Paciencia sí tengo. Suerte, hoy no.': 'Tålamod har jag. Tur, inte i dag.',
+  'Doña Aurora sabe leer hasta las páginas más quemadas.': 'Doña Aurora kan läsa till och med de mest brända sidorna.',
+  'Cada libro está en su lugar. ¿Y tú? ¿Sabes cuál es tu lugar?': 'Varje bok står på sin plats. Och du? Vet du var din plats är?',
+  'Tu lugar es... adelante. Pasa.': 'Din plats är... framåt. Gå vidare.',
+  'El Emplumón de Doña Aurora es tan viejo como la leyenda.': 'Doña Auroras Emplumón är lika gammal som legenden.',
+
+  // Ciudad Ceniza's people
+  '¡Mi casa está construida sobre la lava! Cuando llueve, el suelo echa vapor.': 'Mitt hus är byggt på lavan! När det regnar ångar marken.',
+  'Ciudad Ceniza se quedó vacía cuatrocientos años. Ahora volvimos unas pocas familias.': 'Ciudad Ceniza stod tom i fyrahundra år. Nu har några få familjer flyttat tillbaka.',
+  'Nadie entra sin mover las rocas de la entrada. Así estamos tranquilos.': 'Ingen kommer in utan att flytta stenblocken vid ingången. Så får vi vara i fred.',
+  'Llegué en bote por el río, y tuve que empujar una roca para entrar. ¡Menos mal que mi Palabrita es fuerte!': 'Jag kom med båt längs floden och fick knuffa ett stenblock för att komma in. Tur att min Palabrita är stark!',
+  'En las paredes de mi casa hay piedras de la iglesia vieja. Aquí todo se aprovecha.': 'I väggarna på mitt hus finns stenar från den gamla kyrkan. Här tas allt till vara.',
+  'Mi abuelo decía: si el volcán ruge, no corras; camina rápido y no mires atrás.': 'Min farfar sa: om vulkanen ryter, spring inte; gå fort och titta inte bakåt.',
+  '¡Hola! Te doy un consejo: los dragones resisten el fuego, el agua, las plantas y la electricidad.': 'Hej! Här är ett tips: drakar tål eld, vatten, växter och elektricitet.',
+  'Pero un dragón contra otro dragón... ¡eso sí duele!': 'Men en drake mot en annan drake... det gör ont på riktigt!',
+
+  // Signs and things (src/world/maps/region8.ts)
+  'La vieja iglesia. La lava entró en 1610, y nadie la volvió a abrir.': 'Den gamla kyrkan. Lavan trängde in år 1610, och ingen har öppnat den sedan dess.',
+  'CIUDAD CENIZA. La capital antigua, construida sobre la lava.': 'CIUDAD CENIZA. Den gamla huvudstaden, byggd på lavan.',
+  'Aquí estaba la plaza mayor. Debajo de la lava, dicen, todavía están las campanas.': 'Här låg stora torget. Under lavan, sägs det, finns kyrkklockorna fortfarande.',
+} satisfies Record<string, string>;

@@ -55,7 +55,7 @@ export default {
   'Es la casa del techo rojo': 'Det är huset med det röda taket',
   'Hay un rótulo grande': 'Det finns en stor skylt',
   'El taxi está caro hoy': 'Taxin är dyr i dag',
-  'Vamos caminando': 'Vi går',
+  'Vamos caminando': 'Vi går dit till fots',
   'mi vecindario': 'mitt grannskap',
   'el centro de la ciudad': 'stadens centrum',
   'las afueras de la ciudad': 'stadens utkanter',
