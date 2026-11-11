@@ -5,6 +5,19 @@ show English (choose the meaning, write the Spanish for this). The plan: let the
 when starting a new game, and switch at any time in START → AJUSTES. The Spanish stays the same. Only the helper
 language changes.
 
+## Status
+
+- ✓ **The code** (2026-11-11): the setting and its choice at a new game, TRADUCCIÓN in AJUSTES, the SV button,
+  challenges, the team screen and dictionary, Sam (who explains the game) and the FAQ in Swedish; `tools/sv.mjs` and
+  `tests/swedish.test.mjs`.
+- ✓ **Shared text**: menus, battles, the Palacentro, the shop, field moves, the school, the Palabridex, tiles, the FAQ.
+- Next: dialogue for regions 1–4 and their signs, then the word lists in level order (core first), then regions 5–8.
+- Later: a Swedish column in the dictionary page.
+
+How some text is keyed, learned while building: a line is keyed by its Spanish; text with no Spanish (the FAQ, Sam,
+what someone acts out on a muted map, a prompt's hint) by its English; a challenge label holding its own translation
+('¿Qué significa? · What does it mean?') by the whole label.
+
 An earlier estimate (2026-10-25) was put on hold. Since then regions 6–8 and the themes up to level 50 have grown the
 text by about a third, so the numbers below are recounted.
 

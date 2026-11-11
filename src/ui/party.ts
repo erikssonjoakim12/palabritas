@@ -11,6 +11,7 @@ import { THEMES } from '../data/content';
 import { TYPE_COLORS } from '../data/types';
 import { TYPE_TEXT } from '../style/colors';
 import { speak } from '../lang/speech';
+import { gloss, meaning, named } from '../lang/gloss';
 
 /** A Palabrita's 16x16 icon, for lists (scaled up with hard pixels by the CSS). */
 export function iconCanvas(sp: string) {
@@ -197,7 +198,7 @@ export function showDetails(mon: Mon): Promise<void> {
   }
   box.appendChild(types);
   box.appendChild(el('div', 'row', `Tema: ${theme.name}`));
-  box.appendChild(el('div', 'row muted', `Theme: ${theme.en}`));
+  box.appendChild(el('div', 'row muted', `${gloss('Tema:', 'Theme:')} ${named(theme)}`));
   box.appendChild(el('div', 'row', `PS ${mon.hp}/${s.maxHp} · Ata ${s.atk} · Def ${s.def} · Vel ${s.spd}`));
 
   const loy = lealtad(mon);
@@ -230,9 +231,9 @@ export function showDetails(mon: Mon): Promise<void> {
   const addWord = (es: string, en: string, mark: string) => words.appendChild(wordRow(es, en, mark));
   for (const it of lp.items) {
     const p = peekProg(it.id);
-    if (isLearned(it)) addWord(it.es, it.en, '✓');
-    else if (p?.seen) addWord(it.es, it.en, '…');
-    else addWord('???', it.en, '·');
+    if (isLearned(it)) addWord(it.es, meaning(it), '✓');
+    else if (p?.seen) addWord(it.es, meaning(it), '…');
+    else addWord('???', meaning(it), '·');
   }
   // Half of an earlier level must be reviewed before leveling up.
   const { review } = lp;
@@ -240,12 +241,12 @@ export function showDetails(mon: Mon): Promise<void> {
     words.appendChild(
       el('div', 'muted section', `Repaso del nivel ${review.level}: ${lp.reviewDone}/${lp.reviewTotal}`),
     );
-    for (const it of review.all) addWord(it.es, it.en, review.todo.includes(it) ? '↻' : '✓');
+    for (const it of review.all) addWord(it.es, meaning(it), review.todo.includes(it) ? '↻' : '✓');
   }
   const learned = itemsUpTo(mon.sp, mon.level - 1).filter(isLearned);
   if (learned.length) {
     words.appendChild(el('div', 'muted section', `Ya dominadas (${learned.length}):`));
-    for (const it of learned) addWord(it.es, it.en, isFading(peekProg(it.id)) ? '⚠' : '✓');
+    for (const it of learned) addWord(it.es, meaning(it), isFading(peekProg(it.id)) ? '⚠' : '✓');
   }
   box.appendChild(words);
   box.appendChild(el('div', 'row muted', sp.dex.es));

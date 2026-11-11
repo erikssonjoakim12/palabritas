@@ -21,6 +21,7 @@ import { pickMon } from '../ui/party';
 import { stage, clearStage, battleScene, fighter, enemyFighter, myFighter, lunge, hitAnim, sinkAnim, slide, encounterFlash, throwBall, shakeBall, breakOut, silhouette, SLOT, ENEMY_POS, ME_POS, type Fighter } from './stage';
 import { buildHud, type Hud } from './hud';
 import { canListen } from '../lang/speech';
+import { meaning, named } from '../lang/gloss';
 import type { TrainerDef } from '../data/trainers';
 
 /** An element with a small picture in front of its text. */
@@ -57,7 +58,7 @@ interface Config {
   team: Mon[];
   trainer?: TrainerDef;
   look?: string;
-  outro?: [es: string, en: string];
+  outro?: [es: string, en: string, sv?: string];
   /** The share of the normal prize money (rematches pay half). */
   prize?: number;
   /** A wild guardian (the temple's Rugidón): it can't be caught and you can't run from it. */
@@ -76,6 +77,7 @@ async function announceLevelUps(ups: LevelUp[], each?: () => void) {
       sfx('perfect');
       await info(`¡${monName(up.mon)} aprendió ${mv.name}! (${MODE_INFO[mv.mode].icon} ${MODE_INFO[mv.mode].es})`, {
         en: `${monName(up.mon)} learned ${mv.name}! It's a "${MODE_INFO[mv.mode].en}" move.`,
+        sv: `${monName(up.mon)} lärde sig ${mv.name}! Det är en attack av typen "${meaning(MODE_INFO[mv.mode])}".`,
       });
     }
   }
@@ -89,7 +91,7 @@ export function wildBattle(sp: string, level: number, opts: { guardian?: boolean
  * look: how the trainer looks (key in LOOKS), for their portrait.
  * outro: what they say in battle when you win.
  */
-export function trainerBattle(t: TrainerDef, opts: { look?: string; outro?: [es: string, en: string]; prize?: number } = {}) {
+export function trainerBattle(t: TrainerDef, opts: { look?: string; outro?: [es: string, en: string, sv?: string]; prize?: number } = {}) {
   return runBattle({ kind: 'trainer', team: t.team.map(([sp, l]) => newMon(sp, l)), trainer: t, ...opts });
 }
 
@@ -155,7 +157,7 @@ async function runBattle(cfg: Config): Promise<BattleResult> {
     if (hud) hud.root.style.visibility = 'hidden';
     stage.evo = { img: oldImg };
     playOverlay('evolucion', false);
-    await info(`¿Qué? ¡${from} está evolucionando!`, { en: `What? ${from} is evolving!` });
+    await info(`¿Qué? ¡${from} está evolucionando!`, { en: `What? ${from} is evolving!`, sv: `Vad? ${from} utvecklas!` });
     const [oldOut, newOut] = [silhouette(oldImg), silhouette(newImg)];
     for (let i = 0; i < 20; i++) {
       stage.evo.img = i % 2 ? oldOut : newOut;
@@ -170,7 +172,7 @@ async function runBattle(cfg: Config): Promise<BattleResult> {
     evolve(mon);
     clearOverlay();
     sfx('caught');
-    await info(`¡Felicidades! ¡${from} evolucionó a ${monName(mon)}!`, { en: `Congratulations! ${from} evolved into ${monName(mon)}!` });
+    await info(`¡Felicidades! ¡${from} evolucionó a ${monName(mon)}!`, { en: `Congratulations! ${from} evolved into ${monName(mon)}!`, sv: `Grattis! ${from} utvecklades till ${monName(mon)}!` });
     // Back to the battle, where it left off.
     stage.evo = null;
     if (mon === me && stage.meF) stage.meF.img = creatureArt(mon.sp).back;
@@ -212,7 +214,7 @@ async function runBattle(cfg: Config): Promise<BattleResult> {
           detail.append(
             withIcon(typeIcon(m.type), el('div', '', `TIPO/${m.type.toUpperCase()}`)),
             el('div', '', `PODER ${mi.power}${vs ? ` · ${vs}` : ''}`),
-            el('div', 'muted', `${mi.icon} ${mi.es}: ${mi.en}`),
+            el('div', 'muted', `${mi.icon} ${mi.es}: ${meaning(mi)}`),
           );
         },
       },
@@ -410,10 +412,12 @@ async function runBattle(cfg: Config): Promise<BattleResult> {
       if (keepMon(enemy) === 'box') {
         await info(`¡${sp.name} fue enviado a la Caja de Palabritas!`, {
           en: `Your team is full (6), so ${sp.name} was sent to the storage box. Use a Palacentro computer to get it.`,
+          sv: `Ditt lag är fullt (6), så ${sp.name} skickades till förvaringslådan. Hämta den vid en dator på ett Palacentro.`,
         });
       } else {
         await info(`${sp.name} se unió a tu equipo. Aprenderá palabras de: ${THEMES[sp.theme].name}.`, {
           en: `${sp.name} joined your team. It learns words about: ${THEMES[sp.theme].en}.`,
+          sv: `${sp.name} gick med i ditt lag. Den lär sig ord om: ${named(THEMES[sp.theme])}.`,
         });
       }
       return 'caught';
@@ -428,7 +432,7 @@ async function runBattle(cfg: Config): Promise<BattleResult> {
     await info(
       `Practicaste ${tally.asked} ${tally.asked === 1 ? 'palabra' : 'palabras'}.` +
         (tally.learned ? ` ¡${tally.learned} ${tally.learned === 1 ? 'nueva dominada' : 'nuevas dominadas'}!` : ''),
-      { en: `You practiced ${tally.asked}. Newly mastered: ${tally.learned}.` },
+      { en: `You practiced ${tally.asked}. Newly mastered: ${tally.learned}.`, sv: `Du övade på ${tally.asked}. Nya som du kan: ${tally.learned}.` },
     );
   };
 
@@ -525,11 +529,11 @@ async function runBattle(cfg: Config): Promise<BattleResult> {
       stage.enemyF = trainerFighter();
       await slide(stage.enemyF, ENEMY_POS.x);
       await info(`¡Venciste a ${trainer.name}!`);
-      if (cfg.outro) await say(cfg.outro[0], { en: cfg.outro[1] });
+      if (cfg.outro) await say(cfg.outro[0], { en: cfg.outro[1], sv: cfg.outro[2] });
       const prize = Math.round(prizeMoney(cfg.team) * (cfg.prize ?? 1));
       G.save.money += prize;
       sfx('levelup');
-      await info(`¡Ganaste ${money(prize)}!`, { en: `You won ${money(prize)}!` });
+      await info(`¡Ganaste ${money(prize)}!`, { en: `You won ${money(prize)}!`, sv: `Du vann ${money(prize)}!` });
     }
     await summary();
     return r;

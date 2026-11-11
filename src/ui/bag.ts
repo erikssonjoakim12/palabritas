@@ -27,25 +27,26 @@ export async function useOnMon(id: string): Promise<boolean> {
   if (!mon) return false;
   if (ITEM_DEFS[id].revive) {
     if (mon.hp > 0) {
-      await info(`¡${monName(mon)} no está debilitado!`, { en: `${monName(mon)} hasn’t fainted! (Revivir is for fainted Palabritas.)` });
+      await info(`¡${monName(mon)} no está debilitado!`, { en: `${monName(mon)} hasn’t fainted! (Revivir is for fainted Palabritas.)`, sv: `${monName(mon)} har inte svimmat! (Revivir är för Palabritas som har svimmat.)` });
       return false;
     }
     takeItem(id);
     mon.hp = Math.floor(stats(mon).maxHp / 2);
     sfx('heal');
-    await info(`¡${monName(mon)} revivió!`, { en: `${monName(mon)} was revived!` });
+    await info(`¡${monName(mon)} revivió!`, { en: `${monName(mon)} was revived!`, sv: `${monName(mon)} återupplivades!` });
     return true;
   }
   const healed = healWith(id, mon);
   if (!healed) {
     await info(mon.hp <= 0 ? 'No funciona con una Palabrita debilitada.' : `¡${monName(mon)} ya tiene todos sus PS!`, {
       en: mon.hp <= 0 ? 'It doesn’t work on a fainted Palabrita.' : `${monName(mon)} already has full PS!`,
+      sv: mon.hp <= 0 ? 'Det fungerar inte på en Palabrita som har svimmat.' : `${monName(mon)} har redan alla sina PS!`,
     });
     return false;
   }
   takeItem(id);
   sfx('heal');
-  await info(`${monName(mon)} recuperó ${healed} PS.`, { en: `${monName(mon)} recovered ${healed} PS.` });
+  await info(`${monName(mon)} recuperó ${healed} PS.`, { en: `${monName(mon)} recovered ${healed} PS.`, sv: `${monName(mon)} fick tillbaka ${healed} PS.` });
   return true;
 }
 
@@ -69,8 +70,9 @@ export async function openBag(): Promise<string | undefined> {
       sfx('heal');
       await info(`Usaste un ${def.name}. Las Palabritas salvajes no se acercarán por un rato.`, {
         en: `You used a ${def.enName}. Wild Palabritas won’t come near for ${def.repel} steps.`,
+        sv: `Du använde en ${def.name}. Vilda Palabritas kommer inte nära på ${def.repel} steg.`,
       });
-    } else if (def.ball) await info(`Las ${def.plural} se lanzan en batalla, contra Palabritas salvajes.`, { en: `${def.enPlural} are thrown in battle, at wild Palabritas.` });
+    } else if (def.ball) await info(`Las ${def.plural} se lanzan en batalla, contra Palabritas salvajes.`, { en: `${def.enPlural} are thrown in battle, at wild Palabritas.`, sv: `${def.plural} kastas i strid, på vilda Palabritas.` });
     else await notNow();
   }
 }

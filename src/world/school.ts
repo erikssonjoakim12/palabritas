@@ -10,6 +10,7 @@ import { challenge, type ChallengeResult } from '../ui/challenge';
 import { pickMon } from '../ui/party';
 import type { ScriptFn } from './world';
 import { lines, showCreature } from './flows';
+import { named } from '../lang/gloss';
 
 /*
   Studying outside battles: the reusable drill (the starter's first words, the school, the Palacentro's parrot),
@@ -86,7 +87,7 @@ async function repaso(topics: [string, string]) {
     return;
   }
   const n = Math.min(REVIEW_SIZE, due.length);
-  await lines([`Tienes ${due.length} ${due.length === 1 ? 'palabra' : 'palabras'} para repasar. ¡Empecemos con ${n}!`, `You have ${due.length} to review. Let’s start with ${n}!`]);
+  await lines([`Tienes ${due.length} ${due.length === 1 ? 'palabra' : 'palabras'} para repasar. ¡Empecemos con ${n}!`, `You have ${due.length} to review. Let’s start with ${n}!`, `Du har ${due.length} att repetera. Vi börjar med ${n}!`]);
   await drill(due.slice(0, n), { title: (d, t) => `Repaso ${d + 1}/${t}`, again: onceMore(), mode: reviewMode });
   await lines(['¡Muy bien! Repasar a tiempo hace que tus Palabritas te obedezcan.', 'Very good! Reviewing on time keeps your Palabritas loyal.']);
 }
@@ -98,7 +99,7 @@ async function privateClass() {
   if (!mon) return;
   const items = dueForMon(mon).slice(0, REVIEW_SIZE);
   if (!items.length) {
-    return lines([`¡${monName(mon)} se acuerda de todas sus palabras! No tiene nada que repasar.`, `${monName(mon)} remembers all its words! It has nothing to review.`]);
+    return lines([`¡${monName(mon)} se acuerda de todas sus palabras! No tiene nada que repasar.`, `${monName(mon)} remembers all its words! It has nothing to review.`, `${monName(mon)} minns alla sina ord! Den har inget att repetera.`]);
   }
   await drill(items, { sp: mon.sp, title: (d, t) => `${monName(mon)} ${d + 1}/${t}`, again: onceMore(), mode: reviewMode });
   await lines(['¡Buen trabajo! Estudiar con tu Palabrita los une más.', 'Good work! Studying with your Palabrita brings you closer.']);
@@ -107,7 +108,7 @@ async function privateClass() {
 async function tema(topics: [string, string]) {
   const id = topicOfDay(topics);
   const theme = THEMES[id];
-  await lines([`El tema de hoy: «${theme.name}».`, `Today’s topic: ${theme.en}.`]);
+  await lines([`El tema de hoy: «${theme.name}».`, `Today’s topic: ${theme.en}.`, `Dagens ämne: ${named(theme)}.`]);
   const recent: string[] = [];
   const items = Array.from({ length: 8 }, () => {
     const item = pickFromTheme(id, 3, recent);

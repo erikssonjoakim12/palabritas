@@ -1,3 +1,4 @@
+import { meaning, inSwedish } from '../lang/gloss';
 import { G, today, type ItemProg, type Mon } from './state';
 import { THEMES, poolUpTo, type Item } from '../data/content';
 import type { Mode } from '../data/species';
@@ -258,13 +259,17 @@ export function totalLearned() {
 
 /** Wrong options for a "choose the meaning" question, from the same theme when possible. */
 export function distractors(item: Item, n = 3): string[] {
+  // Compared in the language shown: two words English tells apart can share their Swedish (tú, usted: du).
+  const right = meaning(item);
+  const sameLang = (i: Item) => Number(inSwedish(i.es) === inSwedish(item.es));
   const theme = THEMES[item.theme];
   const pool = (theme ? theme.items : Object.values(THEMES).flatMap((t) => t.items))
-    .filter((i) => i.en !== item.en)
-    .sort((a, b) => Math.abs(a.tier - item.tier) - Math.abs(b.tier - item.tier) + (Math.random() - 0.5) * 3);
+    .filter((i) => meaning(i) !== right)
+    // While Swedish is incomplete, wrong options in the right answer's language first, so its language doesn't give it away.
+    .sort((a, b) => sameLang(b) - sameLang(a) || Math.abs(a.tier - item.tier) - Math.abs(b.tier - item.tier) + (Math.random() - 0.5) * 3);
   const out: string[] = [];
   for (const i of pool) {
-    if (!out.includes(i.en)) out.push(i.en);
+    if (!out.includes(meaning(i))) out.push(meaning(i));
     if (out.length >= n) break;
   }
   return out;

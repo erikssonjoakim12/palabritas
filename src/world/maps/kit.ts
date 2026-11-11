@@ -33,7 +33,8 @@ import type { MapStyle } from '../../art/tiles';
 */
 
 /** A line of dialog: Spanish, and English for the EN button. */
-export type Line = [es: string, en: string];
+/** A line of dialogue. Swedish only for lines built while playing; the rest is looked up (lang/gloss.ts). */
+export type Line = [es: string, en: string, sv?: string];
 
 export interface NpcDef {
   id: string;

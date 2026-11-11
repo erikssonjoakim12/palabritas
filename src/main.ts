@@ -102,12 +102,15 @@ if (import.meta.env.DEV) {
     import('./world/flows'),
     import('./game/rematch'),
     import('./world/ambient'),
-  ]).then(([state, world, battle, mon, maps, textbox, species, content, curriculum, learning, tiles, creatures, people, trainers, items, bgm, layout, backup, region6, flows, rematch, ambient]) => {
+    import('./lang/gloss'),
+    import('./ui/challenge'),
+  ]).then(([state, world, battle, mon, maps, textbox, species, content, curriculum, learning, tiles, creatures, people, trainers, items, bgm, layout, backup, region6, flows, rematch, ambient, gloss, challenge]) => {
     window.__game = {
       ...state, ...world, ...battle, ...mon, ...maps,
       fill: textbox.fill, SPECIES: species.SPECIES, TILES: tiles.TILES, creatureArt: creatures.creatureArt, CREATURE_IDS: creatures.CREATURE_IDS, LOOKS: people.LOOKS,
       OBJECTS_ART: people.OBJECTS_ART, TRAINERS: trainers.TRAINERS, ITEM_DEFS: items.ITEM_DEFS, SHOPS: items.SHOPS,
       content, curriculum, learning, bgm, backup, worldLayout: layout.worldLayout, fogWalk: region6.fogWalkState, fogJump: region6.fogJump, blackout: flows.blackout, ANIMALS: people.ANIMALS, rematchTeam: rematch.rematchTeam, rematchGrowth: rematch.rematchGrowth, ambient,
+      gloss, say: textbox.say, challenge: challenge.challenge,
     };
   });
 }

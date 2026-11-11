@@ -29,6 +29,7 @@ import { REGION7 } from './region7';
 import { REGION8 } from './region8';
 import { TILES } from '../art/tiles';
 import { notNow } from '../ui/bag';
+import { gloss } from '../lang/gloss';
 import { MINI_BALL, BALL_COLORS, FLASH_COLORS, drawPattern } from '../art/balls';
 
 /*
@@ -39,7 +40,7 @@ import { MINI_BALL, BALL_COLORS, FLASH_COLORS, drawPattern } from '../art/balls'
 
 /** Climb onto a water Palabrita and swim off (Surf). */
 async function surf(mon: Mon) {
-  await info(`¡{name} se sube a ${monName(mon)}!`, { en: `{name} climbs onto ${monName(mon)}!` });
+  await info(`¡{name} se sube a ${monName(mon)}!`, { en: `{name} climbs onto ${monName(mon)}!`, sv: `{name} klättrar upp på ${monName(mon)}!` });
   await startSurf();
 }
 
@@ -85,7 +86,7 @@ const S: Record<string, ScriptFn> = {
     const swimmer = !G.save.surfing && fieldHelper('surf');
     if (swimmer) {
       const name = monName(swimmer);
-      if (await ask(`El agua está tranquila. ¿Quieres nadar con ${name}?`, { en: `The water is calm. Do you want to swim with ${name}?` })) return surf(swimmer);
+      if (await ask(`El agua está tranquila. ¿Quieres nadar con ${name}?`, { en: `The water is calm. Do you want to swim with ${name}?`, sv: `Vattnet är lugnt. Vill du simma med ${name}?` })) return surf(swimmer);
     }
     if (itemCount('cana')) return SCRIPTS.fish(c);
   },
@@ -110,7 +111,7 @@ const S: Record<string, ScriptFn> = {
     const at = flySpots()[to];
     const bird = monName(c.data!.mon as Mon);
     sfx('jump');
-    await info(`¡${bird} te lleva volando!`, { en: `${bird} carries you through the sky!`, auto: 1200 });
+    await info(`¡${bird} te lleva volando!`, { en: `${bird} carries you through the sky!`, sv: `${bird} bär dig genom luften!`, auto: 1200 });
     await warp(to, at.x, at.y, 'down', false);
   },
 
@@ -122,11 +123,11 @@ const S: Record<string, ScriptFn> = {
     const { es, en } = TILES['/'].look!;
     if (!cutter) return say(es, { en });
     const name = monName(cutter);
-    if (!chosen && !(await ask(`Este arbolito se puede cortar. ¿Quieres cortarlo con ${name}?`, { en: `This little tree can be cut. Do you want to cut it with ${name}?` }))) return;
+    if (!chosen && !(await ask(`Este arbolito se puede cortar. ¿Quieres cortarlo con ${name}?`, { en: `This little tree can be cut. Do you want to cut it with ${name}?`, sv: `Det här lilla trädet går att hugga ner. Vill du hugga ner det med ${name}?` }))) return;
     sfx('hit');
     cutTree(...facingSpot());
     await frames(30); // the slash and the leaves
-    await info(`¡${name} cortó el arbolito!`, { en: `${name} cut the little tree!` });
+    await info(`¡${name} cortó el arbolito!`, { en: `${name} cut the little tree!`, sv: `${name} högg ner det lilla trädet!` });
   },
 
   /**
@@ -139,10 +140,10 @@ const S: Record<string, ScriptFn> = {
     const strong = chosen ?? fieldHelper('strength');
     if (!strong) return say('Es una roca enorme. Una Palabrita muy fuerte podría moverla.', { en: 'It’s a huge boulder. A very strong Palabrita could move it.' });
     const name = monName(strong);
-    if (!chosen && !(await ask(`Es una roca enorme. ¿Quieres usar FUERZA con ${name}?`, { en: `It’s a huge boulder. Do you want to use Strength with ${name}?` }))) return;
+    if (!chosen && !(await ask(`Es una roca enorme. ¿Quieres usar FUERZA con ${name}?`, { en: `It’s a huge boulder. Do you want to use Strength with ${name}?`, sv: `Det är ett enormt stenblock. Vill du använda FUERZA med ${name}?` }))) return;
     useStrength();
     sfx('hit');
-    await info(`¡${name} usó FUERZA! Ahora puedes empujar las rocas.`, { en: `${name} used Strength! Now you can push the boulders.` });
+    await info(`¡${name} usó FUERZA! Ahora puedes empujar las rocas.`, { en: `${name} used Strength! Now you can push the boulders.`, sv: `${name} använde FUERZA! Nu kan du knuffa stenblocken.` });
   },
   roca: (c) => SCRIPTS.fuerza(c),
 
@@ -205,11 +206,13 @@ const S: Record<string, ScriptFn> = {
         if (q < 0) continue;
         const n = q + 1;
         const enOrder = `I’d like ${n} ${n === 1 ? def.enName : def.enPlural}, please`;
+        const svOrder = `Jag vill ha ${n} ${n === 1 ? def.name : def.plural}, tack`;
         const r = await practice({
-          item: adHocItem([`Quiero ${amountOf(id, n)}, por favor`], enOrder),
+          item: adHocItem([`Quiero ${amountOf(id, n)}, por favor`], gloss('', enOrder, svOrder)),
           mode: talkMode(),
           title: '🛒 Tienda',
           label: `Pídelo en español: «${enOrder}»`,
+          labelSv: `Pídelo en español: «${svOrder}»`,
           allowHelp: true,
           validate: (answer) => gradeOrder(answer, id, n),
         });
@@ -221,7 +224,10 @@ const S: Record<string, ScriptFn> = {
         showMoney();
         addItem(id, n);
         sfx('caught');
-        await sayOrMime([`¡Aquí tienes: ${amountOf(id, n)}! Son ${money(def.price * n)}.`, `Here you go! That’s ${money(def.price * n)}.`], `(She hands it over and writes the price on a paper: ${money(def.price * n)}.)`);
+        await sayOrMime(
+          [`¡Aquí tienes: ${amountOf(id, n)}! Son ${money(def.price * n)}.`, `Here you go! That’s ${money(def.price * n)}.`, `Varsågod! Det blir ${money(def.price * n)}.`],
+          [`(She hands it over and writes the price on a paper: ${money(def.price * n)}.)`, `(Hon ger dig det och skriver priset på en lapp: ${money(def.price * n)}.)`],
+        );
         await sayOrMime(['¿Algo más?', 'Anything else?'], '(She raises her eyebrows: anything else?)', { noWait: true });
       }
     } finally {
@@ -249,14 +255,14 @@ const S: Record<string, ScriptFn> = {
         mon.hp = stats(mon).maxHp;
         G.save.box.push(mon);
         sfx('door');
-        await info(`Dejaste a ${monName(mon)} en la caja.`, { en: `You left ${monName(mon)} in the box (it gets healed there).` });
+        await info(`Dejaste a ${monName(mon)} en la caja.`, { en: `You left ${monName(mon)} in the box (it gets healed there).`, sv: `Du lämnade ${monName(mon)} i lådan (där blir den frisk igen).` });
       } else if (i === 1) {
         if (!G.save.box.length) {
           await info('La caja está vacía.', { en: 'The box is empty.' });
           continue;
         }
         if (G.save.party.length >= PARTY_MAX) {
-          await info('Tu equipo está lleno.', { en: `Your team is full (${PARTY_MAX}). Deposit one first.` });
+          await info('Tu equipo está lleno.', { en: `Your team is full (${PARTY_MAX}). Deposit one first.`, sv: `Ditt lag är fullt (${PARTY_MAX}). Lämna en i lådan först.` });
           continue;
         }
         const mon = await pickFrom(G.save.box, '¿Cuál sacas de la caja?');
@@ -264,7 +270,7 @@ const S: Record<string, ScriptFn> = {
         G.save.box.splice(G.save.box.indexOf(mon), 1);
         G.save.party.push(mon);
         sfx('select');
-        await info(`¡${monName(mon)} volvió a tu equipo!`, { en: `${monName(mon)} is back on your team!` });
+        await info(`¡${monName(mon)} volvió a tu equipo!`, { en: `${monName(mon)} is back on your team!`, sv: `${monName(mon)} är tillbaka i ditt lag!` });
       } else break;
     }
     closeText();
@@ -282,7 +288,7 @@ const S: Record<string, ScriptFn> = {
       G.save.heal = { map: currentMap().id, x: 4, y: 3 };
       await sayOrMime(['¡Listo! Tus Palabritas están sanas. ¡Vuelve pronto!', 'Done! Your Palabritas are healthy. Come back soon!'], '(She gives them back with a big smile and a thumbs up.)');
       const due = dueCount();
-      if (due >= 15 && !muted) await lines([`Por cierto: tienes ${due} palabras para repasar. ¡Nuestra lora te ayuda!`, `By the way: you have ${due} words to review. Our parrot can help!`]);
+      if (due >= 15 && !muted) await lines([`Por cierto: tienes ${due} palabras para repasar. ¡Nuestra lora te ayuda!`, `By the way: you have ${due} words to review. Our parrot can help!`, `Förresten: du har ${due} ord att repetera. Vår papegoja kan hjälpa dig!`]);
     } else {
       await sayOrMime(['¡Vuelve pronto!', 'Come back soon!'], '(She waves.)');
     }
@@ -309,7 +315,7 @@ const S: Record<string, ScriptFn> = {
     setFlag(`item:${id}`);
     addItem(item);
     sfx('levelup');
-    await info(`¡{name} encontró ${amountOf(item, 1)}!`, { en: `{name} found a ${ITEM_DEFS[item].enName}!` });
+    await info(`¡{name} encontró ${amountOf(item, 1)}!`, { en: `{name} found a ${ITEM_DEFS[item].enName}!`, sv: `{name} hittade: ${ITEM_DEFS[item].name}!` });
     if (!flag('itemTip')) {
       setFlag('itemTip');
       await info('Lo que encuentras está en START → MOCHILA. ¡También puedes usarlo en batalla!', { en: 'What you find is in START → MOCHILA. You can use it in battle too!' });

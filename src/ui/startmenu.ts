@@ -9,6 +9,7 @@ import { SPECIES, DEX_ORDER } from '../data/species';
 import { THEMES } from '../data/content';
 import { allItems } from '../game/curriculum';
 import { speak } from '../lang/speech';
+import { meaning, loadGloss, GLOSS_NAMES } from '../lang/gloss';
 import { menu, ask } from './menu';
 import { info, say, closeText } from './textbox';
 import { pickMon, showDetails, listMenu, iconCanvas, detailBox, wordRow, openDetail } from './party';
@@ -75,7 +76,7 @@ async function PalabritasMenu(): Promise<AfterMenu | undefined> {
       }
       if (i !== 1) return false;
       G.save.party = [mon, ...G.save.party.filter((m) => m !== mon)];
-      await info(`${monName(mon)} luchará primero.`, { en: `${monName(mon)} will fight first.` });
+      await info(`${monName(mon)} luchará primero.`, { en: `${monName(mon)} will fight first.`, sv: `${monName(mon)} slåss först.` });
       return true;
     }))
   );
@@ -117,14 +118,14 @@ function dexEntry(id: string): Promise<void> {
     e.stopPropagation();
     speak(sp.dex.es);
   });
-  box.append(es, el('div', 'row muted', sp.dex.en));
+  box.append(es, el('div', 'row muted', meaning(sp.dex)));
   speak(sp.dex.es);
   if (G.save.caught.includes(id)) {
     const items = allItems(id);
     const learned = items.filter(isLearned);
     const words = el('div', 'words');
     words.appendChild(el('div', 'muted', `Palabras dominadas: ${learned.length}/${items.length}`));
-    for (const it of learned) words.appendChild(wordRow(it.es, it.en));
+    for (const it of learned) words.appendChild(wordRow(it.es, meaning(it)));
     box.appendChild(words);
   }
   return openDetail(box);
@@ -149,7 +150,10 @@ async function trainerCard() {
 /** GUARDAR: in this browser, or as a file to keep or take to another device (Drive, WhatsApp...). */
 async function guardar() {
   const i = await menu(['Guardar aquí', 'Exportar archivo', 'Volver'], { cancel: true, pos: { right: 0, top: 0 }, title: 'GUARDAR' });
-  if (i === 0) await info(saveGame() ? 'Partida guardada.' : 'No se pudo guardar.', { en: 'Game saved.' });
+  if (i === 0) {
+    if (saveGame()) await info('Partida guardada.', { en: 'Game saved.' });
+    else await info('No se pudo guardar.', { en: 'The game couldn’t be saved.' });
+  }
   if (i !== 1) return;
   saveGame();
   if (await exportSave()) await info('Partida exportada. Con ese archivo puedes seguir en otro dispositivo.', { en: 'Game exported. With that file you can continue on another device.' });
@@ -167,6 +171,7 @@ export async function importGame(): Promise<boolean> {
   const sure = await ask(`¿Cargar la partida de ${save.name}? Reemplaza la partida de este dispositivo.`, {
     voice: false,
     en: `Load ${save.name}’s game? It replaces the game on this device.`,
+    sv: `Ladda ${save.name}s spel? Det ersätter spelet på den här enheten.`,
   });
   closeText();
   if (!sure) return false;
@@ -181,7 +186,7 @@ async function settings() {
   while (true) {
     const st = G.save.settings;
     const i = await menu(
-      [`Texto: ${sizes[st.textScale]}`, `Voz en diálogos: ${st.dialogVoice ? 'Sí' : 'No'}`, `Voz lenta: ${st.slowVoice ? 'Sí' : 'No'}`, `Música: ${st.musicLevel ? `${st.musicLevel}%` : 'No'}`, 'Importar partida', 'Volver'],
+      [`Texto: ${sizes[st.textScale]}`, `Voz en diálogos: ${st.dialogVoice ? 'Sí' : 'No'}`, `Voz lenta: ${st.slowVoice ? 'Sí' : 'No'}`, `Música: ${st.musicLevel ? `${st.musicLevel}%` : 'No'}`, `Traducción: ${GLOSS_NAMES[st.gloss]}`, 'Importar partida', 'Volver'],
       { cancel: true, pos: { right: 0, top: 0 }, initial: sel, title: 'AJUSTES' },
     );
     sel = Math.max(0, i);
@@ -195,6 +200,10 @@ async function settings() {
       st.musicLevel = st.musicLevel >= 100 ? 0 : st.musicLevel + 20;
       musicSettingChanged();
     } else if (i === 4) {
+      // English or Swedish, from the next line on (plans/swedish.md). What you've learned stays the same.
+      st.gloss = st.gloss === 'sv' ? 'en' : 'sv';
+      await loadGloss();
+    } else if (i === 5) {
       // The game restarts from the title, to load the new save from the start.
       if (await importGame()) {
         await info('Partida cargada. El juego vuelve a empezar.', { en: 'Game loaded. The game restarts.' });

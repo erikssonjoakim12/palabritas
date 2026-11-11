@@ -11,6 +11,7 @@ import { say, info, closeText } from '../ui/textbox';
 import { ask, menu } from '../ui/menu';
 import { wildBattle } from '../battle/battle';
 import { scriptedStep, refreshNpcs, walkNpc, type ScriptFn } from './world';
+import { native, gloss, named } from '../lang/gloss';
 import { lines, as, talkMode, showCreature, heal, blackout, fight, gymLeader, gift, receiveMon, practice, untilRight } from './flows';
 import { hamacaParaMama } from './region4';
 
@@ -59,61 +60,62 @@ export const REGION1: Record<string, ScriptFn> = {
 
   /** Sam explains the game in English, for players who have never played Pokémon. */
   async sam() {
-    const en = (text: string) => say(text, { voice: false });
+    // Sam speaks the player's own language, not Spanish: no voice, no translation button.
+    const plain = (text: string) => say(text, { voice: false });
     if (!flag('beat:sam')) {
       // First meeting: like a trainer, he spots you and comes over to say hi (only once).
       setFlag('beat:sam');
       await say('¡Hola! ¡Hola! Me llamo Sam.', { en: 'Hi! Hi! My name is Sam.' });
-      await en("Sorry, I saw you're new here! I just moved here to learn Spanish too.");
-      const want = await ask('Want me to explain how this game works? (In English!)', { voice: false }, ['Yes, please!', 'No, thanks']);
+      await plain(native("Sorry, I saw you're new here! I just moved here to learn Spanish too."));
+      const want = await ask(native('Want me to explain how this game works? (In English!)'), { voice: false }, [native('Yes, please!'), native('No, thanks')]);
       if (!want) {
-        await en("OK! If you ever have questions, just come and talk to me. I'm always around here.");
+        await plain(native("OK! If you ever have questions, just come and talk to me. I'm always around here."));
         return;
       }
     } else {
       await say('¡Hola otra vez!', { en: 'Hi again!' });
     }
     const TOPICS: [string, string[]][] = [
-      ['Palabritas', [
-        'Palabritas are creatures that grow stronger when YOU learn Spanish.',
-        'Each one teaches everyday Spanish plus its own theme: dogs, weather, food, numbers... Every level brings new words.',
-        'Professor Ceiba, in the lab next door, wants to talk to you. She has something important to tell you!',
+      [native('Palabritas'), [
+        native('Palabritas are creatures that grow stronger when YOU learn Spanish.'),
+        native('Each one teaches everyday Spanish plus its own theme: dogs, weather, food, numbers... Every level brings new words.'),
+        native('Professor Ceiba, in the lab next door, wants to talk to you. She has something important to tell you!'),
       ]],
-      ['Battles', [
-        'Walk into tall grass to meet wild Palabritas. In battle, every attack is a Spanish question.',
-        'Answer well and your attack hits. A perfect answer, accents included, is a critical hit! A wrong answer misses.',
-        'Against trainers you also answer a question when THEY attack. Answer well and you take less damage.',
+      [native('Battles'), [
+        native('Walk into tall grass to meet wild Palabritas. In battle, every attack is a Spanish question.'),
+        native('Answer well and your attack hits. A perfect answer, accents included, is a critical hit! A wrong answer misses.'),
+        native('Against trainers you also answer a question when THEY attack. Answer well and you take less damage.'),
       ]],
-      ['Moves', [
-        'There are four kinds of moves: tap the meaning, write it in Spanish, write what you hear, and say it out loud.',
-        'Harder moves hit harder. A Palabrita starts with two kinds and learns the others as it levels up.',
-        'If you need the 💡 help button, your attack only does half damage.',
+      [native('Moves'), [
+        native('There are four kinds of moves: tap the meaning, write it in Spanish, write what you hear, and say it out loud.'),
+        native('Harder moves hit harder. A Palabrita starts with two kinds and learns the others as it levels up.'),
+        native('If you need the 💡 help button, your attack only does half damage.'),
       ]],
-      ['Leveling up', [
-        'There is no XP here. Your Palabrita levels up when you master the new words of its level, plus a quick review of older ones.',
-        'You can see which words it needs in START, PALABRITAS, DETALLES.',
-        'Mastered words come back for review on later days. If you forget them, your Palabrita stops obeying you!',
+      [native('Leveling up'), [
+        native('There is no XP here. Your Palabrita levels up when you master the new words of its level, plus a quick review of older ones.'),
+        native('You can see which words it needs in START, PALABRITAS, DETALLES.'),
+        native('Mastered words come back for review on later days. If you forget them, your Palabrita stops obeying you!'),
       ]],
-      ['Catching', [
-        'First weaken a wild Palabrita. Then throw a Palabola and say one of its words.',
-        'The better your answer, the easier it is to catch. Doña Lupe in Villa Limón makes Palabolas.',
+      [native('Catching'), [
+        native('First weaken a wild Palabrita. Then throw a Palabola and say one of its words.'),
+        native('The better your answer, the easier it is to catch. Doña Lupe in Villa Limón makes Palabolas.'),
       ]],
-      ['Money & items', [
-        'Beat trainers to win money (córdobas, C$). If all your Palabritas faint, you drop half of it!',
-        'Spend it at the shop in Ciudad Brisa on Palabolas and Potions. To buy, you ask the cashier in Spanish.',
-        'Open START, MOCHILA to see your items and use Potions. In battle, MOCHILA is in the menu too.',
+      [native('Money & items'), [
+        native('Beat trainers to win money (córdobas, C$). If all your Palabritas faint, you drop half of it!'),
+        native('Spend it at the shop in Ciudad Brisa on Palabolas and Potions. To buy, you ask the cashier in Spanish.'),
+        native('Open START, MOCHILA to see your items and use Potions. In battle, MOCHILA is in the menu too.'),
       ]],
-      ['Controls', [
-        'A talks and confirms, B goes back (hold B to run), START opens the menu.',
-        'Tap the speaker button to hear any Spanish line again, and EN to see the English translation.',
-        'If your Palabritas get hurt, heal them at the Palacentro, or at home with your mom.',
+      [native('Controls'), [
+        native('A talks and confirms, B goes back (hold B to run), START opens the menu.'),
+        native('Tap the speaker button to hear any Spanish line again, and EN to see the English translation.'),
+        native('If your Palabritas get hurt, heal them at the Palacentro, or at home with your mom.'),
       ]],
     ];
     while (true) {
-      await say('What do you want to know?', { voice: false, noWait: true });
-      const i = await menu([...TOPICS.map((t) => t[0]), 'Bye'], { cancel: true, columns: 2, pos: { left: 0, right: 0, bottom: 48 } });
+      await say(native('What do you want to know?'), { voice: false, noWait: true });
+      const i = await menu([...TOPICS.map((t) => t[0]), native('Bye')], { cancel: true, columns: 2, pos: { left: 0, right: 0, bottom: 48 } });
       if (i < 0 || i >= TOPICS.length) break;
-      for (const line of TOPICS[i][1]) await en(line);
+      for (const line of TOPICS[i][1]) await plain(line);
     }
     await say('¡Hasta luego! ¡Buena suerte!', { en: 'See you later! Good luck!' });
   },
@@ -200,12 +202,13 @@ export const REGION1: Record<string, ScriptFn> = {
     }
     await lines(['¡Hola! Soy Ana, tu vecina. ¿Cómo te llamas?', 'Hi! I’m Ana, your neighbor. What’s your name?']);
     const name = G.save.name;
-    const item = adHocItem([`Me llamo ${name}`, `Soy ${name}`, `Mi nombre es ${name}`], 'My name is …');
+    const item = adHocItem([`Me llamo ${name}`, `Soy ${name}`, `Mi nombre es ${name}`], gloss('', 'My name is …', 'Jag heter …'));
     const r = await practice({
       item,
       mode: talkMode(),
       title: 'Ana',
       label: `Responde: «My name is ${name}»`,
+      labelSv: `Responde: «Jag heter ${name}»`,
       validate: (a) => (/^\s*(me llamo|soy|mi nombre es)\s+\S+/i.test(a) ? 'perfect' : null),
     });
     if (r.grade === 'wrong') {
@@ -406,7 +409,7 @@ export const REGION1: Record<string, ScriptFn> = {
       if (r.grade !== 'wrong') right++;
     }
     await lines(
-      [`¡Muy bien! ${right} de 4.`, `Very good! ${right} out of 4.`],
+      [`¡Muy bien! ${right} de 4.`, `Very good! ${right} out of 4.`, `Mycket bra! ${right} av 4.`],
       ['Recuerda: -o para yo, -as o -es para tú, -a o -e para él y ella.', 'Remember: -o for I, -as/-es for you, -a/-e for he/she.'],
     );
   },
@@ -453,7 +456,7 @@ async function pickStarter(sp: string) {
   const chosen = G.save.starterChoice;
   if (chosen) {
     if (chosen === sp) return starterTraining(sp);
-    return lines([`Ya elegiste a ${SPECIES[chosen].name}. ¡Habla con la Profesora Ceiba!`, `You already chose ${SPECIES[chosen].name}. Talk to Professor Ceiba!`]);
+    return lines([`Ya elegiste a ${SPECIES[chosen].name}. ¡Habla con la Profesora Ceiba!`, `You already chose ${SPECIES[chosen].name}. Talk to Professor Ceiba!`, `Du har redan valt ${SPECIES[chosen].name}. Prata med professor Ceiba!`]);
   }
   const s = SPECIES[sp];
   const theme = THEMES[s.theme];
@@ -461,8 +464,9 @@ async function pickStarter(sp: string) {
   try {
     await say(`${s.name}: tipo ${s.types.join('/')}. Su tema es «${theme.name}».`, {
       en: `${s.name}: ${s.types.join('/')} type. Its theme is "${theme.en}".`,
+      sv: `${s.name}: typen ${s.types.join('/')}. Dess tema är "${named(theme)}".`,
     });
-    if (!(await ask(`¿Eliges a ${s.name}?`, { en: `Do you choose ${s.name}?` }))) return;
+    if (!(await ask(`¿Eliges a ${s.name}?`, { en: `Do you choose ${s.name}?`, sv: `Väljer du ${s.name}?` }))) return;
   } finally {
     hide();
   }
@@ -481,25 +485,25 @@ async function starterTraining(sp: string) {
   const queue = words.filter((i) => !isLearned(i));
   if (words.every(isUnseen)) {
     await lines(
-      [`¡${s.name}! Muy buena elección. Pero antes de dártelo, quiero ver si eres un buen entrenador.`, `${s.name}! Great choice. But before I give it to you, I want to see if you’re a good trainer.`],
-      [`Si no sabes sus primeras palabras, ¡no te va a obedecer! Son ${words.length} palabras.`, `If you don’t know its first words, it won’t obey you! There are ${words.length} words.`],
+      [`¡${s.name}! Muy buena elección. Pero antes de dártelo, quiero ver si eres un buen entrenador.`, `${s.name}! Great choice. But before I give it to you, I want to see if you’re a good trainer.`, `${s.name}! Bra val. Men innan jag ger den till dig vill jag se om du är en bra tränare.`],
+      [`Si no sabes sus primeras palabras, ¡no te va a obedecer! Son ${words.length} palabras.`, `If you don’t know its first words, it won’t obey you! There are ${words.length} words.`, `Om du inte kan dess första ord kommer den inte att lyda dig! Det är ${words.length} ord.`],
       ['Las palabras nuevas te las enseño primero. Si te equivocas, no pasa nada: la repetimos después.', 'I’ll show you the new words first. If you get one wrong, no problem: we’ll repeat it later.'],
     );
   } else if (queue.length) {
-    await lines([`¿Seguimos con las palabras de ${s.name}?`, `Shall we continue with ${s.name}’s words?`]);
+    await lines([`¿Seguimos con las palabras de ${s.name}?`, `Shall we continue with ${s.name}’s words?`, `Ska vi fortsätta med ${s.name}s ord?`]);
   }
   closeText();
   const known = words.length - queue.length;
   const finished = await drill(queue, { sp, title: (done) => `Palabras ${known + done}/${words.length}`, again: (item) => !isLearned(item) });
   if (!finished) return lines(['Muy bien. Vuelve a hablar conmigo cuando quieras seguir.', 'All right. Talk to me again whenever you want to continue.']);
-  await lines([`¡Excelente! Ya sabes las primeras palabras de ${s.name}.`, `Excellent! You know ${s.name}’s first words now.`]);
+  await lines([`¡Excelente! Ya sabes las primeras palabras de ${s.name}.`, `Excellent! You know ${s.name}’s first words now.`, `Utmärkt! Nu kan du ${s.name}s första ord.`]);
   G.save.starterChoice = undefined;
   G.save.starterPicked = sp;
   setFlag('starter');
   await receiveMon(sp, STARTER_LEVEL);
   refreshNpcs();
   await lines(
-    [`¡${s.name} es perfecto para ti!`, `${s.name} is perfect for you!`],
+    [`¡${s.name} es perfecto para ti!`, `${s.name} is perfect for you!`, `${s.name} passar dig perfekt!`],
     ['Ahora ve al norte, a Villa Limón, y visita a mi amiga Doña Lupe. ¡Creo que necesita ayuda!', 'Now go north to Lemon Village and visit my friend Doña Lupe. I think she needs help!'],
     ['En la hierba alta hay Palabritas salvajes. ¡Usa tus palabras para luchar!', 'Wild Palabritas live in the tall grass. Use your words to fight!'],
   );
@@ -509,11 +513,11 @@ async function starterTraining(sp: string) {
 /** Lucas takes the starter strong against yours (no battle yet: the first is in the clay mine), then runs off. */
 async function lucasElige() {
   const sp = SPECIES[lucasStarter()];
-  await as('lucas', [`¡Mi turno! Entonces yo elijo a ${sp.name}. ¡Le gana al tuyo!`, `My turn! Then I choose ${sp.name}. It beats yours!`]);
+  await as('lucas', [`¡Mi turno! Entonces yo elijo a ${sp.name}. ¡Le gana al tuyo!`, `My turn! Then I choose ${sp.name}. It beats yours!`, `Min tur! Då väljer jag ${sp.name}. Den slår din!`]);
   setFlag('lucasEligio');
   sfx('caught');
   refreshNpcs();
-  await info(`¡Lucas recibió a ${sp.name}!`, { en: `Lucas received ${sp.name}!` });
+  await info(`¡Lucas recibió a ${sp.name}!`, { en: `Lucas received ${sp.name}!`, sv: `Lucas fick ${sp.name}!` });
   await as('lucas', ['¡Vamos a entrenar mucho! ¡Algún día te voy a ganar, {name}!', 'We’re going to train a lot! Someday I’ll beat you!']);
   await walkNpc('lucas_lab', ['right', 'right', 'down', 'down', 'down', 'down', 'down', 'down', 'left', 'down'], { speed: 1.5 });
   setFlag('lucasSeFue');

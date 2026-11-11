@@ -39,6 +39,10 @@ Plans for finished work are removed once built: the code is the truth.
 - **Spanish:** Latin American, natural, beginner-friendly at low levels. Every line has English for the EN
   button. `{o/a}` adapts to the player's gender (`list{o/a}` → lista/listo). Accept natural variants
   (`|` in content lines). When unsure of a regionalism, choose the neutral Latin American form.
+- **Swedish** (plans/swedish.md): the player can learn through Swedish instead of English. Swedish lives in
+  `src/data/sv/`, keyed by the Spanish it translates; a line built while playing carries its own (`sv:`, or a third
+  element in `[es, en, sv]`). Give new lines their Swedish where the area is already translated: `node tools/sv.mjs`
+  shows what's missing, and `npm test -- swedish` checks nothing is left behind.
 - **Look:** strict Gold/Silver style with original art. Every color lives in `src/style/colors.ts`; tile,
   people and Palabrita art are rows of characters in `src/style/`. Keep new art in those palettes.
 - **Code:** match the surrounding style. Clean, reusable, no copy-paste: if two places need it, make a
@@ -56,6 +60,7 @@ Plans for finished work are removed once built: the code is the truth.
 | Game state, saves, migrations, flags | `src/game/state.ts` (`flag()`, `setFlag()`, `G.save`) |
 | Learning: mastery, reviews, picking questions | `src/game/learning.ts`, `src/game/curriculum.ts` |
 | Spanish content | `src/data/content/` (core list, one file per theme, practice topics) |
+| Translation (English or Swedish) | `src/lang/gloss.ts` (`gloss`, `meaning`, `native`...), `src/data/sv/` (the Swedish), `tools/sv.mjs` (what's missing) |
 | Palabritas, moves, types | `src/data/species.ts`, `src/data/types.ts` |
 | Trainers, items | `src/data/trainers.ts`, `src/data/items.ts`, `src/game/bag.ts` |
 | Maps (every town, route, interior) | `src/world/maps/`: one file per region (`region1.ts`...), `kit.ts` (tile legend, types, shared rooms), `index.ts` |

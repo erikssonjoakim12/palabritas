@@ -14,6 +14,7 @@ import { startFogDemo } from './world/region6';
 import { MAPS } from './world/maps';
 import { importGame } from './ui/startmenu';
 import { showHelpButton } from './ui/faq';
+import { loadGloss, phoneIsSwedish, GLOSS_NAMES, type Gloss } from './lang/gloss';
 
 /** A demo of something not yet reached in the game (?demo=niebla: the fog of region 6). Nothing is saved. */
 const DEMO = new URLSearchParams(location.search).get('demo') === 'niebla';
@@ -89,7 +90,7 @@ export async function runTitle() {
     sub.remove();
     showHelpButton(false);
     startFogDemo(loadGame() ? G.save : null); // only reads your game: the demo saves nothing
-    applySettings();
+    await applySettings();
     await enterWorld();
     runScript(SCRIPTS.nieblaDemo);
     return;
@@ -105,7 +106,7 @@ export async function runTitle() {
     sub.remove();
     showHelpButton(false);
     if (!(await importGame())) return runTitle();
-    applySettings();
+    await applySettings();
     enterWorld();
     return;
   }
@@ -123,21 +124,35 @@ export async function runTitle() {
   }
 
   if (start === 'continue' && loadGame()) {
-    applySettings();
+    await applySettings();
     enterWorld();
     return;
   }
 
   deleteSave();
   G.save = newSave();
-  applySettings();
+  await chooseGloss();
+  await applySettings();
   await newGameIntro();
   saveGame();
   enterWorld();
 }
 
-function applySettings() {
+async function applySettings() {
   setTextScale(G.save.settings.textScale);
+  await loadGloss();
+}
+
+/**
+ * The translation, before anything is said (plans/swedish.md). A phone set to Swedish starts on Svenska; whatever you
+ * pick stays until you change it in AJUSTES → Traducción.
+ */
+async function chooseGloss() {
+  const glosses: Gloss[] = ['en', 'sv'];
+  await say('Traducción · Translation · Översättning', { voice: false, noWait: true });
+  const i = await menu(glosses.map((g) => GLOSS_NAMES[g]), { pos: { right: 0, bottom: 48 }, initial: phoneIsSwedish() ? 1 : 0 });
+  G.save.settings.gloss = glosses[i];
+  closeText();
 }
 
 async function newGameIntro() {

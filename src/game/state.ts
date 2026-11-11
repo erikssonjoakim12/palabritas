@@ -1,4 +1,5 @@
 import type { Dir } from '../engine/input';
+import type { Gloss } from '../lang/gloss';
 import { ITEMS, itemBySpanish } from '../data/content';
 
 export interface Mon {
@@ -36,6 +37,8 @@ export interface Settings {
   slowVoice: boolean;
   /** Music volume in percent: 0 (off), 20, 40, 60, 80 or 100. Sound effects stay either way. */
   musicLevel: number;
+  /** The translation shown with the EN/SV button and in challenges (plans/swedish.md). Kept until you change it. */
+  gloss: Gloss;
 }
 
 export interface SaveData {
@@ -121,7 +124,7 @@ export function newSave(): SaveData {
     seen: [],
     caught: [],
     heal: { map: 'casa', x: 2, y: 4 },
-    settings: { textScale: 6, dialogVoice: false, slowVoice: false, musicLevel: 60 },
+    settings: { textScale: 6, dialogVoice: false, slowVoice: false, musicLevel: 60, gloss: 'en' },
     playMs: 0,
     answers: 0,
     correct: 0,

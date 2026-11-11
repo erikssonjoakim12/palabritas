@@ -16,6 +16,7 @@ import { challenge, chooseText, type ChallengeSpec } from '../ui/challenge';
 import { spriteCanvas } from '../ui/party';
 import { trainerBattle } from '../battle/battle';
 import { speak, canListen } from '../lang/speech';
+import { gloss } from '../lang/gloss';
 import { warp, npcById, fadeOut, currentMap, setFollower, SCRIPTS, type ScriptFn } from './world';
 import type { Dir } from '../engine/input';
 import type { Line } from './maps';
@@ -28,7 +29,7 @@ import type { Line } from './maps';
 // ---------- Talking ----------
 
 export async function lines(...ls: Line[]) {
-  for (const [es, en] of ls) await say(es, { en });
+  for (const [es, en, sv] of ls) await say(es, { en, sv });
 }
 
 /** Lines said by someone other than the person you talked to (Lucas arriving, Don Tizón in a cutscene...). */
@@ -45,8 +46,9 @@ export async function as(look: string, ...ls: Line[]) {
  * Someone's line, or on a muted map (Villa Ocote before the mine) «…» and what they act out instead (the EN
  * line), like everyone else there.
  */
-export function sayOrMime([es, en]: Line, mime: string, opts: SayOpts = {}) {
-  return currentMap().muted?.() ? say('…', { ...opts, en: mime }) : say(es, { ...opts, en });
+export function sayOrMime([es, en, sv]: Line, mime: string | [en: string, sv: string], opts: SayOpts = {}) {
+  const [mimeEn, mimeSv] = typeof mime === 'string' ? [mime] : mime;
+  return currentMap().muted?.() ? say('…', { ...opts, en: mimeEn, sv: mimeSv }) : say(es, { ...opts, en, sv });
 }
 
 /** Someone with a few lines, the same each time. */
@@ -97,7 +99,7 @@ export async function blackout() {
 }
 
 /** The money that fell out of your pockets as you fainted. */
-export const droppedMoney = (lost: number) => info(`¡Con las prisas, se te cayeron ${money(lost)}!`, { en: `In the rush, you dropped ${money(lost)}!` });
+export const droppedMoney = (lost: number) => info(`¡Con las prisas, se te cayeron ${money(lost)}!`, { en: `In the rush, you dropped ${money(lost)}!`, sv: `I brådskan tappade du ${money(lost)}!` });
 
 // ---------- Trainers ----------
 
@@ -195,7 +197,7 @@ export async function gymLeader(id: string, g: GymLeader): Promise<boolean> {
   G.save.medals.push(medal);
   if (g.handOver) await lines(...g.handOver);
   fanfare('medalla', 'badge');
-  await info(`¡{name} recibió la Medalla ${medal}!`, { en: `{name} received the ${medalEn} Medal!` });
+  await info(`¡{name} recibió la Medalla ${medal}!`, { en: `{name} received the ${medalEn} Medal!`, sv: `{name} fick ${medal}-medaljen!` });
   await lines(...g.after);
   return true;
 }
@@ -206,13 +208,13 @@ export async function gymLeader(id: string, g: GymLeader): Promise<boolean> {
 export async function gift(id: string, n: number, es: string, en: string) {
   addItem(id, n);
   sfx('caught');
-  await info(`¡{name} recibió ${es}!`, { en: `{name} received ${en}!` });
+  await info(`¡{name} recibió ${es}!`, { en: `{name} received ${en}!`, sv: `{name} fick ${gloss(es, en)}!` });
 }
 
 export async function pay(n: number) {
   G.save.money += n;
   sfx('caught');
-  await info(`¡{name} recibió ${money(n)}!`, { en: `{name} received ${money(n)}!` });
+  await info(`¡{name} recibió ${money(n)}!`, { en: `{name} received ${money(n)}!`, sv: `{name} fick ${money(n)}!` });
 }
 
 /** A Palabrita joins you (to the box when your team is full). */
@@ -220,8 +222,8 @@ export async function receiveMon(sp: string, level: number) {
   const where = giveMon(sp, level);
   const { name } = SPECIES[sp];
   sfx('caught');
-  await info(`¡{name} recibió a ${name}!`, { en: `{name} received ${name}!` });
-  if (where === 'box') await info(`Tu equipo está lleno: ${name} fue a la Caja de Palabritas.`, { en: `Your team is full: ${name} went to the storage box.` });
+  await info(`¡{name} recibió a ${name}!`, { en: `{name} received ${name}!`, sv: `{name} fick ${name}!` });
+  if (where === 'box') await info(`Tu equipo está lleno: ${name} fue a la Caja de Palabritas.`, { en: `Your team is full: ${name} went to the storage box.`, sv: `Ditt lag är fullt: ${name} skickades till förvaringslådan.` });
 }
 
 // ---------- Spanish outside battles ----------

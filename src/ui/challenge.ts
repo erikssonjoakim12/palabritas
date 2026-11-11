@@ -7,6 +7,7 @@ import { speak, listen, canListen, stopSpeaking } from '../lang/speech';
 import { MODE_INFO, type Mode } from '../data/species';
 import type { Item } from '../data/content';
 import { distractors, isUnseen } from '../game/learning';
+import { glossLabel, meaning, native } from '../lang/gloss';
 
 const panel = () => document.getElementById('challenge') as HTMLDivElement;
 const pad = () => document.getElementById('pad') as HTMLDivElement;
@@ -18,8 +19,10 @@ export interface ChallengeSpec {
   title?: string;
   /** Allow the 💡 help button. Default true (not for choose). */
   allowHelp?: boolean;
-  /** Override the instruction line. */
+  /** Override the instruction line (with its own translation after « · », looked up by the whole line). */
   label?: string;
+  /** The label's Swedish, when it's built while playing. */
+  labelSv?: string;
   /** Custom grading that runs before the normal check (return null to fall through). */
   validate?: (answer: string) => Grade | null;
   /** Show a ✕ (and take Esc) to stop: resolves with `quit`, nothing answered (study drills, not battles). */
@@ -225,12 +228,13 @@ export function challenge(spec: ChallengeSpec): Promise<ChallengeResult> {
       prompt.appendChild(label);
 
       if (mode === 'choose') {
-        label.textContent = spec.label ?? '¿Qué significa? · What does it mean?';
+        label.textContent = glossLabel(spec.label ?? '¿Qué significa? · What does it mean?', spec.labelSv);
         prompt.appendChild(el('div', 'answer-es', item.es));
         p.appendChild(speakButtons(item.es));
         speak(item.es);
-        const opts = [item.en, ...distractors(item)].sort(() => Math.random() - 0.5);
-        p.appendChild(choiceList(opts, (i) => finish(opts[i] === item.en ? 'perfect' : 'wrong', opts[i])));
+        const right = meaning(item);
+        const opts = [right, ...distractors(item)].sort(() => Math.random() - 0.5);
+        p.appendChild(choiceList(opts, (i) => finish(opts[i] === right ? 'perfect' : 'wrong', opts[i])));
         return;
       }
 
@@ -249,15 +253,15 @@ export function challenge(spec: ChallengeSpec): Promise<ChallengeResult> {
       });
 
       if (mode === 'listen') {
-        label.textContent = spec.label ?? 'Escribe lo que oyes · Write what you hear';
+        label.textContent = glossLabel(spec.label ?? 'Escribe lo que oyes · Write what you hear', spec.labelSv);
         prompt.appendChild(el('div', '', '🎧 …'));
         prompt.appendChild(reveal);
         p.appendChild(speakButtons(item.es));
         setTimeout(() => speak(item.es), 250);
       } else {
         label.textContent =
-          spec.label ?? (mode === 'speak' ? 'Dilo en español · Say it in Spanish' : 'Escríbelo en español · Write it in Spanish');
-        prompt.appendChild(el('div', 'answer-es', item.en));
+          glossLabel(spec.label ?? (mode === 'speak' ? 'Dilo en español · Say it in Spanish' : 'Escríbelo en español · Write it in Spanish'), spec.labelSv);
+        prompt.appendChild(el('div', 'answer-es', meaning(item)));
         prompt.appendChild(reveal);
       }
 
@@ -331,7 +335,7 @@ export function challenge(spec: ChallengeSpec): Promise<ChallengeResult> {
       );
       if (grade === 'close') {
         const reason = res?.reason ? REASONS[res.reason] : helped ? { es: 'Con ayuda.', en: 'With help.' } : null;
-        if (reason) box.appendChild(el('div', 'why', `${reason.es} · ${reason.en}`));
+        if (reason) box.appendChild(el('div', 'why', `${reason.es} · ${meaning(reason)}`));
       }
       p.appendChild(box);
 
@@ -349,7 +353,7 @@ export function challenge(spec: ChallengeSpec): Promise<ChallengeResult> {
         es.textContent = target;
       }
       prompt.appendChild(es);
-      prompt.appendChild(el('div', 'answer-line', item.en));
+      prompt.appendChild(el('div', 'answer-line', meaning(item)));
       p.appendChild(prompt);
       p.appendChild(speakButtons(item.es));
       speak(target);
@@ -380,7 +384,7 @@ export function challenge(spec: ChallengeSpec): Promise<ChallengeResult> {
 /** Free text input (e.g. the player's name). */
 export function promptText(label: string, en: string, placeholder = ''): Promise<string> {
   return new Promise((resolve) => {
-    const { p, close } = openPanel(en, label);
+    const { p, close } = openPanel(native(en), label);
     const { row, inp } = inputRow((v) => {
       close();
       resolve(v);
@@ -393,7 +397,7 @@ export function promptText(label: string, en: string, placeholder = ''): Promise
 /** A comprehension question with answers in Spanish (tap one). */
 export function chooseText(label: string, en: string, options: string[], replay?: string): Promise<number> {
   return new Promise((resolve) => {
-    const { p, close } = openPanel(en, label);
+    const { p, close } = openPanel(native(en), label);
     if (replay) p.appendChild(speakButtons(replay));
     p.appendChild(
       choiceList(options, (i) => {

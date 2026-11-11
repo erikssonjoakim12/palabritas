@@ -2,6 +2,7 @@ import { el } from '../engine/screen';
 import { input } from '../engine/input';
 import { sfx } from '../engine/sfx';
 import { FAQ } from '../data/faq';
+import { titleGloss } from '../lang/gloss';
 
 /*
   The ? button (bottom left, by the controls, on the title screen) opens the FAQ over the whole page: the game's
@@ -13,13 +14,14 @@ const button = document.getElementById('help') as HTMLButtonElement;
 /** Show or hide the ? button (the title screen shows it). */
 export const showHelpButton = (on: boolean) => (button.hidden = !on);
 
-function openFaq() {
+async function openFaq() {
   sfx('select');
+  const t = await titleGloss();
   const page = el('div', 'faq');
   const box = el('div', 'faq-box');
   const close = el('button', 'faq-close', '✕');
   box.append(close, el('h2', '', 'Preguntas frecuentes'), el('div', 'faq-sub', 'FAQ'));
-  for (const { q, a } of FAQ) box.append(el('h3', '', q), el('p', '', a));
+  for (const { q, a } of FAQ) box.append(el('h3', '', t(q)), el('p', '', t(a)));
   page.appendChild(box);
   document.body.appendChild(page);
   const done = () => {

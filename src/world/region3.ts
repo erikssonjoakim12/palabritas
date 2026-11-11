@@ -159,7 +159,7 @@ async function duenoRestaurante() {
       ? ['¡Ay, mi mesero está enfermo! ¿Me ayudas? Tomas los pedidos de las mesas y se los dices al cocinero.', 'Oh, my waiter is sick! Will you help me? You take the tables’ orders and tell the cook.']
       : ['¡Hola otra vez! Hoy hay mucha gente. ¿Me ayudas con las mesas?', 'Hi again! There are lots of people today. Will you help me with the tables?'],
   );
-  if (!(await ask('¿Me ayudas?', { en: 'Will you help me?' }))) return lines(['Bueno, si cambias de idea, aquí estoy.', 'OK, if you change your mind, I’m here.']);
+  if (!(await ask('¿Me ayudas?', { en: 'Can you help me?' }))) return lines(['Bueno, si cambias de idea, aquí estoy.', 'OK, if you change your mind, I’m here.']);
   const orders = firstTime ? [0, 1, 2] : shuffled([0, 1, 2, 3, 4, 5]).slice(0, 3);
   G.save.restaurante = { round: 0, orders, heard: false };
   await lines(['¡Gracias! Empieza con la primera mesa, a la izquierda.', 'Thanks! Start with the first table, on the left.']);

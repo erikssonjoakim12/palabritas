@@ -4,6 +4,7 @@ import { speak } from '../lang/speech';
 import { G } from '../game/state';
 import { sfx } from '../engine/sfx';
 import { isMaleLook } from '../style/people';
+import { gloss, glossButton } from '../lang/gloss';
 
 let box: HTMLDivElement | null = null;
 /** Who is talking (a look id): male characters get a male voice. Set while talking to someone. */
@@ -18,6 +19,8 @@ export function setSpeaker(lookId?: string) {
 export interface SayOpts {
   /** English translation, shown with the EN button. */
   en?: string;
+  /** Swedish, for a line built while playing (the others find theirs by their Spanish: lang/gloss.ts). */
+  sv?: string;
   /** Spanish line: show the 🔊 button. Default true. */
   voice?: boolean;
   /** Read it aloud right away, even when dialog voice is off (listening moments). */
@@ -53,7 +56,8 @@ export function closeText() {
 /** Show a line of dialog in the Game Boy text box and wait for A (or a tap). */
 export function say(raw: string, opts: SayOpts = {}): Promise<void> {
   const text = fill(raw);
-  const en = opts.en ? fill(opts.en) : '';
+  // «…» (someone on a muted map, faded letters) says nothing: what they act out is looked up by its English.
+  const en = opts.en ? fill(gloss(/^[…. ]*$/.test(raw) ? opts.en : raw, opts.en, opts.sv)) : '';
   const voice = opts.voice !== false;
   const b = ensureBox();
   b.innerHTML = '';
@@ -76,7 +80,7 @@ export function say(raw: string, opts: SayOpts = {}): Promise<void> {
     tools.appendChild(spk);
   }
   if (en) {
-    const enBtn = el('button', 'tool', 'EN');
+    const enBtn = el('button', 'tool', glossButton());
     enBtn.addEventListener('click', (e) => {
       e.stopPropagation();
       enEl.hidden = !enEl.hidden;
